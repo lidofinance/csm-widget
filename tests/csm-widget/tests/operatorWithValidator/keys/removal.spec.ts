@@ -50,15 +50,15 @@ test.describe(
 
           await test.step('Check removal fee', async () => {
             await test.step('Check removal fee value', async () => {
-              // if PLS -> 0.02 ETH per key
-              await expect(keysPage.removePage.ejectionCostInput).toHaveValue(
-                `${(0.02 * keyLength).toFixed(2)} stETH`,
+              // if PLS -> 0.02 ETH per key; FormatToken separates the symbol with &nbsp;
+              await expect(keysPage.removePage.removalFeeValue).toContainText(
+                new RegExp(`${(0.02 * keyLength).toFixed(2)}\\s+stETH`),
               );
               // for ICS need to add assert by ICS fee
             });
 
             await test.step('Check tooltip text', async () => {
-              await keysPage.removePage.ejectionCostInputSVG.hover();
+              await keysPage.removePage.removalFeeInfoIcon.hover();
               await expect(
                 keysPage.removePage.removalFeeInfoTooltipText,
               ).toContainText(

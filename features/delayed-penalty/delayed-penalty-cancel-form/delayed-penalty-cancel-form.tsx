@@ -1,33 +1,41 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { FC, memo } from 'react';
-
+import { FormPage, FormReady } from 'shared/form-page';
+import { Form } from 'shared/hook-form/form-controller';
+import { AppFormUi, FormUiProvider } from 'shared/hook-form/form-ui';
+import { FormLayout } from 'shared/ui';
+import { LockedSection } from '../locked-section';
 import {
   DelayedPenaltyCancelDataProvider,
   DelayedPenaltyCancelFormProvider,
 } from './context';
-
-import { FormBlock } from 'shared/components';
-import { FormLoader, Form } from 'shared/hook-form/form-controller';
-import { AmountInput } from './controls/amount-input';
-import { NodeOperatorInput } from './controls/node-operator-input';
-import { SubmitButton } from './controls/submit-button';
+import { DelayedPenaltyCancelAside } from './delayed-penalty-cancel-aside';
+import { DelayedPenaltyCancelFields } from './delayed-penalty-cancel-fields';
 
 export const DelayedPenaltyCancelForm: FC<{ module?: MODULE_NAME }> = memo(
   ({ module }) => {
     return (
-      <DelayedPenaltyCancelDataProvider module={module}>
-        <DelayedPenaltyCancelFormProvider module={module}>
-          <FormBlock data-testid="delayedPenaltyCancelForm">
-            <FormLoader>
-              <Form>
-                <NodeOperatorInput />
-                <AmountInput />
-                <SubmitButton />
-              </Form>
-            </FormLoader>
-          </FormBlock>
-        </DelayedPenaltyCancelFormProvider>
-      </DelayedPenaltyCancelDataProvider>
+      <AppFormUi>
+        <DelayedPenaltyCancelDataProvider module={module}>
+          <DelayedPenaltyCancelFormProvider module={module}>
+            <FormPage
+              below={
+                <FormUiProvider value="legacy">
+                  <LockedSection module={module} />
+                </FormUiProvider>
+              }
+            >
+              <FormReady>
+                <Form data-testid="delayedPenaltyCancelForm">
+                  <FormLayout aside={<DelayedPenaltyCancelAside />}>
+                    <DelayedPenaltyCancelFields />
+                  </FormLayout>
+                </Form>
+              </FormReady>
+            </FormPage>
+          </DelayedPenaltyCancelFormProvider>
+        </DelayedPenaltyCancelDataProvider>
+      </AppFormUi>
     );
   },
 );

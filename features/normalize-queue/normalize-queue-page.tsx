@@ -6,6 +6,7 @@ import { NormalizeQueue } from './normalize-queue';
 
 export const NormalizeQueuePage: FC = () => (
   <Layout
+    wide
     title="Normalize queue"
     subtitle="Put keys to deposit queue"
     pageName="NormalizeQueue"

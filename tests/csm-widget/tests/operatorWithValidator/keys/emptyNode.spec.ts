@@ -30,7 +30,7 @@ test.describe(
           'No keys available to remove',
         );
         await expect(keysPage.removePage.removeKeysForm).toContainText(
-          'note: Only keys that have not been deposited yet can be deleted. If a key has already been deposited, the only way to retrieve the bond is to exit the validator on the Consensus Layer (CL).',
+          'Note: Only keys that have not been deposited yet can be deleted. If a key has already been deposited, the only way to retrieve the bond is to exit the validator on the Consensus Layer (CL).',
         );
         await expect(
           keysPage.removePage.removeKeysButton,

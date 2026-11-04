@@ -1,5 +1,6 @@
 import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+import { getEjectFee } from '../eject-keys-state';
 import { useEjectKeysFormData } from './eject-keys-data-provider';
 import { EjectKeysFormInputType } from './types';
 
@@ -12,10 +13,7 @@ export const EjectKeysUpdater: FC = () => {
 
   const { ejectKeyFee } = useEjectKeysFormData();
 
-  const feeAmount =
-    ejectKeyFee !== undefined && selection?.length
-      ? ejectKeyFee * BigInt(selection.length)
-      : undefined;
+  const feeAmount = getEjectFee(ejectKeyFee, selection?.length ?? 0);
 
   useEffect(() => {
     setValue('feeAmount', feeAmount, { shouldValidate: true });

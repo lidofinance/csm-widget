@@ -1,28 +1,39 @@
+import { useFaq } from 'faq';
 import { FC, memo } from 'react';
-import { FormBlock } from 'shared/components';
+import { Faq } from 'shared/components';
+import { FormPage, FormReady } from 'shared/form-page';
 import { Form } from 'shared/hook-form/form-controller';
+import { AppFormUi } from 'shared/hook-form/form-ui';
+import { DeleteKeysLayout, DeleteKeysSwitcherRoutes } from 'shared/navigate';
 import { RemoveKeysDataProvider, RemoveKeysFormProvider } from './context';
-import { AmountInput } from './controls/amount-input';
 import { KeysSelector } from './controls/keys-selector';
-import { SubmitButton } from './controls/submit-button';
-import { RemoveKeysFormInfo } from './remove-keys-form-info';
-import { RemoveKeysFormLoader } from './remove-keys-form-loader';
+import { RemoveKeysAside } from './remove-keys-aside';
+import { RemoveKeysFormGate } from './remove-keys-form-gate';
+import { REMOVE_KEYS_FORM_TEST_ID } from './remove-keys-state';
 
 export const RemoveKeysForm: FC = memo(() => {
+  const faq = useFaq('KEYS');
+
   return (
-    <RemoveKeysDataProvider>
-      <RemoveKeysFormProvider>
-        <FormBlock data-testid="removeKeysForm">
-          <RemoveKeysFormLoader>
-            <Form>
-              <KeysSelector />
-              <AmountInput />
-              <SubmitButton />
-            </Form>
-            <RemoveKeysFormInfo />
-          </RemoveKeysFormLoader>
-        </FormBlock>
-      </RemoveKeysFormProvider>
-    </RemoveKeysDataProvider>
+    <AppFormUi>
+      <RemoveKeysDataProvider>
+        <RemoveKeysFormProvider>
+          <FormPage faq={<Faq items={faq} />}>
+            <FormReady>
+              <RemoveKeysFormGate>
+                <Form data-testid={REMOVE_KEYS_FORM_TEST_ID}>
+                  <DeleteKeysLayout
+                    active={DeleteKeysSwitcherRoutes.REMOVE}
+                    aside={<RemoveKeysAside />}
+                  >
+                    <KeysSelector />
+                  </DeleteKeysLayout>
+                </Form>
+              </RemoveKeysFormGate>
+            </FormReady>
+          </FormPage>
+        </RemoveKeysFormProvider>
+      </RemoveKeysDataProvider>
+    </AppFormUi>
   );
 });

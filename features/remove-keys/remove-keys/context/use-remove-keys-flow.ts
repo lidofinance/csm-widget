@@ -7,6 +7,7 @@ import {
 } from 'shared/hook-form/form-controller';
 import { useCanPerform } from 'shared/hooks';
 import { useTxModalStagesRemoveKeys } from '../hooks/use-tx-modal-stages-remove-keys';
+import { getRemoveKeysArgs } from '../remove-keys-state';
 import { useRemoveKeysFormData } from './remove-keys-data-provider';
 import { RemoveKeysFormInputType, RemoveKeysFormNetworkData } from './types';
 
@@ -31,20 +32,16 @@ export const useRemoveKeysFlowResolver = (): FlowResolver<
 
       return {
         action: 'remove' as const,
-        submit: async () => {
-          const { start, count } = input.selection;
-          const pubkeys = data.keys
-            .map(({ pubkey }) => pubkey)
-            .slice(start, start + count);
-
-          return keysSDK.removeKeys({
+        submit: async () =>
+          keysSDK.removeKeys({
             nodeOperatorId: data.nodeOperatorId,
-            startIndex: BigInt(data.info.totalDepositedKeys + start),
-            keysCount: BigInt(count),
-            pubkeys,
+            ...getRemoveKeysArgs(
+              data.keys,
+              data.info.totalDepositedKeys,
+              input.selection,
+            ),
             callback: buildCallback(input, data),
-          });
-        },
+          }),
       };
     },
     [canRemoveKeys, access, keysSDK, buildCallback],

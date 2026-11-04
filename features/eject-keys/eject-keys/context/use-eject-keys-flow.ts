@@ -8,6 +8,7 @@ import {
 } from 'shared/hook-form/form-controller';
 import { useCanPerform } from 'shared/hooks';
 import { invariant } from '@lidofinance/lido-ethereum-sdk';
+import { isHighEjectionCost } from '../eject-keys-state';
 import { useTxModalStagesEjectKeys } from '../hooks/use-tx-modal-stages-eject-keys';
 import { useConfirmHighCostModal } from '../hooks/use-confirm-high-cost-modal';
 import { useConfirmEjectKeysModal } from '../hooks/use-confirm-modal';
@@ -39,7 +40,10 @@ export const useEjectKeysFlowResolver = (): FlowResolver<
         action: 'eject' as const,
         confirm: async () => {
           if (
-            data.ejectKeyFee >= HIGH_EJECTION_COST_THRESHOLD &&
+            isHighEjectionCost(
+              data.ejectKeyFee,
+              HIGH_EJECTION_COST_THRESHOLD,
+            ) &&
             !(await confirmHighCost({}))
           ) {
             return false;

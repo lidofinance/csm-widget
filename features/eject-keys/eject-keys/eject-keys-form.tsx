@@ -1,28 +1,39 @@
+import { useFaq } from 'faq';
 import { FC, memo } from 'react';
-import { FormBlock } from 'shared/components';
+import { Faq } from 'shared/components';
+import { FormPage, FormReady } from 'shared/form-page';
 import { Form } from 'shared/hook-form/form-controller';
+import { AppFormUi } from 'shared/hook-form/form-ui';
+import { DeleteKeysLayout, DeleteKeysSwitcherRoutes } from 'shared/navigate';
 import { EjectKeysDataProvider, EjectKeysFormProvider } from './context';
-import { AmountInput } from './controls/amount-input';
 import { KeysSelector } from './controls/keys-selector';
-import { SubmitButton } from './controls/submit-button';
-import { EjectKeysFormInfo } from './eject-keys-form-info';
-import { EjectKeysFormLoader } from './eject-keys-form-loader';
+import { EjectKeysAside } from './eject-keys-aside';
+import { EjectKeysFormGate } from './eject-keys-form-gate';
+import { EJECT_KEYS_FORM_TEST_ID } from './eject-keys-state';
 
 export const EjectKeysForm: FC = memo(() => {
+  const faq = useFaq('KEYS');
+
   return (
-    <EjectKeysDataProvider>
-      <EjectKeysFormProvider>
-        <FormBlock>
-          <EjectKeysFormLoader>
-            <Form>
-              <KeysSelector />
-              <AmountInput />
-              <SubmitButton />
-            </Form>
-            <EjectKeysFormInfo />
-          </EjectKeysFormLoader>
-        </FormBlock>
-      </EjectKeysFormProvider>
-    </EjectKeysDataProvider>
+    <AppFormUi>
+      <EjectKeysDataProvider>
+        <EjectKeysFormProvider>
+          <FormPage faq={<Faq items={faq} />}>
+            <FormReady>
+              <EjectKeysFormGate>
+                <Form data-testid={EJECT_KEYS_FORM_TEST_ID}>
+                  <DeleteKeysLayout
+                    active={DeleteKeysSwitcherRoutes.EJECT}
+                    aside={<EjectKeysAside />}
+                  >
+                    <KeysSelector />
+                  </DeleteKeysLayout>
+                </Form>
+              </EjectKeysFormGate>
+            </FormReady>
+          </FormPage>
+        </EjectKeysFormProvider>
+      </EjectKeysDataProvider>
+    </AppFormUi>
   );
 });
