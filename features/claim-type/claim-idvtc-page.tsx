@@ -1,12 +1,13 @@
-import { useFaq } from 'faq';
 import { FC } from 'react';
-import { Faq, TypeBackButton } from 'shared/components';
+import { TypeBackButton } from 'shared/components';
 import { Layout } from 'shared/layout';
 import { IdvtcPageSwitcher, Gate, TypePageSwitcher } from 'shared/navigate';
 import { ClaimIdvtc } from './claim-idvtc';
 
+// Wide for the ICS two-card state; the other states centre a 600px column
 export const ClaimIdvtcPage: FC = () => (
   <Layout
+    wide
     title="Apply for Identified DVT Cluster"
     subtitle="Get verified as an Independent DVT Cluster"
     pageName="ClaimIdvtc"
@@ -16,6 +17,5 @@ export const ClaimIdvtcPage: FC = () => (
       <IdvtcPageSwitcher />
     </Gate>
     <ClaimIdvtc />
-    <Faq items={useFaq('OPERATOR_TYPE')} />
   </Layout>
 );

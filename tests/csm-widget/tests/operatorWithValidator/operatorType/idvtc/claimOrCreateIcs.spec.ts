@@ -114,15 +114,17 @@ test.describe(
         });
 
         await test.step('Claim transaction succeeds', async () => {
-          await expect(txModal.title).toContainText(
-            'ICS type has been successfully claimed',
-            { timeout: STAGE_WAIT_TIMEOUT },
+          await expect(claim.successScreen).toBeVisible({
+            timeout: STAGE_WAIT_TIMEOUT,
+          });
+          await expect(txModal.modal).toBeHidden({
+            timeout: STAGE_WAIT_TIMEOUT,
+          });
+          await expect(claim.successScreen).toContainText(
+            'You have claimed the Identified Community Staker operator type',
           );
-          await txModal.closeModal();
           await expect(
-            widgetService.page.getByText(
-              'You have claimed the Identified Community Staker operator type',
-            ),
+            claim.successScreen.getByRole('button', { name: 'Amazing!' }),
           ).toBeVisible();
         });
 

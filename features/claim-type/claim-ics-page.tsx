@@ -1,7 +1,6 @@
 import { FC } from 'react';
 
-import { useFaq } from 'faq';
-import { Faq, TypeBackButton } from 'shared/components';
+import { TypeBackButton } from 'shared/components';
 import { Layout } from 'shared/layout';
 import { Gate, IcsPageSwitcher, TypePageSwitcher } from 'shared/navigate';
 import { ClaimIcs } from './claim-ics';
@@ -17,6 +16,5 @@ export const ClaimIcsPage: FC = () => (
       <IcsPageSwitcher />
     </Gate>
     <ClaimIcs />
-    <Faq items={useFaq('OPERATOR_TYPE')} />
   </Layout>
 );

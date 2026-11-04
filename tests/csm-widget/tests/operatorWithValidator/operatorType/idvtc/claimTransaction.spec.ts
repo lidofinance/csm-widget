@@ -61,16 +61,12 @@ test.describe(
           );
           await widgetService.walletPage.confirmTx();
 
-          await expect(txModal.title).toContainText(
-            'IDVTC type has been successfully claimed',
-            { timeout: STAGE_WAIT_TIMEOUT },
-          );
-          await expect(txModal.etherscanLink).toHaveAttribute(
-            'href',
-            /\/tx\/0x[0-9a-fA-F]+$/,
-          );
-
-          await txModal.closeModal();
+          await expect(claim.successScreen).toBeVisible({
+            timeout: STAGE_WAIT_TIMEOUT,
+          });
+          await expect(txModal.modal).toBeHidden({
+            timeout: STAGE_WAIT_TIMEOUT,
+          });
         });
       },
     );

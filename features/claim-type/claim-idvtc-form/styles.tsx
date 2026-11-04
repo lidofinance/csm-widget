@@ -1,83 +1,46 @@
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
-import { Accordion, Button, Text } from '@lidofinance/lido-ui';
+import { Body, Button, Card } from '@lidofinance/lido-app-ui';
 import DkgFileWarning from 'assets/illustrations/dkg-file-warning.svg?react';
-import { StackStyle } from 'shared/components';
-import { CURVE_VARIANTS } from 'shared/node-operator/curve-badge/styles';
-import styled, { CSSProperties } from 'styled-components';
+import styled from 'styled-components';
 
-export const StyledContainer = styled(StackStyle).attrs({
-  $direction: 'column',
-})`
-  gap: 40px;
-  max-width: 420px;
-  text-align: center;
-  align-self: center;
-  align-items: center;
+export const NarrowStyle = styled.div`
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
 `;
 
-export const StyledButton = styled(Button)`
-  max-width: 360px;
+export const TwoCardsStyle = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 `;
 
-export const BadgeWrapper = styled.div`
-  position: relative;
+export const CardsGridStyle = styled.div`
   display: grid;
-  width: 150px;
-  height: 120px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 
-  &:before {
-    content: '';
-    grid-area: 1 / 1;
-    filter: blur(38px);
-    opacity: 0.8;
-    ${CURVE_VARIANTS[OPERATOR_TYPE.CSM_IDVTC]}
+  @media (max-width: 899px) {
+    grid-template-columns: minmax(0, 1fr);
   }
 `;
 
-export const BadgeMain = styled.div`
-  grid-area: 1 / 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1;
-  border-radius: 28px;
-  border: 4px solid rgba(var(--lido-rgb-foreground), 0.8);
-  ${CURVE_VARIANTS[OPERATOR_TYPE.CSM_IDVTC]}
-  background-origin: border-box;
-`;
-
-export const BadgeText = styled(Text)`
-  font-weight: 700;
-  font-size: 36px;
-  letter-spacing: -0.5pt;
-  color: var(--lido-color-primaryContrast);
-`;
-
-export const canvasStyles: CSSProperties = {
-  position: 'fixed',
-  pointerEvents: 'none',
-  width: '100%',
-  height: '100%',
-  top: 0,
-  left: 0,
-  zIndex: 9999,
-};
-
-export const AccordionStyle = styled(Accordion)`
-  background: var(--lido-color-backgroundSecondary);
-
-  p {
-    margin: 0;
+export const FullWidthButtonStyle = styled(Button)`
+  && {
+    width: 100%;
   }
 `;
 
-export const DkgCardRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 40px;
+export const DkgCardStyle = styled(Card)`
+  && {
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+  }
+`;
 
-  ${({ theme }) => theme.mediaQueries.md} {
-    flex-direction: column;
+export const DkgDescriptionStyle = styled(Body)`
+  && {
+    color: var(--lido-app-ui-color-text-secondary);
   }
 `;
 

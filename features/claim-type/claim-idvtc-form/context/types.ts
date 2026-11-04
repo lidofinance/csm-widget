@@ -7,11 +7,8 @@ import {
 } from '@lidofinance/lido-csm-sdk';
 import { Address } from 'viem';
 
-export type ClaimIdvtcMode = 'upgrade' | 'create';
-
 export type ClaimIdvtcFormInputType = {
   curveId: bigint;
-  mode: ClaimIdvtcMode;
 };
 
 export type ClaimIdvtcFormNetworkData = {
@@ -26,9 +23,6 @@ export type ClaimIdvtcFormNetworkData = {
   newCurve: CurveRef;
   newParameters: CurveParameters;
   proof: AddressProof;
-  justClaimed?: boolean;
-  // Injected by the flow at buildCallback time (not fetched by the data
-  // provider): tells the tx success stage to hand off to the members-init
-  // stage instead of the final success screen.
+  // Injected by the flow at buildCallback time: the success stage then holds on members init
   willInitMembers?: boolean;
 };

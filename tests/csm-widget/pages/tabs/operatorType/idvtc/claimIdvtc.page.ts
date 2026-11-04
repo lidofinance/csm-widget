@@ -6,10 +6,13 @@ export class ClaimIdvtcPage extends BasePage {
   title: Locator;
   subtitle: Locator;
   formTitle: Locator;
+  whatsChanging: Locator;
+  viewFullListButton: Locator;
   parameterChanges: Locator;
   claimButton: Locator;
   confirmModal: Locator;
   confirmContinueButton: Locator;
+  successScreen: Locator;
   dkgRequiredCard: Locator;
   dkgUploadFilesButton: Locator;
 
@@ -21,9 +24,10 @@ export class ClaimIdvtcPage extends BasePage {
       .locator('[aria-current="page"]');
     this.subtitle = this.page.getByTestId('pageSubtitle');
     this.formTitle = this.page.getByTestId('formTitle');
-    this.parameterChanges = this.page.getByText('Parameter changes', {
-      exact: true,
-    });
+    this.whatsChanging = this.page.getByTestId('claimChanges');
+    this.viewFullListButton =
+      this.whatsChanging.getByTestId('viewFullListButton');
+    this.parameterChanges = this.page.getByTestId('parameterChangesModal');
     this.claimButton = this.page.getByRole('button', {
       name: 'Claim operator type',
     });
@@ -33,6 +37,7 @@ export class ClaimIdvtcPage extends BasePage {
     this.confirmContinueButton = this.confirmModal.getByRole('button', {
       name: 'Continue',
     });
+    this.successScreen = this.page.getByTestId('successScreen');
     this.dkgRequiredCard = this.page.getByTestId('dkgRequiredCard');
     this.dkgUploadFilesButton = this.dkgRequiredCard.getByRole('button', {
       name: 'Upload files',
@@ -45,17 +50,20 @@ export class ClaimIdvtcPage extends BasePage {
     });
   }
 
-  async expandParameterChanges() {
-    await test.step('Expand parameter changes', async () => {
-      await this.parameterChanges.click();
+  async openParameterChanges() {
+    await test.step('Open the full parameter list', async () => {
+      await this.viewFullListButton.click();
+      await this.parameterChanges.waitFor();
     });
   }
 
   getColumn(title: string): Locator {
-    return this.page.getByText(title, { exact: true });
+    return this.parameterChanges.getByText(title, { exact: true });
   }
 
   getParameter(title: string): Locator {
-    return this.page.getByTestId('parameterTitle').filter({ hasText: title });
+    return this.parameterChanges
+      .getByTestId('parameterTitle')
+      .filter({ hasText: title });
   }
 }

@@ -14,7 +14,6 @@ export const ClaimIdvtcFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const formObject = useForm<ClaimIdvtcFormInputType>({
     resolver,
     mode: 'onChange',
-    defaultValues: { mode: 'upgrade' },
   });
 
   const submitter = useFlowSubmit(useClaimIdvtcFlowResolver());

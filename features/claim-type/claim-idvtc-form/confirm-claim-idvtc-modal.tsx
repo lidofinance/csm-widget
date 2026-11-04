@@ -3,12 +3,24 @@ import { Button, Modal, Text } from '@lidofinance/lido-ui';
 import type { ModalComponentType } from 'providers/modal-provider';
 import { Stack } from 'shared/components';
 import { ConfirmModalProps } from 'shared/hooks';
+import { ConfirmClaimIdvtcModalApp } from './confirm-claim-idvtc-modal-app';
 
 export const ConfirmClaimIdvtcModal: ModalComponentType<ConfirmModalProps> = ({
+  ui,
   onConfirm,
   onReject,
   ...props
 }) => {
+  if (ui === 'app') {
+    return (
+      <ConfirmClaimIdvtcModalApp
+        open={props.open}
+        onConfirm={onConfirm}
+        onReject={onReject}
+      />
+    );
+  }
+
   return (
     <Modal {...props} center onClose={onReject}>
       <Stack direction="column" gap="xxl">
