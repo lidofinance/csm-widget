@@ -1,4 +1,4 @@
-import { Block, Button, Text } from '@lidofinance/lido-ui';
+import { Button, Card, Description, H3 } from '@lidofinance/lido-app-ui';
 import { FC, PropsWithChildren, ReactNode } from 'react';
 import { useSiweAuth } from 'modules/siwe';
 import { useDappStatus } from 'modules/web3';
@@ -10,19 +10,15 @@ import { Connect } from '../connect/connect';
 export const SiweConnect: FC<{ description: ReactNode }> = ({
   description,
 }) => (
-  <Block>
+  <Card>
     <Stack direction="column" gap="lg">
       <Stack direction="column" gap="md">
-        <Text as="h3" size="lg" weight="bold">
-          Connect your wallet
-        </Text>
-        <Text size="xs" color="secondary">
-          {description}
-        </Text>
+        <H3>Connect your wallet</H3>
+        <Description color="secondary">{description}</Description>
       </Stack>
       <Connect size="sm" fullwidth />
     </Stack>
-  </Block>
+  </Card>
 );
 
 // Connected-but-not-signed step: the surface-specific body plus the Sign in
@@ -31,19 +27,14 @@ export const SiweSignIn: FC<PropsWithChildren> = ({ children }) => {
   const { signIn } = useSiweAuth();
 
   return (
-    <Block>
+    <Card>
       <Stack direction="column" gap="lg">
-        <Text size="xs">{children}</Text>
-        <Button
-          size="sm"
-          onClick={signIn}
-          fullwidth
-          data-testid="siweSignInButton"
-        >
+        <Description>{children}</Description>
+        <Button size="small" onClick={signIn} data-testid="siweSignInButton">
           Sign in
         </Button>
       </Stack>
-    </Block>
+    </Card>
   );
 };
 

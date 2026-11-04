@@ -1,4 +1,4 @@
-import { Block, Button, Text } from '@lidofinance/lido-ui';
+import { Button, Card, Description, H3 } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { useDappStatus } from 'modules/web3';
 import { useSiweAuth } from 'modules/siwe';
@@ -13,22 +13,20 @@ export const SiweSignInAddress: FC<{ operatorType: string }> = ({
   const { signIn } = useSiweAuth();
 
   return (
-    <Block data-testid="signInForm">
+    <Card data-testid="signInForm">
       <Stack direction="column" gap="lg">
         <Stack direction="column" gap="md">
-          <Text as="h3" size="lg" weight="bold">
-            Sign in
-          </Text>
-          <Text size="xs" color="secondary">
+          <H3>Sign in</H3>
+          <Description color="secondary">
             To continue, please sign a message with your connected address to
             prove ownership.
-          </Text>
+          </Description>
         </Stack>
         <Stack direction="column" gap="md">
-          <Text size="xs" color="secondary">
+          <Description color="secondary">
             You are requesting {operatorType} operator type for the following
             address:
-          </Text>
+          </Description>
           <InputAddress
             disabled
             label="Main address"
@@ -38,10 +36,10 @@ export const SiweSignInAddress: FC<{ operatorType: string }> = ({
           />
         </Stack>
 
-        <Button size="sm" onClick={signIn} fullwidth>
+        <Button size="small" onClick={signIn}>
           Sign in
         </Button>
       </Stack>
-    </Block>
+    </Card>
   );
 };

@@ -35,7 +35,6 @@ import {
   PopupStyle,
   SubLineStyle,
   TitleStyle,
-  TypeTagButtonStyle,
 } from './styles';
 
 const CREATE_EVENTS = {
@@ -81,13 +80,12 @@ const ActiveHeader: FC<ActiveHeaderProps> = ({ operator, onClose }) => {
       </HeaderTextStyle>
       <HeaderTagsStyle>
         {type && (
-          <TypeTagButtonStyle
-            type="button"
+          <OperatorTypeTag
+            type={type}
+            full
             data-testid="switchPopupTypeTag"
             onClick={handleTypeClick}
-          >
-            <OperatorTypeTag type={type} full />
-          </TypeTagButtonStyle>
+          />
         )}
         <OperatorRolesTag operator={operator} full />
       </HeaderTagsStyle>

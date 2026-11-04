@@ -1,11 +1,13 @@
 import {
   Address,
-  ButtonIcon,
-  Copy,
-  External,
+  Body,
+  Button,
+  Caption,
+  IconCopy,
+  IconEtherscan,
   Identicon,
   Modal,
-} from '@lidofinance/lido-ui';
+} from '@lidofinance/lido-app-ui';
 import { useCallback, useEffect } from 'react';
 import { useConnectorInfo, useDisconnect } from 'reef-knot/core-react';
 
@@ -15,16 +17,12 @@ import { useCopyToClipboard } from 'shared/hooks';
 import {
   WalletModalAccountStyle,
   WalletModalActionsStyle,
-  WalletModalAddressStyle,
   WalletModalConnectedStyle,
-  WalletModalConnectorStyle,
-  WalletModalContentStyle,
   WalletModalDisconnectStyle,
-  WalletModalLinkStyle,
 } from './styles';
 import { getEtherscanAddressLink } from 'utils';
 
-export const WalletModal: ModalComponentType = ({ onClose, ...props }) => {
+export const WalletModal: ModalComponentType = ({ onClose }) => {
   const { address, chainId } = useDappStatus();
   const { connectorName } = useConnectorInfo();
   const { disconnect } = useDisconnect();
@@ -46,62 +44,60 @@ export const WalletModal: ModalComponentType = ({ onClose, ...props }) => {
 
   return (
     <Modal
+      withOverlay
       title="Account"
       onClose={onClose}
       data-testid="walletModal"
-      {...props}
     >
-      <WalletModalContentStyle>
-        <WalletModalConnectedStyle>
-          {connectorName && (
-            <WalletModalConnectorStyle data-testid="providerName">
-              Connected with {connectorName}
-            </WalletModalConnectorStyle>
-          )}
+      <WalletModalConnectedStyle>
+        {connectorName && (
+          <Caption color="secondary" data-testid="providerName">
+            Connected with {connectorName}
+          </Caption>
+        )}
 
-          {disconnect && (
-            <WalletModalDisconnectStyle
-              size="xs"
-              variant="outlined"
-              onClick={handleDisconnect}
-            >
-              Disconnect
-            </WalletModalDisconnectStyle>
-          )}
-        </WalletModalConnectedStyle>
-
-        <WalletModalAccountStyle>
-          <Identicon address={address} />
-          <WalletModalAddressStyle>
-            <Address
-              data-testid="connectedAddress"
-              address={address}
-              symbols={6}
-            />
-          </WalletModalAddressStyle>
-        </WalletModalAccountStyle>
-
-        <WalletModalActionsStyle>
-          <ButtonIcon
-            data-testid="copyAddressBtn"
-            onClick={handleCopy}
-            icon={<Copy />}
+        {disconnect && (
+          <WalletModalDisconnectStyle
             size="xs"
-            variant="ghost"
+            variant="outlined"
+            onClick={handleDisconnect}
           >
-            Copy address
-          </ButtonIcon>
-          <WalletModalLinkStyle
-            data-testid="etherscanBtn"
-            href={getEtherscanAddressLink(chainId ?? 1, address)}
-            icon={<External />}
-            size="xs"
-            variant="ghost"
-          >
-            View on Etherscan
-          </WalletModalLinkStyle>
-        </WalletModalActionsStyle>
-      </WalletModalContentStyle>
+            Disconnect
+          </WalletModalDisconnectStyle>
+        )}
+      </WalletModalConnectedStyle>
+
+      <WalletModalAccountStyle>
+        <Identicon address={address} size={32} />
+        <Body weight="bold">
+          <Address
+            data-testid="connectedAddress"
+            address={address}
+            symbols={6}
+          />
+        </Body>
+      </WalletModalAccountStyle>
+
+      <WalletModalActionsStyle>
+        <Button
+          variant="ghost"
+          size="small"
+          iconLeft={<IconCopy />}
+          onClick={handleCopy}
+          data-testid="copyAddressBtn"
+        >
+          Copy address
+        </Button>
+        <Button
+          variant="ghost"
+          size="small"
+          iconLeft={<IconEtherscan />}
+          href={getEtherscanAddressLink(chainId ?? 1, address)}
+          data-testid="etherscanBtn"
+        >
+          View on Etherscan
+        </Button>
+      </WalletModalActionsStyle>
     </Modal>
   );
 };

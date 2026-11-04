@@ -1,22 +1,26 @@
+import { Button, Notification } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
 import { FC } from 'react';
-import { LocalLink } from 'shared/navigate';
-import { Alert } from './alert';
-import { AlertButton } from './styles';
+import { trackMatomoEvent } from 'utils';
 
 export const AlertExpiredLockedBond: FC = () => (
-  <Alert title="Your locked bond has expired">
-    <p>
-      The lock period has ended. You can unlock your bond now (no compensation
-      required).
-    </p>
-    <br />
-    <LocalLink
-      href={PATH.BOND_UNLOCK}
-      matomoEvent={MATOMO_CLICK_EVENTS_TYPES.expiredLockedBondLinkAlert}
-    >
-      <AlertButton>Unlock bond</AlertButton>
-    </LocalLink>
-  </Alert>
+  <Notification
+    title="Your locked bond has expired"
+    actions={
+      <Button
+        size="small"
+        variant="outline"
+        href={PATH.BOND_UNLOCK}
+        onClick={() =>
+          trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.expiredLockedBondLinkAlert)
+        }
+      >
+        Unlock bond
+      </Button>
+    }
+  >
+    The lock period has ended. You can unlock your bond now (no compensation
+    required).
+  </Notification>
 );

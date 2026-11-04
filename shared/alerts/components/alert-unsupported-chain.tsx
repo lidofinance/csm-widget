@@ -1,17 +1,20 @@
-import { Text } from '@lidofinance/lido-ui';
+import { Notification } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { useChainName } from 'shared/hooks';
-import { AlertRed } from './styles';
+import styled from 'styled-components';
+
+const ErrorNotification = styled(Notification)`
+  && {
+    --local-border: var(--lido-app-ui-color-border-error);
+  }
+`;
 
 export const AlertUnsupportedChain: FC = () => {
   const chainName = useChainName(true);
 
   return (
-    <AlertRed>
-      <Text size="xs" weight="bold">
-        Unsupported chain
-      </Text>
-      <p>Please switch to {chainName} in your wallet</p>
-    </AlertRed>
+    <ErrorNotification title="Unsupported chain">
+      Please switch to {chainName} in your wallet
+    </ErrorNotification>
   );
 };

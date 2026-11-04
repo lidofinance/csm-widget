@@ -1,4 +1,4 @@
-import { Popover } from '@lidofinance/lido-app-ui';
+import { Popover, Typography } from '@lidofinance/lido-app-ui';
 import styled from 'styled-components';
 
 export const TriggerStyle = styled.button`
@@ -22,15 +22,16 @@ export const TriggerStyle = styled.button`
   }
 `;
 
-export const NameStyle = styled.span`
+export const NameStyle = styled(Typography).attrs({
+  variant: 'body',
+  weight: 'bold',
+  as: 'span',
+})`
   display: flex;
   align-items: center;
   gap: 8px;
   flex: 1;
   min-width: 0;
-  font-size: 14px;
-  line-height: 24px;
-  font-weight: var(--lido-app-ui-font-weight-bold);
 
   > :last-child {
     overflow: hidden;
@@ -79,22 +80,24 @@ export const HeaderTextStyle = styled.div`
   text-align: center;
 `;
 
-export const TitleStyle = styled.span`
-  font-size: 20px;
-  line-height: 32px;
-  font-weight: var(--lido-app-ui-font-weight-semibold, 600);
+export const TitleStyle = styled(Typography).attrs({
+  variant: 'h3',
+  weight: 'semibold',
+  as: 'span',
+})`
   overflow-wrap: anywhere;
 `;
 
-export const SubLineStyle = styled.span`
+export const SubLineStyle = styled(Typography).attrs({
+  variant: 'body',
+  color: 'tertiary',
+  as: 'span',
+})`
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
   gap: 8px;
-  font-size: 14px;
-  line-height: 24px;
-  color: var(--lido-app-ui-color-text-tertiary);
 `;
 
 export const HeaderTagsStyle = styled.div`
@@ -106,22 +109,6 @@ export const HeaderTagsStyle = styled.div`
 
   > * {
     max-width: 100%;
-  }
-`;
-
-export const TypeTagButtonStyle = styled.button`
-  display: flex;
-  justify-content: center;
-  padding: 0;
-  border: none;
-  background: none;
-  font: inherit;
-  color: inherit;
-  cursor: pointer;
-
-  &:focus-visible {
-    outline: 2px solid var(--lido-app-ui-color-border-active);
-    outline-offset: 2px;
   }
 `;
 

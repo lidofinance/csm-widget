@@ -1,4 +1,9 @@
-import { Logo, SidebarGroup, SidebarItem } from '@lidofinance/lido-app-ui';
+import {
+  Logo,
+  Sidebar,
+  SidebarGroup,
+  SidebarItem,
+} from '@lidofinance/lido-app-ui';
 import { WIDGET_TITLE } from 'consts';
 import { PATH } from 'consts/urls';
 import {
@@ -13,14 +18,13 @@ import { NoSSRWrapper } from 'shared/components';
 import { useInitialLoading, useRouterPath } from 'shared/hooks';
 import { getIsActivePath } from 'utils';
 import { OperatorSwitcher } from './operator-switcher';
-import { SidebarStyle } from './styles';
 import { useNavItems } from './use-nav-items';
 
 const SidebarLogo: FC = () => (
   <Logo variant="full" product={WIDGET_TITLE} href={PATH.HOME} />
 );
 
-const ShellNavigation: FC = () => <SidebarStyle logo={<SidebarLogo />} />;
+const ShellNavigation: FC = () => <Sidebar logo={<SidebarLogo />} />;
 
 const OperatorNavigation: FC = () => {
   const isLoading = useInitialLoading();
@@ -38,7 +42,7 @@ const OperatorNavigation: FC = () => {
     isSupportedChain && !!list?.length && (isUpgrading || !isLoading);
 
   return (
-    <SidebarStyle
+    <Sidebar
       logo={<SidebarLogo />}
       footer={
         !showFooter ? undefined : (
@@ -64,7 +68,7 @@ const OperatorNavigation: FC = () => {
           ))}
         </SidebarGroup>
       )}
-    </SidebarStyle>
+    </Sidebar>
   );
 };
 

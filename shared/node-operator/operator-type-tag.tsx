@@ -9,7 +9,7 @@ import {
   DisplayOperatorType,
   OPERATOR_TYPE_METADATA,
 } from 'consts';
-import { FC } from 'react';
+import { FC, MouseEventHandler } from 'react';
 import styled, { css } from 'styled-components';
 import { CURVE_VARIANTS } from './curve-badge/styles';
 
@@ -17,6 +17,8 @@ export type OperatorTypeTagProps = {
   type: DisplayOperatorType;
   full?: boolean;
   tooltip?: boolean;
+  onClick?: MouseEventHandler<HTMLElement>;
+  'data-testid'?: string;
 };
 
 type Gradient = ReturnType<typeof css>;
@@ -97,6 +99,8 @@ export const OperatorTypeTag: FC<OperatorTypeTagProps> = ({
   type,
   full = false,
   tooltip = false,
+  onClick,
+  'data-testid': testId,
 }) => {
   const { short, name } = OPERATOR_TYPE_METADATA[type];
   const curated = isCurated(type);
@@ -107,6 +111,8 @@ export const OperatorTypeTag: FC<OperatorTypeTagProps> = ({
       <TagStyle
         variant={curated ? 'action' : 'default'}
         $fill={gradients?.fill}
+        onClick={onClick}
+        data-testid={testId}
       >
         {full ? name : short}
       </TagStyle>

@@ -28,13 +28,11 @@ export const Header: FC<Props> = ({ dummy, crumbs }) => (
   >
     <Stack direction="row" align="center" gap={12} grow>
       <SidebarToggle />
-      <Hidden above="ml">
+      <Hidden above="lg">
         <Logos />
       </Hidden>
       <Hidden below="md">
-        <Stack direction="row" justify={{ ml: 'center' }} grow>
-          <Crumbs crumbs={crumbs} />
-        </Stack>
+        <Crumbs crumbs={crumbs} />
       </Hidden>
     </Stack>
   </LibHeader>

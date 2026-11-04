@@ -45,7 +45,7 @@ export class OperatorTypePage extends BasePage {
     this.icsApplyButton = this.icsCard.getByTestId('icsApplyButton');
     this.claimIcsAlert = this.page.getByTestId('claimIcsAlert');
     this.claimAlert = this.page.getByTestId('claimIdvtcAlert');
-    this.claimAlertButton = this.claimAlert.getByRole('button', {
+    this.claimAlertButton = this.claimAlert.getByRole('link', {
       name: 'Go to Claim page',
     });
     this.navClaimCounter = this.page

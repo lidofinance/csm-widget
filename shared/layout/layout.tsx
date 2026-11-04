@@ -1,4 +1,5 @@
 import {
+  Description,
   Hidden,
   Layout as LibLayout,
   PageContent,
@@ -22,7 +23,7 @@ import { Footer } from './footer';
 import { Crumb, Crumbs, useCrumbs } from './crumbs';
 import { Header } from './header';
 import { Navigation } from './navigation';
-import { DisclaimersStyled, MainStyled, Subtitle } from './styles';
+import { DisclaimersStyled, MainStyled } from './styles';
 
 type Props = {
   title?: ReactNode;
@@ -71,7 +72,13 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
                   </Hidden>
                   {mainPrefix}
                   {subtitle && (
-                    <Subtitle data-testid="pageSubtitle">{subtitle}</Subtitle>
+                    <Description
+                      as="div"
+                      color="secondary"
+                      data-testid="pageSubtitle"
+                    >
+                      {subtitle}
+                    </Description>
                   )}
                   {children}
                 </AppStack>
