@@ -1,7 +1,5 @@
 import { FC } from 'react';
 
-import { useFaq } from 'faq';
-import { Faq } from 'shared/components';
 import { Layout } from 'shared/layout';
 import { SettingsPageSwitcher } from 'shared/navigate';
 import { AcceptInvite } from './accept-invite';
@@ -15,7 +13,6 @@ export const AcceptInvitePage: FC = () => {
     >
       <SettingsPageSwitcher />
       <AcceptInvite />
-      <Faq items={useFaq('ROLES')} />
     </Layout>
   );
 };

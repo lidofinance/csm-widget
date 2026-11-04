@@ -3,6 +3,7 @@ import {
   type NodeOperatorShortInfo,
 } from '@lidofinance/lido-csm-sdk';
 import { ROLES_METADATA } from 'consts/roles';
+import { type ModuleInvite } from 'modules/web3';
 import { Address } from 'shared/components';
 import { DescriptorId } from 'shared/node-operator';
 import {
@@ -12,12 +13,8 @@ import {
   TxStageSuccess,
   useTxStages,
 } from 'shared/transaction-modal';
-import invariant from 'tiny-invariant';
 import { type Address as TAddress } from 'viem';
-import {
-  AcceptInviteFormInputType,
-  AcceptInviteFormNetworkData,
-} from '../context/types';
+import { AcceptInviteFormNetworkData } from '../context/types';
 
 type AcceptInviteStageParams = {
   invite: Pick<NodeOperatorInviteInfo, 'nodeOperatorId' | 'role'>;
@@ -70,15 +67,16 @@ export const buildAcceptInviteStages = (
     ),
 });
 
+export type AcceptInviteStageInput = { invite: ModuleInvite };
+
 export const useTxModalStagesAcceptInvite = () =>
   useTxStages<
-    AcceptInviteFormInputType,
+    AcceptInviteStageInput,
     AcceptInviteFormNetworkData,
     NodeOperatorShortInfo
-  >((transitStage, input, data) => {
-    invariant(input.invite, 'Invite is required');
-    return buildAcceptInviteStages(transitStage, {
-      invite: input.invite,
+  >((transitStage, { invite }, data) =>
+    buildAcceptInviteStages(transitStage, {
+      invite,
       address: data.address,
-    });
-  });
+    }),
+  );

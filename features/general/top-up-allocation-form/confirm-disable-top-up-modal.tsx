@@ -3,10 +3,21 @@ import { Button, Modal, Text } from '@lidofinance/lido-ui';
 import type { ModalComponentType } from 'providers/modal-provider';
 import { Stack } from 'shared/components';
 import { ConfirmModalProps } from 'shared/hooks';
+import { ConfirmDisableTopUpModalApp } from './confirm-disable-top-up-modal-app';
 
 export const ConfirmDisableTopUpModal: ModalComponentType<
   ConfirmModalProps
-> = ({ onConfirm, onReject, ...props }) => {
+> = ({ ui, onConfirm, onReject, ...props }) => {
+  if (ui === 'app') {
+    return (
+      <ConfirmDisableTopUpModalApp
+        open={props.open}
+        onConfirm={onConfirm}
+        onReject={onReject}
+      />
+    );
+  }
+
   return (
     <Modal {...props} title="Confirm disabling top-ups" onClose={onReject}>
       <Stack direction="column" gap="xxl">

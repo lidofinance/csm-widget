@@ -8,8 +8,11 @@ import {
 } from 'shared/hook-form/form-controller';
 import { useNavigate } from 'shared/navigate';
 import invariant from 'tiny-invariant';
+import {
+  findInviteById,
+  shouldNavigateHomeAfterAccept,
+} from '../accept-invite-state';
 import { useTxModalStagesAcceptInvite } from '../hooks/use-tx-modal-stages-accept-invite';
-import { useAcceptInviteFormData } from './accept-invite-data-provider';
 import {
   AcceptInviteFormInputType,
   AcceptInviteFormNetworkData,
@@ -30,27 +33,29 @@ export const useAcceptInviteFlowResolver = (): FlowResolver<
 
   return useCallback(
     (input, data) => {
-      if (!input.invite) return { action: 'no-invite' };
-
-      const invite = input.invite;
+      const invite = findInviteById(data.invites, input.intent);
+      if (!invite) return { action: 'no-invite' };
 
       return {
         action: 'accept' as const,
         submit: async () => {
-          invariant(invite !== undefined, 'Invite is not defined');
-
           const sdk = sm.get(invite.module);
           invariant(sdk, `${invite.module} SDK not initialized`);
 
           const { result } = await sdk.roles.confirmAddress({
             nodeOperatorId: invite.nodeOperatorId,
             role: invite.role,
-            callback: buildCallback(input, data),
+            callback: buildCallback({ invite }, data),
           });
 
           if (result) appendNO({ ...result, module: invite.module });
 
-          if (data.nodeOperatorId === undefined && data.invites.length <= 1) {
+          if (
+            shouldNavigateHomeAfterAccept({
+              nodeOperatorId: data.nodeOperatorId,
+              invitesCount: data.invites.length,
+            })
+          ) {
             void n(PATH.HOME);
           }
         },
@@ -58,10 +63,4 @@ export const useAcceptInviteFlowResolver = (): FlowResolver<
     },
     [sm, appendNO, n, buildCallback],
   );
-};
-
-export const useAcceptInviteFlow = (): AcceptInviteFlow => {
-  const resolve = useAcceptInviteFlowResolver();
-  const data = useAcceptInviteFormData(true);
-  return resolve({} as AcceptInviteFormInputType, data);
 };

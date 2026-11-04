@@ -1,28 +1,37 @@
 import { FC, memo } from 'react';
-
-import { FormBlock, FormTitle } from 'shared/components';
+import { FormCard, FormPage, FormReady, SubmitButton } from 'shared/form-page';
+import { TextField } from 'shared/hook-form/fields';
 import { Form } from 'shared/hook-form/form-controller';
+import { AppFormUi } from 'shared/hook-form/form-ui';
 import { MetadataDataProvider, MetadataFormProvider } from './context';
-import { DescriptionInput } from './controls/description-input';
-import { NameInput } from './controls/name-input';
-import { SubmitButton } from './controls/submit-button';
-import { MetadataFormLoader } from './metadata-form-loader';
+import { MetadataFormGate } from './metadata-form-gate';
 
-export const MetadataForm: FC = memo(() => {
-  return (
+export const MetadataForm: FC = memo(() => (
+  <AppFormUi>
     <MetadataDataProvider>
       <MetadataFormProvider>
-        <FormBlock>
-          <MetadataFormLoader>
-            <Form>
-              <FormTitle>Node Operator name</FormTitle>
-              <NameInput />
-              <DescriptionInput />
-              <SubmitButton />
-            </Form>
-          </MetadataFormLoader>
-        </FormBlock>
+        <FormPage>
+          <FormReady>
+            <MetadataFormGate>
+              <Form data-testid="metadataForm">
+                <FormCard title="Node Operator name">
+                  <TextField
+                    name="name"
+                    label="Name"
+                    placeholder="Enter operator name"
+                  />
+                  <TextField
+                    name="description"
+                    label="Description"
+                    placeholder="Enter operator description"
+                  />
+                  <SubmitButton>Save</SubmitButton>
+                </FormCard>
+              </Form>
+            </MetadataFormGate>
+          </FormReady>
+        </FormPage>
       </MetadataFormProvider>
     </MetadataDataProvider>
-  );
-});
+  </AppFormUi>
+));

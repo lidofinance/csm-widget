@@ -1,25 +1,31 @@
 import { FC, memo } from 'react';
-
-import { FormBlock } from 'shared/components';
-import { Form, FormLoader } from 'shared/hook-form/form-controller';
+import { FormPage, FormReady } from 'shared/form-page';
+import { Form } from 'shared/hook-form/form-controller';
+import { AppFormUi } from 'shared/hook-form/form-ui';
 import {
   TopUpAllocationDataProvider,
   TopUpAllocationFormProvider,
 } from './context';
-import { TopUpAllocationToggle } from './controls/top-up-allocation-toggle';
+import { TopUpSwitch } from './controls/top-up-switch';
+import { TopUpAllocationFormGate } from './top-up-allocation-form-gate';
+import { TopUpCard } from './top-up-card';
 
-export const TopUpAllocationForm: FC = memo(() => {
-  return (
+export const TopUpAllocationForm: FC = memo(() => (
+  <AppFormUi>
     <TopUpAllocationDataProvider>
       <TopUpAllocationFormProvider>
-        <FormBlock>
-          <FormLoader>
-            <Form>
-              <TopUpAllocationToggle />
-            </Form>
-          </FormLoader>
-        </FormBlock>
+        <FormPage>
+          <FormReady>
+            <TopUpAllocationFormGate>
+              <Form>
+                <TopUpCard enabled>
+                  <TopUpSwitch />
+                </TopUpCard>
+              </Form>
+            </TopUpAllocationFormGate>
+          </FormReady>
+        </FormPage>
       </TopUpAllocationFormProvider>
     </TopUpAllocationDataProvider>
-  );
-});
+  </AppFormUi>
+));

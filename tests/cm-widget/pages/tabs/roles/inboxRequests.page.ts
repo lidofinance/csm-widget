@@ -5,7 +5,7 @@ import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { BasePage } from '../../../../shared/pages/base.page';
 
 export class InboxRequestsPage extends BasePage {
-  acceptRequestButton: Locator;
+  form: Locator;
 
   constructor(
     public page: Page,
@@ -13,29 +13,33 @@ export class InboxRequestsPage extends BasePage {
   ) {
     super(page);
 
-    this.acceptRequestButton = this.page.getByRole('button', {
-      name: 'Accept request',
-    });
+    this.form = this.page.getByTestId('acceptInviteForm');
   }
 
   async open() {
     await test.step('Open Inbox Requests tab', async () => {
-      await this.openWithRetry('/settings/inbox', this.acceptRequestButton);
+      await this.openWithRetry('/settings/inbox', this.form);
     });
   }
 
   getRequestLocator(noNumber: number, role: ROLES) {
     const requestId = `${SHORT_ROLES[role]}-${noNumber}`;
-    // value is module-prefixed; leading "-" keeps "-M-5" from matching "-M-50"
-    return this.page
-      .locator(`input[value$="-${requestId}"]`)
-      .locator('xpath=ancestor::label');
+    // id is module-prefixed; leading "-" keeps "-M-5" from matching "-M-50"
+    return this.page.locator(
+      `[data-testid="inviteCard"][data-invite-id$="-${requestId}"]`,
+    );
+  }
+
+  getAcceptButton(noNumber: number, role: ROLES) {
+    return this.getRequestLocator(noNumber, role).getByRole('button', {
+      name: 'Accept request',
+    });
   }
 
   async acceptRequest(noNumber: number, role: ROLES) {
     await test.step(`Accept ${role} request for #${noNumber} node operator`, async () => {
       await test.step('Accept request', async () => {
-        await this.acceptRequestButton.click();
+        await this.getAcceptButton(noNumber, role).click();
 
         await this.page.waitForSelector(
           `text=You are accepting address change`,
