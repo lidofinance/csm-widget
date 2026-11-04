@@ -10,7 +10,8 @@ export const BondRow: FC = () => {
     <ShareRowView
       data-testid="splitsBondRow"
       label="Operator bond"
-      value={BOND_ROW_DESCRIPTION}
+      value="Operator bond"
+      description={BOND_ROW_DESCRIPTION}
       share={share}
     />
   );

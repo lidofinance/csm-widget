@@ -1,3 +1,8 @@
+jest.mock('modules/web3', () => ({
+  useNodeOperatorId: () => 1,
+  useModule: () => ({ module: 'csm' }),
+}));
+
 import { renderToStaticMarkup } from 'react-dom/server';
 import {
   ClaimTypeSuccessProvider,

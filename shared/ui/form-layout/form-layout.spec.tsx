@@ -14,6 +14,14 @@ describe('FormLayout', () => {
     );
   });
 
+  it('omits the aside panel when aside is null', () => {
+    const html = renderToStaticMarkup(
+      <FormLayout aside={null}>main</FormLayout>,
+    );
+
+    expect(html).toMatch(/^<div[^>]*><div[^>]*>main<\/div><\/div>$/);
+  });
+
   it('forwards html attributes and className to the root', () => {
     const html = renderToStaticMarkup(
       <FormLayout

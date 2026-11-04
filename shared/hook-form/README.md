@@ -1,83 +1,76 @@
-# Form Hooks
+# Forms
 
-A standardized architecture for building forms with React Hook Form, network data management, validation, and transaction handling.
+How forms are built: React Hook Form state, network data, a flow resolver that turns input into an action, transaction stages, and the app-ui kit that renders it all.
 
-## Architecture Overview
+- Flow layer: `shared/hook-form/form-controller`, `shared/hook-form/validation`
+- Fields: `shared/hook-form/fields`
+- Page pieces: `shared/form-page`
+- Layout ports of unpublished app-ui parts: `shared/ui`
+- UI flag: `shared/hook-form/form-ui`
+- Tx and confirm modals: `shared/transaction-modal`, `shared/hooks/use-confirm-modal.ts`
+- Legacy controls, used only by the forms still waiting for the separate pass: `shared/hook-form/controls`
 
-Forms follow a layered provider pattern with clear separation of concerns:
+## Tree
 
-```tsx
-<DataProvider>
-  {' '}
-  {/* Network data fetching */}
-  <FormProvider>
-    {' '}
-    {/* React Hook Form setup */}
-    <FormControllerProvider>
-      {' '}
-      {/* Submission handling */}
-      <Form>
-        {' '}
-        {/* Form element with submit */}
-        <FormLoader>
-          {' '}
-          {/* Loading state wrapper */}
-          <Controls /> {/* Form inputs */}
-        </FormLoader>
-      </Form>
-    </FormControllerProvider>
-  </FormProvider>
-</DataProvider>
+```text
+<AppFormUi>
+  <XDataProvider>
+    <XFormProvider>
+      <FormPage notices below faq done>
+        <FormReady>
+          <XFormGate>
+            <Form data-testid="xForm">
+              <FormLayout aside={<XAside />}>   archetype A
+              <FormCard>                         archetype B
 ```
 
-## File Structure
+- `AppFormUi` is outermost. It sets `ui = 'app'` for the subtree; `TransactionModal` re-provides it, and `useConfirmModal` passes `ui: 'app'` to confirm modals.
+- `FormPage` is the page shell, not a `<form>`. `notices` render above the form and `below` under it, and both hide while `done`. `faq` is always last.
+- `FormReady` shows a skeleton card (`formSkeleton`) while `useFormState().isLoading` is true or the data provider is pending.
+- `XFormGate` reads `useXFlow()` and returns a notice for the non-executable actions (`no-access`, `paused`, empty data). Otherwise it renders its children.
+- `<Form>` exists only when the form can submit. It carries the e2e form testid.
 
-```
-features/{feature-name}/{form-name}/
+## File structure
+
+```text
+features/{feature}/{form-name}/
 ├── context/
-│   ├── {form-name}-data-provider.tsx     # Network data fetching
-│   ├── {form-name}-provider.tsx          # Form state management
-│   ├── {form-name}-updater.tsx           # Field revalidation (optional)
-│   ├── types.ts                          # TypeScript types
-│   ├── use-{form-name}-default-values.ts # Default values computation
-│   ├── use-{form-name}-validation.ts     # Validation logic
-│   └── use-{form-name}-submit.ts         # Submit logic
-├── controls/                             # Form controls
-│   ├── amount-input.tsx
-│   └── submit-button.tsx
-└── {form-name}.tsx                       # Main form component
+│   ├── types.ts
+│   ├── {form}-data-provider.tsx
+│   ├── {form}-form-provider.tsx
+│   ├── {form}-updater.tsx            optional
+│   ├── use-{form}-default-values.ts
+│   ├── use-{form}-validation.ts
+│   ├── use-{form}-flow.ts
+│   └── index.ts
+├── hooks/use-tx-modal-stages-{form}.tsx
+├── controls/
+├── {form}-form.tsx
+├── {form}-form-gate.tsx
+└── {form}-aside.tsx                  archetype A
 ```
 
-## Core Concepts
+Reference implementations: `features/add-keys/add-keys/` (archetype A) and `features/change-role/claimer-form/` (archetype B).
 
-### 1. Data Provider
-
-Manages network data fetching and provides it via context:
+## Data provider
 
 ```tsx
-// *-data-provider.tsx
-import {
-  FormDataContext,
-  NetworkData,
-  useFormData,
-} from 'shared/hook-form/form-controller';
-
 const useMyFormNetworkData: NetworkData<MyFormNetworkData> = () => {
   const ethBalanceQuery = useEthereumBalance();
   const bondQuery = useOperatorBalance({ nodeOperatorId });
+  const invalidate = useInvalidate();
 
   const revalidate = useCallback(() => {
-    invalidate([ethBalanceQuery.queryKey, bondQuery.queryKey]);
-  }, [invalidate, ethBalanceQuery.queryKey, bondQuery.queryKey]);
-
-  const isPending = ethBalanceQuery.isPending || bondQuery.isPending;
+    invalidate([ethBalanceQuery.queryKey, KEY_OPERATOR_BALANCE]);
+  }, [invalidate, ethBalanceQuery.queryKey]);
 
   return {
     data: {
+      nodeOperatorId,
       ethBalance: ethBalanceQuery.data,
       bond: bondQuery.data,
-    },
-    isPending,
+    } as MyFormNetworkData,
+    isPending: ethBalanceQuery.isPending || bondQuery.isPending,
     revalidate,
   };
 };
@@ -86,6 +79,7 @@ export const useMyFormData = useFormData<MyFormNetworkData>;
 
 export const MyDataProvider: FC<PropsWithChildren> = ({ children }) => {
   const networkData = useMyFormNetworkData();
+
   return (
     <FormDataContext.Provider value={networkData}>
       {children}
@@ -94,25 +88,16 @@ export const MyDataProvider: FC<PropsWithChildren> = ({ children }) => {
 };
 ```
 
-**Key Points:**
+- `isPending` is the OR of every query's `isPending`.
+- `revalidate()` runs after a successful submit (`Form` passes it as `onConfirm`).
+- `useMyFormData(true)` throws while pending; use it only under `FormReady`.
 
-- Returns `FormData<T>` with `data`, `isPending`, and `revalidate`
-- Export typed `useFormData` hook for accessing data in controls
-- `revalidate()` refreshes data after transactions
-
-### 2. Form Provider
-
-Sets up React Hook Form with validation and submission:
+## Form provider
 
 ```tsx
-// *-provider.tsx
-import { FormProvider, useForm } from 'react-hook-form';
-import { FormControllerProvider } from 'shared/hook-form/form-controller';
-
 export const MyFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const resolver = useMyValidation();
   const defaultValues = useMyDefaultValues();
-  const submitter = useMySubmit();
 
   const formObject = useForm<MyFormInputType>({
     defaultValues,
@@ -120,10 +105,11 @@ export const MyFormProvider: FC<PropsWithChildren> = ({ children }) => {
     mode: 'onChange',
   });
 
+  const submitter = useFlowSubmit(useMyFlowResolver());
+
   return (
     <FormProvider {...formObject}>
-      <FormControllerProvider submitter={submitter}>
-        <MyUpdater /> {/* Optional field revalidation */}
+      <FormControllerProvider submitter={submitter} formName="myForm">
         {children}
       </FormControllerProvider>
     </FormProvider>
@@ -131,357 +117,245 @@ export const MyFormProvider: FC<PropsWithChildren> = ({ children }) => {
 };
 ```
 
-### 3. Default Values Hook
+`formName` is the Matomo form name (`csm_widget_submit_form_<snake_case formName>_start|success`). Keep it stable.
 
-Computes initial form values from network data:
+## Default values and validation
 
 ```tsx
-// use-*-default-values.ts
-import { useFormDefaultValues } from 'shared/hook-form/form-controller';
-
-export const useMyDefaultValues = () => {
-  return useFormDefaultValues<MyFormInputType, MyFormNetworkData>((data) => ({
-    token: selectBestToken(data.balances),
-    amount: 0n,
+export const useMyDefaultValues = () =>
+  useFormDefaultValues<MyFormInputType, MyFormNetworkData>((data) => ({
+    token: getMaxBalanceToken({ [TOKENS.eth]: data.ethBalance }),
+    amount: null,
   }));
-};
-```
 
-**Key Points:**
-
-- Automatically waits for `isPending: false`
-- Returns async default values for React Hook Form
-- Selector function receives fully loaded network data
-
-### 4. Validation Hook
-
-Creates validation resolver using network data:
-
-```tsx
-// use-*-validation.ts
-import {
-  useFormValidation,
-  type UseFormValidation,
-} from 'shared/hook-form/validation';
-
-export const useMyValidation: UseFormValidation<
-  MyFormInputType,
-  MyFormNetworkData
-> = () => {
-  return useFormValidation<MyFormInputType, MyFormNetworkData>(
-    'fallbackField', // Field for general errors
+export const useMyValidation = () =>
+  useFormValidation<MyFormInputType, MyFormNetworkData>(
+    'amount',
     async (values, data, validate) => {
-      // Validate fields
-      await validate(['token', 'amount'], () =>
-        validateBondAmount({
-          token: values.token,
-          amount: values.amount,
-          maxStakeEth: data.maxStakeEth,
-          ethBalance: data.ethBalance,
-        }),
-      );
-
       await validate('amount', () =>
         validateEtherAmount('amount', values.amount, values.token),
       );
     },
   );
-};
 ```
 
-**With Dependencies:**
+- The selector receives fully loaded network data.
+- The first argument of `useFormValidation` is the fallback field for errors that name no field. Throw `ValidationError` for a failure; pass a deps array as the third argument when the logic closes over hook values.
+- An updater component (`useWatch` + `trigger`) revalidates a field when another field changes.
+
+## Flow
+
+A flow resolver is a pure function from `(input, data)` to a discriminated union. Executable variants carry `Executable = { confirm?, submit, onError? }`.
 
 ```tsx
-export const useMyValidation: UseFormValidation<
+export type MyFlow =
+  | { action: 'no-access'; access: MethodAccess }
+  | { action: 'paused' }
+  | ({ action: 'add-bond' } & Executable);
+
+export const useMyFlowResolver = (): FlowResolver<
   MyFormInputType,
-  MyFormNetworkData
-> = () => {
-  const {
-    csm: { depositData: sdk },
-  } = useLidoSDK();
-
-  return useFormValidation<MyFormInputType, MyFormNetworkData>(
-    'token',
-    async (values, data, validate) => {
-      await validate('depositData', () => {
-        const { error } = sdk.parseDepositData(values.depositData);
-        if (error) throw new ValidationError('depositData', error);
-      });
-    },
-    [sdk], // Dependencies for React's change tracking
-  );
-};
-```
-
-**Key Points:**
-
-- Uses `useFormValidation()` to eliminate boilerplate
-- Network data automatically available from context
-- Dependencies captured via closure, tracked in deps array
-- Throw `ValidationError` for validation failures
-
-### 5. Submit Hook
-
-Implements transaction submission:
-
-```tsx
-// use-*-submit.ts
-import { FormSubmitterHook } from 'shared/hook-form/form-controller';
-
-export const useMySubmit: FormSubmitterHook<
-  MyFormInputType,
-  MyFormNetworkData
-> = () => {
-  const { csm } = useLidoSDK();
-  const { txModalStages } = useTxModalStages();
+  MyFormNetworkData,
+  MyFlow
+> => {
+  const { bond } = useActiveOperatorSDK();
+  const [canAdd, access] = useCanPerform(bond, 'addBond');
+  const buildCallback = useTxModalStagesMy();
+  const confirmOperator = useConfirmOperatorModal();
 
   return useCallback(
-    async (
-      { amount, token }, // Form values
-      { nodeOperatorId }, // Network data
-      { onConfirm, onRetry }, // Callbacks
-    ): Promise<boolean> => {
-      try {
-        await csm.bond.addBond({
-          nodeOperatorId,
-          token,
-          amount,
-          callback: (stage, payload) => {
-            // Handle transaction stages
-          },
-        });
+    (input, data) => {
+      if (!canAdd) return { action: 'no-access', access };
+      if (data.isPaused) return { action: 'paused' };
 
-        await onConfirm?.(); // Revalidate network data
-        return true; // Success
-      } catch (error) {
-        return handleTxError(error);
-      }
+      return {
+        action: 'add-bond' as const,
+        confirm: () => confirmOperator(),
+        submit: () =>
+          bond.addBond({
+            nodeOperatorId: data.nodeOperatorId,
+            token: input.token,
+            amount: input.amount ?? 0n,
+            callback: buildCallback(input, data),
+          }),
+      };
     },
-    [csm.bond, txModalStages],
+    [bond, canAdd, access, buildCallback, confirmOperator],
   );
 };
-```
 
-**Key Points:**
-
-- Returns `boolean` - `true` for success, `false` for cancellation
-- `onConfirm()` triggers data revalidation after success
-- `onRetry()` allows user to retry failed transactions
-- Use `invariant()` for validating required form values
-
-### 6. Updater Component (Optional)
-
-Revalidates fields when dependencies change:
-
-```tsx
-// *-updater.tsx
-export const MyUpdater: FC = () => {
-  const [token] = useWatch<MyFormInputType, ['token']>({
-    name: ['token'],
-  });
-
-  const { trigger } = useFormContext<MyFormInputType>();
-
-  useEffect(() => {
-    void trigger('amount'); // Revalidate amount when token changes
-  }, [token]);
-
-  return null;
+export const useMyFlow = (): MyFlow => {
+  const resolve = useMyFlowResolver();
+  const data = useMyFormData(true);
+  return resolve({} as MyFormInputType, data);
 };
 ```
 
-**Use updaters when:**
+- `useFlowSubmit(resolve)` runs resolve → `confirm()` (abort on `false`) → `submit()` → `onConfirm()` (revalidate). On a throw it calls `onError?.()` and then `handleTxError`.
+- `useCanPerform(sdkModule, 'method')` returns `[allowed, access]`. A `no-access` variant carries `access` for `NoAccessNotice`.
+- Rollback on failure goes in `onError`, not in a try/catch inside `submit`.
+- Side effects that need the tx result (`appendNO`, cache updates, `setCreated`) go inside `submit`, after the SDK call resolves.
+- The gate reads the same union through `useMyFlow()` (resolved with empty input), so gating and submitting can't disagree.
 
-- One field's validation depends on another field's value
-- Validation rules change based on user selections
-- Calculated values need to update on field changes
-
-## Type System
-
-### Core Types
+## Transaction stages
 
 ```tsx
-// Network data structure
+export const useTxModalStagesMy = () =>
+  useTxStages<MyFormInputType, MyFormNetworkData>((transitStage, input) => ({
+    sign: () =>
+      transitStage(
+        <TxStageSignOperationAmount
+          operationText="Adding Bond"
+          amount={input.amount ?? 0n}
+          token={input.token}
+        />,
+      ),
+    pending: (txHash) =>
+      transitStage(
+        <TxStageSignOperationAmount
+          operationText="Adding Bond"
+          amount={input.amount ?? 0n}
+          token={input.token}
+          isPending
+          txHash={txHash}
+        />,
+      ),
+    success: (_result, txHash) =>
+      transitStage(
+        <TxStageSuccess
+          txHash={txHash}
+          title="Bond has been added"
+          description="Adding Bond operation was successful."
+        />,
+      ),
+  }));
+```
+
+- Every stage renders through `TransactionModalContent`. Under `AppFormUi` that's app-ui `TxStatus` (testids `txStage`, `title`, `description`, `footer`).
+- Content inside a stage's `description` or `footer` that isn't plain text must be ui-aware: branch on `useFormUi()` and render app-ui under `'app'`. The shared parts already do: `TxAmount`, `TxLinkEtherscan`, `AfterAddressProposed`, `AfterKeysUpload`, `WhatsNextBlock`, `SkeletonBalance`. `TxStatus` centers its message, so block content sets its own `text-align: left`.
+- Stage copy is e2e-pinned. Don't reword it as part of a UI change.
+
+## UI kit
+
+### Archetypes
+
+- **A, `FormLayout` + `SubmitAside`:** a card with a main column and a 340px tinted aside that holds the rows (`DataListRow`), an optional confirm checkbox and the CTA. The page passes `Layout wide`. Gate states that keep the card render `FormLayout aside={null}` without `<Form>`.
+- **B, `FormCard`:** a narrow app-ui `Card` with an optional `title` / `description` / `action`. The CTA is the last child. The page keeps the default narrow layout. When a view state still submits an intent (accept, unset, cancel), `<Form>` wraps every card.
+
+```tsx
+<Form data-testid="myForm">
+  <FormCard title="Specify a new address">
+    <AddressField name="address" label="New address" />
+    <SubmitButton disableIfClean>Set new address</SubmitButton>
+  </FormCard>
+</Form>
+```
+
+### Gate notices
+
+```tsx
+export const MyFormGate: FC<PropsWithChildren> = ({ children }) => {
+  const flow = useMyFlow();
+
+  if (flow.action === 'no-access') {
+    return <NoAccessNotice access={flow.access} />;
+  }
+  if (flow.action === 'paused') return <PausedNotice />;
+
+  return <>{children}</>;
+};
+```
+
+`NoAccessNotice` derives its copy from `access` (the role label comes from `getAccessRoleLabel`). `PausedNotice` has a `headline` (default "`<module>` is paused") and a body that `children` overrides. `NoAccessNotice` `children` replaces its whole copy.
+
+### Fields
+
+Every field takes `name`, reads the form through `useFormContext`, keeps the `name` attribute on its input and shows errors as `<p role="alert" data-testid="inputMessageError">`. An error shows once the field is touched, the form is submitted, the field has a value, or `showUntouched` is set.
+
+| Field              | Value                                                | Backing                                                                                          |
+| ------------------ | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `TextField`        | `string`                                             | app-ui `Input`                                                                                   |
+| `AddressField`     | `string` (ENS resolved)                              | app-ui `Input`; `currentAddress`, `locked`, `trailing`, `simple`, `error`                        |
+| `AmountField`      | `bigint \| null` (wei)                               | `RichInput` + `SingleTokenSelector`; `maxValue` (Max, `maxBtn`), `balance`, `locked`, `disabled` |
+| `PercentField`     | `bigint \| null` (basis points)                      | app-ui `Input` with `%`                                                                          |
+| `CheckboxField`    | `boolean`                                            | app-ui `Checkbox`                                                                                |
+| `SwitchField`      | `boolean`                                            | app-ui `Switch`; `submitOnChange`                                                                |
+| `TokenSelectField` | token `string`                                       | app-ui `TokenSelector`; testids `tokenSelectTrigger`, `tokenOption-<TOKEN>`                      |
+| `OptionCardsField` | `string`                                             | `OptionList` radiogroup (`role="radio"`, no `<input>`); `variant`, `orientation`                 |
+| `KeyListField`     | `{ start, count }` (`range`) or `number[]` (`multi`) | app-ui `Checkbox` rows + `KeyStatusTag`                                                          |
+| `DisclosureField`  | `boolean`                                            | `Disclosure`; stays open while a dependent field has an error                                    |
+| `DepositDataField` | deposit data                                         | `Dropzone` + JSON/Parsed/Parameters tabs                                                         |
+
+- Build a new control on `useFieldController` (`useController` + the error rule). A control without a forwarded ref wraps itself in `<div ref={useFocusableRef(field.ref, selector)}>` so RHF can focus it on error.
+- A read-only amount that isn't a form value (a fee, a computed cost) is a plain `RichInput locked` with a `SingleTokenSelector`, not an `AmountField`.
+
+### Submit button
+
+`SubmitButton` (`shared/form-page`) shows "Connect wallet" when no wallet is active. It's disabled on form errors (unless `ignoreErrors`), on `disableIfClean && !isDirty`, on `disabled` / `disabledReason`, and while another intent submits. It also takes `variant`, `size` and `fullWidth`. An intent button (`intent="revoke"`) is `type="button"` and submits with that intent, so the form type must include `intent?: string` (`IntentFormInput`).
+
+### Confirm modals
+
+```tsx
+export const ConfirmMyModal: ModalComponentType<ConfirmModalProps> = ({
+  ui,
+  open,
+  onConfirm,
+  onReject,
+}) =>
+  ui === 'app' ? (
+    <ConfirmMyModalApp open={open} onConfirm={onConfirm} onReject={onReject} />
+  ) : (
+    <LegacyBody />
+  );
+```
+
+The app variant uses `FormModalShell ui="app" open onClose={onReject} title subtitle data-testid` (pass `isClosable={false}` for a modal that must not close). Open it from the flow's `confirm` through `getUseConfirmModal(ConfirmMyModal)`.
+
+### Success
+
+- Default: `TxStageSuccess` in the tx modal.
+- Success as form state (create, claim ICS/IDVTC): the data provider holds the success record. The flow sets it synchronously before closing the tx modal, and the form renders `SuccessScreen` in place of `FormReady`:
+
+```tsx
+<FormPage done={!!created} faq={created ? undefined : faq}>
+  {created ? (
+    <MySuccess created={created} />
+  ) : (
+    <FormReady>
+      <MyFormGate>
+        <Form data-testid="myForm">…</Form>
+      </MyFormGate>
+    </FormReady>
+  )}
+</FormPage>
+```
+
+## Types
+
+```ts
 type FormData<T> =
   | {
-      data: Partial<T>; // Data (partial when loading)
-      isPending: boolean; // Loading state
-      revalidate: () => Promise<void>; // Refresh function
+      data: Partial<T>;
+      isPending: true;
+      revalidate: () => Promise<void> | void;
     }
-  | {
-      data: T; // Full data when loaded
-      isPending: false;
-      revalidate: () => Promise<void>;
-    };
+  | { data: T; isPending: false; revalidate: () => Promise<void> | void };
 
-// Network data hook type
-type NetworkData<T> = () => FormData<T>;
+type NetworkData<T, P = void> = (props: P) => FormData<T>;
 
-// Submit function type
-type FormSubmitter<F extends FieldValues, C extends object> = (
-  form: F, // Form values
-  data: C, // Network data
-  options: FormSubmitOptions, // Callbacks
+type FormSubmitter<F, C> = (
+  form: F,
+  data: C,
+  options: { onConfirm?: () => Promise<void> | void; onRetry: () => void },
 ) => Promise<boolean>;
 
-// Submit hook type
-type FormSubmitterHook<
-  F extends FieldValues,
-  C extends object,
-> = () => FormSubmitter<F, C>;
-
-// Validation hook type
-type UseFormValidation<TInput, TNetworkData> = () => Resolver<TInput>;
+type FlowResolver<F, C, Flow> = (input: F, data: C) => Flow;
 ```
 
-### Form Types
+Conventions: `*FormInputType` for fields and `*FormNetworkData` for external data. Data fields that load are optional, and chain numbers are `bigint`.
 
-```tsx
-// types.ts
-export type MyFormInputType = {
-  token?: string;
-  amount?: bigint;
-};
+## Testing
 
-export type MyFormNetworkData = {
-  nodeOperatorId?: number;
-  ethBalance?: bigint;
-  maxStakeEth?: bigint;
-};
-```
-
-**Conventions:**
-
-- `*FormInputType` - Form field values (React Hook Form state)
-- `*FormNetworkData` - External data from blockchain/APIs
-- Use optional fields (`?`) for data that may not be loaded yet
-- Use `bigint` for blockchain numbers
-
-## Hooks & Utilities
-
-### Context Hooks
-
-```tsx
-// Access network data
-const { ethBalance, bond } = useFormData<MyFormNetworkData>();
-
-// Access full FormData structure
-const { data, isPending, revalidate } = useFormDataContext<MyFormNetworkData>();
-
-// Access only loading state
-const isPending = useFormDataPending();
-
-// Get promise that resolves with data (for validation)
-const dataPromise = useAwaitFormData<MyFormNetworkData>();
-const data = await dataPromise; // Waits for isPending: false
-```
-
-### Validation
-
-```tsx
-// From 'shared/hook-form/validation'
-export {
-  // Core
-  useFormValidation,
-  ValidationError,
-  initValidator,
-
-  // Type utilities
-  type UseFormValidation,
-  type ValidationLogic,
-  type ValidateFn,
-
-  // Validators
-  validateBondAmount,
-  validateBigintMax,
-  validateDepositData,
-  validateEtherAmount,
-  validateHash,
-  validateNodeOperatorId,
-};
-```
-
-### Components
-
-```tsx
-// From 'shared/hook-form/form-controller'
-export {
-  Form, // Form element with submit handling
-  FormLoader, // Loading state wrapper
-  FormControllerProvider, // Submission context provider
-
-  // Context
-  FormDataContext,
-  useFormData,
-  useFormDataContext,
-  useFormDataPending,
-  useAwaitFormData,
-
-  // Utilities
-  useFormDefaultValues,
-
-  // Types
-  type FormData,
-  type FormSubmitter,
-  type FormSubmitterHook,
-  type NetworkData,
-};
-```
-
-## Example: Complete Form
-
-```tsx
-// my-form.tsx
-export const MyForm: FC = memo(() => {
-  return (
-    <MyDataProvider>
-      <MyFormProvider>
-        <FormBlock>
-          <FormLoader>
-            <Form>
-              <TokenSelect />
-              <AmountInput />
-              <SubmitButton />
-            </Form>
-          </FormLoader>
-        </FormBlock>
-      </MyFormProvider>
-    </MyDataProvider>
-  );
-});
-```
-
-## Best Practices
-
-### Architecture
-
-- Always use the layered provider pattern
-- Keep data fetching, validation, and submission in separate files
-- Define strong types for inputs and network data
-
-### Data Management
-
-- Create dedicated `*-data-provider.tsx` for network data
-- Use `revalidate()` to refresh data after transactions
-- Aggregate all `isPending` flags in data provider
-- Export typed `useFormData` hooks for each form
-
-### Validation
-
-- Use `useFormValidation()` to eliminate boilerplate
-- Capture dependencies via closure, track in deps array
-- Throw `ValidationError` for validation failures
-- Use updater components for field dependencies
-
-### Submission
-
-- Follow `FormSubmitterHook` pattern
-- Always call `onConfirm()` after success to revalidate data
-- Support retry through `onRetry` callback
-- Use `invariant()` to validate required form values
-
-### Components
-
-- Extract reusable controls to `controls/` directory
-- Use `FormLoader` for consistent loading experience
-- Reuse components from `shared/hook-form/controls`
+- Jest runs in node with ts-jest and no DOM. Test pure helpers, and use `renderToStaticMarkup` for render checks.
+- `jest.mock` anything that pulls the SDK barrel, wagmi or `modules/web3`. Specs import concrete files, never the `shared/form-page` or `shared/hook-form/fields` barrels.
+- e2e conventions for kit forms are in `tests/CLAUDE.md`.

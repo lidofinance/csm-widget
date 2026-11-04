@@ -14,7 +14,6 @@ import {
   SuccessIcon,
   FailIcon,
   TxLoader,
-  WarningIcon,
 } from './icons-styles';
 
 const createStageIcon = (
@@ -53,9 +52,4 @@ export const StageIconLoader = createStageIcon(
 export const StageIconLimit = createStageIcon(
   <Warning />,
   <LedgerFail fill="transparent" />,
-);
-
-export const StageIconDialog = createStageIcon(
-  <WarningIcon />,
-  <WarningIcon />,
 );

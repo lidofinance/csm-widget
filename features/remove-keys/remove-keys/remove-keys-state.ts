@@ -35,7 +35,8 @@ export const showSequentialHint = (keysCount: number) => keysCount > 2;
 export const getRemovalFeeTotal = (
   removalFee: bigint | undefined,
   count: number,
-): bigint | undefined => (removalFee ? removalFee * BigInt(count) : undefined);
+): bigint | undefined =>
+  removalFee !== undefined ? removalFee * BigInt(count) : undefined;
 
 export type RemoveKeysArgs = {
   startIndex: bigint;

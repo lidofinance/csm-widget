@@ -6,11 +6,15 @@ import {
 } from 'shared/hook-form/form-controller';
 import { type NormalizeQueueFormInputType } from './types';
 import { useNormalizeQueueFlowResolver } from './use-normalize-queue-flow';
+import { useNormalizeQueueValidation } from './use-normalize-queue-validation';
 
 export const NormalizeQueueFormProvider: FC<PropsWithChildren> = ({
   children,
 }) => {
+  const resolver = useNormalizeQueueValidation();
+
   const formObject = useForm<NormalizeQueueFormInputType>({
+    resolver,
     mode: 'onChange',
   });
 

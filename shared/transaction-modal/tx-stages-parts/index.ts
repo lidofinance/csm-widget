@@ -4,4 +4,3 @@ export * from './skeleton-balance';
 export * from './success-text';
 export * from './tx-amount';
 export * from './whats-next-block';
-export * from './after-create-custom-node-operator';

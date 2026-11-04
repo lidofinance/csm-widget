@@ -5,10 +5,24 @@ Guidance for writing Playwright e2e tests (`tests/csm-widget`, `tests/cm-widget`
 ## PageObject rules
 
 - Tests, pages, and components must always use the correct PageObject
-- All locators must reference the component's `data-testid`
+- Locators reference the component's `data-testid`. The exceptions are the kit-field DOM contracts below, which are stable by design.
 - If an element has no `data-testid`, add one — but only where it makes logical sense
-- All `data-testid` values must be in camelCase
+- New `data-testid` values are camelCase. The kebab ones the deposit-data kit keeps (`input-message-error`, `tab-button-JSON|Parsed|Parameters`, `deposit-data-row|pubkey|error|error-detected`) stay as they are
 - Always start from fixtures and build on them
+
+## App-ui forms
+
+Migrated forms render on `@lidofinance/lido-app-ui` (`shared/hook-form/fields`, `shared/form-page`). Their DOM contracts:
+
+- **Inputs** keep their `name`: `input[name="amount"]`, `input[name="feeSplits.0.recipient"]`.
+- **Field errors** are `getByTestId('inputMessageError')`. For `TextField` / `AddressField`, scope with `xpath=//input[@name="x"]/ancestor::label/..`. An `AmountField` input isn't inside a `<label>`, so scope its error from the form or a wrapper testid instead.
+- **Max** on `AmountField` is `getByTestId('maxBtn')`. It isn't inside a label either.
+- **Token select:** click `tokenSelectTrigger`, then `getByTestId(BOND_TOKEN_OPTION_TEST_ID[token])` (`tests/shared/consts/common.const.ts`). There is no `input[value=…]`.
+- **Option cards** are `getByRole('radio', { name })` or `[role="radio"][data-value="…"]` with `aria-checked`. There is no `<input>`.
+- **Checkbox rows** (`CheckboxField`, `KeyListField`): the `<label>` holds the input and exactly one `<svg>` tick, so `label >> svg` works.
+- **Modals and tooltips** portal to `document.body`. Use `page.getByRole('dialog')` / `page.getByRole('tooltip')`. `#lido-ui-modal-root` exists only for forms still on lido-ui.
+- **Tx modal:** the `TxModal` page object is unchanged (`txStage`, `title`, `description`). Stage copy doesn't change with the UI.
+- **Success screens** (create, claim ICS/IDVTC): wait on `getByTestId('successScreen')` (or the form's own success testid), not on the tx modal title.
 
 ## Test structure
 

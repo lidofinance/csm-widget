@@ -25,7 +25,7 @@ describe('DeleteKeysLayout', () => {
     expect(html.indexOf('main-slot')).toBeLessThan(html.indexOf('aside-slot'));
   });
 
-  it('puts the testid on the card root and keeps an empty aside column', () => {
+  it('puts the testid on the card root and renders no aside column', () => {
     const html = renderToStaticMarkup(
       <DeleteKeysLayout
         active={REMOVE}
@@ -37,7 +37,7 @@ describe('DeleteKeysLayout', () => {
     );
 
     expect(html).toMatch(/^<div[^>]*data-testid="removeKeysForm"/);
-    expect(html).toMatch(/<div[^>]*><div[^>]*><\/div><\/div><\/div>$/);
+    expect(html).toMatch(/notice<\/span><\/div><\/div><\/div>$/);
     expect(html).not.toContain('<form');
   });
 });

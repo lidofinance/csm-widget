@@ -51,7 +51,10 @@ describe('showSequentialHint', () => {
 describe('getRemovalFeeTotal', () => {
   it('is undefined without a fee', () => {
     expect(getRemovalFeeTotal(undefined, 2)).toBeUndefined();
-    expect(getRemovalFeeTotal(0n, 2)).toBeUndefined();
+  });
+
+  it('keeps a zero fee as zero', () => {
+    expect(getRemovalFeeTotal(0n, 2)).toBe(0n);
   });
 
   it('multiplies the per-key fee by the selected count', () => {

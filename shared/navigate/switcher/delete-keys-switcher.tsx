@@ -22,7 +22,7 @@ const InvalidKeysCounter: FC = () => {
   if (!count) return null;
 
   return (
-    <Counter variant="error" dataTestId={{ root: 'navCounter' }}>
+    <Counter variant="warning" dataTestId={{ root: 'navCounter' }}>
       {count}
     </Counter>
   );

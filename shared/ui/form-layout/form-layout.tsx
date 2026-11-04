@@ -17,8 +17,10 @@ export const FormLayout: FC<FormLayoutProps> = ({
 }) => (
   <LayoutStyle {...rest}>
     <MainStyle>{children}</MainStyle>
-    <AsideStyle>
-      <AsideContentStyle>{aside}</AsideContentStyle>
-    </AsideStyle>
+    {aside !== null && (
+      <AsideStyle>
+        <AsideContentStyle>{aside}</AsideContentStyle>
+      </AsideStyle>
+    )}
   </LayoutStyle>
 );

@@ -1,4 +1,4 @@
-import { CheckLarge, Close, Loader, Warning } from '@lidofinance/lido-ui';
+import { CheckLarge, Close, Loader } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
 
 export const LedgerIconWrapper = styled.div`
@@ -32,9 +32,4 @@ export const FailIcon = styled(Close)`
 
 export const TxLoader = styled(Loader)`
   margin: 0 auto;
-`;
-
-export const WarningIcon = styled(Warning)`
-  border-radius: 50%;
-  color: var(--lido-color-warning);
 `;

@@ -5,7 +5,6 @@ import {
 } from '@lidofinance/wallets-testing-wallets';
 import { expect, Page, test } from '@playwright/test';
 import { FeatureFlagsType } from 'config/feature-flags/types';
-import { TokenSymbol } from 'tests/shared/consts/common.const';
 import {
   RPC_WAIT_TIMEOUT,
   STAGE_WAIT_TIMEOUT,
@@ -22,7 +21,6 @@ import {
 } from '../pages';
 import { GroupPage } from '../pages/group.page';
 import { ElementController } from '../pages/elements/controller';
-import { DepositKey } from '../../shared/services/keysGenerator.service';
 import {
   ConfirmOperatorModalElement,
   NavBlockElement,
@@ -142,21 +140,6 @@ export class WidgetService {
           : 'Wallet should be disconnected',
       ).toBe(expectConnectionState);
     });
-  }
-
-  async submitKeys(keys: DepositKey[], tokenSymbol = TokenSymbol.STETH) {
-    const isNewOperator = await this.keysPage.isNewOperator();
-    if (isNewOperator) {
-      await this.keysPage.createNodeOperatorForm.addNewKeys(keys, tokenSymbol);
-    } else {
-      await this.keysPage.submitPage.submitKeys(keys, tokenSymbol);
-    }
-
-    await this.walletPage.confirmTx();
-    await this.page.waitForSelector(
-      `text=Uploading operation was successful.`,
-      { timeout: STAGE_WAIT_TIMEOUT },
-    );
   }
 
   async removeKeys(keysToRemove: string[]) {

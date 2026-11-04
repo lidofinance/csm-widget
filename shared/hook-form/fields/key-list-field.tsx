@@ -97,7 +97,7 @@ export const KeyListField: FC<KeyListFieldProps> = ({
           const disabled = isDisabled?.(key) ?? false;
 
           return (
-            <KeyRowStyle key={key.pubkey}>
+            <KeyRowStyle key={`${key.index}-${key.pubkey}`}>
               <KeyCheckboxStyle
                 checked={isChecked(key, position)}
                 disabled={disabled}
