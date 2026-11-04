@@ -74,19 +74,21 @@ test.describe(
           const expectedSteth = parseFloat(
             formatEther(claimable > 0n ? claimable : 0n),
           );
-          const token = claim.getTokenCardBySymbol(tokenName);
+          const option = claim.getTokenOption(tokenName);
 
-          await test.step('Select token — radio is checked', async () => {
+          await test.step('Select token — option is selected', async () => {
             await claim.selectBondToken(tokenName);
-            await expect(token.getByRole('radio')).toBeChecked({
+            await claim.tokenSelectTrigger.click();
+            await expect(option).toHaveAttribute('aria-selected', 'true', {
               timeout: PAGE_WAIT_TIMEOUT,
             });
           });
 
           await test.step('Token name is correct', async () => {
-            await expect(token.getByTestId('tokenAmount')).toContainText(
+            await expect(option.getByTestId('tokenOptionLabel')).toContainText(
               TOKEN_DISPLAY_NAMES[tokenName],
             );
+            await claim.page.keyboard.press('Escape');
           });
 
           await test.step('Amount is correctly converted from stETH', async () => {
@@ -105,7 +107,7 @@ test.describe(
           });
 
           await test.step('Input label shows correct token name', async () => {
-            await expect(claim.amountLabel).toContainText(
+            await expect(claim.form).toContainText(
               `${TOKEN_DISPLAY_NAMES[tokenName]} amount`,
             );
           });
@@ -113,7 +115,7 @@ test.describe(
           if (tokenName === TOKENS.eth) {
             await test.step('Note about manual ETH claim is shown with FAQ link and Matomo event', async () => {
               await expect(claim.ethNote).toContainText(
-                'note: After receiving NFT you will need to claim ETH manually. Follow FAQ for more details.',
+                'Note: After receiving NFT you will need to claim ETH manually. Follow FAQ for more details.',
               );
               const faqLink = claim.ethNote.getByRole('link', { name: 'FAQ' });
               await expect(faqLink).toBeVisible();
@@ -128,21 +130,17 @@ test.describe(
           }
 
           await test.step('Hint shows correct waiting time and receive info', async () => {
+            await claim.tokenSelectTrigger.click();
+            const waitingTime = option.getByTestId('waitingTime');
             if (tokenName === TOKENS.eth) {
-              await expect(token.getByTestId('waitingTime')).toContainText(
-                'Waiting time:',
-              );
-              await expect(token.getByTestId('receive')).toContainText(
-                'withdrawal NFT',
+              await expect(waitingTime).toContainText('via withdrawal NFT');
+              await expect(option).toContainText(
+                'You will need to manually claim the withdrawal NFT after the time period',
               );
             } else {
-              await expect(token.getByTestId('waitingTime')).toContainText(
-                '~ 1 min',
-              );
-              await expect(token.getByTestId('receive')).toContainText(
-                TOKEN_DISPLAY_NAMES[tokenName],
-              );
+              await expect(waitingTime).toContainText('~ 1 min');
             }
+            await claim.page.keyboard.press('Escape');
           });
         },
       );
@@ -291,11 +289,9 @@ test.describe(
         });
 
         await test.step('Help tooltip shows recipient info', async () => {
-          // DataTableRow renders help icon as an SVG (Question) without data-testid;
-          // it is the last SVG in the row (after the External icon inside etherscanLink).
-          // lido-ui Tooltip renders content into #lido-ui-modal-root (not tooltipWrapper)
+          // DataListRow's info icon is the last SVG in the row (after the etherscanLink icon)
           await claim.claimBondFormInfoTitle.locator('svg').last().hover();
-          await expect(claim.page.locator('#lido-ui-modal-root')).toContainText(
+          await expect(claim.page.getByRole('tooltip')).toContainText(
             'The recipient of the claim is the Rewards Address. You can change the Rewards Address on the Settings tab',
             { timeout: PAGE_WAIT_TIMEOUT },
           );

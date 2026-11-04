@@ -4,11 +4,10 @@ import { FC } from 'react';
 import { Layout } from 'shared/layout';
 import { BondPageSwitcher } from 'shared/navigate';
 import { ClaimBond } from './claim-bond';
-import { Faq } from 'shared/components';
-import { useFaq } from 'faq';
 
 export const ClaimBondPage: FC = () => (
   <Layout
+    wide
     title="Manage Bond & Rewards"
     subtitle="Select a claiming option for bond and rewards"
     pageName="ClaimBond"
@@ -19,6 +18,5 @@ export const ClaimBondPage: FC = () => (
   >
     <BondPageSwitcher />
     <ClaimBond />
-    <Faq items={useFaq('BOND')} />
   </Layout>
 );

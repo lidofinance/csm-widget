@@ -1,30 +1,19 @@
-import { Text } from '@lidofinance/lido-ui';
+import { Card, Description, H3 } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import { Stack } from 'shared/components';
-import styled from 'styled-components';
+import { EmptyStateStyle } from '../styles';
 
 import RewardsIcon from 'assets/balance/empty.svg?react';
 
 export const EmptyState: FC = () => (
-  <Wrapper data-testid="claimEmptyState" direction="column" center gap="sm">
-    <RewardsIcon />
-    <Text size="sm" weight={700}>
-      Nothing to claim at the moment
-    </Text>
-    <Text size="xxs" color="secondary">
-      Once rewards and excess bond increase,
-      <br />
-      you&apos;ll be able to claim them there
-    </Text>
-  </Wrapper>
+  <Card dataTestId={{ root: 'claimEmptyState' }}>
+    <EmptyStateStyle>
+      <RewardsIcon />
+      <H3>Nothing to claim at the moment</H3>
+      <Description>
+        Once rewards and excess bond increase,
+        <br />
+        you&apos;ll be able to claim them there
+      </Description>
+    </EmptyStateStyle>
+  </Card>
 );
-
-const Wrapper = styled(Stack)`
-  padding: ${({ theme }) => theme.spaceMap.xxl}px 0;
-  text-align: center;
-
-  svg {
-    color: var(--lido-color-textSecondary);
-    opacity: 0.8;
-  }
-`;

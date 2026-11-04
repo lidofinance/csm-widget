@@ -178,11 +178,7 @@ export class WidgetService {
 
   async addBond(tokenName: TOKENS, amount: string) {
     await test.step(`Add ${amount} ${tokenName} as bond`, async () => {
-      await test.step(`Choose ${tokenName} symbol for bond`, async () => {
-        const bondToken =
-          this.bondRewardsPage.addBond.selectBondToken(tokenName);
-        await bondToken.click();
-      });
+      await this.bondRewardsPage.addBond.selectBondToken(tokenName);
       await this.bondRewardsPage.addBond.amountInput.fill(amount);
       await this.bondRewardsPage.addBond.addBondButton.click();
       await this.confirmOperatorModal.confirm();

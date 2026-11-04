@@ -1,18 +1,24 @@
+import {
+  Card,
+  DataList,
+  DataListRow,
+  InfoTooltip,
+  StatItem,
+} from '@lidofinance/lido-app-ui';
 import { PERCENT_BASIS, TOKENS } from '@lidofinance/lido-csm-sdk';
-import { Divider, Text } from '@lidofinance/lido-ui';
 import { BOND_DEBT_HELP, BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
 import { getNextDistribution, useFrameInfo } from 'modules/web3';
-import { FC, Fragment, ReactNode } from 'react';
+import { FC, ReactNode } from 'react';
 import { useFormState } from 'react-hook-form';
-import { Block, Grid, IconTooltip, Stack } from 'shared/components';
-import { FormatToken } from 'shared/formatters';
-import { useModuleMeta, useShowRule } from 'shared/hooks';
-import styled from 'styled-components';
+import { FormatPrice, FormatToken } from 'shared/formatters';
+import { useEthUsd, useModuleMeta, useShowRule } from 'shared/hooks';
 import { useClaimBondFormData } from '../context';
+import { ErrorValueStyle, StatCardBodyStyle, StatsGridStyle } from '../styles';
 
 import BondIcon from 'assets/balance/bond.svg?react';
 import RewardsIcon from 'assets/balance/rewards.svg?react';
-import { Balance } from 'features/dashboard/bond/balance';
+
+const TOOLTIP_TEST_ID = { root: 'iconTooltip', content: 'tooltipWrapper' };
 
 const LOCKED_TOOLTIP_CSM =
   'Penalties have been applied to your Node Operator because of an MEV stealing event reported by a dedicated committee. If it is not covered, the corresponding amount of your bond may be burned. See details in the Locked Bond tab.';
@@ -22,15 +28,12 @@ const LOCKED_TOOLTIP_CM =
 
 const NEGATIVE_FIELDS = ['pendingToSplit', 'debt', 'locked'] as const;
 
-type BondNegativeProps = {
-  title: ReactNode;
-  tooltip?: ReactNode;
-  amount: bigint;
-  token: TOKENS;
-  'data-testid'?: string;
-};
+type NegativeField = (typeof NEGATIVE_FIELDS)[number];
 
-const useBondNegativeMetadata = () => {
+const useNegativeMetadata = (): Record<
+  NegativeField,
+  { title: string; tooltip: string }
+> => {
   const check = useShowRule();
   const meta = useModuleMeta();
 
@@ -38,159 +41,124 @@ const useBondNegativeMetadata = () => {
     locked: {
       title: 'Locked:',
       tooltip: check('IS_CSM_FAMILY') ? LOCKED_TOOLTIP_CSM : LOCKED_TOOLTIP_CM,
-      token: TOKENS.steth,
     },
     pendingToSplit: {
       title: 'Splitter debt:',
       tooltip: `Is the amount that has not been split due to insufficient bond or locked bond that occurred earlier. When claiming rewards ${meta?.shortName ?? 'the module'} will try to split this amount from excess bond.`,
-      token: TOKENS.steth,
     },
-    debt: {
-      title: 'Debt:',
-      tooltip: BOND_DEBT_HELP,
-      token: TOKENS.steth,
-    },
-  } as Record<
-    (typeof NEGATIVE_FIELDS)[number],
-    Pick<BondNegativeProps, 'title' | 'tooltip' | 'token'>
-  >;
+    debt: { title: 'Debt:', tooltip: BOND_DEBT_HELP },
+  };
 };
+
+const LabelWithTooltip: FC<{ label: ReactNode; tooltip: ReactNode }> = ({
+  label,
+  tooltip,
+}) => (
+  <>
+    {label} <InfoTooltip content={tooltip} dataTestId={TOOLTIP_TEST_ID} />
+  </>
+);
+
+const UsdValue: FC<{ amount: bigint }> = ({ amount }) => {
+  const { usdAmount } = useEthUsd(amount);
+  return <FormatPrice amount={usdAmount} approx />;
+};
+
+const NegativeRow: FC<{
+  title: string;
+  tooltip: string;
+  amount: bigint;
+  testId?: string;
+}> = ({ title, tooltip, amount, testId }) => (
+  <DataListRow
+    label={<LabelWithTooltip label={title} tooltip={tooltip} />}
+    value={<FormatToken amount={amount} token={TOKENS.steth} />}
+    dataTestId={testId ? { root: testId } : undefined}
+  />
+);
 
 export const SourcesInfo: FC = () => {
   const { isLoading } = useFormState();
   const { bond, rewards, calculation } = useClaimBondFormData();
   const { data: nextDistribution } = useFrameInfo(getNextDistribution);
-  const bondNegativeMetadata = useBondNegativeMetadata();
+  const negativeMetadata = useNegativeMetadata();
 
-  const negative = bond ? NEGATIVE_FIELDS.filter((field) => bond[field]) : [];
+  if (isLoading || !bond || !rewards) return null;
 
+  const negative = NEGATIVE_FIELDS.filter((field) => bond[field]);
   const splittable =
-    ((rewards?.available ?? 0n) * (calculation?.totalShare ?? 0n)) /
-    PERCENT_BASIS;
-
-  if (isLoading || !bond || !rewards) {
-    return null;
-  }
+    (rewards.available * (calculation?.totalShare ?? 0n)) / PERCENT_BASIS;
+  const bondAmount = bond.isInsufficient ? -bond.delta : bond.delta;
 
   return (
-    <Grid $gap="ms" $stackOnMobile>
-      <Block data-testid="rewardsBalanceCard" padding="none" overflowHidden>
-        <ContentPadding gap="sm" center spaceBetween>
-          <Balance
-            title={
-              <>
-                Rewards balance
-                <IconTooltip
-                  tooltip={`The rewards amount available to claim, obtained from all active validators of the Node Operator. Next rewards distribution is expected ${nextDistribution}.`}
-                  type="calendar"
-                />
-              </>
+    <StatsGridStyle>
+      <Card dataTestId={{ root: 'rewardsBalanceCard' }}>
+        <StatCardBodyStyle>
+          <StatItem
+            label={
+              <LabelWithTooltip
+                label="Rewards balance"
+                tooltip={`The rewards amount available to claim, obtained from all active validators of the Node Operator. Next rewards distribution is expected ${nextDistribution}.`}
+              />
             }
-            amount={rewards.available}
-            approx
-          />
-
-          <IconWrapper>
-            <RewardsIcon />
-          </IconWrapper>
-        </ContentPadding>
-        {splittable > 0n && (
-          <FooterStyle>
-            <BondNegative
-              title="To splitters:"
-              tooltip="Portion of rewards routed to splitters. See the Splitters section for exact proportions."
-              amount={splittable}
-              token={TOKENS.steth}
-            />
-          </FooterStyle>
-        )}
-      </Block>
-      <Block data-testid="bondBalanceCard" padding="none" overflowHidden>
-        <ContentPadding gap="sm" center spaceBetween>
-          <Balance
-            title={
-              <>
-                {bond.isInsufficient ? BOND_INSUFFICIENT : BOND_EXCESS}
-                <IconTooltip
-                  type={bond.isInsufficient ? 'info' : 'calendar'}
-                  tooltip={
-                    bond.isInsufficient
-                      ? "Insufficient bond is the missing amount of stETH required to cover all operator's keys"
-                      : bond.locked > 0n
-                        ? 'Locked bond has not been burned yet but cannot be claimed, so it is not displayed as part of your Excess Bond'
-                        : 'The bond amount available to claim without having to exit validators. Increases daily.'
-                  }
-                />
-              </>
+            value={
+              <FormatToken amount={rewards.available} token={TOKENS.steth} />
             }
-            amount={bond.isInsufficient ? -bond.delta : bond.delta}
-            warning={bond.isInsufficient}
-            approx
+            subValue={<UsdValue amount={rewards.available} />}
+            icon={<RewardsIcon />}
           />
-
-          <IconWrapper>
-            <BondIcon />
-          </IconWrapper>
-        </ContentPadding>
-
-        {negative.length > 0 && (
-          <FooterStyle>
-            {negative.map((field, index) => (
-              <Fragment key={field}>
-                {index > 0 && <Divider />}
-                <BondNegative
-                  {...bondNegativeMetadata[field]}
+          {splittable > 0n && (
+            <DataList>
+              <NegativeRow
+                title="To splitters:"
+                tooltip="Portion of rewards routed to splitters. See the Splitters section for exact proportions."
+                amount={splittable}
+              />
+            </DataList>
+          )}
+        </StatCardBodyStyle>
+      </Card>
+      <Card dataTestId={{ root: 'bondBalanceCard' }}>
+        <StatCardBodyStyle>
+          <StatItem
+            label={
+              <LabelWithTooltip
+                label={bond.isInsufficient ? BOND_INSUFFICIENT : BOND_EXCESS}
+                tooltip={
+                  bond.isInsufficient
+                    ? "Insufficient bond is the missing amount of stETH required to cover all operator's keys"
+                    : bond.locked > 0n
+                      ? 'Locked bond has not been burned yet but cannot be claimed, so it is not displayed as part of your Excess Bond'
+                      : 'The bond amount available to claim without having to exit validators. Increases daily.'
+                }
+              />
+            }
+            value={
+              bond.isInsufficient ? (
+                <ErrorValueStyle>
+                  <FormatToken amount={bondAmount} token={TOKENS.steth} />
+                </ErrorValueStyle>
+              ) : (
+                <FormatToken amount={bondAmount} token={TOKENS.steth} />
+              )
+            }
+            subValue={<UsdValue amount={bondAmount} />}
+            icon={<BondIcon />}
+          />
+          {negative.length > 0 && (
+            <DataList divided>
+              {negative.map((field) => (
+                <NegativeRow
+                  key={field}
+                  {...negativeMetadata[field]}
                   amount={bond[field]}
-                  data-testid={`${field}BondRow`}
+                  testId={`${field}BondRow`}
                 />
-              </Fragment>
-            ))}
-          </FooterStyle>
-        )}
-      </Block>
-    </Grid>
+              ))}
+            </DataList>
+          )}
+        </StatCardBodyStyle>
+      </Card>
+    </StatsGridStyle>
   );
 };
-
-const BondNegative: FC<BondNegativeProps> = ({
-  title,
-  tooltip,
-  amount,
-  token,
-  'data-testid': testId,
-}) => (
-  <Stack gap="xs" center data-testid={testId}>
-    <Text size="xxs" weight={700}>
-      {title}
-    </Text>
-    <Text size="xxs" weight={700}>
-      <FormatToken amount={amount} token={token} />
-    </Text>
-    <IconTooltip tooltip={tooltip} />
-  </Stack>
-);
-
-const ContentPadding = styled(Stack)`
-  padding: ${({ theme }) => theme.spaceMap.md}px
-    ${({ theme }) => theme.spaceMap.xxl}px;
-
-  ${({ theme }) => theme.mediaQueries.md} {
-    padding-left: ${({ theme }) => theme.spaceMap.lg}px;
-    padding-right: ${({ theme }) => theme.spaceMap.lg}px;
-  }
-`;
-
-const FooterStyle = styled.div`
-  background: var(--lido-color-border);
-  margin-top: -${({ theme }) => theme.spaceMap.xs}px;
-  padding: ${({ theme }) => theme.spaceMap.sm}px
-    ${({ theme }) => theme.spaceMap.xxl}px;
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spaceMap.sm}px;
-`;
-
-const IconWrapper = styled.div`
-  display: flex;
-  flex: 0 0 auto;
-`;

@@ -1,21 +1,30 @@
+import { SectionTitle, Stack } from '@lidofinance/lido-app-ui';
+import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
-import { FormTitle } from 'shared/components';
-import { TokenAmountInputHookForm } from 'shared/hook-form/controls';
-import { AddBondFormInputType } from '../context';
-import { useMaxValue } from '../hooks/use-max-value';
+import { FormatToken } from 'shared/formatters';
+import { AmountField } from 'shared/hook-form/fields';
+import { getAddBondBalance } from '../add-bond-state';
+import { AddBondFormInputType, useAddBondFormData } from '../context';
 
-export const AmountInput: React.FC = () => {
+export const AmountInput: FC = () => {
   const token = useWatch<AddBondFormInputType, 'token'>({ name: 'token' });
-  const max = useMaxValue(token);
+  const { ethBalance, stethBalance, wstethBalance } = useAddBondFormData(true);
+  const balance = getAddBondBalance(token, {
+    ethBalance,
+    stethBalance,
+    wstethBalance,
+  });
 
   return (
-    <>
-      <FormTitle>Enter token amount</FormTitle>
-      <TokenAmountInputHookForm
-        fieldName="bondAmount"
+    <Stack direction="column" gap={16}>
+      <SectionTitle title="Enter token amount" />
+      <AmountField
+        name="bondAmount"
+        label="Amount to add"
         token={token}
-        maxValue={max}
+        maxValue={balance}
+        balance={<FormatToken amount={balance} token={token} />}
       />
-    </>
+    </Stack>
   );
 };

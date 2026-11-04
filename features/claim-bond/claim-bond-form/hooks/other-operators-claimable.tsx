@@ -1,8 +1,10 @@
+import { MessageBox } from '@lidofinance/lido-app-ui';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { OPERATOR_TYPE_METADATA } from 'consts';
 import { useOperatorCurveId } from 'modules/web3';
 import { ModuleNodeOperator } from 'modules/web3/operator-provider/types';
 import { FC } from 'react';
+import { useFormUi } from 'shared/hook-form/form-ui';
 import {
   useDisplayOperatorType,
   useOtherOperatorsClaimable,
@@ -10,8 +12,10 @@ import {
 import { TxAmount } from 'shared/transaction-modal';
 import styled from 'styled-components';
 
-// The success description renders as a <p> (lido-ui Text), whose content
-// model only allows phrasing content — spans, not divs, keep this valid.
+const TEST_ID = 'otherOperatorsClaimable';
+
+// The legacy success description renders as a <p> (lido-ui Text), whose
+// content model only allows phrasing content — spans, not divs, keep this valid.
 const Box = styled.span`
   display: flex;
   flex-direction: column;
@@ -28,6 +32,11 @@ const Box = styled.span`
   color: var(--lido-color-text);
   font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
   line-height: 20px;
+`;
+
+const AppBoxStyle = styled.div`
+  margin-top: 16px;
+  text-align: left;
 `;
 
 const Line = styled.span`
@@ -52,19 +61,28 @@ const ClaimableLine: FC<ClaimableLineProps> = ({ operator, amount }) => {
 };
 
 export const OtherOperatorsClaimable: FC = () => {
+  const ui = useFormUi();
   const items = useOtherOperatorsClaimable();
 
   if (items.length === 0) return null;
 
-  return (
-    <Box data-testid="otherOperatorsClaimable">
-      {items.map(({ operator, amount }) => (
-        <ClaimableLine
-          key={`${operator.module}-${operator.nodeOperatorId}`}
-          operator={operator}
-          amount={amount}
-        />
-      ))}
-    </Box>
-  );
+  const lines = items.map(({ operator, amount }) => (
+    <ClaimableLine
+      key={`${operator.module}-${operator.nodeOperatorId}`}
+      operator={operator}
+      amount={amount}
+    />
+  ));
+
+  if (ui === 'app') {
+    return (
+      <AppBoxStyle>
+        <MessageBox variant="info" icon={false} dataTestId={{ root: TEST_ID }}>
+          {lines}
+        </MessageBox>
+      </AppBoxStyle>
+    );
+  }
+
+  return <Box data-testid={TEST_ID}>{lines}</Box>;
 };

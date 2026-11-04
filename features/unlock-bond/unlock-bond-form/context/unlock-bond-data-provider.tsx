@@ -13,8 +13,8 @@ import {
   useFormData,
 } from 'shared/hook-form/form-controller';
 import { useInvalidate } from 'shared/hooks';
+import { getCompensationAmount } from '../unlock-bond-state';
 import { type UnlockBondFormNetworkData } from './types';
-import { bigMin } from 'utils';
 
 const useUnlockBondFormNetworkData: NetworkData<
   UnlockBondFormNetworkData
@@ -28,10 +28,7 @@ const useUnlockBondFormNetworkData: NetworkData<
   const bond = balanceQuery.data;
   const isExpired = !!isExpiredQuery.data;
 
-  const compensationAmount =
-    !isExpired && !bond?.isInsufficient
-      ? bigMin(bond?.delta || 0n, bond?.locked || 0n)
-      : 0n;
+  const compensationAmount = getCompensationAmount(bond, isExpired);
 
   const invalidate = useInvalidate();
 

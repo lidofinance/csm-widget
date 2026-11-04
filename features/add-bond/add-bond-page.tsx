@@ -4,11 +4,10 @@ import { FC } from 'react';
 import { Layout } from 'shared/layout';
 import { BondPageSwitcher } from 'shared/navigate';
 import { AddBond } from './add-bond';
-import { Faq } from 'shared/components';
-import { useFaq } from 'faq';
 
 export const AddBondPage: FC = () => (
   <Layout
+    wide
     title="Manage Bond & Rewards"
     subtitle="Add bond to your Bond balance"
     pageName="AddBond"
@@ -19,6 +18,5 @@ export const AddBondPage: FC = () => (
   >
     <BondPageSwitcher />
     <AddBond />
-    <Faq items={useFaq('BOND')} />
   </Layout>
 );

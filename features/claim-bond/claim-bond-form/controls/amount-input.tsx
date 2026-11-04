@@ -1,18 +1,20 @@
+import { SectionTitle, Stack } from '@lidofinance/lido-app-ui';
 import { STETH_ROUNDING_THRESHOLD, TOKENS } from '@lidofinance/lido-csm-sdk';
+import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
-import { FormTitle, Note } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
-import { TokenAmountInputHookForm } from 'shared/hook-form/controls';
-import { bigMax } from 'utils';
+import { AmountField } from 'shared/hook-form/fields';
+import { bigMax, getTokenDisplayName } from 'utils';
 import {
   CLAIM_OPTION,
   ClaimBondFormInputType,
   useClaimBondFlow,
   useClaimBondFormData,
 } from '../context';
-import { computeClaimBreakdown } from '../hooks/use-claim-breakdown';
+import { getClaimBreakdown } from '../hooks/use-claim-breakdown';
+import { NoteStyle } from '../styles';
 
-export const AmountInput: React.FC = () => {
+export const AmountInput: FC = () => {
   const [token, claimOption] = useWatch<
     ClaimBondFormInputType,
     ['token', 'claimOption']
@@ -30,7 +32,7 @@ export const AmountInput: React.FC = () => {
   } = data;
 
   // amount-independent fields only — pass 0n to skip toRA/bondDelta computation.
-  const { coverAmount } = computeClaimBreakdown(
+  const { coverAmount } = getClaimBreakdown(
     { token, amount: 0n, claimOption },
     data,
   );
@@ -47,36 +49,40 @@ export const AmountInput: React.FC = () => {
   const maxAmount = claimableMaxValues?.[token][flow.maxValueIndex];
 
   return (
-    <>
-      <FormTitle>Enter token amount</FormTitle>
-      <TokenAmountInputHookForm
-        fieldName="amount"
+    <Stack direction="column" gap={16}>
+      <SectionTitle title="Enter token amount" />
+      <AmountField
+        name="amount"
+        label={`${getTokenDisplayName(token)} amount`}
         token={token}
         maxValue={maxAmount}
+        balance={<FormatToken amount={maxAmount} token={token} />}
         disabled={!maxAmount}
       />
       {coverAmount > STETH_ROUNDING_THRESHOLD && (
-        <Note>
-          <FormatToken amount={coverAmount} token={TOKENS.steth} /> of Rewards
-          will compensate for the Insufficient Bond (
+        <NoteStyle>
+          <b>Note:</b> <FormatToken amount={coverAmount} token={TOKENS.steth} />{' '}
+          of Rewards will compensate for the Insufficient Bond (
           <FormatToken amount={forKeysLockedDeficit} token={TOKENS.steth} />)
           {claimableBondAndRewards > 0n && (
             <>
+              .
               <br />
               <FormatToken
                 amount={claimableBondAndRewards}
                 token={TOKENS.steth}
               />{' '}
-              is available to claim to Rewards Address
+              of Rewards is available to claim to Rewards Address.
             </>
           )}
-        </Note>
+        </NoteStyle>
       )}
       {showExcessNote && (
-        <Note>
-          Any unclaimed rewards will be automatically added to your Excess Bond
-        </Note>
+        <NoteStyle>
+          <b>Note:</b> Any unclaimed rewards will be automatically added to your
+          Excess Bond
+        </NoteStyle>
       )}
-    </>
+    </Stack>
   );
 };

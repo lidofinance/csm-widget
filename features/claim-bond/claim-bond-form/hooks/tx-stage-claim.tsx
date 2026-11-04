@@ -1,29 +1,61 @@
+import {
+  Address as AppAddress,
+  DataList,
+  DataListRow,
+} from '@lidofinance/lido-app-ui';
 import { STETH_ROUNDING_THRESHOLD, TOKENS } from '@lidofinance/lido-csm-sdk';
-import { ReactNode } from 'react';
+import { FC, ReactNode } from 'react';
 import styled from 'styled-components';
 import { Address } from 'shared/components';
+import { useFormUi } from 'shared/hook-form/form-ui';
 import {
   TxAmount,
   TxStagePending,
   TxStageSign,
 } from 'shared/transaction-modal';
-import { ClaimBreakdown } from './use-claim-breakdown';
+import { ClaimBreakdown } from '../claim-breakdown';
 
-type TxStageClaimProps = {
+type ReceiptProps = {
   breakdown: ClaimBreakdown;
   rewardsAddress: string;
   feeSplitsCount: number;
+};
+
+type TxStageClaimProps = ReceiptProps & {
   isPending?: boolean;
   txHash?: string;
 };
 
-export const TxStageClaim = ({
+const getReceiptParts = ({
+  coverAmount,
+  splittable,
+  toRA,
+  bondDelta,
+  debtBurned,
+  debtRemain,
+  includesRewards,
+  hasSplits,
+}: ClaimBreakdown) => {
+  const showSplitters = hasSplits && splittable > 0n;
+  const showCover = includesRewards && coverAmount > STETH_ROUNDING_THRESHOLD;
+  const showDebtBurned = includesRewards && debtBurned > 0n;
+  const showDebtRemain = debtRemain > 0n;
+
+  return {
+    showSplitters,
+    showCover,
+    showDebtBurned,
+    showDebtRemain,
+    hasPrimary: showSplitters || toRA > 0n || bondDelta !== 0n,
+    hasSecondary: showCover || showDebtBurned || showDebtRemain,
+  };
+};
+
+const ReceiptApp: FC<ReceiptProps> = ({
   breakdown,
   rewardsAddress,
   feeSplitsCount,
-  isPending,
-  txHash,
-}: TxStageClaimProps) => {
+}) => {
   const {
     coverAmount,
     splittable,
@@ -33,14 +65,192 @@ export const TxStageClaim = ({
     bondDelta,
     debtBurned,
     debtRemain,
-    includesRewards,
-    hasSplits,
     isRewardsToBond,
   } = breakdown;
+  const parts = getReceiptParts(breakdown);
 
-  // Source label: "bond" when no rewards pulled, "rewards" when only rewards
-  // are being delivered to RA, "bond and rewards" when both flow to RA.
-  // bondDelta < 0 means existing excess bond is being claimed alongside rewards.
+  return (
+    <ReceiptAppStyle>
+      {parts.hasPrimary && (
+        <DataList>
+          {parts.showSplitters && (
+            <DataListRow
+              label={`Splitters (${feeSplitsCount})`}
+              value={<TxAmount amount={splittable} token={TOKENS.steth} />}
+            />
+          )}
+          {toRA > 0n && (
+            <DataListRow
+              label="Rewards Address"
+              description={
+                <AppAddress
+                  address={rewardsAddress}
+                  symbols={6}
+                  identicon={20}
+                />
+              }
+              value={<TxAmount amount={toRAToken} token={token} />}
+            />
+          )}
+          {bondDelta > 0n && (
+            <DataListRow
+              label={isRewardsToBond ? 'Bond' : 'Excess bond'}
+              value={
+                <>
+                  +<TxAmount amount={bondDelta} token={TOKENS.steth} />
+                </>
+              }
+            />
+          )}
+          {bondDelta < 0n && (
+            <DataListRow
+              label="Excess bond"
+              value={
+                <>
+                  −<TxAmount amount={-bondDelta} token={TOKENS.steth} />
+                </>
+              }
+            />
+          )}
+        </DataList>
+      )}
+      {parts.hasSecondary && (
+        <DataList>
+          {parts.showCover && (
+            <DataListRow
+              label="Compensation for the Insufficient Bond"
+              value={<TxAmount amount={coverAmount} token={TOKENS.steth} />}
+            />
+          )}
+          {parts.showDebtBurned && (
+            <DataListRow
+              label="Bond debt covered"
+              value={<TxAmount amount={debtBurned} token={TOKENS.steth} />}
+            />
+          )}
+          {parts.showDebtRemain && (
+            <DataListRow
+              label="Bond debt remaining"
+              value={<TxAmount amount={debtRemain} token={TOKENS.steth} />}
+            />
+          )}
+        </DataList>
+      )}
+    </ReceiptAppStyle>
+  );
+};
+
+const ReceiptLegacy: FC<ReceiptProps> = ({
+  breakdown,
+  rewardsAddress,
+  feeSplitsCount,
+}) => {
+  const {
+    coverAmount,
+    splittable,
+    toRA,
+    toRAToken,
+    token,
+    bondDelta,
+    debtBurned,
+    debtRemain,
+    isRewardsToBond,
+  } = breakdown;
+  const parts = getReceiptParts(breakdown);
+
+  return (
+    <Receipt>
+      {parts.showSplitters && (
+        <Row
+          label={`Splitters (${feeSplitsCount})`}
+          value={<TxAmount amount={splittable} token={TOKENS.steth} />}
+        />
+      )}
+      {toRA > 0n && (
+        <Row
+          label={
+            <>
+              Rewards Address
+              <AddressLine>
+                <Address
+                  address={rewardsAddress}
+                  size="xxs"
+                  weight={700}
+                  color="secondary"
+                  link={<></>}
+                />
+              </AddressLine>
+            </>
+          }
+          value={<TxAmount amount={toRAToken} token={token} />}
+        />
+      )}
+      {bondDelta > 0n && (
+        <Row
+          label={isRewardsToBond ? 'Bond' : 'Excess bond'}
+          value={
+            <>
+              +<TxAmount amount={bondDelta} token={TOKENS.steth} />
+            </>
+          }
+        />
+      )}
+      {bondDelta < 0n && (
+        <Row
+          label="Excess bond"
+          value={
+            <>
+              −<TxAmount amount={-bondDelta} token={TOKENS.steth} />
+            </>
+          }
+        />
+      )}
+
+      {parts.hasPrimary && parts.hasSecondary && <Divider />}
+
+      {parts.showCover && (
+        <Row
+          muted
+          label="Compensation for the Insufficient Bond"
+          value={<TxAmount amount={coverAmount} token={TOKENS.steth} />}
+        />
+      )}
+      {parts.showDebtBurned && (
+        <Row
+          muted
+          label="Bond debt covered"
+          value={<TxAmount amount={debtBurned} token={TOKENS.steth} />}
+        />
+      )}
+      {parts.showDebtRemain && (
+        <Row
+          muted
+          label="Bond debt remaining"
+          value={<TxAmount amount={debtRemain} token={TOKENS.steth} />}
+        />
+      )}
+    </Receipt>
+  );
+};
+
+const ClaimReceipt: FC<ReceiptProps> = (props) =>
+  useFormUi() === 'app' ? (
+    <ReceiptApp {...props} />
+  ) : (
+    <ReceiptLegacy {...props} />
+  );
+
+export const TxStageClaim = ({
+  breakdown,
+  rewardsAddress,
+  feeSplitsCount,
+  isPending,
+  txHash,
+}: TxStageClaimProps) => {
+  const { token, bondDelta, includesRewards, isRewardsToBond } = breakdown;
+
+  // "bond" without rewards, "rewards" when only rewards reach the RA,
+  // "bond and rewards" when existing excess bond is claimed alongside.
   const sourceText = !includesRewards
     ? 'bond'
     : isRewardsToBond
@@ -53,13 +263,6 @@ export const TxStageClaim = ({
 
   const Component = isPending ? TxStagePending : TxStageSign;
 
-  const hasPrimary =
-    (hasSplits && splittable > 0n) || toRA > 0n || bondDelta !== 0n;
-  const hasSecondary =
-    (includesRewards && coverAmount > STETH_ROUNDING_THRESHOLD) ||
-    (includesRewards && debtBurned > 0n) ||
-    debtRemain > 0n;
-
   return (
     <Component
       txHash={txHash}
@@ -69,77 +272,11 @@ export const TxStageClaim = ({
         </>
       }
       description={
-        <Receipt>
-          {hasSplits && splittable > 0n && (
-            <Row
-              label={`Splitters (${feeSplitsCount})`}
-              value={<TxAmount amount={splittable} token={TOKENS.steth} />}
-            />
-          )}
-          {toRA > 0n && (
-            <Row
-              label={
-                <>
-                  Rewards Address
-                  <AddressLine>
-                    <Address
-                      address={rewardsAddress}
-                      size="xxs"
-                      weight={700}
-                      color="secondary"
-                      link={<></>}
-                    />
-                  </AddressLine>
-                </>
-              }
-              value={<TxAmount amount={toRAToken} token={token} />}
-            />
-          )}
-          {bondDelta > 0n && (
-            <Row
-              label={isRewardsToBond ? 'Bond' : 'Excess bond'}
-              value={
-                <>
-                  +<TxAmount amount={bondDelta} token={TOKENS.steth} />
-                </>
-              }
-            />
-          )}
-          {bondDelta < 0n && (
-            <Row
-              label="Excess bond"
-              value={
-                <>
-                  −<TxAmount amount={-bondDelta} token={TOKENS.steth} />
-                </>
-              }
-            />
-          )}
-
-          {hasPrimary && hasSecondary && <Divider />}
-
-          {includesRewards && coverAmount > STETH_ROUNDING_THRESHOLD && (
-            <Row
-              muted
-              label="Compensation for the Insufficient Bond"
-              value={<TxAmount amount={coverAmount} token={TOKENS.steth} />}
-            />
-          )}
-          {includesRewards && debtBurned > 0n && (
-            <Row
-              muted
-              label="Bond debt covered"
-              value={<TxAmount amount={debtBurned} token={TOKENS.steth} />}
-            />
-          )}
-          {debtRemain > 0n && (
-            <Row
-              muted
-              label="Bond debt remaining"
-              value={<TxAmount amount={debtRemain} token={TOKENS.steth} />}
-            />
-          )}
-        </Receipt>
+        <ClaimReceipt
+          breakdown={breakdown}
+          rewardsAddress={rewardsAddress}
+          feeSplitsCount={feeSplitsCount}
+        />
       }
     />
   );
@@ -152,6 +289,14 @@ const Row = ({ label, value, muted }: RowProps) => (
     <Value $muted={muted}>{value}</Value>
   </>
 );
+
+const ReceiptAppStyle = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+  text-align: left;
+`;
 
 const Receipt = styled.div`
   display: inline-grid;

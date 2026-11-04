@@ -1,56 +1,51 @@
 import { Locator, Page, test } from '@playwright/test';
 import { BasePage } from '../../../../shared/pages/base.page';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import {
+  BOND_TOKEN_OPTION_TEST_ID,
+  TokenSymbol,
+} from 'tests/shared/consts/common.const';
 
 export class AddBondPage extends BasePage {
   form: Locator;
 
-  // Form info
-  formInfo: Locator;
+  // Bond delta row and the why/insufficient notice
   titledAmount: Locator;
   titledAmountBalance: Locator;
   formInfoText: Locator;
 
-  // Enter token amount
+  // Token and amount
+  tokenSelectTrigger: Locator;
   amountInput: Locator;
-  amountLabel: Locator;
   validationInputTooltip: Locator;
   maxBtn: Locator;
 
   // Button
   addBondButton: Locator;
 
-  // Bond token information
-  addBondTokenInfo: Locator;
+  // Aside rows
   balanceWillReceive: Locator;
   exchangeRate: Locator;
+  exchangeRateValue: Locator;
 
   constructor(public page: Page) {
     super(page);
     this.form = this.page.getByTestId('addBondForm');
 
-    // Form info
-    this.formInfo = this.form.getByTestId('formInfo');
-    this.titledAmount = this.formInfo.getByTestId('titledAmount');
-    this.titledAmountBalance = this.titledAmount.locator('div > span');
-    this.formInfoText = this.formInfo.getByTestId('formInfoText');
+    this.titledAmount = this.form.getByTestId('titledAmount');
+    this.titledAmountBalance = this.form.getByTestId('titledAmountBalance');
+    this.formInfoText = this.page.getByTestId('formInfoText');
 
-    // Enter token amount
+    this.tokenSelectTrigger = this.form.getByTestId('tokenSelectTrigger');
     this.amountInput = this.form.locator('input[name="bondAmount"]');
-    this.amountLabel = this.form.locator(
-      'xpath=//input[@name="bondAmount"]/ancestor::label',
-    );
-    this.validationInputTooltip = this.amountLabel.locator('> span').nth(1);
-    this.maxBtn = this.amountLabel.getByTestId('maxBtn');
+    this.validationInputTooltip = this.form.getByTestId('inputMessageError');
+    this.maxBtn = this.form.getByTestId('maxBtn');
 
-    // Button
     this.addBondButton = this.form.getByRole('button', { name: 'Add Bond' });
 
-    // Bond token information
-    this.addBondTokenInfo = this.form.getByTestId('addBondTokenInfo');
-    this.balanceWillReceive =
-      this.addBondTokenInfo.getByTestId('balanceWillReceive');
-    this.exchangeRate = this.addBondTokenInfo.getByTestId('exchangeRate');
+    this.balanceWillReceive = this.form.getByTestId('balanceWillReceive');
+    this.exchangeRate = this.form.getByTestId('exchangeRate');
+    this.exchangeRateValue = this.form.getByTestId('exchangeRateValue');
   }
 
   async open() {
@@ -59,15 +54,14 @@ export class AddBondPage extends BasePage {
     });
   }
 
-  selectBondToken(symbol: TOKENS) {
-    return this.form.locator(`input[value="${symbol}"]`).locator('..');
-  }
-
-  async getBalanceByToken(symbol: TOKENS) {
-    return parseFloat(
-      await this.waitForTextContent(
-        this.form.locator(`input[value="${symbol}"]`).locator('..'),
-      ),
-    );
+  async selectBondToken(symbol: TOKENS) {
+    await test.step(`Select "${symbol}" bond token`, async () => {
+      await this.tokenSelectTrigger.click();
+      await this.form
+        .getByTestId(
+          BOND_TOKEN_OPTION_TEST_ID[symbol.toUpperCase() as TokenSymbol],
+        )
+        .click();
+    });
   }
 }
