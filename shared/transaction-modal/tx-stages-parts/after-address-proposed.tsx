@@ -1,9 +1,11 @@
+import { Address } from '@lidofinance/lido-app-ui';
 import { Text } from '@lidofinance/lido-ui';
-import { WIDGET_TITLE } from 'consts';
+import { WIDGET_TITLE } from 'consts/module';
 import { FC } from 'react';
-import { Address } from 'shared/components';
-import { useModuleMeta } from 'shared/hooks';
-import styled from 'styled-components';
+import { Address as LegacyAddress } from 'shared/components';
+import { useFormUi } from 'shared/hook-form/form-ui';
+import { useModuleMeta } from 'shared/hooks/use-module-meta';
+import { WhatsNextBlock } from './whats-next-block';
 
 type Props = {
   address: string;
@@ -11,30 +13,24 @@ type Props = {
 
 export const AfterAddressProposed: FC<Props> = ({ address }) => {
   const meta = useModuleMeta();
+  const ui = useFormUi();
 
   return (
-    <BlockStyled color="background">
-      <b>What is next: </b>
-      <br />
-      <ol>
-        <li>
-          Connect to {meta?.shortTitle ?? WIDGET_TITLE} UI with the proposed
-          address
+    <WhatsNextBlock>
+      <li>
+        Connect to {meta?.shortTitle ?? WIDGET_TITLE} UI with the proposed
+        address
+        {ui === 'app' ? (
+          <div>
+            <Address address={address} symbols={6} identicon={20} />
+          </div>
+        ) : (
           <Text size="xxs">
-            <Address address={address} showIcon />
+            <LegacyAddress address={address} showIcon />
           </Text>
-        </li>
-        <li>Go to Settings tab → Inbox requests to confirm the change</li>
-      </ol>
-    </BlockStyled>
+        )}
+      </li>
+      <li>Go to Settings tab → Inbox requests to confirm the change</li>
+    </WhatsNextBlock>
   );
 };
-
-const BlockStyled = styled.div`
-  text-align: left;
-  line-height: 24px;
-
-  background-color: var(--lido-color-backgroundSecondary);
-  border-radius: ${({ theme }) => theme.borderRadiusesMap.lg}px;
-  padding: ${({ theme }) => theme.spaceMap.md}px;
-`;

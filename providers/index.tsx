@@ -46,23 +46,21 @@ export const Providers: FC<PropsWithChildren<Props>> = ({
             <InpageNavigationProvider>
               <AlertProvider>
                 {dummy ? (
-                  <ModalProvider>
-                    <LinkProvider
-                      component={AppLink}
-                      externalComponent={ExternalLink}
-                    >
-                      {children}
-                    </LinkProvider>
-                  </ModalProvider>
+                  <LinkProvider
+                    component={AppLink}
+                    externalComponent={ExternalLink}
+                  >
+                    <ModalProvider>{children}</ModalProvider>
+                  </LinkProvider>
                 ) : (
                   <Web3Provider>
                     <AddressValidationProvider>
                       <NodeOperatorProvider>
-                        <ModalProvider>
-                          <LinkProvider
-                            component={AppLink}
-                            externalComponent={ExternalLink}
-                          >
+                        <LinkProvider
+                          component={AppLink}
+                          externalComponent={ExternalLink}
+                        >
+                          <ModalProvider>
                             <SelectOperatorWatcher />
                             <SurveysAuthProvider>
                               {isError ? (
@@ -75,8 +73,8 @@ export const Providers: FC<PropsWithChildren<Props>> = ({
                                 </GateSupported>
                               )}
                             </SurveysAuthProvider>
-                          </LinkProvider>
-                        </ModalProvider>
+                          </ModalProvider>
+                        </LinkProvider>
                       </NodeOperatorProvider>
                     </AddressValidationProvider>
                   </Web3Provider>
