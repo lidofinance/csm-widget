@@ -1,16 +1,25 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { OptionList } from './option-list';
-import { OptionListItem, type OptionListVariant } from './option-list-item';
+import {
+  OptionListItem,
+  type OptionListOrientation,
+  type OptionListVariant,
+} from './option-list-item';
 
 const radios = (html: string) =>
   html.match(/<div[^>]*role="radio"[^>]*>/g) ?? [];
 
-const render = (value: string, variant?: OptionListVariant) =>
+const render = (
+  value: string,
+  variant?: OptionListVariant,
+  orientation?: OptionListOrientation,
+) =>
   renderToStaticMarkup(
     <OptionList
       value={value}
       onChange={() => undefined}
       variant={variant}
+      orientation={orientation}
       aria-label="Operator type"
     >
       <OptionListItem value="a" title="Alpha" data-testid="gateCardPTO" />
@@ -59,5 +68,22 @@ describe('OptionList', () => {
   it('renders the check indicator only in the cards variant', () => {
     expect(render('a', 'cards')).toContain('<svg');
     expect(render('a')).not.toContain('<svg');
+  });
+
+  it('marks a horizontal group with aria-orientation', () => {
+    const group = (html: string) =>
+      html.match(/<div[^>]*role="radiogroup"[^>]*>/)?.[0] ?? '';
+
+    expect(group(render('a', 'list', 'horizontal'))).toContain(
+      'aria-orientation="horizontal"',
+    );
+    expect(group(render('a'))).not.toContain('aria-orientation');
+  });
+
+  it('keeps radios and the cards indicator when horizontal', () => {
+    const html = render('a', 'cards', 'horizontal');
+
+    expect(radios(html)).toHaveLength(3);
+    expect(html).toContain('<svg');
   });
 });

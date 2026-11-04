@@ -16,6 +16,7 @@ export type SubmitButtonStateInput = {
   isSubmitting: boolean;
   disabled?: boolean;
   disableIfClean?: boolean;
+  ignoreErrors?: boolean;
   formIntent?: string;
   intent?: string;
 };
@@ -28,6 +29,7 @@ export const getSubmitButtonState = ({
   isSubmitting,
   disabled,
   disableIfClean,
+  ignoreErrors,
   formIntent,
   intent,
 }: SubmitButtonStateInput): SubmitButtonState => {
@@ -38,7 +40,7 @@ export const getSubmitButtonState = ({
     showConnect: !isAccountActive,
     loading: isBusy && isOwnIntent,
     disabled:
-      hasErrors ||
+      (hasErrors && !ignoreErrors) ||
       (!!disableIfClean && !isDirty) ||
       !!disabled ||
       (isBusy && !isOwnIntent),

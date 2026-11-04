@@ -1,5 +1,8 @@
 import styled, { css } from 'styled-components';
-import type { OptionListVariant } from './option-list-item';
+import type {
+  OptionListOrientation,
+  OptionListVariant,
+} from './option-list-item';
 
 const ellipsis = css`
   overflow: hidden;
@@ -7,10 +10,23 @@ const ellipsis = css`
   text-overflow: ellipsis;
 `;
 
-export const ListStyle = styled.div<{ $variant: OptionListVariant }>`
+export const ListStyle = styled.div<{
+  $variant: OptionListVariant;
+  $orientation: OptionListOrientation;
+}>`
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+
+  ${({ $orientation }) =>
+    $orientation === 'horizontal' &&
+    css`
+      flex-direction: row;
+
+      @media (max-width: 899px) {
+        flex-direction: column;
+      }
+    `}
 
   ${({ $variant }) =>
     $variant === 'cards'
@@ -28,6 +44,7 @@ export const ListStyle = styled.div<{ $variant: OptionListVariant }>`
 
 type ItemStyleProps = {
   $variant: OptionListVariant;
+  $orientation: OptionListOrientation;
   $selected: boolean;
   $disabled: boolean;
 };
@@ -87,6 +104,23 @@ export const ItemStyle = styled.div<ItemStyleProps>`
       opacity: 0.5;
     `}
 
+  ${({ $orientation }) =>
+    $orientation === 'horizontal' &&
+    css`
+      position: relative;
+      flex: 1 1 0;
+      flex-direction: column;
+      align-items: flex-start;
+      min-width: 0;
+      padding-right: 43px;
+
+      @media (max-width: 899px) {
+        flex: none;
+        padding-right: 15px;
+        flex-direction: row;
+      }
+    `}
+
   &:focus-visible {
     outline: 2px solid var(--lido-app-ui-color-border-active);
     outline-offset: -2px;
@@ -138,7 +172,10 @@ export const ActionStyle = styled.span`
   align-items: center;
 `;
 
-export const IndicatorStyle = styled.span<{ $selected: boolean }>`
+export const IndicatorStyle = styled.span<{
+  $selected: boolean;
+  $orientation: OptionListOrientation;
+}>`
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
@@ -155,6 +192,18 @@ export const IndicatorStyle = styled.span<{ $selected: boolean }>`
   background-color: ${({ $selected }) =>
     $selected ? 'var(--lido-app-ui-color-icons-active)' : 'transparent'};
   color: var(--lido-app-ui-color-icons-inverse);
+
+  ${({ $orientation }) =>
+    $orientation === 'horizontal' &&
+    css`
+      position: absolute;
+      top: 15px;
+      right: 15px;
+
+      @media (max-width: 899px) {
+        position: static;
+      }
+    `}
 
   & > svg {
     width: 14px;

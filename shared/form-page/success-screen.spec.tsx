@@ -39,3 +39,26 @@ it('skips empty optional sections and the empty actions row', () => {
   expect(html).not.toContain('successActions');
   expect(html).not.toContain('NEXT');
 });
+
+it('renders the default check badge without an icon', () => {
+  const html = renderToStaticMarkup(
+    <SuccessScreen title="Congratulations!" description="D" actions={null} />,
+  );
+  expect(html).toContain('<svg');
+  expect(html).not.toContain('<img');
+});
+
+it('renders a custom icon in place of the check badge', () => {
+  const html = renderToStaticMarkup(
+    <SuccessScreen
+      title="Congratulations!"
+      description="D"
+      icon={<img src="ics.svg" alt="" width={240} height={240} />}
+      actions={null}
+    />,
+  );
+  expect(html).toContain(
+    '<img src="ics.svg" alt="" width="240" height="240"/>',
+  );
+  expect(html).not.toContain('<svg');
+});

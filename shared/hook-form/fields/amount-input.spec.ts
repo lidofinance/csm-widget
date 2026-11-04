@@ -1,6 +1,7 @@
 import { parseEther } from 'viem';
 import {
   formatAmountInput,
+  getMaxButtonState,
   getShownAmount,
   parseAmountInput,
 } from './amount-input';
@@ -47,5 +48,15 @@ describe('getShownAmount', () => {
   it('shows the field value when it was changed from outside', () => {
     expect(getShownAmount('1', parseEther('2.4'))).toBe('2.4');
     expect(getShownAmount('1', undefined)).toBe('');
+  });
+});
+
+describe('getMaxButtonState', () => {
+  it.each<[bigint | undefined, { show: boolean; disabled: boolean }]>([
+    [undefined, { show: false, disabled: true }],
+    [0n, { show: true, disabled: true }],
+    [1n, { show: true, disabled: false }],
+  ])('%p -> %p', (maxValue, expected) => {
+    expect(getMaxButtonState(maxValue)).toEqual(expected);
   });
 });

@@ -26,6 +26,16 @@ it.each<[string, Partial<SubmitButtonStateInput>, SubmitButtonState]>([
     { ...idle, showConnect: true },
   ],
   ['has errors', { hasErrors: true }, { ...idle, disabled: true }],
+  [
+    'has errors with ignoreErrors',
+    { hasErrors: true, ignoreErrors: true },
+    idle,
+  ],
+  [
+    'ignoreErrors keeps other disable reasons',
+    { hasErrors: true, ignoreErrors: true, disabled: true },
+    { ...idle, disabled: true },
+  ],
   ['disabled prop', { disabled: true }, { ...idle, disabled: true }],
   [
     'clean with disableIfClean',

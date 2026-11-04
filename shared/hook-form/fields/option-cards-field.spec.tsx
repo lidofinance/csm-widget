@@ -101,4 +101,21 @@ describe('OptionCardsField', () => {
     expect(render({}, notEligible)).not.toContain('inputMessageError');
     expect(render({}, notEligible, true)).toContain('inputMessageError');
   });
+
+  it('passes the horizontal orientation to the group', () => {
+    const html = renderToStaticMarkup(
+      <Host values={{ gateName: 'curatedGatePTO' }}>
+        <OptionCardsField
+          name="gateName"
+          options={options}
+          aria-label="Claiming option"
+          orientation="horizontal"
+        />
+      </Host>,
+    );
+
+    expect(html).toMatch(
+      /<div[^>]*role="radiogroup"[^>]*aria-orientation="horizontal"/,
+    );
+  });
 });

@@ -1,26 +1,28 @@
-import {
-  isTokenIcon,
-  TokenIcon,
-  TokenSelector,
-} from '@lidofinance/lido-app-ui';
 import { ChangeEvent, FC, ReactNode, useState } from 'react';
 import { RichInput } from 'shared/ui';
 import {
   formatAmountInput,
+  getMaxButtonState,
   getShownAmount,
   parseAmountInput,
 } from './amount-input';
 import { FIELD_ERROR_TEST_ID } from './field-error';
+import { SingleTokenSelector } from './single-token-selector';
 import { useFieldController } from './use-field-controller';
 import { useFocusableRef } from './use-focusable-ref';
 
 export const AMOUNT_INPUT_TEST_ID = 'amountInput';
+export const MAX_BUTTON_TEST_ID = 'maxBtn';
 
 export type AmountFieldProps = {
   name: string;
   label: ReactNode;
   token: string;
   locked?: boolean;
+  /** Shows the Max button; `0n` shows it disabled. The lib hides it while `disabled`. */
+  maxValue?: bigint;
+  balance?: ReactNode;
+  disabled?: boolean;
   tooltip?: ReactNode;
   placeholder?: string;
   showUntouched?: boolean;
@@ -32,6 +34,9 @@ export const AmountField: FC<AmountFieldProps> = ({
   label,
   token,
   locked = false,
+  maxValue,
+  balance,
+  disabled,
   tooltip,
   placeholder = '0',
   showUntouched,
@@ -44,12 +49,19 @@ export const AmountField: FC<AmountFieldProps> = ({
   // the label row's tooltip icon is focusable and precedes the input
   const ref = useFocusableRef(field.ref, 'input');
   const [text, setText] = useState(() => formatAmountInput(field.value));
+  const max = getMaxButtonState(maxValue);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const next = parseAmountInput(event.target.value);
     if (!next) return;
     setText(next.text);
     field.onChange(next.value);
+  };
+
+  const handleMax = () => {
+    if (maxValue === undefined) return;
+    setText(formatAmountInput(maxValue));
+    field.onChange(maxValue);
   };
 
   return (
@@ -64,28 +76,22 @@ export const AmountField: FC<AmountFieldProps> = ({
         }
         onChange={locked ? undefined : handleChange}
         onBlur={field.onBlur}
+        disabled={disabled || field.disabled}
         placeholder={placeholder}
         label={label}
         labelTooltip={tooltip}
-        showMaxButton={false}
+        balance={balance}
+        showMaxButton={max.show}
+        maxDisabled={max.disabled}
+        onMaxClick={handleMax}
         error={invalid}
         errorText={message}
-        dataTestId={{ input: testId, error: FIELD_ERROR_TEST_ID }}
-        tokenSelector={
-          <TokenSelector
-            single
-            value={token}
-            options={[
-              {
-                value: token,
-                label: token,
-                icon: isTokenIcon(token) ? (
-                  <TokenIcon token={token} />
-                ) : undefined,
-              },
-            ]}
-          />
-        }
+        dataTestId={{
+          input: testId,
+          error: FIELD_ERROR_TEST_ID,
+          maxButton: MAX_BUTTON_TEST_ID,
+        }}
+        tokenSelector={<SingleTokenSelector token={token} />}
       />
     </div>
   );

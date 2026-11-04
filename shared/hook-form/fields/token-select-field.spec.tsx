@@ -84,4 +84,23 @@ describe('TokenSelectField', () => {
     expect(html).toContain('data-testid="inputMessageError"');
     expect(html).toContain('>Not enough stETH</p>');
   });
+
+  it('renders the subtitle under the title', () => {
+    const html = renderToStaticMarkup(
+      <Host values={{ token: TOKENS.steth }}>
+        <TokenSelectField
+          name="token"
+          options={options}
+          label="Choose a token to claim"
+          subtitle="Splitter addresses receive stETH. Choose the token for your Rewards Address."
+        />
+      </Host>,
+    );
+
+    expect(html.indexOf('>Choose a token to claim</p>')).toBeLessThan(
+      html.indexOf(
+        '>Splitter addresses receive stETH. Choose the token for your Rewards Address.</p>',
+      ),
+    );
+  });
 });

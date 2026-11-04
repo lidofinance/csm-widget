@@ -3,6 +3,7 @@ import {
   OptionList,
   OptionListItem,
   OptionListItemProps,
+  OptionListOrientation,
   OptionListVariant,
 } from 'shared/ui';
 import { FieldError } from './field-error';
@@ -29,6 +30,7 @@ export type OptionCardsFieldProps = {
   options: OptionCardsFieldOption[];
   'aria-label': string;
   variant?: OptionListVariant;
+  orientation?: OptionListOrientation;
   showUntouched?: boolean;
   'data-testid'?: string;
 };
@@ -38,6 +40,7 @@ export const OptionCardsField: FC<OptionCardsFieldProps> = ({
   options,
   'aria-label': ariaLabel,
   variant = 'cards',
+  orientation,
   showUntouched,
   'data-testid': testId,
 }) => {
@@ -55,6 +58,7 @@ export const OptionCardsField: FC<OptionCardsFieldProps> = ({
         onChange={field.onChange}
         onBlur={field.onBlur}
         variant={variant}
+        orientation={orientation}
         aria-label={ariaLabel}
         aria-invalid={invalid || undefined}
         aria-describedby={message ? errorId : undefined}

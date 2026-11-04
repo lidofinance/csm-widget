@@ -85,3 +85,42 @@ describe('AmountField', () => {
     expect(html).toContain('Not enough stETH');
   });
 });
+
+describe('AmountField max and balance', () => {
+  const maxButton = (html: string) =>
+    html.match(/<span[^>]*data-testid="maxBtn"[^>]*>/)?.[0];
+
+  it('renders no Max button without maxValue', () => {
+    expect(maxButton(render({}))).toBeUndefined();
+  });
+
+  it('renders an enabled Max button for a positive maxValue', () => {
+    const tag = maxButton(render({}, { maxValue: parseEther('3') }));
+
+    expect(tag).toContain('role="button"');
+    expect(tag).not.toContain('aria-disabled');
+  });
+
+  it('renders a disabled Max button for a zero maxValue', () => {
+    expect(maxButton(render({}, { maxValue: 0n }))).toContain(
+      'aria-disabled="true"',
+    );
+  });
+
+  it('hides Max when locked', () => {
+    expect(
+      maxButton(render({}, { maxValue: parseEther('3'), locked: true })),
+    ).toBeUndefined();
+  });
+
+  it('disables the input and hides Max when disabled', () => {
+    const html = render({}, { maxValue: parseEther('3'), disabled: true });
+
+    expect(input(html)).toContain('disabled=""');
+    expect(maxButton(html)).toBeUndefined();
+  });
+
+  it('renders the balance slot', () => {
+    expect(render({}, { balance: '24.19 stETH' })).toContain('24.19 stETH');
+  });
+});

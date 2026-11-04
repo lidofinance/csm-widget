@@ -12,6 +12,7 @@ import {
 } from './styles';
 
 export type OptionListVariant = 'list' | 'cards';
+export type OptionListOrientation = 'vertical' | 'horizontal';
 
 export type OptionListItemProps = {
   value: string;
@@ -28,6 +29,7 @@ export type OptionListItemProps = {
   className?: string;
   children?: ReactNode;
   variant?: OptionListVariant;
+  orientation?: OptionListOrientation;
   'data-testid'?: string;
 };
 
@@ -45,9 +47,11 @@ export const OptionListItem: FC<OptionListItemProps> = ({
   className,
   children,
   variant = 'list',
+  orientation = 'vertical',
   'data-testid': dataTestId,
 }) => {
   const isCards = variant === 'cards';
+  const wrap = isCards || orientation === 'horizontal';
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key !== 'Enter' && event.key !== ' ') return;
@@ -66,6 +70,7 @@ export const OptionListItem: FC<OptionListItemProps> = ({
       tabIndex={disabled ? -1 : tabIndex}
       className={className}
       $variant={variant}
+      $orientation={orientation}
       $selected={selected}
       $disabled={disabled}
       onClick={disabled ? undefined : onSelect}
@@ -75,9 +80,9 @@ export const OptionListItem: FC<OptionListItemProps> = ({
         <IconSlotStyle aria-hidden="true">{icon}</IconSlotStyle>
       ) : null}
       <BodyStyle>
-        <TitleStyle $wrap={isCards}>{title}</TitleStyle>
+        <TitleStyle $wrap={wrap}>{title}</TitleStyle>
         {description != null ? (
-          <DescriptionStyle $wrap={isCards}>{description}</DescriptionStyle>
+          <DescriptionStyle $wrap={wrap}>{description}</DescriptionStyle>
         ) : null}
         {children}
       </BodyStyle>
@@ -88,7 +93,11 @@ export const OptionListItem: FC<OptionListItemProps> = ({
         </ActionStyle>
       ) : null}
       {isCards ? (
-        <IndicatorStyle aria-hidden="true" $selected={selected}>
+        <IndicatorStyle
+          aria-hidden="true"
+          $selected={selected}
+          $orientation={orientation}
+        >
           {selected ? <IconCheck /> : null}
         </IndicatorStyle>
       ) : null}

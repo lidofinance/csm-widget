@@ -22,6 +22,8 @@ export type TokenSelectFieldProps = {
   name: string;
   options: TokenSelectorOption[];
   label?: string;
+  /** Second line of the title row; shown only with `label`. */
+  subtitle?: ReactNode;
   action?: ReactNode;
 };
 
@@ -29,6 +31,7 @@ export const TokenSelectField: FC<TokenSelectFieldProps> = ({
   name,
   options,
   label,
+  subtitle,
   action,
 }) => {
   const { field, message } = useFieldController({ name });
@@ -36,7 +39,9 @@ export const TokenSelectField: FC<TokenSelectFieldProps> = ({
 
   return (
     <FieldStackStyle ref={ref}>
-      {label && <SectionTitle title={label} action={action} />}
+      {label && (
+        <SectionTitle title={label} subtitle={subtitle} action={action} />
+      )}
       <TokenSelector
         options={options}
         value={field.value}

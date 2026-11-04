@@ -1,7 +1,8 @@
+import { ButtonSize } from '@lidofinance/lido-app-ui';
 import { FC, MouseEventHandler, ReactNode } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useConnectWallet } from 'shared/wallet/connect/use-connect-wallet';
-import { FullWidthButtonStyle } from './styles';
+import { SubmitButtonStyle } from './styles';
 import { IntentFormInput } from './submit-button-state';
 import { useSubmitButtonState } from './use-submit-button-state';
 
@@ -12,6 +13,11 @@ export type SubmitButtonProps = {
   disableIfClean?: boolean;
   /** Form `intent` this button submits with; a truthy intent renders `type="button"` so it cannot win implicit Enter submission. */
   intent?: string;
+  /** Keeps the button enabled while some field is invalid; for intents that don't read the invalid fields. */
+  ignoreErrors?: boolean;
+  variant?: 'primary' | 'outline';
+  size?: ButtonSize;
+  fullWidth?: boolean;
   'data-testid'?: string;
 };
 
@@ -21,11 +27,16 @@ export const SubmitButton: FC<SubmitButtonProps> = ({
   disabled,
   disableIfClean,
   intent,
+  ignoreErrors,
+  variant,
+  size,
+  fullWidth = true,
   'data-testid': dataTestId,
 }) => {
   const state = useSubmitButtonState({
     disabled: disabled || !!disabledReason,
     disableIfClean,
+    ignoreErrors,
     intent,
   });
   const { setValue } = useFormContext<IntentFormInput>();
@@ -34,14 +45,16 @@ export const SubmitButton: FC<SubmitButtonProps> = ({
 
   if (state.showConnect) {
     return (
-      <FullWidthButtonStyle
+      <SubmitButtonStyle
         type="button"
+        size={size}
+        $fullWidth={fullWidth}
         disabled={connect.disabled}
         onClick={connect.handleClick}
         data-testid="connectBtn"
       >
         Connect wallet
-      </FullWidthButtonStyle>
+      </SubmitButtonStyle>
     );
   }
 
@@ -51,14 +64,17 @@ export const SubmitButton: FC<SubmitButtonProps> = ({
   };
 
   return (
-    <FullWidthButtonStyle
+    <SubmitButtonStyle
       type={intent ? 'button' : 'submit'}
+      variant={variant}
+      size={size}
+      $fullWidth={fullWidth}
       loading={state.loading}
       disabled={state.disabled}
       onClick={handleClick}
       data-testid={dataTestId}
     >
       {disabledReason || children}
-    </FullWidthButtonStyle>
+    </SubmitButtonStyle>
   );
 };

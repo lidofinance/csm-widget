@@ -5,6 +5,7 @@ import {
   SuccessCardStyle,
   SuccessHeroStyle,
   SuccessIconStyle,
+  SuccessIllustrationStyle,
   SuccessScreenStyle,
   SuccessStatsStyle,
 } from './styles';
@@ -12,6 +13,8 @@ import {
 export type SuccessScreenProps = {
   title: ReactNode;
   description: ReactNode;
+  /** Replaces the default green check badge, e.g. an operator-type illustration. */
+  icon?: ReactNode;
   stats?: ReactNode;
   notice?: ReactNode;
   next?: ReactNode;
@@ -22,6 +25,7 @@ export type SuccessScreenProps = {
 export const SuccessScreen: FC<SuccessScreenProps> = ({
   title,
   description,
+  icon,
   stats,
   notice,
   next,
@@ -36,9 +40,15 @@ export const SuccessScreen: FC<SuccessScreenProps> = ({
   return (
     <SuccessScreenStyle data-testid={dataTestId}>
       <SuccessHeroStyle>
-        <SuccessIconStyle>
-          <IconCheck aria-hidden="true" />
-        </SuccessIconStyle>
+        {icon != null ? (
+          <SuccessIllustrationStyle aria-hidden="true">
+            {icon}
+          </SuccessIllustrationStyle>
+        ) : (
+          <SuccessIconStyle>
+            <IconCheck aria-hidden="true" />
+          </SuccessIconStyle>
+        )}
         <H1>{title}</H1>
         <Body as="div">{description}</Body>
       </SuccessHeroStyle>

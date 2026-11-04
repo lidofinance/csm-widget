@@ -1,5 +1,5 @@
 import { Button, Card } from '@lidofinance/lido-app-ui';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const FormPageStyle = styled.div`
   display: flex;
@@ -16,6 +16,14 @@ export const SkeletonCardStyle = styled(Card)`
   }
 `;
 
+export const FormCardStyle = styled(Card)`
+  && {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+`;
+
 export const SubmitAsideStyle = styled.div`
   display: flex;
   flex-direction: column;
@@ -28,10 +36,14 @@ export const CtaStackStyle = styled.div`
   gap: 12px;
 `;
 
-export const FullWidthButtonStyle = styled(Button)`
-  && {
-    width: 100%;
-  }
+export const SubmitButtonStyle = styled(Button)<{ $fullWidth: boolean }>`
+  ${({ $fullWidth }) =>
+    $fullWidth &&
+    css`
+      && {
+        width: 100%;
+      }
+    `}
 `;
 
 export const SuccessScreenStyle = styled.div`
@@ -72,6 +84,13 @@ export const SuccessIconStyle = styled.span`
     width: 40px;
     height: 40px;
   }
+`;
+
+export const SuccessIllustrationStyle = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
 `;
 
 export const SuccessStatsStyle = styled(Card)`

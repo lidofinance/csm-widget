@@ -1,5 +1,5 @@
-import { Checkbox, IconLoaderCircle } from '@lidofinance/lido-app-ui';
-import styled, { keyframes } from 'styled-components';
+import { Checkbox, IconLoaderCircle, Input } from '@lidofinance/lido-app-ui';
+import styled, { css, keyframes } from 'styled-components';
 
 export const FieldErrorStyle = styled.p`
   margin: 0;
@@ -47,6 +47,25 @@ export const AddressLabelStyle = styled.span`
   gap: 8px;
 `;
 
+// app-ui Input has no suffix slot: with $trailing its icon slot moves after the input
+export const TrailingInputStyle = styled(Input)<{ $trailing: boolean }>`
+  ${({ $trailing }) =>
+    $trailing &&
+    css`
+      && label > span[aria-hidden='true'] {
+        order: 1;
+        width: auto;
+        height: auto;
+      }
+    `}
+`;
+
+export const PercentSuffixStyle = styled.span`
+  color: var(--lido-app-ui-color-text-secondary);
+  font-size: var(--lido-app-ui-font-size-body);
+  line-height: var(--lido-app-ui-line-height-body);
+`;
+
 export const ConnectedAddressButtonStyle = styled.button`
   padding: 0;
   border: none;
@@ -77,4 +96,75 @@ export const TabLabelStyle = styled.span`
   display: inline-flex;
   align-items: center;
   gap: 6px;
+`;
+
+export const KeyListStyle = styled.div<{ $invalid: boolean }>`
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid
+    ${({ $invalid }) =>
+      $invalid
+        ? 'var(--lido-app-ui-color-border-error)'
+        : 'var(--lido-app-ui-color-border-default)'};
+  border-radius: var(--lido-app-ui-border-radius-card);
+`;
+
+export const KeyRowStyle = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  background-color: var(--lido-app-ui-color-background-default);
+
+  & + & {
+    border-top: 1px solid var(--lido-app-ui-color-border-default);
+  }
+`;
+
+export const KeyCheckboxStyle = styled(Checkbox)`
+  && {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+  }
+
+  && > span:last-child {
+    flex: 1;
+    min-width: 0;
+  }
+`;
+
+export const KeyLabelStyle = styled.span`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+`;
+
+// both trims stay in the DOM so the desktop text the e2e matches is always present
+export const KeyPubkeyStyle = styled.span`
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+
+  & > span:last-child {
+    display: none;
+  }
+
+  @media (max-width: 439px) {
+    & > span:first-child {
+      display: none;
+    }
+
+    & > span:last-child {
+      display: inline;
+    }
+  }
+`;
+
+export const KeyTagsStyle = styled.span`
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px;
 `;

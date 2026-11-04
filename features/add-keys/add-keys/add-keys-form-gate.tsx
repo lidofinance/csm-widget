@@ -1,22 +1,6 @@
-import { MessageBox } from '@lidofinance/lido-app-ui';
 import { FC, PropsWithChildren } from 'react';
-import { NoAccessNotice } from 'shared/components';
-import { useModuleMeta } from 'shared/hooks';
+import { NoAccessNotice, PausedNotice } from 'shared/form-page';
 import { useAddKeysFlow, useAddKeysFormData } from './context';
-
-const PausedNotice: FC = () => {
-  const meta = useModuleMeta();
-
-  return (
-    <MessageBox
-      variant="warning"
-      headline={`${meta?.shortName ?? 'Module'} is paused`}
-      dataTestId={{ root: 'pausedNotice' }}
-    >
-      This means that Node Operator creation and keys upload is not possible
-    </MessageBox>
-  );
-};
 
 export const AddKeysFormGate: FC<PropsWithChildren> = ({ children }) => {
   const flow = useAddKeysFlow();

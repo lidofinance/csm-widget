@@ -10,12 +10,14 @@ import {
 export type SubmitButtonStateOptions = {
   disabled?: boolean;
   disableIfClean?: boolean;
+  ignoreErrors?: boolean;
   intent?: string;
 };
 
 export const useSubmitButtonState = ({
   disabled,
   disableIfClean,
+  ignoreErrors,
   intent,
 }: SubmitButtonStateOptions): SubmitButtonState => {
   const { isAccountActive } = useDappStatus();
@@ -31,6 +33,7 @@ export const useSubmitButtonState = ({
     isSubmitting,
     disabled,
     disableIfClean,
+    ignoreErrors,
     formIntent,
     intent,
   });

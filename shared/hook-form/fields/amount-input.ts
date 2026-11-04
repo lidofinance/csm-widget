@@ -24,3 +24,11 @@ export const getShownAmount = (text: string, value?: bigint | null): string =>
   parseAmountInput(text)?.value === (value ?? null)
     ? text
     : formatAmountInput(value);
+
+export type MaxButtonState = { show: boolean; disabled: boolean };
+
+// Mirrors legacy InputAmount: no max → no button; a zero max shows it disabled
+export const getMaxButtonState = (maxValue?: bigint): MaxButtonState => ({
+  show: maxValue !== undefined,
+  disabled: !(maxValue !== undefined && maxValue > 0n),
+});

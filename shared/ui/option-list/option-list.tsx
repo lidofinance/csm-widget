@@ -12,6 +12,7 @@ import {
 } from 'react';
 import type {
   OptionListItemProps,
+  OptionListOrientation,
   OptionListVariant,
 } from './option-list-item';
 import {
@@ -28,6 +29,7 @@ export type OptionListProps = Omit<
   value: string;
   onChange: (value: string) => void;
   variant?: OptionListVariant;
+  orientation?: OptionListOrientation;
   children: ReactNode;
 };
 
@@ -35,6 +37,7 @@ export const OptionList: FC<OptionListProps> = ({
   value,
   onChange,
   variant = 'list',
+  orientation = 'vertical',
   children,
   ...rest
 }) => {
@@ -70,8 +73,10 @@ export const OptionList: FC<OptionListProps> = ({
       {...rest}
       ref={containerRef}
       role="radiogroup"
+      aria-orientation={orientation === 'horizontal' ? orientation : undefined}
       tabIndex={-1}
       $variant={variant}
+      $orientation={orientation}
       onKeyDown={handleKeyDown}
     >
       {items.map((item, index) =>
@@ -79,6 +84,7 @@ export const OptionList: FC<OptionListProps> = ({
           key: item.props.value,
           name: item.props.name ?? groupId,
           variant,
+          orientation,
           selected: index === currentIndex,
           tabIndex: index === tabStopIndex ? 0 : -1,
           onSelect: () => onChange(item.props.value),
