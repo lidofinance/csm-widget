@@ -137,6 +137,18 @@ export class ForkActionsService {
     });
   }
 
+  async rewardAddress(noId: number): Promise<Hex> {
+    return this.step(`Resolve reward address of NO #${noId}`, async () => {
+      const { rewardAddress } = await this.client.readContract({
+        address: this.addresses.module,
+        abi: BaseModuleAbi,
+        functionName: 'getNodeOperatorManagementProperties',
+        args: [BigInt(noId)],
+      });
+      return rewardAddress;
+    });
+  }
+
   async getProposedRewardAddress(noId: number): Promise<Hex> {
     return this.step(
       `Resolve proposed reward address of NO #${noId}`,
