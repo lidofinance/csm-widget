@@ -1,4 +1,4 @@
-import { Page, test } from '@playwright/test';
+import { Locator, Page, test } from '@playwright/test';
 import { WalletPage } from '@lidofinance/wallets-testing-wallets';
 import { SignInForm } from '../shared/signInForm.page';
 import { SubmitApplicationForm } from './submitApplicationForm.page';
@@ -9,6 +9,8 @@ export class ApplicationForm {
   signInForm: SignInForm;
   submitApplicationForm: SubmitApplicationForm;
   applicationFormStatus: ApplicationFormStatus;
+  operatorTypeStatus: Locator;
+  operatorTypeChip: Locator;
 
   constructor(
     page: Page,
@@ -18,6 +20,8 @@ export class ApplicationForm {
     this.signInForm = new SignInForm(page, walletPage);
     this.submitApplicationForm = new SubmitApplicationForm(page, walletPage);
     this.applicationFormStatus = new ApplicationFormStatus(page);
+    this.operatorTypeStatus = page.getByTestId('operatorTypeStatus');
+    this.operatorTypeChip = this.operatorTypeStatus.getByTestId('scoreChip');
   }
 
   async open() {

@@ -16,6 +16,10 @@ export class OperatorTypePage extends BasePage {
 
   idvtcApplyButton: Locator;
   idvtcIssuedChip: Locator;
+  icsCard: Locator;
+  icsCardChip: Locator;
+  icsApplyButton: Locator;
+  claimIcsAlert: Locator;
   claimAlert: Locator;
   claimAlertButton: Locator;
   navClaimCounter: Locator;
@@ -36,6 +40,10 @@ export class OperatorTypePage extends BasePage {
     this.idvtcIssuedChip = this.page
       .getByTestId('scoreChip')
       .filter({ hasText: 'Issued' });
+    this.icsCard = this.page.getByTestId('icsTypeCard');
+    this.icsCardChip = this.icsCard.getByTestId('scoreChip');
+    this.icsApplyButton = this.icsCard.getByTestId('icsApplyButton');
+    this.claimIcsAlert = this.page.getByTestId('claimIcsAlert');
     this.claimAlert = this.page.getByTestId('claimIdvtcAlert');
     this.claimAlertButton = this.claimAlert.getByRole('button', {
       name: 'Go to Claim page',

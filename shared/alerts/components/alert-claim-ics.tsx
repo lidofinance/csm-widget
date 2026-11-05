@@ -6,7 +6,10 @@ import { Alert } from './alert';
 import { AlertButton } from './styles';
 
 export const AlertClaimIcs: FC = () => (
-  <Alert title="You have a new operator type to be claimed">
+  <Alert
+    title="You have a new operator type to be claimed"
+    data-testid="claimIcsAlert"
+  >
     <p>
       The Identified Community Staker type is now available to be claimed for
       your node operator

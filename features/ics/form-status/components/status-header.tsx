@@ -92,7 +92,12 @@ export const StatusHeader: FC<StatusHeaderProps> = ({
   return (
     <Stack direction="column" gap="md">
       {status && (
-        <Stack direction="row" justify="space-between" align="center">
+        <Stack
+          direction="row"
+          justify="space-between"
+          align="center"
+          data-testid="applicationStatus"
+        >
           <Text size="lg" weight={700}>
             Application
           </Text>
@@ -100,7 +105,12 @@ export const StatusHeader: FC<StatusHeaderProps> = ({
         </Stack>
       )}
       {(!status || status === 'APPROVED' || hasTypeStatus) && (
-        <Stack direction="row" justify="space-between" align="center">
+        <Stack
+          direction="row"
+          justify="space-between"
+          align="center"
+          data-testid="operatorTypeStatus"
+        >
           <Text size="lg" weight={700}>
             Operator type
           </Text>

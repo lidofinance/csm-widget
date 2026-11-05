@@ -1,4 +1,3 @@
-import { fileURLToPath } from 'node:url';
 import { ReporterDescription } from '@playwright/test';
 import { widgetFullConfig } from '../../csm-widget/config';
 
@@ -24,11 +23,6 @@ export const SENSITIVE_ENV_KEYS = [
 // ids from the bochqa.apps dictionary
 const BOCHQA_APP_IDS = { CSM: 1, CM: 2 } as const;
 
-// secret-guard resolves relative paths from testDir, not from the config
-const BOCHQA_REPORTER_PATH = fileURLToPath(
-  new URL('bochqa.reporter.ts', import.meta.url),
-);
-
 type GetReportConfig = (
   app: keyof typeof BOCHQA_APP_IDS,
 ) => ReporterDescription[];
@@ -44,7 +38,7 @@ export const getReportConfig: GetReportConfig = function (app) {
       reporters.qaseReporter,
       reporters.chatReporter,
       [
-        BOCHQA_REPORTER_PATH,
+        '@lidofinance/bochqa-reporter',
         { appId: BOCHQA_APP_IDS[app], launchName: getTestRunName() },
       ],
     );
@@ -65,7 +59,7 @@ export const getReportConfig: GetReportConfig = function (app) {
     // must stay outside secret-guard: it swallows errors thrown before onBegin
     ['../shared/config/globalError.reporter.ts'],
     [
-      '../shared/config/githubSummary.reporter.ts',
+      '@lidofinance/github-summary-reporter',
       { qaseProjectName: process.env.QASE_PROJECT_ID },
     ],
   ];
