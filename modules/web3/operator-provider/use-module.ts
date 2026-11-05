@@ -1,10 +1,11 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { config } from 'config';
+import { useRenderedModule } from 'shared/hooks/use-module-meta';
 import { useNodeOperator } from './node-operator-provider';
 
 export const useModule = () => {
   const { activeModule } = useNodeOperator();
-  const currentModule = activeModule ?? config.module;
+  const renderedModule = useRenderedModule();
+  const currentModule = activeModule ?? renderedModule;
   return {
     module: currentModule,
     isCSM: currentModule === MODULE_NAME.CSM,

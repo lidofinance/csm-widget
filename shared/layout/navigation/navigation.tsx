@@ -1,10 +1,9 @@
 import { Dark, Light, ThemeName, useThemeToggle } from '@lidofinance/lido-ui';
-import { moduleMeta } from 'consts';
 import { useSmVersionSupported } from 'modules/web3';
 import { useInpageNavigation } from 'providers/inpage-navigation';
 import { FC, memo, PropsWithChildren } from 'react';
 import { Stack } from 'shared/components';
-import { useInitialLoading, useRouterPath } from 'shared/hooks';
+import { useInitialLoading, useModuleMeta, useRouterPath } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
 import { getIsActivePath } from 'utils';
 import {
@@ -26,6 +25,7 @@ export const Navigation: FC<{ desktopHidden?: boolean }> = memo(
     const { expanded, toggleExpanded } = useInpageNavigation();
     const routes = useNavItems();
     const pathname = useRouterPath();
+    const moduleMeta = useModuleMeta();
 
     const hidden = isLoading || !isSupported || routes.length === 0;
 

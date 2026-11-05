@@ -1,49 +1,56 @@
 import { FC } from 'react';
 
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
+import { config } from 'config';
 import { getExternalLinks } from 'consts/external-links';
+import { useRenderedModule } from 'shared/hooks';
 import { LogoLidoLink, Stack } from 'shared/components';
 import { FooterLink, FooterStyle, LinkDivider } from './styles';
 import { Version } from './version';
 
-const { feedbackForm } = getExternalLinks();
+export const Footer: FC = () => {
+  const feedbackForm = getExternalLinks(
+    config.defaultChain,
+    useRenderedModule(),
+  ).feedbackForm;
 
-export const Footer: FC = () => (
-  <FooterStyle data-testid="appFooter">
-    <LogoLidoLink />
-    <Stack gap="none">
-      <FooterLink
-        href="https://lido.fi/terms-of-use"
-        matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerTermsOfUse}
-        data-testid="footerTermsOfUseLink"
-      >
-        Terms of Use
-      </FooterLink>
-      <LinkDivider />
-      <FooterLink
-        href="https://lido.fi/privacy-notice"
-        matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerPrivacyNotice}
-        data-testid="footerPrivacyNoticeLink"
-      >
-        Privacy Notice
-      </FooterLink>
-      <LinkDivider />
-      <FooterLink
-        href={feedbackForm}
-        matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerFeedbackForm}
-        data-testid="footerFeedbackFormLink"
-      >
-        Feedback form
-      </FooterLink>
-      <LinkDivider />
-      <FooterLink
-        href="https://discord.com/invite/lido"
-        matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerDiscord}
-        data-testid="footerDiscordLink"
-      >
-        Discord
-      </FooterLink>
-    </Stack>
-    <Version />
-  </FooterStyle>
-);
+  return (
+    <FooterStyle data-testid="appFooter">
+      <LogoLidoLink />
+      <Stack gap="none">
+        <FooterLink
+          href="https://lido.fi/terms-of-use"
+          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerTermsOfUse}
+          data-testid="footerTermsOfUseLink"
+        >
+          Terms of Use
+        </FooterLink>
+        <LinkDivider />
+        <FooterLink
+          href="https://lido.fi/privacy-notice"
+          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerPrivacyNotice}
+          data-testid="footerPrivacyNoticeLink"
+        >
+          Privacy Notice
+        </FooterLink>
+        <LinkDivider />
+        <FooterLink
+          href={feedbackForm}
+          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerFeedbackForm}
+          data-testid="footerFeedbackFormLink"
+        >
+          Feedback form
+        </FooterLink>
+        <LinkDivider />
+        <FooterLink
+          href="https://discord.com/invite/lido"
+          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerDiscord}
+          data-testid="footerDiscordLink"
+        >
+          Discord
+        </FooterLink>
+      </Stack>
+      <Version />
+    </FooterStyle>
+  );
+};

@@ -27,5 +27,7 @@ export const MODULE_METADATA = {
 
 export const moduleMeta = MODULE_METADATA[config.module];
 
+export const hasModuleOverride = config.module !== config.envModule;
+
 export const isModuleCSM = config.module === MODULE_NAME.CSM;
 export const isModuleCM = config.module === MODULE_NAME.CM;
