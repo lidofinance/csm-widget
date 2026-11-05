@@ -2494,10 +2494,10 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/github-summary-reporter/-/github-summary-reporter-1.0.0.tgz#12351a4bb3be8f2f189620e41fe579e5f98c2548"
   integrity sha512-i+OKGONoS8CH9SGAVlz/zmB/VLddldaCE9f8UH7KA5pzVtDQ++8LCHxac1HKwguqPzF5dllq3pTuXkbIH+spiw==
 
-"@lidofinance/lido-csm-sdk@3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/lido-csm-sdk/-/lido-csm-sdk-3.0.0.tgz#8cd6a3ca7c7fe44341902f9a6114672d28d717e7"
-  integrity sha512-1W1nDCUzXYBr1OLjdAgScfBwR/D+OktLNkM+oQoAanq5Xdr9mw4RFtmw0ggU7ByAA+OsejJ2O1sINqhZmVN57Q==
+"@lidofinance/lido-csm-sdk@3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@lidofinance/lido-csm-sdk/-/lido-csm-sdk-3.0.1.tgz#8d65992f4294ee49e35b05da2667225cf68f7da5"
+  integrity sha512-glzRBgUqgpUJCWdsM72bii5wtLRJywPI5iIc/HckmMqpEbCDjYSdnPUQoY6779emzzbVVEmn0+LDi4CNYSAAYQ==
   dependencies:
     "@chainsafe/ssz" "^1.7.0"
     "@openzeppelin/merkle-tree" "^1.0.8"
