@@ -59,7 +59,7 @@ export const AddressField: FC<AddressFieldProps> = ({
   const icon =
     trailing ??
     (isLoading ? (
-      <AddressSpinnerStyle data-testid="loader" />
+      <AddressSpinnerStyle decorative data-testid="loader" />
     ) : (
       !simple && address && <Identicon address={address} size={20} />
     ));

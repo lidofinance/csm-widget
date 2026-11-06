@@ -6,6 +6,7 @@ import { trackMatomoEvent } from 'utils';
 
 export const AlertExpiredLockedBond: FC = () => (
   <Notification
+    fluid
     title="Your locked bond has expired"
     actions={
       <Button

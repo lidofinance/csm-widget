@@ -14,11 +14,6 @@ export const AlertContainerStyled = styled.div`
   margin-inline: auto;
   padding: 8px var(--lido-app-ui-page-gutter) 0;
 
-  /* lib Notification is a fixed 320px toast; alerts fill the column (some sit inside display:contents wrappers) */
-  && [role='alert'] {
-    width: 100%;
-  }
-
   :empty {
     display: none;
   }

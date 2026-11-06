@@ -27,6 +27,7 @@ export const AlertWrongFeeRecipient: FC<AlertWrongFeeRecipientProps> = ({
 
   return (
     <Notification
+      fluid
       title="Wrong feeRecipient"
       actions={
         <>

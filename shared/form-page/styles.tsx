@@ -1,5 +1,5 @@
-import { Button, Card } from '@lidofinance/lido-app-ui';
-import styled, { css } from 'styled-components';
+import { Card } from '@lidofinance/lido-app-ui';
+import styled from 'styled-components';
 
 export const FormPageStyle = styled.div`
   display: flex;
@@ -34,16 +34,6 @@ export const CtaStackStyle = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
-`;
-
-export const SubmitButtonStyle = styled(Button)<{ $fullWidth: boolean }>`
-  ${({ $fullWidth }) =>
-    $fullWidth &&
-    css`
-      && {
-        width: 100%;
-      }
-    `}
 `;
 
 export const SuccessScreenStyle = styled.div`

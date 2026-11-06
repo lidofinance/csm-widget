@@ -58,8 +58,8 @@ export const WalletModal: ModalComponentType = ({ onClose }) => {
 
         {disconnect && (
           <WalletModalDisconnectStyle
-            size="xs"
-            variant="outlined"
+            size="small"
+            variant="outline"
             onClick={handleDisconnect}
           >
             Disconnect

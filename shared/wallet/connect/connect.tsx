@@ -1,15 +1,12 @@
-import { Button, ButtonProps } from '@lidofinance/lido-ui';
+import { Button, ButtonAsButtonProps } from '@lidofinance/lido-app-ui';
 import { FC, PropsWithChildren } from 'react';
 
 import { WithMatomoEvent } from 'utils';
 import { useConnectWallet } from './use-connect-wallet';
 
-export const Connect: FC<PropsWithChildren<WithMatomoEvent<ButtonProps>>> = ({
-  children,
-  matomoEvent,
-  onClick,
-  ...rest
-}) => {
+export const Connect: FC<
+  PropsWithChildren<WithMatomoEvent<ButtonAsButtonProps>>
+> = ({ children, matomoEvent, onClick, ...rest }) => {
   const { handleClick, disabled } = useConnectWallet(matomoEvent);
 
   return (

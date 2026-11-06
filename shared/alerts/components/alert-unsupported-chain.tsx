@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 const ErrorNotification = styled(Notification)`
   && {
-    --local-border: var(--lido-app-ui-color-border-error);
+    border-color: var(--lido-app-ui-color-border-error);
   }
 `;
 
@@ -13,7 +13,7 @@ export const AlertUnsupportedChain: FC = () => {
   const chainName = useChainName(true);
 
   return (
-    <ErrorNotification title="Unsupported chain">
+    <ErrorNotification fluid title="Unsupported chain">
       Please switch to {chainName} in your wallet
     </ErrorNotification>
   );

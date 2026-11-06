@@ -1,4 +1,4 @@
-import { Modal } from '@lidofinance/lido-app-ui';
+import { Modal, Spinner } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { useAvailableOperators, useNodeOperator } from 'modules/web3';
 import type { ModalComponentType } from 'providers/modal-provider';
@@ -10,7 +10,7 @@ import {
   SectionStyle,
   useCreateRows,
 } from '../operator-rows';
-import { ContentStyle, LoadingStyle, SpinnerStyle } from './styles';
+import { ContentStyle, LoadingStyle } from './styles';
 
 const CREATE_EVENTS = {
   cm: MATOMO_CLICK_EVENTS_TYPES.chooseOperatorCreateCm,
@@ -36,7 +36,11 @@ export const ChooseOperatorModal: ModalComponentType = ({ onClose }) => {
         data-testid="selectOperatorModal"
       >
         <LoadingStyle>
-          <SpinnerStyle data-testid="selectOperatorModalLoader" />
+          <Spinner
+            size="lg"
+            label="Loading operators"
+            data-testid="selectOperatorModalLoader"
+          />
         </LoadingStyle>
       </Modal>
     );

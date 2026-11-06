@@ -88,7 +88,7 @@ describe('AmountField', () => {
 
 describe('AmountField max and balance', () => {
   const maxButton = (html: string) =>
-    html.match(/<span[^>]*data-testid="maxBtn"[^>]*>/)?.[0];
+    html.match(/<button[^>]*data-testid="maxBtn"[^>]*>/)?.[0];
 
   it('renders no Max button without maxValue', () => {
     expect(maxButton(render({}))).toBeUndefined();
@@ -97,14 +97,12 @@ describe('AmountField max and balance', () => {
   it('renders an enabled Max button for a positive maxValue', () => {
     const tag = maxButton(render({}, { maxValue: parseEther('3') }));
 
-    expect(tag).toContain('role="button"');
-    expect(tag).not.toContain('aria-disabled');
+    expect(tag).toBeDefined();
+    expect(tag).not.toContain('disabled');
   });
 
   it('renders a disabled Max button for a zero maxValue', () => {
-    expect(maxButton(render({}, { maxValue: 0n }))).toContain(
-      'aria-disabled="true"',
-    );
+    expect(maxButton(render({}, { maxValue: 0n }))).toContain('disabled=""');
   });
 
   it('hides Max when locked', () => {

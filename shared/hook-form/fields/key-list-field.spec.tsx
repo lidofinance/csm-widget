@@ -48,7 +48,9 @@ const render = (
   );
 
 const labels = (html: string) => html.match(/<label[\s\S]*?<\/label>/g) ?? [];
-const svgCount = (fragment: string) => fragment.match(/<svg/g)?.length ?? 0;
+// lib Checkbox also renders a hidden indeterminate (minus) glyph
+const svgCount = (fragment: string) =>
+  fragment.match(/<svg(?![^>]*_minus)/g)?.length ?? 0;
 
 describe('KeyListField', () => {
   it('renders one labelled checkbox row per key in a named group', () => {

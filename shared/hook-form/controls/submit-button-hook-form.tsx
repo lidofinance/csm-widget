@@ -39,7 +39,7 @@ export const SubmitButtonHookForm: React.FC<SubmitButtonHookFormProps> = ({
   const formIntent = useWatch<IntentFormInput>({ name: 'intent' });
   const isBusy = isValidating || isSubmitting;
 
-  if (!isAccountActive) return <Connect fullwidth />;
+  if (!isAccountActive) return <Connect fullWidth />;
 
   const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     if (formIntent !== intent) setValue('intent', intent);

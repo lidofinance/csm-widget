@@ -6,6 +6,7 @@ import { trackMatomoEvent } from 'utils';
 
 export const AlertNomalizeQueue: FC = () => (
   <Notification
+    fluid
     title="You have unqueued keys"
     actions={
       <Button

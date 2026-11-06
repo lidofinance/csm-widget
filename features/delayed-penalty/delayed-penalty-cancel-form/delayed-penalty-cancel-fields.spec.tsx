@@ -54,13 +54,13 @@ describe('DelayedPenaltyCancelFields', () => {
     const html = render({ maxAmount: parseEther('1') });
     const tag = maxTag(html);
 
-    expect(tag).toContain('role="button"');
-    expect(tag).not.toContain('aria-disabled');
+    expect(tag).toMatch(/^<button/);
+    expect(tag).not.toContain('disabled');
     expect(html).toContain('>Max</span>');
   });
 
   it('disables Max when the locked bond is zero', () => {
-    expect(maxTag(render({ maxAmount: 0n }))).toContain('aria-disabled="true"');
+    expect(maxTag(render({ maxAmount: 0n }))).toContain('disabled=""');
   });
 
   it('shows the amount error under the amount input', () => {

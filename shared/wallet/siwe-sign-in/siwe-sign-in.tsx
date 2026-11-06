@@ -16,7 +16,7 @@ export const SiweConnect: FC<{ description: ReactNode }> = ({
         <H3>Connect your wallet</H3>
         <Description color="secondary">{description}</Description>
       </Stack>
-      <Connect size="sm" fullwidth />
+      <Connect size="small" fullWidth />
     </Stack>
   </Card>
 );

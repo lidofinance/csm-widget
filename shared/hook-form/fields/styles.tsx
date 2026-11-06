@@ -1,5 +1,5 @@
-import { Checkbox, IconLoaderCircle, Input } from '@lidofinance/lido-app-ui';
-import styled, { css, keyframes } from 'styled-components';
+import { Checkbox, Input, Spinner } from '@lidofinance/lido-app-ui';
+import styled, { css } from 'styled-components';
 
 export const FieldErrorStyle = styled.p`
   margin: 0;
@@ -28,16 +28,11 @@ export const CheckboxStyle = styled(Checkbox)`
   }
 `;
 
-const spin = keyframes`
-  to {
-    transform: rotate(360deg);
+// matches the 20px Identicon in the same slot
+export const AddressSpinnerStyle = styled(Spinner)`
+  && {
+    --spinner-size: 20px;
   }
-`;
-
-export const AddressSpinnerStyle = styled(IconLoaderCircle)`
-  width: 20px;
-  height: 20px;
-  animation: ${spin} 0.9s linear infinite;
 `;
 
 export const AddressLabelStyle = styled.span`

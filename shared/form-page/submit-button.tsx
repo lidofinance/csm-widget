@@ -1,8 +1,7 @@
-import { ButtonSize } from '@lidofinance/lido-app-ui';
+import { Button, ButtonSize } from '@lidofinance/lido-app-ui';
 import { FC, MouseEventHandler, ReactNode } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useConnectWallet } from 'shared/wallet/connect/use-connect-wallet';
-import { SubmitButtonStyle } from './styles';
 import { IntentFormInput } from './submit-button-state';
 import { useSubmitButtonState } from './use-submit-button-state';
 
@@ -45,16 +44,16 @@ export const SubmitButton: FC<SubmitButtonProps> = ({
 
   if (state.showConnect) {
     return (
-      <SubmitButtonStyle
+      <Button
         type="button"
         size={size}
-        $fullWidth={fullWidth}
+        fullWidth={fullWidth}
         disabled={connect.disabled}
         onClick={connect.handleClick}
         data-testid="connectBtn"
       >
         Connect wallet
-      </SubmitButtonStyle>
+      </Button>
     );
   }
 
@@ -64,17 +63,17 @@ export const SubmitButton: FC<SubmitButtonProps> = ({
   };
 
   return (
-    <SubmitButtonStyle
+    <Button
       type={intent ? 'button' : 'submit'}
       variant={variant}
       size={size}
-      $fullWidth={fullWidth}
+      fullWidth={fullWidth}
       loading={state.loading}
       disabled={state.disabled}
       onClick={handleClick}
       data-testid={dataTestId}
     >
       {disabledReason || children}
-    </SubmitButtonStyle>
+    </Button>
   );
 };

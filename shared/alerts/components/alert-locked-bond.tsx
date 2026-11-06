@@ -6,6 +6,7 @@ import { trackMatomoEvent } from 'utils';
 
 export const AlertLockedBond: FC = () => (
   <Notification
+    fluid
     title="Your bond is locked"
     actions={
       <Button

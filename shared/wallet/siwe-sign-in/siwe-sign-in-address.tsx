@@ -36,7 +36,7 @@ export const SiweSignInAddress: FC<{ operatorType: string }> = ({
           />
         </Stack>
 
-        <Button size="small" onClick={signIn}>
+        <Button size="small" onClick={signIn} fullWidth>
           Sign in
         </Button>
       </Stack>

@@ -8,6 +8,7 @@ import Arrow from 'assets/icons/arrow-right.svg?react';
 
 export const AlertRequestToExit: FC = () => (
   <Notification
+    fluid
     title="You have an Exit Request"
     actions={
       <Button

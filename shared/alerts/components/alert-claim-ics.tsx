@@ -6,6 +6,7 @@ import { trackMatomoEvent } from 'utils';
 
 export const AlertClaimIcs: FC = () => (
   <Notification
+    fluid
     title="You have a new operator type to be claimed"
     data-testid="claimIcsAlert"
     actions={
