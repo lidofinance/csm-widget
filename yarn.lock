@@ -2447,10 +2447,10 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/api-rpc/-/api-rpc-0.63.0.tgz#1a46bab7f035bf4516ae59eb44da77ec963015cf"
   integrity sha512-P2qG//DW87AowTc5jQGDdeBesmSdrVnInSBKPr5FO0CE1I7sMmilC/rrovGJ8QHoffXmmHplX6o8FKipbg/hbA==
 
-"@lidofinance/bochqa-reporter@1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/bochqa-reporter/-/bochqa-reporter-1.0.0.tgz#edec7536954c60b466edbeee722352d52e2db094"
-  integrity sha512-ImSgyq0waZfmD+8Ok2P6mB+ZVhSwWyY+izlb3CLa0DHQ2I693DmOQs6JWQ0OgClz1lP3BI9uy/vJO2VNXo6iuw==
+"@lidofinance/bochqa-reporter@1.1.0-alpha-send-msg-on-err.3":
+  version "1.1.0-alpha-send-msg-on-err.3"
+  resolved "https://registry.yarnpkg.com/@lidofinance/bochqa-reporter/-/bochqa-reporter-1.1.0-alpha-send-msg-on-err.3.tgz#55499907d3c00ff95623afd3e414cb443fc78d75"
+  integrity sha512-sgqqg8x9KY0RG7L1Cb4yhO3a2ogAnEVbfSlTlI3UdTqy3XHSSOEoknLTpQz5sOUZ5Z/fFGJprFCRXJITdm5OgA==
   dependencies:
     "@nestjs/common" "^10.0.0"
 
@@ -5476,7 +5476,7 @@ axios-retry@^4.5.0:
   dependencies:
     is-retry-allowed "^2.2.0"
 
-axios@1.12.2, axios@1.13.5, axios@1.16.0, axios@^1.10.0, axios@^1.16.0, axios@^1.18.1, axios@^1.8.2:
+axios@1.12.2, axios@1.13.5, axios@1.16.0, axios@^1.10.0, axios@^1.16.0, axios@^1.20.0, axios@^1.8.2:
   version "1.21.0"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.21.0.tgz#30c363a2652d9649e8b4d2645b34c64ca541ff67"
   integrity sha512-YCzXMB53Q9PZBsh7yN7wtapit4WepwcHS2fP8QhGsBxSz5YtgYobV7GGlWlAJi+RxfU77GQTQi2DSLUma42EYA==
@@ -10087,12 +10087,12 @@ playwright-core@1.63.0:
   resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.63.0.tgz#e57665bc32846c213ac39a1e4d5bc6228e76b376"
   integrity sha512-rYCsBF/M5HjUch52bbtVONEFjv6Xu8sm8h72dNlR5bzIE1fvC/bxgspzkjSfU+MweEMmPM8KJebG6nnyxo5mCg==
 
-playwright-qase-reporter@^2.7.0:
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/playwright-qase-reporter/-/playwright-qase-reporter-2.7.0.tgz#e86924ef09c3df7dfc34f3956c1c31689f7374fa"
-  integrity sha512-nNG6GDfqQkNpkaznaYIDJXpRQ1IGawDEMqBIG7J0a4T6+Dg9avxZu7Kg/acS1WL69/F60neDy83wwln8HPRPlA==
+playwright-qase-reporter@^2.8.1:
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/playwright-qase-reporter/-/playwright-qase-reporter-2.8.1.tgz#71a363507af54485e077dcb4a8a948abe2f2808e"
+  integrity sha512-iP0Yg9NQD5GtQcb0S3/gc0rA6+TyyuQ//lqNnibQH/APRJoWEsBvfST3IFRwmeKr7TaWDLQacXmmOjlhXN1uTw==
   dependencies:
-    qase-javascript-commons "~2.9.0"
+    qase-javascript-commons "~2.9.7"
     uuid "11.1.1"
 
 playwright@1.63.0:
@@ -10286,26 +10286,26 @@ pure-rand@^7.0.0:
   resolved "https://registry.yarnpkg.com/pure-rand/-/pure-rand-7.0.1.tgz#6f53a5a9e3e4a47445822af96821ca509ed37566"
   integrity sha512-oTUZM/NAZS8p7ANR3SHh30kXB+zK2r2BPcEn/awJIbOvq82WoMN4p62AWWp3Hhw50G0xMsw1mhIBLqHw64EcNQ==
 
-qase-api-client@~1.1.9:
-  version "1.1.10"
-  resolved "https://registry.yarnpkg.com/qase-api-client/-/qase-api-client-1.1.10.tgz#18cd944b6581bb7774c64bf09bac31bf4eba107f"
-  integrity sha512-ipOHKfr+22mW9zlXy8Fhmp7tPCMlbHAHAFLq4zClf+ZdKltYyt1XYxhvGRa0lH3VoCNEs9db4NL4ja2P5Vu7VQ==
+qase-api-client@~1.1.17:
+  version "1.1.17"
+  resolved "https://registry.yarnpkg.com/qase-api-client/-/qase-api-client-1.1.17.tgz#79b545a81038fe4948c0f8ba518b53a813d1f834"
+  integrity sha512-0uhl8f8X3gJgy4+wFhwZdKngiKQs14cM1canwIL++b5K0HIlCZuK72kxli6bPjtIowmOeq+CIXx1Y9fV9o7sZg==
   dependencies:
-    axios "^1.16.0"
+    axios "^1.20.0"
     axios-retry "^4.5.0"
 
-qase-api-v2-client@~1.0.10:
-  version "1.0.10"
-  resolved "https://registry.yarnpkg.com/qase-api-v2-client/-/qase-api-v2-client-1.0.10.tgz#a43a59e5f6f54ed62bd51e8cf06b6fb6b852288f"
-  integrity sha512-ab9SwmWcL7QUFzL99k90P093RCleWvMUdXt2DT2Olrqdx2s/K21xjUvn0gibItB11W/W6lg/EHHMdAL5tAQHUw==
+qase-api-v2-client@~1.0.13:
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/qase-api-v2-client/-/qase-api-v2-client-1.0.13.tgz#3e0df4b514224d053cd76cb58f9d796ce436ad1a"
+  integrity sha512-wk05h86F1mn4fDPv4YUxtMeRkEJJV+PbOOt5bTxAVGsxrCxlQWFblYhwxUS4X6jmT/3RKeW33tj/CTuLE6jArg==
   dependencies:
-    axios "^1.18.1"
+    axios "^1.20.0"
     axios-retry "^4.5.0"
 
-qase-javascript-commons@^2.9.3, qase-javascript-commons@~2.9.0:
-  version "2.9.3"
-  resolved "https://registry.yarnpkg.com/qase-javascript-commons/-/qase-javascript-commons-2.9.3.tgz#a9f3ba7f08e67475b877db137d01f2e8410ffbb9"
-  integrity sha512-Db91eQe022JATo6W/nZvsUmCJu9CzHB6JNdfTp5RziKpLJL8PzYR90fTlEhdu4DXosUg3HzqrBzCUK6g2t/cjA==
+qase-javascript-commons@^2.9.12, qase-javascript-commons@~2.9.7:
+  version "2.9.12"
+  resolved "https://registry.yarnpkg.com/qase-javascript-commons/-/qase-javascript-commons-2.9.12.tgz#19114a932b649ed5b0a5bcd262d14ac23d6920b5"
+  integrity sha512-C4YEW0v4h57RDvDyhy2vjkECKXAaUQHErUxLwPsUagd3sm3hdx5tOeT00rrf9u7FRUbZqnZDY1Wv6VxWhEa3NA==
   dependencies:
     ajv "^8.18.0"
     async-mutex "~0.5.0"
@@ -10315,8 +10315,8 @@ qase-javascript-commons@^2.9.3, qase-javascript-commons@~2.9.0:
     lodash.merge "^4.6.2"
     lodash.mergewith "^4.6.2"
     mime-types "^2.1.35"
-    qase-api-client "~1.1.9"
-    qase-api-v2-client "~1.0.10"
+    qase-api-client "~1.1.17"
+    qase-api-v2-client "~1.0.13"
     strip-ansi "^6.0.1"
     uuid "11.1.1"
 
