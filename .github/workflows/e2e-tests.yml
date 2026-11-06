@@ -85,6 +85,7 @@ jobs:
       REPORT_ENABLED: ${{ (github.event_name == 'schedule' || inputs.report_enabled) && 'true' || 'false' }}
       JOB_CUSTOM_NAME: ${{ inputs.job_custom_name }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      QA_METRICS_SLACK_WEBHOOK_URL: ${{ secrets.QA_METRICS_SLACK_WEBHOOK_URL}}
       SLACK_DUTY_TAG: "S09H269H2TT"
       ARTIFACT_PASSWORD: ${{ secrets.ARTIFACT_PASSWORD }}
       REPORT_FORMAT: v3
@@ -97,11 +98,9 @@ jobs:
       PUSHGATEWAY_PASSWORD: ${{ secrets.PUSHGATEWAY_PASSWORD }}
       GRAFANA_URL: ${{ secrets.GRAFANA_URL }}
       GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
-      BOCHQA_URL: ${{ secrets.BOCHQA_URL }}
+      BOCHQA_URL: ${{ secrets.BOCHQA_URL }}m
       BOCHQA_USER: ${{ secrets.BOCHQA_USER }}
       BOCHQA_PASSWORD: ${{ secrets.BOCHQA_PASSWORD }}
-      PINATA_API_KEY: ${{ secrets.QA_PINATA_API_KEY }}
-      PINATA_API_SECRET: ${{ secrets.QA_PINATA_API_SECRET }}
 
       # prod/staging → mainnet, testnet/preview → hoodi
       CHAIN: ${{ (inputs.stand_type == 'prod' || inputs.stand_type == 'staging') && 'mainnet' || 'hoodi' }}
