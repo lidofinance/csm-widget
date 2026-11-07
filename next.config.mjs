@@ -47,6 +47,8 @@ const withBundleAnalyzer = process.env.ANALYZE_BUNDLE
 
 export default withBundleAnalyzer({
   basePath,
+  // re-evaluated on boot, so MODULE picks the matching build
+  distDir: `.next/${moduleName}`,
   env: {
     MODULE: moduleMode,
     BASE_PATH: basePath ?? '',
