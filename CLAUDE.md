@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 The project requires an `.env.local` file with environment variables. Copy from `.env.example` and configure:
 
-- `MODULE` - Set to `csm` (default) or `cm` to choose the module version
+- `MODULE` - `csm` (default) or `cm`; build time, see Module Versions
 - RPC provider URLs and CL API URLs with keys
 - For testing, also set `STAND_TYPE`, `WALLET_SECRET_PHRASE`, `WALLET_PASSWORD`
 
@@ -32,9 +32,11 @@ The active version is controlled by the `MODULE` environment variable:
 
 The module value is:
 
-1. Read from `process.env.MODULE` in `next.config.mjs` (uppercased to `moduleMode`)
-2. Exposed via `publicRuntimeConfig.module`, then mapped to the `MODULE_NAME` enum in `config/get-preconfig.ts`
+1. Read from `process.env.MODULE` by `next.config.mjs` at **build time**; the build goes to `.next/<module>` and the uppercased value is inlined as `process.env.MODULE`
+2. Mapped to the `MODULE_NAME` enum in `config/get-preconfig.ts`
 3. Accessible throughout the app via `useConfig()` hook: `config.module`
+
+Each build serves one module. `yarn build:all` builds both; `MODULE` at start only picks which build `server.mjs` serves. There is no runtime module switch.
 
 #### Detecting Module Version in Code
 
@@ -114,7 +116,9 @@ Note: "SM" = Staking Module (module-agnostic terminology for code shared between
 
 **Configuration System**:
 
-- Runtime configuration with server/public configs in `next.config.mjs`
+- Client runtime env: `config/client-env.mjs` → `window.__env__`, served by `server.mjs` at `/runtime/window-env.js`, read via `config/dynamics.ts`. New client keys go there, never into `next.config.mjs`
+- Server-only env: `utilsApi/server-config.ts` (API routes, `server.mjs`); not exported from the `config` barrel
+- No `next/config` / `publicRuntimeConfig` (removed in Next 16)
 - Feature flags in `config/feature-flags/`
 - User configuration in `config/user-config/`
 
@@ -126,7 +130,11 @@ Note: "SM" = Staking Module (module-agnostic terminology for code shared between
 
 ### Development Notes
 
-- Uses **publicRuntimeConfig** for environment variables to support Docker deployment
+- Next.js 15 pages router, SWC (no Babel), webpack. Dev entry is `yarn dev` (`node server.mjs`), not `next dev`
+- SPA shell: every page is static; `_app` renders the app only after mount and `router.isReady`, so `router.query` is filled on first render. No `getServerSideProps`, no `getInitialProps` on `_app` (kills static optimization). `pages/test/*` use `getTestProps` (`getStaticProps`, build-info gate)
+- SVG: `import Icon from 'x.svg?react'` for a component, `import url from 'x.svg'` for a URL string
+- Unit tests: vitest (`yarn test:unit`, globals, no setup file), `*.test.ts(x)` / `*.spec.ts(x)` next to the code; `tests/` is Playwright only
+- `next-env.d.ts` is generated and git-ignored (`yarn types` runs `next typegen` first); don't commit it
 - Includes bundle analysis with `ANALYZE_BUNDLE=true yarn build`
 - Has automatic versioning using conventional commits
 - Uses Playwright for e2e testing with wallet extensions
