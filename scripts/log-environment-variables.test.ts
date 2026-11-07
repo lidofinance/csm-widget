@@ -117,7 +117,10 @@ describe('logging missing env vars', () => {
         '-e',
         `import { ${fn} } from ${JSON.stringify(LOGGER)}; ${fn}();`,
       ],
-      { env: { PATH: process.env.PATH, ...env }, encoding: 'utf8' },
+      {
+        env: { PATH: process.env.PATH, ...env } as unknown as NodeJS.ProcessEnv,
+        encoding: 'utf8',
+      },
     );
     return stdout + stderr;
   };

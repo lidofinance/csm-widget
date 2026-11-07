@@ -119,7 +119,6 @@ export const Nav = styled.nav<{ $desktopHidden?: boolean }>`
     `}
 `;
 
-// Not wrapping <a> inside <a> in IPFS mode
 // Also avoid problems with migrate to Next v13
 // see: https://nextjs.org/docs/app/building-your-application/upgrading/app-router-migration#link-component
 export const NavLink = styled.span<{ $active?: boolean; $colored?: boolean }>`

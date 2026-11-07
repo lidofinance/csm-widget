@@ -2,10 +2,8 @@ import Link, { LinkProps } from 'next/link';
 import { useRouter } from 'next/router';
 import React, { FC, PropsWithChildren, useCallback } from 'react';
 
-import { config } from 'config';
 import { PATH } from 'consts/urls';
 import { useModalActions } from 'providers/modal-provider';
-import { LinkIpfs } from 'shared/components/link-ipfs';
 import { trackMatomoEvent, WithMatomoEvent } from 'utils';
 import { useCorrectPath } from './use-correct-path';
 
@@ -44,10 +42,6 @@ export const LocalLink: FC<
   if (theme && typeof theme === 'string') extraQuery.theme = theme;
 
   if (typeof href === 'string') {
-    if (config.ipfsMode) {
-      return <LinkIpfs {...restProps} href={href} query={extraQuery} />;
-    }
-
     return (
       <Link
         {...restProps}

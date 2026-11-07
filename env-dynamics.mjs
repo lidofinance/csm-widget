@@ -8,9 +8,6 @@ export const defaultChain = parseInt(process.env.DEFAULT_CHAIN, 10) || 560048;
 export const walletconnectProjectId = process.env.WALLETCONNECT_PROJECT_ID;
 
 /** @type boolean */
-export const ipfsMode = toBoolean(process.env.IPFS_MODE);
-
-/** @type boolean */
 export const isTestEnv = !toBoolean(process.env.IS_PROD);
 
 // Parse comma-separated URL list: trim whitespace, strip trailing slashes,
@@ -20,16 +17,6 @@ const parseUrlList = (val) =>
     ?.split(',')
     .map((s) => s.trim().replace(/\/+$/, ''))
     .filter(Boolean) ?? [];
-
-/** @type string[] */
-export const prefillUnsafeElRpcUrls1 = parseUrlList(
-  process.env.PREFILL_UNSAFE_EL_RPC_URLS_1,
-);
-
-/** @type string[] */
-export const prefillUnsafeElRpcUrls560048 = parseUrlList(
-  process.env.PREFILL_UNSAFE_EL_RPC_URLS_560048,
-);
 
 /** @type boolean */
 export const addressApiValidationEnabled =

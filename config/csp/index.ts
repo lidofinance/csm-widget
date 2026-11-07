@@ -8,9 +8,8 @@ import { config } from '../get-config';
 import { secretConfig } from '../get-secret-config';
 import { buildCspDirectives } from './build-directives';
 
-export const contentSecurityPolicy: ContentSecurityPolicyOption = {
+const contentSecurityPolicy: ContentSecurityPolicyOption = {
   directives: buildCspDirectives({
-    ipfsMode: config.ipfsMode,
     developmentMode: config.developmentMode,
     trustedHosts: secretConfig.cspTrustedHosts
       ? secretConfig.cspTrustedHosts.split(',')

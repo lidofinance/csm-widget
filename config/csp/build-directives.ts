@@ -1,7 +1,6 @@
 import type { ContentSecurityPolicyOption } from 'next-secure-headers/lib/rules';
 
 export type CspBuildOptions = {
-  ipfsMode: boolean;
   developmentMode: boolean;
   trustedHosts: string[];
   reportUri?: string;
@@ -18,7 +17,6 @@ export const WALLETCONNECT_HOSTS = [
 ] as const;
 
 export const buildCspDirectives = ({
-  ipfsMode,
   developmentMode,
   trustedHosts,
   reportUri,
@@ -42,11 +40,8 @@ export const buildCspDirectives = ({
     'wss:',
     ...(developmentMode ? ['ws:'] : []), // HMR
   ],
-  // ignored when delivered via <meta> (IPFS mode)
-  ...(!ipfsMode && {
-    frameAncestors: ['*'],
-    reportURI: reportUri,
-  }),
+  frameAncestors: ['*'],
+  reportURI: reportUri,
   // frame-src wins over child-src in modern browsers; child-src kept as fallback
   frameSrc: ["'self'", ...WALLETCONNECT_HOSTS],
   childSrc: ["'self'", ...WALLETCONNECT_HOSTS],
@@ -56,5 +51,5 @@ export const buildCspDirectives = ({
   manifestSrc: ["'self'"],
   formAction: ["'self'"],
   'script-src-attr': ["'none'"],
-  'base-uri': ipfsMode ? undefined : ["'none'"],
+  'base-uri': ["'none'"],
 });

@@ -1,6 +1,6 @@
 import 'utils/zod-jitless';
 
-import { config, SecretConfigType } from 'config';
+import { SecretConfigType } from 'config';
 import { withCsp } from 'config/csp';
 import { moduleMeta } from 'consts/module';
 import { AppProps } from 'next/app';
@@ -67,6 +67,6 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
   );
 };
 
-export default config.ipfsMode || process.env.NODE_ENV === 'development'
+export default process.env.NODE_ENV === 'development'
   ? AppWrapper
   : withCsp(AppWrapper);

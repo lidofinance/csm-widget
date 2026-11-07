@@ -1,14 +1,7 @@
 import { useCallback } from 'react';
-import invariant from 'tiny-invariant';
 
 import { API_ROUTES } from 'consts/api';
 
-// Don't use absolute import here!
-// code'''
-//    import { config } from 'config';
-// '''
-// otherwise you will get something like a cyclic error!
-import { config } from '../get-config';
 import { useUserConfig } from '../user-config';
 
 import { useDappStatus } from 'modules/web3';
@@ -30,17 +23,10 @@ export const useGetClApiUrlByChainId = () => {
         return '';
       }
 
-      if (config.ipfsMode) {
-        const apiUrl = userConfig.savedUserConfig.clApiUrls[chainId];
-
-        invariant(apiUrl, '[useGetClApiUrlByChainId] ApiUrl is required!');
-        return apiUrl;
-      } else {
-        return (
-          userConfig.savedUserConfig.clApiUrls[chainId] ||
-          getBackendApiPath(chainId)
-        );
-      }
+      return (
+        userConfig.savedUserConfig.clApiUrls[chainId] ||
+        getBackendApiPath(chainId)
+      );
     },
     [userConfig],
   );

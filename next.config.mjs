@@ -14,7 +14,6 @@ const basePath = process.env.BASE_PATH;
 const developmentMode = process.env.NODE_ENV === 'development';
 const moduleMode = (process.env.MODULE || 'csm').toUpperCase();
 const moduleName = moduleMode.toLowerCase();
-const isIPFSMode = toBoolean(process.env.IPFS_MODE);
 const maintenance = toBoolean(process.env.MAINTENANCE); // TODO: load from runtime config
 
 // Load devnet contract addresses from JSON file if specified
@@ -79,15 +78,6 @@ export default withBundleAnalyzer({
     ignoreBuildErrors: true,
   },
 
-  // IPFS next.js configuration reference:
-  // https://github.com/Velenir/nextjs-ipfs-example
-  trailingSlash: isIPFSMode,
-  assetPrefix: isIPFSMode ? './' : undefined,
-
-  // IPFS version has hash-based routing,
-  // so we provide only index.html in ipfs version
-  exportPathMap: isIPFSMode ? () => ({ '/': { page: '/' } }) : undefined,
-
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -138,22 +128,6 @@ export default withBundleAnalyzer({
       {
         test: /\.md$/,
         use: 'raw-loader',
-      },
-
-      // Needs for `Conditional Compilation`,
-      // because we have differences in source code of IPFS widget and NOT IPFS widget
-      {
-        test: /\.(t|j)sx?$/,
-        use: [
-          {
-            loader: 'webpack-preprocessor-loader',
-            options: {
-              params: {
-                IPFS_MODE: isIPFSMode,
-              },
-            },
-          },
-        ],
       },
 
       // Handle JSON imports with 'with' assertions syntax from node_modules

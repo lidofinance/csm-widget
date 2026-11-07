@@ -92,18 +92,6 @@ export const DotStyle = styled.p`
   margin-left: ${({ theme }) => theme.spaceMap.sm}px;
 `;
 
-export const IPFSInfoBoxOnlyDesktopWrapper = styled.div`
-  position: absolute;
-  right: 0;
-  top: calc(100% + 15px);
-  width: 255px;
-  z-index: 3;
-
-  ${NAV_MOBILE_MEDIA} {
-    display: none;
-  }
-`;
-
 export const ThemeTogglerStyle = styled(ThemeToggler)<{ $always?: boolean }>`
   margin: 0;
 

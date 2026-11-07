@@ -8,7 +8,7 @@ jest.mock('utils', () => {
   };
 });
 jest.mock('config', () => ({
-  config: { addressApiValidationEnabled: true, ipfsMode: false },
+  config: { addressApiValidationEnabled: true },
 }));
 jest.mock('consts/api', () => ({
   API_ROUTES: { VALIDATION: 'api/validation' },
