@@ -1,6 +1,7 @@
 import ms from 'ms';
 
-import { config, secretConfig } from 'config';
+import { config } from 'config';
+import { getServerConfig } from './server-config';
 import { API_ROUTES } from 'consts/api';
 import { UnifiedPerformance } from 'types';
 import { standardFetcher } from 'utils';
@@ -43,7 +44,8 @@ const fetchPerformance = async (
   nodeOperatorId: string,
   countEpochs: number,
 ) => {
-  const { migalabsApiUrl: apiUrl, migalabsApiToken: apiToken } = secretConfig;
+  const { migalabsApiUrl: apiUrl, migalabsApiToken: apiToken } =
+    getServerConfig();
   if (!apiUrl || !apiToken) {
     throw new Error('Error: MigaLabs API URL or token is not configured');
   }

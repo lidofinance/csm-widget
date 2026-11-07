@@ -1,38 +1,25 @@
-import getConfigNext from 'next/config';
-import { default as dynamics } from './dynamics';
 import { MODULE_NAME, SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
+import dynamics from './dynamics';
+import type { ClientEnv } from './dynamics';
 import { parseDefaultChain } from './helpers';
 
-const { publicRuntimeConfig, serverRuntimeConfig } = getConfigNext();
-
-export type PreConfigType = Omit<typeof publicRuntimeConfig, 'module'> &
-  typeof dynamics & {
-    module: MODULE_NAME;
-    defaultChain: SUPPORTED_CHAINS;
-    BASE_PATH_ASSET: string;
-  };
+export type PreConfigType = Omit<ClientEnv, 'defaultChain'> & {
+  module: MODULE_NAME;
+  defaultChain: SUPPORTED_CHAINS;
+  developmentMode: boolean;
+  BASE_PATH_ASSET: string;
+};
 
 // `getPreConfig()` needs for internal using in 'config/groups/*'
 // Do not use `getPreConfig()` outside of 'config/groups/*'
-export const getPreConfig = (): PreConfigType => {
-  const BASE_PATH_ASSET =
-    (serverRuntimeConfig.basePath ?? '') ||
-    (publicRuntimeConfig.basePath ?? '');
-
-  const config = {
-    BASE_PATH_ASSET,
-
-    ...publicRuntimeConfig,
-    module: MODULE_NAME[publicRuntimeConfig.module],
-
-    ...(typeof window !== 'undefined' ? window.__env__ : dynamics),
-  };
-
-  return {
-    ...config,
-    defaultChain: parseDefaultChain(config.defaultChain),
-  };
-};
+export const getPreConfig = (): PreConfigType => ({
+  ...dynamics,
+  // MODULE and BASE_PATH are inlined at build by next.config `env`
+  BASE_PATH_ASSET: process.env.BASE_PATH ?? '',
+  module: MODULE_NAME[process.env.MODULE as 'CSM' | 'CM'] ?? MODULE_NAME.CSM,
+  developmentMode: process.env.NODE_ENV === 'development',
+  defaultChain: parseDefaultChain(dynamics.defaultChain),
+});
 
 // `preConfig` needs for external internal in 'config/groups/*'
 // Not use `preConfig` outside of 'config/groups/*'

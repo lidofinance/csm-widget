@@ -1,27 +1,10 @@
-import fs from 'fs';
-import path from 'path';
 import generateBuildId from './scripts/generate-build-id.mjs';
-import { toBoolean } from './scripts/to-boolean.mjs';
-
 
 // https://nextjs.org/docs/pages/api-reference/next-config-js/basePath
 const basePath = process.env.BASE_PATH;
 
-const developmentMode = process.env.NODE_ENV === 'development';
 const moduleMode = (process.env.MODULE || 'csm').toUpperCase();
 const moduleName = moduleMode.toLowerCase();
-const maintenance = toBoolean(process.env.MAINTENANCE); // TODO: load from runtime config
-
-// Load devnet contract addresses from JSON file if specified
-let devnetAddresses = null;
-if (process.env.DEVNET_ADDRESSES_FILE_PATH) {
-  try {
-    const filePath = path.resolve(process.env.DEVNET_ADDRESSES_FILE_PATH);
-    devnetAddresses = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-  } catch (e) {
-    console.warn('Failed to load devnet addresses:', e.message);
-  }
-}
 
 // cache control
 export const CACHE_CONTROL_HEADER = 'x-cache-control';
@@ -64,6 +47,10 @@ const withBundleAnalyzer = process.env.ANALYZE_BUNDLE
 
 export default withBundleAnalyzer({
   basePath,
+  env: {
+    MODULE: moduleMode,
+    BASE_PATH: basePath ?? '',
+  },
   generateBuildId,
 
   typescript: {
@@ -238,40 +225,5 @@ export default withBundleAnalyzer({
         destination: `/apple-touch-icon-${moduleName}.png`,
       },
     ];
-  },
-
-  // ATTENTION: If you add a new variable you should declare it in `global.d.ts`
-  serverRuntimeConfig: {
-    // https://nextjs.org/docs/pages/api-reference/next-config-js/basePath
-    basePath,
-    developmentMode,
-    maintenance,
-
-    defaultChain: process.env.DEFAULT_CHAIN,
-
-    rpcUrls_1: process.env.EL_RPC_URLS_1,
-    rpcUrls_560048: process.env.EL_RPC_URLS_560048,
-
-    clApiUrls_1: process.env.CL_API_URLS_1,
-    clApiUrls_560048: process.env.CL_API_URLS_560048,
-
-    migalabsApiUrl: process.env.ETHSEER_API_URL,
-    migalabsApiToken: process.env.ETHSEER_API_TOKEN,
-
-    cspTrustedHosts: process.env.CSP_TRUSTED_HOSTS,
-    cspReportUri: process.env.CSP_REPORT_URI,
-    cspReportOnly: process.env.CSP_REPORT_ONLY,
-
-    rateLimit: process.env.RATE_LIMIT,
-    rateLimitTimeFrame: process.env.RATE_LIMIT_TIME_FRAME,
-    validationAPI: process.env.VALIDATION_SERVICE_BASE_PATH,
-  },
-
-  // ATTENTION: If you add a new variable you should declare it in `global.d.ts`
-  publicRuntimeConfig: {
-    basePath,
-    developmentMode,
-    module: moduleMode,
-    devnetAddresses,
   },
 });

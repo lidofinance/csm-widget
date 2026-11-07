@@ -1,7 +1,5 @@
 import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 
-export type Modify<T, R> = Omit<T, keyof R> & R;
-
 // Keep fallback as in 'config/client-env.mjs' (Hoodi)
 const FALLBACK_CHAIN = 560048 as SUPPORTED_CHAINS;
 

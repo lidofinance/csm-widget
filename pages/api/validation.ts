@@ -5,7 +5,8 @@ import {
 } from '@lidofinance/next-api-wrapper';
 import { isAddress } from 'viem';
 
-import { config, secretConfig } from 'config';
+import { config } from 'config';
+import { getServerConfig } from 'utilsApi/server-config';
 import { API_ROUTES } from 'consts/api';
 import {
   defaultErrorHandler,
@@ -20,6 +21,8 @@ import { createCachedProxy } from 'utilsApi/cached-proxy';
 import { getClientRequestHeaders } from 'utilsApi/client-request-headers';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 
+const serverConfig = getServerConfig();
+
 // Validate address to prevent SSRF attacks
 const validateEthereumAddress = (address: unknown): string | null => {
   if (typeof address !== 'string' || !address) return null;
@@ -29,9 +32,9 @@ const validateEthereumAddress = (address: unknown): string | null => {
 };
 
 let handler;
-if (!secretConfig.validationAPI) {
+if (!serverConfig.validationAPI) {
   console.info(
-    '[api/validation] Skipped setup: secretConfig.validationAPI is null',
+    '[api/validation] Skipped setup: VALIDATION_SERVICE_BASE_PATH is not set',
   );
   handler = (_: NextApiRequest, res: NextApiResponse) => {
     res.status(404).end();
@@ -44,17 +47,16 @@ if (!secretConfig.validationAPI) {
       if (!validatedAddress) {
         throw new Error('Invalid address'); // This will be caught by the handler
       }
-      secretConfig.defaultChain;
       const isMainnet = config.defaultChain === CHAINS.Mainnet;
       const path = isMainnet
         ? `/v2/check/${validatedAddress}`
         : `/v1/check/${validatedAddress}`;
-      return `${secretConfig.validationAPI}${path}`;
+      return `${serverConfig.validationAPI}${path}`;
     },
     cacheTTL: 1000,
     ignoreParams: true, // Address is in path, not query
     timeout: 10_000,
-    metricsHost: secretConfig.validationAPI,
+    metricsHost: serverConfig.validationAPI,
     forwardHeaders: getClientRequestHeaders,
   });
 

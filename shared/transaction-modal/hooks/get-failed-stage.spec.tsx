@@ -1,10 +1,5 @@
 import type { Mock } from 'vitest';
 // shared/transaction-modal/hooks/get-failed-stage.spec.tsx
-// Stubs required before imports that transitively load next.js runtime.
-vi.mock('utils/track-matomo-event', () => ({
-  trackMatomoError: vi.fn(),
-}));
-
 // Mock the utils barrel so get-failed-stage's `import { resolveError } from 'utils'`
 // resolves to a controllable spy.
 vi.mock('utils', () => ({

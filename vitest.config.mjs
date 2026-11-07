@@ -30,6 +30,7 @@ export default defineConfig({
   },
   test: {
     globals: true,
+    env: { MODULE: 'CSM' },
     include: ['**/*.{test,spec}.{ts,tsx}'],
     exclude: [
       ...configDefaults.exclude,

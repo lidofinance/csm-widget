@@ -4,8 +4,7 @@
 // DEPENDENCY-FREE BY DESIGN: this module imports NOTHING. That is what lets the
 // surveys-sdk error layer (api/errors.ts, api/surveys-api.ts), the SIWE provider
 // (modules/siwe), and the framework-agnostic widget classifier
-// (utils/get-error-code.ts) all share one mapping without dragging the Next.js
-// runtime config into unit tests. Do NOT add imports here.
+// (utils/get-error-code.ts) all share one mapping. Do NOT add imports here.
 
 export type AuthErrorKind = 'reauth' | 'logout';
 

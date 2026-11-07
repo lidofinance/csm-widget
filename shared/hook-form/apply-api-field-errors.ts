@@ -23,8 +23,7 @@ const rootField = (path: string): string => path.split(/[.[]/, 1)[0];
 // lost.
 //
 // Uses the structural guard (not `instanceof SurveysApiError`) to avoid
-// importing modules/surveys-sdk, which transitively loads Next.js runtime
-// config and breaks unit tests.
+// importing modules/surveys-sdk.
 export const applyApiFieldErrors = <T extends FieldValues>(
   error: unknown,
   setError: UseFormSetError<T>,

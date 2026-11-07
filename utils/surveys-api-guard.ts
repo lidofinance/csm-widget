@@ -1,5 +1,4 @@
-// Structural guard for SurveysApiError — avoids importing modules/surveys-sdk
-// which transitively loads Next.js runtime config (breaks unit tests).
+// Structural guard for SurveysApiError — avoids importing modules/surveys-sdk.
 // We check by name and read the typed fields structurally.
 //
 // Keep in sync with modules/surveys-sdk/api/errors.ts SurveysApiError.

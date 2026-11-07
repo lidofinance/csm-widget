@@ -1,6 +1,5 @@
 import 'utils/zod-jitless';
 
-import { SecretConfigType } from 'config';
 import { withCsp } from 'config/csp';
 import { moduleMeta } from 'consts/module';
 import { AppProps } from 'next/app';
@@ -29,7 +28,8 @@ const App = (props: AppProps) => {
 
 const MemoApp = memo(App);
 
-type AppParams = Partial<Pick<SecretConfigType, 'maintenance'>> & {
+type AppParams = {
+  maintenance?: boolean;
   validationFile?: AddressValidationFile;
   isError?: boolean;
 };

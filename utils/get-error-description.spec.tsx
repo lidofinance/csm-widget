@@ -5,8 +5,6 @@ import { SDKError } from '@lidofinance/lido-csm-sdk';
 import { ErrorCode } from './get-error-code';
 import { getErrorDescription, resolveError } from './get-error-description';
 
-// track-matomo-event imports consts/matomo-click-events → config → next.js
-// runtime which is unavailable in unit tests. Stub the whole module.
 vi.mock('./track-matomo-event', () => ({
   trackMatomoError: vi.fn(),
 }));

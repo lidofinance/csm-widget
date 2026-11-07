@@ -1,12 +1,12 @@
 import { GetServerSideProps } from 'next';
-import { secretConfig } from 'config';
+import { getServerConfig } from './server-config';
 import buildInfo from 'build-info.json';
 import { loadValidationFile } from './load-validation-file';
 
 export const getProps =
   (options?: { continueAnyway?: boolean }): GetServerSideProps =>
   async () => {
-    const { maintenance, defaultChain } = secretConfig;
+    const { maintenance, defaultChain } = getServerConfig();
 
     if (!options?.continueAnyway && maintenance) return { notFound: true };
 

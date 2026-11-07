@@ -6,8 +6,7 @@ import {
 } from './contract-errors';
 import { trackMatomoError } from './track-matomo-event';
 
-// track-matomo-event imports consts/matomo-click-events → config → next.js
-// runtime which is unavailable in unit tests. Stub the whole module.
+// keeps tracking out of unit tests
 vi.mock('./track-matomo-event', () => ({
   trackMatomoError: vi.fn(),
 }));

@@ -5,18 +5,18 @@ import type { ContentSecurityPolicyOption } from 'next-secure-headers/lib/rules'
 
 // Relative imports on purpose: `from 'config'` here creates an import cycle.
 import { config } from '../get-config';
-import { secretConfig } from '../get-secret-config';
+import { getServerConfig } from '../../utilsApi/server-config';
 import { buildCspDirectives } from './build-directives';
+
+const { cspTrustedHosts, cspReportUri, cspReportOnly } = getServerConfig();
 
 const contentSecurityPolicy: ContentSecurityPolicyOption = {
   directives: buildCspDirectives({
     developmentMode: config.developmentMode,
-    trustedHosts: secretConfig.cspTrustedHosts
-      ? secretConfig.cspTrustedHosts.split(',')
-      : [],
-    reportUri: secretConfig.cspReportUri,
+    trustedHosts: cspTrustedHosts ? cspTrustedHosts.split(',') : [],
+    reportUri: cspReportUri,
   }),
-  reportOnly: secretConfig.cspReportOnly,
+  reportOnly: cspReportOnly,
 };
 
 export const withCsp = (app: FC<AppProps>): FC =>
