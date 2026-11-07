@@ -1,6 +1,7 @@
 import 'utils/zod-jitless';
 
 import { withCsp } from 'config/csp';
+import { config } from 'config';
 import { moduleMeta } from 'consts/module';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -14,8 +15,10 @@ import {
   TestEnvBanner,
   ToastContainer,
 } from 'shared/components';
+import { useIsClient } from 'shared/hooks/use-is-client';
 import { SVGGradientDefs } from 'shared/components/svg-gradient-defs/svg-gradient-defs';
-import { AddressValidationFile, nprogress } from 'utils';
+import { nprogress } from 'utils';
+import { MaintenancePage } from 'features/welcome/maintenance-page';
 
 // Visualize route changes
 nprogress();
@@ -29,19 +32,20 @@ const App = (props: AppProps) => {
 const MemoApp = memo(App);
 
 type AppParams = {
-  maintenance?: boolean;
-  validationFile?: AddressValidationFile;
   isError?: boolean;
+  dummy?: boolean;
 };
 
 const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
-  const { ...rest } = props;
+  const { pageProps } = props;
+  const isClient = useIsClient();
+  // window.__env__ is client-only; prerendered HTML never shows maintenance
+  const isMaintenance = isClient && config.maintenance;
 
   return (
     <Providers
-      dummy={props.pageProps?.maintenance || props.pageProps?.isError}
-      skipWatcher={props.pageProps?.isError}
-      validationFile={props.pageProps?.validationFile}
+      dummy={isMaintenance || pageProps?.isError || pageProps?.dummy}
+      skipWatcher={pageProps?.isError}
     >
       {/* see https://nextjs.org/docs/messages/no-document-viewport-meta */}
       <Head>
@@ -61,7 +65,7 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
       <SVGGradientDefs />
       <ToastContainer />
       <TestEnvBanner />
-      <MemoApp {...rest} />
+      {isMaintenance ? <MaintenancePage /> : <MemoApp {...props} />}
       <SecurityStatusBanner />
     </Providers>
   );

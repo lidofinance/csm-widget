@@ -1,4 +1,4 @@
-import { parseDefaultChain, parseUrlList, toBoolean } from 'config/helpers';
+import { parseUrlList, toBoolean } from 'config/helpers';
 
 // an empty list passes as the tuple; consumers fail on use, as before
 const urlList = (value?: string) =>
@@ -7,8 +7,6 @@ const urlList = (value?: string) =>
 export const readServerConfig = (
   env: Record<string, string | undefined> = process.env,
 ) => ({
-  maintenance: toBoolean(env.MAINTENANCE),
-  defaultChain: parseDefaultChain(env.DEFAULT_CHAIN),
   rpcUrls_1: urlList(env.EL_RPC_URLS_1),
   rpcUrls_560048: urlList(env.EL_RPC_URLS_560048),
   clApiUrls_1: urlList(env.CL_API_URLS_1),

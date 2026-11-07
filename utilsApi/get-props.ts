@@ -1,22 +1,14 @@
 import { GetServerSideProps } from 'next';
-import { getServerConfig } from './server-config';
 import buildInfo from 'build-info.json';
-import { loadValidationFile } from './load-validation-file';
+import { buildClientEnv } from '../config/client-env.mjs';
 
 export const getProps =
   (options?: { continueAnyway?: boolean }): GetServerSideProps =>
   async () => {
-    const { maintenance, defaultChain } = getServerConfig();
-
-    if (!options?.continueAnyway && maintenance) return { notFound: true };
-
-    const validationFile = await loadValidationFile();
-
-    const props = { maintenance, defaultChain, validationFile };
-
-    return {
-      props,
-    };
+    if (!options?.continueAnyway && buildClientEnv().maintenance) {
+      return { notFound: true };
+    }
+    return { props: {} };
   };
 
 export const getTestProps: GetServerSideProps = async () => {
