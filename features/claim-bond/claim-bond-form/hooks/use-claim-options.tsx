@@ -8,8 +8,8 @@ import {
 import { useWatch } from 'react-hook-form';
 import styled, { css } from 'styled-components';
 
-import { ReactComponent as _BondIcon } from 'assets/balance/bond.svg';
-import { ReactComponent as _RewardsIcon } from 'assets/balance/rewards.svg';
+import _BondIcon from 'assets/balance/bond.svg?react';
+import _RewardsIcon from 'assets/balance/rewards.svg?react';
 
 import {
   CLAIM_OPTION,

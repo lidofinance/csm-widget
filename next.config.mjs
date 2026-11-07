@@ -74,12 +74,17 @@ export default withBundleAnalyzer({
     unoptimized: true,
   },
   webpack(config) {
+    const imageRule = config.module.rules.find(
+      (rule) => rule?.loader === 'next-image-loader',
+    );
+    if (imageRule) imageRule.exclude = /\.svg$/i;
+
     config.module.rules.push(
-      // Teach webpack to import svg and md files
-      // `issuer` keeps svgr off SVGs referenced from CSS (e.g. @lidofinance/lido-shared-ui)
+      // `issuer` keeps both off SVGs referenced from CSS (e.g. @lidofinance/lido-shared-ui)
       {
-        test: /\.svg$/,
+        test: /\.svg$/i,
         issuer: /\.[jt]sx?$/,
+        resourceQuery: /react/,
         use: [
           {
             loader: '@svgr/webpack',
@@ -88,37 +93,20 @@ export default withBundleAnalyzer({
                 plugins: [
                   {
                     name: 'preset-default',
-                    params: {
-                      overrides: {
-                        removeViewBox: false,
-                      },
-                    },
+                    params: { overrides: { removeViewBox: false } },
                   },
                 ],
               },
             },
           },
-          'url-loader',
         ],
       },
       {
-        test: /\.md$/,
-        use: 'raw-loader',
-      },
-
-      // Handle JSON imports with 'with' assertions syntax from node_modules
-      // by removing the assertions, because next v12 does not support them, which causes build error.
-      // Specifically targeting affected modules here
-      {
-        test: /node_modules\/@base-org\/account.*\.js$/,
-        use: {
-          loader: 'string-replace-loader',
-          options: {
-            search: 'with\\s*\\{\\s*type:\\s*[\'"]json[\'"]\\s*\\}',
-            replace: '',
-            flags: 'g',
-          },
-        },
+        test: /\.svg$/i,
+        issuer: /\.[jt]sx?$/,
+        resourceQuery: { not: [/react/] },
+        type: 'asset/resource',
+        generator: { filename: 'static/media/[name].[hash:8][ext]' },
       },
     );
 

@@ -9,14 +9,11 @@ interface Window {
 }
 
 declare module '*.svg' {
-  /**
-   * Use `any` to avoid conflicts with
-   * `@svgr/webpack` plugin or
-   * `babel-plugin-inline-react-svg` plugin.
-   */
-  const content: any;
-  export const ReactComponent: React.FunctionComponent<
-    React.ComponentProps<'svg'>
-  >;
-  export default content;
+  const src: string;
+  export default src;
+}
+
+declare module '*.svg?react' {
+  const Component: React.FC<React.ComponentProps<'svg'>>;
+  export default Component;
 }

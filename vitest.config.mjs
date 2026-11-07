@@ -23,8 +23,16 @@ const BARE_ROOTS = [
   'utilsApi',
 ];
 
+// svgr is a webpack loader; unit tests only need a component-shaped default export
+const svgReactStub = {
+  name: 'svg-react-stub',
+  enforce: 'pre',
+  load: (id) =>
+    id.endsWith('.svg?react') ? 'export default () => null;' : null,
+};
+
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), svgReactStub],
   resolve: {
     alias: BARE_ROOTS.map((find) => ({ find, replacement: root + find })),
   },

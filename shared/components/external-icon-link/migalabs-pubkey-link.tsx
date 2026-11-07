@@ -3,7 +3,7 @@ import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FC } from 'react';
 import { MatomoLink } from '../matomo-link/matomo-link';
 
-import { ReactComponent as MigalabsLink } from 'assets/icons/migalabs-link.svg';
+import MigalabsLink from 'assets/icons/migalabs-link.svg?react';
 import { KeyWithStatus } from '@lidofinance/lido-csm-sdk';
 
 const { migalabs } = getExternalLinks();
