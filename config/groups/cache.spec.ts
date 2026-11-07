@@ -10,7 +10,7 @@ import {
 
 // same flavour Next 15.5 compiles header/rewrite sources with
 const compileSource = (source: string) =>
-  pathToRegexp(source, [], { delimiter: '/' });
+  pathToRegexp(source, [], { delimiter: '/', strict: true });
 
 // RFC 9111 (HTTP Caching) + RFC 5861 (stale-if-error / stale-while-revalidate)
 const VALID_DIRECTIVES = new Set([

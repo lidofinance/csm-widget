@@ -117,7 +117,7 @@ export default withBundleAnalyzer({
       ...config.resolve.fallback,
       '@react-native-async-storage/async-storage': false,
       // Tempo Accounts SDK, optional peer dep of @wagmi/connectors v8 reachable only via
-      // @wagmi/core's unused `tempo` export; not installed, Next 12 webpack resolves it eagerly
+      // @wagmi/core's unused `tempo` export; not installed, webpack resolves it eagerly
       accounts: false,
     };
 

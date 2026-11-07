@@ -103,7 +103,8 @@ app
 
     const server = createServer(async (req, res) => {
       try {
-        const { pathname } = new URL(req.url ?? '/', 'http://localhost');
+        // raw target: Next does not collapse dot segments, so neither may the CSP/asset check
+        const pathname = (req.url ?? '/').replace(/[?#].*$/, '');
 
         overrideSetHeader(res);
 
@@ -115,7 +116,7 @@ app
 
         await handle(req, res);
       } catch (err) {
-        // an unhandled rejection here kills the process (--unhandled-rejections=throw); `new URL` throws on e.g. `GET http://[ HTTP/1.1`
+        // an unhandled rejection here kills the process (--unhandled-rejections=throw)
         console.error(err);
         if (!res.headersSent) {
           res.statusCode = 500;

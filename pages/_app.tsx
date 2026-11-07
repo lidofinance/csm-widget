@@ -53,7 +53,7 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
           name="viewport"
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
-        <title>{moduleMeta.shortTitle} | Lido</title>
+        <title>{`${moduleMeta.shortTitle} | Lido`}</title>
       </Head>
       {isMounted ? (
         <Providers
