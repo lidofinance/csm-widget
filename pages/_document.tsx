@@ -13,18 +13,12 @@ import { config } from 'config';
 import { moduleMeta } from 'consts/module';
 import { FiraCodeFont } from 'styles';
 
-let host: string = moduleMeta.host;
-
 export default class MyDocument extends Document {
   static async getInitialProps(
     ctx: DocumentContext,
   ): Promise<DocumentInitialProps> {
     const sheet = new ServerStyleSheet();
     const originalRenderPage = ctx.renderPage;
-
-    if (ctx?.req?.headers?.host) {
-      host = `https://${ctx?.req?.headers?.host}`;
-    }
 
     try {
       ctx.renderPage = () =>
@@ -58,7 +52,7 @@ export default class MyDocument extends Document {
   }
 
   get metaPreviewImgUrl(): string {
-    return `${host}/${moduleMeta.previewFile}`;
+    return `${moduleMeta.host}/${moduleMeta.previewFile}`;
   }
 
   render(): JSX.Element {
@@ -114,7 +108,6 @@ export default class MyDocument extends Document {
           <meta name="twitter:site" content="@lidofinance" />
           <meta name="twitter:creator" content="@lomashuk" />
           <meta name="description" content={this.metaDescription} />
-          <meta name="currentChain" content={String(config.defaultChain)} />
           <Fonts />
           <FiraCodeFont />
           <LidoUIHead />

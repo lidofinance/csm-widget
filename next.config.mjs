@@ -9,8 +9,8 @@ const moduleName = moduleMode.toLowerCase();
 // cache control
 export const CACHE_CONTROL_HEADER = 'x-cache-control';
 export const CACHE_CONTROL_PAGES = [
-  // documents — same HTML for every visitor; uncovered, gSSP pages get the
-  // default no-store and gSP pages a 1-year s-maxage that outlives build chunk hashes
+  // documents — statically prerendered, same HTML for every visitor; uncovered
+  // routes get Next's 1-year s-maxage, which outlives build chunk hashes
   '/',
   '/group',
   '/monitoring',
@@ -26,6 +26,7 @@ export const CACHE_CONTROL_PAGES = [
   '/top-up-allocation',
   '/surveys/:path*',
   '/type/:path*',
+  '/test/:path*',
   // assets — unhashed, so they share the document TTL; header sources match
   // pre-rewrite paths, so module-variant files are listed too
   '/manifest.json',

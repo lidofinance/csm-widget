@@ -2,7 +2,6 @@ import { ROLES } from '@lidofinance/lido-csm-sdk';
 import { FAQ_ROLES } from 'faq';
 import { FC } from 'react';
 import { Faq } from 'shared/components';
-import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
 import { useWeb3Key } from 'shared/hooks';
 import { Layout } from 'shared/layout';
 import { SettingsPageSwitcher } from 'shared/navigate';
@@ -18,9 +17,7 @@ export const ManagerAddressPage: FC = () => {
       pageName="SettingsManagerAddress"
     >
       <SettingsPageSwitcher />
-      <NoSSRWrapper key={key}>
-        <ChangeRoleForm role={ROLES.MANAGER} />
-      </NoSSRWrapper>
+      <ChangeRoleForm key={key} role={ROLES.MANAGER} />
       <Faq items={FAQ_ROLES} />
     </Layout>
   );

@@ -7,7 +7,6 @@ import {
 } from 'features/create-node-operator';
 import { useCanCreateNodeOperator } from 'shared/hooks';
 import { Gate, GateLoaded, Navigate, useCorrectPath } from 'shared/navigate';
-import { getProps } from 'utilsApi';
 
 // Only a CSM-family deployment has multiple types to choose between. Branch on
 // this build-time deployment fact, not the active-module show rule — a
@@ -39,5 +38,3 @@ const Page = () => {
 };
 
 export default Page;
-
-export const getServerSideProps = getProps();

@@ -4,11 +4,13 @@ import { config } from 'config';
 import { moduleMeta } from 'consts/module';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import 'nprogress/nprogress.css';
 import '@lidofinance/lido-shared-ui/index.css';
 import { Providers } from 'providers';
 import { memo } from 'react';
 import {
+  AppShellLoader,
   BackgroundGradient,
   SecurityStatusBanner,
   TestEnvBanner,
@@ -37,15 +39,14 @@ type AppParams = {
 
 const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
   const { pageProps } = props;
+  const { isReady } = useRouter();
   const isClient = useIsClient();
-  // window.__env__ is client-only; prerendered HTML never shows maintenance
-  const isMaintenance = isClient && config.maintenance;
+  // Next never marks the router ready on /404
+  const isMounted = isClient && (isReady || !!pageProps?.isError);
+  const isMaintenance = isMounted && config.maintenance;
 
   return (
-    <Providers
-      dummy={isMaintenance || pageProps?.isError || pageProps?.dummy}
-      skipWatcher={pageProps?.isError}
-    >
+    <>
       {/* see https://nextjs.org/docs/messages/no-document-viewport-meta */}
       <Head>
         <meta
@@ -54,19 +55,28 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
         />
         <title>{moduleMeta.shortTitle} | Lido</title>
       </Head>
-      <BackgroundGradient
-        width={1560}
-        height={784}
-        style={{
-          opacity: 'var(--lido-color-darkThemeOpacity)',
-        }}
-      />
-      <SVGGradientDefs />
-      <ToastContainer />
-      <TestEnvBanner />
-      {isMaintenance ? <MaintenancePage /> : <MemoApp {...props} />}
-      <SecurityStatusBanner />
-    </Providers>
+      {isMounted ? (
+        <Providers
+          dummy={isMaintenance || pageProps?.isError || pageProps?.dummy}
+          skipWatcher={pageProps?.isError}
+        >
+          <BackgroundGradient
+            width={1560}
+            height={784}
+            style={{
+              opacity: 'var(--lido-color-darkThemeOpacity)',
+            }}
+          />
+          <SVGGradientDefs />
+          <ToastContainer />
+          <TestEnvBanner />
+          {isMaintenance ? <MaintenancePage /> : <MemoApp {...props} />}
+          <SecurityStatusBanner />
+        </Providers>
+      ) : (
+        <AppShellLoader />
+      )}
+    </>
   );
 };
 

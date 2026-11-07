@@ -1,7 +1,6 @@
 import { DashboardPage } from 'features/dashboard';
 import { StarterPackPage } from 'features/starter-pack';
 import { WelcomePage } from 'features/welcome';
-import { getProps } from 'utilsApi';
 import { FC } from 'react';
 import { Gate, GateLoaded } from 'shared/navigate';
 import { CmWelcomePage } from 'features/starter-pack/cm-welcome-page';
@@ -29,7 +28,3 @@ const Page: FC = () => (
 );
 
 export default Page;
-
-export const getServerSideProps = getProps({
-  continueAnyway: true,
-});

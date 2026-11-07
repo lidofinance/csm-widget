@@ -2,7 +2,6 @@ import { PATH } from 'consts';
 import { IcsApplyPage } from 'features/ics';
 import { FC } from 'react';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
-import { getProps } from 'utilsApi';
 
 const ScoresPage: FC = () => {
   return (
@@ -17,5 +16,3 @@ const ScoresPage: FC = () => {
 };
 
 export default ScoresPage;
-
-export const getServerSideProps = getProps();

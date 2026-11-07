@@ -3,7 +3,6 @@ import { PATH } from 'consts/urls';
 import { CreateOperatorPage } from 'features/create-node-operator';
 import { useCanCreateNodeOperator } from 'shared/hooks';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
-import { getProps } from 'utilsApi';
 
 const Page = () => {
   const { isPending } = useCanCreateNodeOperator();
@@ -27,5 +26,3 @@ const Page = () => {
 };
 
 export default Page;
-
-export const getServerSideProps = getProps();

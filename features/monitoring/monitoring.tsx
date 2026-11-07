@@ -1,6 +1,5 @@
 import { useModule } from 'modules/web3';
 import { FC } from 'react';
-import { NoSSRWrapper } from 'shared/components';
 import { ExternalSection } from './external-section';
 import { NotificationToolsSection } from './notification-tools-section';
 import { StrikesSection } from './strikes-section';
@@ -11,12 +10,10 @@ export const Monitoring: FC = () => {
 
   return (
     <>
-      <NoSSRWrapper>
-        {isCsmFamily && <AttestationRateSection />}
-        {isCsmFamily && <StrikesSection />}
-        <ExternalSection />
-        <NotificationToolsSection />
-      </NoSSRWrapper>
+      {isCsmFamily && <AttestationRateSection />}
+      {isCsmFamily && <StrikesSection />}
+      <ExternalSection />
+      <NotificationToolsSection />
     </>
   );
 };

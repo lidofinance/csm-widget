@@ -1,7 +1,6 @@
 import { PATH } from 'consts/urls';
 import { SiweAuthGate } from 'modules/siwe';
 import { FC, useMemo } from 'react';
-import { NoSSRWrapper } from 'shared/components';
 import { Layout } from 'shared/layout';
 import { SurveysContactsPage } from './surveys-contacts-page';
 import { SurveysDelegatesPage } from './surveys-delegates-page';
@@ -39,11 +38,9 @@ export const SurveysPage: FC<{ slug?: string[] }> = ({ slug = [] }) => {
 
   return (
     <Layout title="Surveys" subtitle="Voluntary report form" pageName="Surveys">
-      <NoSSRWrapper>
-        <SiweAuthGate fallback={<SurveysSignInPage />}>
-          <SurveyProvider>{page}</SurveyProvider>
-        </SiweAuthGate>
-      </NoSSRWrapper>
+      <SiweAuthGate fallback={<SurveysSignInPage />}>
+        <SurveyProvider>{page}</SurveyProvider>
+      </SiweAuthGate>
     </Layout>
   );
 };

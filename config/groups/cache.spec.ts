@@ -133,14 +133,7 @@ describe('CACHE_CONTROL_PAGES covers every page and public asset', () => {
 
   // api/test set their own policy or keep Next's private default; 404/500 are
   // error renders; _app/_document aren't routes
-  const UNCACHED_ROUTES = new Set([
-    'api',
-    'test',
-    '_app',
-    '_document',
-    '404',
-    '500',
-  ]);
+  const UNCACHED_ROUTES = new Set(['api', '_app', '_document', '404', '500']);
 
   const matchers = entries.map(
     (source) =>
