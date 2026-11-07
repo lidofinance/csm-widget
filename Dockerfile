@@ -64,6 +64,7 @@ COPY --from=build /app/public ./public
 COPY --from=build /app/package.json /app/next.config.mjs /app/next-logger.config.cjs /app/build-info.json /app/server.mjs ./
 COPY --from=build /app/scripts ./scripts
 COPY --from=build /app/config/client-env.mjs ./config/client-env.mjs
+COPY --from=build /app/config/csp/policy.mjs ./config/csp/policy.mjs
 
 # ARG does not cross stages; re-declared here so the labels resolve
 ARG BUILD_VERSION

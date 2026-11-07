@@ -5,6 +5,7 @@ import { parse } from 'url';
 import next from 'next';
 import { registerShutdownSignals } from './scripts/shutdown.mjs';
 import { toBoolean } from './scripts/to-boolean.mjs';
+import { buildCspHeader } from './config/csp/policy.mjs';
 import { buildClientEnv, serializeClientEnv } from './config/client-env.mjs';
 import { logEnvironmentVariables } from './scripts/log-environment-variables.mjs';
 import { startupCheckRPCs } from './scripts/startup-checks/rpc.mjs';
@@ -85,6 +86,17 @@ app
     // must match next.config.mjs basePath (baked at build)
     const basePath = process.env.BASE_PATH ?? '';
     const serveWindowEnv = createWindowEnvRoute(basePath);
+    // runtime env, so not in next.config headers() (serialized at build)
+    const csp = dev
+      ? null
+      : buildCspHeader({
+          trustedHosts: process.env.CSP_TRUSTED_HOSTS,
+          reportUri: process.env.CSP_REPORT_URI,
+          reportOnly: process.env.CSP_REPORT_ONLY,
+        });
+    const isApiOrAsset = (pathname = '') =>
+      pathname.startsWith(`${basePath}/api/`) ||
+      pathname.startsWith(`${basePath}/_next/`);
     if (toBoolean(process.env.RUN_STARTUP_CHECKS)) {
       void startupCheckRPCs();
       await startupCheckValidationFile();
@@ -97,6 +109,10 @@ app
         const parsedUrl = parse(req.url, true);
 
         overrideSetHeader(res);
+
+        if (csp && !isApiOrAsset(parsedUrl.pathname ?? '')) {
+          res.setHeader(csp.name, csp.value);
+        }
 
         if (serveWindowEnv(req, res, parsedUrl.pathname)) return;
 

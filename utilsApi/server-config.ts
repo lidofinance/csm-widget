@@ -1,4 +1,4 @@
-import { parseUrlList, toBoolean } from 'config/helpers';
+import { parseUrlList } from 'config/helpers';
 
 // an empty list passes as the tuple; consumers fail on use, as before
 const urlList = (value?: string) =>
@@ -13,9 +13,6 @@ export const readServerConfig = (
   clApiUrls_560048: urlList(env.CL_API_URLS_560048),
   migalabsApiUrl: env.ETHSEER_API_URL,
   migalabsApiToken: env.ETHSEER_API_TOKEN,
-  cspTrustedHosts: env.CSP_TRUSTED_HOSTS,
-  cspReportUri: env.CSP_REPORT_URI,
-  cspReportOnly: toBoolean(env.CSP_REPORT_ONLY),
   rateLimit: Number(env.RATE_LIMIT) || 100,
   rateLimitTimeFrame: Number(env.RATE_LIMIT_TIME_FRAME) || 60,
   validationAPI: env.VALIDATION_SERVICE_BASE_PATH,

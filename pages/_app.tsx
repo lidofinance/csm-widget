@@ -1,6 +1,5 @@
 import 'utils/zod-jitless';
 
-import { withCsp } from 'config/csp';
 import { config } from 'config';
 import { moduleMeta } from 'consts/module';
 import { AppProps } from 'next/app';
@@ -71,6 +70,4 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
   );
 };
 
-export default process.env.NODE_ENV === 'development'
-  ? AppWrapper
-  : withCsp(AppWrapper);
+export default AppWrapper;
