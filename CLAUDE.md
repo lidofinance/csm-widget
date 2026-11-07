@@ -131,7 +131,7 @@ Note: "SM" = Staking Module (module-agnostic terminology for code shared between
 ### Development Notes
 
 - Next.js 15 pages router, SWC (no Babel), webpack. Dev entry is `yarn dev` (`node server.mjs`), not `next dev`
-- SPA shell: every page is static; `_app` renders the app only after mount and `router.isReady`, so `router.query` is filled on first render. No `getServerSideProps`, no `getInitialProps` on `_app` (kills static optimization). `pages/test/*` use `getTestProps` (`getStaticProps`, build-info gate)
+- SPA shell: every page is static; `_app` renders the app only after mount and `router.isReady` (or on error pages), so `router.query` is filled on first render. No `getServerSideProps`, no `getInitialProps` on `_app` (kills static optimization). `pages/test/*` use `getTestProps` (`getStaticProps`, build-info gate)
 - SVG: `import Icon from 'x.svg?react'` for a component, `import url from 'x.svg'` for a URL string
 - Unit tests: vitest (`yarn test:unit`, globals, no setup file), `*.test.ts(x)` / `*.spec.ts(x)` next to the code; `tests/` is Playwright only
 - `next-env.d.ts` is generated and git-ignored (`yarn types` runs `next typegen` first); don't commit it

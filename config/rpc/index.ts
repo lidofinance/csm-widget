@@ -4,11 +4,11 @@ import { API_ROUTES } from 'consts/api';
 
 import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
+import { getApiUrl } from 'shared/hooks/get-api-url';
 import { useUserConfig } from '../user-config';
 
 export const getBackendRPCPath = (chainId: string | number): string => {
-  const BASE_URL = typeof window === 'undefined' ? '' : window.location.origin;
-  return `${BASE_URL}/${API_ROUTES.RPC}?chainId=${chainId}`;
+  return getApiUrl(API_ROUTES.RPC, { chainId: String(chainId) });
 };
 
 export const useGetRpcUrlByChainId = () => {

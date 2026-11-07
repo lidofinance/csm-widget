@@ -2,14 +2,14 @@ import { useCallback } from 'react';
 
 import { API_ROUTES } from 'consts/api';
 
+import { getApiUrl } from 'shared/hooks/get-api-url';
 import { useUserConfig } from '../user-config';
 
 import { useDappStatus } from 'modules/web3';
 import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 
 export const getBackendApiPath = (chainId: string | number): string => {
-  const BASE_URL = typeof window === 'undefined' ? '' : window.location.origin;
-  return `${BASE_URL}/${API_ROUTES.CL}/${chainId}`;
+  return getApiUrl(`${API_ROUTES.CL}/${chainId}`);
 };
 
 export const useGetClApiUrlByChainId = () => {
