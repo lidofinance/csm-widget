@@ -2,6 +2,10 @@ import { createServer } from 'http';
 import next from 'next';
 import { registerShutdownSignals } from './scripts/shutdown.mjs';
 import { loadDevnetAddresses } from './scripts/load-devnet-addresses.mjs';
+import {
+  CACHE_CONTROL_HEADER,
+  CACHE_CONTROL_VALUE,
+} from './scripts/cache-control.mjs';
 import { toBoolean } from './scripts/to-boolean.mjs';
 import { buildCspHeader } from './config/csp/policy.mjs';
 import { buildClientEnv, serializeClientEnv } from './config/client-env.mjs';
@@ -15,11 +19,6 @@ const port = Number(process.env.PORT) || 3000;
 // when using middleware `hostname` and `port` must be provided below
 const app = next({ dev, hostname, port });
 const handle = app.getRequestHandler();
-// cannot import from next.config.mjs because this will break env load
-const CACHE_CONTROL_HEADER = 'x-cache-control';
-// document TTL, same literal as next.config.mjs (config/groups/cache.spec.ts keeps them equal)
-const CACHE_CONTROL_VALUE =
-  'public, max-age=15, s-maxage=30, stale-if-error=86400, stale-while-revalidate=60';
 
 const createWindowEnvRoute = (basePath) => {
   const routePath = `${basePath}/runtime/window-env.js`;
@@ -31,7 +30,10 @@ const createWindowEnvRoute = (basePath) => {
   const body = `window.__env__=${serializeClientEnv(clientEnv)};`;
 
   return (req, res, pathname) => {
-    if (pathname !== routePath || (req.method !== 'GET' && req.method !== 'HEAD')) {
+    if (
+      pathname !== routePath ||
+      (req.method !== 'GET' && req.method !== 'HEAD')
+    ) {
       return false;
     }
     res.setHeader('Content-Type', 'application/javascript; charset=utf-8');

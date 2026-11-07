@@ -2,12 +2,6 @@ vi.mock('config', () => ({
   config: { surveysApiUrl: 'https://surveys.test' },
 }));
 
-vi.mock('config/qa-tools', () => ({ qaToolsEnabled: true }));
-
-vi.mock('consts/external-links', () => ({
-  getExternalLinks: () => ({ surveyApi: 'https://default.test' }),
-}));
-
 import { isSurveysApiConfigured, SURVEYS_API_BASE_URL } from '../surveys-api';
 import { SurveysApiError, isAuthError, authErrorKind } from '../errors';
 

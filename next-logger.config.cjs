@@ -18,7 +18,7 @@ const URL_LIST_ENV_PREFIXES = ['EL_RPC_URLS_', 'CL_API_URLS_'];
 // Comma-split so each URL becomes its own pattern; otherwise satanizer only
 // matches the full concatenation, never a single URL as it appears in logs.
 // Both the raw and trailing-slash-stripped forms are masked: satanizer matches
-// literally, and `parseUrlList` in config/helpers.ts strips the trailing slash
+// literally, and `parseUrlList` (scripts/parse-url-list.mjs) strips the trailing slash
 // before the URL ever reaches a log line. Same applies to the single-URL envs
 // VALIDATION_SERVICE_BASE_PATH and ETHSEER_API_URL below.
 const urlVariants = (url) =>

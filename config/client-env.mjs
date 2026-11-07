@@ -1,25 +1,21 @@
+import { parseUrlList } from '../scripts/parse-url-list.mjs';
 import { toBoolean } from '../scripts/to-boolean.mjs';
 
-// Trailing `/` breaks some RPC providers (e.g. Infura)
-const parseUrlList = (value) =>
-  value
-    ?.split(',')
-    .map((s) => s.trim().replace(/\/+$/, ''))
-    .filter(Boolean) ?? [];
+export const DEFAULT_CHAIN = 560048;
 
 const UNSAFE_CHARS = /[<>&\u2028\u2029]/g;
 
 /**
  * @typedef {{
- *   matomoHost: string;
+ *   matomoHost: string | undefined;
  *   defaultChain: number;
- *   walletconnectProjectId: string;
+ *   walletconnectProjectId: string | undefined;
  *   isTestEnv: boolean;
  *   maintenance: boolean;
  *   addressApiValidationEnabled: boolean;
- *   keysApiUrl: string;
- *   feesMonitoringApiUrl: string;
- *   surveysApiUrl: string;
+ *   keysApiUrl: string | undefined;
+ *   feesMonitoringApiUrl: string | undefined;
+ *   surveysApiUrl: string | undefined;
  *   ipfsGateways: string[];
  *   devnetAddresses: Record<string, unknown> | null;
  * }} ClientEnv
@@ -36,7 +32,7 @@ export const buildClientEnv = (
   { devnetAddresses = null } = {},
 ) => ({
   matomoHost: env.MATOMO_URL,
-  defaultChain: parseInt(env.DEFAULT_CHAIN, 10) || 560048,
+  defaultChain: parseInt(env.DEFAULT_CHAIN, 10) || DEFAULT_CHAIN,
   walletconnectProjectId: env.WALLETCONNECT_PROJECT_ID,
   isTestEnv: !toBoolean(env.IS_PROD),
   maintenance: toBoolean(env.MAINTENANCE),

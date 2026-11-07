@@ -3,20 +3,35 @@ import {
   ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
 import { config } from 'config';
-import {
-  useApiAddressValidation,
-  useValidationFile,
-  validationFileQuery,
-} from 'shared/hooks';
+import { API_ROUTES } from 'consts/api';
+import { STRATEGY_LAZY } from 'consts';
+import { useApiAddressValidation } from 'shared/hooks';
 import invariant from 'tiny-invariant';
-import { validateAddressLocally } from 'utils';
+import {
+  AddressValidationFile,
+  standardFetcher,
+  validateAddressLocally,
+} from 'utils';
+import { getApiUrl } from 'utils/get-api-url';
 import { Address } from 'viem';
+
+const validationFileQuery = {
+  queryKey: ['address-validation-file'],
+  queryFn: (): Promise<AddressValidationFile> =>
+    standardFetcher(getApiUrl(API_ROUTES.VALIDATION_FILE), {
+      method: 'GET',
+      headers: { 'Content-type': 'application/json' },
+    }),
+  ...STRATEGY_LAZY,
+  retry: 1,
+};
 
 const AddressValidationContext = createContext<{
   isValidAddress: boolean;
@@ -47,9 +62,7 @@ export const useAddressValidation = () => {
 //   3. validationFile present  → check against deny-list locally
 //   4. Otherwise               → valid
 //
-// The file comes from /api/validation-file and is awaited at validation time;
-// only a failed fetch counts as absent (valid). The loader behind it returns an
-// empty list for a missing/malformed file, surfaced via logs + Prom metrics.
+// The deny-list file is prefetched and awaited at validation time; a failed fetch counts as absent.
 export const AddressValidationProvider = ({
   children,
 }: {
@@ -57,8 +70,11 @@ export const AddressValidationProvider = ({
 }) => {
   const validateAddressAPI = useApiAddressValidation();
   const queryClient = useQueryClient();
-  useValidationFile();
   const [isValidAddress, setIsValidAddress] = useState(true);
+
+  useEffect(() => {
+    void queryClient.prefetchQuery(validationFileQuery);
+  }, [queryClient]);
 
   const validateAddress = useCallback(
     async (addressToValidate?: Address) => {

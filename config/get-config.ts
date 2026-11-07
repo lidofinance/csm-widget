@@ -4,10 +4,7 @@ import * as locale from './groups/locale';
 import * as stake from './groups/stake';
 import * as web3 from './groups/web3';
 
-export type ConfigType = {
-  isClientSide: boolean;
-  isServerSide: boolean;
-} & typeof cache &
+export type ConfigType = typeof cache &
   typeof locale &
   typeof stake &
   typeof web3 &
@@ -15,9 +12,6 @@ export type ConfigType = {
 
 export const getConfig = (): ConfigType => {
   return {
-    isClientSide: typeof window !== 'undefined',
-    isServerSide: typeof window === 'undefined',
-
     ...cache,
     ...locale,
     ...stake,

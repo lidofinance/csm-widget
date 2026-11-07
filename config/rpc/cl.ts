@@ -2,15 +2,11 @@ import { useCallback } from 'react';
 
 import { API_ROUTES } from 'consts/api';
 
-import { getApiUrl } from 'shared/hooks/get-api-url';
+import { getApiUrl } from 'utils/get-api-url';
 import { useUserConfig } from '../user-config';
 
 import { useDappStatus } from 'modules/web3';
 import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
-
-export const getBackendApiPath = (chainId: string | number): string => {
-  return getApiUrl(`${API_ROUTES.CL}/${chainId}`);
-};
 
 export const useGetClApiUrlByChainId = () => {
   const userConfig = useUserConfig();
@@ -25,7 +21,7 @@ export const useGetClApiUrlByChainId = () => {
 
       return (
         userConfig.savedUserConfig.clApiUrls[chainId] ||
-        getBackendApiPath(chainId)
+        getApiUrl(`${API_ROUTES.CL}/${chainId}`)
       );
     },
     [userConfig],

@@ -1,4 +1,4 @@
-import { parseUrlList } from 'config/helpers';
+import { parseUrlList } from '../scripts/parse-url-list.mjs';
 import { loadDevnetAddresses } from '../scripts/load-devnet-addresses.mjs';
 
 // empty list still typed as the tuple; consumers throw on use

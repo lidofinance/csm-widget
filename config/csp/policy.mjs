@@ -1,3 +1,4 @@
+import { parseUrlList } from '../../scripts/parse-url-list.mjs';
 import { toBoolean } from '../../scripts/to-boolean.mjs';
 
 const WALLETCONNECT_HOSTS = [
@@ -54,7 +55,7 @@ export const buildCspHeader = ({ trustedHosts, reportUri, reportOnly }) => ({
     : 'Content-Security-Policy',
   value: serializeCsp(
     buildCspDirectives({
-      trustedHosts: trustedHosts ? trustedHosts.split(',') : [],
+      trustedHosts: parseUrlList(trustedHosts),
       reportUri,
     }),
   ),

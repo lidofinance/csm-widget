@@ -16,7 +16,7 @@ import {
   TestEnvBanner,
   ToastContainer,
 } from 'shared/components';
-import { useIsClient } from 'shared/hooks/use-is-client';
+import { useIsClient } from 'shared/hooks';
 import { SVGGradientDefs } from 'shared/components/svg-gradient-defs/svg-gradient-defs';
 import { nprogress } from 'utils';
 import { MaintenancePage } from 'features/welcome/maintenance-page';
@@ -43,7 +43,7 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
   const isClient = useIsClient();
   // Next never marks the router ready on /404
   const isMounted = isClient && (isReady || !!pageProps?.isError);
-  const isMaintenance = isMounted && config.maintenance;
+  const isMaintenance = config.maintenance;
 
   return (
     <>

@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { API_ROUTES, STRATEGY_LAZY } from 'consts';
 import { useNodeOperatorId } from 'modules/web3';
 import { Performance, RateStatus, UnifiedPerformance } from 'types';
-import { getApiUrl } from 'shared/hooks/get-api-url';
+import { getApiUrl } from 'utils/get-api-url';
 import { standardFetcher } from 'utils';
 
 const usePerformanceRate = (nodeOperatorId?: NodeOperatorId) => {

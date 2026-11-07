@@ -5,7 +5,7 @@ import { Address } from 'viem';
 import { API_ROUTES } from 'consts/api';
 import { config } from 'config';
 import { FetcherError, standardFetcher } from 'utils';
-import { getApiUrl } from './get-api-url';
+import { getApiUrl } from 'utils/get-api-url';
 
 export const useApiAddressValidation = () => {
   const queryClient = useQueryClient();

@@ -1,7 +1,4 @@
 import { buildClientEnv } from './client-env.mjs';
-// We're making dynamic env variables
-// so we can inject selected envs from Docker runtime too,
-// not only during build-time for static pages
 
 export type ClientEnv = ReturnType<typeof buildClientEnv>;
 
@@ -11,13 +8,8 @@ declare global {
   }
 }
 
-// Don't use dynamics directly in the project!
-// Only through:
-// code```
-//    import { config } from 'config'; // or
-//    import { config } from './get-config'; // in config "namespace"
-// ```
-// server side reads live env: API routes use config.defaultChain/module
+// Don't use dynamics directly: read config through `config` / `useConfig`.
+// Browser gets `window.__env__` (see /runtime/window-env.js); server builds it from live env.
 export default typeof window !== 'undefined'
   ? window.__env__
   : buildClientEnv();

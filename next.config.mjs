@@ -1,4 +1,8 @@
 import generateBuildId from './scripts/generate-build-id.mjs';
+import {
+  CACHE_CONTROL_HEADER,
+  CACHE_CONTROL_VALUE,
+} from './scripts/cache-control.mjs';
 
 // https://nextjs.org/docs/pages/api-reference/next-config-js/basePath
 const basePath = process.env.BASE_PATH;
@@ -7,7 +11,6 @@ const moduleMode = (process.env.MODULE || 'csm').toUpperCase();
 const moduleName = moduleMode.toLowerCase();
 
 // cache control
-export const CACHE_CONTROL_HEADER = 'x-cache-control';
 export const CACHE_CONTROL_PAGES = [
   // documents — statically prerendered, same HTML for every visitor; uncovered
   // routes get Next's 1-year s-maxage, which outlives build chunk hashes
@@ -35,10 +38,7 @@ export const CACHE_CONTROL_PAGES = [
   '/apple-touch-icon.png',
   '/apple-touch-icon-:module(csm|cm).png',
   '/:module(csm|cm)-preview.png',
-  '/runtime/window-env.js',
 ];
-export const CACHE_CONTROL_VALUE =
-  'public, max-age=15, s-maxage=30, stale-if-error=86400, stale-while-revalidate=60';
 
 // devDependency, absent from the production image where this config is re-evaluated on boot
 const withBundleAnalyzer = process.env.ANALYZE_BUNDLE
@@ -68,7 +68,7 @@ export default withBundleAnalyzer({
     ignoreDuringBuilds: true,
   },
   compiler: {
-    // SWC drops displayName in prod by default; Babel plugin kept it
+    // SWC omits displayName in prod by default
     styledComponents: { displayName: true, ssr: true },
   },
   images: {
@@ -118,7 +118,7 @@ export default withBundleAnalyzer({
       ...config.resolve.fallback,
       '@react-native-async-storage/async-storage': false,
       // Tempo Accounts SDK, optional peer dep of @wagmi/connectors v8 reachable only via
-      // @wagmi/core's unused `tempo` export; not installed, webpack resolves it eagerly
+      // @wagmi/core's unused `tempo` export; not installed, webpack still resolves it
       accounts: false,
     };
 

@@ -5,14 +5,10 @@ import { Button, Connect } from 'shared/wallet';
 const HeaderWallet: FC = () => {
   const { isAccountActive } = useDappStatus();
 
-  return (
-    <>
-      {isAccountActive ? (
-        <Button data-testid="accountSectionHeader" />
-      ) : (
-        <Connect size="sm" />
-      )}
-    </>
+  return isAccountActive ? (
+    <Button data-testid="accountSectionHeader" />
+  ) : (
+    <Connect size="sm" />
   );
 };
 

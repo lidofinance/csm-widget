@@ -42,5 +42,4 @@ export * from './use-sorted-keys';
 export * from './use-strike-dates';
 export * from './use-survey-enabled';
 export * from './use-surveys-filled';
-export * from './use-validation-file';
 export * from './use-web3-key';

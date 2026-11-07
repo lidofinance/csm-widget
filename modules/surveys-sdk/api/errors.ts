@@ -1,9 +1,7 @@
 import { type ApiError, parseApiError, getApiErrorCode } from './api-error';
 import { type AuthErrorKind, resolveAuthErrorKind } from './auth-error-kind';
 
-// Surface the shared auth vocabulary type through the barrel. The single source
-// of truth is ./auth-error-kind (a dependency-free leaf shared with modules/siwe
-// and utils/get-error-code.ts, both of which import its functions directly).
+// Re-exported from the barrel; ./auth-error-kind is the source of truth.
 export type { AuthErrorKind } from './auth-error-kind';
 
 export class SurveysApiError extends Error {

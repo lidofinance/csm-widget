@@ -1,10 +1,8 @@
 // Single source of truth for the auth-recovery vocabulary and the code→kind
 // mapping. See docs/api-errors-guide.md.
 //
-// DEPENDENCY-FREE BY DESIGN: this module imports NOTHING. That is what lets the
-// surveys-sdk error layer (api/errors.ts, api/surveys-api.ts), the SIWE provider
-// (modules/siwe), and the framework-agnostic widget classifier
-// (utils/get-error-code.ts) all share one mapping. Do NOT add imports here.
+// Import-free leaf: shared by api/errors.ts, modules/siwe and utils/get-error-code.ts
+// without creating cycles.
 
 export type AuthErrorKind = 'reauth' | 'logout';
 

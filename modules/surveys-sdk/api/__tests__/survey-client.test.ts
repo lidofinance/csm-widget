@@ -8,17 +8,11 @@ import type { Mock } from 'vitest';
 //
 // We mock the global `fetch` with Response-like objects shaped exactly how the
 // bundled client-fetch runtime consumes them (.ok/.status/.url/.headers.get/
-// .text/.json). The same `config`/`external-links` mocks as surveys-api.test.ts
-// make SURVEYS_API_BASE_URL resolve to https://surveys.test.
+// .text/.json). The config mock makes SURVEYS_API_BASE_URL resolve to
+// https://surveys.test.
 
 vi.mock('config', () => ({
   config: { surveysApiUrl: 'https://surveys.test' },
-}));
-
-vi.mock('config/qa-tools', () => ({ qaToolsEnabled: true }));
-
-vi.mock('consts/external-links', () => ({
-  getExternalLinks: () => ({ surveyApi: 'https://default.test' }),
 }));
 
 import {
@@ -29,52 +23,7 @@ import {
 } from '../../generated';
 import { callSurvey, surveyClient, surveyRequest } from '../survey-client';
 import { SurveysApiError, authErrorKind } from '../errors';
-
-type FetchResponseInit = {
-  status: number;
-  body?: unknown;
-  /** Raw header map; `content-type` defaults to application/json. */
-  headers?: Record<string, string>;
-};
-
-// Build a minimal Response-like the client-fetch runtime understands. It reads
-// the body via `.text()` (then JSON.parses), infers parsing from Content-Type,
-// and checks Content-Length for the empty-body branch.
-const makeResponse = (
-  init: FetchResponseInit,
-  url = 'https://surveys.test/x',
-): Response => {
-  const headers = new Headers({
-    'content-type': 'application/json',
-    ...init.headers,
-  });
-  const text =
-    init.body === undefined
-      ? ''
-      : typeof init.body === 'string'
-        ? init.body
-        : JSON.stringify(init.body);
-  return {
-    ok: init.status >= 200 && init.status < 300,
-    status: init.status,
-    url,
-    headers,
-    text: vi.fn().mockResolvedValue(text),
-    json: vi.fn().mockResolvedValue(init.body),
-  } as unknown as Response;
-};
-
-// Install a fetch mock returning `response` for any request. Returns the mock
-// so tests can assert on the Request it received.
-const installFetch = (response: Response): Mock => {
-  const fetchMock = vi.fn().mockResolvedValue(response);
-  (globalThis as unknown as { fetch: Mock }).fetch = fetchMock;
-  return fetchMock;
-};
-
-// The client builds a `Request`; pull the resolved URL/headers off it.
-const lastRequest = (fetchMock: Mock): Request =>
-  fetchMock.mock.calls[fetchMock.mock.calls.length - 1][0] as Request;
+import { installFetch, lastRequest, makeResponse } from './fetch-mock';
 
 // Run a thunk that awaits a rejecting call and return the thrown error.
 const captureError = async (run: () => Promise<unknown>): Promise<any> => {
