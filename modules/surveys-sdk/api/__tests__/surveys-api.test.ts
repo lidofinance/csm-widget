@@ -1,10 +1,10 @@
-jest.mock('config', () => ({
+vi.mock('config', () => ({
   config: { surveysApiUrl: 'https://surveys.test' },
 }));
 
-jest.mock('config/qa-tools', () => ({ qaToolsEnabled: true }));
+vi.mock('config/qa-tools', () => ({ qaToolsEnabled: true }));
 
-jest.mock('consts/external-links', () => ({
+vi.mock('consts/external-links', () => ({
   getExternalLinks: () => ({ surveyApi: 'https://default.test' }),
 }));
 

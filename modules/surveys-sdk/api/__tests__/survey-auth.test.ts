@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 // Tests for the public SIWE auth endpoints (api/survey-auth.ts). They route
 // through the generated SDK + configured survey client (covered transport-wise
 // by survey-client.test.ts); here we prove they hit the right URLs without a
@@ -6,13 +7,13 @@
 // Same config/external-links mocks as the other surveys-sdk tests so
 // SURVEYS_API_BASE_URL resolves to https://surveys.test.
 
-jest.mock('config', () => ({
+vi.mock('config', () => ({
   config: { surveysApiUrl: 'https://surveys.test' },
 }));
 
-jest.mock('config/qa-tools', () => ({ qaToolsEnabled: true }));
+vi.mock('config/qa-tools', () => ({ qaToolsEnabled: true }));
 
-jest.mock('consts/external-links', () => ({
+vi.mock('consts/external-links', () => ({
   getExternalLinks: () => ({ surveyApi: 'https://default.test' }),
 }));
 
@@ -36,22 +37,22 @@ const makeResponse = (
     status: init.status,
     url,
     headers,
-    text: jest.fn().mockResolvedValue(text),
-    json: jest.fn().mockResolvedValue(init.body),
+    text: vi.fn().mockResolvedValue(text),
+    json: vi.fn().mockResolvedValue(init.body),
   } as unknown as Response;
 };
 
-const installFetch = (response: Response): jest.Mock => {
-  const fetchMock = jest.fn().mockResolvedValue(response);
-  (globalThis as unknown as { fetch: jest.Mock }).fetch = fetchMock;
+const installFetch = (response: Response): Mock => {
+  const fetchMock = vi.fn().mockResolvedValue(response);
+  (globalThis as unknown as { fetch: Mock }).fetch = fetchMock;
   return fetchMock;
 };
 
-const lastRequest = (fetchMock: jest.Mock): Request =>
+const lastRequest = (fetchMock: Mock): Request =>
   fetchMock.mock.calls[fetchMock.mock.calls.length - 1][0] as Request;
 
 describe('survey-auth', () => {
-  afterEach(() => jest.restoreAllMocks());
+  afterEach(() => vi.restoreAllMocks());
 
   it('surveysGetNonce GETs /auth/nonce without a token', async () => {
     const fetchMock = installFetch(

@@ -1,6 +1,6 @@
-// `consts` reaches config → next publicRuntimeConfig, which is undefined under
-// Jest. Only the two module booleans are used by the function under test.
-jest.mock('consts', () => ({ isModuleCM: false, isModuleCSM: true }));
+// `consts` reaches config → next publicRuntimeConfig, which is undefined in
+// unit tests. Only the two module booleans are used by the function under test.
+vi.mock('consts', () => ({ isModuleCM: false, isModuleCSM: true }));
 
 import { PATH } from 'consts/urls';
 import { ShowFlags } from 'shared/hooks';

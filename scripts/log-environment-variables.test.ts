@@ -24,7 +24,7 @@ const SCAN_DIRS = [
   'consts',
 ];
 const EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.mjs', '.cjs']);
-const EXCLUDED_DIRS = new Set(['node_modules', '__mocks__']);
+const EXCLUDED_DIRS = new Set(['node_modules']);
 
 const NOT_LOGGED = new Set([
   'NODE_ENV',

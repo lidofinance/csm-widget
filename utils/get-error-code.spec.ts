@@ -1,8 +1,8 @@
 // utils/get-error-code.spec.ts
 // track-matomo-event imports consts/matomo-click-events → config → next.js
-// runtime which is unavailable in Jest. Stub the whole module.
-jest.mock('./track-matomo-event', () => ({
-  trackMatomoError: jest.fn(),
+// runtime which is unavailable in unit tests. Stub the whole module.
+vi.mock('./track-matomo-event', () => ({
+  trackMatomoError: vi.fn(),
 }));
 
 import { SDKError, ERROR_CODE } from '@lidofinance/lido-csm-sdk';

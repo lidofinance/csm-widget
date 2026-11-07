@@ -1,11 +1,9 @@
 import type { NextApiRequest } from 'next';
 
-const standardFetcher = jest.fn();
+const { standardFetcher } = vi.hoisted(() => ({ standardFetcher: vi.fn() }));
 
-jest.mock('utils/standard-fetcher', () => ({
-  standardFetcher: (...args: unknown[]) => standardFetcher(...args),
-}));
-jest.mock('../external-metrics', () => ({
+vi.mock('utils/standard-fetcher', () => ({ standardFetcher }));
+vi.mock('../external-metrics', () => ({
   responseTimeExternalMetricWrapper: ({
     request,
   }: {
@@ -17,10 +15,10 @@ import { createCachedProxy } from '../cached-proxy';
 import { FetcherError } from 'utils/fetcher-error';
 
 const makeRes = () => ({
-  status: jest.fn(),
-  json: jest.fn(),
-  end: jest.fn(),
-  setHeader: jest.fn(),
+  status: vi.fn(),
+  json: vi.fn(),
+  end: vi.fn(),
+  setHeader: vi.fn(),
 });
 const makeReq = (headers: Record<string, string> = {}) =>
   ({ query: {}, headers }) as unknown as NextApiRequest;

@@ -1,18 +1,19 @@
+import type { Mock } from 'vitest';
 // shared/transaction-modal/hooks/get-failed-stage.spec.tsx
 // Stubs required before imports that transitively load next.js runtime.
-jest.mock('utils/track-matomo-event', () => ({
-  trackMatomoError: jest.fn(),
+vi.mock('utils/track-matomo-event', () => ({
+  trackMatomoError: vi.fn(),
 }));
 
 // Mock the utils barrel so get-failed-stage's `import { resolveError } from 'utils'`
 // resolves to a controllable spy.
-jest.mock('utils', () => ({
-  resolveError: jest.fn(),
+vi.mock('utils', () => ({
+  resolveError: vi.fn(),
 }));
 
 // TxStageFail uses hooks that need full React context; replace with a recorder.
-jest.mock('shared/transaction-modal/tx-stages-basic', () => ({
-  TxStageFail: jest.fn(() => null),
+vi.mock('shared/transaction-modal/tx-stages-basic', () => ({
+  TxStageFail: vi.fn(() => null),
 }));
 
 import React from 'react';
@@ -21,15 +22,13 @@ import { resolveError } from 'utils';
 import { TxStageFail } from 'shared/transaction-modal/tx-stages-basic';
 import { getFailedStage } from './get-failed-stage';
 
-const mockResolveError = resolveError as jest.MockedFunction<
-  typeof resolveError
->;
+const mockResolveError = vi.mocked(resolveError);
 
 describe('getFailedStage', () => {
-  let transitStage: jest.Mock;
+  let transitStage: Mock;
 
   beforeEach(() => {
-    transitStage = jest.fn();
+    transitStage = vi.fn();
     transitStage.mockClear();
     mockResolveError.mockClear();
   });

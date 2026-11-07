@@ -22,7 +22,12 @@
     "jsx-a11y/no-autofocus": "off",
     "jsx-a11y/anchor-is-valid": "off",
     "@next/next/no-img-element": "off",
-    "no-console": ["warn", { "allow": ["warn", "error", "info", "debug"] }],
+    "no-console": [
+      "warn",
+      {
+        "allow": ["warn", "error", "info", "debug"]
+      }
+    ],
     "@typescript-eslint/no-unused-vars": [
       "warn",
       {
@@ -47,7 +52,11 @@
     "import/no-extraneous-dependencies": [
       "error",
       {
-        "devDependencies": ["tests/**", "openapi-ts.config.ts"]
+        "devDependencies": [
+          "tests/**",
+          "openapi-ts.config.ts",
+          "vitest.config.mjs"
+        ]
       }
     ]
   },
@@ -67,6 +76,16 @@
             "message": "A top-level test.describe must declare its place in the suite tree: test.describe(...suite({ epic, feature, story }), () => { ... }). A plain title is only for grouping inside it."
           }
         ]
+      }
+    },
+    {
+      "files": ["*.spec.ts", "*.spec.tsx"],
+      "rules": {
+        "unicorn/consistent-function-scoping": "off",
+        "unicorn/error-message": "off",
+        "sonarjs/no-identical-conditions": "off",
+        "sonarjs/no-identical-expressions": "off",
+        "sonarjs/no-identical-functions": "off"
       }
     }
   ]

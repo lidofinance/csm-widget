@@ -2,7 +2,7 @@ import { MODULE_NAME, ROLES } from '@lidofinance/lido-csm-sdk';
 
 // shared/node-operator/utils pulls in 'consts' -> next/config, which throws
 // outside a Next.js runtime; stub the bit getInviteId actually needs.
-jest.mock('consts', () => ({
+vi.mock('consts', () => ({
   ROLES_METADATA: {
     MANAGER: { short: 'M' },
     REWARDS: { short: 'R' },

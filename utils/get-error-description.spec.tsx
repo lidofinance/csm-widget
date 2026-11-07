@@ -6,9 +6,9 @@ import { ErrorCode } from './get-error-code';
 import { getErrorDescription, resolveError } from './get-error-description';
 
 // track-matomo-event imports consts/matomo-click-events → config → next.js
-// runtime which is unavailable in Jest. Stub the whole module.
-jest.mock('./track-matomo-event', () => ({
-  trackMatomoError: jest.fn(),
+// runtime which is unavailable in unit tests. Stub the whole module.
+vi.mock('./track-matomo-event', () => ({
+  trackMatomoError: vi.fn(),
 }));
 
 // Helper to build a SurveysApiError-shaped plain object.

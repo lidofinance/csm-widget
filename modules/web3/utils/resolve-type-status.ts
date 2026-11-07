@@ -1,4 +1,3 @@
-// import type only: the SDK barrel pulls ESM deps that jest cannot load
 import type { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 
 export type OperatorTypeStatus =

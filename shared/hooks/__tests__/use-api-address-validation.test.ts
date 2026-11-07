@@ -1,22 +1,19 @@
-const standardFetcher = jest.fn();
+const { standardFetcher } = vi.hoisted(() => ({ standardFetcher: vi.fn() }));
 
-jest.mock('utils', () => {
-  const { FetcherError } = jest.requireActual('utils/fetcher-error');
-  return {
-    FetcherError,
-    standardFetcher: (...args: unknown[]) => standardFetcher(...args),
-  };
+vi.mock('utils', async () => {
+  const { FetcherError } = await import('utils/fetcher-error');
+  return { FetcherError, standardFetcher };
 });
-jest.mock('config', () => ({
+vi.mock('config', () => ({
   config: { addressApiValidationEnabled: true },
 }));
-jest.mock('consts/api', () => ({
+vi.mock('consts/api', () => ({
   API_ROUTES: { VALIDATION: 'api/validation' },
 }));
-jest.mock('react', () => ({
+vi.mock('react', () => ({
   useCallback: (fn: unknown) => fn,
 }));
-jest.mock('@tanstack/react-query', () => ({
+vi.mock('@tanstack/react-query', () => ({
   useQueryClient: () => ({
     fetchQuery: ({ queryFn }: { queryFn: () => Promise<unknown> }) => queryFn(),
   }),

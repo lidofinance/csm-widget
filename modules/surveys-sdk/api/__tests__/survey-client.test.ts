@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 // Parity tests for the configured hey-api survey client (api/survey-client.ts).
 // They prove `callSurvey` + `surveyRequest` reproduce the bespoke transport
 // (surveysRequest + standardFetcher) it will replace in T5: parsed JSON on
@@ -10,13 +11,13 @@
 // .text/.json). The same `config`/`external-links` mocks as surveys-api.test.ts
 // make SURVEYS_API_BASE_URL resolve to https://surveys.test.
 
-jest.mock('config', () => ({
+vi.mock('config', () => ({
   config: { surveysApiUrl: 'https://surveys.test' },
 }));
 
-jest.mock('config/qa-tools', () => ({ qaToolsEnabled: true }));
+vi.mock('config/qa-tools', () => ({ qaToolsEnabled: true }));
 
-jest.mock('consts/external-links', () => ({
+vi.mock('consts/external-links', () => ({
   getExternalLinks: () => ({ surveyApi: 'https://default.test' }),
 }));
 
@@ -58,21 +59,21 @@ const makeResponse = (
     status: init.status,
     url,
     headers,
-    text: jest.fn().mockResolvedValue(text),
-    json: jest.fn().mockResolvedValue(init.body),
+    text: vi.fn().mockResolvedValue(text),
+    json: vi.fn().mockResolvedValue(init.body),
   } as unknown as Response;
 };
 
 // Install a fetch mock returning `response` for any request. Returns the mock
 // so tests can assert on the Request it received.
-const installFetch = (response: Response): jest.Mock => {
-  const fetchMock = jest.fn().mockResolvedValue(response);
-  (globalThis as unknown as { fetch: jest.Mock }).fetch = fetchMock;
+const installFetch = (response: Response): Mock => {
+  const fetchMock = vi.fn().mockResolvedValue(response);
+  (globalThis as unknown as { fetch: Mock }).fetch = fetchMock;
   return fetchMock;
 };
 
 // The client builds a `Request`; pull the resolved URL/headers off it.
-const lastRequest = (fetchMock: jest.Mock): Request =>
+const lastRequest = (fetchMock: Mock): Request =>
   fetchMock.mock.calls[fetchMock.mock.calls.length - 1][0] as Request;
 
 // Run a thunk that awaits a rejecting call and return the thrown error.
@@ -86,7 +87,7 @@ const captureError = async (run: () => Promise<unknown>): Promise<any> => {
 };
 
 describe('survey-client / callSurvey', () => {
-  afterEach(() => jest.restoreAllMocks());
+  afterEach(() => vi.restoreAllMocks());
 
   describe('success responses', () => {
     it('returns parsed JSON on a 200 GET', async () => {
@@ -334,7 +335,7 @@ describe('survey-client / callSurvey', () => {
       // outright — no Response ever exists. This proves what actually reaches
       // the caller in that case.
       const networkError = new TypeError('Failed to fetch');
-      (globalThis as unknown as { fetch: jest.Mock }).fetch = jest
+      (globalThis as unknown as { fetch: Mock }).fetch = vi
         .fn()
         .mockRejectedValue(networkError);
 
