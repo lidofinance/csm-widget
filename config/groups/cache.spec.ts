@@ -67,8 +67,7 @@ describe('cache-control headers', () => {
 });
 
 describe('sentinel header agreement between next.config.mjs and server.mjs', () => {
-  // Read as text, not import: next.config.mjs regenerates public/runtime on
-  // evaluation, and both files have module-level side effects.
+  // Read as text: both files read process.env at module load.
   const nextConfigSource = fs.readFileSync(
     path.resolve(__dirname, '../../next.config.mjs'),
     'utf-8',
@@ -80,6 +79,12 @@ describe('sentinel header agreement between next.config.mjs and server.mjs', () 
 
   const extractLiteral = (source: string, name: string) =>
     source.match(new RegExp(`${name}\\s*=\\s*'([^']*)'`))?.[1];
+
+  it('CACHE_CONTROL_VALUE matches in both files', () => {
+    expect(extractLiteral(serverSource, 'CACHE_CONTROL_VALUE')).toBe(
+      extractLiteral(nextConfigSource, 'CACHE_CONTROL_VALUE'),
+    );
+  });
 
   it('CACHE_CONTROL_HEADER sentinel matches in both files', () => {
     const nextConfigHeader = extractLiteral(

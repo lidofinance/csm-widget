@@ -1,12 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import buildDynamics from './scripts/build-dynamics.mjs';
 import generateBuildId from './scripts/generate-build-id.mjs';
 import { toBoolean } from './scripts/to-boolean.mjs';
-import { logEnvironmentVariables } from './scripts/log-environment-variables.mjs';
 
-logEnvironmentVariables();
-buildDynamics();
 
 // https://nextjs.org/docs/pages/api-reference/next-config-js/basePath
 const basePath = process.env.BASE_PATH;

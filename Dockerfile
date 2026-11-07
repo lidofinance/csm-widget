@@ -34,7 +34,7 @@ RUN if [ -n "$BUILD_COMMIT" ]; then \
       printf '{"version":"%s","branch":"%s","commit":"%s"}\n' \
         "$BUILD_VERSION" "$BUILD_BRANCH" "$BUILD_COMMIT" > build-info.json; \
     fi \
-    && NODE_NO_BUILD_DYNAMICS=true yarn build \
+    && yarn build \
     && rm -rf .next/cache
 
 # runtime image
@@ -57,13 +57,10 @@ WORKDIR /app
 
 COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=build /app/.next ./.next
-# next.config.mjs is re-evaluated on server start and writes only
-# public/runtime/window-env.js. It is the sole runtime-writable path: under
-# readOnlyRootFilesystem mount an emptyDir at /app/public/runtime (uid 1000)
 COPY --from=build /app/public ./public
-RUN rm -rf public/runtime && mkdir public/runtime && chown node public/runtime
-COPY --from=build /app/package.json /app/next.config.mjs /app/next-logger.config.cjs /app/env-dynamics.mjs /app/build-info.json /app/server.mjs ./
+COPY --from=build /app/package.json /app/next.config.mjs /app/next-logger.config.cjs /app/build-info.json /app/server.mjs ./
 COPY --from=build /app/scripts ./scripts
+COPY --from=build /app/config/client-env.mjs ./config/client-env.mjs
 
 # ARG does not cross stages; re-declared here so the labels resolve
 ARG BUILD_VERSION
