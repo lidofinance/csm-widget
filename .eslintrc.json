@@ -55,7 +55,8 @@
         "devDependencies": [
           "tests/**",
           "openapi-ts.config.ts",
-          "vitest.config.mjs"
+          "vitest.config.mjs",
+          "**/*.{spec,test}.{ts,tsx}"
         ]
       }
     ]

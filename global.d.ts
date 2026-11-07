@@ -1,4 +1,6 @@
 /// <reference types="vitest/globals" />
+/// <reference types="next" />
+/// <reference types="next/image-types/global" />
 interface Window {
   // see _document.js for definition
   _paq: undefined | [string, ...unknown[]][];

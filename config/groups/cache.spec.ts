@@ -1,12 +1,16 @@
 import fs from 'fs';
 import path from 'path';
-import { getCustomRoute } from 'next/dist/server/server-route-utils';
+import { pathToRegexp } from 'path-to-regexp';
 import {
   CACHE_MIGALABS_RATE_HEADERS,
   CACHE_VALIDATION_HEADERS,
   CACHE_CL_HEADERS,
   CACHE_NO_STORE_HEADERS,
 } from './cache';
+
+// same flavour Next 15.5 compiles header/rewrite sources with
+const compileSource = (source: string) =>
+  pathToRegexp(source, [], { delimiter: '/' });
 
 // RFC 9111 (HTTP Caching) + RFC 5861 (stale-if-error / stale-while-revalidate)
 const VALID_DIRECTIVES = new Set([
@@ -77,6 +81,14 @@ describe('sentinel header agreement between next.config.mjs and server.mjs', () 
     'utf-8',
   );
 
+  const routeSources = [
+    ...nextConfigSource.matchAll(/source:\s*'([^']+)'/g),
+  ].map(([, source]) => source);
+
+  it.each(routeSources)('route source %s compiles', (source) => {
+    expect(() => compileSource(source)).not.toThrow();
+  });
+
   const extractLiteral = (source: string, name: string) =>
     source.match(new RegExp(`${name}\\s*=\\s*'([^']*)'`))?.[1];
 
@@ -135,16 +147,12 @@ describe('CACHE_CONTROL_PAGES covers every page and public asset', () => {
   // error renders; _app/_document aren't routes
   const UNCACHED_ROUTES = new Set(['api', '_app', '_document', '404', '500']);
 
-  const matchers = entries.map(
-    (source) =>
-      getCustomRoute({
-        type: 'header',
-        rule: { source, headers: [] },
-        restrictedRedirectPaths: [],
-      }).match,
-  );
   const isCovered = (requestPath: string) =>
-    matchers.some((match) => match(requestPath) !== false);
+    entries.some((source) => compileSource(source).test(requestPath));
+
+  it.each(entries)('entry %s compiles', (source) => {
+    expect(() => compileSource(source)).not.toThrow();
+  });
 
   const pagesDir = path.resolve(__dirname, '../../pages');
 

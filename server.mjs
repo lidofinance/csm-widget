@@ -1,7 +1,6 @@
 import { createServer } from 'http';
 import { readFileSync } from 'fs';
 import path from 'path';
-import { parse } from 'url';
 import next from 'next';
 import { registerShutdownSignals } from './scripts/shutdown.mjs';
 import { toBoolean } from './scripts/to-boolean.mjs';
@@ -104,21 +103,19 @@ app
 
     const server = createServer(async (req, res) => {
       try {
-        // Be sure to pass `true` as the second argument to `url.parse`.
-        // This tells it to parse the query portion of the URL.
-        const parsedUrl = parse(req.url, true);
+        const { pathname } = new URL(req.url ?? '/', 'http://localhost');
 
         overrideSetHeader(res);
 
-        if (csp && !isApiOrAsset(parsedUrl.pathname ?? '')) {
+        if (csp && !isApiOrAsset(pathname)) {
           res.setHeader(csp.name, csp.value);
         }
 
-        if (serveWindowEnv(req, res, parsedUrl.pathname)) return;
+        if (serveWindowEnv(req, res, pathname)) return;
 
-        await handle(req, res, parsedUrl);
+        await handle(req, res);
       } catch (err) {
-        // an unhandled rejection here kills the process (--unhandled-rejections=throw); url.parse throws on e.g. `GET http://[ HTTP/1.1`
+        // an unhandled rejection here kills the process (--unhandled-rejections=throw); `new URL` throws on e.g. `GET http://[ HTTP/1.1`
         console.error(err);
         if (!res.headersSent) {
           res.statusCode = 500;

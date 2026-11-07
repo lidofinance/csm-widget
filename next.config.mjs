@@ -31,7 +31,7 @@ export const CACHE_CONTROL_PAGES = [
   // pre-rewrite paths, so module-variant files are listed too
   '/manifest.json',
   '/manifest-:module(csm|cm).json',
-  '/favicon:size*',
+  '/favicon:suffix([-.a-z0-9]+)',
   '/apple-touch-icon.png',
   '/apple-touch-icon-:module(csm|cm).png',
   '/:module(csm|cm)-preview.png',
@@ -72,16 +72,6 @@ export default withBundleAnalyzer({
   },
   images: {
     unoptimized: true,
-    loader: 'custom',
-  },
-  experimental: {
-    // Fixes a build error with importing Pure ESM modules, e.g. reef-knot
-    // Some docs are here:
-    // https://github.com/vercel/next.js/pull/27069
-    // You can see how it is actually used in v12.3.4 here:
-    // https://github.com/vercel/next.js/blob/v12.3.4/packages/next/build/webpack-config.ts#L417
-    // Presumably, it is true by default in next v13 and won't be needed
-    esmExternals: true,
   },
   webpack(config) {
     config.module.rules.push(
@@ -136,6 +126,7 @@ export default withBundleAnalyzer({
     // which comes from @metamask/connect-multichain and @walletconnect/keyvaluestorage
     // See https://github.com/MetaMask/metamask-sdk/issues/1376
     config.resolve.fallback = {
+      ...config.resolve.fallback,
       '@react-native-async-storage/async-storage': false,
       // Tempo Accounts SDK, optional peer dep of @wagmi/connectors v8 reachable only via
       // @wagmi/core's unused `tempo` export; not installed, Next 12 webpack resolves it eagerly
