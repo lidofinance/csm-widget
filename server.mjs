@@ -1,8 +1,7 @@
 import { createServer } from 'http';
-import { readFileSync } from 'fs';
-import path from 'path';
 import next from 'next';
 import { registerShutdownSignals } from './scripts/shutdown.mjs';
+import { loadDevnetAddresses } from './scripts/load-devnet-addresses.mjs';
 import { toBoolean } from './scripts/to-boolean.mjs';
 import { buildCspHeader } from './config/csp/policy.mjs';
 import { buildClientEnv, serializeClientEnv } from './config/client-env.mjs';
@@ -22,21 +21,12 @@ const CACHE_CONTROL_HEADER = 'x-cache-control';
 const CACHE_CONTROL_VALUE =
   'public, max-age=15, s-maxage=30, stale-if-error=86400, stale-while-revalidate=60';
 
-const loadDevnetAddresses = () => {
-  const filePath = process.env.DEVNET_ADDRESSES_FILE_PATH;
-  if (!filePath) return null;
-  try {
-    return JSON.parse(readFileSync(path.resolve(filePath), 'utf-8'));
-  } catch (e) {
-    console.warn('Failed to load devnet addresses:', e.message);
-    return null;
-  }
-};
-
 const createWindowEnvRoute = (basePath) => {
   const routePath = `${basePath}/runtime/window-env.js`;
   const clientEnv = buildClientEnv(process.env, {
-    devnetAddresses: loadDevnetAddresses(),
+    devnetAddresses: loadDevnetAddresses(
+      process.env.DEVNET_ADDRESSES_FILE_PATH,
+    ),
   });
   const body = `window.__env__=${serializeClientEnv(clientEnv)};`;
 

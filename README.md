@@ -44,8 +44,8 @@ Step 5. Open [http://localhost:3000](http://localhost:3000) with your browser to
 
 Every page is a static shell prerendered at build time; the app renders in the browser and only `/api/*` runs per request. Env vars come in three groups:
 
-- **Client, runtime.** `server.mjs` reads them on start (`config/client-env.mjs`) and serves them as `window.__env__` at `{BASE_PATH}/runtime/window-env.js`, loaded before the app bundle. Restart to apply, no rebuild: `DEFAULT_CHAIN`, `MAINTENANCE`, `IS_PROD`, `MATOMO_URL`, `WALLETCONNECT_PROJECT_ID`, `KEYS_API_URL`, `FEES_MONITORING_API_URL`, `SURVEYS_API_URL`, `IPFS_GATEWAYS`, `VALIDATION_SERVICE_BASE_PATH` (only whether it is set), `DEVNET_ADDRESSES_FILE_PATH`.
-- **Server, runtime.** `EL_RPC_URLS_*`, `CL_API_URLS_*`, `ETHSEER_*`, `CSP_*`, `RATE_LIMIT*`, `VALIDATION_SERVICE_BASE_PATH`, `VALIDATION_FILE_PATH`: read from `process.env` by `server.mjs` and the API routes only, never sent to the browser. `server.mjs` builds the `Content-Security-Policy` header from `CSP_*`.
+- **Client, runtime.** `server.mjs` reads them on start (`config/client-env.mjs`) and serves them as `window.__env__` at `{BASE_PATH}/runtime/window-env.js`, loaded before the app bundle. Restart to apply, no rebuild: `DEFAULT_CHAIN`, `MAINTENANCE`, `IS_PROD`, `MATOMO_URL`, `WALLETCONNECT_PROJECT_ID`, `KEYS_API_URL`, `FEES_MONITORING_API_URL`, `SURVEYS_API_URL`, `IPFS_GATEWAYS`, `VALIDATION_SERVICE_BASE_PATH` (only whether it is set), `DEVNET_ADDRESSES_FILE_PATH` (also read server-side for the `/api/rpc` allowlist).
+- **Server, runtime.** `EL_RPC_URLS_*`, `CL_API_URLS_*`, `ETHSEER_*`, `CSP_*`, `RATE_LIMIT*`, `VALIDATION_SERVICE_BASE_PATH`, `VALIDATION_FILE_PATH`, `DEVNET_ADDRESSES_FILE_PATH`: read from `process.env` by `server.mjs` and the API routes only, never sent to the browser. `server.mjs` builds the `Content-Security-Policy` header from `CSP_*`.
 - **Build time.** `MODULE` and `BASE_PATH` are inlined into the bundle (see below).
 
 ### Modules

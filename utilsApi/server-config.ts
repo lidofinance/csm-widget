@@ -1,6 +1,7 @@
 import { parseUrlList } from 'config/helpers';
+import { loadDevnetAddresses } from '../scripts/load-devnet-addresses.mjs';
 
-// an empty list passes as the tuple; consumers fail on use, as before
+// empty list still typed as the tuple; consumers throw on use
 const urlList = (value?: string) =>
   parseUrlList(value) as [string, ...string[]];
 
@@ -16,6 +17,7 @@ export const readServerConfig = (
   rateLimit: Number(env.RATE_LIMIT) || 100,
   rateLimitTimeFrame: Number(env.RATE_LIMIT_TIME_FRAME) || 60,
   validationAPI: env.VALIDATION_SERVICE_BASE_PATH,
+  devnetAddresses: loadDevnetAddresses(env.DEVNET_ADDRESSES_FILE_PATH),
 });
 
 export type ServerConfig = ReturnType<typeof readServerConfig>;
