@@ -152,6 +152,7 @@ Used in navigation items (`use-nav-items.tsx`), page guards, and conditional UI.
 - Use function expressions only (`func-style: expression`) — no function declarations
 - No `console.log` — only `console.warn`, `console.error`, `console.info`, `console.debug`
 - Prefix unused variables with `_` (e.g., `_unused`)
+- TypeScript `satisfies` is fine — the app compiles with SWC, there is no Babel
 - Respect `.editorconfig` (2-space indent) and `.prettierrc` (single quotes, trailing commas)
 - Run `yarn lint:fix` after changes
 

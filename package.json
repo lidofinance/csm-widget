@@ -67,7 +67,6 @@
     "pino": "^10.0.0",
     "porto": "~0.2.35",
     "prom-client": "^15",
-    "raw-loader": "^4.0.2",
     "react": "^18.2.0",
     "react-canvas-confetti": "^2.0.7",
     "react-dom": "^18.2.0",
@@ -136,10 +135,8 @@
     "prettier": "^3.3.3",
     "qase-javascript-commons": "^2.9.12",
     "qaseio": "^2.4.3",
-    "string-replace-loader": "^3.3.0",
     "typechain": "^8.1.1",
     "typescript": "^5.7.3",
-    "url-loader": "^4.1.1",
     "vitest": "4.1.9"
   },
   "resolutions": {

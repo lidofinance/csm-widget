@@ -68,7 +68,8 @@ export default withBundleAnalyzer({
     ignoreDuringBuilds: true,
   },
   compiler: {
-    styledComponents: true,
+    // SWC drops displayName in prod by default; Babel plugin kept it
+    styledComponents: { displayName: true, ssr: true },
   },
   images: {
     unoptimized: true,
