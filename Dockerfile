@@ -15,7 +15,8 @@ FROM node-base AS prod-deps
 WORKDIR /app
 
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile --non-interactive --ignore-scripts --production && yarn cache clean
+# optional deps are native build tooling (swc, lightningcss) or unused at runtime (sharp: images.unoptimized)
+RUN yarn install --frozen-lockfile --non-interactive --ignore-scripts --production --ignore-optional && yarn cache clean
 
 # build env
 FROM deps AS build
