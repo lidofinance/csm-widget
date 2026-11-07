@@ -83,9 +83,8 @@ app
           reportUri: process.env.CSP_REPORT_URI,
           reportOnly: process.env.CSP_REPORT_ONLY,
         });
-    const isApiOrAsset = (pathname = '') =>
-      pathname.startsWith(`${basePath}/api/`) ||
-      pathname.startsWith(`${basePath}/_next/`);
+    const isStaticAsset = (pathname = '') =>
+      pathname.startsWith(`${basePath}/_next/static/`);
     if (toBoolean(process.env.RUN_STARTUP_CHECKS)) {
       void startupCheckRPCs();
       await startupCheckValidationFile();
@@ -93,12 +92,12 @@ app
 
     const server = createServer(async (req, res) => {
       try {
-        // raw target: Next does not collapse dot segments, so neither may the CSP/asset check
+        // raw target: Next does not collapse dot segments, so neither may the static-asset check
         const pathname = (req.url ?? '/').replace(/[?#].*$/, '');
 
         overrideSetHeader(res);
 
-        if (csp && !isApiOrAsset(pathname)) {
+        if (csp && !isStaticAsset(pathname)) {
           res.setHeader(csp.name, csp.value);
         }
 
