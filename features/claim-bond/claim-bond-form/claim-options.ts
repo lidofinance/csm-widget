@@ -168,7 +168,7 @@ export const describeClaimOption = (
   }
 };
 
-export const CLAIM_OPTION_ORDER: readonly CLAIM_OPTION[] = [
+const CLAIM_OPTION_ORDER: readonly CLAIM_OPTION[] = [
   CLAIM_OPTION.ALL_TO_RA,
   CLAIM_OPTION.REWARDS_TO_BOND,
   CLAIM_OPTION.BOND_TO_RA,

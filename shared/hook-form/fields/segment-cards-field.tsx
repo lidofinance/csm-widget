@@ -8,7 +8,7 @@ import { FieldError } from './field-error';
 import { useFieldController } from './use-field-controller';
 import { useFocusableRef } from './use-focusable-ref';
 
-export const SEGMENT_TAB_STOP_SELECTOR = '[role="tab"]:not([disabled])';
+const SEGMENT_TAB_STOP_SELECTOR = '[role="tab"]:not([disabled])';
 
 export type SegmentCardsFieldOption = SegmentCardItem;
 
