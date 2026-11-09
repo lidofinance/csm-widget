@@ -25,8 +25,6 @@ export const PATH = {
   BOND: '/bond',
   BOND_CLAIM: '/bond/claim',
   BOND_ADD: '/bond/add',
-  BOND_REWARDS_HISTORY: '/bond/rewards-history',
-  BOND_REBASE_HISTORY: '/bond/rebase-history',
   BOND_UNLOCK: '/bond/unlock',
 
   SETTINGS: '/settings',

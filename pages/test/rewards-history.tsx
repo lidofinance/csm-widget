@@ -1,7 +1,7 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { Accordion, Block, Text } from '@lidofinance/lido-ui';
 import { deployedModules } from 'consts';
-import { RewardsHistory } from 'features/rewards-history';
+import { RewardsHistoryCard } from 'features/bond-rewards';
 import { MockRewardsHistoryProvider } from 'mock/rewards/mock-providers';
 import { testScenarios } from 'mock/rewards/test-scenarios';
 import { useRouter } from 'next/router';
@@ -101,7 +101,7 @@ const RewardsHistoryTestPage: FC = () => {
           scenario={scenario.data}
           module={selectedModule}
         >
-          <RewardsHistory />
+          <RewardsHistoryCard />
         </MockRewardsHistoryProvider>
       </TestContainer>
     </Layout>

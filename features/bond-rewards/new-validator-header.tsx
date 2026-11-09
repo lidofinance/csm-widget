@@ -20,8 +20,11 @@ import { getNewValidatorProgress } from './new-validator-progress';
 
 const BandStyled = styled(Stack)`
   padding: 12px 24px;
-  background: var(--lido-app-ui-color-background-surface-secondary);
+  background: var(--lido-app-ui-color-tint-active);
+  color: var(--lido-app-ui-color-text-active);
 `;
+
+const INHERIT_COLOR = { color: 'inherit' };
 
 const BarStyled = styled.div`
   flex: 1;
@@ -68,7 +71,7 @@ const NewValidatorStrip: FC = () => {
       dataTestId={{ root: 'newValidatorProgress' }}
     >
       <Stack direction="row" align="center" gap={8}>
-        <Typography as="span" weight="semibold">
+        <Typography as="span" weight="semibold" style={INHERIT_COLOR}>
           New Validator
         </Typography>
         <InfoTooltip content="Share of the bond required for one more validator that is covered by your Rewards and Excess bond" />
@@ -81,7 +84,7 @@ const NewValidatorStrip: FC = () => {
           aria-label="New Validator progress"
         />
       </BarStyled>
-      <Typography as="span" weight="semibold">
+      <Typography as="span" weight="semibold" style={INHERIT_COLOR}>
         {progress}%
       </Typography>
     </BandStyled>

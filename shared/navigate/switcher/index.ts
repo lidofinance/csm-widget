@@ -1,5 +1,3 @@
-export * from './bond-page-switcher';
-export * from './bond-table-switcher';
 export * from './delete-keys-switcher';
 export * from './delete-keys-layout';
 export * from './keys-page-switcher';

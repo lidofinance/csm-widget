@@ -2,7 +2,6 @@ import { PATH } from 'consts/urls';
 import { FC } from 'react';
 
 import { Layout } from 'shared/layout';
-import { BondPageSwitcher } from 'shared/navigate';
 import { AddBond } from './add-bond';
 
 export const AddBondPage: FC = () => (
@@ -16,7 +15,6 @@ export const AddBondPage: FC = () => (
       { label: 'Add bond' },
     ]}
   >
-    <BondPageSwitcher />
     <AddBond />
   </Layout>
 );

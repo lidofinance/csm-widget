@@ -2,7 +2,6 @@ import { PATH } from 'consts/urls';
 import { FC } from 'react';
 
 import { Layout } from 'shared/layout';
-import { BondPageSwitcher } from 'shared/navigate';
 import { UnlockBond } from './unlock-bond';
 
 export const UnlockBondPage: FC = () => (
@@ -16,7 +15,6 @@ export const UnlockBondPage: FC = () => (
       { label: 'Cover locked bond' },
     ]}
   >
-    <BondPageSwitcher />
     <UnlockBond />
   </Layout>
 );

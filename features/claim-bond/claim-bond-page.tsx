@@ -2,7 +2,6 @@ import { PATH } from 'consts/urls';
 import { FC } from 'react';
 
 import { Layout } from 'shared/layout';
-import { BondPageSwitcher } from 'shared/navigate';
 import { ClaimBond } from './claim-bond';
 
 export const ClaimBondPage: FC = () => (
@@ -16,7 +15,6 @@ export const ClaimBondPage: FC = () => (
       { label: 'Claim' },
     ]}
   >
-    <BondPageSwitcher />
     <ClaimBond />
   </Layout>
 );
