@@ -2,9 +2,9 @@ import { CurveRef } from '@lidofinance/lido-csm-sdk';
 import { OPERATOR_TYPE_METADATA } from 'consts';
 import { useCurveParameters } from 'modules/web3';
 import type { ModalComponentType } from 'providers/modal-provider';
+import { Modal } from '@lidofinance/lido-app-ui';
 import { ParametersList } from 'shared/components';
 import { useDisplayOperatorType } from 'shared/hooks';
-import { StyledModal } from './styles';
 
 export const ParametersModal: ModalComponentType<{ curve: CurveRef }> = ({
   open,
@@ -16,13 +16,13 @@ export const ParametersModal: ModalComponentType<{ curve: CurveRef }> = ({
   const metadata = type ? OPERATOR_TYPE_METADATA[type] : undefined;
 
   return (
-    <StyledModal
+    <Modal
+      withOverlay
       title={metadata?.title ?? ''}
       onClose={onClose}
       open={open}
-      $variant={type}
     >
       <ParametersList parameters={parameters} module={curve.module} />
-    </StyledModal>
+    </Modal>
   );
 };

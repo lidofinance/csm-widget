@@ -1,4 +1,11 @@
-import { Stack, Typography } from '@lidofinance/lido-app-ui';
+import {
+  Button,
+  Grid,
+  IconLink,
+  Stack,
+  StatItem,
+  Typography,
+} from '@lidofinance/lido-app-ui';
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { CSM_DOCS_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
@@ -6,46 +13,24 @@ import { FC, ReactNode } from 'react';
 import styled from 'styled-components';
 import { DisclaimerMark } from 'shared/components';
 import { useExternalLinks } from 'shared/hooks';
+import { trackMatomoEvent } from 'utils';
 import moduleCsm from 'assets/illustrations/module-csm.webp';
 import {
-  ExternalCtaButton,
   HeroIllustration,
   HeroIllustrationSlot,
-  HeroRow,
   ModuleStatusTag,
   PromoCard,
-  SecondaryText,
 } from '../components';
 import { CreateOperatorButton } from './create-operator-button';
 import { isStatVisible, StatBody } from './stat-body';
 import { Stat, useCsmStats } from './use-csm-stats';
 
-const Content = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-`;
-
-const Buttons = styled.div`
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-
+const Buttons = styled(Stack)`
   @media (max-width: 599px) {
-    flex-direction: column;
-    align-items: stretch;
-
     && a,
     && button {
       width: 100%;
     }
-  }
-`;
-
-const StatValue = styled(Typography)`
-  && {
-    font-weight: 500;
   }
 `;
 
@@ -59,14 +44,16 @@ const HeroStat = <T,>({ label, stat, format }: HeroStatProps<T>) => {
   if (!isStatVisible(stat)) return null;
 
   return (
-    <Stack direction="column" gap={0}>
-      <SecondaryText variant="body">{label}</SecondaryText>
-      <StatBody
-        stat={stat}
-        format={(value) => <StatValue variant="h3">{format(value)}</StatValue>}
-        skeletonStyle={{ width: 120, height: 36 }}
-      />
-    </Stack>
+    <StatItem
+      label={label}
+      value={
+        <StatBody
+          stat={stat}
+          format={format}
+          skeletonStyle={{ width: 120, height: 36 }}
+        />
+      }
+    />
   );
 };
 
@@ -79,8 +66,12 @@ export const CsmHero: FC<
 
   return (
     <PromoCard $radius="xl">
-      <HeroRow $fluid>
-        <Content>
+      <Stack
+        direction={{ base: 'row', mdDown: 'column' }}
+        gap={16}
+        align="stretch"
+      >
+        <Stack grow direction="column" gap={40}>
           <Stack direction="column" gap={24}>
             <Stack direction="column" gap={8} align="start">
               <ModuleStatusTag variant="csm" />
@@ -88,12 +79,12 @@ export const CsmHero: FC<
                 Community Staking
               </Typography>
             </Stack>
-            <SecondaryText variant="bodyLarge">
+            <Typography variant="bodyLarge" color="secondary">
               The Community Staking Module (CSM) is a Lido staking module with
               permissionless entry, allowing any operator to run validators with
               less ETH and improved capital efficiency compared to solo staking
-            </SecondaryText>
-            <Stack direction="row" gap={32} wrap>
+            </Typography>
+            <Grid columns={{ base: 3, smDown: 1 }} gap={32}>
               <HeroStat
                 label="CSM staking APR"
                 stat={maxApr}
@@ -113,32 +104,38 @@ export const CsmHero: FC<
                 stat={operators}
                 format={(count) => count.toLocaleString('en-US')}
               />
-            </Stack>
+            </Grid>
           </Stack>
-          <Buttons>
+          <Buttons direction={{ base: 'row', smDown: 'column' }} gap={16} wrap>
             <CreateOperatorButton />
-            <ExternalCtaButton
+            <Button
               href={landing}
               variant="ghost"
               size="big"
-              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.csmLearnMore}
+              iconRight={<IconLink />}
+              onClick={() =>
+                trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.csmLearnMore)
+              }
             >
               Learn more about CSM
-            </ExternalCtaButton>
-            <ExternalCtaButton
+            </Button>
+            <Button
               href={CSM_DOCS_LINK}
               variant="ghost"
               size="big"
-              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.csmHowItWorks}
+              iconRight={<IconLink />}
+              onClick={() =>
+                trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.csmHowItWorks)
+              }
             >
               How it works
-            </ExternalCtaButton>
+            </Button>
           </Buttons>
-        </Content>
+        </Stack>
         <HeroIllustrationSlot $fluid>
           <HeroIllustration $fluid src={moduleCsm} width={331} />
         </HeroIllustrationSlot>
-      </HeroRow>
+      </Stack>
     </PromoCard>
   );
 };

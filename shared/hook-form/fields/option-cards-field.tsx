@@ -1,3 +1,4 @@
+import { Stack, getFieldErrorId } from '@lidofinance/lido-app-ui';
 import { FC, useId } from 'react';
 import {
   OptionList,
@@ -7,7 +8,6 @@ import {
   OptionListVariant,
 } from 'shared/ui';
 import { FieldError } from './field-error';
-import { FieldStackStyle } from './styles';
 import { useFieldController } from './use-field-controller';
 import { useFocusableRef } from './use-focusable-ref';
 
@@ -52,7 +52,7 @@ export const OptionCardsField: FC<OptionCardsFieldProps> = ({
   const errorId = useId();
 
   return (
-    <FieldStackStyle ref={ref}>
+    <Stack gap={12} ref={ref}>
       <OptionList
         value={field.value ?? ''}
         onChange={field.onChange}
@@ -61,7 +61,7 @@ export const OptionCardsField: FC<OptionCardsFieldProps> = ({
         orientation={orientation}
         aria-label={ariaLabel}
         aria-invalid={invalid || undefined}
-        aria-describedby={message ? errorId : undefined}
+        aria-describedby={message ? getFieldErrorId(errorId) : undefined}
         data-testid={testId}
       >
         {options.map((option) => (
@@ -69,6 +69,6 @@ export const OptionCardsField: FC<OptionCardsFieldProps> = ({
         ))}
       </OptionList>
       <FieldError id={errorId}>{message}</FieldError>
-    </FieldStackStyle>
+    </Stack>
   );
 };

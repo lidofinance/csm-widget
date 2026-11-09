@@ -1,10 +1,8 @@
-import { Button, Notification } from '@lidofinance/lido-app-ui';
+import { Button, IconArrowRight, Notification } from '@lidofinance/lido-app-ui';
 import { HOW_TO_EXIT_VALIDATOR_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FC } from 'react';
 import { trackMatomoEvent } from 'utils';
-
-import Arrow from 'assets/icons/arrow-right.svg?react';
 
 export const AlertRequestToExit: FC = () => (
   <Notification
@@ -15,7 +13,7 @@ export const AlertRequestToExit: FC = () => (
         size="small"
         variant="outline"
         href={HOW_TO_EXIT_VALIDATOR_LINK}
-        iconRight={<Arrow />}
+        iconRight={<IconArrowRight />}
         onClick={() =>
           trackMatomoEvent(
             MATOMO_CLICK_EVENTS_TYPES.howToExitLinkRequestToExitAlert,

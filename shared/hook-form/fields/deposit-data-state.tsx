@@ -1,6 +1,5 @@
-import { Counter, SegmentItem } from '@lidofinance/lido-app-ui';
+import { Counter, SegmentItem, Stack } from '@lidofinance/lido-app-ui';
 import { isValidationErrorTypeValidate } from '../validation/validation-error';
-import { TabLabelStyle } from './styles';
 
 export type DepositDataTab = 'json' | 'parsed' | 'parameters';
 
@@ -49,7 +48,7 @@ export const getDepositDataTabItems = ({
   {
     value: 'parsed',
     label: (
-      <TabLabelStyle>
+      <Stack as="span" inline direction="row" align="center" gap={6}>
         Parsed
         {errorsCount > 0 && (
           <Counter
@@ -59,7 +58,7 @@ export const getDepositDataTabItems = ({
             {errorsCount}
           </Counter>
         )}
-      </TabLabelStyle>
+      </Stack>
     ),
     disabled: !hasKeys,
     dataTestId: { root: 'tab-button-Parsed' },

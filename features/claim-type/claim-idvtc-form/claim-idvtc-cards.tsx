@@ -1,4 +1,4 @@
-import { SectionTitle } from '@lidofinance/lido-app-ui';
+import { Button, SectionTitle } from '@lidofinance/lido-app-ui';
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { PATH } from 'consts/urls';
 import { FC, ReactNode } from 'react';
@@ -8,12 +8,7 @@ import { useNavigate } from 'shared/navigate';
 import { ClaimChanges, ClaimTypeBadges, ClaimTypeCard } from '../shared';
 import { getClaimIdvtcCopy } from './claim-idvtc-copy';
 import { useClaimIdvtcFormData } from './context';
-import {
-  CardsGridStyle,
-  FullWidthButtonStyle,
-  NarrowStyle,
-  TwoCardsStyle,
-} from './styles';
+import { CardsGridStyle, NarrowStyle, TwoCardsStyle } from './styles';
 
 const useClaimCurves = () => {
   const { currentCurve, newCurve, currentParameters, newParameters } =
@@ -35,9 +30,9 @@ export const CreateIdvtcButton: FC = () => {
   const navigate = useNavigate();
 
   return (
-    <FullWidthButtonStyle onClick={() => void navigate(PATH.CREATE_IDVTC)}>
+    <Button fullWidth onClick={() => void navigate(PATH.CREATE_IDVTC)}>
       Create a new IDVTC operator
-    </FullWidthButtonStyle>
+    </Button>
   );
 };
 

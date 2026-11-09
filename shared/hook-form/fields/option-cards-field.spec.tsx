@@ -88,7 +88,7 @@ describe('OptionCardsField', () => {
     const html = render({ gateName: 'curatedGatePTO' }, notEligible);
     const group = html.match(/<div[^>]*role="radiogroup"[^>]*>/)?.[0] ?? '';
     const error =
-      html.match(/<p[^>]*data-testid="inputMessageError"[^>]*>/)?.[0] ?? '';
+      html.match(/<span[^>]*data-testid="inputMessageError"[^>]*>/)?.[0] ?? '';
     const errorId = error.match(/\sid="([^"]+)"/)?.[1];
 
     expect(errorId).toBeTruthy();

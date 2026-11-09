@@ -1,4 +1,4 @@
-import { Stack } from '@lidofinance/lido-app-ui';
+import { Stack, FormLayout } from '@lidofinance/lido-app-ui';
 import { OPERATOR_TYPE_INFO } from '@lidofinance/lido-csm-sdk';
 import { useFaq } from 'faq';
 import { DepositQueue } from 'features/view-keys/deposit-queue';
@@ -13,7 +13,6 @@ import {
 import { Form } from 'shared/hook-form/form-controller';
 import { AppFormUi } from 'shared/hook-form/form-ui';
 import { CreatableOperatorType, useCreateOptions } from 'shared/hooks';
-import { FormLayout } from 'shared/ui';
 import { useCreateSuccess } from '../create-success';
 import { getCsmCreateSteps } from '../csm-create-steps';
 import { OtherModuleBanner } from '../other-module-banner';

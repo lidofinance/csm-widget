@@ -1,9 +1,10 @@
 import { Fragment, useCallback, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { toast } from '@lidofinance/lido-app-ui';
 import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
-import { Block, Button, Input, ToastSuccess } from '@lidofinance/lido-ui';
+import { Block, Button, Input } from '@lidofinance/lido-ui';
 
 import { useUserConfig } from 'config/user-config';
 import { CHAIN_METADATA } from 'consts/chains';
@@ -106,7 +107,7 @@ export const QaConfigForm = () => {
       const surveyApiUrl = values[SURVEY_API_URL_KEY]?.trim() || undefined;
 
       setSavedUserConfig({ rpcUrls, clApiUrls, ipfsGateways, surveyApiUrl });
-      ToastSuccess('QA endpoints saved. Reload the page to apply.');
+      toast('QA endpoints saved. Reload the page to apply.');
     },
     [rows, setSavedUserConfig],
   );
@@ -118,7 +119,7 @@ export const QaConfigForm = () => {
     for (const key of Object.keys(defaultValues)) empty[key] = '';
     reset(empty);
 
-    ToastSuccess('QA endpoints reset to defaults');
+    toast('QA endpoints reset to defaults');
   }, [defaultValues, reset, resetSavedUserConfig]);
 
   return (

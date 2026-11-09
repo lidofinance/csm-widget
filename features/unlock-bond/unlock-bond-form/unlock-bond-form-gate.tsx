@@ -1,13 +1,17 @@
-import { MessageBox, Stack, TextLink } from '@lidofinance/lido-app-ui';
+import {
+  MessageBox,
+  Stack,
+  TextLink,
+  FormLayout,
+} from '@lidofinance/lido-app-ui';
 import { PATH } from 'consts/urls';
 import { FC, PropsWithChildren } from 'react';
 import { NoAccessNotice } from 'shared/form-page';
-import { FormLayout } from 'shared/ui';
 import { useUnlockBondFlow } from './context';
 import { LockedBondNotice, LockedBondSummary } from './controls/locked-bond';
 
 const GateLayout: FC<PropsWithChildren> = ({ children }) => (
-  <FormLayout aside={null}>
+  <FormLayout>
     <Stack direction="column" gap={24}>
       <LockedBondSummary />
       {children}

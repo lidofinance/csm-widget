@@ -37,7 +37,7 @@ describe('DeleteKeysLayout', () => {
     );
 
     expect(html).toMatch(/^<div[^>]*data-testid="removeKeysForm"/);
-    expect(html).toMatch(/notice<\/span><\/div><\/div><\/div>$/);
+    expect(html).not.toContain('<aside');
     expect(html).not.toContain('<form');
   });
 });

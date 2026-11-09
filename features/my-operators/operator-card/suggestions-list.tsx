@@ -1,7 +1,9 @@
+import { InfoTooltip } from '@lidofinance/lido-app-ui';
+import { ICON_TOOLTIP_TEST_ID } from 'shared/components/icon-tooltip/test-ids';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { OperatorRef, useNodeOperator } from 'modules/web3';
 import { FC, useCallback } from 'react';
-import { IconTooltip, Stack } from 'shared/components';
+import { Stack } from 'shared/components';
 import { Suggestion, useOperatorSuggestions } from 'shared/hooks';
 import { useNavigate } from 'shared/navigate';
 import { useSwitchOperator } from 'shared/node-operator/use-switch-operator';
@@ -36,7 +38,15 @@ export const SuggestionsList: FC<{ operator: OperatorRef }> = ({
         <SuggestionStyle key={s.id} data-testid={`suggestion-${s.id}`}>
           <SuggestionText>
             {s.text}
-            {s.tooltip && <IconTooltip tooltip={s.tooltip} inline />}
+            {s.tooltip && (
+              <>
+                {' '}
+                <InfoTooltip
+                  dataTestId={ICON_TOOLTIP_TEST_ID}
+                  content={s.tooltip}
+                />
+              </>
+            )}
           </SuggestionText>
           <SuggestionButton type="button" onClick={() => follow(s)}>
             {s.cta}

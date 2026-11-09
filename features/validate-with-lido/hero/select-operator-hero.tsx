@@ -3,7 +3,6 @@ import { PATH } from 'consts/urls';
 import { FC } from 'react';
 import { useAvailableOperators, useNodeOperator } from 'modules/web3';
 import { useCreateRows } from 'shared/node-operator';
-import { InternalButtonLink } from '../components';
 import { HeroCard, HeroText } from './hero-card';
 
 export const SelectOperatorHero: FC = () => {
@@ -35,14 +34,14 @@ export const SelectOperatorHero: FC = () => {
             Choose Node Operator
           </Button>
           {canCreate && (
-            <InternalButtonLink
+            <Button
               href={PATH.CREATE}
               variant="outline"
               size="big"
               data-testid="heroCreateOperatorBtn"
             >
               Create new operator
-            </InternalButtonLink>
+            </Button>
           )}
         </Stack>
       }

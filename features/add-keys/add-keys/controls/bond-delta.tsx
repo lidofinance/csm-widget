@@ -1,10 +1,11 @@
-import { DataList, DataListRow } from '@lidofinance/lido-app-ui';
+import { DataList, DataListRow, Typography } from '@lidofinance/lido-app-ui';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { FC } from 'react';
 import { FormatToken } from 'shared/formatters';
 import { getBondDeltaRow } from '../add-keys-state';
 import { useAddKeysFormData } from '../context';
-import { ErrorValueStyle } from '../styles';
+
+const INHERIT_FONT = { font: 'inherit' };
 
 const useBondDeltaRow = () => getBondDeltaRow(useAddKeysFormData(true).bond);
 
@@ -18,9 +19,9 @@ export const InsufficientBondRow: FC = () => {
       label={row.label}
       description={row.hint}
       value={
-        <ErrorValueStyle>
+        <Typography as="span" color="error" style={INHERIT_FONT}>
           <FormatToken amount={row.amount} token={TOKENS.steth} />
-        </ErrorValueStyle>
+        </Typography>
       }
     />
   );

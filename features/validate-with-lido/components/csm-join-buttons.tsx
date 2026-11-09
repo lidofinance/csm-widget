@@ -1,8 +1,9 @@
+import { Button, IconLink } from '@lidofinance/lido-app-ui';
 import { LIDO_OPERATOR_PORTAL_BASE } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
 import { FC } from 'react';
-import { ExternalCtaButton, InternalButtonLink } from './button-links';
+import { trackMatomoEvent } from 'utils';
 
 type CsmJoinButtonsProps = {
   size: 'small' | 'big';
@@ -16,22 +17,27 @@ export const CsmJoinButtons: FC<CsmJoinButtonsProps> = ({
   joinLabel = 'Join CSM',
 }) => (
   <>
-    <InternalButtonLink
+    <Button
       href={PATH.CSM}
       variant="primary"
       size={size}
-      matomoEvent={MATOMO_CLICK_EVENTS_TYPES.validateJoinCsm}
+      onClick={() =>
+        trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.validateJoinCsm)
+      }
       data-testid={joinTestId}
     >
       {joinLabel}
-    </InternalButtonLink>
-    <ExternalCtaButton
+    </Button>
+    <Button
       href={LIDO_OPERATOR_PORTAL_BASE}
       variant="outline"
       size={size}
-      matomoEvent={MATOMO_CLICK_EVENTS_TYPES.validateLearnMoreCsm}
+      iconRight={<IconLink />}
+      onClick={() =>
+        trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.validateLearnMoreCsm)
+      }
     >
       Learn More
-    </ExternalCtaButton>
+    </Button>
   </>
 );

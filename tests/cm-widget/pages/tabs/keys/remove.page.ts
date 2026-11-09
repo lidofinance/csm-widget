@@ -54,8 +54,10 @@ export class RemovePage extends BasePage {
   getCheckboxByAddress(key: string) {
     const trimmedPubkey = trimAddress(`0x${key}`, 16);
     return this.page
-      .locator('label', { hasText: trimmedPubkey })
-      .locator('svg');
+      .getByTestId('keyRow')
+      .filter({ hasText: trimmedPubkey })
+      .locator('label svg')
+      .first();
   }
 
   async getRandomKeys(count = 1) {

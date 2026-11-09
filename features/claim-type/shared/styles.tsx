@@ -1,4 +1,3 @@
-import { Body, Button } from '@lidofinance/lido-app-ui';
 import styled, { CSSProperties } from 'styled-components';
 
 export const CardHeaderStyle = styled.div`
@@ -8,12 +7,6 @@ export const CardHeaderStyle = styled.div`
   gap: 16px;
   width: 100%;
   text-align: center;
-`;
-
-export const CardDescriptionStyle = styled(Body)`
-  && {
-    color: var(--lido-app-ui-color-text-secondary);
-  }
 `;
 
 export const CardBodyStyle = styled.div`
@@ -74,22 +67,6 @@ export const FaintStyle = styled.span`
   line-height: 16px;
 `;
 
-export const CompareRowStyle = styled.div<{ $head?: boolean }>`
-  display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr);
-  align-items: center;
-  column-gap: 16px;
-  padding: ${({ $head }) => ($head ? '0 0 8px' : '12px 0')};
-  border-top: ${({ $head }) =>
-    $head ? 'none' : '1px solid var(--lido-app-ui-color-border-subtle)'};
-  color: ${({ $head }) =>
-    $head
-      ? 'var(--lido-app-ui-color-text-tertiary)'
-      : 'var(--lido-app-ui-color-text-default)'};
-  font-size: 14px;
-  line-height: 20px;
-`;
-
 export const SuccessBadgeStyle = styled.img`
   width: 240px;
   height: 240px;
@@ -97,12 +74,6 @@ export const SuccessBadgeStyle = styled.img`
   @media (max-width: 439px) {
     width: 160px;
     height: 160px;
-  }
-`;
-
-export const AmazingButtonStyle = styled(Button)`
-  && {
-    width: 100%;
   }
 `;
 

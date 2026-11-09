@@ -1,8 +1,15 @@
-import { Button, Card, Description, H3 } from '@lidofinance/lido-app-ui';
+import {
+  Button,
+  Card,
+  Description,
+  H3,
+  Identicon,
+  Input,
+} from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { useDappStatus } from 'modules/web3';
 import { useSiweAuth } from 'modules/siwe';
-import { InputAddress, Stack } from 'shared/components';
+import { Stack } from 'shared/components';
 
 // Sign-in step that also confirms the connected address as the operator's main
 // address, used by the ICS / IDVTC apply flows.
@@ -27,12 +34,12 @@ export const SiweSignInAddress: FC<{ operatorType: string }> = ({
             You are requesting {operatorType} operator type for the following
             address:
           </Description>
-          <InputAddress
+          <Input
             disabled
             label="Main address"
             value={address}
-            fullwidth
             name="mainAddress"
+            icon={<Identicon address={address} size={20} />}
           />
         </Stack>
 

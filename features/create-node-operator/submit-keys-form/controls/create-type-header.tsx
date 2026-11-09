@@ -1,8 +1,7 @@
-import { Description, H2 } from '@lidofinance/lido-app-ui';
+import { Description, H2, Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { CreatableOperatorType, useOperatorTypeCurve } from 'shared/hooks';
 import { TypeBadgeButton } from 'shared/node-operator/operator-type';
-import { PageHeaderStyle, TypeLineStyle } from '../../styles';
 
 export const CreateTypeHeader: FC<{ type: CreatableOperatorType }> = ({
   type,
@@ -10,16 +9,16 @@ export const CreateTypeHeader: FC<{ type: CreatableOperatorType }> = ({
   const curve = useOperatorTypeCurve(type);
 
   return (
-    <PageHeaderStyle>
+    <Stack gap={8}>
       <H2 as="h1">Submit validator keys</H2>
-      <TypeLineStyle>
+      <Stack direction="row" align="center" gap={12}>
         <Description as="span">Node Operator type</Description>
         <TypeBadgeButton
           displayType={type}
           curve={curve}
           data-testid="createTypeBadge"
         />
-      </TypeLineStyle>
-    </PageHeaderStyle>
+      </Stack>
+    </Stack>
   );
 };

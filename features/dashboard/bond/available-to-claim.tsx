@@ -1,3 +1,6 @@
+import { Counter, InfoTooltip } from '@lidofinance/lido-app-ui';
+import { ReactComponent as CalendarIcon } from 'assets/icons/info-calendar.svg';
+import { ICON_TOOLTIP_TEST_ID } from 'shared/components/icon-tooltip/test-ids';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import {
   BOND_EXCESS,
@@ -15,7 +18,6 @@ import {
   useOperatorRewards,
 } from 'modules/web3';
 import { FC } from 'react';
-import { Counter, IconTooltip } from 'shared/components';
 import { calculateAvailableToClaim } from 'utils';
 import { Balance } from './balance';
 import { AccordionStyle, RowBody, RowHeader, RowTitle } from './styles';
@@ -49,7 +51,7 @@ export const AvailableToClaim: FC = () => {
           <RowTitle>
             Available to claim
             {(bond?.isInsufficient || !!bond?.locked) && (
-              <Counter warning count={1} />
+              <Counter variant="warning">1</Counter>
             )}
           </RowTitle>
           <Balance
@@ -67,9 +69,10 @@ export const AvailableToClaim: FC = () => {
           title={
             <>
               Rewards
-              <IconTooltip
-                tooltip={`Next rewards distribution is expected ${nextDistribution}`}
-                type="calendar"
+              <InfoTooltip
+                dataTestId={ICON_TOOLTIP_TEST_ID}
+                content={`Next rewards distribution is expected ${nextDistribution}`}
+                icon={<CalendarIcon />}
               />
             </>
           }
@@ -95,7 +98,11 @@ export const AvailableToClaim: FC = () => {
               title={
                 <>
                   {BOND_EXCESS}
-                  <IconTooltip tooltip="Increases daily" type="calendar" />
+                  <InfoTooltip
+                    dataTestId={ICON_TOOLTIP_TEST_ID}
+                    content="Increases daily"
+                    icon={<CalendarIcon />}
+                  />
                 </>
               }
               loading={isBondLoading}

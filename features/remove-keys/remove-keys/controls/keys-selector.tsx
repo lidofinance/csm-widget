@@ -1,4 +1,4 @@
-import { SectionTitle, Stack } from '@lidofinance/lido-app-ui';
+import { SectionTitle, Stack, Typography } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { KeyListField } from 'shared/hook-form/fields';
 import { useRemoveKeysFormData } from '../context';
@@ -7,7 +7,6 @@ import {
   SEQUENTIAL_HINT,
   showSequentialHint,
 } from '../remove-keys-state';
-import { HintStyle } from '../styles';
 
 export const KeysSelector: FC = () => {
   const { keys } = useRemoveKeysFormData(true);
@@ -24,9 +23,9 @@ export const KeysSelector: FC = () => {
         data-testid="removeKeysList"
       />
       {showSequentialHint(keys.length) && (
-        <HintStyle variant="description" forwardedAs="p">
+        <Typography variant="description" color="secondary">
           {SEQUENTIAL_HINT}
-        </HintStyle>
+        </Typography>
       )}
     </Stack>
   );

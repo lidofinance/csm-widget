@@ -1,12 +1,12 @@
 import {
   SectionTitle,
+  Stack,
   TokenSelector,
   TokenSelectorDataTestId,
   TokenSelectorOption,
 } from '@lidofinance/lido-app-ui';
 import { FC, ReactNode } from 'react';
 import { FieldError } from './field-error';
-import { FieldStackStyle } from './styles';
 import { useFieldController } from './use-field-controller';
 import { useFocusableRef } from './use-focusable-ref';
 
@@ -38,7 +38,7 @@ export const TokenSelectField: FC<TokenSelectFieldProps> = ({
   const ref = useFocusableRef(field.ref, TOKEN_SELECT_TRIGGER_SELECTOR);
 
   return (
-    <FieldStackStyle ref={ref}>
+    <Stack gap={12} ref={ref}>
       {label && (
         <SectionTitle title={label} subtitle={subtitle} action={action} />
       )}
@@ -50,6 +50,6 @@ export const TokenSelectField: FC<TokenSelectFieldProps> = ({
         dataTestId={TOKEN_SELECT_TEST_ID}
       />
       <FieldError>{message}</FieldError>
-    </FieldStackStyle>
+    </Stack>
   );
 };

@@ -1,3 +1,4 @@
+import { Disclosure } from '@lidofinance/lido-app-ui';
 import { FC, PropsWithChildren, ReactNode } from 'react';
 import {
   FieldErrors,
@@ -6,7 +7,6 @@ import {
   useFormContext,
   useFormState,
 } from 'react-hook-form';
-import { Disclosure } from 'shared/ui';
 
 export const hasAnyFieldError = (
   errors: FieldErrors,

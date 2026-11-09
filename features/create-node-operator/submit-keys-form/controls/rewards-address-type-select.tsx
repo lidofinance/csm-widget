@@ -1,13 +1,13 @@
-import { RadioButton } from '@lidofinance/lido-app-ui';
+import {
+  Description,
+  Grid,
+  RadioButton,
+  Stack,
+  Typography,
+} from '@lidofinance/lido-app-ui';
 import { ChangeEvent, FC, ReactNode, useCallback } from 'react';
 import { useController } from 'react-hook-form';
 import { SubmitKeysFormInputType } from '../context';
-import {
-  PermissionLabelStyle,
-  PermissionsStyle,
-  PermissionTextStyle,
-  PermissionTitleStyle,
-} from './styles';
 
 type PermissionLabelProps = {
   title: string;
@@ -20,13 +20,19 @@ const PermissionLabel: FC<PermissionLabelProps> = ({
   description,
   rules,
 }) => (
-  <PermissionLabelStyle>
-    <PermissionTitleStyle>{title}</PermissionTitleStyle>
-    <PermissionTextStyle>{description}</PermissionTextStyle>
+  <Stack as="span" gap={4}>
+    <Typography as="span" variant="body" color="default" weight="bold">
+      {title}
+    </Typography>
+    <Description as="span" color="secondary">
+      {description}
+    </Description>
     {rules.map((rule) => (
-      <PermissionTextStyle key={rule}>{rule}</PermissionTextStyle>
+      <Description as="span" color="secondary" key={rule}>
+        {rule}
+      </Description>
     ))}
-  </PermissionLabelStyle>
+  </Stack>
 );
 
 export const RewardsAddressTypeSelect: FC = () => {
@@ -42,7 +48,9 @@ export const RewardsAddressTypeSelect: FC = () => {
   );
 
   return (
-    <PermissionsStyle
+    <Grid
+      columns={{ base: 2, mdDown: 1 }}
+      gap={16}
       role="radiogroup"
       aria-label="Manager Address permissions type"
     >
@@ -93,6 +101,6 @@ export const RewardsAddressTypeSelect: FC = () => {
           />
         }
       />
-    </PermissionsStyle>
+    </Grid>
   );
 };

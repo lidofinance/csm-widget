@@ -25,20 +25,3 @@ export const shouldInterceptEnter = (
 
 export const getStepTrackText = (current: number, count: number) =>
   `Step ${Math.min(current, count - 1) + 1} of ${count}`;
-
-type Box = { left: number; width: number };
-
-export const getRevealScrollLeft = (
-  container: Box,
-  item: Box,
-  scrollLeft: number,
-) =>
-  Math.max(
-    0,
-    Math.round(
-      scrollLeft +
-        item.left -
-        container.left -
-        (container.width - item.width) / 2,
-    ),
-  );

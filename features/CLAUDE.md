@@ -37,5 +37,5 @@ Rules:
 - `NoAccessNotice` and `PausedNotice` come from `shared/form-page`. The `shared/components` export of the same name is gone.
 - Success stays in the tx modal (`TxStageSuccess`) by default. Forms whose success is form state (create, claim ICS/IDVTC) render `SuccessScreen` in place of `FormReady` and pass `FormPage done`.
 - Flow code never branches on `useFormUi()`. Only content rendered inside the tx or confirm modal does.
-- Confirm modals dispatch on `ui` in the modal file. The app variant lives in a sibling `*-app.tsx` on `FormModalShell ui="app"`.
+- Confirm modals are app-only `*-modal-app.tsx` components on `FormModalShell ui="app"`, registered directly via `getUseConfirmModal`.
 - Reference forms: `features/add-keys/add-keys/` (A) and `features/change-role/claimer-form/` (B).

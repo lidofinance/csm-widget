@@ -1,5 +1,6 @@
+import { Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import { CardStackStyle, FormCardStackStyle } from '../shared/styles';
+import { FormCardStackStyle } from '../shared/styles';
 import { shouldRenderChangeRoleForm } from './change-role-state';
 import { useChangeRoleFlow, useChangeRoleFormData } from './context';
 import { AddressFormCard } from './controls/address-form-card';
@@ -19,7 +20,7 @@ export const ChangeRoleFormGate: FC = () => {
   );
 
   return (
-    <CardStackStyle data-testid="changeRoleForm">
+    <Stack gap={24} data-testid="changeRoleForm">
       {shouldRenderChangeRoleForm({
         action: flow.action,
         hasInvite: !!invite,
@@ -28,6 +29,6 @@ export const ChangeRoleFormGate: FC = () => {
       ) : (
         cards
       )}
-    </CardStackStyle>
+    </Stack>
   );
 };

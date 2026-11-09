@@ -1,13 +1,17 @@
-import { Body, H1, IconCheck } from '@lidofinance/lido-app-ui';
+import {
+  Body,
+  Card,
+  Grid,
+  H1,
+  IconCheck,
+  Stack,
+} from '@lidofinance/lido-app-ui';
 import { FC, ReactNode, useEffect } from 'react';
 import {
   SuccessActionsStyle,
-  SuccessCardStyle,
   SuccessHeroStyle,
   SuccessIconStyle,
   SuccessIllustrationStyle,
-  SuccessScreenStyle,
-  SuccessStatsStyle,
 } from './styles';
 
 export type SuccessScreenProps = {
@@ -38,32 +42,42 @@ export const SuccessScreen: FC<SuccessScreenProps> = ({
   }, []);
 
   return (
-    <SuccessScreenStyle data-testid={dataTestId}>
+    <Stack gap={8} data-testid={dataTestId}>
       <SuccessHeroStyle>
-        {icon != null ? (
-          <SuccessIllustrationStyle aria-hidden="true">
-            {icon}
-          </SuccessIllustrationStyle>
-        ) : (
-          <SuccessIconStyle>
-            <IconCheck aria-hidden="true" />
-          </SuccessIconStyle>
-        )}
-        <H1>{title}</H1>
-        <Body as="div">{description}</Body>
+        <Stack gap={16} align="center">
+          {icon != null ? (
+            <SuccessIllustrationStyle aria-hidden="true">
+              {icon}
+            </SuccessIllustrationStyle>
+          ) : (
+            <SuccessIconStyle>
+              <IconCheck aria-hidden="true" />
+            </SuccessIconStyle>
+          )}
+          <H1>{title}</H1>
+          <Body as="div">{description}</Body>
+        </Stack>
       </SuccessHeroStyle>
       {notice}
-      {stats && <SuccessStatsStyle>{stats}</SuccessStatsStyle>}
-      {(next || actions) && (
-        <SuccessCardStyle>
-          {next}
-          {actions && (
-            <SuccessActionsStyle data-testid="successActions">
-              {actions}
-            </SuccessActionsStyle>
-          )}
-        </SuccessCardStyle>
+      {stats && (
+        <Card>
+          <Grid minItemWidth={140} gap={24} align="start">
+            {stats}
+          </Grid>
+        </Card>
       )}
-    </SuccessScreenStyle>
+      {(next || actions) && (
+        <Card>
+          <Stack gap={24} align="stretch">
+            {next}
+            {actions && (
+              <SuccessActionsStyle data-testid="successActions">
+                {actions}
+              </SuccessActionsStyle>
+            )}
+          </Stack>
+        </Card>
+      )}
+    </Stack>
   );
 };

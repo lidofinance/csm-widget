@@ -1,4 +1,4 @@
-import { IconButton, IconCross } from '@lidofinance/lido-app-ui';
+import { Grid, IconButton, IconCross, Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { useFormContext, useFormState } from 'react-hook-form';
 import {
@@ -7,11 +7,13 @@ import {
   PercentField,
 } from 'shared/hook-form/fields';
 import { SplitsFormInputType } from '../context/types';
-import {
-  EditShareRowStyle,
-  RemoveButtonCellStyle,
-  SectionStyle,
-} from '../styles';
+
+const COLUMNS = {
+  base: 'minmax(0, 1fr) 120px 40px',
+  xsDown: 'minmax(0, 1fr) 96px 40px',
+};
+
+const REMOVE_CELL_STYLE = { height: 48 };
 
 type SplitRowProps = {
   index: number;
@@ -41,8 +43,8 @@ export const SplitRow: FC<SplitRowProps> = ({ index, onRemove }) => {
   const errorMessage = recipientError?.message || shareError?.message;
 
   return (
-    <SectionStyle>
-      <EditShareRowStyle>
+    <Stack gap={12}>
+      <Grid columns={COLUMNS} gap={12} align="end">
         <AddressField
           name={`feeSplits.${index}.recipient`}
           label={`Additional address #${index + 1}`}
@@ -55,16 +57,16 @@ export const SplitRow: FC<SplitRowProps> = ({ index, onRemove }) => {
           error={!!shareError}
           onChange={() => clearErrors(`feeSplits.${index}.share`)}
         />
-        <RemoveButtonCellStyle>
+        <Stack align="center" justify="center" style={REMOVE_CELL_STYLE}>
           <IconButton
             variant="ghost"
             icon={<IconCross />}
             aria-label="Remove"
             onClick={() => onRemove(index)}
           />
-        </RemoveButtonCellStyle>
-      </EditShareRowStyle>
+        </Stack>
+      </Grid>
       <FieldError>{errorMessage}</FieldError>
-    </SectionStyle>
+    </Stack>
   );
 };

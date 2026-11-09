@@ -1,7 +1,8 @@
+import { InfoTooltip } from '@lidofinance/lido-app-ui';
+import { ICON_TOOLTIP_TEST_ID } from 'shared/components/icon-tooltip/test-ids';
 import { CurveParameters, MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
 import { FC, PropsWithChildren, useState } from 'react';
-import { IconTooltip } from '../icon-tooltip/icon-tooltip';
 import { Stack } from '../stack/stack';
 import { useParameters } from './parameters';
 import { ParametersValue } from './parameters-value';
@@ -21,7 +22,12 @@ export { DefColumnBackground, IcsColumnBackground } from './styles';
 const Title: FC<{ title: string; help?: string }> = ({ title, help }) => (
   <Text size="xs" weight={700} data-testid="parameterTitle">
     {title}
-    <IconTooltip tooltip={help} placement="bottomLeft" inline />
+    {help && (
+      <>
+        {' '}
+        <InfoTooltip dataTestId={ICON_TOOLTIP_TEST_ID} content={help} />
+      </>
+    )}
   </Text>
 );
 

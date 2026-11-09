@@ -1,9 +1,8 @@
-import { Address, IconLink, TextLink } from '@lidofinance/lido-app-ui';
+import { Address, IconLink, Stack, TextLink } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { useDappStatus } from 'modules/web3';
 import { FC, ReactNode } from 'react';
 import { getEtherscanAddressLink, trackMatomoEvent } from 'utils';
-import { RoleAddressStyle } from './styles';
 
 export type RoleAddressProps = {
   address: string;
@@ -19,7 +18,7 @@ export const RoleAddress: FC<RoleAddressProps> = ({
   const { chainId } = useDappStatus();
 
   return (
-    <RoleAddressStyle data-testid={dataTestId}>
+    <Stack direction="row" wrap align="center" gap={8} data-testid={dataTestId}>
       <Address address={address} symbols={6} identicon={24} copy>
         <TextLink
           external
@@ -32,6 +31,6 @@ export const RoleAddress: FC<RoleAddressProps> = ({
         />
       </Address>
       {tags}
-    </RoleAddressStyle>
+    </Stack>
   );
 };

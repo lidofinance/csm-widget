@@ -1,11 +1,10 @@
-import { Address, Identicon, Tag } from '@lidofinance/lido-app-ui';
+import { Address, Identicon, Stack, Tag } from '@lidofinance/lido-app-ui';
 import { FC, ReactNode, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useEnsInput } from 'shared/hooks/use-ens-input';
 import { FIELD_ERROR_TEST_ID } from './field-error';
 import {
   TrailingInputStyle,
-  AddressLabelStyle,
   AddressSpinnerStyle,
   ConnectedAddressButtonStyle,
 } from './styles';
@@ -82,7 +81,7 @@ export const AddressField: FC<AddressFieldProps> = ({
       error={isLoading ? undefined : (error ?? message ?? invalid)}
       dataTestId={{ error: FIELD_ERROR_TEST_ID }}
       label={
-        <AddressLabelStyle>
+        <Stack as="span" inline direction="row" wrap align="center" gap={8}>
           {label}
           {!simple && isEns && address && (
             <Tag variant="neutral">
@@ -106,7 +105,7 @@ export const AddressField: FC<AddressFieldProps> = ({
               Connected address
             </ConnectedAddressButtonStyle>
           )}
-        </AddressLabelStyle>
+        </Stack>
       }
     />
   );

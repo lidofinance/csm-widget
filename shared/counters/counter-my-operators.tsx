@@ -1,6 +1,6 @@
 import { useNodeOperator } from 'modules/web3';
 import { FC } from 'react';
-import { Counter } from 'shared/components';
+import { NavCounter } from './nav-counter';
 import { useMyOperatorsIssues } from 'shared/hooks';
 import { isSameOperator } from 'shared/node-operator/utils';
 
@@ -14,10 +14,10 @@ export const CounterMyOperators: FC = () => {
   );
 
   return (
-    <Counter
-      warning
+    <NavCounter
+      variant="warning"
       count={hasOtherIssues ? 1 : 0}
-      data-testid="myOperatorsCounter"
+      testId="myOperatorsCounter"
     />
   );
 };

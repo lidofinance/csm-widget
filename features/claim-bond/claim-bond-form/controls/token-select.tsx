@@ -1,4 +1,4 @@
-import { MessageBox, Stack } from '@lidofinance/lido-app-ui';
+import { Description, MessageBox, Stack } from '@lidofinance/lido-app-ui';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
@@ -13,10 +13,9 @@ import {
   useClaimBondFormData,
 } from '../context';
 import { useWithdrawalWaitingTime } from '../hooks/use-withdrawal-waiting-time';
-import { NoteStyle } from '../styles';
 
 const EthNote: FC = () => (
-  <NoteStyle data-testid="ethNote">
+  <Description color="secondary" data-testid="ethNote">
     <b>Note:</b> After receiving NFT you will need to claim ETH manually. Follow{' '}
     <LocalLink
       href={PATH.BOND_CLAIM}
@@ -26,7 +25,7 @@ const EthNote: FC = () => (
       FAQ
     </LocalLink>{' '}
     for more details.
-  </NoteStyle>
+  </Description>
 );
 
 export const TokenSelect: FC = () => {

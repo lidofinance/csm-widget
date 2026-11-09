@@ -1,4 +1,4 @@
-import { Grid, H2, Stack } from '@lidofinance/lido-app-ui';
+import { Button, Grid, H2, Stack } from '@lidofinance/lido-app-ui';
 import {
   LIDO_OPERATOR_PORTAL_CM,
   LIDO_OPERATOR_PORTAL_CURATED,
@@ -7,16 +7,13 @@ import {
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
 import { FC } from 'react';
+import { trackMatomoEvent } from 'utils';
 import { useCanCreateCM } from 'shared/hooks';
 import moduleCsm from 'assets/illustrations/module-csm.webp';
 import moduleCurated from 'assets/illustrations/module-curated.webp';
 import moduleCuratedV2 from 'assets/illustrations/module-curated-v2.webp';
 import moduleDvt from 'assets/illustrations/module-dvt.webp';
-import {
-  CsmJoinButtons,
-  InternalButtonLink,
-  ModuleStatusTag,
-} from '../components';
+import { CsmJoinButtons, ModuleStatusTag } from '../components';
 import { ModuleCard } from './module-card';
 
 export const ModulesSection: FC = () => {
@@ -62,14 +59,16 @@ export const ModulesSection: FC = () => {
           learnMoreEvent={MATOMO_CLICK_EVENTS_TYPES.validateLearnMoreCm}
           buttons={
             canCreateCm && (
-              <InternalButtonLink
+              <Button
                 href={PATH.CREATE_CM}
                 variant="primary"
                 size="small"
-                matomoEvent={MATOMO_CLICK_EVENTS_TYPES.validateCreateCm}
+                onClick={() =>
+                  trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.validateCreateCm)
+                }
               >
                 Create new NO
-              </InternalButtonLink>
+              </Button>
             )
           }
         />

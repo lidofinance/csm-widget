@@ -9,32 +9,24 @@ import {
   DisplayOperatorType,
   OPERATOR_TYPE_METADATA,
 } from 'consts';
-import { FC, MouseEventHandler } from 'react';
-import styled, { css } from 'styled-components';
-import { CURVE_VARIANTS } from './curve-badge/styles';
+import { CSSProperties, FC, MouseEventHandler } from 'react';
+import styled from 'styled-components';
+import { CURVE_GRADIENTS } from './curve-badge/styles';
 
 export type OperatorTypeTagProps = {
   type: DisplayOperatorType;
   full?: boolean;
   tooltip?: boolean;
+  disabled?: boolean;
   onClick?: MouseEventHandler<HTMLElement>;
   'data-testid'?: string;
 };
 
-type Gradient = ReturnType<typeof css>;
-
-const ICS_GRADIENT = css`
-  background: linear-gradient(60.6deg, #08d1ff 7.1%, #88f493 127.77%);
-`;
-const ICS_FULL_GRADIENT = css`
-  background: linear-gradient(19.85deg, #08d1ff 7.1%, #88f493 127.77%);
-`;
-const IDVTC_GRADIENT = css`
-  background: linear-gradient(10.45deg, #b98bff 0%, #ff7fc3 100%);
-`;
-const IDVTC_GLOW = css`
-  background: linear-gradient(10.45deg, #c4a8ff 0%, #f7a3cc 100%);
-`;
+const ICS_GRADIENT = 'linear-gradient(60.6deg, #08d1ff 7.1%, #88f493 127.77%)';
+const ICS_FULL_GRADIENT =
+  'linear-gradient(19.85deg, #08d1ff 7.1%, #88f493 127.77%)';
+const IDVTC_GRADIENT = 'linear-gradient(10.45deg, #b98bff 0%, #ff7fc3 100%)';
+const IDVTC_GLOW = 'linear-gradient(10.45deg, #c4a8ff 0%, #f7a3cc 100%)';
 
 const isCurated = (type: DisplayOperatorType) =>
   type !== CUSTOM_CURVE && OPERATOR_TYPE_INFO[type].module === MODULE_NAME.CM;
@@ -42,7 +34,7 @@ const isCurated = (type: DisplayOperatorType) =>
 const getGradients = (
   type: DisplayOperatorType,
   full: boolean,
-): { fill: Gradient; glow: Gradient } => {
+): { fill: string; glow: string } => {
   switch (type) {
     case OPERATOR_TYPE.CSM_ICS:
       return {
@@ -52,71 +44,45 @@ const getGradients = (
     case OPERATOR_TYPE.CSM_IDVTC:
       return { fill: IDVTC_GRADIENT, glow: IDVTC_GLOW };
     default:
-      return { fill: CURVE_VARIANTS[type], glow: CURVE_VARIANTS[type] };
+      return { fill: CURVE_GRADIENTS[type], glow: CURVE_GRADIENTS[type] };
   }
 };
 
-const GlowStyle = styled.span<{ $glow?: Gradient }>`
-  position: relative;
-  isolation: isolate;
-  display: inline-flex;
-  max-width: 100%;
-  flex-shrink: 0;
-
-  ${({ $glow }) =>
-    $glow &&
-    css`
-      &::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        z-index: -1;
-        border-radius: 8px;
-        filter: blur(8px);
-        opacity: 0.5;
-        ${$glow}
-      }
-    `}
-`;
-
-const TagStyle = styled(Tag)<{ $fill?: Gradient }>`
+const TagStyle = styled(Tag)`
   && {
     justify-content: center;
+    flex-shrink: 0;
+    max-width: 100%;
   }
-
-  ${({ $fill }) =>
-    $fill &&
-    css`
-      && {
-        color: #fff;
-        ${$fill}
-        background-origin: border-box;
-      }
-    `}
 `;
 
 export const OperatorTypeTag: FC<OperatorTypeTagProps> = ({
   type,
   full = false,
   tooltip = false,
+  disabled,
   onClick,
   'data-testid': testId,
 }) => {
   const { short, name } = OPERATOR_TYPE_METADATA[type];
-  const curated = isCurated(type);
-  const gradients = curated ? undefined : getGradients(type, full);
+  const gradients = isCurated(type) ? undefined : getGradients(type, full);
+
+  const style = gradients && {
+    '--lido-app-ui-tag-background': gradients.fill,
+    '--lido-app-ui-tag-color': '#fff',
+    ...(!full && { '--lido-app-ui-tag-glow': gradients.glow }),
+  };
 
   const tag = (
-    <GlowStyle $glow={full ? undefined : gradients?.glow}>
-      <TagStyle
-        variant={curated ? 'action' : 'default'}
-        $fill={gradients?.fill}
-        onClick={onClick}
-        data-testid={testId}
-      >
-        {full ? name : short}
-      </TagStyle>
-    </GlowStyle>
+    <TagStyle
+      variant={gradients ? 'custom' : 'action'}
+      style={style as CSSProperties | undefined}
+      disabled={disabled}
+      onClick={onClick}
+      dataTestId={{ root: testId }}
+    >
+      {full ? name : short}
+    </TagStyle>
   );
 
   return tooltip && !full ? <Tooltip content={name}>{tag}</Tooltip> : tag;

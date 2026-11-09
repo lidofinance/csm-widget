@@ -1,3 +1,4 @@
+import { Counter } from '@lidofinance/lido-app-ui';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import {
   BOND_DEBT,
@@ -8,7 +9,6 @@ import {
 } from 'consts/text';
 import { useNodeOperatorId, useOperatorBalance } from 'modules/web3';
 import { FC } from 'react';
-import { Counter } from 'shared/components';
 import { Balance } from './balance';
 import { AccordionStyle, RowBody, RowHeader, RowTitle } from './styles';
 
@@ -27,7 +27,7 @@ export const BondBalance: FC = () => {
         <RowHeader>
           <RowTitle>
             Bond balance
-            {bond?.isInsufficient && <Counter warning count={1} />}
+            {bond?.isInsufficient && <Counter variant="warning">1</Counter>}
           </RowTitle>
           <Balance
             data-testid="commonBalance"

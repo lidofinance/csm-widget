@@ -1,6 +1,8 @@
+import { InfoTooltip } from '@lidofinance/lido-app-ui';
+import { ICON_TOOLTIP_TEST_ID } from 'shared/components/icon-tooltip/test-ids';
 import { InlineLoader } from '@lidofinance/lido-ui';
 import { FC, PropsWithChildren, ReactNode } from 'react';
-import { IconTooltip, Stack } from 'shared/components';
+import { Stack } from 'shared/components';
 import {
   GrayText,
   TextBlockContent,
@@ -39,7 +41,9 @@ export const TextBlock: FC<PropsWithChildren<Props>> = ({
           <TextBlockTitle data-testid="textTitleContent">
             {title}
           </TextBlockTitle>
-          <IconTooltip tooltip={help} />
+          {help && (
+            <InfoTooltip dataTestId={ICON_TOOLTIP_TEST_ID} content={help} />
+          )}
         </Stack>
       )}
       {loading ? (

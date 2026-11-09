@@ -1,6 +1,8 @@
+import { InfoTooltip } from '@lidofinance/lido-app-ui';
+import { ICON_TOOLTIP_TEST_ID } from 'shared/components/icon-tooltip/test-ids';
 import { Text } from '@lidofinance/lido-ui';
 import { FC, PropsWithChildren, ReactNode } from 'react';
-import { IconTooltip, Stack } from 'shared/components';
+import { Stack } from 'shared/components';
 
 type SurveySectionProps = {
   title: string;
@@ -27,7 +29,9 @@ export const SurveySection: FC<PropsWithChildren<SurveySectionProps>> = ({
             <Text size="xxs" color="secondary">
               {subtitle}
             </Text>
-            {help && <IconTooltip tooltip={help} />}
+            {help && (
+              <InfoTooltip dataTestId={ICON_TOOLTIP_TEST_ID} content={help} />
+            )}
           </Stack>
         )}
       </Stack>

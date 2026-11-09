@@ -1,6 +1,5 @@
-import { DataList } from '@lidofinance/lido-app-ui';
+import { DataList, Stack } from '@lidofinance/lido-app-ui';
 import { FC, PropsWithChildren, ReactNode } from 'react';
-import { CtaStackStyle, SubmitAsideStyle } from './styles';
 
 export type SubmitAsideProps = PropsWithChildren<{
   confirm?: ReactNode;
@@ -12,9 +11,9 @@ export const SubmitAside: FC<SubmitAsideProps> = ({
   rows,
   children,
 }) => (
-  <SubmitAsideStyle>
+  <Stack gap={24}>
     {confirm}
     {rows && <DataList divided>{rows}</DataList>}
-    <CtaStackStyle>{children}</CtaStackStyle>
-  </SubmitAsideStyle>
+    <Stack gap={12}>{children}</Stack>
+  </Stack>
 );

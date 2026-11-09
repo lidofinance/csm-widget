@@ -2,17 +2,20 @@ import { CSM_FAMILY_MODULES } from 'consts';
 import { PATH } from 'consts/urls';
 import { ReactNode } from 'react';
 
-import { Eth as EthIcon, Plus as PlusIcon } from '@lidofinance/lido-ui';
-import DashboardIcon from 'assets/icons/dashboard.svg?react';
+import {
+  IconDashboard,
+  IconKeyRound,
+  IconPlus,
+  IconUser,
+  IconWallet,
+} from '@lidofinance/lido-app-ui';
+import { Eth as EthIcon } from '@lidofinance/lido-ui';
 import DvtIcon from 'assets/icons/file-2.svg?react';
 import FileIcon from 'assets/icons/file.svg?react';
 import GearIcon from 'assets/icons/gear.svg?react';
 import HomeIcon from 'assets/icons/home.svg?react';
-import KeyIcon from 'assets/icons/key.svg?react';
 import MeterIcon from 'assets/icons/meter.svg?react';
-import UserIcon from 'assets/icons/user.svg?react';
 import UsersIcon from 'assets/icons/users-round.svg?react';
-import WalletIcon from 'assets/icons/wallet.svg?react';
 import {
   CounterClaimType,
   CounterInvalidKeys,
@@ -43,13 +46,13 @@ const routes: Route[] = [
   {
     name: 'Dashboard',
     path: PATH.HOME,
-    icon: <DashboardIcon />,
+    icon: <IconDashboard />,
     showRules: ['HAS_ANY_ROLE'],
   },
   {
     name: 'Keys',
     path: PATH.KEYS,
-    icon: <KeyIcon />,
+    icon: <IconKeyRound />,
     subPaths: [
       PATH.KEYS_SUBMIT,
       PATH.KEYS_REMOVE,
@@ -63,7 +66,7 @@ const routes: Route[] = [
   {
     name: 'Bond & Rewards',
     path: PATH.BOND,
-    icon: <WalletIcon />,
+    icon: <IconWallet />,
     subPaths: [PATH.BOND_ADD, PATH.BOND_CLAIM, PATH.BOND_UNLOCK],
     showRules: ['HAS_ANY_ROLE'],
     suffix: <CounterLockedBond />,
@@ -102,7 +105,7 @@ const routes: Route[] = [
   {
     name: 'Create Operator',
     path: PATH.CREATE,
-    icon: <PlusIcon />,
+    icon: <IconPlus />,
     subPaths: [
       PATH.CREATE_0x01,
       PATH.CREATE_ICS,
@@ -144,7 +147,7 @@ const routes: Route[] = [
   {
     name: 'Operator Type',
     path: PATH.TYPE,
-    icon: <UserIcon />,
+    icon: <IconUser />,
     subPaths: [
       PATH.TYPE_ICS_SYSTEM,
       PATH.TYPE_ICS_APPLY,

@@ -1,3 +1,4 @@
+import { MessageBox } from '@lidofinance/lido-app-ui';
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { isCsmFamilyModule } from 'consts';
 import { PHASED_DEPOSIT_APPROACH_LINK } from 'consts/external-links';
@@ -12,13 +13,13 @@ import {
   useTopUpQueueInfo,
 } from 'modules/web3';
 import { FC } from 'react';
-import { Banner, MatomoLink } from 'shared/components';
+import { MatomoLink } from 'shared/components';
 import { useCurrentCurveModule } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
 
 type NameProps = { name: string };
 type KeysLeftProps = NameProps & {
-  variant: 'wary' | 'wary-dangerous';
+  variant: 'info' | 'warning';
   title: string;
   activeLeft: string;
   queue: string;
@@ -44,43 +45,43 @@ const PhasedDepositLink: FC = () => (
 );
 
 const SeedOnlyBanner: FC<NameProps> = ({ name }) => (
-  <Banner
-    variant="wary"
-    title={`${name} is currently allocating seed deposits only`}
+  <MessageBox
+    variant="info"
+    headline={`${name} is currently allocating seed deposits only`}
   >
     Each key uploaded now will be eligible for a seed deposit of 32 ETH only.
     Top-ups will become available once the module’s stake share limit is
     increased. For more details, see <PhasedDepositLink />.
-  </Banner>
+  </MessageBox>
 );
 
 const SeedQueueFullBanner: FC = () => (
-  <Banner variant="wary-dangerous" title="The seed deposit queue is full">
+  <MessageBox variant="warning" headline="The seed deposit queue is full">
     You can still upload keys, but they are unlikely to receive deposits in the
     near term. The wait could last several months. For more details, see{' '}
     <PhasedDepositLink />.
-  </Banner>
+  </MessageBox>
 );
 
 const ReachedBanner: FC<NameProps> = ({ name }) => (
-  <Banner
-    variant="wary-dangerous"
-    title={`${name} has reached its stake share limit`}
+  <MessageBox
+    variant="warning"
+    headline={`${name} has reached its stake share limit`}
   >
     You can still upload keys, but they are very unlikely to receive deposits in
     the near future (possibly for months).
     <br />
     <ShareLimitFaqLink />
-  </Banner>
+  </MessageBox>
 );
 
 const TopUpsExceedBanner: FC = () => (
-  <Banner variant="wary-dangerous" title="Top ups exceed the stake share limit">
+  <MessageBox variant="warning" headline="Top ups exceed the stake share limit">
     Your keys will still be queued for initial activation, but they are unlikely
     to be filled up to 2048 ETH in the near future
     <br />
     <ShareLimitFaqLink />
-  </Banner>
+  </MessageBox>
 );
 
 const KeysLeftBanner: FC<KeysLeftProps> = ({
@@ -90,7 +91,7 @@ const KeysLeftBanner: FC<KeysLeftProps> = ({
   activeLeft,
   queue,
 }) => (
-  <Banner variant={variant} title={title}>
+  <MessageBox variant={variant} headline={title}>
     Currently, <b>{activeLeft}</b> more keys can be activated in {name} before
     it hits its stake share limit. Since there are already <b>{queue}</b> keys
     in the queue, this means that newly uploaded keys may not receive deposits
@@ -101,7 +102,7 @@ const KeysLeftBanner: FC<KeysLeftProps> = ({
     dynamics.
     <br />
     <ShareLimitFaqLink />
-  </Banner>
+  </MessageBox>
 );
 
 export const ShareLimitBanner: FC = () => {
@@ -142,7 +143,7 @@ export const ShareLimitBanner: FC = () => {
           <TopUpsExceedBanner />
         ) : (
           <KeysLeftBanner
-            variant="wary-dangerous"
+            variant="warning"
             title={`${name} has exhausted its limit for new keys`}
             name={name}
             activeLeft={data.activeLeft.toString()}
@@ -151,7 +152,7 @@ export const ShareLimitBanner: FC = () => {
         )
       ) : status === SHARE_LIMIT_STATUS.APPROACHING ? (
         <KeysLeftBanner
-          variant="wary"
+          variant="info"
           title={`${name} is approaching its stake share limit`}
           name={name}
           activeLeft={data.activeLeft.toString()}

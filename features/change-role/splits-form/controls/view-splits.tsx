@@ -1,10 +1,9 @@
-import { SectionTitle } from '@lidofinance/lido-app-ui';
+import { Button, SectionTitle, Stack } from '@lidofinance/lido-app-ui';
 import { FC, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { FormCard } from 'shared/form-page';
 import { SplitsFormInputType, useSplitsFormData } from '../context';
 import { getSplitsActionLabel, getSplitsNotice } from '../splits-state';
-import { FullWidthButtonStyle, SectionStyle } from '../styles';
 import { BondRow } from './bond-row';
 import { ShareRowView } from './split-row-view';
 import { SplitsNotice } from './splits-notice';
@@ -29,7 +28,7 @@ export const ViewSplits: FC = () => {
       <BondRow />
 
       {hasSplits && (
-        <SectionStyle>
+        <Stack gap={12}>
           <SectionTitle title="Additional addresses" />
           {currentFeeSplits.map((split, i) => (
             <ShareRowView
@@ -39,19 +38,20 @@ export const ViewSplits: FC = () => {
               share={split.share}
             />
           ))}
-        </SectionStyle>
+        </Stack>
       )}
 
       {notice && <SplitsNotice notice={notice} />}
 
       {isOwner && (
-        <FullWidthButtonStyle
+        <Button
+          fullWidth
           disabled={!canEdit}
           onClick={handleEdit}
           data-testid="splitsActionButton"
         >
           {getSplitsActionLabel(hasSplits)}
-        </FullWidthButtonStyle>
+        </Button>
       )}
     </FormCard>
   );

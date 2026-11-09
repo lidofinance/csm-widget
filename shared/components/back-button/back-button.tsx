@@ -1,7 +1,7 @@
+import { TextLink } from '@lidofinance/lido-app-ui';
 import { ArrowLeft, ButtonIcon } from '@lidofinance/lido-ui';
 import { PATH } from 'consts/urls';
 import { ComponentProps, FC } from 'react';
-import { SecondaryLocalLink } from 'shared/navigate';
 import styled from 'styled-components';
 import { StackStyle } from '../stack';
 import { useRouter } from 'next/router';
@@ -20,12 +20,12 @@ export const BackButton: FC<BackButtonProps> = ({
   if (asPath === href) return null;
 
   return (
-    <SecondaryLocalLink href={href}>
+    <TextLink variant="secondary" size="inherit" href={href}>
       <Wrap>
         <ArrowLeft />
         {text}
       </Wrap>
-    </SecondaryLocalLink>
+    </TextLink>
   );
 };
 

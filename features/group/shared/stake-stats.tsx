@@ -1,7 +1,9 @@
+import { InfoTooltip } from '@lidofinance/lido-app-ui';
+import { ICON_TOOLTIP_TEST_ID } from 'shared/components/icon-tooltip/test-ids';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
-import { IconTooltip, Stack } from 'shared/components';
+import { Stack } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
 import { getPercent, pluralKeys, StakeAndKeysData } from 'utils';
 import {
@@ -35,7 +37,10 @@ export const StakeStats: FC<Props> = ({ data }) => {
           <Stack center gap="xs">
             <ColorDot $color={STAKE_COLORS.active} />
             <Text size="xs">Active</Text>
-            <IconTooltip tooltip="The amount of ETH currently staked by the Lido protocol with this Node Operator" />
+            <InfoTooltip
+              dataTestId={ICON_TOOLTIP_TEST_ID}
+              content="The amount of ETH currently staked by the Lido protocol with this Node Operator"
+            />
           </Stack>
           <Stack direction="column" gap="none">
             <Text as="b" weight={700} size="sm">
@@ -60,7 +65,10 @@ export const StakeStats: FC<Props> = ({ data }) => {
           <Stack center gap="xs">
             <ColorDot $color={STAKE_COLORS.depositable} />
             <Text size="xs">Depositable</Text>
-            <IconTooltip tooltip="Available capacity ready to receive stake from the Lido protocol" />
+            <InfoTooltip
+              dataTestId={ICON_TOOLTIP_TEST_ID}
+              content="Available capacity ready to receive stake from the Lido protocol"
+            />
           </Stack>
           <Stack direction="column" gap="none">
             <Text as="b" weight={700} size="sm">
@@ -85,7 +93,10 @@ export const StakeStats: FC<Props> = ({ data }) => {
           <Stack center gap="xs">
             <ColorDot $color={STAKE_COLORS.potential} />
             <Text size="xs">Potential additional capacity</Text>
-            <IconTooltip tooltip="The additional stake the Lido protocol could allocate to this Node Operator based on its current weight, assuming enough validator keys are available" />
+            <InfoTooltip
+              dataTestId={ICON_TOOLTIP_TEST_ID}
+              content="The additional stake the Lido protocol could allocate to this Node Operator based on its current weight, assuming enough validator keys are available"
+            />
           </Stack>
           <Stack direction="column" gap="none">
             <Text as="b" weight={700} size="sm">

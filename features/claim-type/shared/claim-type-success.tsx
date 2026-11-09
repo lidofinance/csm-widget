@@ -1,3 +1,4 @@
+import { Button } from '@lidofinance/lido-app-ui';
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { FC, ReactNode, useCallback, useRef } from 'react';
 import Confetti from 'react-canvas-confetti/dist/presets/realistic';
@@ -7,11 +8,7 @@ import {
 } from 'react-canvas-confetti/dist/types';
 import { SuccessScreen } from 'shared/form-page';
 import { getOperatorTypeBadge } from './claim-type-badges';
-import {
-  AmazingButtonStyle,
-  confettiCanvasStyles,
-  SuccessBadgeStyle,
-} from './styles';
+import { confettiCanvasStyles, SuccessBadgeStyle } from './styles';
 
 export type ClaimTypeSuccessProps = {
   type: OPERATOR_TYPE;
@@ -55,7 +52,9 @@ export const ClaimTypeSuccess: FC<ClaimTypeSuccessProps> = ({
         description={description}
         notice={notice}
         actions={
-          <AmazingButtonStyle onClick={fire}>Amazing!</AmazingButtonStyle>
+          <Button fullWidth onClick={fire}>
+            Amazing!
+          </Button>
         }
       />
     </>

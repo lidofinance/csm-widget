@@ -47,7 +47,10 @@ const render = (
     </Host>,
   );
 
-const labels = (html: string) => html.match(/<label[\s\S]*?<\/label>/g) ?? [];
+const labels = (html: string) =>
+  html.match(
+    /<div class="CheckboxRow-module_row[\s\S]*?(?=<div class="CheckboxRow-module_row|<\/div><\/div>$)/g,
+  ) ?? [];
 // lib Checkbox also renders a hidden indeterminate (minus) glyph
 const svgCount = (fragment: string) =>
   fragment.match(/<svg(?![^>]*_minus)/g)?.length ?? 0;
@@ -57,7 +60,7 @@ describe('KeyListField', () => {
     const html = render({ start: 0, count: 0 });
 
     expect(html).toMatch(
-      /<div[^>]*role="group"[^>]*aria-label="Keys to remove"[^>]*data-testid="keysList"/,
+      /<div[^>]*data-testid="keysList"[^>]*role="group"[^>]*aria-label="Keys to remove"/,
     );
     expect(labels(html)).toHaveLength(3);
   });
@@ -115,7 +118,9 @@ describe('KeyListField', () => {
 
     expect(a).toContain('disabled=""');
     expect(c).not.toContain('disabled=""');
-    labels(html).forEach((label) => expect(svgCount(label)).toBe(1));
+    (html.match(/<label[\s\S]*?<\/label>/g) ?? []).forEach((label) =>
+      expect(svgCount(label)).toBe(1),
+    );
     expect(svgCount(html)).toBe(5);
   });
 

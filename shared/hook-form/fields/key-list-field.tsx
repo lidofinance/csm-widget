@@ -1,4 +1,10 @@
-import { InfoTooltip } from '@lidofinance/lido-app-ui';
+import {
+  CheckboxList,
+  CheckboxRow,
+  InfoTooltip,
+  Stack,
+  getFieldErrorId,
+} from '@lidofinance/lido-app-ui';
 import type { KEY_STATUS, KeyWithStatus } from '@lidofinance/lido-csm-sdk';
 import { FC, ReactNode, useEffect, useId } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
@@ -14,15 +20,7 @@ import {
   trimPubkey,
 } from './key-list-selection';
 import { KeyStatusTag } from './key-status-tag';
-import {
-  FieldStackStyle,
-  KeyCheckboxStyle,
-  KeyLabelStyle,
-  KeyListStyle,
-  KeyPubkeyStyle,
-  KeyRowStyle,
-  KeyTagsStyle,
-} from './styles';
+import { KeyPubkeyStyle } from './styles';
 import { useFocusableRef } from './use-focusable-ref';
 
 export type KeyListFieldProps = {
@@ -85,46 +83,53 @@ export const KeyListField: FC<KeyListFieldProps> = ({
     );
 
   return (
-    <FieldStackStyle ref={ref}>
-      <KeyListStyle
+    <Stack gap={12} ref={ref}>
+      <CheckboxList
         role="group"
         aria-label={ariaLabel}
-        $invalid={invalid}
-        aria-describedby={message ? errorId : undefined}
+        error={invalid}
+        aria-describedby={message ? getFieldErrorId(errorId) : undefined}
         data-testid={testId}
       >
         {options.map((key, position) => {
           const disabled = isDisabled?.(key) ?? false;
 
           return (
-            <KeyRowStyle key={`${key.index}-${key.pubkey}`}>
-              <KeyCheckboxStyle
-                checked={isChecked(key, position)}
-                disabled={disabled}
-                onChange={() => toggle(key, position)}
-                onBlur={field.onBlur}
-                label={
-                  <KeyLabelStyle>
-                    <KeyPubkeyStyle title={key.pubkey}>
-                      <span>{trimPubkey(key.pubkey, 16)}</span>
-                      <span>{trimPubkey(key.pubkey, 6)}</span>
-                    </KeyPubkeyStyle>
-                    <KeyTagsStyle>
-                      {getTags(key).map((status) => (
-                        <KeyStatusTag key={status} status={status} />
-                      ))}
-                    </KeyTagsStyle>
-                  </KeyLabelStyle>
-                }
-              />
-              {disabled && disabledHint != null && (
-                <InfoTooltip content={disabledHint} position="left" />
-              )}
-            </KeyRowStyle>
+            <CheckboxRow
+              key={`${key.index}-${key.pubkey}`}
+              mono
+              dataTestId={{ root: 'keyRow' }}
+              checked={isChecked(key, position)}
+              disabled={disabled}
+              onChange={() => toggle(key, position)}
+              onBlur={field.onBlur}
+              label={
+                <KeyPubkeyStyle title={key.pubkey}>
+                  <span>{trimPubkey(key.pubkey, 16)}</span>
+                  <span>{trimPubkey(key.pubkey, 6)}</span>
+                </KeyPubkeyStyle>
+              }
+              trailing={
+                <Stack
+                  direction="row"
+                  wrap
+                  align="center"
+                  justify="end"
+                  gap={4}
+                >
+                  {getTags(key).map((status) => (
+                    <KeyStatusTag key={status} status={status} />
+                  ))}
+                  {disabled && disabledHint != null && (
+                    <InfoTooltip content={disabledHint} position="left" />
+                  )}
+                </Stack>
+              }
+            />
           );
         })}
-      </KeyListStyle>
+      </CheckboxList>
       <FieldError id={errorId}>{message}</FieldError>
-    </FieldStackStyle>
+    </Stack>
   );
 };

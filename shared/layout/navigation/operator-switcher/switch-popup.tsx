@@ -1,3 +1,4 @@
+import { Divider } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import {
   OperatorRef,
@@ -5,14 +6,7 @@ import {
   useOperatorGroup,
 } from 'modules/web3';
 import { ModuleNodeOperator } from 'modules/web3/operator-provider/types';
-import {
-  FC,
-  RefObject,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { FC, RefObject, useCallback, useMemo } from 'react';
 import {
   formatGroupLabel,
   isSameOperator,
@@ -28,6 +22,7 @@ import {
   useSwitchOperator,
 } from 'shared/node-operator';
 import {
+  BodyContentStyle,
   BodyStyle,
   HeaderStyle,
   HeaderTagsStyle,
@@ -94,25 +89,6 @@ const ActiveHeader: FC<ActiveHeaderProps> = ({ operator, onClose }) => {
 };
 
 const POPUP_OFFSET = 16;
-const VIEWPORT_MARGIN = 8;
-
-const useMaxHeight = (anchorRef: RefObject<HTMLElement | null>) => {
-  const [maxHeight, setMaxHeight] = useState<number>();
-
-  useEffect(() => {
-    const update = () => {
-      const top = anchorRef.current?.getBoundingClientRect().top;
-      if (top !== undefined) {
-        setMaxHeight(top - POPUP_OFFSET - VIEWPORT_MARGIN);
-      }
-    };
-    update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
-  }, [anchorRef]);
-
-  return maxHeight;
-};
 
 export const SwitchPopup: FC<SwitchPopupProps> = ({
   onClose,
@@ -122,7 +98,6 @@ export const SwitchPopup: FC<SwitchPopupProps> = ({
 }) => {
   const createRows = useCreateRows();
   const switchOperator = useSwitchOperator();
-  const maxHeight = useMaxHeight(anchorRef);
   const others = useMemo(
     () => list.filter((item) => !isSameOperator(item, active)),
     [list, active],
@@ -145,36 +120,37 @@ export const SwitchPopup: FC<SwitchPopupProps> = ({
       align="center"
       offset={POPUP_OFFSET}
       width={296 - 16}
-      // Popover clamps to an 8px viewport margin; Figma keeps the panel flush with the sidebar
-      style={{ maxHeight }}
       aria-label="Switch Node Operator"
       data-testid="switchOperatorPopup"
     >
       <ActiveHeader operator={active} onClose={onClose} />
       {(others.length > 0 || createRows.hasRows) && (
         <BodyStyle>
-          {others.length > 0 && (
-            <div>
-              <CaptionStyle $size="compact">Other operators</CaptionStyle>
-              {others.map((operator) => (
-                <OperatorRow
-                  key={`${operator.module}:${operator.nodeOperatorId}`}
-                  operator={operator}
-                  size="compact"
-                  onSelect={handleSwitch}
-                  data-testid="switchModalOperatorRow"
-                  data-name-testid="switchModalOperatorName"
-                />
-              ))}
-            </div>
-          )}
-          <CreateSection
-            size="compact"
-            rows={createRows}
-            onCreate={onClose}
-            events={CREATE_EVENTS}
-            testIdPrefix="switchPopupCreate"
-          />
+          <Divider />
+          <BodyContentStyle>
+            {others.length > 0 && (
+              <div>
+                <CaptionStyle $size="compact">Other operators</CaptionStyle>
+                {others.map((operator) => (
+                  <OperatorRow
+                    key={`${operator.module}:${operator.nodeOperatorId}`}
+                    operator={operator}
+                    size="compact"
+                    onSelect={handleSwitch}
+                    data-testid="switchModalOperatorRow"
+                    data-name-testid="switchModalOperatorName"
+                  />
+                ))}
+              </div>
+            )}
+            <CreateSection
+              size="compact"
+              rows={createRows}
+              onCreate={onClose}
+              events={CREATE_EVENTS}
+              testIdPrefix="switchPopupCreate"
+            />
+          </BodyContentStyle>
         </BodyStyle>
       )}
     </PopupStyle>

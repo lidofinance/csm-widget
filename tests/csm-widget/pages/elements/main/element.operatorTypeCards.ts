@@ -28,7 +28,7 @@ export class OperatorTypeCards {
   }
 
   getCardButton(type: OperatorTypeCard): Locator {
-    // the card also holds the type-badge button, so the CTA is addressed through its link
-    return this.getCard(type).getByRole('link').getByRole('button');
+    // the card also holds the type-badge button, so the CTA is addressed by its link role
+    return this.getCard(type).getByRole('link');
   }
 }

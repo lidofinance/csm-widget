@@ -1,6 +1,8 @@
+import { InfoTooltip } from '@lidofinance/lido-app-ui';
+import { ICON_TOOLTIP_TEST_ID } from 'shared/components/icon-tooltip/test-ids';
 import { Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
-import { FormTitle, IconTooltip, InputAddress, Stack } from 'shared/components';
+import { FormTitle, InputAddress, Stack } from 'shared/components';
 import { VerifiedChip } from 'shared/components/input-address/verified-chip';
 import { useApplyFormData } from '../context';
 import { MainAddressTooltipContent } from './main-address-tooltip-content';
@@ -13,8 +15,11 @@ export const MainAddress: FC = () => {
       <Stack direction="column" gap="xxs">
         <FormTitle>Main address</FormTitle>
         <Text size="xs" color="secondary">
-          You are requesting IDVTC operator type for the following address:
-          <IconTooltip inline tooltip={<MainAddressTooltipContent />} />
+          You are requesting IDVTC operator type for the following address:{' '}
+          <InfoTooltip
+            dataTestId={ICON_TOOLTIP_TEST_ID}
+            content={<MainAddressTooltipContent />}
+          />
         </Text>
       </Stack>
       <InputAddress

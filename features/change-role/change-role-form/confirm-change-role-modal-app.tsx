@@ -2,7 +2,6 @@ import { Button, Stack, Typography } from '@lidofinance/lido-app-ui';
 import { FC, useCallback, useId, useMemo, useState } from 'react';
 import { ConfirmModalProps } from 'shared/hooks';
 import { FormModalShell } from 'shared/transaction-modal/form-modal-shell';
-import styled from 'styled-components';
 import {
   getConfirmChangeRoleStepCopy,
   getConfirmChangeRoleSteps,
@@ -14,18 +13,6 @@ type ConfirmChangeRoleModalAppProps = ConfirmModalProps & {
   isProposal: boolean;
   showRepropose: boolean;
 };
-
-const SecondaryTextStyle = styled(Typography)`
-  && {
-    color: var(--lido-app-ui-color-text-secondary);
-  }
-`;
-
-const ContinueButtonStyle = styled(Button)`
-  && {
-    width: 100%;
-  }
-`;
 
 export const ConfirmChangeRoleModalApp: FC<ConfirmChangeRoleModalAppProps> = ({
   open,
@@ -68,26 +55,28 @@ export const ConfirmChangeRoleModalApp: FC<ConfirmChangeRoleModalAppProps> = ({
           >
             {copy.title}
           </Typography>
-          <SecondaryTextStyle
+          <Typography
+            color="secondary"
             variant="body"
-            forwardedAs="p"
+            as="p"
             dataTestId={{ root: 'changeRoleModalText' }}
           >
             {copy.body}
-          </SecondaryTextStyle>
+          </Typography>
         </Stack>
         <Stack direction="column" gap={12}>
-          <ContinueButtonStyle onClick={onContinue}>
+          <Button fullWidth onClick={onContinue}>
             Continue
-          </ContinueButtonStyle>
+          </Button>
           {copy.hint && (
-            <SecondaryTextStyle
+            <Typography
+              color="secondary"
               variant="description"
-              forwardedAs="p"
+              as="p"
               dataTestId={{ root: 'changeRoleModalText' }}
             >
               {copy.hint}
-            </SecondaryTextStyle>
+            </Typography>
           )}
         </Stack>
       </Stack>

@@ -1,11 +1,5 @@
-import { Button, Pagination, Select } from '@lidofinance/lido-ui';
+import { Button } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
-
-export const PaginationStyled = styled(Pagination)`
-  align-self: center;
-  flex-wrap: wrap;
-  justify-content: center;
-`;
 
 export const SortButtonStyled = styled(Button).attrs({
   variant: 'ghost',
@@ -30,40 +24,5 @@ export const SortButtonStyled = styled(Button).attrs({
     opacity: ${({ $active }) => ($active ? 1 : 0.5)};
     color: ${({ theme, $active }) =>
       $active ? theme.colors['primary'] : theme.colors['secondary']};
-  }
-`;
-
-export const Wrapper = styled.div`
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: ${({ theme }) => theme.spaceMap.lg}px;
-  justify-items: end;
-
-  & > *:first-child {
-    grid-column: 2 / 3;
-    justify-self: center;
-  }
-
-  ${({ theme }) => theme.mediaQueries.md} {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: ${({ theme }) => theme.spaceMap.md}px;
-  }
-`;
-
-export const SelectStyle = styled(Select)`
-  width: fit-content;
-
-  & > span {
-    max-height: 32px;
-    padding: 5px 12px;
-    min-width: 112px;
-    width: 120px;
-    border-radius: 6px;
-  }
-
-  div + span {
-    padding-left: 8px;
   }
 `;

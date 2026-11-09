@@ -1,9 +1,14 @@
-import { Button, Notification } from '@lidofinance/lido-app-ui';
-import Arrow from 'assets/icons/arrow-right.svg?react';
+import {
+  Button,
+  Copy,
+  IconArrowRight,
+  Notification,
+} from '@lidofinance/lido-app-ui';
 import { FEE_RECIPIENT_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FC, useCallback } from 'react';
-import { CopyLink, Plural, Pubkey } from 'shared/components';
+import { Plural, Pubkey } from 'shared/components';
+import { notifyCopied } from 'shared/hooks';
 import { trackMatomoEvent } from 'utils';
 
 type AlertWrongFeeRecipientProps = {
@@ -35,7 +40,7 @@ export const AlertWrongFeeRecipient: FC<AlertWrongFeeRecipientProps> = ({
             size="small"
             variant="outline"
             href={FEE_RECIPIENT_LINK}
-            iconRight={<Arrow />}
+            iconRight={<IconArrowRight />}
             onClick={() =>
               trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.feeRecipientDocsLink)
             }
@@ -61,7 +66,7 @@ export const AlertWrongFeeRecipient: FC<AlertWrongFeeRecipientProps> = ({
             <Pubkey
               symbols={6}
               pubkey={pubkey}
-              link={<CopyLink text={pubkey} />}
+              link={<Copy text={pubkey} onCopy={notifyCopied} />}
             />
           </li>
         ))}

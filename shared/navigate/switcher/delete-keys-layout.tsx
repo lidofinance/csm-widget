@@ -1,6 +1,9 @@
-import { Stack } from '@lidofinance/lido-app-ui';
+import {
+  Stack,
+  FormLayout,
+  type FormLayoutProps,
+} from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import { FormLayout, FormLayoutProps } from 'shared/ui';
 import {
   DeleteKeysSwitcher,
   type DeleteKeysSwitcherRoutes,

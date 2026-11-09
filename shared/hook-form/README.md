@@ -270,7 +270,7 @@ export const MyFormGate: FC<PropsWithChildren> = ({ children }) => {
 
 ### Fields
 
-Every field takes `name`, reads the form through `useFormContext`, keeps the `name` attribute on its input and shows errors as `<p role="alert" data-testid="inputMessageError">`. An error shows once the field is touched, the form is submitted, the field has a value, or `showUntouched` is set.
+Every field takes `name`, reads the form through `useFormContext`, keeps the `name` attribute on its input and shows errors as `<span role="alert" data-testid="inputMessageError">`. An error shows once the field is touched, the form is submitted, the field has a value, or `showUntouched` is set.
 
 | Field              | Value                                                | Backing                                                                                          |
 | ------------------ | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------ |

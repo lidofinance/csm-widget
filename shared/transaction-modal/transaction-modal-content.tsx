@@ -1,7 +1,7 @@
 import { memo, ReactNode } from 'react';
 import styled from 'styled-components';
 import { Text } from '@lidofinance/lido-ui';
-import { TxStatus } from '@lidofinance/lido-app-ui';
+import { Body, Stack, TxStatus } from '@lidofinance/lido-app-ui';
 import { useFormUi } from 'shared/hook-form/form-ui';
 
 export const Wrap = styled.div`
@@ -37,32 +37,24 @@ export const FooterHint = styled(Text).attrs({
   margin-top: ${({ theme }) => theme.spaceMap.xxl}px;
 `;
 
-const AppFooterStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  width: 100%;
-  text-align: center;
+const AppFooterStyle = styled(Stack)`
+  && {
+    width: 100%;
+    text-align: center;
+  }
 `;
 
-const AppFooterSlotStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-`;
-
-const AppFooterHintStyle = styled.div`
-  color: var(--lido-app-ui-color-text-tertiary);
-  font-size: var(--lido-app-ui-font-size-label);
-  line-height: var(--lido-app-ui-line-height-label);
-  word-break: break-word;
+const AppFooterHintStyle = styled(Body)`
+  && {
+    word-break: break-word;
+  }
 `;
 
 export type TxStageStatus = 'loading' | 'success' | 'error' | 'warning';
 
 type TransactionModalContentProps = {
   status: TxStageStatus;
-  icon: ReactNode;
+  icon?: ReactNode;
   title: ReactNode;
   description: ReactNode;
   footerHint?: ReactNode;
@@ -104,14 +96,17 @@ const AppContent = ({
     dataTestId={{ root: 'txStage', title: 'title', message: 'description' }}
     footer={
       (footer || footerHint) && (
-        <AppFooterStyle>
+        <AppFooterStyle gap={16}>
           {footer && (
-            <AppFooterSlotStyle data-testid="footer">
+            <Stack gap={12} dataTestId={{ root: 'footer' }}>
               {footer}
-            </AppFooterSlotStyle>
+            </Stack>
           )}
           {footerHint && (
-            <AppFooterHintStyle data-testid="footerHint">
+            <AppFooterHintStyle
+              color="tertiary"
+              dataTestId={{ root: 'footerHint' }}
+            >
               {footerHint}
             </AppFooterHintStyle>
           )}

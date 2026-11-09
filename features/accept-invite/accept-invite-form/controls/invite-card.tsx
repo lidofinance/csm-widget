@@ -1,4 +1,4 @@
-import { Typography } from '@lidofinance/lido-app-ui';
+import { Card, Stack, Typography } from '@lidofinance/lido-app-ui';
 import { ModuleInvite } from 'modules/web3';
 import { FC } from 'react';
 import { SubmitButton } from 'shared/form-page';
@@ -10,26 +10,23 @@ import {
   OperatorTypeTag,
 } from 'shared/node-operator';
 import { getProposedRoleText } from '../accept-invite-state';
-import { InviteCardStyle, InviteHeaderStyle, InviteNameStyle } from '../styles';
+import { InviteNameStyle } from '../styles';
 
 export const InviteCard: FC<{ invite: ModuleInvite }> = ({ invite }) => {
   const inviteId = getInviteId(invite);
   const type = useDisplayOperatorType(invite);
 
   return (
-    <InviteCardStyle
-      dataTestId={{ root: 'inviteCard' }}
-      data-invite-id={inviteId}
-    >
-      <InviteHeaderStyle>
+    <Card dataTestId={{ root: 'inviteCard' }} data-invite-id={inviteId}>
+      <Stack direction="row" align="center" gap={12}>
         <OperatorAvatar operator={invite} size={40} />
         <InviteNameStyle>{getOperatorName(invite)}</InviteNameStyle>
         {type && <OperatorTypeTag type={type} />}
-      </InviteHeaderStyle>
+      </Stack>
       <Typography variant="body" as="p">
         {getProposedRoleText(invite.role)}
       </Typography>
       <SubmitButton intent={inviteId}>Accept request</SubmitButton>
-    </InviteCardStyle>
+    </Card>
   );
 };

@@ -1,6 +1,5 @@
-import { Address } from '@lidofinance/lido-app-ui';
+import { Address, Stack } from '@lidofinance/lido-app-ui';
 import { FC, ReactNode } from 'react';
-import { TxAddressStyle } from './styles';
 
 export type TxAddressDescriptionProps = {
   label: ReactNode;
@@ -12,8 +11,8 @@ export const TxAddressDescription: FC<TxAddressDescriptionProps> = ({
   label,
   address,
 }) => (
-  <TxAddressStyle>
+  <Stack as="span" inline align="center" gap={8}>
     {label}
     <Address address={address} symbols={6} identicon={20} />
-  </TxAddressStyle>
+  </Stack>
 );

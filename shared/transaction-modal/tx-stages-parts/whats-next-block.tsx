@@ -1,19 +1,9 @@
 import { MessageBox } from '@lidofinance/lido-app-ui';
 import { FC, PropsWithChildren } from 'react';
-import { useFormUi } from 'shared/hook-form/form-ui';
 import styled from 'styled-components';
 
-const LegacyBlockStyle = styled.div`
-  text-align: left;
-  line-height: 24px;
-
-  background-color: var(--lido-color-backgroundSecondary);
-  border-radius: ${({ theme }) => theme.borderRadiusesMap.lg}px;
-  padding: ${({ theme }) => theme.spaceMap.md}px;
-`;
-
 // TxStatus centers its message; the steps read as a left-aligned list
-const AppBlockStyle = styled(MessageBox)`
+const BlockStyle = styled(MessageBox)`
   && {
     text-align: left;
   }
@@ -25,22 +15,8 @@ const AppBlockStyle = styled(MessageBox)`
 `;
 
 /** "What is next:" steps box inside a tx stage description; children are `<li>` items. */
-export const WhatsNextBlock: FC<PropsWithChildren> = ({ children }) => {
-  const ui = useFormUi();
-
-  if (ui === 'app') {
-    return (
-      <AppBlockStyle icon={false} headline="What is next:">
-        <ol>{children}</ol>
-      </AppBlockStyle>
-    );
-  }
-
-  return (
-    <LegacyBlockStyle>
-      <b>What is next: </b>
-      <br />
-      <ol>{children}</ol>
-    </LegacyBlockStyle>
-  );
-};
+export const WhatsNextBlock: FC<PropsWithChildren> = ({ children }) => (
+  <BlockStyle icon={false} headline="What is next:">
+    <ol>{children}</ol>
+  </BlockStyle>
+);

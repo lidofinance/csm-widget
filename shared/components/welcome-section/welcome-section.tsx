@@ -1,17 +1,15 @@
+import { Body, Card, H1, Stack } from '@lidofinance/lido-app-ui';
 import { LIDO_OPERATOR_PORTAL_BASE, WIDGET_TITLE } from 'consts';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FC, PropsWithChildren } from 'react';
 import { MatomoLink } from 'shared/components';
-import { BlockStyled, ContentWrapper, Header, Heading } from './styles';
 
 export const WelcomeSection: FC<PropsWithChildren> = ({ children }) => {
   return (
-    <BlockStyled data-testid="welcomeSection">
-      <Heading>
-        <Header>{WIDGET_TITLE}</Header>
-      </Heading>
-      <ContentWrapper>
-        <p>
+    <Card data-testid="welcomeSection">
+      <Stack gap={24}>
+        <H1>{WIDGET_TITLE}</H1>
+        <Body>
           Lido Node Operators run validators in the Community Staking Module
           (CSM), a permissionless module for community stakers, and in the
           Curated Module v2 (CM), for allow-listed professional operators. For a
@@ -24,9 +22,9 @@ export const WelcomeSection: FC<PropsWithChildren> = ({ children }) => {
             link
           </MatomoLink>
           .
-        </p>
-      </ContentWrapper>
-      {children}
-    </BlockStyled>
+        </Body>
+        {children}
+      </Stack>
+    </Card>
   );
 };

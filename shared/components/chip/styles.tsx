@@ -33,14 +33,6 @@ export const CustomStyledChip = styled.span`
   }
 `;
 
-export const StyledOwnerChip = styled(CustomStyledChip)`
-  font-weight: 400;
-  color: var(--lido-color-textSecondary);
-  background: color-mix(in srgb, currentColor 15%, transparent);
-`;
-
-export const StyledYouChip = styled(CustomStyledChip)``;
-
 export const StyledPriorityChip = styled.div`
   display: inline-flex;
   width: fit-content;

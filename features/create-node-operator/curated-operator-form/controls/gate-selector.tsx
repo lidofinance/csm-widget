@@ -1,5 +1,5 @@
 import { CurveRef } from '@lidofinance/lido-csm-sdk';
-import { Body, DataListRow, Skeleton } from '@lidofinance/lido-app-ui';
+import { Body, DataListRow, Skeleton, Stack } from '@lidofinance/lido-app-ui';
 import { CUSTOM_CURVE, OPERATOR_TYPE_METADATA } from 'consts';
 import { useCurveParameters } from 'modules/web3';
 import { FC, useMemo } from 'react';
@@ -16,7 +16,7 @@ import { useCurveMetadataGetter } from 'shared/hooks';
 import { CurveBadge } from 'shared/node-operator';
 import { useCuratedOperatorFormData } from '../context';
 import { getGateCardTestId } from '../curated-operator-wizard';
-import { CompactListStyle, GateParamsStyle, ParamGroupStyle } from './styles';
+import { CompactListStyle, GateParamsStyle } from './styles';
 
 type ParamGroupProps = {
   title: string;
@@ -29,7 +29,7 @@ const ParamGroup: FC<ParamGroupProps> = ({
   rows,
   'data-testid': testId,
 }) => (
-  <ParamGroupStyle data-testid={testId}>
+  <Stack gap={8} data-testid={testId}>
     <Body as="p" weight="semibold">
       {title}
     </Body>
@@ -42,14 +42,14 @@ const ParamGroup: FC<ParamGroupProps> = ({
     ) : (
       <Skeleton variant="text" lines={2} />
     )}
-  </ParamGroupStyle>
+  </Stack>
 );
 
 const GateCardParams: FC<{ curve: CurveRef }> = ({ curve }) => {
   const { data: parameters } = useCurveParameters(curve);
 
   return (
-    <GateParamsStyle>
+    <GateParamsStyle minItemWidth={200} rowGap={16} columnGap={24}>
       <ParamGroup
         title="Node Operator reward:"
         rows={

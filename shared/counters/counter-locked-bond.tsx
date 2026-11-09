@@ -1,6 +1,6 @@
 import { useNodeOperatorId, useOperatorBalance } from 'modules/web3';
 import { FC } from 'react';
-import { Counter } from 'shared/components';
+import { NavCounter } from './nav-counter';
 
 export const CounterLockedBond: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
@@ -8,5 +8,5 @@ export const CounterLockedBond: FC = () => {
 
   const count = balance?.locked ? 1 : 0;
 
-  return <Counter warning count={count} />;
+  return <NavCounter variant="warning" count={count} />;
 };

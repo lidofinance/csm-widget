@@ -1,5 +1,5 @@
 import type { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { SectionTitle } from '@lidofinance/lido-app-ui';
+import { SectionTitle, Stack } from '@lidofinance/lido-app-ui';
 import { FC, ReactNode, useCallback, useState } from 'react';
 import {
   useController,
@@ -22,7 +22,6 @@ import {
   getDepositDataState,
   getDepositDataTabItems,
 } from './deposit-data-state';
-import { FieldStackStyle } from './styles';
 import { useFocusableRef } from './use-focusable-ref';
 
 export const DEPOSIT_DATA_ERROR_TEST_ID = 'input-message-error';
@@ -106,7 +105,7 @@ export const DepositDataField: FC<DepositDataFieldProps> = ({
     ));
 
   return (
-    <FieldStackStyle ref={ref}>
+    <Stack gap={12} ref={ref}>
       {label && <SectionTitle title={label} action={action} />}
       <Dropzone
         name={field.name}
@@ -127,6 +126,6 @@ export const DepositDataField: FC<DepositDataFieldProps> = ({
         {TAB_CONTENT[activeTab]}
       </Dropzone>
       {isWcTypeMismatch && <WcTypeWarning />}
-    </FieldStackStyle>
+    </Stack>
   );
 };

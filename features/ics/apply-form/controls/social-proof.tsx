@@ -1,3 +1,5 @@
+import { InfoTooltip } from '@lidofinance/lido-app-ui';
+import { ICON_TOOLTIP_TEST_ID } from 'shared/components/icon-tooltip/test-ids';
 import { Input, Text } from '@lidofinance/lido-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { CategoryItemsWrapper } from 'features/ics/score-system/styles';
@@ -6,7 +8,6 @@ import {
   Chip,
   CopyButton,
   FormTitle,
-  IconTooltip,
   MatomoLink,
   Stack,
 } from 'shared/components';
@@ -89,9 +90,9 @@ export const SocialProof: FC = () => {
                 the CSM channel
               </MatomoLink>
               .{' '}
-              <IconTooltip
-                inline
-                tooltip='If you cannot access the CSM channel, you may need to claim the "CSM Operator" role. To claim this role, follow the instructions in the "cs-get-started" channel.'
+              <InfoTooltip
+                dataTestId={ICON_TOOLTIP_TEST_ID}
+                content='If you cannot access the CSM channel, you may need to claim the "CSM Operator" role. To claim this role, follow the instructions in the "cs-get-started" channel.'
               />
             </Text>
 

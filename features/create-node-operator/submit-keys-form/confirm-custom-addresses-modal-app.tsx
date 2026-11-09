@@ -1,6 +1,7 @@
 import {
   Address,
   Button,
+  Grid,
   IconLink,
   MessageBox,
   Stack,
@@ -24,27 +25,9 @@ type ConfirmCustomAddressesModalAppProps = ConfirmModalProps & {
   extendedManagerPermissions: boolean;
 };
 
-const SecondaryTextStyle = styled(Typography)`
-  && {
-    color: var(--lido-app-ui-color-text-secondary);
-  }
-`;
-
 const PermissionsListStyle = styled.ol`
   margin: 0;
   padding-left: 20px;
-`;
-
-const ButtonsStyle = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-`;
-
-const DotsStyle = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `;
 
 const DotStyle = styled.span<{ $done: boolean }>`
@@ -70,14 +53,20 @@ const StepDots: FC<{ count: number; current: number }> = ({
   count,
   current,
 }) => (
-  <DotsStyle role="img" aria-label={`Step ${current + 1} of ${count}`}>
+  <Stack
+    direction="row"
+    align="center"
+    justify="center"
+    role="img"
+    aria-label={`Step ${current + 1} of ${count}`}
+  >
     {Array.from({ length: count }, (_, index) => (
       <Fragment key={index}>
         {index > 0 && <DotLineStyle $done={index <= current} />}
         <DotStyle $done={index <= current} />
       </Fragment>
     ))}
-  </DotsStyle>
+  </Stack>
 );
 
 const AddressRow: FC<{ label: string; address: string }> = ({
@@ -88,9 +77,9 @@ const AddressRow: FC<{ label: string; address: string }> = ({
 
   return (
     <Stack direction="column" gap={4}>
-      <SecondaryTextStyle variant="body" forwardedAs="span">
+      <Typography variant="body" color="secondary" as="span">
         {label}
-      </SecondaryTextStyle>
+      </Typography>
       <Typography variant="body" as="div">
         <Address address={address} symbols={0}>
           <TextLink
@@ -148,11 +137,11 @@ export const ConfirmCustomAddressesModalApp: FC<
           <Typography variant="bodyLarge" weight="semibold" as="h3">
             Are you sure you want to set the following custom addresses?
           </Typography>
-          <SecondaryTextStyle variant="body" forwardedAs="p">
+          <Typography variant="body" color="secondary" as="p">
             {step === 0
               ? 'Please doublecheck the new addresses for the Node Operator. Keep in mind that in case of wrong addresses specified, you can lose the access to your Node Operator and your bond submitted and rewards acquired.'
               : 'These permissions can only be selected during Node Operator Creation, and cannot be changed in the future'}
-          </SecondaryTextStyle>
+          </Typography>
         </Stack>
 
         {step === 0 ? (
@@ -175,12 +164,12 @@ export const ConfirmCustomAddressesModalApp: FC<
 
         {stepsCount > 1 && <StepDots count={stepsCount} current={step} />}
 
-        <ButtonsStyle>
+        <Grid columns={2} gap={12}>
           <Button variant="outline" onClick={onReject}>
             Cancel
           </Button>
           <Button onClick={onContinue}>{actionLabel}</Button>
-        </ButtonsStyle>
+        </Grid>
       </Stack>
     </FormModalShell>
   );

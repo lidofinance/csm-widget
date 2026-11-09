@@ -1,4 +1,4 @@
-import { DataListRow, Skeleton } from '@lidofinance/lido-app-ui';
+import { DataListRow, Skeleton, Typography } from '@lidofinance/lido-app-ui';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { CSSProperties, FC } from 'react';
 import { useWatch } from 'react-hook-form';
@@ -11,8 +11,8 @@ import {
   getRemovalFeeTotal,
   REMOVAL_FEE_TOOLTIP,
 } from './remove-keys-state';
-import { ErrorValueStyle } from './styles';
 
+const INHERIT_FONT: CSSProperties = { font: 'inherit' };
 const VALUE_SKELETON: CSSProperties = { width: 80 };
 
 const useSelectedCount = () =>
@@ -59,7 +59,9 @@ const BondAfterRow: FC = () => {
         isPending ? (
           <Skeleton variant="text" style={VALUE_SKELETON} />
         ) : row.insufficient ? (
-          <ErrorValueStyle>{amount}</ErrorValueStyle>
+          <Typography as="span" color="error" style={INHERIT_FONT}>
+            {amount}
+          </Typography>
         ) : (
           amount
         )

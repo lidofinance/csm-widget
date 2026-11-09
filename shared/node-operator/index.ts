@@ -1,5 +1,5 @@
 export * from './choose-operator-modal';
-export * from './confirm-operator-modal/confirm-operator-modal';
+export * from './confirm-operator-modal/confirm-operator-modal-app';
 export * from './confirm-operator-modal/use-confirm-operator-modal';
 export * from './curve-badge/curve-badge';
 export * from './descriptor/descriptor-id';

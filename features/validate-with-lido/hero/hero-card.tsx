@@ -1,13 +1,11 @@
-import { Stack, Typography } from '@lidofinance/lido-app-ui';
+import { BodyLarge, Stack, Typography } from '@lidofinance/lido-app-ui';
 import { FC, ReactNode } from 'react';
 import styled from 'styled-components';
 import validateNom from 'assets/illustrations/validate-nom.webp';
 import {
   HeroIllustration,
   HeroIllustrationSlot,
-  HeroRow,
   PromoCard,
-  SecondaryText,
 } from '../components';
 
 const HeroPromoCard = styled(PromoCard)`
@@ -20,10 +18,6 @@ const HeroPromoCard = styled(PromoCard)`
       padding: 20px;
     }
   }
-`;
-
-const TextColumn = styled(Stack)`
-  flex: 1;
 `;
 
 type HeroCardProps = {
@@ -40,8 +34,12 @@ export const HeroCard: FC<HeroCardProps> = ({
   actions,
 }) => (
   <HeroPromoCard $gradient={variant} $radius="xl">
-    <HeroRow>
-      <TextColumn direction="column" gap={24}>
+    <Stack
+      direction={{ base: 'row', mdDown: 'column' }}
+      gap={{ base: 40, mdDown: 24 }}
+      align="stretch"
+    >
+      <Stack grow direction="column" gap={24}>
         <Stack direction="column" gap={8}>
           <Typography variant="h1" as="h2">
             {title}
@@ -49,14 +47,14 @@ export const HeroCard: FC<HeroCardProps> = ({
           <div>{text}</div>
         </Stack>
         {actions}
-      </TextColumn>
+      </Stack>
       <HeroIllustrationSlot>
         <HeroIllustration src={validateNom} width={297} />
       </HeroIllustrationSlot>
-    </HeroRow>
+    </Stack>
   </HeroPromoCard>
 );
 
 export const HeroText: FC<{ children: ReactNode }> = ({ children }) => (
-  <SecondaryText variant="bodyLarge">{children}</SecondaryText>
+  <BodyLarge color="secondary">{children}</BodyLarge>
 );

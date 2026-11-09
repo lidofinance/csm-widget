@@ -1,19 +1,19 @@
 import { CONTRACT_NAMES, MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { Copy } from '@lidofinance/lido-app-ui';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { MODULE_METADATA } from 'consts/module';
 import { useDappStatus, useModule, useSmSDK } from 'modules/web3';
 import { FC, PropsWithChildren } from 'react';
-import { useChainName } from 'shared/hooks';
+import { notifyCopied, useChainName } from 'shared/hooks';
 import styled from 'styled-components';
 import { getEtherscanAddressLink } from 'utils';
-import { CopyLink } from '../copy-button';
 import { FaqLink } from './faq-link';
 
 const AddressCode = styled.code`
   word-break: break-all;
 `;
 
-const StyledCopy = styled(CopyLink)`
+const StyledCopy = styled(Copy)`
   margin: -8px 0 -4px;
   vertical-align: middle;
 `;
@@ -66,7 +66,7 @@ const FaqContractAddress: FC<{ name: CONTRACT_NAMES }> = ({ name }) => {
       <FaqLink href={url} $inline>
         <AddressCode>{address}</AddressCode>
       </FaqLink>
-      <StyledCopy text={address} />
+      <StyledCopy text={address} onCopy={notifyCopied} />
     </>
   );
 };

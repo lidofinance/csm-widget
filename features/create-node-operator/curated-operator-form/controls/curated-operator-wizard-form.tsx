@@ -1,13 +1,12 @@
+import { FormLayout, Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { useFormWizard } from 'shared/form-page';
 import { Form } from 'shared/hook-form/form-controller';
-import { FormLayout } from 'shared/ui';
 import { CURATED_OPERATOR_STEPS } from '../curated-operator-wizard';
 import { AddressesStep } from './addresses-step';
 import { CuratedOperatorAside } from './curated-operator-aside';
 import { GateSelector } from './gate-selector';
 import { OperatorInfoStep } from './operator-info-step';
-import { StepContentStyle } from './styles';
 import { VerificationSummary } from './verification-summary';
 
 const STEP_CONTENT: FC[] = [
@@ -24,9 +23,9 @@ export const CuratedOperatorWizardForm: FC = () => {
   return (
     <Form data-testid="curatedOperatorForm" onKeyDown={onKeyDown}>
       <FormLayout aside={<CuratedOperatorAside />}>
-        <StepContentStyle>
+        <Stack gap={24}>
           <StepContent />
-        </StepContentStyle>
+        </Stack>
       </FormLayout>
     </Form>
   );

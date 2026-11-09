@@ -8,7 +8,7 @@ import badge0x01 from 'assets/illustrations/operator-type/0x01.svg';
 import badge0x02 from 'assets/illustrations/operator-type/0x02.svg';
 import badgeIcs from 'assets/illustrations/operator-type/ics.svg';
 import badgeIdvtc from 'assets/illustrations/operator-type/idvtc.svg';
-import { ModuleStatusTag, PromoCard, SecondaryText } from '../components';
+import { ModuleStatusTag, PromoCard } from '../components';
 import { isStatVisible, StatBody } from './stat-body';
 import { AprType, Stat } from './use-csm-stats';
 
@@ -52,24 +52,10 @@ const Badge = styled.img`
   height: 52px;
 `;
 
-const TextColumn = styled.div`
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-`;
-
 const AprColumn = styled.div`
   flex: none;
   width: 60px;
   text-align: right;
-`;
-
-const Row = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 12px;
 `;
 
 const ComingSoonTag: FC = () => {
@@ -80,20 +66,24 @@ const ComingSoonTag: FC = () => {
 type OptionRowProps = { option: Option; apr: Stat<number> };
 
 const OptionRow: FC<OptionRowProps> = ({ option, apr }) => (
-  <Row>
+  <Stack direction="row" align="center" gap={12}>
     <Badge src={option.badge} alt="" width={52} height={52} />
-    <TextColumn>
+    <Stack grow direction="column" gap={4}>
       <Stack direction="row" gap={8} align="center">
         <Typography variant="bodyLarge" weight="semibold">
           {option.name}
         </Typography>
         {option.type === OPERATOR_TYPE.CSM2_DEF && <ComingSoonTag />}
       </Stack>
-      <SecondaryText variant="description">{option.description}</SecondaryText>
-    </TextColumn>
+      <Typography variant="description" color="secondary">
+        {option.description}
+      </Typography>
+    </Stack>
     {isStatVisible(apr) && (
       <AprColumn>
-        <SecondaryText variant="description">APY up to</SecondaryText>
+        <Typography variant="description" color="secondary">
+          APY up to
+        </Typography>
         <StatBody
           stat={apr}
           format={(value) => (
@@ -104,7 +94,7 @@ const OptionRow: FC<OptionRowProps> = ({ option, apr }) => (
         />
       </AprColumn>
     )}
-  </Row>
+  </Stack>
 );
 
 type OptionsCardProps = { aprs: Record<AprType, Stat<number>> };

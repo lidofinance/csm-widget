@@ -3,18 +3,33 @@ import {
   OPERATOR_TYPE,
   OPERATOR_TYPE_INFO,
 } from '@lidofinance/lido-csm-sdk';
-import { Skeleton } from '@lidofinance/lido-app-ui';
+import { Description, Skeleton, Stack } from '@lidofinance/lido-app-ui';
 import { OPERATOR_TYPE_METADATA } from 'consts';
 import { useCurveParameters } from 'modules/web3';
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import { useParameters } from 'shared/components/parameters-list/parameters';
 import { useOperatorTypeCurve } from 'shared/hooks';
-import {
-  ParameterGroupStyle,
-  ParameterRowStyle,
-  ParametersStyle,
-  ParameterTitleStyle,
-} from './styles';
+
+type ParameterRowProps = {
+  label: ReactNode;
+  value: ReactNode;
+  strong?: boolean;
+};
+
+const ParameterRow: FC<ParameterRowProps> = ({ label, value, strong }) => (
+  <Stack direction="row" justify="between" gap={8}>
+    <Description
+      as="span"
+      color={strong ? 'default' : 'secondary'}
+      weight={strong ? 'bold' : 'regular'}
+    >
+      {label}
+    </Description>
+    <Description as="span" color="default" weight="bold">
+      {value}
+    </Description>
+  </Stack>
+);
 
 export const Parameters: FC<{ type: OPERATOR_TYPE }> = ({ type }) => {
   const metadata = OPERATOR_TYPE_METADATA[type];
@@ -26,32 +41,29 @@ export const Parameters: FC<{ type: OPERATOR_TYPE }> = ({ type }) => {
   );
 
   return (
-    <ParametersStyle>
+    <Stack gap={8}>
       {PARAMETERS.map(({ title, renderRows }) => (
-        <ParameterGroupStyle key={title}>
-          <ParameterTitleStyle>{title}:</ParameterTitleStyle>
+        <Stack key={title} gap={2}>
+          <Description as="span" weight="bold">
+            {title}:
+          </Description>
           {parameters ? (
             renderRows?.(parameters).map(({ label, value }) => (
-              <ParameterRowStyle key={label}>
-                <span>{label}</span>
-                <span>{value}</span>
-              </ParameterRowStyle>
+              <ParameterRow key={label} label={label} value={value} />
             ))
           ) : (
             <Skeleton variant="text" />
           )}
-        </ParameterGroupStyle>
+        </Stack>
       ))}
       {metadata.capitalMultiplier && (
-        <ParameterRowStyle $strong>
-          <span>Capital multiplier</span>
-          <span>{metadata.capitalMultiplier}</span>
-        </ParameterRowStyle>
+        <ParameterRow
+          strong
+          label="Capital multiplier"
+          value={metadata.capitalMultiplier}
+        />
       )}
-      <ParameterRowStyle $strong>
-        <span>Withdrawal credential type</span>
-        <span>{wcType}</span>
-      </ParameterRowStyle>
-    </ParametersStyle>
+      <ParameterRow strong label="Withdrawal credential type" value={wcType} />
+    </Stack>
   );
 };

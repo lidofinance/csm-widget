@@ -42,14 +42,15 @@ describe('AmountField', () => {
     expect(tag).toContain('value="2.4"');
   });
 
-  it('is read-only with a lock icon when locked', () => {
+  it('is read-only with a lock icon beside the label when locked', () => {
     const html = render({ bondAmount: parseEther('2.4') }, { locked: true });
 
     const label = html.match(/<label[^>]*>[\s\S]*?<\/label>/)?.[0] ?? '';
 
     expect(input(html)).toContain('readonly=""');
     expect(label).toContain('stETH amount');
-    expect(label).toMatch(/<svg[^>]*aria-hidden="true"/);
+    expect(label).not.toContain('<svg');
+    expect(html).toMatch(/<svg[^>]*aria-hidden="true"/);
   });
 
   it('is editable when not locked', () => {

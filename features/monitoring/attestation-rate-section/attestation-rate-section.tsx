@@ -1,3 +1,5 @@
+import { InfoTooltip } from '@lidofinance/lido-app-ui';
+import { ICON_TOOLTIP_TEST_ID } from 'shared/components/icon-tooltip/test-ids';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { Block, InlineLoader, Text } from '@lidofinance/lido-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
@@ -8,7 +10,7 @@ import {
   useOperatorInfo,
 } from 'modules/web3';
 import { FC } from 'react';
-import { IconTooltip, MatomoLink, Stack } from 'shared/components';
+import { MatomoLink, Stack } from 'shared/components';
 import { formatDate, formatPercent } from 'utils';
 import { DiffBadge } from './diff-badge';
 import { Rate } from './styles';
@@ -53,9 +55,10 @@ export const AttestationRateSection: FC = () => {
                 MigaLabs
               </MatomoLink>
             </div>
-            <IconTooltip
-              placement="bottomRight"
-              tooltip="This is aggregated data for your Node Operator obtained from the third-party source, while the actual performance for rewards distribution is calculated per key by the CSM Performance Oracle at the end of each frame"
+            <InfoTooltip
+              dataTestId={ICON_TOOLTIP_TEST_ID}
+              position="bottom-right"
+              content="This is aggregated data for your Node Operator obtained from the third-party source, while the actual performance for rewards distribution is calculated per key by the CSM Performance Oracle at the end of each frame"
             />
           </Stack>
         </Stack>
@@ -73,9 +76,10 @@ export const AttestationRateSection: FC = () => {
                     ? 'above Performance Threshold'
                     : 'below Performance Threshold'}
                 </Text>
-                <IconTooltip
-                  placement="bottomRight"
-                  tooltip="Performance threshold is utilized to determine the allocation of the actual Node Operator rewards. Validators with performance above the threshold are included in the allocation pool, while the rest are not. Read more in the FAQ section."
+                <InfoTooltip
+                  dataTestId={ICON_TOOLTIP_TEST_ID}
+                  position="bottom-right"
+                  content="Performance threshold is utilized to determine the allocation of the actual Node Operator rewards. Validators with performance above the threshold are included in the allocation pool, while the rest are not. Read more in the FAQ section."
                 />
               </Stack>
             </Stack>

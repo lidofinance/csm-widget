@@ -3,17 +3,6 @@ import { Illustration } from './illustration';
 
 type FluidProps = { $fluid?: boolean };
 
-export const HeroRow = styled.div<FluidProps>`
-  display: flex;
-  flex-direction: row;
-  gap: ${({ $fluid }) => ($fluid ? 16 : 44)}px;
-
-  @media (max-width: 899px) {
-    flex-direction: column;
-    gap: ${({ $fluid }) => ($fluid ? 16 : 24)}px;
-  }
-`;
-
 export const HeroIllustrationSlot = styled.div<FluidProps>`
   position: relative;
   display: flex;

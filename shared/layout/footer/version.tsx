@@ -41,15 +41,13 @@ const getVersionInfo = () => {
 const { label, link, title } = getVersionInfo();
 
 export const Version: FC = () => (
-  <a
+  <Tag
+    variant="neutral"
     href={link}
     title={title}
-    target="_blank"
-    rel="noopener noreferrer"
-    style={{ textDecoration: 'none' }}
     onClick={() => trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.footerVersion)}
     data-testid="footerVersionLink"
   >
-    <Tag variant="neutral">{label}</Tag>
-  </a>
+    {label}
+  </Tag>
 );

@@ -24,9 +24,7 @@ export class RemovePage {
     this.page = page;
     this.base = new BasePage(page);
     this.removeKeysForm = this.page.getByTestId('removeKeysForm');
-    this.keyRow = this.removeKeysForm.locator('label', {
-      hasText: /0x[0-9a-fA-F]+/,
-    });
+    this.keyRow = this.removeKeysForm.getByTestId('keyRow');
     this.emptyState = this.removeKeysForm.getByText(
       'No keys available to remove',
     );
@@ -67,8 +65,10 @@ export class RemovePage {
   getCheckboxByAddress(key: string) {
     const trimmedPubkey = trimAddress(`0x${key}`, 16);
     return this.page
-      .locator('label', { hasText: trimmedPubkey })
-      .locator('svg');
+      .getByTestId('keyRow')
+      .filter({ hasText: trimmedPubkey })
+      .locator('label svg')
+      .first();
   }
 
   async getRandomKeys(count = 1) {

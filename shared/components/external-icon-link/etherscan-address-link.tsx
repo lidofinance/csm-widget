@@ -1,4 +1,4 @@
-import { External } from '@lidofinance/lido-ui';
+import { IconLink } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { useDappStatus } from 'modules/web3';
 import { ComponentProps, FC } from 'react';
@@ -21,7 +21,7 @@ export const EtherscanAddressLink: FC<Props> = ({ address, ...rest }) => {
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.etherscanAddressLink}
       title="View on etherscan"
     >
-      <External />
+      <IconLink />
     </MatomoLink>
   );
 };

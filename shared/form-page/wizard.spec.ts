@@ -2,7 +2,6 @@ import {
   EnterKeyInput,
   getBackStep,
   getNextStep,
-  getRevealScrollLeft,
   getStepTrackText,
   shouldInterceptEnter,
 } from './wizard';
@@ -58,15 +57,4 @@ it('getStepTrackText is 1-based and clamps when done', () => {
   expect(getStepTrackText(0, 4)).toBe('Step 1 of 4');
   expect(getStepTrackText(3, 4)).toBe('Step 4 of 4');
   expect(getStepTrackText(4, 4)).toBe('Step 4 of 4');
-});
-
-it('getRevealScrollLeft centres the item and never goes negative', () => {
-  const container = { left: 0, width: 400 };
-  expect(getRevealScrollLeft(container, { left: 500, width: 100 }, 0)).toBe(
-    350,
-  );
-  expect(getRevealScrollLeft(container, { left: 150, width: 100 }, 200)).toBe(
-    200,
-  );
-  expect(getRevealScrollLeft(container, { left: 10, width: 100 }, 0)).toBe(0);
 });

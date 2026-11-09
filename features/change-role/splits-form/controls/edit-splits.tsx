@@ -1,11 +1,16 @@
-import { Button, IconPlus, SectionTitle } from '@lidofinance/lido-app-ui';
+import {
+  Button,
+  IconPlus,
+  SectionTitle,
+  Stack,
+  Typography,
+} from '@lidofinance/lido-app-ui';
 import { MAX_FEE_SPLITS_COUNT } from '@lidofinance/lido-csm-sdk';
 import { FC, useCallback } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { FormCard } from 'shared/form-page';
 import { FieldError } from 'shared/hook-form/fields';
 import { SplitsFormInputType } from '../context';
-import { SecondaryTextStyle, SectionStyle } from '../styles';
 import { BondRow } from './bond-row';
 import { EditInfo } from './edit-info';
 import { SplitRow } from './split-row';
@@ -34,14 +39,14 @@ export const EditSplits: FC = () => {
     <>
       <EditInfo />
       <FormCard>
-        <SectionStyle>
+        <Stack gap={12}>
           <BondRow />
-          <SecondaryTextStyle variant="description" forwardedAs="p">
+          <Typography color="secondary" variant="description" as="p">
             This share decreases as you allocate shares to the addresses below
-          </SecondaryTextStyle>
-        </SectionStyle>
+          </Typography>
+        </Stack>
 
-        <SectionStyle>
+        <Stack gap={12}>
           <SectionTitle
             title="Additional addresses"
             action={
@@ -62,7 +67,7 @@ export const EditSplits: FC = () => {
             <SplitRow key={field.id} index={index} onRemove={remove} />
           ))}
           <FieldError>{rootError?.message}</FieldError>
-        </SectionStyle>
+        </Stack>
 
         <SplitsCtas />
       </FormCard>

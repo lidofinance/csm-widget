@@ -1,30 +1,26 @@
+import { Caption, Stack, Typography } from '@lidofinance/lido-app-ui';
+import { FC, ReactNode } from 'react';
 import styled, { css } from 'styled-components';
 
 export type RowSize = 'regular' | 'compact';
 
 type SizeProps = { $size: RowSize };
 
-export const SectionStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
+export const SectionStyle: FC<{ children: ReactNode }> = ({ children }) => (
+  <Stack gap={8}>{children}</Stack>
+);
 
-export const CaptionStyle = styled.span<SizeProps>`
-  font-size: 12px;
-  line-height: 20px;
-  font-weight: var(--lido-app-ui-font-weight-bold);
-  text-transform: uppercase;
-  ${({ $size }) =>
-    $size === 'compact'
-      ? css`
-          padding: 8px 12px;
-          color: var(--lido-app-ui-color-text-tertiary);
-        `
-      : css`
-          color: var(--lido-app-ui-color-text-secondary);
-        `}
-`;
+export const CaptionStyle: FC<{ $size: RowSize; children: ReactNode }> = ({
+  $size,
+  children,
+}) => (
+  <Caption
+    color={$size === 'compact' ? 'tertiary' : 'secondary'}
+    style={$size === 'compact' ? { padding: '8px 12px' } : undefined}
+  >
+    {children}
+  </Caption>
+);
 
 export const RowStyle = styled.button<SizeProps>`
   display: flex;
@@ -69,39 +65,70 @@ export const AvatarSlotStyle = styled.span<SizeProps>`
   height: ${({ $size }) => ($size === 'compact' ? 40 : 60)}px;
 `;
 
-export const RowTextStyle = styled.span<{ $gap?: number }>`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ $gap = 0 }) => $gap}px;
-  flex: 1;
-  min-width: 0;
-`;
+type RowTextProps = { $gap?: number; children: ReactNode };
 
-export const RowNameStyle = styled.span<SizeProps>`
-  font-weight: var(--lido-app-ui-font-weight-bold);
-  font-size: ${({ $size }) => ($size === 'compact' ? 14 : 16)}px;
-  line-height: ${({ $size }) => ($size === 'compact' ? 24 : 28)}px;
-  ${({ $size }) =>
-    $size === 'compact' &&
-    css`
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    `}
-`;
+export const RowTextStyle: FC<RowTextProps> = ({ $gap = 0, children }) => (
+  <Stack as="span" grow gap={$gap === 4 ? 4 : 0}>
+    {children}
+  </Stack>
+);
 
-export const RowSubStyle = styled.span<SizeProps>`
-  font-size: 12px;
-  line-height: 20px;
-  color: var(
-    --lido-app-ui-color-text-${({ $size }) =>
-    $size === 'compact' ? 'tertiary' : 'secondary'}
+const ELLIPSIS = {
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+} as const;
+
+type RowNameProps = SizeProps & { 'data-testid'?: string; children: ReactNode };
+
+export const RowNameStyle: FC<RowNameProps> = ({
+  $size,
+  'data-testid': testId,
+  children,
+}) => {
+  const compact = $size === 'compact';
+
+  return (
+    <Typography
+      as="span"
+      variant={compact ? 'body' : 'bodyLarge'}
+      weight="bold"
+      style={compact ? ELLIPSIS : undefined}
+      dataTestId={{ root: testId }}
+    >
+      {children}
+    </Typography>
   );
-`;
+};
 
-export const RowTagsStyle = styled.span<SizeProps>`
-  display: flex;
-  align-items: center;
-  gap: ${({ $size }) => ($size === 'compact' ? 4 : 12)}px;
-  flex-shrink: 0;
-`;
+type RowSubProps = SizeProps & { 'data-testid'?: string; children: ReactNode };
+
+export const RowSubStyle: FC<RowSubProps> = ({
+  $size,
+  'data-testid': testId,
+  children,
+}) => (
+  <Typography
+    as="span"
+    variant="description"
+    color={$size === 'compact' ? 'tertiary' : 'secondary'}
+    dataTestId={{ root: testId }}
+  >
+    {children}
+  </Typography>
+);
+
+export const RowTagsStyle: FC<SizeProps & { children: ReactNode }> = ({
+  $size,
+  children,
+}) => (
+  <Stack
+    as="span"
+    direction="row"
+    align="center"
+    style={{ flexShrink: 0 }}
+    gap={$size === 'compact' ? 4 : 12}
+  >
+    {children}
+  </Stack>
+);

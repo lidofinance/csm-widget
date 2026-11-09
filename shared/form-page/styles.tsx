@@ -1,53 +1,8 @@
 import { Card } from '@lidofinance/lido-app-ui';
 import styled from 'styled-components';
 
-export const FormPageStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  min-width: 0;
-`;
-
-export const SkeletonCardStyle = styled(Card)`
-  && {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-`;
-
-export const FormCardStyle = styled(Card)`
-  && {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-`;
-
-export const SubmitAsideStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-`;
-
-export const CtaStackStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-`;
-
-export const SuccessScreenStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
-
 export const SuccessHeroStyle = styled(Card)`
   && {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
     padding: 52px 32px;
     text-align: center;
   }
@@ -83,39 +38,11 @@ export const SuccessIllustrationStyle = styled.span`
   margin-bottom: 16px;
 `;
 
-export const SuccessStatsStyle = styled(Card)`
-  && {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    align-items: start;
-    gap: 24px;
-  }
-`;
-
-export const SuccessCardStyle = styled(Card)`
-  && {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 24px;
-  }
-`;
-
 export const SuccessActionsStyle = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 16px 40px;
-`;
-
-export const WizardStepperStyle = styled.div`
-  max-width: 100%;
-  overflow-x: auto;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
 `;
 
 export const VisuallyHiddenStyle = styled.span`

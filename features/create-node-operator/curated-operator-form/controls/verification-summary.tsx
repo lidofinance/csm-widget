@@ -1,4 +1,10 @@
-import { Address, Body, DataListRow, Divider } from '@lidofinance/lido-app-ui';
+import {
+  Address,
+  Body,
+  DataListRow,
+  Divider,
+  Stack,
+} from '@lidofinance/lido-app-ui';
 import { useCurveParameters } from 'modules/web3';
 import { FC, ReactNode } from 'react';
 import { useWatch } from 'react-hook-form';
@@ -12,29 +18,31 @@ import {
   type CuratedOperatorFormInputType,
   useCuratedOperatorFormData,
 } from '../context';
-import {
-  AddressValueStyle,
-  CompactListStyle,
-  ParamLinesStyle,
-  SummaryStyle,
-} from './styles';
+import { CompactListStyle } from './styles';
 
 const SummaryAddress: FC<{ address?: string }> = ({ address }) =>
   address ? (
-    <AddressValueStyle>
+    <Stack
+      as="span"
+      inline
+      direction="row"
+      align="center"
+      gap={8}
+      style={{ wordBreak: 'break-all' }}
+    >
       <Address address={address} symbols={0} copy />
       <EtherscanAddressLink address={address} />
-    </AddressValueStyle>
+    </Stack>
   ) : (
     <>—</>
   );
 
 const ParamLines: FC<{ items: ReactNode[] }> = ({ items }) => (
-  <ParamLinesStyle>
+  <Stack as="span" align="end" gap={4}>
     {items.map((item, index) => (
       <span key={index}>{item}</span>
     ))}
-  </ParamLinesStyle>
+  </Stack>
 );
 
 export const VerificationSummary: FC = () => {
@@ -59,7 +67,7 @@ export const VerificationSummary: FC = () => {
   const metadata = useCurveMetadata(selectedGate?.curve);
 
   return (
-    <SummaryStyle>
+    <Stack gap={16}>
       <Body as="h2" weight="semibold">
         Node Operator details
       </Body>
@@ -110,6 +118,6 @@ export const VerificationSummary: FC = () => {
           }
         />
       </CompactListStyle>
-    </SummaryStyle>
+    </Stack>
   );
 };

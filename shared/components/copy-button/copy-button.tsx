@@ -1,7 +1,10 @@
 import { ButtonProps, ButtonIcon, Check, Copy } from '@lidofinance/lido-ui';
 import { FC } from 'react';
-import { CopyButtonProps } from './copy-link';
 import { useCopy } from './use-copy';
+
+export type CopyButtonProps = {
+  text: string;
+};
 
 export const CopyButton: FC<CopyButtonProps & ButtonProps> = ({
   text,

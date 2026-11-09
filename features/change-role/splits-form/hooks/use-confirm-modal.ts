@@ -1,4 +1,4 @@
 import { getUseConfirmModal } from 'shared/hooks';
-import { ConfirmSplitsModal } from '../confirm-splits-modal';
+import { ConfirmSplitsModalApp } from '../confirm-splits-modal-app';
 
-export const useConfirmSplitsModal = getUseConfirmModal(ConfirmSplitsModal);
+export const useConfirmSplitsModal = getUseConfirmModal(ConfirmSplitsModalApp);

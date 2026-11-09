@@ -1,4 +1,4 @@
-import { Popover, Typography } from '@lidofinance/lido-app-ui';
+import { Popover, Stack, Typography } from '@lidofinance/lido-app-ui';
 import styled from 'styled-components';
 
 export const TriggerStyle = styled.button`
@@ -40,10 +40,12 @@ export const NameStyle = styled(Typography).attrs({
   }
 `;
 
-export const TagsStyle = styled.span`
-  display: flex;
-  align-items: center;
-  gap: 4px;
+export const TagsStyle = styled(Stack).attrs({
+  direction: 'row',
+  align: 'center',
+  gap: 4,
+  forwardedAs: 'span',
+})`
   flex-shrink: 0;
 `;
 
@@ -62,20 +64,18 @@ export const PopupStyle = styled(Popover)`
   }
 `;
 
-export const HeaderStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
+export const HeaderStyle = styled(Stack).attrs({
+  align: 'center',
+  gap: 12,
+})`
   width: 100%;
   padding-top: 20px;
 `;
 
-export const HeaderTextStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
+export const HeaderTextStyle = styled(Stack).attrs({
+  align: 'center',
+  gap: 0,
+})`
   max-width: 100%;
   text-align: center;
 `;
@@ -100,11 +100,10 @@ export const SubLineStyle = styled(Typography).attrs({
   gap: 8px;
 `;
 
-export const HeaderTagsStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
+export const HeaderTagsStyle = styled(Stack).attrs({
+  align: 'center',
+  gap: 8,
+})`
   width: 100%;
 
   > * {
@@ -112,11 +111,10 @@ export const HeaderTagsStyle = styled.div`
   }
 `;
 
-export const BodyStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+export const BodyStyle = styled(Stack).attrs({ gap: 0 })`
   width: 100%;
+`;
+
+export const BodyContentStyle = styled(Stack).attrs({ gap: 20 })`
   padding: 16px 0;
-  border-top: 1px solid var(--lido-app-ui-color-border-default);
 `;

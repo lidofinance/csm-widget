@@ -16,7 +16,6 @@ export const EjectKeysFormGate: FC<PropsWithChildren> = ({ children }) => {
     return (
       <DeleteKeysLayout
         active={DeleteKeysSwitcherRoutes.EJECT}
-        aside={null}
         data-testid={EJECT_KEYS_FORM_TEST_ID}
       >
         <NoAccessNotice access={flow.access} />
@@ -28,7 +27,6 @@ export const EjectKeysFormGate: FC<PropsWithChildren> = ({ children }) => {
     return (
       <DeleteKeysLayout
         active={DeleteKeysSwitcherRoutes.EJECT}
-        aside={null}
         data-testid={EJECT_KEYS_FORM_TEST_ID}
       >
         <MessageBox icon={false} headline={NO_KEYS_TO_EJECT}>

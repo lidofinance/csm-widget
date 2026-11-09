@@ -45,7 +45,7 @@ describe('CheckboxField', () => {
     );
   });
 
-  it('renders the resolver error after the label and marks the input invalid', () => {
+  it('renders the resolver error and marks the input invalid', () => {
     const html = render(
       { confirmKeysReady: false },
       {
@@ -55,11 +55,10 @@ describe('CheckboxField', () => {
         },
       },
     );
-    const afterLabel = html.split('</label>')[1] ?? '';
 
     expect(labelInner(html)).toContain('aria-invalid="true"');
-    expect(afterLabel).toContain('data-testid="inputMessageError"');
-    expect(afterLabel).toContain('role="alert"');
-    expect(afterLabel).toContain('Please confirm that the keys are ready');
+    expect(html).toContain('data-testid="inputMessageError"');
+    expect(html).toContain('role="alert"');
+    expect(html).toContain('Please confirm that the keys are ready');
   });
 });

@@ -1,4 +1,4 @@
-import { Loader } from '@lidofinance/lido-ui';
+import { Spinner } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { Stack, WelcomeSection } from 'shared/components';
 import { Layout } from 'shared/layout';
@@ -7,7 +7,7 @@ export const SplashPage: FC = () => (
   <Layout>
     <WelcomeSection>
       <Stack align="center" justify="center">
-        <Loader size="large" data-testid="loader" />
+        <Spinner size="lg" dataTestId={{ root: 'loader' }} />
       </Stack>
     </WelcomeSection>
   </Layout>

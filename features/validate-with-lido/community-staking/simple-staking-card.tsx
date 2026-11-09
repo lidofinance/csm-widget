@@ -1,8 +1,11 @@
 import {
   Divider,
-  H3,
+  Grid,
+  GridItem,
   IconArrowRight,
+  SectionTitle,
   Stack,
+  TextLink,
   Typography,
 } from '@lidofinance/lido-app-ui';
 import { CSM_NODE_SETUP_LINK } from 'consts/external-links';
@@ -24,7 +27,7 @@ import rated from 'assets/partners/simple-staking/rated.svg';
 import sedge from 'assets/partners/simple-staking/sedge.svg';
 import ssv from 'assets/partners/simple-staking/ssv.svg';
 import stakely from 'assets/partners/simple-staking/stakely.svg';
-import { PromoCard, SecondaryText } from '../components';
+import { PromoCard } from '../components';
 
 type Partner = { name: string; src: string };
 
@@ -77,30 +80,6 @@ const BLOCKS: Block[] = [
   },
 ];
 
-const Header = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 16px;
-
-  h3 {
-    flex: 1;
-  }
-`;
-
-const DetailsLink = styled.a`
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 14px;
-  line-height: 24px;
-  text-decoration: none;
-  color: var(--lido-app-ui-color-text-active);
-
-  &:hover {
-    color: var(--lido-app-ui-color-text-active-hover);
-  }
-`;
-
 const Chips = styled.div`
   display: flex;
 `;
@@ -134,17 +113,6 @@ const Chip = styled.span`
   }
 `;
 
-const BlocksGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 32px;
-  row-gap: 24px;
-`;
-
-const FullRow = styled.div`
-  grid-column: 1 / -1;
-`;
-
 const BlockView: FC<{ block: Block }> = ({ block }) => (
   <Stack direction="column" gap={8} align="start">
     <Chips>
@@ -158,7 +126,9 @@ const BlockView: FC<{ block: Block }> = ({ block }) => (
       <Typography variant="bodyLarge" weight="semibold">
         {block.title}
       </Typography>
-      <SecondaryText variant="description">{block.description}</SecondaryText>
+      <Typography variant="description" color="secondary">
+        {block.description}
+      </Typography>
     </Stack>
   </Stack>
 );
@@ -167,29 +137,30 @@ export const SimpleStakingCard: FC = () => {
   return (
     <PromoCard>
       <Stack direction="column" gap={24} align="stretch">
-        <Header>
-          <H3>Simple Staking with CSM</H3>
-          <DetailsLink
-            href={CSM_NODE_SETUP_LINK}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() =>
-              trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.csmViewDetails)
-            }
-          >
-            View details
-            <IconArrowRight width={20} height={20} />
-          </DetailsLink>
-        </Header>
-        <BlocksGrid>
+        <SectionTitle
+          title="Simple Staking with CSM"
+          titleAs="h3"
+          action={
+            <TextLink
+              href={CSM_NODE_SETUP_LINK}
+              icon={<IconArrowRight width={20} height={20} />}
+              onClick={() =>
+                trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.csmViewDetails)
+              }
+            >
+              View details
+            </TextLink>
+          }
+        />
+        <Grid columns={2} columnGap={32} rowGap={24}>
           <BlockView block={BLOCKS[0]} />
           <BlockView block={BLOCKS[1]} />
-          <FullRow>
+          <GridItem span="full">
             <Divider />
-          </FullRow>
+          </GridItem>
           <BlockView block={BLOCKS[2]} />
           <BlockView block={BLOCKS[3]} />
-        </BlocksGrid>
+        </Grid>
       </Stack>
     </PromoCard>
   );

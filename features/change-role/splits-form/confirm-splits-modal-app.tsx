@@ -3,6 +3,7 @@ import {
   Button,
   DataList,
   DataListRow,
+  Grid,
   IconLink,
   Stack,
   TextLink,
@@ -19,12 +20,7 @@ import {
   getEtherscanAddressLink,
   trackMatomoEvent,
 } from 'utils';
-import {
-  BulletsStyle,
-  ButtonsStyle,
-  RecipientStyle,
-  SecondaryTextStyle,
-} from './styles';
+import { BulletsStyle, RecipientStyle } from './styles';
 
 type ConfirmSplitsModalAppProps = ConfirmModalProps & {
   open?: boolean;
@@ -77,11 +73,11 @@ export const ConfirmSplitsModalApp: FC<ConfirmSplitsModalAppProps> = ({
               : 'Are you sure you want to set the following addresses in the splitter?'}
           </Typography>
           {isRemoving ? (
-            <SecondaryTextStyle variant="body" forwardedAs="p">
+            <Typography color="secondary" variant="body" as="p">
               All rewards will be sent to the following address
-            </SecondaryTextStyle>
+            </Typography>
           ) : (
-            <SecondaryTextStyle variant="body" forwardedAs="div">
+            <Typography color="secondary" variant="body" as="div">
               Please note:
               <BulletsStyle>
                 <li>Editing is disabled while you have unclaimed rewards</li>
@@ -91,21 +87,21 @@ export const ConfirmSplitsModalApp: FC<ConfirmSplitsModalAppProps> = ({
                   rewards go to the configured addresses
                 </li>
               </BulletsStyle>
-            </SecondaryTextStyle>
+            </Typography>
           )}
         </Stack>
 
         <DataList divided>
           <DataListRow
             label={
-              <SecondaryTextStyle variant="description" forwardedAs="span">
+              <Typography color="secondary" variant="description" as="span">
                 Address
-              </SecondaryTextStyle>
+              </Typography>
             }
             value={
-              <SecondaryTextStyle variant="description" forwardedAs="span">
+              <Typography color="secondary" variant="description" as="span">
                 Share
-              </SecondaryTextStyle>
+              </Typography>
             }
           />
           {isRemoving ? (
@@ -124,12 +120,12 @@ export const ConfirmSplitsModalApp: FC<ConfirmSplitsModalAppProps> = ({
           )}
         </DataList>
 
-        <ButtonsStyle>
+        <Grid columns={2} gap={12}>
           <Button variant="outline" onClick={onReject}>
             Cancel
           </Button>
           <Button onClick={onConfirm}>Confirm</Button>
-        </ButtonsStyle>
+        </Grid>
       </Stack>
     </FormModalShell>
   );

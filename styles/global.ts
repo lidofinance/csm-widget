@@ -17,6 +17,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     background: var(--lido-color-background);
     color: var(--lido-color-text);
+    font-family: var(--lido-app-ui-font-family);
     position: relative;
     box-sizing: border-box;
     font-size: ${({ theme }) => theme.fontSizesMap.xs}px;

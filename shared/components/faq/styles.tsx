@@ -1,4 +1,4 @@
-import { InlineLoader } from '@lidofinance/lido-ui';
+import { Skeleton } from '@lidofinance/lido-app-ui';
 import styled from 'styled-components';
 
 export const FaqElement = styled.div`
@@ -33,7 +33,14 @@ export const FaqElement = styled.div`
   }
 `;
 
-export const ShortInlineLoader = styled(InlineLoader)`
-  max-width: 50px;
-  min-width: 30px;
+const ShortSkeleton = styled(Skeleton)`
+  && {
+    width: 50px;
+  }
+`;
+
+export const ShortInlineLoader = () => <ShortSkeleton variant="text" />;
+
+export const FaqSection = styled.section`
+  margin-top: ${({ theme }) => theme.spaceMap.xxl}px;
 `;

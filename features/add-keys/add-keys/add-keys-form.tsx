@@ -1,4 +1,4 @@
-import { Stack } from '@lidofinance/lido-app-ui';
+import { Stack, FormLayout } from '@lidofinance/lido-app-ui';
 import { useFaq } from 'faq';
 import { ShareLimitBanner } from 'features/create-node-operator/share-limit-banner';
 import { DkgFilesField } from 'features/idvtc/dkg/components/dkg-files-field';
@@ -9,7 +9,6 @@ import { FormPage, FormReady } from 'shared/form-page';
 import { Form } from 'shared/hook-form/form-controller';
 import { AppFormUi } from 'shared/hook-form/form-ui';
 import { Gate } from 'shared/navigate';
-import { FormLayout } from 'shared/ui';
 import { AddKeysAside } from './add-keys-aside';
 import { AddKeysFormGate } from './add-keys-form-gate';
 import { AddKeysDataProvider, AddKeysFormProvider } from './context';

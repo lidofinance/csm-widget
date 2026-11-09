@@ -1,4 +1,6 @@
 import { getUseConfirmModal } from 'shared/hooks';
-import { ConfirmClaimIcsModal } from '../confirm-claim-ics-modal';
+import { ConfirmClaimIcsModalApp } from '../confirm-claim-ics-modal-app';
 
-export const useConfirmClaimIcsModal = getUseConfirmModal(ConfirmClaimIcsModal);
+export const useConfirmClaimIcsModal = getUseConfirmModal(
+  ConfirmClaimIcsModalApp,
+);

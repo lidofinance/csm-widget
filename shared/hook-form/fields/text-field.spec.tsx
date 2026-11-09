@@ -47,7 +47,7 @@ describe('TextField', () => {
     );
 
     expect(html).toContain('data-testid="inputMessageError"');
-    expect(html).toContain('>Must be 64 characters or less</p>');
+    expect(html).toContain('>Must be 64 characters or less</span>');
     expect(html).toContain('aria-invalid="true"');
   });
 

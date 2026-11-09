@@ -1,13 +1,12 @@
-import { Description, H2 } from '@lidofinance/lido-app-ui';
+import { Description, H2, Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { getStepHeading } from '../curated-operator-wizard';
-import { HeadingStyle } from './styles';
 
 export const CuratedOperatorStepHeading: FC<{ step: number }> = ({ step }) => {
   const { title, description, note } = getStepHeading(step);
 
   return (
-    <HeadingStyle>
+    <Stack gap={8}>
       <H2 as="h1" dataTestId={{ root: 'stepTitle' }}>
         {title}
       </H2>
@@ -17,6 +16,6 @@ export const CuratedOperatorStepHeading: FC<{ step: number }> = ({ step }) => {
         </Description>
       )}
       {note && <Description as="p">{note}</Description>}
-    </HeadingStyle>
+    </Stack>
   );
 };

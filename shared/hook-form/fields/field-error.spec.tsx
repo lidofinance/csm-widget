@@ -9,11 +9,11 @@ describe('FieldError', () => {
       </FieldError>,
     );
 
-    expect(html.startsWith('<p ')).toBe(true);
+    expect(html.startsWith('<span ')).toBe(true);
     expect(html).toContain('role="alert"');
     expect(html).toContain('data-testid="inputMessageError"');
-    expect(html).toContain('id="err-1"');
-    expect(html).toContain('>Please confirm that the keys are ready</p>');
+    expect(html).toContain('id="err-1-error"');
+    expect(html).toContain('>Please confirm that the keys are ready</span>');
   });
 
   it('accepts a custom testid', () => {

@@ -3,13 +3,16 @@ import {
   DataListRow,
   MessageBox,
   Tag,
+  Typography,
 } from '@lidofinance/lido-app-ui';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { BOND_LOCKED } from 'consts/text';
 import { FC } from 'react';
 import { FormatToken } from 'shared/formatters';
 import { useUnlockBondFormData } from '../context';
-import { ActionsStyle, ErrorValueStyle } from '../styles';
+import { ActionsStyle } from '../styles';
+
+const INHERIT_FONT = { font: 'inherit' };
 
 export const LockedBondSummary: FC = () => {
   const { bond, isExpired } = useUnlockBondFormData(true);
@@ -33,7 +36,9 @@ export const LockedBondSummary: FC = () => {
         info="Bond may be locked in the case of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations."
         value={
           !isExpired && locked > 0n ? (
-            <ErrorValueStyle>{amount}</ErrorValueStyle>
+            <Typography as="span" color="error" style={INHERIT_FONT}>
+              {amount}
+            </Typography>
           ) : (
             amount
           )

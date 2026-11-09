@@ -6,10 +6,12 @@ import { useModuleMeta } from 'shared/hooks';
 import { isAddressEqual } from 'viem';
 import { RoleAddress } from '../../shared/role-address';
 import { RoleCard } from '../../shared/role-card';
-import { PendingIconStyle, StepsListStyle } from '../../shared/styles';
+import { StepsListStyle } from '../../shared/styles';
 import { getPendingChangeIntent } from '../change-role-state';
 import { useChangeRoleFlow, useChangeRoleFormData } from '../context';
 import { useRole } from '../hooks/use-role';
+
+const WARNING_ICON_STYLE = { color: 'var(--lido-app-ui-color-icons-warning)' };
 
 export const PendingChangeCard: FC = () => {
   const roleTitle = useRole();
@@ -27,11 +29,7 @@ export const PendingChangeCard: FC = () => {
   return (
     <RoleCard
       data-testid="proposedAddress"
-      icon={
-        <PendingIconStyle>
-          <IconWarning />
-        </PendingIconStyle>
-      }
+      icon={<IconWarning width={20} height={20} style={WARNING_ICON_STYLE} />}
       title="Pending change"
       action={
         intent && (

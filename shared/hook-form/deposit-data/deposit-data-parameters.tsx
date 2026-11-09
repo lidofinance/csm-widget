@@ -1,11 +1,18 @@
 import {
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeaderCell,
+  TableRoot,
+  TableRow,
+} from '@lidofinance/lido-app-ui';
+import {
   CurveParameters,
   NodeOperatorInfo,
   TOKENS,
 } from '@lidofinance/lido-csm-sdk';
 import { FC, useMemo } from 'react';
 import { useModule } from 'modules/web3';
-import { IconTooltip } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
 import {
   formatPercent,
@@ -13,13 +20,7 @@ import {
   getFeeForKey,
   getQueueTypeForKey,
 } from 'utils';
-import {
-  DataCell,
-  HeaderCell,
-  TableContainer,
-  TableHeader,
-  TableRow,
-} from './styles';
+import { TableScroll } from './styles';
 import { useWatch } from 'react-hook-form';
 import { DepositDataInputType } from './use-parse-deposit-data';
 import { useFormData } from '../form-controller';
@@ -70,44 +71,52 @@ export const DepositDataParameters: FC = () => {
   }, [curveParameters, depositData.length, operatorInfo, isCsmFamily]);
 
   return (
-    <TableContainer $equal $short={!isCsmFamily}>
-      <TableHeader>
-        <HeaderCell>Key number</HeaderCell>
-        <HeaderCell>
-          Fee
-          <IconTooltip
-            tooltip="A share of the Consensus and Execution layers rewards"
-            placement="bottomRight"
-          />
-        </HeaderCell>
-        {isCsmFamily && (
-          <HeaderCell>
-            Queue
-            <IconTooltip
-              tooltip="Priority queue stays ahead of the general queue"
-              placement="bottomRight"
-            />
-          </HeaderCell>
-        )}
-        <HeaderCell>
-          Bond
-          <IconTooltip
-            tooltip="Security collateral required per validator key"
-            placement="bottomRight"
-          />
-        </HeaderCell>
-      </TableHeader>
-
-      {keyData.map(({ keyNumber, bondAmount, feePercentage, queueType }) => (
-        <TableRow key={keyNumber}>
-          <DataCell>#{keyNumber}</DataCell>
-          <DataCell>{formatPercent(feePercentage)}</DataCell>
-          {isCsmFamily && <DataCell>{queueType}</DataCell>}
-          <DataCell>
-            <FormatToken amount={bondAmount} token={TOKENS.eth} />
-          </DataCell>
-        </TableRow>
-      ))}
-    </TableContainer>
+    <TableScroll>
+      <TableRoot variant="dense">
+        <TableHead>
+          <TableRow>
+            <TableHeaderCell>Key number</TableHeaderCell>
+            <TableHeaderCell
+              align="right"
+              info="A share of the Consensus and Execution layers rewards"
+            >
+              Fee
+            </TableHeaderCell>
+            {isCsmFamily && (
+              <TableHeaderCell
+                align="right"
+                info="Priority queue stays ahead of the general queue"
+              >
+                Queue
+              </TableHeaderCell>
+            )}
+            <TableHeaderCell
+              align="right"
+              info="Security collateral required per validator key"
+            >
+              Bond
+            </TableHeaderCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {keyData.map(
+            ({ keyNumber, bondAmount, feePercentage, queueType }) => (
+              <TableRow key={keyNumber}>
+                <TableCell>#{keyNumber}</TableCell>
+                <TableCell align="right">
+                  {formatPercent(feePercentage)}
+                </TableCell>
+                {isCsmFamily && (
+                  <TableCell align="right">{queueType}</TableCell>
+                )}
+                <TableCell align="right">
+                  <FormatToken amount={bondAmount} token={TOKENS.eth} />
+                </TableCell>
+              </TableRow>
+            ),
+          )}
+        </TableBody>
+      </TableRoot>
+    </TableScroll>
   );
 };

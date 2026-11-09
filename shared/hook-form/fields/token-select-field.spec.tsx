@@ -82,7 +82,7 @@ describe('TokenSelectField', () => {
     });
 
     expect(html).toContain('data-testid="inputMessageError"');
-    expect(html).toContain('>Not enough stETH</p>');
+    expect(html).toContain('>Not enough stETH</span>');
   });
 
   it('renders the subtitle under the title', () => {

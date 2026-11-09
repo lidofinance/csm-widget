@@ -1,5 +1,5 @@
+import { Stack } from '@lidofinance/lido-app-ui';
 import { FC, PropsWithChildren, ReactNode } from 'react';
-import { FormPageStyle } from './styles';
 
 export type FormPageProps = PropsWithChildren<{
   steps?: ReactNode;
@@ -17,11 +17,11 @@ export const FormPage: FC<FormPageProps> = ({
   done,
   children,
 }) => (
-  <FormPageStyle>
+  <Stack gap={24} style={{ minWidth: 0 }}>
     {steps}
     {!done && notices}
     {children}
     {!done && below}
     {faq}
-  </FormPageStyle>
+  </Stack>
 );

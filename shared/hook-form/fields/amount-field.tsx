@@ -1,5 +1,5 @@
+import { RichInput } from '@lidofinance/lido-app-ui';
 import { ChangeEvent, FC, ReactNode, useState } from 'react';
-import { RichInput } from 'shared/ui';
 import {
   formatAmountInput,
   getMaxButtonState,
@@ -79,13 +79,12 @@ export const AmountField: FC<AmountFieldProps> = ({
         disabled={disabled || field.disabled}
         placeholder={placeholder}
         label={label}
-        labelTooltip={tooltip}
-        balance={balance}
+        tooltip={tooltip}
+        balance={locked ? undefined : balance}
         showMaxButton={max.show}
         maxDisabled={max.disabled}
         onMaxClick={handleMax}
-        error={invalid}
-        errorText={message}
+        error={invalid && (message ?? true)}
         dataTestId={{
           input: testId,
           error: FIELD_ERROR_TEST_ID,

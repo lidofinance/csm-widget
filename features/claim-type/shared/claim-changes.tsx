@@ -3,13 +3,19 @@ import {
   DataList,
   DataListRow,
   SectionTitle,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeaderCell,
+  TableRoot,
+  TableRow,
 } from '@lidofinance/lido-app-ui';
 import type { CurveParameters } from '@lidofinance/lido-csm-sdk';
 import { FC, useState } from 'react';
 import { CLAIM_SUMMARY_ROWS } from './claim-summary-rows';
 import { getClaimTypeSummary } from './claim-type-summary';
 import { ParameterChangesModal } from './parameter-changes-modal';
-import { ChangesBoxStyle, CompareRowStyle } from './styles';
+import { ChangesBoxStyle } from './styles';
 
 export type ClaimChangesVariant = 'change' | 'compare';
 
@@ -62,20 +68,24 @@ export const ClaimChanges: FC<ClaimChangesProps> = ({
           ))}
         </DataList>
       ) : (
-        <div>
-          <CompareRowStyle $head>
-            <span />
-            <span>{fromLabel}</span>
-            <span>{toLabel}</span>
-          </CompareRowStyle>
-          {CLAIM_SUMMARY_ROWS.map(({ label, render }) => (
-            <CompareRowStyle key={label}>
-              <span>{label}</span>
-              <span>{render(fromSummary)}</span>
-              <span>{render(toSummary)}</span>
-            </CompareRowStyle>
-          ))}
-        </div>
+        <TableRoot variant="dense">
+          <TableHead>
+            <TableRow>
+              <TableHeaderCell />
+              <TableHeaderCell>{fromLabel}</TableHeaderCell>
+              <TableHeaderCell>{toLabel}</TableHeaderCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {CLAIM_SUMMARY_ROWS.map(({ label, render }) => (
+              <TableRow key={label}>
+                <TableCell>{label}</TableCell>
+                <TableCell>{render(fromSummary)}</TableCell>
+                <TableCell>{render(toSummary)}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </TableRoot>
       )}
       <ParameterChangesModal
         open={open}

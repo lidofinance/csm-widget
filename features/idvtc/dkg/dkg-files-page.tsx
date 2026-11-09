@@ -1,12 +1,7 @@
+import { Counter } from '@lidofinance/lido-app-ui';
 import { Text } from '@lidofinance/lido-ui';
 import { FC, useCallback, useState } from 'react';
-import {
-  Block,
-  Counter,
-  SectionTitle,
-  Stack,
-  WhenLoaded,
-} from 'shared/components';
+import { Block, SectionTitle, Stack, WhenLoaded } from 'shared/components';
 import { useShowRule } from 'shared/hooks';
 import { IdvtcSiwePage } from '../idvtc-siwe-page';
 import { DkgAddFileButton } from './components/dkg-add-file-button';
@@ -64,13 +59,9 @@ const DkgFilesContent: FC = () => {
       >
         <Stack center gap="sm">
           Your DKG files
-          <Counter
-            count={files?.length ?? 0}
-            showZero
-            type="secondary"
-            inverse={false}
-            data-testid="dkgFilesCounter"
-          />
+          <Counter variant="neutral" dataTestId={{ root: 'dkgFilesCounter' }}>
+            {files?.length ?? 0}
+          </Counter>
         </Stack>
       </SectionTitle>
 

@@ -1,8 +1,9 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { WizardStepper } from './wizard-stepper';
 
-jest.mock('shared/ui', () => ({
-  StepIndicator: ({
+jest.mock('@lidofinance/lido-app-ui', () => ({
+  ...jest.requireActual('@lidofinance/lido-app-ui'),
+  Steps: ({
     steps,
     current,
   }: {
@@ -18,7 +19,7 @@ const STEPS = [
   'Create Node Operator',
 ];
 
-it('passes labels and the current index to StepIndicator', () => {
+it('passes labels and the current index to Steps', () => {
   const html = renderToStaticMarkup(
     <WizardStepper steps={STEPS} current={2} />,
   );

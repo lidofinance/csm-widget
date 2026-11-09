@@ -4,10 +4,8 @@ import {
   DataListRow,
 } from '@lidofinance/lido-app-ui';
 import { STETH_ROUNDING_THRESHOLD, TOKENS } from '@lidofinance/lido-csm-sdk';
-import { FC, ReactNode } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
-import { Address } from 'shared/components';
-import { useFormUi } from 'shared/hook-form/form-ui';
 import {
   TxAmount,
   TxStagePending,
@@ -51,7 +49,7 @@ const getReceiptParts = ({
   };
 };
 
-const ReceiptApp: FC<ReceiptProps> = ({
+const ClaimReceipt: FC<ReceiptProps> = ({
   breakdown,
   rewardsAddress,
   feeSplitsCount,
@@ -140,106 +138,6 @@ const ReceiptApp: FC<ReceiptProps> = ({
   );
 };
 
-const ReceiptLegacy: FC<ReceiptProps> = ({
-  breakdown,
-  rewardsAddress,
-  feeSplitsCount,
-}) => {
-  const {
-    coverAmount,
-    splittable,
-    toRA,
-    toRAToken,
-    token,
-    bondDelta,
-    debtBurned,
-    debtRemain,
-    isRewardsToBond,
-  } = breakdown;
-  const parts = getReceiptParts(breakdown);
-
-  return (
-    <Receipt>
-      {parts.showSplitters && (
-        <Row
-          label={`Splitters (${feeSplitsCount})`}
-          value={<TxAmount amount={splittable} token={TOKENS.steth} />}
-        />
-      )}
-      {toRA > 0n && (
-        <Row
-          label={
-            <>
-              Rewards Address
-              <AddressLine>
-                <Address
-                  address={rewardsAddress}
-                  size="xxs"
-                  weight={700}
-                  color="secondary"
-                  link={<></>}
-                />
-              </AddressLine>
-            </>
-          }
-          value={<TxAmount amount={toRAToken} token={token} />}
-        />
-      )}
-      {bondDelta > 0n && (
-        <Row
-          label={isRewardsToBond ? 'Bond' : 'Excess bond'}
-          value={
-            <>
-              +<TxAmount amount={bondDelta} token={TOKENS.steth} />
-            </>
-          }
-        />
-      )}
-      {bondDelta < 0n && (
-        <Row
-          label="Excess bond"
-          value={
-            <>
-              −<TxAmount amount={-bondDelta} token={TOKENS.steth} />
-            </>
-          }
-        />
-      )}
-
-      {parts.hasPrimary && parts.hasSecondary && <Divider />}
-
-      {parts.showCover && (
-        <Row
-          muted
-          label="Compensation for the Insufficient Bond"
-          value={<TxAmount amount={coverAmount} token={TOKENS.steth} />}
-        />
-      )}
-      {parts.showDebtBurned && (
-        <Row
-          muted
-          label="Bond debt covered"
-          value={<TxAmount amount={debtBurned} token={TOKENS.steth} />}
-        />
-      )}
-      {parts.showDebtRemain && (
-        <Row
-          muted
-          label="Bond debt remaining"
-          value={<TxAmount amount={debtRemain} token={TOKENS.steth} />}
-        />
-      )}
-    </Receipt>
-  );
-};
-
-const ClaimReceipt: FC<ReceiptProps> = (props) =>
-  useFormUi() === 'app' ? (
-    <ReceiptApp {...props} />
-  ) : (
-    <ReceiptLegacy {...props} />
-  );
-
 export const TxStageClaim = ({
   breakdown,
   rewardsAddress,
@@ -282,60 +180,10 @@ export const TxStageClaim = ({
   );
 };
 
-type RowProps = { label: ReactNode; value: ReactNode; muted?: boolean };
-const Row = ({ label, value, muted }: RowProps) => (
-  <>
-    <Label $muted={muted}>{label}</Label>
-    <Value $muted={muted}>{value}</Value>
-  </>
-);
-
 const ReceiptAppStyle = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
   margin-top: 16px;
   text-align: left;
-`;
-
-const Receipt = styled.div`
-  display: inline-grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  column-gap: ${({ theme }) => theme.spaceMap.lg}px;
-  row-gap: ${({ theme }) => theme.spaceMap.xs}px;
-  text-align: left;
-  margin-top: ${({ theme }) => theme.spaceMap.md}px;
-  max-width: 100%;
-  align-items: baseline;
-`;
-
-const Label = styled.div<{ $muted?: boolean }>`
-  color: var(
-    --lido-color-${({ $muted }) => ($muted ? 'textSecondary' : 'text')}
-  );
-  font-size: ${({ theme, $muted }) =>
-    $muted ? theme.fontSizesMap.xxs : theme.fontSizesMap.xs}px;
-  line-height: 1.4;
-`;
-
-const Value = styled.div<{ $muted?: boolean }>`
-  color: var(
-    --lido-color-${({ $muted }) => ($muted ? 'textSecondary' : 'text')}
-  );
-  font-weight: ${({ $muted }) => ($muted ? 400 : 700)};
-  font-size: ${({ theme, $muted }) =>
-    $muted ? theme.fontSizesMap.xxs : theme.fontSizesMap.xs}px;
-  text-align: right;
-  white-space: nowrap;
-`;
-
-const Divider = styled.div`
-  grid-column: 1 / -1;
-  border-top: 1px solid var(--lido-color-border);
-  margin: ${({ theme }) => theme.spaceMap.xs}px 0;
-`;
-
-const AddressLine = styled.span`
-  display: block;
-  margin-top: 2px;
 `;

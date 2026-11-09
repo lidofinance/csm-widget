@@ -1,13 +1,9 @@
-import { Stack, Typography } from '@lidofinance/lido-app-ui';
+import { Button, IconLink, Stack, Typography } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FC, ReactNode } from 'react';
 import styled from 'styled-components';
-import {
-  ExternalCtaButton,
-  Illustration,
-  PromoCard,
-  SecondaryText,
-} from '../components';
+import { trackMatomoEvent } from 'utils';
+import { Illustration, PromoCard } from '../components';
 
 type ModuleCardProps = {
   id: string;
@@ -20,24 +16,11 @@ type ModuleCardProps = {
   illustration: { src: string };
 };
 
-const Row = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 16px;
-`;
-
-const Content = styled.div`
-  flex: 1;
-  min-width: 0;
+const Content = styled(Stack)`
   min-height: 192px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 16px;
 
   @media (max-width: 599px) {
     min-height: auto;
-    gap: 12px;
   }
 `;
 
@@ -63,30 +46,38 @@ export const ModuleCard: FC<ModuleCardProps> = ({
   illustration,
 }) => (
   <PromoCard data-testid={`moduleCard-${id}`}>
-    <Row>
-      <Content>
+    <Stack direction="row" align="center" gap={16}>
+      <Content
+        grow
+        direction="column"
+        justify="between"
+        gap={{ base: 16, smDown: 12 }}
+      >
         <Stack direction="column" gap={8} align="start">
           {tag}
           <Typography variant="h2" as="h3">
             {title}
           </Typography>
-          <SecondaryText variant="description">{description}</SecondaryText>
+          <Typography variant="description" color="secondary">
+            {description}
+          </Typography>
         </Stack>
         <Stack direction="row" gap={12} wrap>
           {buttons}
           {learnMoreHref && (
-            <ExternalCtaButton
+            <Button
               href={learnMoreHref}
               variant="outline"
               size="small"
-              matomoEvent={learnMoreEvent}
+              iconRight={<IconLink />}
+              onClick={() => trackMatomoEvent(learnMoreEvent)}
             >
               Learn More
-            </ExternalCtaButton>
+            </Button>
           )}
         </Stack>
       </Content>
       <ModuleIllustration src={illustration} width={160} />
-    </Row>
+    </Stack>
   </PromoCard>
 );

@@ -1,21 +1,14 @@
-import { Button, Stack } from '@lidofinance/lido-app-ui';
+import { BodyLarge, Button, Stack } from '@lidofinance/lido-app-ui';
 import { NodeOperatorShortInfo } from '@lidofinance/lido-csm-sdk';
 import { FC } from 'react';
 import { ConfirmModalProps } from 'shared/hooks';
 import { FormModalShell } from 'shared/transaction-modal/form-modal-shell';
-import styled from 'styled-components';
 import { DescriptorId } from '../descriptor/descriptor-id';
 
 type ConfirmOperatorModalAppProps = ConfirmModalProps & {
   open?: boolean;
   nodeOperator: NodeOperatorShortInfo;
 };
-
-const OperatorStyle = styled.div`
-  color: var(--lido-app-ui-color-text-default);
-  font-size: var(--lido-app-ui-font-size-body);
-  line-height: var(--lido-app-ui-line-height-body);
-`;
 
 export const ConfirmOperatorModalApp: FC<ConfirmOperatorModalAppProps> = ({
   open,
@@ -32,9 +25,9 @@ export const ConfirmOperatorModalApp: FC<ConfirmOperatorModalAppProps> = ({
     data-testid="confirmOperatorModal"
   >
     <Stack direction="column" gap={24}>
-      <OperatorStyle>
+      <BodyLarge>
         <DescriptorId id={nodeOperator.nodeOperatorId} />
-      </OperatorStyle>
+      </BodyLarge>
       <Button onClick={onConfirm} data-testid="confirmOperatorButton">
         Continue
       </Button>

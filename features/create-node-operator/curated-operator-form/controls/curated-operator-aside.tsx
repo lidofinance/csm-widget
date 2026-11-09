@@ -1,3 +1,4 @@
+import { Button } from '@lidofinance/lido-app-ui';
 import { PATH } from 'consts/urls';
 import { FC, MouseEventHandler } from 'react';
 import { FieldPath, useFormState } from 'react-hook-form';
@@ -9,7 +10,7 @@ import {
   isRepeatClick,
 } from '../curated-operator-wizard';
 import { useStepComplete } from '../hooks/use-step-complete';
-import { AsideButtonStyle, SubmitGuardStyle } from './styles';
+import { SubmitGuardStyle } from './styles';
 
 const NO_FIELDS: FieldPath<CuratedOperatorFormInputType>[] = [];
 
@@ -26,13 +27,14 @@ const LastStepAside: FC<{ back: () => void }> = ({ back }) => {
       <SubmitGuardStyle onClickCapture={guardRepeatClick}>
         <SubmitButton>Create Node Operator</SubmitButton>
       </SubmitGuardStyle>
-      <AsideButtonStyle
+      <Button
+        fullWidth
         variant="outline"
         disabled={isSubmitting}
         onClick={back}
       >
         Back
-      </AsideButtonStyle>
+      </Button>
     </SubmitAside>
   );
 };
@@ -50,17 +52,17 @@ export const CuratedOperatorAside: FC = () => {
 
   return (
     <SubmitAside>
-      <AsideButtonStyle disabled={!canContinue} onClick={() => void next()}>
+      <Button fullWidth disabled={!canContinue} onClick={() => void next()}>
         Continue
-      </AsideButtonStyle>
+      </Button>
       {isFirst ? (
-        <AsideButtonStyle variant="outline" onClick={() => void n(PATH.HOME)}>
+        <Button fullWidth variant="outline" onClick={() => void n(PATH.HOME)}>
           Cancel
-        </AsideButtonStyle>
+        </Button>
       ) : (
-        <AsideButtonStyle variant="outline" onClick={back}>
+        <Button fullWidth variant="outline" onClick={back}>
           Back
-        </AsideButtonStyle>
+        </Button>
       )}
     </SubmitAside>
   );

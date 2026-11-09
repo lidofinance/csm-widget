@@ -1,6 +1,8 @@
+import { InfoTooltip } from '@lidofinance/lido-app-ui';
+import { ICON_TOOLTIP_TEST_ID } from 'shared/components/icon-tooltip/test-ids';
 import { Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
-import { IconTooltip, Stack } from 'shared/components';
+import { Stack } from 'shared/components';
 
 const TOP_UP_QUEUE_TOOLTIP =
   'Deposited keys wait in this queue to receive additional stake. The position updates as the queue is processed.';
@@ -18,7 +20,10 @@ export const TopUpQueuePosition: FC<Props> = ({ position, total }) => {
       <Text size="xxs" color="secondary">
         Top up in queue #{position + 1}/{total}
       </Text>
-      <IconTooltip type="info" tooltip={TOP_UP_QUEUE_TOOLTIP} />
+      <InfoTooltip
+        dataTestId={ICON_TOOLTIP_TEST_ID}
+        content={TOP_UP_QUEUE_TOOLTIP}
+      />
     </Stack>
   );
 };

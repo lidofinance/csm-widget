@@ -1,9 +1,9 @@
+import { FormLayout } from '@lidofinance/lido-app-ui';
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { FC, memo } from 'react';
 import { FormPage, FormReady } from 'shared/form-page';
 import { Form } from 'shared/hook-form/form-controller';
 import { AppFormUi, FormUiProvider } from 'shared/hook-form/form-ui';
-import { FormLayout } from 'shared/ui';
 import { LockedSection } from '../locked-section';
 import {
   DelayedPenaltyCancelDataProvider,

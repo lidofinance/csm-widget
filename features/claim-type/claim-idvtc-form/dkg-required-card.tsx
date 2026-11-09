@@ -1,14 +1,9 @@
-import { H3 } from '@lidofinance/lido-app-ui';
+import { Body, Button, H3, Stack } from '@lidofinance/lido-app-ui';
 import { PATH } from 'consts/urls';
 import { useHasNonWithdrawnKeys, useNodeOperatorId } from 'modules/web3';
 import { FC } from 'react';
 import { useNavigate } from 'shared/navigate';
-import {
-  DkgCardStyle,
-  DkgDescriptionStyle,
-  DkgIllustration,
-  FullWidthButtonStyle,
-} from './styles';
+import { DkgCardStyle, DkgIllustration } from './styles';
 
 export const DkgRequiredCard: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
@@ -19,16 +14,18 @@ export const DkgRequiredCard: FC = () => {
 
   return (
     <DkgCardStyle dataTestId={{ root: 'dkgRequiredCard' }}>
-      <DkgIllustration aria-hidden="true" />
-      <H3>Upload DKG Files Required</H3>
-      <DkgDescriptionStyle>
-        This Node Operator is configured as IDVTC. To keep the IDVTC status,
-        please upload the DKG files that prove the validator keys were generated
-        through a DKG ceremony.
-      </DkgDescriptionStyle>
-      <FullWidthButtonStyle onClick={() => void navigate(PATH.IDVTC_DKG)}>
-        Upload files
-      </FullWidthButtonStyle>
+      <Stack align="center" gap={16} style={{ textAlign: 'center' }}>
+        <DkgIllustration aria-hidden="true" />
+        <H3>Upload DKG Files Required</H3>
+        <Body color="secondary">
+          This Node Operator is configured as IDVTC. To keep the IDVTC status,
+          please upload the DKG files that prove the validator keys were
+          generated through a DKG ceremony.
+        </Body>
+        <Button fullWidth onClick={() => void navigate(PATH.IDVTC_DKG)}>
+          Upload files
+        </Button>
+      </Stack>
     </DkgCardStyle>
   );
 };

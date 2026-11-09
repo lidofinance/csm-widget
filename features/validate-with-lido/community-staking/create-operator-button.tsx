@@ -4,8 +4,8 @@ import { PATH } from 'consts/urls';
 import { FC } from 'react';
 import { useDappStatus } from 'modules/web3';
 import { useCanCreateNodeOperator, useCreateOptions } from 'shared/hooks';
+import { trackMatomoEvent } from 'utils';
 import { useConnectWallet } from 'shared/wallet/connect/use-connect-wallet';
-import { InternalButtonLink } from '../components';
 
 const TEST_ID = 'createNodeOperatorBtn';
 
@@ -47,15 +47,17 @@ const CreateLink: FC = () => {
   }
 
   return (
-    <InternalButtonLink
+    <Button
       href={PATH.CREATE}
       variant="primary"
       size="big"
-      matomoEvent={MATOMO_CLICK_EVENTS_TYPES.csmCreateOperator}
+      onClick={() =>
+        trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.csmCreateOperator)
+      }
       data-testid={TEST_ID}
     >
       Create a Node Operator
-    </InternalButtonLink>
+    </Button>
   );
 };
 

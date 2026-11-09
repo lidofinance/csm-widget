@@ -1,4 +1,4 @@
-import { Button } from '@lidofinance/lido-ui';
+import { Button } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES, PATH } from 'consts';
 import { OperatorRef, useNodeOperator } from 'modules/web3';
 import { FC } from 'react';
@@ -17,11 +17,10 @@ export const CardAction: FC<{ operator: OperatorRef }> = ({ operator }) => {
         matomoEvent={MATOMO_CLICK_EVENTS_TYPES.myOperatorsDashboard}
       >
         <Button
-          fullwidth
-          size="sm"
-          variant="outlined"
-          color="primary"
-          data-testid="goToDashboardBtn"
+          fullWidth
+          size="small"
+          variant="outline"
+          dataTestId={{ root: 'goToDashboardBtn' }}
         >
           Go to dashboard
         </Button>
@@ -32,8 +31,6 @@ export const CardAction: FC<{ operator: OperatorRef }> = ({ operator }) => {
   return (
     <SwitchToOperatorButton
       operator={operator}
-      variant="outlined"
-      color="primary"
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.myOperatorsSwitch}
     >
       Switch

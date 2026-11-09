@@ -75,13 +75,15 @@ export const StepContent = styled.div`
   }
 `;
 
-export const ScoreAccordionstyle = styled(AccordionNavigatable)`
+export const ScoreAccordionstyle = styled(AccordionNavigatable).attrs({
+  border: false,
+})`
   margin: 0;
-  & > [type='button'] {
+  && > button {
     padding: 0;
     min-height: 24px;
   }
-  & > [type='button'] + div > div {
+  && > div > div > div {
     padding: 4px 0 0;
   }
 

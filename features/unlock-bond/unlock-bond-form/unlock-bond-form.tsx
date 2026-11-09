@@ -1,11 +1,10 @@
-import { Stack } from '@lidofinance/lido-app-ui';
+import { Stack, FormLayout } from '@lidofinance/lido-app-ui';
 import { useFaq } from 'faq';
 import { FC, memo } from 'react';
 import { Faq } from 'shared/components';
 import { FormPage, FormReady } from 'shared/form-page';
 import { Form } from 'shared/hook-form/form-controller';
-import { AppFormUi, FormUiProvider } from 'shared/hook-form/form-ui';
-import { FormLayout } from 'shared/ui';
+import { AppFormUi } from 'shared/hook-form/form-ui';
 import { PenaltyHistory } from '../penalty-history';
 import { UnlockBondDataProvider, UnlockBondFormProvider } from './context';
 import { LockedBondNotice, LockedBondSummary } from './controls/locked-bond';
@@ -19,14 +18,7 @@ export const UnlockBondForm: FC = memo(() => {
     <AppFormUi>
       <UnlockBondDataProvider>
         <UnlockBondFormProvider>
-          <FormPage
-            below={
-              <FormUiProvider value="legacy">
-                <PenaltyHistory />
-              </FormUiProvider>
-            }
-            faq={<Faq items={faq} />}
-          >
+          <FormPage below={<PenaltyHistory />} faq={<Faq items={faq} />}>
             <FormReady>
               <UnlockBondFormGate>
                 <Form data-testid="unlockBondForm">

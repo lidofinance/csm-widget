@@ -1,3 +1,4 @@
+import { TextLink } from '@lidofinance/lido-app-ui';
 import { Divider, Edit, Text } from '@lidofinance/lido-ui';
 import { PATH } from 'consts';
 import { MODULE_METADATA } from 'consts/module';
@@ -12,7 +13,6 @@ import { Stack } from 'shared/components/stack/stack';
 import { useCurveMetadata, useShowFlags } from 'shared/hooks';
 import { DescriptorId, formatGroupTitle } from 'shared/node-operator';
 import styled from 'styled-components';
-import { SecondaryLocalLink, TextLocalLink } from 'shared/navigate';
 
 import ArrowRight from 'assets/icons/arrow-forward.svg?react';
 
@@ -42,13 +42,15 @@ const OperatorName: FC = () => {
       <span data-testid="operatorName">{metadata?.name}</span>
       {IS_NODE_OPERATOR && !metadata?.ownerEditsRestricted && (
         <InlineWrapper>
-          <SecondaryLocalLink
+          <TextLink
+            variant="secondary"
+            size="inherit"
             href={PATH.SETTINGS_METADATA}
             title="Edit Operator Metadata"
             data-testid="editMetadataLink"
           >
             <Edit />
-          </SecondaryLocalLink>
+          </TextLink>
         </InlineWrapper>
       )}
     </>
@@ -76,7 +78,9 @@ const CmSubtitle: FC = () => {
       {group && IS_NODE_OPERATOR ? (
         <>
           <DividerStyle />
-          <TextLocalLink
+          <TextLink
+            variant="secondary"
+            size="inherit"
             href={PATH.GROUP}
             title="View group"
             data-testid="operatorGroupLink"
@@ -85,7 +89,7 @@ const CmSubtitle: FC = () => {
               {formatGroupTitle(group)}
               <ArrowRight />
             </Stack>
-          </TextLocalLink>
+          </TextLink>
         </>
       ) : null}
     </Stack>

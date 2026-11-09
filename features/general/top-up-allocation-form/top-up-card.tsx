@@ -1,7 +1,6 @@
-import { Switch } from '@lidofinance/lido-app-ui';
+import { Switch, Typography } from '@lidofinance/lido-app-ui';
 import { FC, PropsWithChildren } from 'react';
 import { FormCard } from 'shared/form-page';
-import { SecondaryTextStyle } from './styles';
 import { getTopUpCopy } from './top-up-state';
 
 export type TopUpCardProps = PropsWithChildren<{ enabled: boolean }>;
@@ -9,9 +8,9 @@ export type TopUpCardProps = PropsWithChildren<{ enabled: boolean }>;
 export const TopUpCard: FC<TopUpCardProps> = ({ enabled, children }) => (
   <FormCard title="Top-ups">
     {children}
-    <SecondaryTextStyle variant="body" forwardedAs="p">
+    <Typography color="secondary" variant="body" as="p">
       {getTopUpCopy(enabled).description}
-    </SecondaryTextStyle>
+    </Typography>
   </FormCard>
 );
 

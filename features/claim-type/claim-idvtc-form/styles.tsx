@@ -1,4 +1,4 @@
-import { Body, Button, Card } from '@lidofinance/lido-app-ui';
+import { Card } from '@lidofinance/lido-app-ui';
 import DkgFileWarning from 'assets/illustrations/dkg-file-warning.svg?react';
 import styled from 'styled-components';
 
@@ -24,23 +24,9 @@ export const CardsGridStyle = styled.div`
   }
 `;
 
-export const FullWidthButtonStyle = styled(Button)`
-  && {
-    width: 100%;
-  }
-`;
-
 export const DkgCardStyle = styled(Card)`
   && {
-    align-items: center;
-    gap: 16px;
-    text-align: center;
-  }
-`;
-
-export const DkgDescriptionStyle = styled(Body)`
-  && {
-    color: var(--lido-app-ui-color-text-secondary);
+    align-items: stretch;
   }
 `;
 

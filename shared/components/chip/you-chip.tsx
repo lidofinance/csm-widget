@@ -1,5 +1,7 @@
-import { StyledYouChip } from './styles';
+import { Tag } from '@lidofinance/lido-app-ui';
 
-export const YouChip = () => {
-  return <StyledYouChip data-testid="youChip">You</StyledYouChip>;
-};
+export const YouChip = () => (
+  <Tag variant="neutral" dataTestId={{ root: 'youChip' }}>
+    You
+  </Tag>
+);

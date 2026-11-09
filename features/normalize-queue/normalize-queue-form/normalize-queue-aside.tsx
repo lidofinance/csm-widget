@@ -1,11 +1,10 @@
-import { DataListRow, TextLink } from '@lidofinance/lido-app-ui';
+import { DataListRow, Stack, TextLink } from '@lidofinance/lido-app-ui';
 import { PATH } from 'consts/urls';
 import { FC } from 'react';
 import { SubmitAside, SubmitButton } from 'shared/form-page';
 import { Gate } from 'shared/navigate';
 import { useNormalizeQueueFlow, useNormalizeQueueFormData } from './context';
 import { getNormalizeQueueView } from './normalize-queue-state';
-import { SecondaryLinkStyle } from './styles';
 
 export const NormalizeQueueAside: FC = () => {
   const { unqueuedCount } = useNormalizeQueueFormData(true);
@@ -34,9 +33,9 @@ export const NormalizeQueueAside: FC = () => {
       </SubmitButton>
       {canNormalize && (
         <Gate rule="HAS_MANAGER_ROLE">
-          <SecondaryLinkStyle>
+          <Stack align="center">
             <TextLink href={PATH.KEYS_SUBMIT}>Or submit more keys</TextLink>
-          </SecondaryLinkStyle>
+          </Stack>
         </Gate>
       )}
     </SubmitAside>

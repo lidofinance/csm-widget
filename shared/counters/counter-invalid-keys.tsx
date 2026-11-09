@@ -1,6 +1,6 @@
 import { useNodeOperatorId, useOperatorInfo } from 'modules/web3';
 import { FC } from 'react';
-import { Counter } from 'shared/components';
+import { NavCounter } from './nav-counter';
 
 export const useInvalidKeysCount = () => {
   const nodeOperatorId = useNodeOperatorId();
@@ -10,5 +10,5 @@ export const useInvalidKeysCount = () => {
 };
 
 export const CounterInvalidKeys: FC = () => (
-  <Counter warning count={useInvalidKeysCount()} />
+  <NavCounter variant="warning" count={useInvalidKeysCount()} />
 );
