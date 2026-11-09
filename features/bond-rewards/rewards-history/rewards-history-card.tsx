@@ -14,6 +14,7 @@ const CardStyled = styled(Card)`
     padding: 0;
     overflow: hidden;
     align-items: stretch;
+    gap: 0;
   }
 `;
 

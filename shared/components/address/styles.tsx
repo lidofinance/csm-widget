@@ -54,9 +54,14 @@ const VARIANTS = {
 
 export const PubkeyContainerStyle = styled(AddressContainerStyle)<{
   $color?: ComponentProps<typeof Text>['color'];
+  $monospace?: boolean;
 }>`
-  font-family: 'Fira Code', monospace;
-  font-size: ${({ theme }) => theme.fontSizesMap.xs}px;
+  ${({ $monospace = true, theme }) =>
+    $monospace &&
+    css`
+      font-family: 'Fira Code', monospace;
+      font-size: ${theme.fontSizesMap.xs}px;
+    `}
   ${({ $color = 'default' }) => $color && VARIANTS[$color]}
 `;
 

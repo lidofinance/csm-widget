@@ -12,8 +12,11 @@ import { useFocusableRef } from './use-focusable-ref';
 const SEGMENT_TAB_STOP_SELECTOR = '[role="tab"]:not([disabled])';
 
 // lib stacks below count * 216px, which wraps 3 cards in a ~600px form column
-const SegmentedControlCardStyled = styled(SegmentedControlCard)`
+const SegmentedControlCardStyled = styled(SegmentedControlCard)<{
+  $count: number;
+}>`
   && {
+    --local-stack-at: ${({ $count }) => $count * 160}px;
     --local-stack-at: 480px;
   }
 `;
@@ -46,6 +49,7 @@ export const SegmentCardsField: FC<SegmentCardsFieldProps> = ({
     <Stack direction="column" gap={12} ref={ref}>
       <SegmentedControlCardStyled
         items={options}
+        $count={options.length}
         value={field.value ?? ''}
         onChange={field.onChange}
         onBlur={field.onBlur}

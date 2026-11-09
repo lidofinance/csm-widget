@@ -7,7 +7,7 @@ import { Crumb } from './types';
 // lib caps non-last items at nav width - 72px; a shrink-to-fit nav makes that cyclic and clips short trails
 const BreadcrumbsStyled = styled(Breadcrumbs)`
   && {
-    width: 100%;
+    flex: 1 1 0;
   }
 `;
 

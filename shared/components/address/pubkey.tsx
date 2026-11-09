@@ -10,6 +10,7 @@ import { PubkeyContainerStyle } from './styles';
 export type PubkeyProps = {
   link?: ReactNode;
   pubkey: string | undefined;
+  monospace?: boolean;
 } & Pick<ComponentProps<typeof Text>, 'size' | 'color'> &
   Partial<Omit<AddressProps, 'address'>>;
 
@@ -18,6 +19,7 @@ export const Pubkey: FC<PubkeyProps> = ({
   symbols = 8,
   link,
   color,
+  monospace = true,
 }) => {
   const component = (
     <AddressComponent
@@ -29,7 +31,7 @@ export const Pubkey: FC<PubkeyProps> = ({
   return (
     <>
       {pubkey && (
-        <PubkeyContainerStyle $color={color}>
+        <PubkeyContainerStyle $color={color} $monospace={monospace}>
           {symbols === 0 ? (
             component
           ) : (

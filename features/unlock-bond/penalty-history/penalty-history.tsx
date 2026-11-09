@@ -14,10 +14,6 @@ const CardStyled = styled(Card)`
     padding: 0 24px;
     gap: 0;
   }
-
-  button[aria-expanded] {
-    padding: 22px 0;
-  }
 `;
 
 const getPenaltyTypeLabel = (record: PenaltyRecord): string => {

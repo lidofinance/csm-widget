@@ -11,9 +11,14 @@ import { Date, Pubkey } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
 import { notifyCopied } from 'shared/hooks';
 import { formatPercent } from 'utils';
+import styled from 'styled-components';
 import { Performance } from './performance';
 
 type Row = ValidatorRewardsEntity;
+
+const FooterStyled = styled.div`
+  width: 100%;
+`;
 
 const NOWRAP = { whiteSpace: 'nowrap' } as const;
 
@@ -38,6 +43,7 @@ const getColumns = (showBalance: boolean): TableColumn<Row>[] => [
         <Pubkey
           pubkey={pubkey}
           symbols={6}
+          monospace={false}
           link={<Copy text={pubkey} onCopy={notifyCopied} />}
         />
       ) : (
@@ -120,7 +126,11 @@ export const RewardsHistoryTable: FC = () => {
       onSortChange={({ key, direction }) =>
         setSort({ column: key as keyof Row, direction })
       }
-      footer={<TablePagination />}
+      footer={
+        <FooterStyled>
+          <TablePagination />
+        </FooterStyled>
+      }
       dataTestId={{ root: 'rewardsHistoryTable' }}
     />
   );

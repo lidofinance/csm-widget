@@ -9,7 +9,7 @@ export const BondRewardsActions: FC = () => {
   return (
     <Stack
       direction={{ base: 'row', mdDown: 'column' }}
-      align="stretch"
+      align={{ base: 'center', mdDown: 'stretch' }}
       gap={12}
       wrap
     >
@@ -17,7 +17,6 @@ export const BondRewardsActions: FC = () => {
         <Button
           href={PATH.BOND_CLAIM}
           variant="primary"
-          fullWidth
           dataTestId={{ root: 'claimBondButton' }}
         >
           Claim Bond &amp; Rewards
@@ -27,7 +26,6 @@ export const BondRewardsActions: FC = () => {
         <Button
           href={PATH.BOND_UNLOCK}
           variant="outline"
-          fullWidth
           counter={<Counter variant="warning">1</Counter>}
           counterLabel="1 locked bond"
           dataTestId={{ root: 'compensateBondButton' }}
@@ -39,7 +37,6 @@ export const BondRewardsActions: FC = () => {
         <Button
           href={PATH.BOND_ADD}
           variant="outline"
-          fullWidth
           iconLeft={<IconPlus />}
           dataTestId={{ root: 'addBondButton' }}
         >
