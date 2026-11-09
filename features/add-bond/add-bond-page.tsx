@@ -7,8 +7,6 @@ import { AddBond } from './add-bond';
 export const AddBondPage: FC = () => (
   <Layout
     wide
-    title="Manage Bond & Rewards"
-    subtitle="Add bond to your Bond balance"
     pageName="AddBond"
     breadcrumbs={[
       { label: 'Bond & Rewards', href: PATH.BOND },

@@ -6,7 +6,6 @@ import { useWatch } from 'react-hook-form';
 import { SubmitAside, SubmitButton } from 'shared/form-page';
 import { FormatToken } from 'shared/formatters';
 import { AddBondFormInputType, useAddBondFormData } from './context';
-import { InsufficientBondRow } from './controls/bond-delta';
 
 const TokenInfoRows: FC = () => {
   const { poolData } = useAddBondFormData(true);
@@ -21,7 +20,7 @@ const TokenInfoRows: FC = () => {
   return (
     <>
       <DataListRow
-        label="Bond balance will receive"
+        label="Bond balance to increase"
         value={
           <FormatToken
             amount={toSteth(bondAmount ?? 0n)}
@@ -48,14 +47,7 @@ const TokenInfoRows: FC = () => {
 };
 
 export const AddBondAside: FC = () => (
-  <SubmitAside
-    rows={
-      <>
-        <InsufficientBondRow />
-        <TokenInfoRows />
-      </>
-    }
-  >
-    <SubmitButton>Add Bond</SubmitButton>
+  <SubmitAside rows={<TokenInfoRows />}>
+    <SubmitButton>Add bond</SubmitButton>
   </SubmitAside>
 );

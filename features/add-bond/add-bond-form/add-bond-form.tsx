@@ -1,7 +1,7 @@
 import { Stack, FormLayout } from '@lidofinance/lido-app-ui';
 import { useFaq } from 'faq';
 import { FC, memo } from 'react';
-import { Faq } from 'shared/components';
+import { BondStatsCard, Faq } from 'shared/components';
 import { FormPage, FormReady } from 'shared/form-page';
 import { Form } from 'shared/hook-form/form-controller';
 import { AppFormUi } from 'shared/hook-form/form-ui';
@@ -10,7 +10,6 @@ import { AddBondFormGate } from './add-bond-form-gate';
 import { InsufficientBondNotice, WhyAddBondNotice } from './add-bond-notices';
 import { AddBondDataProvider, AddBondFormProvider } from './context';
 import { AmountInput } from './controls/amount-input';
-import { ExcessBondRow } from './controls/bond-delta';
 import { TokenSelect } from './controls/token-select';
 
 export const AddBondForm: FC = memo(() => {
@@ -21,7 +20,12 @@ export const AddBondForm: FC = memo(() => {
       <AddBondDataProvider>
         <AddBondFormProvider>
           <FormPage
-            notices={<InsufficientBondNotice />}
+            notices={
+              <>
+                <BondStatsCard />
+                <InsufficientBondNotice />
+              </>
+            }
             below={<WhyAddBondNotice />}
             faq={<Faq items={faq} />}
           >
@@ -31,7 +35,6 @@ export const AddBondForm: FC = memo(() => {
                   <FormLayout aside={<AddBondAside />}>
                     <Stack direction="column" gap={32}>
                       <TokenSelect />
-                      <ExcessBondRow />
                       <AmountInput />
                     </Stack>
                   </FormLayout>
