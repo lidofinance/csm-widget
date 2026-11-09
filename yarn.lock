@@ -2447,10 +2447,10 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/api-rpc/-/api-rpc-0.63.0.tgz#1a46bab7f035bf4516ae59eb44da77ec963015cf"
   integrity sha512-P2qG//DW87AowTc5jQGDdeBesmSdrVnInSBKPr5FO0CE1I7sMmilC/rrovGJ8QHoffXmmHplX6o8FKipbg/hbA==
 
-"@lidofinance/bochqa-reporter@1.1.0-alpha-send-msg-on-err.4":
-  version "1.1.0-alpha-send-msg-on-err.4"
-  resolved "https://registry.yarnpkg.com/@lidofinance/bochqa-reporter/-/bochqa-reporter-1.1.0-alpha-send-msg-on-err.4.tgz#495ccdbac6efa7ac6e27c8b567e9b2ecd41221d1"
-  integrity sha512-pZtiVhLc67SwvZ8lYm5qvayvU139VpgtbFTj7Orlk2PIKkRuCEXcMIg9VxJAJveWRE/v6PPIcTaf3tfSre2cgA==
+"@lidofinance/bochqa-reporter@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/bochqa-reporter/-/bochqa-reporter-1.1.0.tgz#d1ec8c0dd4494c6fc789465e0bda16ac0d559486"
+  integrity sha512-nfItmJH699irBhy/yYq05aGenXhjkyNA+8q8j84YkMs80X6+IaOuoI6+7KpyhO9WZIEopFa9eSbvdyILSL8w6g==
   dependencies:
     "@nestjs/common" "^10.0.0"
 
