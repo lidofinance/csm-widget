@@ -46,10 +46,10 @@ export const RewardsHistoryCard: FC = () => {
           <LoaderStyled align="center" justify="center">
             <Spinner label="Loading rewards history" />
           </LoaderStyled>
-        ) : isError ? (
-          <EmptyState title="Failed to load rewards history" />
         ) : hasData ? (
           <RewardsHistoryTable />
+        ) : isError ? (
+          <EmptyState title="Failed to load rewards history" />
         ) : (
           <EmptyState
             illustration={<RewardsIconStyled />}
