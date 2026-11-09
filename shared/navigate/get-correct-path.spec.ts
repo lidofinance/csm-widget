@@ -103,8 +103,17 @@ describe('getCorrectPath — bond pages', () => {
     expect(getCorrectPath(PATH.BOND_UNLOCK, claimer)).toBe(PATH.BOND_CLAIM);
   });
 
+  it('keeps a role holder on the hub', () => {
+    expect(getCorrectPath(PATH.BOND, operator)).toBe(PATH.BOND);
+    expect(
+      getCorrectPath(
+        PATH.BOND,
+        flags({ HAS_REWARDS_ROLE: true, HAS_ANY_ROLE: true }),
+      ),
+    ).toBe(PATH.BOND);
+  });
+
   it('leaves an operator on the requested bond page', () => {
-    expect(getCorrectPath(PATH.BOND, operator)).toBe(PATH.BOND_CLAIM);
     expect(getCorrectPath(PATH.BOND_ADD, operator)).toBe(PATH.BOND_ADD);
     expect(getCorrectPath(PATH.BOND_UNLOCK, operator)).toBe(PATH.BOND_UNLOCK);
   });

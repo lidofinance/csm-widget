@@ -28,7 +28,7 @@ test.describe(
             'e_n',
             'csm_widget_dashboard_bond_section',
           ),
-          widgetService.page.waitForURL('**/bond/claim'),
+          widgetService.page.waitForURL(/\/bond$/),
           widgetService.dashboardPage.bondRewards.sectionHeaderLink.click(),
         ]);
       },

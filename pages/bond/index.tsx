@@ -1,9 +1,12 @@
 import { PATH } from 'consts/urls';
-import { GateLoaded, Navigate } from 'shared/navigate';
+import { BondRewardsPage } from 'features/bond-rewards';
+import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 
 const Page = () => (
   <GateLoaded>
-    <Navigate path={PATH.BOND} />
+    <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.HOME} />}>
+      <BondRewardsPage />
+    </Gate>
   </GateLoaded>
 );
 

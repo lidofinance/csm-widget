@@ -54,7 +54,7 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
 
     // Bond — a claimer-only wallet is kept inside the claim page
     case PATH.BOND:
-      return canClaim ? PATH.BOND_CLAIM : PATH.HOME;
+      return hasRole ? path : canClaim ? PATH.BOND_CLAIM : PATH.HOME;
     case PATH.BOND_CLAIM:
       return canClaim ? path : PATH.HOME;
     case PATH.BOND_ADD:
