@@ -23,14 +23,13 @@ const InfoRows: FC = () => {
     debtRemain,
     includesRewards,
     hasSplits,
-    isRewardsToBond,
   } = useClaimBreakdown();
 
   return (
     <>
       {includesRewards && coverAmount > STETH_ROUNDING_THRESHOLD && (
         <DataListRow
-          label="Compensation for the Insufficient Bond"
+          label="Insufficient Bond compensation"
           value={<FormatToken amount={coverAmount} token={TOKENS.steth} />}
         />
       )}
@@ -53,36 +52,33 @@ const InfoRows: FC = () => {
       )}
       {toRA > 0n && (
         <DataListRow
-          label={
-            <>
-              Rewards Address (
-              <Address
-                address={rewardsAddress}
-                size="xxs"
-                weight={700}
-                color="secondary"
-              />
-              ) will receive
-            </>
+          label="Rewards Address to receive"
+          description={
+            <Address
+              address={rewardsAddress}
+              size="xxs"
+              weight={700}
+              color="secondary"
+            />
           }
-          info="The recipient of the claim is the Rewards Address. You can change the Rewards Address on the Settings tab."
+          descriptionInfo="The recipient of the claim is the Rewards Address. You can change the Rewards Address on the Settings tab."
           value={<FormatToken amount={toRAToken} token={token} />}
-          dataTestId={{ root: 'claimBondFormInfoTitle' }}
+          dataTestId={{
+            root: 'claimBondFormInfoTitle',
+            descriptionInfo: 'iconTooltip',
+            descriptionInfoContent: 'tooltipWrapper',
+          }}
         />
       )}
       {bondDelta > 0n && (
         <DataListRow
-          label={
-            isRewardsToBond
-              ? 'Bond will receive'
-              : 'Excess bond will increase by'
-          }
+          label="Bond balance will increase by"
           value={<FormatToken amount={bondDelta} token={TOKENS.steth} />}
         />
       )}
       {bondDelta < 0n && (
         <DataListRow
-          label="Excess bond will decrease by"
+          label="Bond balance will decrease by"
           value={<FormatToken amount={-bondDelta} token={TOKENS.steth} />}
           dataTestId={{ root: 'bondDecreaseRow' }}
         />
