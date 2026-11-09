@@ -55,6 +55,7 @@ export default withBundleAnalyzer({
     BASE_PATH: basePath ?? '',
   },
   generateBuildId,
+  devIndicators: false,
 
   typescript: {
     // !! WARN !!
