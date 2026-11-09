@@ -76,9 +76,9 @@ test.describe(
           });
         });
 
-        await test.step('Tooltip describes penalty and refers to Locked Bond tab', async () => {
+        await test.step('Tooltip describes penalty and refers to Compensate locked bond page', async () => {
           await expect(claim.tooltipWrapper).toContainText(
-            'Penalties have been applied to your Node Operator. If they are not covered, the corresponding amount of your bond may be burned. See details in the Locked Bond tab',
+            'Penalties have been applied to your Node Operator. If they are not covered, the corresponding amount of your bond may be burned. See details on the Compensate locked bond page.',
           );
         });
       },

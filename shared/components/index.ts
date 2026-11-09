@@ -39,7 +39,6 @@ export * from './section-header-link';
 export * from './back-button';
 export * from './banner';
 export * from './key-strikes';
-export * from './tabs';
 export * from './legal-disclaimer';
 export * from './date';
 export * from './table';

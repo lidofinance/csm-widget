@@ -10,7 +10,11 @@ import {
   Typography,
 } from '@lidofinance/lido-app-ui';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
+import {
+  BOND_EXCESS,
+  BOND_INSUFFICIENT,
+  BOND_INSUFFICIENT_HELP,
+} from 'consts/text';
 import { getNextDistribution, useFrameInfo } from 'modules/web3';
 import { FC, ReactNode } from 'react';
 import { FormatToken } from 'shared/formatters';
@@ -93,7 +97,7 @@ export const BondStatsCard: FC<Props> = ({ header, actions }) => {
               <DataList>
                 <DataListRow
                   label="To splitters:"
-                  info="Portion of rewards routed to splitters. See the Splitters section for exact proportions."
+                  info="Portion of rewards routed to splitters."
                   value={<Amount amount={splittable} symbol="stETH" />}
                   dataTestId={{ ...INFO_TEST_ID, root: 'toSplittersRow' }}
                 />
@@ -106,7 +110,7 @@ export const BondStatsCard: FC<Props> = ({ header, actions }) => {
               titleIcon={<BondIcon />}
               info={
                 isInsufficient
-                  ? "Insufficient bond is the missing amount of stETH required to cover all operator's keys"
+                  ? BOND_INSUFFICIENT_HELP
                   : bond?.locked
                     ? 'Locked bond has not been burned yet but cannot be claimed, so it is not displayed as part of your Excess Bond'
                     : 'The bond amount available to claim without having to exit validators. Increases daily.'
