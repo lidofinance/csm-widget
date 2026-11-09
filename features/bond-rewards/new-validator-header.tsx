@@ -25,7 +25,7 @@ const BandStyled = styled(Stack)`
 
 const BarStyled = styled.div`
   flex: 1;
-  min-width: 120px;
+  min-width: 0;
 `;
 
 const NewValidatorStrip: FC = () => {
@@ -62,13 +62,18 @@ const NewValidatorStrip: FC = () => {
 
   return (
     <BandStyled
-      direction={{ base: 'row', mdDown: 'column' }}
-      align={{ base: 'center', mdDown: 'stretch' }}
+      direction="row"
+      align="center"
       gap={16}
       dataTestId={{ root: 'newValidatorProgress' }}
     >
       <Stack direction="row" align="center" gap={8}>
-        <Typography as="span" weight="semibold" color="active">
+        <Typography
+          as="span"
+          weight="semibold"
+          color="active"
+          style={{ whiteSpace: 'nowrap' }}
+        >
           New Validator
         </Typography>
         <InfoTooltip content="Share of the bond required for one more validator that is covered by your Rewards and Excess bond" />
@@ -81,7 +86,12 @@ const NewValidatorStrip: FC = () => {
           aria-label="New Validator progress"
         />
       </BarStyled>
-      <Typography as="span" weight="semibold" color="active">
+      <Typography
+        as="span"
+        weight="semibold"
+        color="active"
+        style={{ whiteSpace: 'nowrap' }}
+      >
         {progress}%
       </Typography>
     </BandStyled>
