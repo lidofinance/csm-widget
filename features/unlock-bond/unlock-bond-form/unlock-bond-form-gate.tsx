@@ -1,4 +1,5 @@
 import {
+  Card,
   EmptyState,
   MessageBox,
   Stack,
@@ -11,6 +12,8 @@ import { NoAccessNotice } from 'shared/form-page';
 import { useUnlockBondFlow } from './context';
 import { LockedBondNotice } from './controls/locked-bond';
 
+import { ReactComponent as EmptyIcon } from 'assets/balance/empty.svg';
+
 const GateLayout: FC<PropsWithChildren> = ({ children }) => (
   <FormLayout>
     <Stack direction="column" gap={24}>
@@ -22,7 +25,13 @@ const GateLayout: FC<PropsWithChildren> = ({ children }) => (
 export const UnlockBondFormGate: FC<PropsWithChildren> = ({ children }) => {
   const flow = useUnlockBondFlow();
 
-  if (flow.action === 'nothing') return <EmptyState title="No locked bond" />;
+  if (flow.action === 'nothing') {
+    return (
+      <Card dataTestId={{ root: 'unlockEmptyState' }}>
+        <EmptyState illustration={<EmptyIcon />} title="No locked bond" />
+      </Card>
+    );
+  }
 
   if (flow.action === 'no-access') {
     return (

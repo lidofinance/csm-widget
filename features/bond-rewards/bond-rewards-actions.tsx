@@ -7,7 +7,12 @@ export const BondRewardsActions: FC = () => {
   const check = useShowRule();
 
   return (
-    <Stack direction={{ base: 'row', mdDown: 'column' }} gap={12} wrap>
+    <Stack
+      direction={{ base: 'row', mdDown: 'column' }}
+      align="stretch"
+      gap={12}
+      wrap
+    >
       {check('HAS_ANY_ROLE') && (
         <Button
           href={PATH.BOND_CLAIM}

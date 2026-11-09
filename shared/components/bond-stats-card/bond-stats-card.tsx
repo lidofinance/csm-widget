@@ -35,6 +35,7 @@ const CardStyled = styled(Card)`
     padding: 0;
     overflow: hidden;
     align-items: stretch;
+    gap: 0;
   }
 `;
 
@@ -80,6 +81,7 @@ export const BondStatsCard: FC<Props> = ({ header, actions }) => {
         <Grid columns={STATS_COLUMNS} gap={24}>
           <Stack gap={16}>
             <StatItem
+              align="left"
               label="Rewards, stETH"
               titleIcon={<RewardsIcon />}
               info={`The rewards amount available to claim, obtained from all active validators of the Node Operator. Next rewards distribution is expected ${nextDistribution}.`}
@@ -106,6 +108,7 @@ export const BondStatsCard: FC<Props> = ({ header, actions }) => {
           </Stack>
           <Stack gap={16}>
             <StatItem
+              align="left"
               label={`${isInsufficient ? BOND_INSUFFICIENT : BOND_EXCESS}, stETH`}
               titleIcon={<BondIcon />}
               info={
@@ -146,6 +149,7 @@ export const BondStatsCard: FC<Props> = ({ header, actions }) => {
             )}
           </Stack>
           <StatItem
+            align="left"
             label="Required bond, stETH"
             titleIcon={<IconLockKeyhole />}
             info="The amount of bond required for all submitted keys of the Node Operator"

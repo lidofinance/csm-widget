@@ -1,7 +1,15 @@
 import { Breadcrumbs } from '@lidofinance/lido-app-ui';
 import { FC, useMemo } from 'react';
+import styled from 'styled-components';
 import { useCorrectPath } from 'shared/navigate';
 import { Crumb } from './types';
+
+// lib caps non-last items at nav width - 72px; a shrink-to-fit nav makes that cyclic and clips short trails
+const BreadcrumbsStyled = styled(Breadcrumbs)`
+  && {
+    width: 100%;
+  }
+`;
 
 type Props = { crumbs: Crumb[]; className?: string };
 
@@ -17,5 +25,5 @@ export const Crumbs: FC<Props> = ({ crumbs, className }) => {
   );
 
   if (items.length === 0) return null;
-  return <Breadcrumbs items={items} className={className} />;
+  return <BreadcrumbsStyled items={items} className={className} />;
 };
