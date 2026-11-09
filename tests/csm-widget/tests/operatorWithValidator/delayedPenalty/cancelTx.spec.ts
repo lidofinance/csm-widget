@@ -108,7 +108,7 @@ test.describe(
             .toBeCloseTo(parseFloat(formatEther(locked)), 3);
         });
 
-        await test.step('Penalty History lists the cancellation', async () => {
+        await test.step('History lists the cancellation', async () => {
           await unlockBond.open();
           await unlockBond.expandPenaltyHistory();
           const row = unlockBond.penaltyHistoryRows.filter({

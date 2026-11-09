@@ -9,9 +9,8 @@ import {
 export class AddBondPage extends BasePage {
   form: Locator;
 
-  // Bond delta row and the why/insufficient notice
-  titledAmount: Locator;
-  titledAmountBalance: Locator;
+  // Bond stats card and the why/insufficient notice
+  bondStat: Locator;
   formInfoText: Locator;
 
   // Token and amount
@@ -32,8 +31,7 @@ export class AddBondPage extends BasePage {
     super(page);
     this.form = this.page.getByTestId('addBondForm');
 
-    this.titledAmount = this.form.getByTestId('titledAmount');
-    this.titledAmountBalance = this.form.getByTestId('titledAmountBalance');
+    this.bondStat = this.page.getByTestId('excessBondStat');
     this.formInfoText = this.page.getByTestId('formInfoText');
 
     this.tokenSelectTrigger = this.form.getByTestId('tokenSelectTrigger');
@@ -41,7 +39,7 @@ export class AddBondPage extends BasePage {
     this.validationInputTooltip = this.form.getByTestId('inputMessageError');
     this.maxBtn = this.form.getByTestId('maxBtn');
 
-    this.addBondButton = this.form.getByRole('button', { name: 'Add Bond' });
+    this.addBondButton = this.form.getByRole('button', { name: 'Add bond' });
 
     this.balanceWillReceive = this.form.getByTestId('balanceWillReceive');
     this.exchangeRate = this.form.getByTestId('exchangeRate');
@@ -50,7 +48,7 @@ export class AddBondPage extends BasePage {
 
   async open() {
     await test.step('Open the Bond & Rewards page', async () => {
-      await this.openWithRetry('/bond/add', this.titledAmountBalance);
+      await this.openWithRetry('/bond/add', this.bondStat);
     });
   }
 

@@ -8,7 +8,7 @@ export class UnlockBondPage extends BasePage {
 
   constructor(public page: Page) {
     super(page);
-    this.lockedBondAmount = this.page.getByTestId('lockedBondAmount');
+    this.lockedBondAmount = this.page.getByTestId('lockedBondRow');
     this.penaltyHistory = this.page.getByTestId('penaltyHistory');
     this.penaltyHistoryRows =
       this.penaltyHistory.getByTestId('penaltyHistoryRow');
@@ -21,7 +21,7 @@ export class UnlockBondPage extends BasePage {
   }
 
   async expandPenaltyHistory() {
-    await test.step('Expand Penalty History', async () => {
+    await test.step('Expand History', async () => {
       const toggle = this.penaltyHistory.locator('[aria-expanded]').first();
       if ((await toggle.getAttribute('aria-expanded')) !== 'true')
         await toggle.click();

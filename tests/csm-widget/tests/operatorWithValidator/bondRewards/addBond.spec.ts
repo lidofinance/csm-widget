@@ -29,14 +29,14 @@ test.describe(
           const nodeOperatorId = await widgetService.extractNodeOperatorId();
 
           await test.step('Verify bond balance', async () => {
-            await expect(bondRewardsPage.addBond.titledAmount).toContainText(
-              'Excess bond',
+            await expect(bondRewardsPage.addBond.bondStat).toContainText(
+              /excess bond/i,
             );
-            const bondSummary = await csmSDK.getBondSummary(nodeOperatorId);
 
-            await expect(
-              bondRewardsPage.addBond.titledAmountBalance,
-            ).toHaveText(`${bondSummary.excess.toCut(4)} stETH`);
+            const bondSummary = await csmSDK.getBondSummary(nodeOperatorId);
+            await expect(bondRewardsPage.addBond.bondStat).toContainText(
+              bondSummary.excess.toCut(4),
+            );
           });
 
           await test.step('Verify text', async () => {
@@ -148,7 +148,7 @@ test.describe(
             ).toBeVisible();
             await expect(
               bondRewardsPage.addBond.balanceWillReceive,
-            ).toContainText('Bond balance will receive');
+            ).toContainText('Bond balance to increase');
 
             await expect(
               bondRewardsPage.addBond.balanceWillReceive.getByTestId(
