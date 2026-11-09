@@ -93,7 +93,7 @@ export const BondStatsCard: FC<Props> = ({ header, actions }) => {
               <DataList>
                 <DataListRow
                   label="To splitters:"
-                  info="Portion of rewards routed to splitters. See the Splitters section for exact proportions"
+                  info="Portion of rewards routed to splitters. See the Splitters section for exact proportions."
                   value={<Amount amount={splittable} symbol="stETH" />}
                   dataTestId={{ ...INFO_TEST_ID, root: 'toSplittersRow' }}
                 />
