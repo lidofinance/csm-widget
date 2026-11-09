@@ -19,7 +19,7 @@ export const MODULE_METADATA = {
     shortName: 'CM',
     description:
       'The Curated Module v2 consists of allow-listed independent professional staking organizations and Ethereum client teams, which operate validators using the protocol',
-    host: 'https://cm.testnet.fi', // TODO: replace to lido.fi when CM will be released
+    host: 'https://cm.lido.fi',
     previewFile: 'cm-preview.png',
   },
   [MODULE_NAME.CSM_02]: CSM_METADATA,
