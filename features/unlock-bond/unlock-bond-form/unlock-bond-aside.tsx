@@ -1,5 +1,6 @@
-import { DataListRow } from '@lidofinance/lido-app-ui';
+import { DataListRow, Tag } from '@lidofinance/lido-app-ui';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { BOND_LOCKED } from 'consts/text';
 import { FC } from 'react';
 import { SubmitAside, SubmitButton } from 'shared/form-page';
 import { FormatToken } from 'shared/formatters';
@@ -30,12 +31,28 @@ const CompensationRows: FC = () => {
   );
 };
 
+const ExpiredRow: FC = () => {
+  const { bond } = useUnlockBondFormData(true);
+
+  return (
+    <DataListRow
+      label={
+        <>
+          {BOND_LOCKED} <Tag variant="warning">Expired</Tag>
+        </>
+      }
+      value={<FormatToken amount={bond.locked} token={TOKENS.steth} />}
+      dataTestId={{ root: 'lockedBondAmount' }}
+    />
+  );
+};
+
 export const UnlockBondAside: FC = () => {
   const flow = useUnlockBondFlow();
   const isUnlockExpired = flow.action === 'unlock-expired';
 
   return (
-    <SubmitAside rows={isUnlockExpired ? undefined : <CompensationRows />}>
+    <SubmitAside rows={isUnlockExpired ? <ExpiredRow /> : <CompensationRows />}>
       <SubmitButton>
         {isUnlockExpired ? 'Unlock bond' : 'Compensate locked bond'}
       </SubmitButton>

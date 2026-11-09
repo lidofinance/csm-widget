@@ -34,7 +34,7 @@ export const PenaltyHistory: FC = () => {
   return (
     <Card>
       <Accordion
-        title="Penalty History"
+        title="History"
         border={false}
         defaultExpanded={false}
         dataTestId={{ root: 'penaltyHistory' }}

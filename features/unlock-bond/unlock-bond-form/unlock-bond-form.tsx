@@ -1,13 +1,13 @@
-import { Stack, FormLayout } from '@lidofinance/lido-app-ui';
+import { FormLayout } from '@lidofinance/lido-app-ui';
 import { useFaq } from 'faq';
 import { FC, memo } from 'react';
-import { Faq } from 'shared/components';
+import { BondStatsCard, Faq } from 'shared/components';
 import { FormPage, FormReady } from 'shared/form-page';
 import { Form } from 'shared/hook-form/form-controller';
 import { AppFormUi } from 'shared/hook-form/form-ui';
 import { PenaltyHistory } from '../penalty-history';
 import { UnlockBondDataProvider, UnlockBondFormProvider } from './context';
-import { LockedBondNotice, LockedBondSummary } from './controls/locked-bond';
+import { LockedBondNotice } from './controls/locked-bond';
 import { UnlockBondAside } from './unlock-bond-aside';
 import { UnlockBondFormGate } from './unlock-bond-form-gate';
 
@@ -18,15 +18,16 @@ export const UnlockBondForm: FC = memo(() => {
     <AppFormUi>
       <UnlockBondDataProvider>
         <UnlockBondFormProvider>
-          <FormPage below={<PenaltyHistory />} faq={<Faq items={faq} />}>
+          <FormPage
+            notices={<BondStatsCard />}
+            below={<PenaltyHistory />}
+            faq={<Faq items={faq} />}
+          >
             <FormReady>
               <UnlockBondFormGate>
                 <Form data-testid="unlockBondForm">
                   <FormLayout aside={<UnlockBondAside />}>
-                    <Stack direction="column" gap={24}>
-                      <LockedBondSummary />
-                      <LockedBondNotice />
-                    </Stack>
+                    <LockedBondNotice />
                   </FormLayout>
                 </Form>
               </UnlockBondFormGate>

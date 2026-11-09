@@ -1,53 +1,7 @@
-import {
-  DataList,
-  DataListRow,
-  MessageBox,
-  Tag,
-  Typography,
-} from '@lidofinance/lido-app-ui';
-import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { BOND_LOCKED } from 'consts/text';
+import { MessageBox } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import { FormatToken } from 'shared/formatters';
 import { useUnlockBondFormData } from '../context';
 import { ActionsStyle } from '../styles';
-
-const INHERIT_FONT = { font: 'inherit' };
-
-export const LockedBondSummary: FC = () => {
-  const { bond, isExpired } = useUnlockBondFormData(true);
-  const locked = bond?.locked ?? 0n;
-  const amount = <FormatToken amount={locked} token={TOKENS.steth} />;
-
-  return (
-    <DataList>
-      <DataListRow
-        label={
-          <>
-            {BOND_LOCKED}
-            {isExpired && locked > 0n && (
-              <>
-                {' '}
-                <Tag variant="warning">Expired</Tag>
-              </>
-            )}
-          </>
-        }
-        info="Bond may be locked in the case of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations."
-        value={
-          !isExpired && locked > 0n ? (
-            <Typography as="span" color="error" style={INHERIT_FONT}>
-              {amount}
-            </Typography>
-          ) : (
-            amount
-          )
-        }
-        dataTestId={{ value: 'lockedBondAmount' }}
-      />
-    </DataList>
-  );
-};
 
 export const LockedBondNotice: FC = () => {
   const { bond, isExpired } = useUnlockBondFormData(true);

@@ -1,4 +1,5 @@
 import {
+  EmptyState,
   MessageBox,
   Stack,
   TextLink,
@@ -8,12 +9,11 @@ import { PATH } from 'consts/urls';
 import { FC, PropsWithChildren } from 'react';
 import { NoAccessNotice } from 'shared/form-page';
 import { useUnlockBondFlow } from './context';
-import { LockedBondNotice, LockedBondSummary } from './controls/locked-bond';
+import { LockedBondNotice } from './controls/locked-bond';
 
 const GateLayout: FC<PropsWithChildren> = ({ children }) => (
   <FormLayout>
     <Stack direction="column" gap={24}>
-      <LockedBondSummary />
       {children}
     </Stack>
   </FormLayout>
@@ -22,7 +22,7 @@ const GateLayout: FC<PropsWithChildren> = ({ children }) => (
 export const UnlockBondFormGate: FC<PropsWithChildren> = ({ children }) => {
   const flow = useUnlockBondFlow();
 
-  if (flow.action === 'nothing') return <GateLayout />;
+  if (flow.action === 'nothing') return <EmptyState title="No locked bond" />;
 
   if (flow.action === 'no-access') {
     return (
