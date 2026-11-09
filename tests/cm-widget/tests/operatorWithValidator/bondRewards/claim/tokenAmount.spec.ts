@@ -185,7 +185,7 @@ test.describe(
 
           await test.step('"Rewards Address will receive" row is shown', async () => {
             await expect(claim.claimBondFormInfoTitle).toContainText(
-              'will receive',
+              'Rewards Address to receive',
               { timeout: PAGE_WAIT_TIMEOUT },
             );
           });
@@ -289,8 +289,7 @@ test.describe(
         });
 
         await test.step('Help tooltip shows recipient info', async () => {
-          // DataListRow's info icon is the last SVG in the row (after the etherscanLink icon)
-          await claim.claimBondFormInfoTitle.locator('svg').last().hover();
+          await claim.claimBondFormInfoTitle.getByTestId('iconTooltip').hover();
           await expect(claim.page.getByRole('tooltip')).toContainText(
             'The recipient of the claim is the Rewards Address. You can change the Rewards Address on the Settings tab',
             { timeout: PAGE_WAIT_TIMEOUT },

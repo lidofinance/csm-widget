@@ -1,4 +1,4 @@
-import { Locator, Page, test } from '@playwright/test';
+import { expect, Locator, Page, test } from '@playwright/test';
 import { BasePage } from '../../../../shared/pages/base.page';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import {
@@ -61,8 +61,8 @@ export class ClaimPage extends BasePage {
     super(page);
     this.form = this.page.getByTestId('claimBondForm');
 
-    this.rewardsBalanceCard = this.page.getByTestId('rewardsBalanceCard');
-    this.bondBalanceCard = this.page.getByTestId('bondBalanceCard');
+    this.rewardsBalanceCard = this.page.getByTestId('rewardsStat');
+    this.bondBalanceCard = this.page.getByTestId('excessBondStat');
     this.lockedBondRow = this.page.getByTestId('lockedBondRow');
     this.pendingToSplitRow = this.page.getByTestId('pendingToSplitBondRow');
     this.debtBondRow = this.page.getByTestId('debtBondRow');
@@ -156,7 +156,19 @@ export class ClaimPage extends BasePage {
   }
 
   getClaimOptionRadio(option: string) {
-    return this.form.locator(`[role="radio"][data-value="${option}"]`);
+    return this.form.getByTestId(`claimOption-${option}`);
+  }
+
+  async expectClaimOptionSelected(
+    option: string,
+    selected = true,
+    options?: { timeout?: number },
+  ) {
+    await expect(this.getClaimOptionRadio(option)).toHaveAttribute(
+      'aria-selected',
+      String(selected),
+      options,
+    );
   }
 
   getClaimOptionLabel(option: string) {

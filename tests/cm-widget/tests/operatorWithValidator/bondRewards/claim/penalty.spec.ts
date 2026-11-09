@@ -93,33 +93,32 @@ test.describe(
           await expect(
             claim.getClaimOptionRadio(CLAIM_OPTION.ALL_TO_RA),
           ).toBeEnabled({ timeout: PAGE_WAIT_TIMEOUT });
-          await expect(
-            claim.getClaimOptionRadio(CLAIM_OPTION.ALL_TO_RA),
-          ).toBeChecked();
+          await claim.expectClaimOptionSelected(CLAIM_OPTION.ALL_TO_RA);
           await expect(
             claim.getClaimOptionDescription(CLAIM_OPTION.ALL_TO_RA),
-          ).toHaveText('Claim both Excess Bond and Rewards');
+          ).toHaveText('Claim both Excess Bond and Rewards to Rewards Address');
         });
 
         await test.step('"Excess Bond" option is disabled and not checked', async () => {
           await expect(
             claim.getClaimOptionRadio(CLAIM_OPTION.BOND_TO_RA),
           ).toBeDisabled();
-          await expect(
-            claim.getClaimOptionRadio(CLAIM_OPTION.BOND_TO_RA),
-          ).not.toBeChecked();
+          await claim.expectClaimOptionSelected(CLAIM_OPTION.BOND_TO_RA, false);
           await expect(
             claim.getClaimOptionDescription(CLAIM_OPTION.BOND_TO_RA),
-          ).toHaveText('Claim only Excess Bond. Rewards remain unclaimed.');
+          ).toHaveText(
+            'Claim only Excess Bond. Rewards remain unclaimed to Rewards Address.',
+          );
         });
 
         await test.step('"Rewards to Bond" option is enabled, not checked, description reads "Move all rewards to the bond"', async () => {
           await expect(
             claim.getClaimOptionRadio(CLAIM_OPTION.REWARDS_TO_BOND),
           ).toBeEnabled();
-          await expect(
-            claim.getClaimOptionRadio(CLAIM_OPTION.REWARDS_TO_BOND),
-          ).not.toBeChecked();
+          await claim.expectClaimOptionSelected(
+            CLAIM_OPTION.REWARDS_TO_BOND,
+            false,
+          );
           await expect(
             claim.getClaimOptionDescription(CLAIM_OPTION.REWARDS_TO_BOND),
           ).toHaveText(
