@@ -98,7 +98,7 @@ jobs:
       PUSHGATEWAY_PASSWORD: ${{ secrets.PUSHGATEWAY_PASSWORD }}
       GRAFANA_URL: ${{ secrets.GRAFANA_URL }}
       GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
-      BOCHQA_URL: ${{ secrets.BOCHQA_URL }}m
+      BOCHQA_URL: ${{ secrets.BOCHQA_URL }}
       BOCHQA_USER: ${{ secrets.BOCHQA_USER }}
       BOCHQA_PASSWORD: ${{ secrets.BOCHQA_PASSWORD }}
 
