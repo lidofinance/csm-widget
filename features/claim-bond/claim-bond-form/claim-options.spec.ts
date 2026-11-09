@@ -24,8 +24,8 @@ describe('describeClaimOption', () => {
     expect(
       describeClaimOption(CLAIM_OPTION.ALL_TO_RA, ctx(), TOKENS.steth),
     ).toEqual({
-      label: 'All → Rewards Address',
-      description: 'Claim both Excess Bond and Rewards',
+      label: 'Cash out',
+      description: 'Claim both Excess Bond and Rewards to Rewards Address',
       submitLabel: 'Claim',
     });
   });
@@ -45,8 +45,9 @@ describe('describeClaimOption', () => {
         TOKENS.steth,
       ),
     ).toEqual({
-      label: 'Rewards → Rewards Address',
-      description: 'Compensate the Insufficient Bond and claim Rewards',
+      label: 'Cash out',
+      description:
+        'Compensate the Insufficient Bond and claim the rest of Rewards to Rewards Address',
       submitLabel: 'Claim',
     });
   });
@@ -57,8 +58,10 @@ describe('describeClaimOption', () => {
         CLAIM_OPTION.ALL_TO_RA,
         ctx({ keysInsufficient: INSUFFICIENT, hasSplits: true }),
         TOKENS.steth,
-      ).label,
-    ).toBe('Rewards → Splitter addresses → Rewards Address');
+      ).description,
+    ).toBe(
+      'Split Rewards, compensate the Insufficient Bond and send the rest to Rewards Address',
+    );
     expect(
       describeClaimOption(
         CLAIM_OPTION.ALL_TO_RA,
@@ -66,8 +69,8 @@ describe('describeClaimOption', () => {
         TOKENS.steth,
       ),
     ).toEqual({
-      label: 'Rewards → Splitter addresses',
-      description: 'Split rewards',
+      label: 'Cash out',
+      description: 'Split all Rewards between splitter addresses',
       submitLabel: 'Claim',
     });
     expect(
@@ -77,8 +80,8 @@ describe('describeClaimOption', () => {
         TOKENS.steth,
       ),
     ).toEqual({
-      label: 'Rewards → Splitter addresses, Excess Bond → Rewards Address',
-      description: 'Split rewards and claim Excess bond',
+      label: 'Cash out',
+      description: 'Split Rewards and claim Excess Bond to Rewards Address',
       submitLabel: 'Claim',
     });
   });
@@ -87,8 +90,9 @@ describe('describeClaimOption', () => {
     expect(
       describeClaimOption(CLAIM_OPTION.BOND_TO_RA, ctx(), TOKENS.steth),
     ).toEqual({
-      label: 'Excess Bond → Rewards Address',
-      description: 'Claim only Excess Bond. Rewards remain unclaimed.',
+      label: 'Excess bond only',
+      description:
+        'Claim only Excess Bond. Rewards remain unclaimed to Rewards Address.',
       submitLabel: 'Claim',
     });
     expect(
@@ -110,8 +114,8 @@ describe('describeClaimOption', () => {
         TOKENS.steth,
       ),
     ).toEqual({
-      label: 'Rewards → Bond',
-      description: 'Compensate the Insufficient Bond',
+      label: 'Compound',
+      description: 'Compensate the Insufficient Bond with Rewards',
       submitLabel: 'Compensate',
     });
   });
@@ -120,7 +124,7 @@ describe('describeClaimOption', () => {
     expect(
       describeClaimOption(CLAIM_OPTION.REWARDS_TO_BOND, ctx(), TOKENS.steth),
     ).toEqual({
-      label: 'Rewards → Excess Bond',
+      label: 'Compound',
       description:
         'Move all rewards to the bond. Best for uploading more keys.',
       submitLabel: 'Claim rewards to the Bond balance',
@@ -132,8 +136,8 @@ describe('describeClaimOption', () => {
         TOKENS.steth,
       ),
     ).toEqual({
-      label: 'Rewards → Splitter addresses → Excess bond',
-      description: 'Split rewards, send remaining to Excess bond',
+      label: 'Compound',
+      description: 'Split Rewards and send the rest to Bond',
       submitLabel: 'Claim rewards to the Bond balance',
     });
   });
@@ -151,6 +155,38 @@ describe('getClaimOptionViews', () => {
       [CLAIM_OPTION.REWARDS_TO_BOND, false],
       [CLAIM_OPTION.ALL_TO_RA, true],
       [CLAIM_OPTION.BOND_TO_RA, true],
+    ]);
+  });
+
+  it('orders all enabled options as Figma does', () => {
+    const views = getClaimOptionViews(
+      [
+        CLAIM_OPTION.BOND_TO_RA,
+        CLAIM_OPTION.REWARDS_TO_BOND,
+        CLAIM_OPTION.ALL_TO_RA,
+      ],
+      ctx(),
+      TOKENS.steth,
+    );
+
+    expect(views.map(({ option, disabled }) => [option, disabled])).toEqual([
+      [CLAIM_OPTION.ALL_TO_RA, false],
+      [CLAIM_OPTION.REWARDS_TO_BOND, false],
+      [CLAIM_OPTION.BOND_TO_RA, false],
+    ]);
+  });
+
+  it('puts the disabled option last', () => {
+    const views = getClaimOptionViews(
+      [CLAIM_OPTION.ALL_TO_RA, CLAIM_OPTION.BOND_TO_RA],
+      ctx(),
+      TOKENS.steth,
+    );
+
+    expect(views.map(({ option, disabled }) => [option, disabled])).toEqual([
+      [CLAIM_OPTION.ALL_TO_RA, false],
+      [CLAIM_OPTION.BOND_TO_RA, false],
+      [CLAIM_OPTION.REWARDS_TO_BOND, true],
     ]);
   });
 });

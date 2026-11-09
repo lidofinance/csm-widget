@@ -4,55 +4,62 @@ import { CLAIM_OPTION, type ClaimBondCalculation } from './context/types';
 
 type Meta = { label: string; description: string };
 
+const CASH_OUT = 'Cash out';
+const COMPOUND = 'Compound';
+const EXCESS_BOND_ONLY = 'Excess bond only';
+
 const COMPENSATE_AND_CLAIM_REWARDS: Meta = {
-  label: 'Rewards → Rewards Address',
-  description: 'Compensate the Insufficient Bond and claim Rewards',
+  label: CASH_OUT,
+  description:
+    'Compensate the Insufficient Bond and claim the rest of Rewards to Rewards Address',
 };
 
 const CLAIM_ALL: Meta = {
-  label: 'All → Rewards Address',
-  description: 'Claim both Excess Bond and Rewards',
+  label: CASH_OUT,
+  description: 'Claim both Excess Bond and Rewards to Rewards Address',
 };
 
 const CLAIM_EXCESS_BOND: Meta = {
-  label: 'Excess Bond → Rewards Address',
-  description: 'Claim only Excess Bond. Rewards remain unclaimed.',
+  label: EXCESS_BOND_ONLY,
+  description:
+    'Claim only Excess Bond. Rewards remain unclaimed to Rewards Address.',
 };
 
 const CLAIM_EXCESS_BOND_WITH_PENDING_SPLIT: Meta = {
-  label: CLAIM_EXCESS_BOND.label,
+  label: EXCESS_BOND_ONLY,
   description:
     'Claim Excess Bond. Pending splitter share will be settled from bond.',
 };
 
 const COMPENSATE_INSUFFICIENT: Meta = {
-  label: 'Rewards → Bond',
-  description: 'Compensate the Insufficient Bond',
+  label: COMPOUND,
+  description: 'Compensate the Insufficient Bond with Rewards',
 };
 
 const REWARDS_TO_EXCESS_BOND: Meta = {
-  label: 'Rewards → Excess Bond',
+  label: COMPOUND,
   description: 'Move all rewards to the bond. Best for uploading more keys.',
 };
 
 const SPLIT_REWARDS_ONLY: Meta = {
-  label: 'Rewards → Splitter addresses',
-  description: 'Split rewards',
+  label: CASH_OUT,
+  description: 'Split all Rewards between splitter addresses',
 };
 
 const SPLIT_AND_CLAIM_BOND: Meta = {
-  label: 'Rewards → Splitter addresses, Excess Bond → Rewards Address',
-  description: 'Split rewards and claim Excess bond',
+  label: CASH_OUT,
+  description: 'Split Rewards and claim Excess Bond to Rewards Address',
 };
 
 const SPLIT_AND_COMPENSATE_TO_RA: Meta = {
-  label: 'Rewards → Splitter addresses → Rewards Address',
-  description: 'Split rewards, send remaining to Rewards Address',
+  label: CASH_OUT,
+  description:
+    'Split Rewards, compensate the Insufficient Bond and send the rest to Rewards Address',
 };
 
 const SPLIT_REWARDS_TO_BOND: Meta = {
-  label: 'Rewards → Splitter addresses → Excess bond',
-  description: 'Split rewards, send remaining to Excess bond',
+  label: COMPOUND,
+  description: 'Split Rewards and send the rest to Bond',
 };
 
 export type ClaimOptionContext = {
@@ -163,8 +170,8 @@ export const describeClaimOption = (
 
 export const CLAIM_OPTION_ORDER: readonly CLAIM_OPTION[] = [
   CLAIM_OPTION.ALL_TO_RA,
-  CLAIM_OPTION.BOND_TO_RA,
   CLAIM_OPTION.REWARDS_TO_BOND,
+  CLAIM_OPTION.BOND_TO_RA,
 ];
 
 export type ClaimOptionView = {

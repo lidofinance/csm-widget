@@ -5,39 +5,21 @@ import {
   Tag,
 } from '@lidofinance/lido-app-ui';
 import { FeeSplit } from '@lidofinance/lido-csm-sdk';
-import { FC, ReactNode } from 'react';
+import { FC } from 'react';
 import { Address } from 'shared/components';
-import { OptionCardsField } from 'shared/hook-form/fields';
-import { CLAIM_OPTION, useClaimBondFormData } from '../context';
+import { SegmentCardsField } from 'shared/hook-form/fields';
+import { useClaimBondFormData } from '../context';
 import { useClaimOptions } from '../hooks/use-claim-options';
-import { OptionIconsStyle } from '../styles';
-
-import { ReactComponent as BondIcon } from 'assets/balance/bond.svg';
-import { ReactComponent as RewardsIcon } from 'assets/balance/rewards.svg';
-
-const OPTION_ICONS: Record<CLAIM_OPTION, ReactNode> = {
-  [CLAIM_OPTION.ALL_TO_RA]: (
-    <OptionIconsStyle>
-      <RewardsIcon />
-      <BondIcon />
-    </OptionIconsStyle>
-  ),
-  [CLAIM_OPTION.BOND_TO_RA]: (
-    <OptionIconsStyle>
-      <BondIcon />
-    </OptionIconsStyle>
-  ),
-  [CLAIM_OPTION.REWARDS_TO_BOND]: (
-    <OptionIconsStyle>
-      <RewardsIcon />
-    </OptionIconsStyle>
-  ),
-};
+import { CLAIM_OPTION_ICONS } from './claim-option-icons';
 
 const formatShare = (share: bigint) => `${Number(share) / 100}%`;
 
-const SplittersTooltip: FC<{ feeSplits: FeeSplit[] }> = ({ feeSplits }) => (
+const SplittersTooltip: FC<{
+  feeSplits: FeeSplit[];
+  rewardsAddress?: string;
+}> = ({ feeSplits, rewardsAddress }) => (
   <Stack direction="column" gap={12}>
+    <b>Splitters ON</b>
     <span>
       When you claim rewards, they will be distributed according to the
       proportions below
@@ -50,7 +32,11 @@ const SplittersTooltip: FC<{ feeSplits: FeeSplit[] }> = ({ feeSplits }) => (
           justify="between"
           data-testid="splittersTooltipRow"
         >
-          <Address address={split.recipient} link="" symbols={8} noStyle />
+          <span>
+            <Address address={split.recipient} link="" symbols={8} noStyle />
+            {split.recipient.toLowerCase() === rewardsAddress?.toLowerCase() &&
+              ' (Bond)'}
+          </span>
           <span>{formatShare(split.share)}</span>
         </Stack>
       ))}
@@ -59,17 +45,28 @@ const SplittersTooltip: FC<{ feeSplits: FeeSplit[] }> = ({ feeSplits }) => (
 );
 
 const SplittersChip: FC = () => {
-  const { feeSplits } = useClaimBondFormData(true);
+  const { feeSplits, rewardsAddress } = useClaimBondFormData(true);
 
   if (feeSplits.length === 0) return null;
 
   return (
-    <Tag variant="info" dataTestId={{ root: 'splittersChip' }}>
-      SPLITTERS ON{' '}
-      <InfoTooltip
-        content={<SplittersTooltip feeSplits={feeSplits} />}
-        dataTestId={{ root: 'iconTooltip', content: 'tooltipWrapper' }}
-      />
+    <Tag
+      variant="info"
+      icon={
+        <InfoTooltip
+          content={
+            <SplittersTooltip
+              feeSplits={feeSplits}
+              rewardsAddress={rewardsAddress}
+            />
+          }
+          dataTestId={{ root: 'iconTooltip', content: 'tooltipWrapper' }}
+        />
+      }
+      iconPosition="right"
+      dataTestId={{ root: 'splittersChip' }}
+    >
+      Splitters ON
     </Tag>
   );
 };
@@ -80,19 +77,20 @@ export const SourceSelect: FC = () => {
   return (
     <Stack direction="column" gap={16}>
       <SectionTitle title="Select claiming option" action={<SplittersChip />} />
-      <OptionCardsField
+      <SegmentCardsField
         name="claimOption"
         aria-label="Select claiming option"
-        variant="list"
-        orientation="horizontal"
         options={options.map(({ option, label, description, disabled }) => ({
           value: option,
-          icon: OPTION_ICONS[option],
-          title: <span data-testid="claimOptionLabel">{label}</span>,
-          description: (
-            <span data-testid="claimOptionDescription">{description}</span>
-          ),
+          icon: CLAIM_OPTION_ICONS[option],
+          title: label,
+          description,
           disabled,
+          dataTestId: {
+            root: `claimOption-${option}`,
+            title: 'claimOptionLabel',
+            description: 'claimOptionDescription',
+          },
         }))}
       />
     </Stack>
