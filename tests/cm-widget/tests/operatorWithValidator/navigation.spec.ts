@@ -23,21 +23,16 @@ const KEYS_TABS = [
   { title: 'View keys', url: '/keys/view' },
 ];
 
-const BOND_TABS = [
+const BOND_ACTIONS = [
   {
-    title: 'Add Bond',
+    title: 'Add bond',
     url: '/bond/add',
     event: 'cm_widget_view_add_bond_page',
   },
   {
-    title: 'Claim',
+    title: 'Claim Bond & Rewards',
     url: '/bond/claim',
     event: 'cm_widget_view_claim_bond_page',
-  },
-  {
-    title: 'Rewards history',
-    url: '/bond/rewards-history',
-    event: 'cm_widget_view_rewards_history_page',
   },
 ];
 
@@ -126,29 +121,42 @@ test.describe(
     );
 
     test(
-      qase(175, 'Should display Bond & Rewards tabs and navigate correctly'),
+      qase(175, 'Should display Bond & Rewards hub and navigate to actions'),
       async ({ widgetService }) => {
-        await navigation.navItem('Bond & Rewards').click();
-        await widgetService.page.waitForURL(/\/bond/);
+        const { hub } = widgetService.bondRewardsPage;
 
-        await test.step('All Bond & Rewards tabs are visible', async () => {
-          for (const { title } of BOND_TABS) {
-            await expect(
-              navigation.switcherTab(title),
-              `"${title}" tab should be visible`,
-            ).toBeVisible();
-          }
+        await Promise.all([
+          matomoEventService.waitForEvent(
+            'e_n',
+            'cm_widget_view_bond_rewards_page',
+          ),
+          navigation.navItem('Bond & Rewards').click(),
+        ]);
+        await expect(widgetService.page).toHaveURL(/\/bond$/);
+
+        await test.step('Hub actions are visible', async () => {
+          await expect(hub.claimButton).toBeVisible();
+          await expect(hub.addBondButton).toBeVisible();
         });
 
-        for (const { title, url, event } of BOND_TABS) {
-          await test.step(`Navigate to "${title}" tab and check Matomo event`, async () => {
+        for (const { title, url, event } of BOND_ACTIONS) {
+          await test.step(`Navigate to "${title}" and check Matomo event`, async () => {
+            const button =
+              url === '/bond/add' ? hub.addBondButton : hub.claimButton;
             await Promise.all([
               matomoEventService.waitForEvent('e_n', event),
-              navigation.switcherTab(title).click(),
+              button.click(),
             ]);
             await expect(widgetService.page).toHaveURL(new RegExp(url));
+            await widgetService.page.goBack();
+            await expect(hub.claimButton).toBeVisible();
           });
         }
+
+        await test.step('Legacy rewards history url redirects to hub', async () => {
+          await widgetService.page.goto('/bond/rewards-history');
+          await expect(widgetService.page).toHaveURL(/\/bond$/);
+        });
       },
     );
 
