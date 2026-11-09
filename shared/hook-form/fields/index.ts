@@ -12,6 +12,7 @@ export * from './key-list-field';
 export * from './key-list-selection';
 export * from './key-status-tag';
 export * from './option-cards-field';
+export * from './segment-cards-field';
 export * from './percent-field';
 export * from './percent-input';
 export * from './single-token-selector';

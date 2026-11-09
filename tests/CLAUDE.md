@@ -18,7 +18,7 @@ Migrated forms render on `@lidofinance/lido-app-ui` (`shared/hook-form/fields`, 
 - **Field errors** are `getByTestId('inputMessageError')`. For `TextField` / `AddressField`, scope with `xpath=//input[@name="x"]/ancestor::label/..`. An `AmountField` input isn't inside a `<label>`, so scope its error from the form or a wrapper testid instead.
 - **Max** on `AmountField` is `getByTestId('maxBtn')`. It isn't inside a label either.
 - **Token select:** click `tokenSelectTrigger`, then `getByTestId(BOND_TOKEN_OPTION_TEST_ID[token])` (`tests/shared/consts/common.const.ts`). There is no `input[value=…]`.
-- **Option cards** are `getByRole('radio', { name })` or `[role="radio"][data-value="…"]` with `aria-checked`. There is no `<input>`.
+- **Option cards** are `getByRole('radio', { name })` or `[role="radio"][data-value="…"]` with `aria-checked`. There is no `<input>`. `SegmentCardsField` cards (claim options) are `getByTestId(<per-option root testid>)` (`claimOption-<value>`), `role="tab"` + `aria-selected`, not `radio`/`aria-checked`.
 - **Checkbox rows** (`CheckboxField`, `KeyListField`): the `<label>` holds the input and exactly one `<svg>` tick, so `label >> svg` works.
 - **Modals and tooltips** portal to `document.body`. Use `page.getByRole('dialog')` / `page.getByRole('tooltip')`. `#lido-ui-modal-root` exists only for forms still on lido-ui.
 - **Tx modal:** the `TxModal` page object is unchanged (`txStage`, `title`, `description`). Stage copy doesn't change with the UI.

@@ -272,19 +272,20 @@ export const MyFormGate: FC<PropsWithChildren> = ({ children }) => {
 
 Every field takes `name`, reads the form through `useFormContext`, keeps the `name` attribute on its input and shows errors as `<span role="alert" data-testid="inputMessageError">`. An error shows once the field is touched, the form is submitted, the field has a value, or `showUntouched` is set.
 
-| Field              | Value                                                | Backing                                                                                          |
-| ------------------ | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| `TextField`        | `string`                                             | app-ui `Input`                                                                                   |
-| `AddressField`     | `string` (ENS resolved)                              | app-ui `Input`; `currentAddress`, `locked`, `trailing`, `simple`, `error`                        |
-| `AmountField`      | `bigint \| null` (wei)                               | `RichInput` + `SingleTokenSelector`; `maxValue` (Max, `maxBtn`), `balance`, `locked`, `disabled` |
-| `PercentField`     | `bigint \| null` (basis points)                      | app-ui `Input` with `%`                                                                          |
-| `CheckboxField`    | `boolean`                                            | app-ui `Checkbox`                                                                                |
-| `SwitchField`      | `boolean`                                            | app-ui `Switch`; `submitOnChange`                                                                |
-| `TokenSelectField` | token `string`                                       | app-ui `TokenSelector`; testids `tokenSelectTrigger`, `tokenOption-<TOKEN>`                      |
-| `OptionCardsField` | `string`                                             | `OptionList` radiogroup (`role="radio"`, no `<input>`); `variant`, `orientation`                 |
-| `KeyListField`     | `{ start, count }` (`range`) or `number[]` (`multi`) | app-ui `Checkbox` rows + `KeyStatusTag`                                                          |
-| `DisclosureField`  | `boolean`                                            | `Disclosure`; stays open while a dependent field has an error                                    |
-| `DepositDataField` | deposit data                                         | `Dropzone` + JSON/Parsed/Parameters tabs                                                         |
+| Field               | Value                                                | Backing                                                                                                                      |
+| ------------------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `TextField`         | `string`                                             | app-ui `Input`                                                                                                               |
+| `AddressField`      | `string` (ENS resolved)                              | app-ui `Input`; `currentAddress`, `locked`, `trailing`, `simple`, `error`                                                    |
+| `AmountField`       | `bigint \| null` (wei)                               | `RichInput` + `SingleTokenSelector`; `maxValue` (Max, `maxBtn`), `balance`, `locked`, `disabled`                             |
+| `PercentField`      | `bigint \| null` (basis points)                      | app-ui `Input` with `%`                                                                                                      |
+| `CheckboxField`     | `boolean`                                            | app-ui `Checkbox`                                                                                                            |
+| `SwitchField`       | `boolean`                                            | app-ui `Switch`; `submitOnChange`                                                                                            |
+| `TokenSelectField`  | token `string`                                       | app-ui `TokenSelector`; testids `tokenSelectTrigger`, `tokenOption-<TOKEN>`                                                  |
+| `OptionCardsField`  | `string`                                             | `OptionList` radiogroup (`role="radio"`, no `<input>`); `variant`, `orientation`                                             |
+| `SegmentCardsField` | `string`                                             | lib `SegmentedControlCard` (`role="tab"`, `aria-selected`); options `{value,title,description,icon,tag,disabled,dataTestId}` |
+| `KeyListField`      | `{ start, count }` (`range`) or `number[]` (`multi`) | app-ui `Checkbox` rows + `KeyStatusTag`                                                                                      |
+| `DisclosureField`   | `boolean`                                            | `Disclosure`; stays open while a dependent field has an error                                                                |
+| `DepositDataField`  | deposit data                                         | `Dropzone` + JSON/Parsed/Parameters tabs                                                                                     |
 
 - Build a new control on `useFieldController` (`useController` + the error rule). A control without a forwarded ref wraps itself in `<div ref={useFocusableRef(field.ref, selector)}>` so RHF can focus it on error.
 - A read-only amount that isn't a form value (a fee, a computed cost) is a plain `RichInput locked` with a `SingleTokenSelector`, not an `AmountField`.
