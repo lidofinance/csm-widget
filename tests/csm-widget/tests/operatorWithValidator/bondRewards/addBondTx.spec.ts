@@ -44,8 +44,8 @@ test.describe(
             const actualBalance =
               await bondRewardsPage.addBond.bondStat.textContent();
 
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            expect(parseAmount(actualBalance)).toBeCloseTo(expectedBalance);
+            const amount = actualBalance?.match(/\d[\d,]*\.?\d*/)?.[0] ?? null;
+            expect(parseAmount(amount)).toBeCloseTo(expectedBalance);
           });
         },
       );

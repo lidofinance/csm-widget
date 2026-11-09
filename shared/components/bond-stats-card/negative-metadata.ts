@@ -1,15 +1,15 @@
 import { BOND_DEBT_HELP } from 'consts/text';
 import { useModuleMeta, useShowRule } from 'shared/hooks';
 
-export const LOCKED_TOOLTIP_CSM =
-  'Penalties have been applied to your Node Operator because of an MEV stealing event reported by a dedicated committee. If it is not covered, the corresponding amount of your bond may be burned. See details in the Locked Bond tab.';
+const LOCKED_TOOLTIP_CSM =
+  'Penalties have been applied to your Node Operator because of an MEV stealing event reported by a dedicated committee. If it is not covered, the corresponding amount of your bond may be burned. See details on the Compensate locked bond page.';
 
-export const LOCKED_TOOLTIP_CM =
-  'Penalties have been applied to your Node Operator. If they are not covered, the corresponding amount of your bond may be burned. See details in the Locked Bond tab.';
+const LOCKED_TOOLTIP_CM =
+  'Penalties have been applied to your Node Operator. If they are not covered, the corresponding amount of your bond may be burned. See details on the Compensate locked bond page.';
 
 export const NEGATIVE_FIELDS = ['locked', 'pendingToSplit', 'debt'] as const;
 
-export type NegativeField = (typeof NEGATIVE_FIELDS)[number];
+type NegativeField = (typeof NEGATIVE_FIELDS)[number];
 
 export const useNegativeMetadata = (): Record<
   NegativeField,
