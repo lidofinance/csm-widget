@@ -7,8 +7,6 @@ import { ClaimBond } from './claim-bond';
 export const ClaimBondPage: FC = () => (
   <Layout
     wide
-    title="Manage Bond & Rewards"
-    subtitle="Select a claiming option for bond and rewards"
     pageName="ClaimBond"
     breadcrumbs={[
       { label: 'Bond & Rewards', href: PATH.BOND },
