@@ -1,39 +1,48 @@
 import {
+  Body,
   Button,
-  ButtonIcon,
-  External,
-  Input,
-  Text,
-} from '@lidofinance/lido-ui';
+  Description,
+  IconLink,
+  Stack,
+  Tag,
+} from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
-import { CategoryItemsWrapper } from 'features/ics/score-system/styles';
 import { FC, useCallback, useState } from 'react';
+import styled from 'styled-components';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { CopyButton, MatomoLink, Stack } from 'shared/components';
-import { VerifiedChip } from 'shared/components/input-address/verified-chip';
 import {
-  AddressInputHookForm,
-  TextInputHookForm,
-} from 'shared/hook-form/controls';
+  AddressField,
+  CopyField,
+  TextField,
+  stopFocus,
+} from 'shared/hook-form/fields';
 import { VALIDATION_MESSAGES } from 'shared/hook-form/validation';
+import { trackMatomoEvent } from 'utils';
 import { isAddress, isHex } from 'viem';
 import {
   useAddressMessage,
   useVerifyMessage,
   type ApplyFormInputType,
 } from '../context';
+import { VerifiedTag } from './apply-section';
+import { ETHERSCAN_SIGNATURES_URL } from './consts';
+
+const StepsStyle = styled(Stack)`
+  padding-left: 16px;
+  border-left: 1px solid var(--lido-app-ui-color-border-default);
+`;
+
+const openEtherscan = () => {
+  trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.icsEtherscanSignaturesLink);
+  window.open(ETHERSCAN_SIGNATURES_URL, '_blank', 'noopener,noreferrer');
+};
 
 export type AddressItemProps = {
-  field: { id: string; address: string; signature: string; verified?: boolean };
   index: number;
   onRemove: (index: number) => void;
 };
 
-export const AddressItem: FC<AddressItemProps> = ({
-  field,
-  index,
-  onRemove,
-}) => {
+export const AddressItem: FC<AddressItemProps> = ({ index, onRemove }) => {
   const watchedAddress = useWatch<ApplyFormInputType>({
     name: `additionalAddresses.${index}.address` as const,
   }) as string;
@@ -109,115 +118,79 @@ export const AddressItem: FC<AddressItemProps> = ({
   );
 
   return (
-    <Stack
-      key={field.id}
-      direction="column"
-      gap="sm"
-      data-testid={`additionalAddressInfo-${index}`}
-    >
-      <Stack direction="row" justify="space-between" align="center">
-        <Text as="h4" size="xs" weight="bold">
-          Additional address #{index + 1}
-        </Text>
+    <Stack gap={12} data-testid={`additionalAddressInfo-${index}`}>
+      <Stack direction="row" justify="between" align="center">
+        <Body weight="semibold">Additional address #{index + 1}</Body>
         <Button
-          size="xs"
-          variant="text"
-          color="error"
+          type="button"
+          size="small"
+          variant="error"
           onClick={() => onRemove(index)}
-          data-testid="removeBtn"
+          dataTestId={{ root: 'removeBtn' }}
         >
           Remove
         </Button>
       </Stack>
       {verified ? (
-        <Stack direction="column" gap="sm">
-          <AddressInputHookForm
-            fieldName={`additionalAddresses.${index}.address`}
-            disabled
-            label={
-              <>
-                Additional address #{index + 1}{' '}
-                <VerifiedChip color="primary">Verified</VerifiedChip>
-              </>
-            }
-          />
-        </Stack>
+        <AddressField
+          name={`additionalAddresses.${index}.address`}
+          disabled
+          simple
+          trailing={<VerifiedTag />}
+        />
       ) : (
-        <CategoryItemsWrapper $gap="md" $offset="md">
-          <Stack
-            direction="column"
-            gap="sm"
-            data-testid="additionalAddressStep1"
-          >
-            <Text size="xs">Step 1. Insert your Ethereum address</Text>
-            <AddressInputHookForm
-              fieldName={`additionalAddresses.${index}.address`}
-              label={`Additional address #${index + 1}`}
+        <StepsStyle gap={16}>
+          <Stack gap={8} data-testid="additionalAddressStep1">
+            <Description color="secondary">
+              Step 1. Insert your Ethereum address
+            </Description>
+            <AddressField
+              name={`additionalAddresses.${index}.address`}
               placeholder="0x..."
             />
           </Stack>
-          <Stack
-            direction="column"
-            gap="sm"
-            data-testid="additionalAddressStep2"
-          >
-            <Text size="xs">
+          <Stack gap={8} data-testid="additionalAddressStep2">
+            <Description color="secondary">
               Step 2. Copy the message and sign it on Etherscan (or other tool)
-            </Text>
-            <Input
+            </Description>
+            <CopyField
               name={`additionalAddresses.${index}.messageToSign`}
-              value={message}
-              readOnly
               label="Message to sign"
+              text={message}
               placeholder="Enter address above to generate message..."
-              rightDecorator={
-                <Stack gap="sm">
-                  <CopyButton text={message} size="xs" variant="translucent" />
-                  <MatomoLink
-                    href="https://etherscan.io/verifiedSignatures#"
-                    matomoEvent={
-                      MATOMO_CLICK_EVENTS_TYPES.icsEtherscanSignaturesLink
-                    }
-                  >
-                    <ButtonIcon
-                      data-testid="signBtn"
-                      icon={<External />}
-                      size="xs"
-                      variant="translucent"
-                    >
-                      Sign
-                    </ButtonIcon>
-                  </MatomoLink>
-                </Stack>
+              extra={
+                <Tag
+                  variant="action"
+                  icon={<IconLink />}
+                  onClick={stopFocus(openEtherscan)}
+                  dataTestId={{ root: 'signBtn' }}
+                >
+                  Sign
+                </Tag>
               }
             />
           </Stack>
-          <Stack
-            direction="column"
-            gap="sm"
-            data-testid="additionalAddressStep3"
-          >
-            <Text size="xs">
+          <Stack gap={8} data-testid="additionalAddressStep3">
+            <Description color="secondary">
               Step 3. Paste the signature in the field below
-            </Text>
-            <TextInputHookForm
-              fieldName={`additionalAddresses.${index}.signature`}
-              label="Signature"
-              placeholder="0x123..."
-              rightDecorator={
-                <Button
-                  size="xs"
-                  variant="translucent"
-                  onClick={() => void onVerify(index)}
+            </Description>
+            <TextField
+              name={`additionalAddresses.${index}.signature`}
+              aria-label="Signature"
+              placeholder="Signature"
+              trailing={
+                <Tag
+                  variant="action"
                   disabled={isVerifying}
-                  data-testid="verifySignatureBtn"
+                  onClick={stopFocus(() => void onVerify(index))}
+                  dataTestId={{ root: 'verifySignatureBtn' }}
                 >
                   {isVerifying ? 'Verifying...' : 'Verify'}
-                </Button>
+                </Tag>
               }
             />
           </Stack>
-        </CategoryItemsWrapper>
+        </StepsStyle>
       )}
     </Stack>
   );

@@ -1,7 +1,7 @@
 import {
   Button,
+  Body,
   Card,
-  Description,
   H3,
   Identicon,
   Input,
@@ -21,16 +21,16 @@ export const SiweSignInAddress: FC<{ operatorType: string }> = ({
 
   return (
     <Card data-testid="signInForm">
-      <Stack direction="column" gap="lg">
-        <Stack direction="column" gap="md">
+      <Stack direction="column" gap="lg" selfAlign="stretch">
+        <Stack direction="column" gap="sm">
           <H3>Sign in</H3>
-          <Description color="secondary">
+          <Body color="secondary">
             To continue, please sign a message with your connected address to
             prove ownership.
             <br />
             You are requesting {operatorType} operator type for the following
             address:
-          </Description>
+          </Body>
         </Stack>
         <Input
           disabled

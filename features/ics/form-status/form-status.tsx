@@ -1,14 +1,15 @@
-import { Block, Button, Divider } from '@lidofinance/lido-ui';
-import { useIcsState } from 'features/ics/shared';
-import { FC, useCallback } from 'react';
-import { Stack } from 'shared/components';
+import { Stack } from '@lidofinance/lido-app-ui';
+import { FC, useCallback, useState } from 'react';
 import { IcsResponseDto } from '../shared/types';
 import {
-  Application,
+  ApplicationCard,
+  ApplicationModal,
   ApplicationTip,
-  ScorePoints,
-  StatusHeader,
+  OperatorTypeCard,
+  ScoreBreakdownModal,
+  ScoreCard,
 } from './components';
+import { hasFlaggedAddresses, hasScores } from './utils';
 
 type FormStatusProps = {
   data: IcsResponseDto;
@@ -16,30 +17,50 @@ type FormStatusProps = {
 };
 
 export const FormStatus: FC<FormStatusProps> = ({ data, reset }) => {
-  const { typeStatus } = useIcsState();
-  const { status, form, comments, createdAt, scores } = data;
+  const { status, comments, createdAt, scores } = data;
 
-  const handle = useCallback(() => {
+  const [modal, setModal] = useState<'application' | 'score'>();
+  const closeModal = useCallback(() => setModal(undefined), []);
+
+  const handleApplyAgain = useCallback(() => {
     window.scrollTo({ top: 0 });
     reset();
   }, [reset]);
 
-  const haveScores = Object.values(scores).some((score) => score !== null);
+  const haveScores = hasScores(scores);
 
   return (
-    <Block data-testid="applicationFormStatus">
-      <Stack direction="column" gap="xxl">
-        <StatusHeader status={status} comments={comments} scores={scores} />
-        {(status !== 'REVIEW' || haveScores) && <Divider type="horizontal" />}
-        {haveScores && <ScorePoints scores={scores} status={status} />}
-        {status === 'REJECTED' && <ApplicationTip comments={comments} />}
-        <Application form={form} comments={comments} createdAt={createdAt} />
-        {status === 'REJECTED' && typeStatus === 'PENDING' && (
-          <Button variant="outlined" fullwidth onClick={handle}>
-            Apply again
-          </Button>
-        )}
-      </Stack>
-    </Block>
+    <Stack
+      direction="column"
+      gap={8}
+      dataTestId={{ root: 'applicationFormStatus' }}
+    >
+      <OperatorTypeCard status={status} />
+      <ApplicationCard
+        status={status}
+        comments={comments}
+        scores={scores}
+        createdAt={createdAt}
+        onApplyAgain={handleApplyAgain}
+        onView={() => setModal('application')}
+      />
+      {haveScores && (
+        <ScoreCard scores={scores} onView={() => setModal('score')} />
+      )}
+      {status === 'REJECTED' && haveScores && hasFlaggedAddresses(comments) && (
+        <ApplicationTip />
+      )}
+      {modal === 'application' && (
+        <ApplicationModal
+          comments={comments}
+          form={data.form}
+          createdAt={createdAt}
+          onClose={closeModal}
+        />
+      )}
+      {modal === 'score' && (
+        <ScoreBreakdownModal scores={scores} onClose={closeModal} />
+      )}
+    </Stack>
   );
 };

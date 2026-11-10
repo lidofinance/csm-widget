@@ -8,7 +8,7 @@ import { formatSentOn } from '../type-status/format-sent-on';
 import { TypeCardChip } from '../type-status/type-card-chip';
 import type { ApplicationStatus } from '../type-status/types';
 import type { TypeApplyState } from '../type-status/use-type-apply-state';
-import { getTypeStatusDescription } from './type-status-description';
+import { getTypeStatusDescription } from '../type-status/type-status-description';
 
 type ApplicationData = { status: ApplicationStatus; createdAt: string };
 

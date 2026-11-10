@@ -1,6 +1,6 @@
 import { fromPairs } from 'lodash';
 import { SCORE_SOURCES } from '../shared/score-data';
-import { IcsScoresDto } from '../shared/types';
+import { IcsCommentsDto, IcsScoresDto } from '../shared/types';
 
 const summ = (acc: number, item?: number) => acc + (item ?? 0);
 
@@ -33,3 +33,9 @@ export const isMinScoresReached = (scores: IcsScoresDto) => {
     Boolean,
   );
 };
+
+export const hasScores = (scores: IcsScoresDto) =>
+  Object.values(scores).some((score) => score !== null);
+
+export const hasFlaggedAddresses = (comments: IcsCommentsDto) =>
+  !!comments.additionalAddresses?.some((comment) => !!comment);

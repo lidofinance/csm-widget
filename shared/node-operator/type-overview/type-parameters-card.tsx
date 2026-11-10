@@ -15,6 +15,7 @@ import {
   useOperatorCurveId,
 } from 'modules/web3';
 import { FC, ReactNode } from 'react';
+import { StretchStack } from 'shared/components';
 import { ICON_TOOLTIP_TEST_ID } from 'shared/components/icon-tooltip/test-ids';
 import { useParameters } from 'shared/components/parameters-list/parameters';
 import {
@@ -44,15 +45,6 @@ const ValuesStyle = styled.ul`
   margin: 0;
   padding: 0;
   list-style: none;
-`;
-
-// lib Card aligns children to flex-start; the fixed-layout table needs the full card width.
-const CardBodyStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  align-self: stretch;
-  min-width: 0;
 `;
 
 const HIDDEN_PARAMETERS = ['Penalty fee'];
@@ -108,7 +100,7 @@ export const TypeParametersCard: FC<Props> = ({ type }) => {
 
   return (
     <Card dataTestId={{ root: 'typeParametersCard' }}>
-      <CardBodyStyle>
+      <StretchStack gap={24}>
         <SectionTitle title="Parameters" />
         <Table<ParameterRow>
           rows={parameters}
@@ -152,7 +144,7 @@ export const TypeParametersCard: FC<Props> = ({ type }) => {
             },
           ]}
         />
-      </CardBodyStyle>
+      </StretchStack>
     </Card>
   );
 };

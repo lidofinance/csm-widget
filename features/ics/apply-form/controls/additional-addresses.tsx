@@ -1,10 +1,12 @@
-import { ButtonIcon, Plus, Text } from '@lidofinance/lido-ui';
+import { Button, IconPlus, Stack, TextLink } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { FC, useCallback } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import { Chip, FormTitle, MatomoLink, Stack } from 'shared/components';
+import { trackMatomoEvent } from 'utils';
 import { MAX_ADDITIONAL_ADDRESSES, type ApplyFormInputType } from '../context';
+import { ApplySection, GuideLink } from './apply-section';
 import { AddressItem } from './address-item';
+import { ETHERSCAN_SIGNATURES_URL } from './consts';
 
 export const AdditionalAddresses: FC = () => {
   const { control } = useFormContext<ApplyFormInputType>();
@@ -19,52 +21,54 @@ export const AdditionalAddresses: FC = () => {
     }
   }, [append, fields.length]);
 
-  const handleRemoveAddress = useCallback(
-    (index: number) => {
-      remove(index);
-    },
-    [remove],
-  );
-
   return (
-    <Stack direction="column" gap="md" data-testid="additionalAddressesSection">
-      <Stack direction="column" gap="xxs">
-        <FormTitle chip={<Chip>Optional</Chip>}>Additional Addresses</FormTitle>
-        <Text size="xs" color="secondary">
+    <ApplySection
+      title="Additional addresses"
+      action={<GuideLink />}
+      subtitle={
+        <>
           You can add up to {MAX_ADDITIONAL_ADDRESSES} addresses where your
           achievements are stored. To prove you own each address, sign a message
-          on Etherscan. For more info see{' '}
-          <MatomoLink
-            $inline
-            href="https://www.youtube.com/watch?v=yUX34iCbCWE"
-            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsYoutubeGuideLink}
+          via the{' '}
+          <TextLink
+            external
+            size="inherit"
+            href={ETHERSCAN_SIGNATURES_URL}
+            onClick={() =>
+              trackMatomoEvent(
+                MATOMO_CLICK_EVENTS_TYPES.icsEtherscanSignaturesLink,
+              )
+            }
           >
-            the guide
-          </MatomoLink>
-        </Text>
-      </Stack>
-
-      {fields.map((field, index) => (
-        <AddressItem
-          key={field.id}
-          field={field}
-          index={index}
-          onRemove={handleRemoveAddress}
-        />
-      ))}
+            verification page
+          </TextLink>
+          .
+        </>
+      }
+      data-testid="additionalAddressesSection"
+    >
+      {fields.length > 0 && (
+        <Stack gap={24}>
+          {fields.map((field, index) => (
+            <AddressItem key={field.id} index={index} onRemove={remove} />
+          ))}
+        </Stack>
+      )}
 
       {fields.length < MAX_ADDITIONAL_ADDRESSES && (
-        <ButtonIcon
-          icon={<Plus />}
-          variant="translucent"
-          size="sm"
-          onClick={handleAddAddress}
-          fullwidth
-          data-testid="addNewAddressBtn"
-        >
-          Add new address
-        </ButtonIcon>
+        <div>
+          <Button
+            type="button"
+            variant="outline"
+            size="small"
+            iconLeft={<IconPlus />}
+            onClick={handleAddAddress}
+            dataTestId={{ root: 'addNewAddressBtn' }}
+          >
+            Add new address
+          </Button>
+        </div>
       )}
-    </Stack>
+    </ApplySection>
   );
 };

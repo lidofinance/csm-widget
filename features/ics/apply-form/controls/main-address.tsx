@@ -1,31 +1,25 @@
-import { Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
-import { FormTitle, InputAddress, Stack } from 'shared/components';
-import { VerifiedChip } from 'shared/components/input-address/verified-chip';
+import { TrailingInputStyle } from 'shared/hook-form/fields/styles';
 import { useApplyFormData } from '../context';
+import { ApplySection, VerifiedTag } from './apply-section';
 
 export const MainAddress: FC = () => {
   const { mainAddress } = useApplyFormData(true);
 
   return (
-    <Stack direction="column" gap="md" data-testid="mainAddressSection">
-      <Stack direction="column" gap="xxs">
-        <FormTitle>Main address</FormTitle>
-        <Text size="xs" color="secondary">
-          You are requesting ICS operator type to the following address:
-        </Text>
-      </Stack>
-      <InputAddress
-        fullwidth
-        disabled
+    <ApplySection
+      title="Main address"
+      subtitle="You are requesting ICS operator type for the following address:"
+      data-testid="mainAddressSection"
+    >
+      <TrailingInputStyle
+        $trailing
         name="mainAddress"
-        label={
-          <>
-            Main address <VerifiedChip color="primary">Verified</VerifiedChip>
-          </>
-        }
+        aria-label="Main address"
         value={mainAddress}
+        disabled
+        icon={<VerifiedTag />}
       />
-    </Stack>
+    </ApplySection>
   );
 };

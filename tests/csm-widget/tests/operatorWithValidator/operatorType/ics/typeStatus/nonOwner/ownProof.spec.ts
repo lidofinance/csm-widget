@@ -93,7 +93,7 @@ test.describe(
         await test.step('Open the ICS claim page directly', async () => {
           await widgetService.page.goto('/type/ics-claim');
           await expect(claim.formTitle).toContainText(
-            'Claim Identified Community Staker operator type',
+            'You are eligible to claim a new operator type',
           );
         });
 

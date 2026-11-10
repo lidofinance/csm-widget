@@ -45,6 +45,8 @@ export const LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE = `${LIDO_OPERATOR_PORTAL_B
 export const LIDO_OPERATOR_PORTAL_DEPOSITS_FLOW = `${LIDO_OPERATOR_PORTAL_BASE}#block-90b8ff95edc64cf7a051584820219616`;
 export const PHASED_DEPOSIT_APPROACH_LINK =
   'https://research.lido.fi/t/0x02-csm-landscape/11697/10';
+export const LIDO_RESEARCH_FORUM_NODE_OPERATORS_LINK =
+  'https://research.lido.fi/c/node-operators/12';
 
 // Lido Execution Layer Rewards Vault
 export const LIDO_REWARDS_VAULT_LINK =

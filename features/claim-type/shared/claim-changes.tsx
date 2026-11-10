@@ -15,7 +15,7 @@ import { FC, useState } from 'react';
 import { CLAIM_SUMMARY_ROWS } from './claim-summary-rows';
 import { getClaimTypeSummary } from './claim-type-summary';
 import { ParameterChangesModal } from './parameter-changes-modal';
-import { ChangesBoxStyle } from './styles';
+import { ChangesBoxStyle, DataListFlushStyle } from './styles';
 
 export type ClaimChangesVariant = 'change' | 'compare';
 
@@ -58,15 +58,17 @@ export const ClaimChanges: FC<ClaimChangesProps> = ({
         }
       />
       {variant === 'change' ? (
-        <DataList divided>
-          {CLAIM_SUMMARY_ROWS.map(({ label, render }) => (
-            <DataListRow
-              key={label}
-              label={label}
-              value={{ from: render(fromSummary), to: render(toSummary) }}
-            />
-          ))}
-        </DataList>
+        <DataListFlushStyle>
+          <DataList divided>
+            {CLAIM_SUMMARY_ROWS.map(({ label, render }) => (
+              <DataListRow
+                key={label}
+                label={label}
+                value={{ from: render(fromSummary), to: render(toSummary) }}
+              />
+            ))}
+          </DataList>
+        </DataListFlushStyle>
       ) : (
         <TableRoot variant="dense">
           <TableHead>

@@ -5,6 +5,7 @@ import {
   Stack,
 } from '@lidofinance/lido-app-ui';
 import { FC, ReactNode } from 'react';
+import { StretchStack } from 'shared/components';
 
 type Props = {
   title: string;
@@ -24,7 +25,7 @@ export const StatusCard: FC<Props> = ({
   dataTestId,
 }) => (
   <Card dataTestId={{ root: dataTestId }}>
-    <Stack direction="column" gap={16}>
+    <StretchStack gap={16}>
       <SectionTitle title={title} subtitle={subtitle} action={tag} />
       {children && (
         <Description as="div" color="secondary">
@@ -36,6 +37,6 @@ export const StatusCard: FC<Props> = ({
           {actions}
         </Stack>
       )}
-    </Stack>
+    </StretchStack>
   </Card>
 );

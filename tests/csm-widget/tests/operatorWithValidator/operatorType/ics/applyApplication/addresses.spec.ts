@@ -53,7 +53,7 @@ test.describe(
           await expect(
             applicationForm.submitApplicationForm.mainAddressSection,
           ).toContainText(
-            'You are requesting ICS operator type to the following address:',
+            'You are requesting ICS operator type for the following address:',
           );
         });
 
@@ -87,7 +87,7 @@ test.describe(
           await expect(
             applicationForm.submitApplicationForm.additionalAddressesSection,
           ).toContainText(
-            'You can add up to 5 addresses where your achievements are stored. To prove you own each address, sign a message on Etherscan. For more info see the guide',
+            'You can add up to 5 addresses where your achievements are stored. To prove you own each address, sign a message via the verification page.',
           );
         });
 

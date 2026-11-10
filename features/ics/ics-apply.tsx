@@ -1,13 +1,21 @@
-import { Block } from '@lidofinance/lido-ui';
+import { Card, Skeleton } from '@lidofinance/lido-app-ui';
 import { useSiweAuth } from 'modules/siwe';
 import { useDappStatus } from 'modules/web3';
 import { FC } from 'react';
-import { WhenLoaded } from 'shared/components';
+import { StretchStack } from 'shared/components';
 import { SiweConnect, SiweSignInAddress } from 'shared/wallet';
 import { ApplyForm } from './apply-form';
 import { FormStatus } from './form-status';
-import { StatusHeader } from './form-status/components';
+import { OperatorTypeCard } from './form-status/components';
 import { IcsProviders, useIcsState } from './shared';
+
+const Loader: FC = () => (
+  <Card data-testid="loader">
+    <StretchStack>
+      <Skeleton variant="text" lines={3} />
+    </StretchStack>
+  </Card>
+);
 
 const IcsApplyContent: FC = () => {
   const { isAccountActive } = useDappStatus();
@@ -15,11 +23,7 @@ const IcsApplyContent: FC = () => {
   const { typeStatus, data, isPending, isTypePending, applyMode, reset } =
     useIcsState();
 
-  const status = (
-    <Block>
-      <StatusHeader />
-    </Block>
-  );
+  const status = <OperatorTypeCard />;
 
   if (!isAccountActive) {
     return (
@@ -28,11 +32,7 @@ const IcsApplyContent: FC = () => {
   }
 
   if (isTypePending) {
-    return (
-      <Block>
-        <WhenLoaded loading={true} />
-      </Block>
-    );
+    return <Loader />;
   }
 
   if (
@@ -52,11 +52,7 @@ const IcsApplyContent: FC = () => {
   }
 
   if (isPending) {
-    return (
-      <Block>
-        <WhenLoaded loading={true} />
-      </Block>
-    );
+    return <Loader />;
   }
 
   if (data && !applyMode) {
@@ -70,10 +66,8 @@ const IcsApplyContent: FC = () => {
   return <ApplyForm />;
 };
 
-export const IcsApply: FC = () => {
-  return (
-    <IcsProviders>
-      <IcsApplyContent />
-    </IcsProviders>
-  );
-};
+export const IcsApply: FC = () => (
+  <IcsProviders>
+    <IcsApplyContent />
+  </IcsProviders>
+);

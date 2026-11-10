@@ -9,3 +9,4 @@ export * from './type-status-tag';
 export * from './type-status-hint';
 export * from './types';
 export * from './use-type-apply-state';
+export * from './type-status-description';

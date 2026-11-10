@@ -1,18 +1,14 @@
-import { Body, Modal } from '@lidofinance/lido-app-ui';
+import { Body } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import styled from 'styled-components';
 import { ScoreSource } from '../shared';
+import { WideModalStyle } from '../styles';
 import { Points } from './points';
 
 type Props = {
   category: ScoreSource;
   onClose: () => void;
 };
-
-const ModalStyle = styled(Modal)`
-  width: 680px;
-  max-width: 100%;
-`;
 
 const RangeStyle = styled.div`
   display: flex;
@@ -56,7 +52,7 @@ const DescriptionStyle = styled.div`
 `;
 
 export const CriteriaModal: FC<Props> = ({ category, onClose }) => (
-  <ModalStyle
+  <WideModalStyle
     withOverlay
     title={category.title}
     onClose={onClose}
@@ -81,5 +77,5 @@ export const CriteriaModal: FC<Props> = ({ category, onClose }) => (
         </ItemStyle>
       ))}
     </ItemsStyle>
-  </ModalStyle>
+  </WideModalStyle>
 );

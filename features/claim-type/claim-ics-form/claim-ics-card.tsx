@@ -14,12 +14,12 @@ export const ClaimIcsCard: FC<{ cta: ReactNode }> = ({ cta }) => {
   return (
     <ClaimTypeCard
       badges={<ClaimTypeBadges from={currentType} to={OPERATOR_TYPE.CSM_ICS} />}
-      title="Claim Identified Community Staker operator type"
+      title="You are eligible to claim a new operator type"
       titleTestId="formTitle"
-      description="You are eligible to claim a new operator type. Claiming the Identified Community Staker operator type will change some parameters for your node operator according to the section below."
+      description={`You can change your operator type from ${currentMetadata?.name ?? 'your current type'} to Identified Community Staker (ICS). Claiming ICS will update several parameters for your Node Operator. Review the changes below before continuing.`}
     >
       <ClaimChanges
-        title="What's changing"
+        title="What’s changing"
         from={currentParameters}
         to={newParameters}
         fromLabel={`Current (${currentMetadata?.short ?? ''})`}

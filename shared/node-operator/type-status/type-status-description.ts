@@ -1,5 +1,5 @@
 import type { OperatorTypeStatus } from 'modules/web3';
-import type { TypeProgram } from '../type-status/consts';
+import type { TypeProgram } from './consts';
 
 export const getTypeStatusDescription = (
   program: TypeProgram,

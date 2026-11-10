@@ -16,7 +16,7 @@ export type TextFieldProps = Omit<
   | 'icon'
 > & {
   name: string;
-  label: ReactNode;
+  label?: ReactNode;
   showUntouched?: boolean;
   /** Rendered after the input, e.g. a tag or tag-button. */
   trailing?: ReactNode;

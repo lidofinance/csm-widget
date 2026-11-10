@@ -100,7 +100,7 @@ test.describe(
         await test.step('Apply page shows the claimed status', async () => {
           await expect(form.operatorTypeChip).toHaveText('Claimed');
           await expect(
-            form.page.getByText('Your Node Operator already has ICS type'),
+            form.page.getByText('You successfully claimed your Operator type'),
           ).toBeVisible();
           await expect(
             form.page.getByText(/already used its ICS proof/),

@@ -1,5 +1,6 @@
 import { Text } from '@lidofinance/lido-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
+import { LIDO_RESEARCH_FORUM_NODE_OPERATORS_LINK } from 'consts/external-links';
 import {
   FormTitle,
   MatomoLink,
@@ -89,10 +90,7 @@ export const ExitKeys = () => {
           . In case an out of order exit is required, the Node Operator must
           notify the community, specifying the number of validators affected,
           their indices, and the reason for the exit request via{' '}
-          <MatomoLink
-            $inline
-            href="https://research.lido.fi/c/node-operators/12"
-          >
+          <MatomoLink $inline href={LIDO_RESEARCH_FORUM_NODE_OPERATORS_LINK}>
             the Node Operator category of the Lido Research Forum
           </MatomoLink>
           .

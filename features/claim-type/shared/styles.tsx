@@ -4,8 +4,9 @@ export const CardHeaderStyle = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 8px;
   width: 100%;
+  padding-bottom: 8px;
   text-align: center;
 `;
 
@@ -20,8 +21,8 @@ export const BadgesStyle = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
-  margin-bottom: 8px;
+  gap: 12px;
+  margin-bottom: 24px;
 `;
 
 export const BadgeJoinStyle = styled.span`
@@ -29,8 +30,8 @@ export const BadgeJoinStyle = styled.span`
   color: var(--lido-app-ui-color-icons-secondary);
 
   svg {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
 `;
 
@@ -42,11 +43,16 @@ export const ChangesBoxStyle = styled.div`
   width: 100%;
   padding: 24px;
   border-radius: var(--lido-app-ui-border-radius-card);
-  background: var(--lido-app-ui-color-background-secondary);
+  background: var(--lido-app-ui-color-background-default);
 
   @media (max-width: 439px) {
     padding: 16px;
   }
+`;
+
+// lib DataList brings its own 16px inset; rows sit flush with the box padding
+export const DataListFlushStyle = styled.div`
+  margin: 0 -16px;
 `;
 
 export const FaintStyle = styled.span`
