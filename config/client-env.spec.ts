@@ -8,7 +8,7 @@ describe('buildClientEnv', () => {
       walletconnectProjectId: undefined,
       isTestEnv: true,
       maintenance: false,
-      addressApiValidationEnabled: false,
+      addressValidationEnabled: false,
       keysApiUrl: undefined,
       feesMonitoringApiUrl: undefined,
       surveysApiUrl: undefined,
@@ -29,7 +29,7 @@ describe('buildClientEnv', () => {
       defaultChain: 1,
       isTestEnv: false,
       maintenance: true,
-      addressApiValidationEnabled: true,
+      addressValidationEnabled: true,
       ipfsGateways: ['https://a.io', 'https://b.io'],
     });
   });
@@ -44,6 +44,19 @@ describe('buildClientEnv', () => {
   it('does not expose server secrets', () => {
     const env = buildClientEnv({ EL_RPC_URLS_1: 'https://secret' });
     expect(JSON.stringify(env)).not.toContain('secret');
+  });
+
+  it.each([
+    [{ VALIDATION_SERVICE_BASE_PATH: 'https://validation' }, true],
+    [{ VALIDATION_FILE_PATH: '/run/deny.json' }, true],
+    [{}, false],
+  ])('addressValidationEnabled for %o is %s', (env, expected) => {
+    expect(buildClientEnv(env).addressValidationEnabled).toBe(expected);
+  });
+
+  it('does not expose the deny-list path', () => {
+    const env = buildClientEnv({ VALIDATION_FILE_PATH: '/run/deny.json' });
+    expect(JSON.stringify(env)).not.toContain('deny.json');
   });
 });
 

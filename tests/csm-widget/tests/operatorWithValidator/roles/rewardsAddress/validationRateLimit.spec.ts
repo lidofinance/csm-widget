@@ -65,21 +65,31 @@ test.describe(
     );
 
     test(
-      qase(659, 'Should propose on other API errors'),
+      qase(659, 'Should block propose on other API errors'),
       async ({ widgetService, forkActionService }) => {
         const page = widgetService.settingsPage.rewardsAddressPage;
-        const newAddress = generateAddress(true);
+        const proposedBefore =
+          await forkActionService.getProposedRewardAddress(noId);
 
         await widgetService.mockValidationAddressRequest(true, 500);
         // full reload: validation results are cached per address
         await page.open();
-        await page.revokePendingRole();
 
-        await page.proposeNewAddress(newAddress);
+        await test.step('Submit a new rewards address', async () => {
+          await page.addressInput.fill(generateAddress());
+          await page.addressValidIcon.waitFor({ state: 'visible' });
+          await page.proposeButton.click();
+        });
 
-        await test.step('New address is proposed on chain', async () => {
+        await test.step('Access denied modal is shown', async () => {
+          await expect(new TxModal(widgetService.page).modal).toContainText(
+            OFAC_MODAL_TEXT,
+          );
+        });
+
+        await test.step('Nothing is proposed on chain', async () => {
           expect(await forkActionService.getProposedRewardAddress(noId)).toBe(
-            newAddress,
+            proposedBefore,
           );
         });
       },

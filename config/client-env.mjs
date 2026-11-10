@@ -12,7 +12,7 @@ const UNSAFE_CHARS = /[<>&\u2028\u2029]/g;
  *   walletconnectProjectId: string | undefined;
  *   isTestEnv: boolean;
  *   maintenance: boolean;
- *   addressApiValidationEnabled: boolean;
+ *   addressValidationEnabled: boolean;
  *   keysApiUrl: string | undefined;
  *   feesMonitoringApiUrl: string | undefined;
  *   surveysApiUrl: string | undefined;
@@ -36,7 +36,8 @@ export const buildClientEnv = (
   walletconnectProjectId: env.WALLETCONNECT_PROJECT_ID,
   isTestEnv: !toBoolean(env.IS_PROD),
   maintenance: toBoolean(env.MAINTENANCE),
-  addressApiValidationEnabled: !!env.VALIDATION_SERVICE_BASE_PATH,
+  addressValidationEnabled:
+    !!env.VALIDATION_SERVICE_BASE_PATH || !!env.VALIDATION_FILE_PATH,
   keysApiUrl: env.KEYS_API_URL,
   feesMonitoringApiUrl: env.FEES_MONITORING_API_URL,
   surveysApiUrl: env.SURVEYS_API_URL,

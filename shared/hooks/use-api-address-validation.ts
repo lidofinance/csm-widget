@@ -11,39 +11,38 @@ export const useApiAddressValidation = () => {
   const queryClient = useQueryClient();
 
   const validateAddressAPI = useCallback(
-    async (addressToValidate: Address) => {
-      if (!config.addressApiValidationEnabled) {
-        return { isValid: true };
+    async (addressToValidate: Address): Promise<boolean> => {
+      if (!config.addressValidationEnabled) {
+        return true;
       }
 
-      const result = await queryClient.fetchQuery<{ isValid: boolean } | null>({
-        queryKey: ['address-validation-api', addressToValidate],
-        queryFn: async () => {
-          try {
+      try {
+        return await queryClient.fetchQuery<boolean>({
+          queryKey: ['address-validation-api', addressToValidate],
+          queryFn: async () => {
             const url = getApiUrl(API_ROUTES.VALIDATION, {
               address: addressToValidate,
             });
-            return await standardFetcher(url, {
+            const data = await standardFetcher<{ isValid?: unknown }>(url, {
               method: 'GET',
               headers: {
                 'Content-type': 'application/json',
                 source: 'csm',
               },
             });
-          } catch (error) {
-            // any 429 means this client is over a rate limit (Cloudflare,
-            // widget or validation API): block instead of falling back
-            if (error instanceof FetcherError && error.status === 429) {
-              return { isValid: false };
+            if (typeof data?.isValid !== 'boolean') {
+              throw new Error('Malformed address validation response');
             }
-            return null;
-          }
-        },
-        staleTime: 1 * 60 * 1000, // 1 minute
-        retry: 1,
-      });
-
-      return result;
+            return data.isValid;
+          },
+          staleTime: 1 * 60 * 1000, // 1 minute
+          retry: (failureCount, error) =>
+            failureCount < 1 &&
+            !(error instanceof FetcherError && error.status === 429),
+        });
+      } catch {
+        return false;
+      }
     },
     [queryClient],
   );

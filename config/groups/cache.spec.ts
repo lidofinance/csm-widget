@@ -3,7 +3,6 @@ import path from 'path';
 import { pathToRegexp } from 'path-to-regexp';
 import {
   CACHE_MIGALABS_RATE_HEADERS,
-  CACHE_VALIDATION_HEADERS,
   CACHE_CL_HEADERS,
   CACHE_NO_STORE_HEADERS,
 } from './cache';
@@ -59,7 +58,6 @@ const getMalformedValueDirectives = (header: string) =>
 describe('cache-control headers', () => {
   it.each([
     ['CACHE_MIGALABS_RATE_HEADERS', CACHE_MIGALABS_RATE_HEADERS],
-    ['CACHE_VALIDATION_HEADERS', CACHE_VALIDATION_HEADERS],
     ['CACHE_CL_HEADERS', CACHE_CL_HEADERS],
     ['CACHE_NO_STORE_HEADERS', CACHE_NO_STORE_HEADERS],
   ])(

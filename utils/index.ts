@@ -1,4 +1,3 @@
-export * from './address-validation';
 export * from './aggregate-operators-overview';
 export * from './bigint-utils';
 export * from './bond-curve';
