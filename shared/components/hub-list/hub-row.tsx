@@ -1,4 +1,4 @@
-import { Body, BodyLarge, IconChevronRight } from '@lidofinance/lido-app-ui';
+import { BodyLarge, Caption, IconChevronRight } from '@lidofinance/lido-app-ui';
 import { PATH } from 'consts/urls';
 import { FC, ReactNode } from 'react';
 import { ExternalLink } from 'shared/navigate/external-link';
@@ -69,9 +69,9 @@ export const HubRow: FC<HubRowProps> = ({
           {tag}
         </HubTitleRowStyle>
         {description && (
-          <Body color="secondary" as="span">
+          <Caption color="secondary" as="span">
             {description}
-          </Body>
+          </Caption>
         )}
       </HubMainStyle>
       {value && (

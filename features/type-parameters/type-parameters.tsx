@@ -50,7 +50,9 @@ export const TypeParameters: FC = () => {
               <IdvtcColumnBackground $index={2} />
             </CompareParametersList>
           </Block>
-          {(ICS_APPLY_ENABLED || CAN_CLAIM_ICS) && <IcsApplyButton size="sm" />}
+          {(ICS_APPLY_ENABLED || CAN_CLAIM_ICS) && (
+            <IcsApplyButton size="small" />
+          )}
         </Stack>
       </Stack>
     </Block>

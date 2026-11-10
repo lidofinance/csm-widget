@@ -6,6 +6,7 @@ export * from './descriptor/descriptor-id';
 export * from './operator-type';
 export * from './parameters-modal';
 export * from './switch-to-operator-button';
+export * from './type-overview';
 export * from './type-status';
 export * from './use-switch-operator';
 export * from './utils';

@@ -18,7 +18,7 @@ export const hubRowCss = css`
   width: 100%;
   align-items: center;
   flex-wrap: wrap;
-  gap: 8px 16px;
+  gap: 8px 20px;
   box-sizing: border-box;
   min-height: 60px;
   padding: 12px 8px;

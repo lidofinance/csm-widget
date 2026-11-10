@@ -47,9 +47,9 @@ test.describe(
       qase(468, 'Should show the claim notification, badge and claim button'),
       async ({ widgetService }) => {
         const operatorType = widgetService.operatorType;
-        await operatorType.openTypePage();
+        await operatorType.openIdvtcOverviewPage();
 
-        await test.step('IDVTC card is issued and claimable', async () => {
+        await test.step('IDVTC banner is issued and claimable', async () => {
           await expect(operatorType.idvtcIssuedChip).toBeVisible();
           await expect(operatorType.idvtcApplyButton).toContainText(
             'Claim IDVTC type',
@@ -77,7 +77,7 @@ test.describe(
       qase(438, 'Should open the claim page from the claim button'),
       async ({ widgetService }) => {
         const operatorType = widgetService.operatorType;
-        await operatorType.openTypePage();
+        await operatorType.openIdvtcOverviewPage();
 
         await operatorType.idvtcApplyButton.click();
 

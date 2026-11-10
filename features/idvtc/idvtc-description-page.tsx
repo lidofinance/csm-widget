@@ -1,17 +1,45 @@
+import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 
 import { PATH } from 'consts/urls';
-import { Layout } from 'shared/layout';
-import { Faq } from 'shared/components';
 import { useFaq } from 'faq';
-import { BlockStyle } from './description/styles';
+import { Faq } from 'shared/components';
+import { useShowFlags } from 'shared/hooks';
+import { Layout } from 'shared/layout';
 import {
-  ApplicationFlow,
-  Introduction,
-  RequirementsCriteria,
-} from './description';
+  ApplicationBanner,
+  FlowSteps,
+  isApplicationBannerVisible,
+  TypeHero,
+  TypeParametersCard,
+} from 'shared/node-operator/type-overview';
+import { RequirementsCriteria } from './description';
 import { IdvtcApplyButton } from './apply-button';
-import { IdvtcProviders } from './shared';
+import { IdvtcProviders, useIdvtcState } from './shared';
+
+const IdvtcOverview: FC = () => {
+  const { ICS_APPLY_ENABLED } = useShowFlags();
+  const state = useIdvtcState();
+  const showCta = ICS_APPLY_ENABLED && !isApplicationBannerVisible(state);
+
+  return (
+    <Stack direction="column" gap={8}>
+      <ApplicationBanner
+        program="IDVTC"
+        state={state}
+        actionTestId="dvtApplyButton"
+      />
+      <TypeHero
+        type={OPERATOR_TYPE.CSM_IDVTC}
+        cta={showCta ? <IdvtcApplyButton /> : undefined}
+      />
+      <RequirementsCriteria />
+      <FlowSteps type={OPERATOR_TYPE.CSM_IDVTC} />
+      <TypeParametersCard type={OPERATOR_TYPE.CSM_IDVTC} />
+    </Stack>
+  );
+};
 
 export const IdvtcDescriptionPage: FC = () => (
   <Layout
@@ -23,12 +51,7 @@ export const IdvtcDescriptionPage: FC = () => (
     ]}
   >
     <IdvtcProviders>
-      <BlockStyle>
-        <Introduction />
-        <RequirementsCriteria />
-        <ApplicationFlow />
-        <IdvtcApplyButton />
-      </BlockStyle>
+      <IdvtcOverview />
     </IdvtcProviders>
     <Faq items={useFaq('OPERATOR_TYPE')} />
   </Layout>

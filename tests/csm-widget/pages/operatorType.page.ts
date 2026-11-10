@@ -14,9 +14,10 @@ export class OperatorTypePage extends BasePage {
   claimIcs: ClaimIcsPage;
   txModal: TxModal;
 
+  typeHubRows: Locator;
   idvtcApplyButton: Locator;
   idvtcIssuedChip: Locator;
-  icsCard: Locator;
+  icsBanner: Locator;
   icsCardChip: Locator;
   icsApplyButton: Locator;
   claimIcsAlert: Locator;
@@ -36,13 +37,17 @@ export class OperatorTypePage extends BasePage {
     this.claimIcs = new ClaimIcsPage(page);
     this.txModal = new TxModal(page);
 
+    this.typeHubRows = this.page
+      .getByTestId('operatorTypeCurrent')
+      .or(this.page.locator('[data-testid^="operatorTypeAvailable-"]'));
     this.idvtcApplyButton = this.page.getByTestId('dvtApplyButton');
     this.idvtcIssuedChip = this.page
+      .getByTestId('applicationBanner')
       .getByTestId('scoreChip')
       .filter({ hasText: 'Issued' });
-    this.icsCard = this.page.getByTestId('icsTypeCard');
-    this.icsCardChip = this.icsCard.getByTestId('scoreChip');
-    this.icsApplyButton = this.icsCard.getByTestId('icsApplyButton');
+    this.icsBanner = this.page.getByTestId('applicationBanner');
+    this.icsCardChip = this.icsBanner.getByTestId('scoreChip');
+    this.icsApplyButton = this.page.getByTestId('icsApplyButton');
     this.claimIcsAlert = this.page.getByTestId('claimIcsAlert');
     this.claimAlert = this.page.getByTestId('claimIdvtcAlert');
     this.claimAlertButton = this.claimAlert.getByRole('link', {
@@ -59,7 +64,22 @@ export class OperatorTypePage extends BasePage {
 
   async openTypePage() {
     await test.step('Open the Operator Type page', async () => {
-      await this.openWithRetry('/type', this.idvtcApplyButton);
+      await this.openWithRetry('/type', this.typeHubRows.first());
+    });
+  }
+
+  async openIcsOverviewPage() {
+    await test.step('Open the ICS overview page', async () => {
+      await this.openWithRetry('/type/ics-system', this.icsApplyButton);
+    });
+  }
+
+  async openIdvtcOverviewPage() {
+    await test.step('Open the IDVTC overview page', async () => {
+      await this.openWithRetry(
+        '/type/idvtc-description',
+        this.idvtcApplyButton,
+      );
     });
   }
 

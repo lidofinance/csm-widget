@@ -153,7 +153,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
     id: 'proofOfHumanity',
     title: 'Proof-of-Humanity',
     description:
-      'This group of proofs allows users to earn a score by being verified by third-party platforms that apply their own rules for identifying real individuals',
+      'This set of proofs allows users to earn a score by being verified by third-party platforms that apply their own rules for identifying real individuals',
     min: 4,
     max: 8,
     items: [
@@ -180,6 +180,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
             >
               the guide
             </MatomoLink>
+            .
           </>
         ),
       },
@@ -207,6 +208,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
             >
               the guide
             </MatomoLink>
+            .
           </>
         ),
       },
@@ -226,8 +228,8 @@ export const SCORE_SOURCES: ScoreSource[] = [
         description: (
           <>
             - Submitted account is registered no less than 1 year ago
-            <br />- A unique message with the address applying to be included in
-            the list is published from this account to prove ownership
+            <br />- A unique message containing the applicant’s address is
+            published from that account to prove ownership
           </>
         ),
       },
@@ -239,8 +241,8 @@ export const SCORE_SOURCES: ScoreSource[] = [
         description: (
           <>
             - Submitted account is registered no less than 1 year ago
-            <br />- A unique message with the address applying to be included in
-            the list is published from this account to prove ownership
+            <br />- A unique message containing the applicant’s address is
+            published from that account to prove ownership
           </>
         ),
       },
@@ -250,7 +252,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
     id: 'proofOfEngagement',
     title: 'Proof-of-Engagement',
     description:
-      'This group represents user engagement within the Ethereum and Lido ecosystems',
+      'This set of proofs represents user’s engagement within the Ethereum and Lido ecosystems',
     min: 2,
     max: 7,
     items: [
@@ -262,7 +264,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
         description: (
           <>
             Submitted addresses have voted at least twice, with more than 100
-            LDO. Different addresses can be used for voting
+            LDO. Different addresses can be used for voting.
           </>
         ),
       },
@@ -274,7 +276,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
         description: (
           <>
             Submitted addresses have voted at least three times, with more than
-            100 LDO. Different addresses can be used for voting
+            100 LDO. Different addresses can be used for voting.
           </>
         ),
       },
@@ -338,6 +340,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
             >
               the guide
             </MatomoLink>
+            .
           </>
         ),
       },
