@@ -71,4 +71,24 @@ describe('TextField', () => {
 
     expect(html).toContain('data-testid="inputMessageError"');
   });
+
+  it('renders the trailing node inside the field', () => {
+    const html = renderToStaticMarkup(
+      <Host values={{ name: 'Lido' }}>
+        <TextField name="name" label="Name" trailing={<b>7 keys left</b>} />
+      </Host>,
+    );
+
+    expect(html).toContain('<b>7 keys left</b>');
+  });
+
+  it('renders no trailing node by default', () => {
+    const html = renderToStaticMarkup(
+      <Host values={{ name: 'Lido' }}>
+        <TextField name="name" label="Name" />
+      </Host>,
+    );
+
+    expect(html).not.toContain('aria-hidden="true"');
+  });
 });

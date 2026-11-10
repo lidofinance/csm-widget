@@ -24,17 +24,6 @@ export const BadgesStyle = styled.div`
   margin-bottom: 8px;
 `;
 
-export const BadgeStyle = styled.img`
-  flex: none;
-  width: 120px;
-  height: 120px;
-
-  @media (max-width: 439px) {
-    width: 96px;
-    height: 96px;
-  }
-`;
-
 export const BadgeJoinStyle = styled.span`
   display: inline-flex;
   color: var(--lido-app-ui-color-icons-secondary);
@@ -65,16 +54,6 @@ export const FaintStyle = styled.span`
   color: var(--lido-app-ui-color-text-tertiary);
   font-size: 12px;
   line-height: 16px;
-`;
-
-export const SuccessBadgeStyle = styled.img`
-  width: 240px;
-  height: 240px;
-
-  @media (max-width: 439px) {
-    width: 160px;
-    height: 160px;
-  }
 `;
 
 export const confettiCanvasStyles: CSSProperties = {

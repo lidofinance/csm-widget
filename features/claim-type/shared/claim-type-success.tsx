@@ -7,8 +7,11 @@ import {
   TOnInitPresetFn,
 } from 'react-canvas-confetti/dist/types';
 import { SuccessScreen } from 'shared/form-page';
-import { getOperatorTypeBadge } from './claim-type-badges';
-import { confettiCanvasStyles, SuccessBadgeStyle } from './styles';
+import {
+  getOperatorTypeBadge,
+  TypeBadge,
+} from 'shared/node-operator/type-badge';
+import { confettiCanvasStyles } from './styles';
 
 export type ClaimTypeSuccessProps = {
   type: OPERATOR_TYPE;
@@ -47,7 +50,7 @@ export const ClaimTypeSuccess: FC<ClaimTypeSuccessProps> = ({
         })}
       />
       <SuccessScreen
-        icon={badge ? <SuccessBadgeStyle src={badge} alt="" /> : undefined}
+        icon={badge ? <TypeBadge type={type} size={240} /> : undefined}
         title="Congratulations!"
         description={description}
         notice={notice}

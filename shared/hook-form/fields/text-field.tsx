@@ -1,21 +1,32 @@
-import { Input, InputProps } from '@lidofinance/lido-app-ui';
+import { InputProps } from '@lidofinance/lido-app-ui';
 import { FC, ReactNode } from 'react';
 import { FIELD_ERROR_TEST_ID } from './field-error';
+import { TrailingInputStyle } from './styles';
 import { useFieldController } from './use-field-controller';
 
 export type TextFieldProps = Omit<
   InputProps,
-  'name' | 'value' | 'defaultValue' | 'onChange' | 'onBlur' | 'error' | 'label'
+  | 'name'
+  | 'value'
+  | 'defaultValue'
+  | 'onChange'
+  | 'onBlur'
+  | 'error'
+  | 'label'
+  | 'icon'
 > & {
   name: string;
   label: ReactNode;
   showUntouched?: boolean;
+  /** Rendered after the input, e.g. a tag or tag-button. */
+  trailing?: ReactNode;
 };
 
 export const TextField: FC<TextFieldProps> = ({
   name,
   label,
   showUntouched,
+  trailing,
   disabled,
   dataTestId,
   ...rest
@@ -27,7 +38,9 @@ export const TextField: FC<TextFieldProps> = ({
   });
 
   return (
-    <Input
+    <TrailingInputStyle
+      $trailing={!!trailing}
+      icon={trailing}
       spellCheck={false}
       {...rest}
       ref={field.ref}

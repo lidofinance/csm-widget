@@ -1,21 +1,39 @@
+import { IconCheck, IconHourglass, Tag } from '@lidofinance/lido-app-ui';
 import { OperatorTypeStatus } from 'modules/web3';
 import { FC } from 'react';
-import { ScoreChip } from 'shared/components';
 
 type Props = {
   typeStatus: OperatorTypeStatus;
 };
 
+const TEST_ID = { root: 'scoreChip' };
+
 export const TypeStatusChip: FC<Props> = ({ typeStatus }) => {
   switch (typeStatus) {
     case 'CLAIMED':
-      return <ScoreChip type="default">Claimed</ScoreChip>;
+      return (
+        <Tag variant="neutral" icon={<IconCheck />} dataTestId={TEST_ID}>
+          Claimed
+        </Tag>
+      );
     case 'PROOF_USED':
     case 'PROOF_USED_ELSEWHERE':
-      return <ScoreChip type="default">Used</ScoreChip>;
+      return (
+        <Tag variant="neutral" dataTestId={TEST_ID}>
+          Used
+        </Tag>
+      );
     case 'PENDING':
-      return <ScoreChip type="pending">Pending</ScoreChip>;
+      return (
+        <Tag variant="neutral" icon={<IconHourglass />} dataTestId={TEST_ID}>
+          Pending
+        </Tag>
+      );
     default:
-      return <ScoreChip type="success">Issued</ScoreChip>;
+      return (
+        <Tag variant="success" icon={<IconCheck />} dataTestId={TEST_ID}>
+          Issued
+        </Tag>
+      );
   }
 };

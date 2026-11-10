@@ -3,11 +3,8 @@ import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { FC, Fragment } from 'react';
 import styled from 'styled-components';
 import { DisclaimerMark } from 'shared/components';
+import { TypeBadge } from 'shared/node-operator/type-badge';
 import { useModuleOpen } from 'shared/hooks/can-create/use-module-open';
-import badge0x01 from 'assets/illustrations/operator-type/0x01.svg';
-import badge0x02 from 'assets/illustrations/operator-type/0x02.svg';
-import badgeIcs from 'assets/illustrations/operator-type/ics.svg';
-import badgeIdvtc from 'assets/illustrations/operator-type/idvtc.svg';
 import { ModuleStatusTag, PromoCard } from '../components';
 import { isStatVisible, StatBody } from './stat-body';
 import { AprType, Stat } from './use-csm-stats';
@@ -16,7 +13,6 @@ type Option = {
   type: AprType;
   name: string;
   description: string;
-  badge: string;
 };
 
 const OPTIONS: Option[] = [
@@ -24,33 +20,23 @@ const OPTIONS: Option[] = [
     type: OPERATOR_TYPE.CSM_DEF,
     name: 'Default',
     description: 'The simplest way to start validating in CSM',
-    badge: badge0x01,
   },
   {
     type: OPERATOR_TYPE.CSM_ICS,
     name: 'ICS',
     description: 'Get verified and unlock better parameters',
-    badge: badgeIcs,
   },
   {
     type: OPERATOR_TYPE.CSM_IDVTC,
     name: 'IDVTC',
     description: 'Join a cluster of solo stakers to get better parameters',
-    badge: badgeIdvtc,
   },
   {
     type: OPERATOR_TYPE.CSM2_DEF,
     name: '0x02',
     description: 'Validate up to 2,048 ETH per key for enhanced economics',
-    badge: badge0x02,
   },
 ];
-
-const Badge = styled.img`
-  flex: none;
-  width: 52px;
-  height: 52px;
-`;
 
 const AprColumn = styled.div`
   flex: none;
@@ -67,7 +53,7 @@ type OptionRowProps = { option: Option; apr: Stat<number> };
 
 const OptionRow: FC<OptionRowProps> = ({ option, apr }) => (
   <Stack direction="row" align="center" gap={12}>
-    <Badge src={option.badge} alt="" width={52} height={52} />
+    <TypeBadge type={option.type} size={52} />
     <Stack grow direction="column" gap={4}>
       <Stack direction="row" gap={8} align="center">
         <Typography variant="bodyLarge" weight="semibold">

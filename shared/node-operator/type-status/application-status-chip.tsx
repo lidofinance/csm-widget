@@ -1,6 +1,11 @@
+import {
+  IconCheck,
+  IconCross,
+  IconHourglass,
+  Tag,
+} from '@lidofinance/lido-app-ui';
 import { OperatorTypeStatus } from 'modules/web3';
 import { FC } from 'react';
-import { ScoreChip } from 'shared/components';
 import { ApplicationStatus } from './types';
 
 type Props = {
@@ -8,17 +13,31 @@ type Props = {
   typeStatus?: OperatorTypeStatus;
 };
 
+const TEST_ID = { root: 'scoreChip' };
+
 export const ApplicationStatusChip: FC<Props> = ({ status, typeStatus }) => {
   switch (status) {
     case 'APPROVED':
       return (
-        <ScoreChip type={typeStatus === 'CLAIMED' ? 'default' : 'success'}>
+        <Tag
+          variant={typeStatus === 'CLAIMED' ? 'neutral' : 'success'}
+          icon={<IconCheck />}
+          dataTestId={TEST_ID}
+        >
           Approved
-        </ScoreChip>
+        </Tag>
       );
     case 'REJECTED':
-      return <ScoreChip type="error">Rejected</ScoreChip>;
+      return (
+        <Tag variant="error" icon={<IconCross />} dataTestId={TEST_ID}>
+          Rejected
+        </Tag>
+      );
     case 'REVIEW':
-      return <ScoreChip type="pending">Pending</ScoreChip>;
+      return (
+        <Tag variant="neutral" icon={<IconHourglass />} dataTestId={TEST_ID}>
+          Pending
+        </Tag>
+      );
   }
 };
