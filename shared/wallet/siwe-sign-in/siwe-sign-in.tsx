@@ -1,4 +1,4 @@
-import { Button, Card, Description, H3 } from '@lidofinance/lido-app-ui';
+import { Body, Button, Card, Description, H3 } from '@lidofinance/lido-app-ui';
 import { FC, PropsWithChildren, ReactNode } from 'react';
 import { useSiweAuth } from 'modules/siwe';
 import { useDappStatus } from 'modules/web3';
@@ -29,16 +29,11 @@ export const SiweSignIn: FC<PropsWithChildren> = ({ children }) => {
   return (
     <Card>
       <Stack direction="column" gap="lg" selfAlign="stretch">
-        <Stack direction="column" gap="md">
+        <Stack direction="column" gap="sm">
           <H3>Sign in</H3>
-          <Description color="secondary">{children}</Description>
+          <Body color="secondary">{children}</Body>
         </Stack>
-        <Button
-          size="small"
-          fullWidth
-          onClick={signIn}
-          data-testid="siweSignInButton"
-        >
+        <Button fullWidth onClick={signIn} data-testid="siweSignInButton">
           Sign in
         </Button>
       </Stack>

@@ -17,12 +17,16 @@ export const hubRowCss = css`
   display: flex;
   width: 100%;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 8px 20px;
+  flex-wrap: nowrap;
+  gap: 8px 12px;
+
+  /* only rows with trailing actions wrap them under the title on mobile */
+  &[data-wrap='true'] {
+    flex-wrap: wrap;
+  }
   box-sizing: border-box;
   min-height: 60px;
   padding: 12px 8px;
-  border-radius: var(--lido-app-ui-border-radius-card);
   text-decoration: none;
 
   &&,
@@ -40,7 +44,7 @@ export const hubRowLinkCss = css`
   cursor: pointer;
 
   &:hover {
-    background: var(--lido-app-ui-color-background-surface-hover);
+    background: var(--lido-app-ui-color-background-transparent-hover);
   }
 
   &:focus-visible {
@@ -53,6 +57,7 @@ export const HubMediaStyle = styled.div`
   display: flex;
   flex: none;
   align-items: center;
+  margin-right: 8px;
 `;
 
 export const HubMainStyle = styled.div`
@@ -60,29 +65,38 @@ export const HubMainStyle = styled.div`
   flex: 1 1 0;
   flex-direction: column;
   gap: 4px;
-  min-width: 0;
+  /* never narrower than the unwrapped title; the value side gives way instead */
+  min-width: min-content;
 `;
 
 export const HubTitleRowStyle = styled.div`
   display: flex;
-  min-width: 0;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
 `;
 
 export const HubTitleTextStyle = styled.span`
+  white-space: nowrap;
+`;
+
+export const HubValueStyle = styled.span`
+  display: block;
+  max-width: 100%;
   min-width: 0;
-  overflow-wrap: anywhere;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 export const HubAsideStyle = styled.div`
   display: flex;
-  flex: none;
+  flex: 0 1 auto;
   align-items: center;
   justify-content: flex-end;
   gap: 8px;
   min-width: 0;
+  overflow: hidden;
   margin-left: auto;
 `;
 

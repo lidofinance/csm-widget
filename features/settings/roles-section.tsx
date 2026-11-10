@@ -1,4 +1,4 @@
-import { Address, Tag } from '@lidofinance/lido-app-ui';
+import { Address, Hidden, Tag } from '@lidofinance/lido-app-ui';
 import { PATH } from 'consts/urls';
 import {
   useCustomRewardsClaimer,
@@ -21,7 +21,14 @@ const PendingTag: FC = () => <Tag variant="warning">Pending change</Tag>;
 
 const AddressValue: FC<{ address?: string }> = ({ address }) =>
   address ? (
-    <Address address={address} symbols={6} identicon={24} />
+    <>
+      <Hidden below="sm">
+        <Address address={address} symbols={6} identicon={24} />
+      </Hidden>
+      <Hidden above="sm">
+        <Address address={address} symbols={4} identicon={24} />
+      </Hidden>
+    </>
   ) : (
     <HubRowEmptyValue />
   );

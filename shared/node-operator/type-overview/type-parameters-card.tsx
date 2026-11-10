@@ -57,11 +57,7 @@ const Values: FC<{ values?: ReactNode[]; strong?: boolean }> = ({
     <ValuesStyle>
       {values.map((value, index) => (
         <li key={index}>
-          <Body
-            as="span"
-            color={strong ? 'default' : 'secondary'}
-            weight={strong ? 'bold' : undefined}
-          >
+          <Body as="span" color="default" weight={strong ? 'bold' : undefined}>
             {value}
           </Body>
         </li>
@@ -98,8 +94,9 @@ export const TypeParametersCard: FC<Props> = ({ type }) => {
 
   const { data: baseParams } = useCurveParameters(baseCurve);
   const { data: typeParams } = useOperatorTypeParameters(type);
+  const isDefBase = baseCurve?.curveId === defCurve?.curveId;
   const baseShort = useCurveMetadata(baseCurve)?.short ?? '';
-  const baseTitle = ownOtherCurve ? baseShort : 'Default';
+  const baseTitle = ownOtherCurve && !isDefBase ? baseShort : 'Default';
 
   const parameters = useParameters(MODULE_NAME.CSM).filter(
     ({ title }) => !HIDDEN_PARAMETERS.includes(title),

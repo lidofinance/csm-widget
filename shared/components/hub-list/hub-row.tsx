@@ -1,4 +1,8 @@
-import { BodyLarge, Caption, IconChevronRight } from '@lidofinance/lido-app-ui';
+import {
+  BodyLarge,
+  Description,
+  IconChevronRight,
+} from '@lidofinance/lido-app-ui';
 import { PATH } from 'consts/urls';
 import { FC, ReactNode } from 'react';
 import { ExternalLink } from 'shared/navigate/external-link';
@@ -11,6 +15,7 @@ import {
   HubMediaStyle,
   HubRowStyle,
   HubTrailingStyle,
+  HubValueStyle,
   HubTitleRowStyle,
   HubTitleTextStyle,
   hubRowCss,
@@ -70,16 +75,18 @@ export const HubRow: FC<HubRowProps> = ({
           {tag}
         </HubTitleRowStyle>
         {description && (
-          <Caption color="secondary" as="span">
+          <Description color="secondary" as="span">
             {description}
-          </Caption>
+          </Description>
         )}
       </HubMainStyle>
       {value && (
         <HubAsideStyle>
-          <BodyLarge as="span" color="default">
-            {value}
-          </BodyLarge>
+          <HubValueStyle>
+            <BodyLarge as="span" color="default">
+              {value}
+            </BodyLarge>
+          </HubValueStyle>
         </HubAsideStyle>
       )}
       {trailing && <HubTrailingStyle>{trailing}</HubTrailingStyle>}
@@ -92,15 +99,27 @@ export const HubRow: FC<HubRowProps> = ({
   );
 
   if (!href) {
-    return <HubRowStyle data-testid={dataTestId}>{content}</HubRowStyle>;
+    return (
+      <HubRowStyle data-testid={dataTestId} data-wrap={!!trailing}>
+        {content}
+      </HubRowStyle>
+    );
   }
 
   return external ? (
-    <RowExternalLinkStyle href={href} data-testid={dataTestId}>
+    <RowExternalLinkStyle
+      href={href}
+      data-testid={dataTestId}
+      data-wrap={!!trailing}
+    >
       {content}
     </RowExternalLinkStyle>
   ) : (
-    <RowLocalLinkStyle href={href as PATH} data-testid={dataTestId}>
+    <RowLocalLinkStyle
+      href={href as PATH}
+      data-testid={dataTestId}
+      data-wrap={!!trailing}
+    >
       {content}
     </RowLocalLinkStyle>
   );

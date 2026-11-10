@@ -32,6 +32,16 @@ const StepStyle = styled.li`
   padding: 24px 0;
   border-top: 1px solid var(--lido-app-ui-color-border-default);
 
+  &:nth-child(odd) {
+    margin-right: -24px;
+    padding-right: 24px;
+  }
+
+  &:nth-child(even) {
+    margin-left: -24px;
+    padding-left: 24px;
+  }
+
   &:nth-child(-n + 2) {
     border-top: 0;
     padding-top: 0;
@@ -42,6 +52,13 @@ const StepStyle = styled.li`
   }
 
   @media (max-width: 899px) {
+    &:nth-child(odd),
+    &:nth-child(even) {
+      margin: 0;
+      padding-right: 0;
+      padding-left: 0;
+    }
+
     &:nth-child(2) {
       border-top: 1px solid var(--lido-app-ui-color-border-default);
       padding-top: 24px;

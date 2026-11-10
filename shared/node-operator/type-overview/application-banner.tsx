@@ -30,6 +30,12 @@ const TitleStyle = styled.span`
   gap: 12px;
 `;
 
+const ActionsStyle = styled.span`
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 12px;
+`;
+
 export const isApplicationBannerVisible = ({
   typeStatus,
   data,
@@ -51,16 +57,23 @@ const renderAction = (
 
   switch (cta) {
     case 'claim':
-      return (
-        <Button href={claimPath} dataTestId={dataTestId}>
-          {`Claim ${program} type`}
-        </Button>
-      );
     case 'create':
       return (
-        <Button href={createPath} dataTestId={dataTestId}>
-          {`Create ${program} operator`}
-        </Button>
+        <ActionsStyle>
+          {canViewDetails && (
+            <Button variant="outline" href={applyPath}>
+              View details
+            </Button>
+          )}
+          <Button
+            href={cta === 'claim' ? claimPath : createPath}
+            dataTestId={dataTestId}
+          >
+            {cta === 'claim'
+              ? `Claim ${program} type`
+              : `Create ${program} operator`}
+          </Button>
+        </ActionsStyle>
       );
     default:
       return canViewDetails ? (

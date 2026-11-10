@@ -13,7 +13,16 @@ const ShareInputStyle = styled(TrailingInputStyle)`
   }
 `;
 
-const COLUMNS = { base: 'minmax(0, 1fr) 120px', smDown: 'minmax(0, 1fr) 96px' };
+const AddressInputStyle = styled(Input)`
+  && input {
+    text-overflow: ellipsis;
+  }
+`;
+
+const COLUMNS = {
+  base: 'minmax(0, 1fr) 120px',
+  smDown: 'minmax(0, 1fr) 120px',
+};
 
 type ShareRowViewProps = {
   label: string;
@@ -29,7 +38,7 @@ export const ShareRowView: FC<ShareRowViewProps> = ({
   'data-testid': dataTestId,
 }) => (
   <Grid columns={COLUMNS} gap={12} data-testid={dataTestId}>
-    <Input readOnly aria-label={label} value={value} />
+    <AddressInputStyle readOnly aria-label={label} value={value} />
     <ShareInputStyle
       $trailing
       readOnly
