@@ -157,7 +157,11 @@ const routes: Route[] = [
       PATH.TYPE_IDVTC_CLAIM,
       PATH.TYPE_PARAMETERS,
     ],
-    showRules: ['CAN_CLAIM_ICS', 'CAN_CLAIM_IDVTC', 'ICS_APPLY_ENABLED'],
+    showRules: [
+      'CAN_CLAIM_ICS',
+      'CAN_CLAIM_IDVTC',
+      ['IS_CSM_FAMILY_SCOPE', 'ICS_APPLY_ENABLED'],
+    ],
     suffix: <CounterClaimType />,
   },
   {

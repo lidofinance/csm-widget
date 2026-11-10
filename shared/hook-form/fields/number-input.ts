@@ -28,12 +28,10 @@ export const getShownNumber = (
   text: string,
   value: number | undefined,
   decimals = 0,
-): string =>
-  parseNumberInput(text, decimals)?.value === value
-    ? text
-    : value === undefined
-      ? ''
-      : String(value);
+): string => {
+  if (parseNumberInput(text, decimals)?.value === value) return text;
+  return value === undefined ? '' : String(value);
+};
 
 /** Range violation message; empty value never violates. */
 export const getNumberRangeError = (

@@ -40,7 +40,7 @@ export const SiweSignInAddress: FC<{ operatorType: string }> = ({
           icon={<Identicon address={address} size={20} />}
         />
 
-        <Button size="small" onClick={signIn} fullWidth>
+        <Button onClick={signIn} fullWidth>
           Sign in
         </Button>
       </Stack>

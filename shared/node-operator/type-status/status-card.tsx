@@ -1,6 +1,10 @@
-import { Card, SectionTitle } from '@lidofinance/lido-app-ui';
+import {
+  Card,
+  Description,
+  SectionTitle,
+  Stack,
+} from '@lidofinance/lido-app-ui';
 import { FC, ReactNode } from 'react';
-import { Stack } from 'shared/components';
 
 type Props = {
   title: string;
@@ -20,11 +24,15 @@ export const StatusCard: FC<Props> = ({
   dataTestId,
 }) => (
   <Card dataTestId={{ root: dataTestId }}>
-    <Stack direction="column" gap="md">
+    <Stack direction="column" gap={16}>
       <SectionTitle title={title} subtitle={subtitle} action={tag} />
-      {children}
+      {children && (
+        <Description as="div" color="secondary">
+          {children}
+        </Description>
+      )}
       {actions && (
-        <Stack direction="row" gap="sm" wrap>
+        <Stack direction="row" gap={12} wrap>
           {actions}
         </Stack>
       )}

@@ -1,12 +1,4 @@
-import { Card } from '@lidofinance/lido-app-ui';
 import styled, { css } from 'styled-components';
-
-export const HubCardStyle = styled(Card)`
-  && {
-    display: block;
-    padding: 24px 32px;
-  }
-`;
 
 export const HubOverlineStyle = styled.div`
   padding: 0 8px 8px;
@@ -22,7 +14,7 @@ export const hubRowCss = css`
   flex-wrap: wrap;
   gap: 8px 16px;
   box-sizing: border-box;
-  padding: 16px 8px;
+  padding: 12px 8px;
   border-radius: var(--lido-app-ui-border-radius-card);
   color: var(--lido-app-ui-color-text-default);
   text-decoration: none;
@@ -73,10 +65,18 @@ export const HubAsideStyle = styled.div`
   justify-content: flex-end;
   gap: 8px;
   min-width: 0;
+`;
+
+export const HubTrailingStyle = styled.div`
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
 
   @media (max-width: 440px) {
     flex: 1 1 100%;
-    justify-content: flex-start;
+    order: 1;
   }
 `;
 

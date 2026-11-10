@@ -15,7 +15,7 @@ type Props = {
 
 const TEST_ID = { root: 'scoreChip' };
 
-export const ApplicationStatusChip: FC<Props> = ({ status, typeStatus }) => {
+export const ApplicationStatusTag: FC<Props> = ({ status, typeStatus }) => {
   switch (status) {
     case 'APPROVED':
       return (

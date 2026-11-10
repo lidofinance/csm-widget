@@ -64,6 +64,7 @@ export type ShowRule =
   | 'IS_CSM'
   | 'IS_CSM_02'
   | 'IS_CSM_FAMILY'
+  | 'IS_CSM_FAMILY_SCOPE'
   | 'IS_CM'
   | 'CAN_TOGGLE_TOP_UP'
   | 'IS_IDVTC';
@@ -186,6 +187,7 @@ export const useShowFlags = (): ShowFlags => {
       ['IS_CSM']: module === MODULE_NAME.CSM,
       ['IS_CSM_02']: module === MODULE_NAME.CSM_02,
       ['IS_CSM_FAMILY']: isCsmFamily,
+      ['IS_CSM_FAMILY_SCOPE']: isCsmFamily || !nodeOperator,
       ['IS_CM']: module === MODULE_NAME.CM,
       ['CAN_TOGGLE_TOP_UP']: module === MODULE_NAME.CM && !!topUpSupported,
       ['IS_IDVTC']: isNodeOperator && operatorType === OPERATOR_TYPE.CSM_IDVTC,

@@ -26,6 +26,7 @@ export const CopyField: FC<CopyFieldProps> = ({ text, onCopy, ...rest }) => {
       readOnly
       trailing={
         <Tag
+          variant="action"
           icon={<IconCopy />}
           onClick={handleClick}
           dataTestId={{ root: 'copyBtn' }}

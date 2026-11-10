@@ -10,8 +10,8 @@ import {
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import {
-  ApplicationStatusChip,
-  TypeStatusChip,
+  ApplicationStatusTag,
+  TypeStatusTag,
   TypeStatusHint,
 } from 'shared/node-operator/type-status';
 import { calculateScores, isMinScoresReached } from '../utils';
@@ -101,7 +101,7 @@ export const StatusHeader: FC<StatusHeaderProps> = ({
           <Text size="lg" weight={700}>
             Application
           </Text>
-          <ApplicationStatusChip status={status} typeStatus={typeStatus} />
+          <ApplicationStatusTag status={status} typeStatus={typeStatus} />
         </Stack>
       )}
       {(!status || status === 'APPROVED' || hasTypeStatus) && (
@@ -114,7 +114,7 @@ export const StatusHeader: FC<StatusHeaderProps> = ({
           <Text size="lg" weight={700}>
             Operator type
           </Text>
-          <TypeStatusChip typeStatus={typeStatus} />
+          <TypeStatusTag typeStatus={typeStatus} />
         </Stack>
       )}
       {hint}

@@ -1,4 +1,4 @@
-import { Body, IconChevronRight } from '@lidofinance/lido-app-ui';
+import { Body, BodyLarge, IconChevronRight } from '@lidofinance/lido-app-ui';
 import { PATH } from 'consts/urls';
 import { FC, ReactNode } from 'react';
 import { ExternalLink } from 'shared/navigate/external-link';
@@ -10,6 +10,7 @@ import {
   HubMainStyle,
   HubMediaStyle,
   HubRowStyle,
+  HubTrailingStyle,
   HubTitleRowStyle,
   hubRowCss,
   hubRowLinkCss,
@@ -26,9 +27,7 @@ const RowExternalLinkStyle = styled(ExternalLink)`
 `;
 
 type LinkProps =
-  | { href?: undefined; external?: undefined }
-  | { href: PATH; external?: false }
-  | { href: string; external: true };
+  { href?: PATH; external?: false } | { href: string; external: true };
 
 export type HubRowProps = LinkProps & {
   media?: ReactNode;
@@ -43,9 +42,9 @@ export type HubRowProps = LinkProps & {
 export const HubRowEmptyValue: FC<{ children?: ReactNode }> = ({
   children = 'Not set',
 }) => (
-  <Body color="disabled" as="span">
+  <BodyLarge color="disabled" as="span">
     {children}
-  </Body>
+  </BodyLarge>
 );
 
 export const HubRow: FC<HubRowProps> = ({
@@ -64,9 +63,9 @@ export const HubRow: FC<HubRowProps> = ({
       {media && <HubMediaStyle>{media}</HubMediaStyle>}
       <HubMainStyle>
         <HubTitleRowStyle>
-          <Body weight="semibold" as="span">
+          <BodyLarge weight="semibold" as="span">
             {title}
-          </Body>
+          </BodyLarge>
           {tag}
         </HubTitleRowStyle>
         {description && (
@@ -75,16 +74,14 @@ export const HubRow: FC<HubRowProps> = ({
           </Body>
         )}
       </HubMainStyle>
-      {(value || trailing) && (
+      {value && (
         <HubAsideStyle>
-          {value && (
-            <Body as="span" color="default">
-              {value}
-            </Body>
-          )}
-          {trailing}
+          <BodyLarge as="span" color="default">
+            {value}
+          </BodyLarge>
         </HubAsideStyle>
       )}
+      {trailing && <HubTrailingStyle>{trailing}</HubTrailingStyle>}
       {href && (
         <HubChevronStyle aria-hidden="true">
           <IconChevronRight />

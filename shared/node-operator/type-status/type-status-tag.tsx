@@ -8,7 +8,7 @@ type Props = {
 
 const TEST_ID = { root: 'scoreChip' };
 
-export const TypeStatusChip: FC<Props> = ({ typeStatus }) => {
+export const TypeStatusTag: FC<Props> = ({ typeStatus }) => {
   switch (typeStatus) {
     case 'CLAIMED':
       return (

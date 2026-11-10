@@ -56,27 +56,30 @@ const getApplication = (
   }
 };
 
+const getType = (
+  formStatus: ApplicationStatus | undefined,
+  typeStatus: OperatorTypeStatus,
+): ApplicationDisplayType | undefined => {
+  if (typeStatus !== 'PENDING') return TYPE_BY_STATUS[typeStatus];
+  return formStatus === 'APPROVED' ? 'pending' : undefined;
+};
+
+const getCta = (
+  typeStatus: OperatorTypeStatus,
+  hasOperator: boolean,
+): ApplicationDisplayCta => {
+  if (typeStatus !== 'ISSUED') return 'viewDetails';
+  return hasOperator ? 'claim' : 'create';
+};
+
 export const getApplicationDisplayState = ({
   formStatus,
   typeStatus,
   hasOperator,
 }: Params): ApplicationDisplayState => {
   const application = getApplication(formStatus, typeStatus);
-  const type =
-    typeStatus === 'PENDING'
-      ? formStatus === 'APPROVED'
-        ? 'pending'
-        : undefined
-      : TYPE_BY_STATUS[typeStatus];
-
+  const type = getType(formStatus, typeStatus);
   if (!application && !type) return {};
 
-  const cta =
-    typeStatus === 'ISSUED'
-      ? hasOperator
-        ? 'claim'
-        : 'create'
-      : 'viewDetails';
-
-  return { application, type, cta };
+  return { application, type, cta: getCta(typeStatus, hasOperator) };
 };
