@@ -59,12 +59,9 @@ test.describe(
         await test.step('Verify that proposal address is visible', async () => {
           await expect(rewardsAddressPage.proposedAddress).toBeVisible();
           await expect(rewardsAddressPage.pendingTitledAddress).toContainText(
-            'Pending change',
+            'Change pending',
           );
 
-          await expect(rewardsAddressPage.actionRequired).toContainText(
-            'Action required',
-          );
           await expect(rewardsAddressPage.actionRequired).toContainText(
             'Connect to CSM UI with the proposed address',
           );

@@ -1,10 +1,18 @@
 import { Card, SectionTitle, Stack } from '@lidofinance/lido-app-ui';
 import { FC, PropsWithChildren, ReactNode } from 'react';
+import styled from 'styled-components';
+
+const FormCardStyle = styled(Card)`
+  && {
+    align-items: stretch;
+  }
+`;
 
 export type FormCardProps = PropsWithChildren<{
   title?: string;
   description?: ReactNode;
   action?: ReactNode;
+  tooltip?: ReactNode;
   'data-testid'?: string;
 }>;
 
@@ -13,20 +21,26 @@ export const FormCard: FC<FormCardProps> = ({
   title,
   description,
   action,
+  tooltip,
   children,
   'data-testid': testId,
 }) => (
-  <Card data-testid={testId}>
+  <FormCardStyle data-testid={testId}>
     <Stack gap={24}>
       {title && (
         <SectionTitle
           title={title}
           subtitle={description}
           action={action}
-          dataTestId={{ root: 'formTitle' }}
+          tooltip={tooltip}
+          dataTestId={{
+            root: 'formTitle',
+            tooltip: 'formTitleTooltip',
+            tooltipContent: 'formTitleTooltipContent',
+          }}
         />
       )}
       {children}
     </Stack>
-  </Card>
+  </FormCardStyle>
 );

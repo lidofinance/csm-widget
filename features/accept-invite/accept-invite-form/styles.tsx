@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 
 export const InviteNameStyle = styled.span`
-  flex: 1;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 16px;
-  line-height: 28px;
-  font-weight: var(--lido-app-ui-font-weight-bold);
+  font-size: var(--lido-app-ui-font-size-h3);
+  line-height: var(--lido-app-ui-line-height-h3);
+  letter-spacing: var(--lido-app-ui-letter-spacing-h3);
+  font-weight: var(--lido-app-ui-font-weight-medium);
 `;

@@ -20,7 +20,7 @@ export const ChangeRoleFormGate: FC = () => {
   );
 
   return (
-    <Stack gap={24} data-testid="changeRoleForm">
+    <Stack gap={8} data-testid="changeRoleForm">
       {shouldRenderChangeRoleForm({
         action: flow.action,
         hasInvite: !!invite,

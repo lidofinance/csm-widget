@@ -62,7 +62,7 @@ export class ManagerAddressPage extends BasePage {
       name: 'Propose a new manager address',
     });
     this.resetButton = this.form.getByRole('button', {
-      name: 'Reset Manager Address',
+      name: 'Change Manager Address',
     });
     this.note = this.form.getByTestId('noteText');
   }

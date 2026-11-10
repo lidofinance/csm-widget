@@ -11,6 +11,7 @@ import { useFieldArray, useFormContext } from 'react-hook-form';
 import { FormCard } from 'shared/form-page';
 import { FieldError } from 'shared/hook-form/fields';
 import { SplitsFormInputType } from '../context';
+import { ADDITIONAL_ADDRESSES_DESCRIPTION } from '../splits-state';
 import { BondRow } from './bond-row';
 import { EditInfo } from './edit-info';
 import { SplitRow } from './split-row';
@@ -49,18 +50,18 @@ export const EditSplits: FC = () => {
         <Stack gap={12}>
           <SectionTitle
             title="Additional addresses"
+            tooltip={ADDITIONAL_ADDRESSES_DESCRIPTION}
             action={
-              fields.length < MAX_FEE_SPLITS_COUNT ? (
-                <Button
-                  variant="outline"
-                  size="small"
-                  iconLeft={<IconPlus />}
-                  onClick={handleAdd}
-                  data-testid="addSplitButton"
-                >
-                  Add new address
-                </Button>
-              ) : undefined
+              <Button
+                variant="outline"
+                size="small"
+                iconLeft={<IconPlus />}
+                onClick={handleAdd}
+                disabled={fields.length >= MAX_FEE_SPLITS_COUNT}
+                data-testid="addSplitButton"
+              >
+                Add new address
+              </Button>
             }
           />
           {fields.map((field, index) => (

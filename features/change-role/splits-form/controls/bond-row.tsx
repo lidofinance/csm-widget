@@ -1,3 +1,4 @@
+import { SectionTitle, Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { useRestShare } from '../hooks/use-rest-share';
 import { BOND_ROW_DESCRIPTION } from '../splits-state';
@@ -7,12 +8,9 @@ export const BondRow: FC = () => {
   const share = useRestShare();
 
   return (
-    <ShareRowView
-      data-testid="splitsBondRow"
-      label="Operator bond"
-      value="Operator bond"
-      description={BOND_ROW_DESCRIPTION}
-      share={share}
-    />
+    <Stack gap={12} data-testid="splitsBondRow">
+      <SectionTitle title="Operator bond" tooltip={BOND_ROW_DESCRIPTION} />
+      <ShareRowView label="Operator bond" value="Operator bond" share={share} />
+    </Stack>
   );
 };

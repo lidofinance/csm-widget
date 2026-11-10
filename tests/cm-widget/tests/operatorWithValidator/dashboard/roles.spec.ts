@@ -165,7 +165,7 @@ test.describe(
           await expect(
             widgetService.page,
             'Should navigate to roles settings page',
-          ).toHaveURL(/\/settings\/roles/);
+          ).toHaveURL(/\/settings$/);
         });
       },
     );

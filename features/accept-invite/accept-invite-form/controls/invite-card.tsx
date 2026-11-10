@@ -18,15 +18,19 @@ export const InviteCard: FC<{ invite: ModuleInvite }> = ({ invite }) => {
 
   return (
     <Card dataTestId={{ root: 'inviteCard' }} data-invite-id={inviteId}>
-      <Stack direction="row" align="center" gap={12}>
-        <OperatorAvatar operator={invite} size={40} />
-        <InviteNameStyle>{getOperatorName(invite)}</InviteNameStyle>
-        {type && <OperatorTypeTag type={type} />}
+      <Stack direction="column" align="start" gap={16}>
+        <Stack direction="row" align="center" gap={12} style={{ minWidth: 0 }}>
+          <OperatorAvatar operator={invite} size={40} />
+          <InviteNameStyle>{getOperatorName(invite)}</InviteNameStyle>
+          {type && <OperatorTypeTag type={type} />}
+        </Stack>
+        <Typography variant="body" as="p">
+          {getProposedRoleText(invite.role)}
+        </Typography>
+        <SubmitButton intent={inviteId} size="small" fullWidth={false}>
+          Accept request
+        </SubmitButton>
       </Stack>
-      <Typography variant="body" as="p">
-        {getProposedRoleText(invite.role)}
-      </Typography>
-      <SubmitButton intent={inviteId}>Accept request</SubmitButton>
     </Card>
   );
 };

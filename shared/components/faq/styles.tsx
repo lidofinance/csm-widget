@@ -1,4 +1,4 @@
-import { Skeleton } from '@lidofinance/lido-app-ui';
+import { Card, Skeleton } from '@lidofinance/lido-app-ui';
 import styled from 'styled-components';
 
 export const FaqElement = styled.div`
@@ -41,6 +41,15 @@ const ShortSkeleton = styled(Skeleton)`
 
 export const ShortInlineLoader = () => <ShortSkeleton variant="text" />;
 
+export const FaqCardStyle = styled(Card)`
+  && {
+    align-items: stretch;
+    gap: 0;
+  }
+`;
+
 export const FaqSection = styled.section`
-  margin-top: ${({ theme }) => theme.spaceMap.xxl}px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 `;

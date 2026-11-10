@@ -3,7 +3,11 @@ import { FC } from 'react';
 import { BulletsStyle } from '../styles';
 
 export const EditInfo: FC = () => (
-  <MessageBox variant="info" headline="Set up rewards splitter addresses">
+  <MessageBox
+    variant="default"
+    icon
+    headline="Set up rewards splitter addresses"
+  >
     <BulletsStyle>
       <li>Split rewards across up to 10 additional addresses</li>
       <li>Additional addresses receive rewards in stETH only</li>

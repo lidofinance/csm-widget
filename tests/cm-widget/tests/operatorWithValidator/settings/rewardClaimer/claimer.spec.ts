@@ -35,24 +35,24 @@ test.describe(
           );
         });
 
-        await test.step('"Specify a new Rewards Claimer Address" title is visible', async () => {
+        await test.step('"Specify a new Rewards claimer address" title is visible', async () => {
           await expect(claimerPage.addressInputTitle).toBeVisible();
           await expect(claimerPage.addressInputTitle).toHaveText(
-            'Specify a new Rewards Claimer Address',
+            'Specify a new Rewards claimer address',
           );
         });
 
         await test.step('Address input is visible with correct placeholder', async () => {
           await expect(claimerPage.addressInput).toBeVisible();
           await expect(claimerPage.addressInputContainer).toContainText(
-            'New Rewards Claimer Address',
+            'New Rewards claimer address',
           );
         });
 
         await test.step('Submit button is visible with correct text', async () => {
           await expect(claimerPage.submitButton).toBeVisible();
           await expect(claimerPage.submitButton).toHaveText(
-            'Set new Rewards Claimer Address',
+            'Set new Rewards claimer address',
           );
         });
       },
@@ -76,9 +76,9 @@ test.describe(
         const { claimerPage } = widgetService.settingsPage;
 
         await claimerPage.settingsCrumb.click();
-        await expect(widgetService.page).toHaveURL(/\/settings/);
+        await expect(widgetService.page).toHaveURL(/\/settings$/);
         await expect(
-          widgetService.page.getByTestId('pageSwitcher'),
+          widgetService.page.getByTestId('settingsRolesSection'),
         ).toBeVisible();
       },
     );

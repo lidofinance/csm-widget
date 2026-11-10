@@ -1,5 +1,5 @@
-import { FC } from 'react';
 import { Stack } from '@lidofinance/lido-app-ui';
+import { FC } from 'react';
 import { ClusterMembersHubSection } from './cluster-members-hub-section';
 import { DkgSection } from './dkg-section';
 import { IncomingRequestsBanner } from './incoming-requests-banner';

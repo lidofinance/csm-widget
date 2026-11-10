@@ -3,7 +3,11 @@ import { FC, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { FormCard } from 'shared/form-page';
 import { SplitsFormInputType, useSplitsFormData } from '../context';
-import { getSplitsActionLabel, getSplitsNotice } from '../splits-state';
+import {
+  ADDITIONAL_ADDRESSES_DESCRIPTION,
+  getSplitsActionLabel,
+  getSplitsNotice,
+} from '../splits-state';
 import { BondRow } from './bond-row';
 import { ShareRowView } from './split-row-view';
 import { SplitsNotice } from './splits-notice';
@@ -29,7 +33,10 @@ export const ViewSplits: FC = () => {
 
       {hasSplits && (
         <Stack gap={12}>
-          <SectionTitle title="Additional addresses" />
+          <SectionTitle
+            title="Additional addresses"
+            tooltip={ADDITIONAL_ADDRESSES_DESCRIPTION}
+          />
           {currentFeeSplits.map((split, i) => (
             <ShareRowView
               key={split.recipient}

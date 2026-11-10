@@ -1,13 +1,23 @@
 import { Grid, Input } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { formatPercentInput } from 'shared/hook-form/fields/percent-input';
+import {
+  PercentSuffixStyle,
+  TrailingInputStyle,
+} from 'shared/hook-form/fields/styles';
+import styled from 'styled-components';
 
-const COLUMNS = { base: 'minmax(0, 1fr) 120px', xsDown: 'minmax(0, 1fr) 96px' };
+const ShareInputStyle = styled(TrailingInputStyle)`
+  && input {
+    text-align: right;
+  }
+`;
+
+const COLUMNS = { base: 'minmax(0, 1fr) 120px', smDown: 'minmax(0, 1fr) 96px' };
 
 type ShareRowViewProps = {
   label: string;
   value: string;
-  description?: string;
   share: bigint;
   'data-testid'?: string;
 };
@@ -15,12 +25,17 @@ type ShareRowViewProps = {
 export const ShareRowView: FC<ShareRowViewProps> = ({
   label,
   value,
-  description,
   share,
   'data-testid': dataTestId,
 }) => (
-  <Grid columns={COLUMNS} gap={12} align="end" data-testid={dataTestId}>
-    <Input readOnly label={label} value={value} description={description} />
-    <Input readOnly label="Share, %" value={formatPercentInput(share)} />
+  <Grid columns={COLUMNS} gap={12} data-testid={dataTestId}>
+    <Input readOnly aria-label={label} value={value} />
+    <ShareInputStyle
+      $trailing
+      readOnly
+      aria-label={`${label} share, %`}
+      value={formatPercentInput(share)}
+      icon={<PercentSuffixStyle>%</PercentSuffixStyle>}
+    />
   </Grid>
 );

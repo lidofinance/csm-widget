@@ -29,7 +29,7 @@ test.describe(
             'e_n',
             'csm_widget_dashboard_roles_section',
           ),
-          widgetService.page.waitForURL(/\/settings\/roles$/),
+          widgetService.page.waitForURL(/\/settings$/),
           widgetService.dashboardPage.rolesSection.sectionHeaderLink.click(),
         ]);
       },

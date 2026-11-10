@@ -24,6 +24,9 @@ export type SplitsStageTexts = {
 export const BOND_ROW_DESCRIPTION =
   'This share of the rewards will be sent to the Node Operator’s bond';
 
+export const ADDITIONAL_ADDRESSES_DESCRIPTION =
+  'Additional addresses receive rewards in stETH only';
+
 export const splitsEqual = (a: Partial<FeeSplit>[], b: FeeSplit[]) =>
   a.length === b.length &&
   a.every(

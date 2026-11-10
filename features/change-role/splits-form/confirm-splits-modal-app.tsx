@@ -91,7 +91,7 @@ export const ConfirmSplitsModalApp: FC<ConfirmSplitsModalAppProps> = ({
           )}
         </Stack>
 
-        <DataList divided>
+        <DataList>
           <DataListRow
             label={
               <Typography color="secondary" variant="description" as="span">

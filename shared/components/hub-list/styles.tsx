@@ -1,7 +1,12 @@
 import styled, { css } from 'styled-components';
 
+export const HubListStyle = styled.div`
+  align-self: stretch;
+  width: 100%;
+`;
+
 export const HubOverlineStyle = styled.div`
-  padding: 0 8px 8px;
+  padding: 0 0 8px;
 `;
 
 export const HubDividerStyle = styled.div`
@@ -10,14 +15,20 @@ export const HubDividerStyle = styled.div`
 
 export const hubRowCss = css`
   display: flex;
+  width: 100%;
   align-items: center;
   flex-wrap: wrap;
   gap: 8px 16px;
   box-sizing: border-box;
   padding: 12px 8px;
   border-radius: var(--lido-app-ui-border-radius-card);
-  color: var(--lido-app-ui-color-text-default);
   text-decoration: none;
+
+  &&,
+  &&:visited,
+  &&:hover {
+    color: var(--lido-app-ui-color-text-default);
+  }
 `;
 
 export const HubRowStyle = styled.div`
@@ -53,6 +64,7 @@ export const HubMainStyle = styled.div`
 
 export const HubTitleRowStyle = styled.div`
   display: flex;
+  white-space: nowrap;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
@@ -65,6 +77,7 @@ export const HubAsideStyle = styled.div`
   justify-content: flex-end;
   gap: 8px;
   min-width: 0;
+  margin-left: auto;
 `;
 
 export const HubTrailingStyle = styled.div`

@@ -14,7 +14,7 @@ const NEW = '0x3333333333333333333333333333333333333333';
 describe('getChangeRoleSubmitLabel', () => {
   it('labels the manager reset', () => {
     expect(getChangeRoleSubmitLabel('manager-reset', 'Manager')).toBe(
-      'Reset Manager Address',
+      'Change Manager Address',
     );
   });
 

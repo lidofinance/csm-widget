@@ -13,7 +13,10 @@ describe('formatSplittersValue', () => {
 
   it('shows the equal share for the CSM family', () => {
     expect(
-      formatSplittersValue(Array.from({ length: 5 }).fill(split(2000)), true),
+      formatSplittersValue(
+        Array.from({ length: 5 }, () => split(2000)),
+        true,
+      ),
     ).toBe('5 addresses, 20% each');
   });
 
@@ -25,8 +28,15 @@ describe('formatSplittersValue', () => {
 
   it('shows only the count for CM', () => {
     expect(
-      formatSplittersValue(Array.from({ length: 5 }).fill(split(2000)), false),
+      formatSplittersValue(
+        Array.from({ length: 5 }, () => split(2000)),
+        false,
+      ),
     ).toBe('5 addresses');
+  });
+
+  it('omits "each" for a single CSM-family address', () => {
+    expect(formatSplittersValue([split(1000)], true)).toBe('1 address, 10%');
   });
 
   it('uses the singular for one address', () => {

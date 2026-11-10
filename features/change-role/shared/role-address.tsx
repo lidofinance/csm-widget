@@ -23,7 +23,7 @@ export const RoleAddress: FC<RoleAddressProps> = ({
         <TextLink
           external
           href={getEtherscanAddressLink(chainId, address)}
-          icon={<IconLink />}
+          icon={<IconLink color="var(--lido-app-ui-color-icons-secondary)" />}
           aria-label="View on Etherscan"
           onClick={() =>
             trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.etherscanAddressLink)

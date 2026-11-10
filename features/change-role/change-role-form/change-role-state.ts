@@ -17,11 +17,9 @@ export const getChangeRoleSubmitLabel = (
   action: ChangeRoleAction,
   roleTitle: string,
 ) =>
-  action === 'manager-reset'
-    ? `Reset ${roleTitle} Address`
-    : action === 'propose'
-      ? `Propose a new ${roleTitle} Address`
-      : `Change ${roleTitle} Address`;
+  action === 'propose'
+    ? `Propose a new ${roleTitle} Address`
+    : `Change ${roleTitle} Address`;
 
 export const getConfirmChangeRoleSteps = ({
   showRewards,

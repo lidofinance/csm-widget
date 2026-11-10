@@ -30,7 +30,7 @@ export const PendingChangeCard: FC = () => {
     <RoleCard
       data-testid="proposedAddress"
       icon={<IconWarning width={20} height={20} style={WARNING_ICON_STYLE} />}
-      title="Pending change"
+      title="Change pending"
       action={
         intent && (
           <SubmitButton
@@ -40,7 +40,7 @@ export const PendingChangeCard: FC = () => {
             fullWidth={false}
             ignoreErrors
           >
-            {intent === 'revoke' ? 'Cancel' : 'Accept'}
+            {intent === 'revoke' ? 'Cancel change' : 'Accept'}
           </SubmitButton>
         )
       }
@@ -63,9 +63,6 @@ export const PendingChangeCard: FC = () => {
         as="div"
         dataTestId={{ root: 'pendingActionRequired' }}
       >
-        <Typography variant="body" weight="semibold" as="p">
-          Action required
-        </Typography>
         <StepsListStyle>
           <li>
             Connect to {meta?.shortTitle ?? WIDGET_TITLE} UI with the proposed

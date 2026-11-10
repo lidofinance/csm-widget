@@ -10,10 +10,8 @@ import { SplitsFormInputType } from '../context/types';
 
 const COLUMNS = {
   base: 'minmax(0, 1fr) 120px 40px',
-  xsDown: 'minmax(0, 1fr) 96px 40px',
+  smDown: 'minmax(0, 1fr) 96px 40px',
 };
-
-const REMOVE_CELL_STYLE = { height: 48 };
 
 type SplitRowProps = {
   index: number;
@@ -44,24 +42,24 @@ export const SplitRow: FC<SplitRowProps> = ({ index, onRemove }) => {
 
   return (
     <Stack gap={12}>
-      <Grid columns={COLUMNS} gap={12} align="end">
+      <Grid columns={COLUMNS} gap={12}>
         <AddressField
           name={`feeSplits.${index}.recipient`}
-          label={`Additional address #${index + 1}`}
+          placeholder={`Additional address #${index + 1}`}
           simple
           error={!!recipientError}
         />
         <PercentField
           name={`feeSplits.${index}.share`}
-          label="Share, %"
+          placeholder="Share, %"
           error={!!shareError}
           onChange={() => clearErrors(`feeSplits.${index}.share`)}
         />
-        <Stack align="center" justify="center" style={REMOVE_CELL_STYLE}>
+        <Stack align="center" justify="center">
           <IconButton
-            variant="ghost"
+            variant="outline"
             icon={<IconCross />}
-            aria-label="Remove"
+            aria-label="Remove address"
             onClick={() => onRemove(index)}
           />
         </Stack>

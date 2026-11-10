@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { useFilterShowRules } from 'shared/hooks';
 import { Faq as FaqItem } from 'types';
 import { AccordionNavigatable } from '../accordion-navigatable';
-import { FaqSection } from './styles';
+import { FaqCardStyle, FaqSection } from './styles';
 
 export const Faq: FC<{ items: FaqItem[] }> = ({ items: _items }) => {
   const items = useFilterShowRules(_items);
@@ -12,21 +12,22 @@ export const Faq: FC<{ items: FaqItem[] }> = ({ items: _items }) => {
 
   return (
     <FaqSection data-testid="faqSection">
-      <SectionTitle title="FAQ" />
-      {items.map(({ title, anchor, content }, index) => {
-        return (
-          <AccordionNavigatable
-            key={anchor}
-            id={anchor}
-            summary={<span data-testid="faqItemTitle">{title}</span>}
-            border={index < items.length - 1}
-            isFirst={index === 0}
-            data-testid="faqItem"
-          >
-            {content}
-          </AccordionNavigatable>
-        );
-      })}
+      <SectionTitle size="large" title="FAQ" />
+      <FaqCardStyle>
+        {items.map(({ title, anchor, content }, index) => {
+          return (
+            <AccordionNavigatable
+              key={anchor}
+              id={anchor}
+              summary={<span data-testid="faqItemTitle">{title}</span>}
+              border={index < items.length - 1}
+              data-testid="faqItem"
+            >
+              {content}
+            </AccordionNavigatable>
+          );
+        })}
+      </FaqCardStyle>
     </FaqSection>
   );
 };

@@ -63,7 +63,7 @@ export const HubRow: FC<HubRowProps> = ({
       {media && <HubMediaStyle>{media}</HubMediaStyle>}
       <HubMainStyle>
         <HubTitleRowStyle>
-          <BodyLarge weight="semibold" as="span">
+          <BodyLarge weight="semibold" as="span" color="default">
             {title}
           </BodyLarge>
           {tag}

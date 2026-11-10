@@ -60,12 +60,9 @@ test.describe(
           await expect(managerAddressPage.proposedAddress).toBeVisible();
 
           await expect(managerAddressPage.pendingTitledAddress).toContainText(
-            'Pending change',
+            'Change pending',
           );
 
-          await expect(managerAddressPage.actionRequired).toContainText(
-            'Action required',
-          );
           await expect(managerAddressPage.actionRequired).toContainText(
             'Connect to CSM UI with the proposed address',
           );

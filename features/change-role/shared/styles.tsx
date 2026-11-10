@@ -5,7 +5,7 @@ import styled from 'styled-components';
 export const FormCardStackStyle = styled(Form)`
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 8px;
   min-width: 0;
 `;
 
@@ -13,6 +13,7 @@ export const RoleCardStyle = styled(Card)`
   && {
     display: flex;
     flex-direction: column;
+    align-items: stretch;
     gap: 16px;
   }
 `;

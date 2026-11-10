@@ -12,7 +12,8 @@ import { useFieldController } from './use-field-controller';
 
 export type AddressFieldProps = {
   name: string;
-  label: ReactNode;
+  label?: ReactNode;
+  placeholder?: string;
   description?: ReactNode;
   tooltip?: ReactNode;
   currentAddress?: string;
@@ -29,6 +30,7 @@ export type AddressFieldProps = {
 export const AddressField: FC<AddressFieldProps> = ({
   name,
   label,
+  placeholder = 'Ethereum address or ENS name',
   description,
   tooltip,
   currentAddress,
@@ -73,7 +75,7 @@ export const AddressField: FC<AddressFieldProps> = ({
       onBlur={field.onBlur}
       disabled={isDisabled}
       readOnly={locked}
-      placeholder="Ethereum address or ENS name"
+      placeholder={placeholder}
       spellCheck={false}
       icon={icon}
       tooltip={tooltip}
@@ -81,31 +83,33 @@ export const AddressField: FC<AddressFieldProps> = ({
       error={isLoading ? undefined : (error ?? message ?? invalid)}
       dataTestId={{ error: FIELD_ERROR_TEST_ID }}
       label={
-        <Stack as="span" inline direction="row" wrap align="center" gap={8}>
-          {label}
-          {!simple && isEns && address && (
-            <Tag variant="neutral">
-              <Address address={address} symbols={6} />
-            </Tag>
-          )}
-          {!simple && !isEns && ensName && (
-            <Tag variant="neutral">{ensName}</Tag>
-          )}
-          {addressName && (
-            <Tag variant="success" data-testid="verifiedChip">
-              {addressName}
-            </Tag>
-          )}
-          {currentAddress && !locked && (
-            <ConnectedAddressButtonStyle
-              type="button"
-              onClick={fillConnected}
-              disabled={isDisabled}
-            >
-              Connected address
-            </ConnectedAddressButtonStyle>
-          )}
-        </Stack>
+        label == null ? undefined : (
+          <Stack as="span" inline direction="row" wrap align="center" gap={8}>
+            {label}
+            {!simple && isEns && address && (
+              <Tag variant="neutral">
+                <Address address={address} symbols={6} />
+              </Tag>
+            )}
+            {!simple && !isEns && ensName && (
+              <Tag variant="neutral">{ensName}</Tag>
+            )}
+            {addressName && (
+              <Tag variant="success" data-testid="verifiedChip">
+                {addressName}
+              </Tag>
+            )}
+            {currentAddress && !locked && (
+              <ConnectedAddressButtonStyle
+                type="button"
+                onClick={fillConnected}
+                disabled={isDisabled}
+              >
+                Connected address
+              </ConnectedAddressButtonStyle>
+            )}
+          </Stack>
+        )
       }
     />
   );

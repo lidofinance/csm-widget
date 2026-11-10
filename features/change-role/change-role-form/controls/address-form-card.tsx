@@ -1,6 +1,7 @@
 import { MessageBox, Tag } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
+import { RoleActionsList } from 'shared/components';
 import { FormCard, SubmitButton } from 'shared/form-page';
 import { AddressField } from 'shared/hook-form/fields';
 import { isAddressEqual } from 'viem';
@@ -18,8 +19,13 @@ import { useRole } from '../hooks/use-role';
 export const AddressFormCard: FC = () => {
   const flow = useChangeRoleFlow();
   const roleTitle = useRole();
-  const { address, currentAddress, otherRoleAddress } =
-    useChangeRoleFormData(true);
+  const {
+    address,
+    currentAddress,
+    otherRoleAddress,
+    role,
+    extendedManagerPermissions,
+  } = useChangeRoleFormData(true);
   const newAddress = useWatch<ChangeRoleFormInputType, 'address'>({
     name: 'address',
   });
@@ -29,6 +35,12 @@ export const AddressFormCard: FC = () => {
   return (
     <FormCard
       title={`Specify a new ${roleTitle} Address`}
+      tooltip={
+        <RoleActionsList
+          role={role}
+          extendedManagerPermissions={extendedManagerPermissions}
+        />
+      }
       description={
         flow.action === 'propose' ? (
           <span data-testid="noteText">

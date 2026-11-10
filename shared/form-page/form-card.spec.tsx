@@ -24,6 +24,16 @@ describe('FormCard', () => {
     expect(html.indexOf('FIELD')).toBeLessThan(html.indexOf('CTA'));
   });
 
+  it('renders the title tooltip trigger', () => {
+    const html = renderToStaticMarkup(
+      <FormCard title="TITLE" tooltip="TIP">
+        <i>FIELD</i>
+      </FormCard>,
+    );
+
+    expect(html).toContain('formTitleTooltip');
+  });
+
   it('skips the title row without a title', () => {
     const html = renderToStaticMarkup(
       <FormCard>
