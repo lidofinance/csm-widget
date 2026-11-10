@@ -9,11 +9,13 @@ export type SelectFieldProps = Omit<
 > & {
   name: string;
   showUntouched?: boolean;
+  required?: boolean;
 };
 
 export const SelectField: FC<SelectFieldProps> = ({
   name,
   showUntouched,
+  required,
   placeholder = 'Select',
   disabled,
   dataTestId,
@@ -22,6 +24,7 @@ export const SelectField: FC<SelectFieldProps> = ({
   const { field, invalid, message } = useFieldController({
     name,
     defaultValue: '',
+    rules: { required },
     showUntouched,
   });
 

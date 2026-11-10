@@ -1,7 +1,6 @@
 import { FC } from 'react';
-import { Button } from '@lidofinance/lido-ui';
-import { Stack } from 'shared/components';
-import { Address } from 'shared/components/address';
+import { Address, Button } from '@lidofinance/lido-app-ui';
+import { HubRow } from 'shared/components/hub-list';
 import { Delegate } from '../types';
 
 type DelegateItemProps = {
@@ -14,19 +13,18 @@ export const DelegateItem: FC<DelegateItemProps> = ({
   delegate,
   onRemove,
   isRemoving,
-}) => {
-  return (
-    <Stack align="center" spaceBetween>
-      <Address address={delegate.address} showIcon />
+}) => (
+  <HubRow
+    title={<Address address={delegate.address} identicon={24} copy />}
+    trailing={
       <Button
-        size="xs"
-        variant="text"
-        color="error"
+        variant="outline"
+        size="small"
         onClick={onRemove}
         loading={isRemoving}
       >
         Remove
       </Button>
-    </Stack>
-  );
-};
+    }
+  />
+);

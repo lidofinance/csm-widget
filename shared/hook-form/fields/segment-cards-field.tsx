@@ -28,6 +28,7 @@ export type SegmentCardsFieldProps = {
   options: SegmentCardsFieldOption[];
   'aria-label': string;
   showUntouched?: boolean;
+  required?: boolean;
   'data-testid'?: string;
 };
 
@@ -36,10 +37,12 @@ export const SegmentCardsField: FC<SegmentCardsFieldProps> = ({
   options,
   'aria-label': ariaLabel,
   showUntouched,
+  required,
   'data-testid': testId,
 }) => {
   const { field, invalid, message } = useFieldController({
     name,
+    rules: { required },
     showUntouched,
   });
   const ref = useFocusableRef(field.ref, SEGMENT_TAB_STOP_SELECTOR);

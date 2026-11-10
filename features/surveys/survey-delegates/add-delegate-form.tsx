@@ -1,11 +1,8 @@
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { isAddress } from 'viem';
-import { Stack } from 'shared/components';
-import {
-  AddressInputHookForm,
-  SubmitButtonHookForm,
-} from 'shared/hook-form/controls';
+import { FormCard, SubmitButton } from 'shared/form-page';
+import { AddressField } from 'shared/hook-form/fields';
 import { VALIDATION_MESSAGES } from 'shared/hook-form/validation';
 
 type AddDelegateFormData = {
@@ -23,16 +20,13 @@ export const AddDelegateForm: FC<AddDelegateFormProps> = ({
 }) => {
   const { handleSubmit, setError, clearErrors } =
     useFormContext<AddDelegateFormData>();
-  const [validationError, setValidationError] = useState<string | undefined>();
 
   const handleFormSubmit = useCallback(
     (data: AddDelegateFormData) => {
       clearErrors('address');
-      setValidationError(undefined);
 
       if (!data.address) {
         setError('address', { type: 'manual', message: 'Address is required' });
-        setValidationError('Address is required');
         return;
       }
       if (!isAddress(data.address)) {
@@ -40,7 +34,6 @@ export const AddDelegateForm: FC<AddDelegateFormProps> = ({
           type: 'manual',
           message: VALIDATION_MESSAGES.invalidAddress,
         });
-        setValidationError(VALIDATION_MESSAGES.invalidAddress);
         return;
       }
       onSubmit(data);
@@ -50,17 +43,14 @@ export const AddDelegateForm: FC<AddDelegateFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>
-      <Stack direction="column" gap="md">
-        <AddressInputHookForm
-          fieldName="address"
+      <FormCard>
+        <AddressField
+          name="address"
           label="Delegate address"
           placeholder="0x..."
-          error={validationError}
         />
-        <SubmitButtonHookForm loading={isSubmitting}>
-          Add Delegate
-        </SubmitButtonHookForm>
-      </Stack>
+        <SubmitButton disabled={isSubmitting}>Add Delegate</SubmitButton>
+      </FormCard>
     </form>
   );
 };

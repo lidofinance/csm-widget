@@ -18,6 +18,7 @@ export type TextFieldProps = Omit<
   name: string;
   label?: ReactNode;
   showUntouched?: boolean;
+  required?: boolean;
   /** Rendered after the input, e.g. a tag or tag-button. */
   trailing?: ReactNode;
 };
@@ -26,6 +27,7 @@ export const TextField: FC<TextFieldProps> = ({
   name,
   label,
   showUntouched,
+  required,
   trailing,
   disabled,
   dataTestId,
@@ -34,6 +36,7 @@ export const TextField: FC<TextFieldProps> = ({
   const { field, invalid, message } = useFieldController({
     name,
     defaultValue: '',
+    rules: { required },
     showUntouched,
   });
 

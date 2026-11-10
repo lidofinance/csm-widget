@@ -1,12 +1,10 @@
 import { FC, useCallback, useEffect } from 'react';
 import { trackMatomoFormEvent } from 'utils/track-matomo-event';
 import { FormProvider, useForm } from 'react-hook-form';
-import { FormTitle, SectionBlock, Stack, WhenLoaded } from 'shared/components';
-import {
-  SelectHookForm,
-  SubmitButtonHookForm,
-  TextInputHookForm,
-} from 'shared/hook-form/controls';
+import { WhenLoaded } from 'shared/components';
+import { FormCard, FormPage, SubmitButton } from 'shared/form-page';
+import { SelectField, TextField } from 'shared/hook-form/fields';
+import { Stack } from '@lidofinance/lido-app-ui';
 import {
   callSurvey,
   isAuthError,
@@ -21,7 +19,6 @@ import { HowDidYouLearnCsm } from '../types';
 import { useModalStages } from './use-modal-stages';
 import { sources } from './sources';
 import { transformOutgoing } from './transform';
-import { SurveysBackButton } from '../shared';
 
 export const SurveyHowDidYouLearnCsm: FC = () => {
   const { data, mutate } = useOperatorSurvey<HowDidYouLearnCsm>(
@@ -79,63 +76,48 @@ export const SurveyHowDidYouLearnCsm: FC = () => {
   }, [formObject, sourceOne, sourceTwo]);
 
   return (
-    <SectionBlock
-      title="How did you learn about CSM?"
-      mainPrefix={<SurveysBackButton />}
-    >
-      <FormProvider {...formObject}>
-        <WhenLoaded loading={formObject.formState.isLoading}>
-          <Stack direction="column">
+    <FormProvider {...formObject}>
+      <WhenLoaded loading={formObject.formState.isLoading}>
+        <FormPage>
+          <FormCard>
             <form
               autoComplete="off"
               onSubmit={formObject.handleSubmit(handleSubmit)}
             >
-              <Stack direction="column" gap="xxl">
-                <Stack direction="column">
-                  <FormTitle>What led you to CSM?</FormTitle>
-                  <SelectHookForm
-                    fieldName="sourceOne"
-                    options={sources.map((s) => ({
+              <Stack gap={32}>
+                <SelectField
+                  name="sourceOne"
+                  label="What led you to CSM?"
+                  options={sources.map((s) => ({
+                    value: s.value,
+                    label: s.label,
+                  }))}
+                  required
+                />
+                {selected1?.options && (
+                  <SelectField
+                    name="sourceTwo"
+                    label={selected1.subTitle}
+                    options={selected1.options.map((s) => ({
                       value: s.value,
                       label: s.label,
                     }))}
-                    rules={{ required: true }}
+                    required
                   />
-                </Stack>
-
-                {selected1?.options && (
-                  <Stack direction="column">
-                    <FormTitle>{selected1?.subTitle}</FormTitle>
-                    <SelectHookForm
-                      fieldName="sourceTwo"
-                      options={selected1?.options?.map((s) => ({
-                        value: s.value,
-                        label: s.label,
-                      }))}
-                      rules={{ required: true }}
-                    />
-                  </Stack>
                 )}
-
                 {(selected1?.otherTitle || selected2?.otherTitle) && (
-                  <Stack direction="column">
-                    <FormTitle>
-                      {selected1?.otherTitle || selected2?.otherTitle}
-                    </FormTitle>
-                    <TextInputHookForm
-                      fieldName="other"
-                      label=""
-                      rules={{ required: true }}
-                    />
-                  </Stack>
+                  <TextField
+                    name="other"
+                    label={selected1?.otherTitle || selected2?.otherTitle}
+                    required
+                  />
                 )}
-
-                <SubmitButtonHookForm>Submit</SubmitButtonHookForm>
+                <SubmitButton>Submit</SubmitButton>
               </Stack>
             </form>
-          </Stack>
-        </WhenLoaded>
-      </FormProvider>
-    </SectionBlock>
+          </FormCard>
+        </FormPage>
+      </WhenLoaded>
+    </FormProvider>
   );
 };

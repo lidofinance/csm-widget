@@ -1,9 +1,10 @@
-import { Plus, Text } from '@lidofinance/lido-ui';
+import { Button, EmptyState, MessageBox } from '@lidofinance/lido-app-ui';
 import { PATH } from 'consts/urls';
 import { FC } from 'react';
-import { Plural, Stack, WhenLoaded } from 'shared/components';
-import { formatDaysAgo } from 'utils';
-import { SurveyItem, SurveyLink, SurveySection, Warning } from '../components';
+import { Plural, WhenLoaded } from 'shared/components';
+import { HubSection } from 'shared/components/hub-list';
+import { SetupRow } from '../surveys-home/setup-row';
+import { SurveyCards } from '../components';
 import {
   callSurvey,
   parseOperatorKey,
@@ -13,7 +14,6 @@ import {
 import { setupFindAll } from 'modules/surveys-sdk/generated';
 import { SetupRaw } from '../types';
 import { useSetupsKeys } from '../survey-setup/use-setups-keys';
-import { DelegatorBackButton } from './back-button';
 
 type DelegatorSetupsProps = {
   operatorId: string;
@@ -38,74 +38,42 @@ export const DelegatorSetups: FC<DelegatorSetupsProps> = ({ operatorId }) => {
 
   return (
     <WhenLoaded loading={!data && isLoading}>
-      <SurveySection
+      <HubSection
         title={`Setups for ${operatorId}`}
-        subtitle="How this information will be used"
-        help="Information is voluntarily submitted and only retained for report building. Information is aggregated and utilized in the compilation of the Validator and Node Operator Metrics (VaNOM) reports."
-        mainPrefix={<DelegatorBackButton />}
+        tooltip="Information is voluntarily submitted and only retained for report building. Information is aggregated and utilized in the compilation of the Validator and Node Operator Metrics (VaNOM) reports."
       >
         {!showSetups ? (
-          <Text size="sm" color="secondary">
-            No keys available for this operator
-          </Text>
+          <EmptyState title="No keys available for this operator" />
         ) : (
           <>
             {keys && keys.filled > keys.total && (
-              <Warning>
+              <MessageBox variant="warning">
                 The number of keys has decreased. Please update the data.
-              </Warning>
+              </MessageBox>
             )}
-            {data?.map((setup) => (
-              <SurveyItem
-                key={setup.index}
-                title={
-                  <Stack direction="column" gap="xs">
-                    <Stack>
-                      Setup #{setup.index}{' '}
-                      <Text as="span" size="sm" color="secondary">
-                        {setup.keysCount}{' '}
-                        <Plural
-                          value={setup.keysCount}
-                          variants={['key', 'keys']}
-                        />
-                      </Text>
-                    </Stack>
-                    <Text as="span" size="xxs" color="secondary">
-                      Updated {formatDaysAgo(setup.updatedAt)}
-                    </Text>
-                  </Stack>
-                }
-              >
-                <SurveyLink
-                  path={`${PATH.SURVEYS_DELEGATOR}/${operatorId}/${setup.index}`}
+            <SurveyCards>
+              {data?.map((setup) => (
+                <SetupRow
+                  key={setup.index}
+                  setup={setup}
+                  operatorKey={operatorKey}
+                  editHref={`${PATH.SURVEYS_DELEGATOR}/${operatorId}/${setup.index}`}
+                />
+              ))}
+              {keys && keys.left > 0 && (
+                <Button
+                  variant="outline"
+                  fullWidth
+                  href={`${PATH.SURVEYS_DELEGATOR}/${operatorId}/new`}
                 >
-                  Edit
-                </SurveyLink>
-              </SurveyItem>
-            ))}
-
-            {keys && keys.left > 0 && (
-              <SurveyLink
-                icon={<Plus />}
-                color="primary"
-                variant="translucent"
-                fullwidth
-                path={`${PATH.SURVEYS_DELEGATOR}/${operatorId}/new`}
-              >
-                <>
-                  Add new setup
-                  <>
-                    {' '}
-                    ({keys.left}{' '}
-                    <Plural value={keys.left} variants={['key', 'keys']} />{' '}
-                    left)
-                  </>
-                </>
-              </SurveyLink>
-            )}
+                  Add new setup ({keys.left}{' '}
+                  <Plural value={keys.left} variants={['key', 'keys']} /> left)
+                </Button>
+              )}
+            </SurveyCards>
           </>
         )}
-      </SurveySection>
+      </HubSection>
     </WhenLoaded>
   );
 };

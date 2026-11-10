@@ -7,7 +7,6 @@ export { TokenAmount } from './token-amount/token-amount';
 export { InputAddress } from './input-address/input-address';
 export { Sign, type SignType } from './sign/sign';
 export { Note } from './note/note';
-export { Warning } from './warning/warning';
 export { WarningBlock } from './warning-block/warning-block';
 export { FormBlock } from './form-block/form-block';
 export { Tooltip, type TooltipProps } from './tooltip/tooltip';

@@ -30,6 +30,7 @@ export type NumberFieldProps = NumberRange &
     /** Max fractional digits; integers only by default. */
     decimals?: number;
     showUntouched?: boolean;
+    required?: boolean;
     /** Rendered after the input, e.g. a tag or unit. */
     trailing?: ReactNode;
   };
@@ -44,6 +45,7 @@ export const NumberField: FC<NumberFieldProps> = ({
   maxMessage,
   decimals = 0,
   showUntouched,
+  required,
   trailing,
   disabled,
   dataTestId,
@@ -53,7 +55,10 @@ export const NumberField: FC<NumberFieldProps> = ({
   const { field, invalid, message } = useFieldController({
     name,
     showUntouched,
-    rules: { validate: (value) => getNumberRangeError(value, range) ?? true },
+    rules: {
+      required,
+      validate: (value) => getNumberRangeError(value, range) ?? true,
+    },
   });
   const [text, setText] = useState(() =>
     field.value == null ? '' : String(field.value),
