@@ -36,19 +36,16 @@ const BOND_ACTIONS = [
   },
 ];
 
-const SETTINGS_TABS = [
+const SETTINGS_PAGES = [
   {
-    title: 'Meta data',
     url: '/settings/metadata',
     event: 'cm_widget_view_settings_metadata_page',
   },
   {
-    title: 'Roles',
-    url: '/settings/roles',
+    url: '/settings',
     event: 'cm_widget_view_settings_roles_page',
   },
   {
-    title: 'Inbox requests',
     url: '/settings/inbox',
     event: 'cm_widget_view_inbox_requests_page',
   },
@@ -161,27 +158,18 @@ test.describe(
     );
 
     test(
-      qase(176, 'Should display Settings tabs and navigate correctly'),
+      qase(176, 'Should display Settings hub and navigate to sub-pages'),
       async ({ widgetService }) => {
         await navigation.navItem('Settings').click();
-        await widgetService.page.waitForURL(/\/settings/);
+        await widgetService.page.waitForURL(/\/settings$/);
 
-        await test.step('All Settings tabs are visible', async () => {
-          for (const { title } of SETTINGS_TABS) {
-            await expect(
-              navigation.switcherTab(title),
-              `"${title}" tab should be visible`,
-            ).toBeVisible();
-          }
-        });
-
-        for (const { title, url, event } of SETTINGS_TABS) {
-          await test.step(`Navigate to "${title}" tab and check Matomo event`, async () => {
+        for (const { url, event } of SETTINGS_PAGES) {
+          await test.step(`Open ${url} and check Matomo event`, async () => {
             await Promise.all([
               matomoEventService.waitForEvent('e_n', event),
-              navigation.switcherTab(title).click(),
+              widgetService.page.goto(url),
             ]);
-            await expect(widgetService.page).toHaveURL(new RegExp(url));
+            await expect(widgetService.page).toHaveURL(new RegExp(`${url}$`));
           });
         }
       },

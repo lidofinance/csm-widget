@@ -180,3 +180,21 @@ describe('getCorrectPath — type claim pages', () => {
     ).toBe(PATH.TYPE_PARAMETERS);
   });
 });
+
+describe('getCorrectPath — settings hub', () => {
+  it('keeps the hub for wallets with a manager or rewards role', () => {
+    expect(
+      getCorrectPath(PATH.SETTINGS, flags({ HAS_MANAGER_ROLE: true })),
+    ).toBe(PATH.SETTINGS);
+    expect(
+      getCorrectPath(PATH.SETTINGS, flags({ HAS_REWARDS_ROLE: true })),
+    ).toBe(PATH.SETTINGS);
+  });
+
+  it('sends claimer-only wallets and invitees to the inbox', () => {
+    expect(getCorrectPath(PATH.SETTINGS, flags({ HAS_ANY_ROLE: true }))).toBe(
+      PATH.SETTINGS_INBOX,
+    );
+    expect(getCorrectPath(PATH.SETTINGS, flags({}))).toBe(PATH.SETTINGS_INBOX);
+  });
+});

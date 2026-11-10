@@ -28,7 +28,6 @@ export const PATH = {
   BOND_UNLOCK: '/bond/unlock',
 
   SETTINGS: '/settings',
-  SETTINGS_ROLES: '/settings/roles',
   SETTINGS_REWARDS_ADDRESS: '/settings/rewards-address',
   SETTINGS_MANAGER_ADDRESS: '/settings/manager-address',
   SETTINGS_CLAIMER: '/settings/claimer',

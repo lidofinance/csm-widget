@@ -8,8 +8,7 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
   switch (path) {
     // Settings pages — non-operators → inbox
     case PATH.SETTINGS:
-      return hasRole ? PATH.SETTINGS_ROLES : PATH.SETTINGS_INBOX;
-    case PATH.SETTINGS_ROLES:
+      return hasRole ? PATH.SETTINGS : PATH.SETTINGS_INBOX;
     case PATH.SETTINGS_REWARDS_ADDRESS:
     case PATH.SETTINGS_MANAGER_ADDRESS:
     case PATH.SETTINGS_CLAIMER:

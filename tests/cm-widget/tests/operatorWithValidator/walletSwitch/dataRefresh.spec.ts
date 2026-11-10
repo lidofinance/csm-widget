@@ -86,7 +86,9 @@ test.describe(
 
         await test.step('Inbox requests lists the new invite', async () => {
           await navBlockElement.navItem('Settings').click();
-          await navBlockElement.switcherTab('Inbox requests').click();
+          await navBlockElement.page
+            .getByTestId('incomingRequestsBanner')
+            .click();
           await expect(
             inboxRequestsPage.getRequestLocator(invitedNoId, ROLES.REWARDS),
           ).toBeVisible({ timeout: RPC_WAIT_TIMEOUT });

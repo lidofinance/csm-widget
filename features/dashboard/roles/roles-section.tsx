@@ -50,7 +50,7 @@ export const RolesSection: FC = () => {
   return (
     <SectionBlock
       title="Roles"
-      href={IS_NODE_OPERATOR ? PATH.SETTINGS_ROLES : undefined}
+      href={IS_NODE_OPERATOR ? PATH.SETTINGS : undefined}
       data-testid="dashboardRolesSection"
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dashboardRolesLink}
     >
