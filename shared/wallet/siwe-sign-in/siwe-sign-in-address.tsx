@@ -27,21 +27,18 @@ export const SiweSignInAddress: FC<{ operatorType: string }> = ({
           <Description color="secondary">
             To continue, please sign a message with your connected address to
             prove ownership.
-          </Description>
-        </Stack>
-        <Stack direction="column" gap="md">
-          <Description color="secondary">
+            <br />
             You are requesting {operatorType} operator type for the following
             address:
           </Description>
-          <Input
-            disabled
-            label="Main address"
-            value={address}
-            name="mainAddress"
-            icon={<Identicon address={address} size={20} />}
-          />
         </Stack>
+        <Input
+          disabled
+          label="Main address"
+          value={address}
+          name="mainAddress"
+          icon={<Identicon address={address} size={20} />}
+        />
 
         <Button size="small" onClick={signIn} fullWidth>
           Sign in
