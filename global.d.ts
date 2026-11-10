@@ -1,3 +1,6 @@
+/// <reference types="vitest/globals" />
+/// <reference types="next" />
+/// <reference types="next/image-types/global" />
 interface Window {
   // see _document.js for definition
   _paq: undefined | [string, ...unknown[]][];
@@ -6,56 +9,11 @@ interface Window {
 }
 
 declare module '*.svg' {
-  /**
-   * Use `any` to avoid conflicts with
-   * `@svgr/webpack` plugin or
-   * `babel-plugin-inline-react-svg` plugin.
-   */
-  const content: any;
-  export const ReactComponent: React.FunctionComponent<
-    React.ComponentProps<'svg'>
-  >;
-  export default content;
+  const src: string;
+  export default src;
 }
 
-declare module 'next/config' {
-  type ConfigTypes = () => {
-    // some properties may be confusing, but that's okay - "serverRuntimeConfig" accepts "process.env" without modification and/or validation.
-    // see: config/get-secret-config.ts
-    serverRuntimeConfig: {
-      basePath: string | undefined;
-      developmentMode: boolean;
-      maintenance: boolean;
-
-      defaultChain: string;
-
-      rpcUrls_1: string | undefined;
-      rpcUrls_560048: string | undefined;
-
-      clApiUrls_1: string | undefined;
-      clApiUrls_560048: string | undefined;
-
-      migalabsApiUrl: string | undefined;
-      migalabsApiToken: string | undefined;
-
-      cspTrustedHosts: string | undefined;
-      cspReportUri: string | undefined;
-      cspReportOnly: string | undefined;
-
-      rateLimit: string;
-      rateLimitTimeFrame: string;
-
-      validationAPI: string | undefined;
-    };
-    publicRuntimeConfig: {
-      basePath: string | undefined;
-      developmentMode: boolean;
-      module: 'CSM' | 'CM';
-      devnetAddresses: Record<string, unknown> | null;
-    };
-  };
-
-  declare const getConfig: ConfigTypes;
-
-  export default getConfig;
+declare module '*.svg?react' {
+  const Component: React.FC<React.ComponentProps<'svg'>>;
+  export default Component;
 }

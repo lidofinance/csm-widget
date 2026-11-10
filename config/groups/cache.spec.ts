@@ -1,12 +1,16 @@
 import fs from 'fs';
 import path from 'path';
-import { getCustomRoute } from 'next/dist/server/server-route-utils';
+import { pathToRegexp } from 'path-to-regexp';
 import {
   CACHE_MIGALABS_RATE_HEADERS,
-  CACHE_VALIDATION_HEADERS,
   CACHE_CL_HEADERS,
   CACHE_NO_STORE_HEADERS,
 } from './cache';
+import { CACHE_CONTROL_VALUE } from '../../scripts/cache-control.mjs';
+
+// same flavour Next 15.5 compiles header/rewrite sources with
+const compileSource = (source: string) =>
+  pathToRegexp(source, [], { delimiter: '/', strict: true });
 
 // RFC 9111 (HTTP Caching) + RFC 5861 (stale-if-error / stale-while-revalidate)
 const VALID_DIRECTIVES = new Set([
@@ -54,7 +58,6 @@ const getMalformedValueDirectives = (header: string) =>
 describe('cache-control headers', () => {
   it.each([
     ['CACHE_MIGALABS_RATE_HEADERS', CACHE_MIGALABS_RATE_HEADERS],
-    ['CACHE_VALIDATION_HEADERS', CACHE_VALIDATION_HEADERS],
     ['CACHE_CL_HEADERS', CACHE_CL_HEADERS],
     ['CACHE_NO_STORE_HEADERS', CACHE_NO_STORE_HEADERS],
   ])(
@@ -66,46 +69,25 @@ describe('cache-control headers', () => {
   );
 });
 
-describe('sentinel header agreement between next.config.mjs and server.mjs', () => {
-  // Read as text, not import: next.config.mjs regenerates public/runtime on
-  // evaluation, and both files have module-level side effects.
+describe('CACHE_CONTROL_VALUE', () => {
+  it('uses only valid directives with well-formed values', () => {
+    expect(getUnknownDirectives(CACHE_CONTROL_VALUE)).toEqual([]);
+    expect(getMalformedValueDirectives(CACHE_CONTROL_VALUE)).toEqual([]);
+  });
+});
+
+describe('next.config.mjs route sources', () => {
   const nextConfigSource = fs.readFileSync(
     path.resolve(__dirname, '../../next.config.mjs'),
     'utf-8',
   );
-  const serverSource = fs.readFileSync(
-    path.resolve(__dirname, '../../server.mjs'),
-    'utf-8',
-  );
 
-  const extractLiteral = (source: string, name: string) =>
-    source.match(new RegExp(`${name}\\s*=\\s*'([^']*)'`))?.[1];
+  const routeSources = [
+    ...nextConfigSource.matchAll(/source:\s*'([^']+)'/g),
+  ].map(([, source]) => source);
 
-  it('CACHE_CONTROL_HEADER sentinel matches in both files', () => {
-    const nextConfigHeader = extractLiteral(
-      nextConfigSource,
-      'CACHE_CONTROL_HEADER',
-    );
-    const serverHeader = extractLiteral(serverSource, 'CACHE_CONTROL_HEADER');
-
-    expect(nextConfigHeader).toBeDefined();
-    // A mismatch here silently disables all document caching: next.config.mjs
-    // sets the sentinel header, but server.mjs's shim never renames it to
-    // Cache-Control, so Next's SSR default (private, no-cache, ...) wins.
-    expect(serverHeader).toBe(nextConfigHeader);
-  });
-
-  it('CACHE_CONTROL_VALUE uses only valid directives with well-formed values', () => {
-    const cacheControlValue = extractLiteral(
-      nextConfigSource,
-      'CACHE_CONTROL_VALUE',
-    );
-
-    expect(cacheControlValue).toBeDefined();
-    expect(getUnknownDirectives(cacheControlValue as string)).toEqual([]);
-    expect(getMalformedValueDirectives(cacheControlValue as string)).toEqual(
-      [],
-    );
+  it.each(routeSources)('route source %s compiles', (source) => {
+    expect(() => compileSource(source)).not.toThrow();
   });
 });
 
@@ -126,27 +108,16 @@ describe('CACHE_CONTROL_PAGES covers every page and public asset', () => {
     expect(entries.length).toBeGreaterThan(0);
   });
 
-  // api/test set their own policy or keep Next's private default; 404/500 are
+  // api routes set their own policy or keep Next's private default; 404/500 are
   // error renders; _app/_document aren't routes
-  const UNCACHED_ROUTES = new Set([
-    'api',
-    'test',
-    '_app',
-    '_document',
-    '404',
-    '500',
-  ]);
+  const UNCACHED_ROUTES = new Set(['api', '_app', '_document', '404', '500']);
 
-  const matchers = entries.map(
-    (source) =>
-      getCustomRoute({
-        type: 'header',
-        rule: { source, headers: [] },
-        restrictedRedirectPaths: [],
-      }).match,
-  );
   const isCovered = (requestPath: string) =>
-    matchers.some((match) => match(requestPath) !== false);
+    entries.some((source) => compileSource(source).test(requestPath));
+
+  it.each(entries)('entry %s compiles', (source) => {
+    expect(() => compileSource(source)).not.toThrow();
+  });
 
   const pagesDir = path.resolve(__dirname, '../../pages');
 
@@ -191,7 +162,6 @@ describe('CACHE_CONTROL_PAGES covers every page and public asset', () => {
       .readdirSync(publicDir, { withFileTypes: true })
       .filter((dirent) => dirent.isFile() && !dirent.name.startsWith('.'))
       .map((dirent) => `/${dirent.name}`),
-    '/runtime/window-env.js',
     '/manifest.json',
     '/favicon.ico',
     '/favicon-16x16.png',

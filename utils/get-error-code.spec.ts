@@ -1,13 +1,12 @@
 // utils/get-error-code.spec.ts
-// track-matomo-event imports consts/matomo-click-events → config → next.js
-// runtime which is unavailable in Jest. Stub the whole module.
-jest.mock('./track-matomo-event', () => ({
-  trackMatomoError: jest.fn(),
+vi.mock('./track-matomo-event', () => ({
+  trackMatomoError: vi.fn(),
 }));
 
 import { SDKError, ERROR_CODE } from '@lidofinance/lido-csm-sdk';
 import { ErrorCode, classifyErrorCode, getErrorCode } from './get-error-code';
 import { FetcherError } from './fetcher-error';
+import { SurveysApiError } from 'modules/surveys-sdk/api/errors';
 
 const sdk = (code: ERROR_CODE, extra: Record<string, unknown> = {}) =>
   Object.assign(new SDKError({ code, message: 'x' }), extra);
@@ -142,18 +141,16 @@ describe('classifyErrorCode (API path)', () => {
   });
 });
 
-// Helper to build a plain object shaped like SurveysApiError (no import needed).
 const surveyError = (
   status: number,
   apiError?: { code?: string; message?: string },
-) => ({
-  name: 'SurveysApiError' as const,
-  status,
-  apiError: apiError ? { message: 'server msg', ...apiError } : undefined,
-  get code() {
-    return this.apiError?.code;
-  },
-});
+) =>
+  new SurveysApiError({
+    message: 'server msg',
+    status,
+    url: '/x',
+    body: apiError ? { message: 'server msg', ...apiError } : undefined,
+  });
 
 describe('classifyErrorCode (SurveysApiError path)', () => {
   it('maps AUTH_JWT_EXPIRED to SESSION_EXPIRED', () => {

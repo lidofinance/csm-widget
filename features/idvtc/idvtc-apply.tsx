@@ -2,7 +2,7 @@ import { Block } from '@lidofinance/lido-ui';
 import { useSiweAuth } from 'modules/siwe';
 import { useDappStatus } from 'modules/web3';
 import { FC } from 'react';
-import { NoSSRWrapper, WhenLoaded } from 'shared/components';
+import { WhenLoaded } from 'shared/components';
 import { SiweConnect, SiweSignInAddress } from 'shared/wallet';
 import { ApplyForm } from './apply-form';
 import { FormStatus } from './form-status/form-status';
@@ -71,9 +71,7 @@ const IdvtcApplyContent: FC = () => {
 };
 
 export const IdvtcApply: FC = () => (
-  <NoSSRWrapper>
-    <IdvtcProviders>
-      <IdvtcApplyContent />
-    </IdvtcProviders>
-  </NoSSRWrapper>
+  <IdvtcProviders>
+    <IdvtcApplyContent />
+  </IdvtcProviders>
 );

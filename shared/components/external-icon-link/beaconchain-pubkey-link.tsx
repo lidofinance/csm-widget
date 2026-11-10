@@ -5,7 +5,7 @@ import { FC } from 'react';
 import { hasInterception } from 'utils';
 import { MatomoLink } from '../matomo-link/matomo-link';
 
-import { ReactComponent as BeaconchaLink } from 'assets/icons/beaconcha-link.svg';
+import BeaconchaLink from 'assets/icons/beaconcha-link.svg?react';
 
 const { beaconchain } = getExternalLinks();
 

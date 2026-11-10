@@ -3,11 +3,13 @@ import { useQuery } from '@tanstack/react-query';
 import { API_ROUTES, STRATEGY_LAZY } from 'consts';
 import { useNodeOperatorId } from 'modules/web3';
 import { Performance, RateStatus, UnifiedPerformance } from 'types';
+import { getApiUrl } from 'utils/get-api-url';
 import { standardFetcher } from 'utils';
 
 const usePerformanceRate = (nodeOperatorId?: NodeOperatorId) => {
-  const BASE_URL = typeof window === 'undefined' ? '' : window.location.origin;
-  const url = `${BASE_URL}/${API_ROUTES.PERFORMANCE}?node-operator-id=${nodeOperatorId}`;
+  const url = getApiUrl(API_ROUTES.PERFORMANCE, {
+    'node-operator-id': String(nodeOperatorId),
+  });
 
   return useQuery({
     queryKey: ['performance', { nodeOperatorId }],

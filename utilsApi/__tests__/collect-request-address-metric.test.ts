@@ -1,17 +1,18 @@
+import type { MockInstance } from 'vitest';
 const CHAIN_ID = 1;
 const KNOWN_ADDRESS = '0x1234567890123456789012345678901234567890';
 const UNKNOWN_ADDRESS = '0xaBcDEF1234567890abcdEF1234567890AbCdEf12';
 const REFERER = 'https://example.com/page';
 
-jest.mock('../contractAddressesMetricsMap', () => ({
+vi.mock('../contractAddressesMetricsMap', () => ({
   METRIC_CONTRACT_ADDRESSES: {
     1: { '0x1234567890123456789012345678901234567890': 'csModule' },
   },
-  getMetricContractAbi: jest.fn(() => []),
+  getMetricContractAbi: vi.fn(() => []),
 }));
 
-jest.mock('../get-function-name-from-abi', () => ({
-  getFunctionNameFromAbi: jest.fn(() => 'submit'),
+vi.mock('../get-function-name-from-abi', () => ({
+  getFunctionNameFromAbi: vi.fn(() => 'submit'),
 }));
 
 import { collectRequestAddressMetric } from '../collect-request-address-metric';
@@ -43,10 +44,10 @@ const collect = (calls: any[], counter: any) =>
   });
 
 describe('collectRequestAddressMetric', () => {
-  let warnSpy: jest.SpyInstance;
+  let warnSpy: MockInstance<typeof console.warn>;
 
   beforeEach(() => {
-    warnSpy = jest.spyOn(console, 'warn').mockImplementation();
+    warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
   });
 
   afterEach(() => {
@@ -86,11 +87,9 @@ describe('collectRequestAddressMetric', () => {
 
   it('still records the call when ABI decoding throws', () => {
     const { counter, recorded } = makeCounterMock();
-    (getMetricContractAbi as unknown as jest.Mock).mockImplementationOnce(
-      () => {
-        throw new Error('x'.repeat(64 * 1024));
-      },
-    );
+    vi.mocked(getMetricContractAbi).mockImplementationOnce(() => {
+      throw new Error('x'.repeat(64 * 1024));
+    });
 
     collect([makeEthCall(KNOWN_ADDRESS)], counter);
 

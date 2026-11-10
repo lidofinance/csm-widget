@@ -17,7 +17,7 @@ const validationError = (
 
 describe('applyApiFieldErrors', () => {
   it('calls setError per field, returns true when every detail has a field', () => {
-    const setError = jest.fn();
+    const setError = vi.fn();
     const err = validationError([
       { field: 'items[0].signature', message: 'must be a string' },
       { field: 'name', message: 'required' },
@@ -36,7 +36,7 @@ describe('applyApiFieldErrors', () => {
   });
 
   it('applies field errors but returns false when a detail lacks a field', () => {
-    const setError = jest.fn();
+    const setError = vi.fn();
     const err = validationError([
       { field: 'items[0].signature', message: 'must be a string' },
       { message: 'no field — general message' },
@@ -53,11 +53,11 @@ describe('applyApiFieldErrors', () => {
   });
 
   it('returns false for non-validation errors', () => {
-    expect(applyApiFieldErrors(new Error('x'), jest.fn() as any)).toBe(false);
+    expect(applyApiFieldErrors(new Error('x'), vi.fn() as any)).toBe(false);
   });
 
   it('returns false when all details lack a field property', () => {
-    const setError = jest.fn();
+    const setError = vi.fn();
     const err = validationError([
       { message: 'no field here' },
       { message: 'also no field' },
@@ -69,7 +69,7 @@ describe('applyApiFieldErrors', () => {
 
   describe('with knownFields', () => {
     it('returns true and applies each error when all fields are known', () => {
-      const setError = jest.fn();
+      const setError = vi.fn();
       const err = validationError([
         { field: 'name', message: 'required' },
         { field: 'twitterLink', message: 'invalid url' },
@@ -91,7 +91,7 @@ describe('applyApiFieldErrors', () => {
     });
 
     it('returns false and skips setError for an unknown field', () => {
-      const setError = jest.fn();
+      const setError = vi.fn();
       const err = validationError([
         { field: 'name', message: 'required' },
         { field: 'unknownServerField', message: 'something off' },
@@ -113,7 +113,7 @@ describe('applyApiFieldErrors', () => {
     });
 
     it('returns false when a fieldless detail is mixed with known fields', () => {
-      const setError = jest.fn();
+      const setError = vi.fn();
       const err = validationError([
         { field: 'name', message: 'required' },
         { message: 'general server message' },
@@ -128,7 +128,7 @@ describe('applyApiFieldErrors', () => {
     });
 
     it('treats a nested path as known by its root segment', () => {
-      const setError = jest.fn();
+      const setError = vi.fn();
       const err = validationError([
         { field: 'additionalAddresses[0]', message: 'invalid address' },
       ]);

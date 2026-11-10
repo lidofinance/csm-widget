@@ -2,16 +2,14 @@
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { SDKError } from '@lidofinance/lido-csm-sdk';
+import { SurveysApiError } from 'modules/surveys-sdk/api/errors';
 import { ErrorCode } from './get-error-code';
 import { getErrorDescription, resolveError } from './get-error-description';
 
-// track-matomo-event imports consts/matomo-click-events → config → next.js
-// runtime which is unavailable in Jest. Stub the whole module.
-jest.mock('./track-matomo-event', () => ({
-  trackMatomoError: jest.fn(),
+vi.mock('./track-matomo-event', () => ({
+  trackMatomoError: vi.fn(),
 }));
 
-// Helper to build a SurveysApiError-shaped plain object.
 const surveyError = (
   status: number,
   apiError?: {
@@ -19,14 +17,13 @@ const surveyError = (
     message?: string;
     details?: { field?: string; message: string }[];
   },
-) => ({
-  name: 'SurveysApiError' as const,
-  status,
-  apiError: apiError ? { message: 'server msg', ...apiError } : undefined,
-  get code() {
-    return this.apiError?.code;
-  },
-});
+) =>
+  new SurveysApiError({
+    message: 'server msg',
+    status,
+    url: '/x',
+    body: apiError ? { message: 'server msg', ...apiError } : undefined,
+  });
 
 it('resolves contract copy from decodedRevert for CONTRACT_ERROR', () => {
   const e = new SDKError({

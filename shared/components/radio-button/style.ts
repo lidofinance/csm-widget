@@ -1,7 +1,7 @@
 import { ThemeName } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
 
-import { ReactComponent as Radio } from 'assets/icons/radio.svg';
+import Radio from 'assets/icons/radio.svg?react';
 
 export const RadioIconStyle = styled(Radio)`
   align-self: center;

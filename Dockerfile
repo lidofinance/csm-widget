@@ -15,7 +15,8 @@ FROM node-base AS prod-deps
 WORKDIR /app
 
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile --non-interactive --ignore-scripts --production && yarn cache clean
+# optional deps are native build tooling (swc, lightningcss) or unused at runtime (sharp: images.unoptimized)
+RUN yarn install --frozen-lockfile --non-interactive --ignore-scripts --production --ignore-optional && yarn cache clean
 
 # build env
 FROM deps AS build
@@ -29,13 +30,15 @@ COPY . .
 ARG BUILD_VERSION
 ARG BUILD_BRANCH
 ARG BUILD_COMMIT
-# .next/cache is a multi-hundred-MB webpack FS cache; it must not leak into COPY --from=build below
+# baked into both builds; the runner must boot with the same BASE_PATH
+ARG BASE_PATH=""
+# .next/<module>/cache is a multi-hundred-MB webpack FS cache; it must not leak into COPY --from=build below
 RUN if [ -n "$BUILD_COMMIT" ]; then \
       printf '{"version":"%s","branch":"%s","commit":"%s"}\n' \
         "$BUILD_VERSION" "$BUILD_BRANCH" "$BUILD_COMMIT" > build-info.json; \
     fi \
-    && NODE_NO_BUILD_DYNAMICS=true yarn build \
-    && rm -rf .next/cache
+    && yarn build:all \
+    && rm -rf .next/*/cache
 
 # runtime image
 FROM node-base AS runner
@@ -56,14 +59,13 @@ ENV NODE_ENV=production \
 WORKDIR /app
 
 COPY --from=prod-deps /app/node_modules ./node_modules
+# both module builds; next.config.mjs is re-evaluated on boot and MODULE (default csm) picks .next/<module>
 COPY --from=build /app/.next ./.next
-# next.config.mjs is re-evaluated on server start and writes only
-# public/runtime/window-env.js. It is the sole runtime-writable path: under
-# readOnlyRootFilesystem mount an emptyDir at /app/public/runtime (uid 1000)
 COPY --from=build /app/public ./public
-RUN rm -rf public/runtime && mkdir public/runtime && chown node public/runtime
-COPY --from=build /app/package.json /app/next.config.mjs /app/next-logger.config.cjs /app/env-dynamics.mjs /app/build-info.json /app/server.mjs ./
+COPY --from=build /app/package.json /app/next.config.mjs /app/next-logger.config.cjs /app/build-info.json /app/server.mjs ./
 COPY --from=build /app/scripts ./scripts
+COPY --from=build /app/config/client-env.mjs ./config/client-env.mjs
+COPY --from=build /app/config/csp/policy.mjs ./config/csp/policy.mjs
 
 # ARG does not cross stages; re-declared here so the labels resolve
 ARG BUILD_VERSION

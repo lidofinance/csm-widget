@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
 import { CreatableOperatorType, useWeb3Key } from 'shared/hooks';
 
 import { OtherModuleBanner } from './other-module-banner';
@@ -13,11 +12,9 @@ export const CreateNodeOperator: FC<{ type: CreatableOperatorType }> = ({
 
   return (
     <>
-      <NoSSRWrapper>
-        <ShareLimitBanner />
-        <OtherModuleBanner />
-        <SubmitKeysForm key={key} type={type} />
-      </NoSSRWrapper>
+      <ShareLimitBanner />
+      <OtherModuleBanner />
+      <SubmitKeysForm key={key} type={type} />
     </>
   );
 };

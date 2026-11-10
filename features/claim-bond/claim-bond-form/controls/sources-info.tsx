@@ -10,8 +10,8 @@ import { useShowRule } from 'shared/hooks';
 import styled from 'styled-components';
 import { useClaimBondFormData } from '../context';
 
-import { ReactComponent as BondIcon } from 'assets/balance/bond.svg';
-import { ReactComponent as RewardsIcon } from 'assets/balance/rewards.svg';
+import BondIcon from 'assets/balance/bond.svg?react';
+import RewardsIcon from 'assets/balance/rewards.svg?react';
 import { moduleMeta } from 'consts';
 import { Balance } from 'features/dashboard/bond/balance';
 

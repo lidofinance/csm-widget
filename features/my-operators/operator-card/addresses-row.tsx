@@ -1,6 +1,6 @@
 import { NodeOperatorInfo } from '@lidofinance/lido-csm-sdk';
 import { InlineLoader, Tooltip } from '@lidofinance/lido-ui';
-import { ReactComponent as AlertIcon } from 'assets/icons/alert.svg';
+import AlertIcon from 'assets/icons/alert.svg?react';
 import { FC } from 'react';
 import { Address } from 'shared/components';
 import {

@@ -1,12 +1,13 @@
 import { SUPPORTED_CHAINS, LidoSDKCsm } from '@lidofinance/lido-csm-sdk';
 import { CHAINS, LidoSDKCore } from '@lidofinance/lido-ethereum-sdk';
-import { config, secretConfig } from 'config';
+import { config } from 'config';
+import { getServerConfig } from './server-config';
 import { PublicClient, createPublicClient, fallback, http } from 'viem';
 import * as chains from 'viem/chains';
 
 const rpcUrls: Partial<Record<SUPPORTED_CHAINS, [string, ...string[]]>> = {
-  [CHAINS.Mainnet]: secretConfig.rpcUrls_1,
-  [CHAINS.Hoodi]: secretConfig.rpcUrls_560048,
+  [CHAINS.Mainnet]: getServerConfig().rpcUrls_1,
+  [CHAINS.Hoodi]: getServerConfig().rpcUrls_560048,
 };
 
 let client: LidoSDKCsm | undefined = undefined;

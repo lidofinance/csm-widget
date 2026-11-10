@@ -1,3 +1,4 @@
+import { ButtonIcon } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
 import { Disconnect } from '../disconnect/disconnect';
 
@@ -43,9 +44,19 @@ export const WalletModalActionsStyle = styled.div`
   margin: 0 ${({ theme }) => -theme.spaceMap.sm}px;
   margin-top: ${({ theme }) => theme.spaceMap.md}px;
 
-  button {
+  button,
+  a {
     padding-left: ${({ theme }) => theme.spaceMap.sm}px;
     padding-right: ${({ theme }) => theme.spaceMap.sm}px;
     margin-right: ${({ theme }) => theme.spaceMap.sm}px;
   }
+`;
+
+// lido-ui Button forbids `as`; forwarding it renders one <a> with button styles
+export const WalletModalLinkStyle = styled(ButtonIcon).attrs({
+  forwardedAs: 'a',
+  target: '_blank',
+  rel: 'noopener noreferrer',
+})<{ href: string }>`
+  text-decoration: none;
 `;

@@ -1,4 +1,3 @@
-// import type only: the SDK barrel pulls ESM deps that jest cannot load
 import type { CachedOperatorRef, ModuleNodeOperator } from './types';
 
 const matches = (item: ModuleNodeOperator, ref: CachedOperatorRef) =>

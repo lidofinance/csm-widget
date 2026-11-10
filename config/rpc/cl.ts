@@ -1,23 +1,12 @@
 import { useCallback } from 'react';
-import invariant from 'tiny-invariant';
 
 import { API_ROUTES } from 'consts/api';
 
-// Don't use absolute import here!
-// code'''
-//    import { config } from 'config';
-// '''
-// otherwise you will get something like a cyclic error!
-import { config } from '../get-config';
+import { getApiUrl } from 'utils/get-api-url';
 import { useUserConfig } from '../user-config';
 
 import { useDappStatus } from 'modules/web3';
 import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
-
-export const getBackendApiPath = (chainId: string | number): string => {
-  const BASE_URL = typeof window === 'undefined' ? '' : window.location.origin;
-  return `${BASE_URL}/${API_ROUTES.CL}/${chainId}`;
-};
 
 export const useGetClApiUrlByChainId = () => {
   const userConfig = useUserConfig();
@@ -30,17 +19,10 @@ export const useGetClApiUrlByChainId = () => {
         return '';
       }
 
-      if (config.ipfsMode) {
-        const apiUrl = userConfig.savedUserConfig.clApiUrls[chainId];
-
-        invariant(apiUrl, '[useGetClApiUrlByChainId] ApiUrl is required!');
-        return apiUrl;
-      } else {
-        return (
-          userConfig.savedUserConfig.clApiUrls[chainId] ||
-          getBackendApiPath(chainId)
-        );
-      }
+      return (
+        userConfig.savedUserConfig.clApiUrls[chainId] ||
+        getApiUrl(`${API_ROUTES.CL}/${chainId}`)
+      );
     },
     [userConfig],
   );
