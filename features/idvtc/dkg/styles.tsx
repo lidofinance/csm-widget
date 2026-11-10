@@ -1,8 +1,10 @@
-import { Body, Card } from '@lidofinance/lido-app-ui';
+import { Body } from '@lidofinance/lido-app-ui';
 import { ReactComponent as DkgFileWarning } from 'assets/illustrations/dkg-file-warning.svg';
 import styled, { css } from 'styled-components';
 
 export const DropArea = styled.div<{ $dragActive?: boolean }>`
+  align-self: stretch;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spaceMap.md}px;
@@ -68,12 +70,6 @@ export const EmptyStateIllustration = styled.span`
   display: block;
   line-height: 0;
   color: var(--lido-app-ui-color-text-tertiary);
-`;
-
-export const DkgCardStyle = styled(Card)`
-  && {
-    align-items: stretch;
-  }
 `;
 
 export const DkgIllustration = styled(DkgFileWarning)`

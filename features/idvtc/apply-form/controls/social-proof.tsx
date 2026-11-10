@@ -1,20 +1,14 @@
-import {
-  Body,
-  Description,
-  InfoTooltip,
-  Stack,
-  TextLink,
-} from '@lidofinance/lido-app-ui';
+import { Body, Stack } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { FC } from 'react';
-import { ICON_TOOLTIP_TEST_ID } from 'shared/components/icon-tooltip/test-ids';
-import { CopyField, TextField } from 'shared/hook-form/fields';
-import { trackMatomoEvent } from 'utils';
+import { TextField } from 'shared/hook-form/fields';
+import {
+  ApplySection,
+  DiscordProofSteps,
+  GuideLink,
+} from 'shared/node-operator/type-apply';
 import { useDiscordMessage } from '../context';
-import { ApplySection, GuideLink, OptionalHeading } from './apply-section';
-
-const DISCORD_CHANNEL_URL =
-  'https://discord.com/channels/761182643269795850/1404810479292907662';
+import { OptionalHeading } from './optional-heading';
 
 export const SocialProof: FC = () => {
   const discordMessage = useDiscordMessage();
@@ -22,49 +16,20 @@ export const SocialProof: FC = () => {
   return (
     <ApplySection
       title="Socials"
-      action={<GuideLink />}
+      action={
+        <GuideLink
+          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.idvtcYoutubeGuideLink}
+        />
+      }
       subtitle="You must add your social accounts. To prove you own an account, post a message."
       data-testid="socialProofSection"
     >
       <Stack gap={16} data-testid="discordSection">
         <Body weight="semibold">Discord</Body>
-        <Stack gap={8} data-testid="discordProofStep1">
-          <Description color="secondary">
-            Step 1. Prove the ownership of the Discord account by posting the
-            following message to{' '}
-            <TextLink
-              external
-              size="inherit"
-              href={DISCORD_CHANNEL_URL}
-              onClick={() =>
-                trackMatomoEvent(
-                  MATOMO_CLICK_EVENTS_TYPES.idvtcDiscordChannelLink,
-                )
-              }
-            >
-              the CSM channel
-            </TextLink>{' '}
-            <InfoTooltip
-              dataTestId={ICON_TOOLTIP_TEST_ID}
-              content='If you cannot access the CSM channel, you may need to claim the "CSM Operator" role. To claim this role, follow the instructions in the "cs-get-started" channel.'
-            />
-          </Description>
-          <CopyField
-            id="discord-message"
-            label="Discord message"
-            text={discordMessage}
-          />
-        </Stack>
-        <Stack gap={8} data-testid="discordProofStep2">
-          <Description color="secondary">
-            Step 2. Paste the link to this message
-          </Description>
-          <TextField
-            name="discordLink"
-            aria-label="Discord message link"
-            placeholder="Discord message link"
-          />
-        </Stack>
+        <DiscordProofSteps
+          message={discordMessage}
+          channelMatomoEvent={MATOMO_CLICK_EVENTS_TYPES.idvtcDiscordChannelLink}
+        />
       </Stack>
 
       <Stack gap={16} data-testid="telegramSection">

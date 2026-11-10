@@ -7,7 +7,7 @@ import { Points } from 'features/ics/score-system/points';
 import { FC } from 'react';
 import { StretchStack } from 'shared/components';
 import styled from 'styled-components';
-import { WideModalStyle } from '../../styles';
+import { WideModalStyle } from 'shared/node-operator/type-status';
 import { calculateScores } from '../utils';
 
 type Props = Pick<IcsResponseDto, 'scores'> & {

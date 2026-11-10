@@ -1,4 +1,4 @@
-import { Button, Stack } from '@lidofinance/lido-app-ui';
+import { Stack } from '@lidofinance/lido-app-ui';
 import {
   ICS_ROUND,
   IcsResponseDto,
@@ -7,9 +7,8 @@ import {
 } from 'features/ics/shared';
 import { FC } from 'react';
 import {
-  ApplicationStatusTag,
-  StatusCard,
-  formatSentOn,
+  ApplicationStatusCard,
+  ApplicationTip,
 } from 'shared/node-operator/type-status';
 import {
   calculateScores,
@@ -17,7 +16,6 @@ import {
   hasScores,
   isMinScoresReached,
 } from '../utils';
-import { ApplicationTip } from './application-tip';
 
 type Props = Pick<IcsResponseDto, 'status' | 'comments' | 'scores'> & {
   createdAt: string;
@@ -41,6 +39,28 @@ const getRejectedText = ({
   return `Your application earned ${total} out of the ${TOTAL_SCORE_REQUIRED} points required to qualify`;
 };
 
+const getBody = ({
+  status,
+  comments,
+  scores,
+}: Pick<Props, 'status' | 'comments' | 'scores'>) => {
+  switch (status) {
+    case 'REVIEW':
+      return `The application will be evaluated in ${ICS_ROUND.assessedDate}. You cannot change the application while it is being reviewed.`;
+    case 'REJECTED':
+      return (
+        <Stack gap={16}>
+          {getRejectedText({ comments, scores })}
+          {hasFlaggedAddresses(comments) && !hasScores(scores) && (
+            <ApplicationTip />
+          )}
+        </Stack>
+      );
+    default:
+      return undefined;
+  }
+};
+
 export const ApplicationCard: FC<Props> = ({
   status,
   comments,
@@ -50,52 +70,16 @@ export const ApplicationCard: FC<Props> = ({
   onView,
 }) => {
   const { typeStatus } = useIcsState();
-  const canApplyAgain = status === 'REJECTED' && typeStatus === 'PENDING';
-
-  const body = (() => {
-    switch (status) {
-      case 'REVIEW':
-        return `The application will be evaluated in ${ICS_ROUND.assessedDate}. You cannot change the application while it is being reviewed.`;
-      case 'REJECTED':
-        return (
-          <Stack gap={16}>
-            {getRejectedText({ comments, scores })}
-            {hasFlaggedAddresses(comments) && !hasScores(scores) && (
-              <ApplicationTip />
-            )}
-          </Stack>
-        );
-      default:
-        return undefined;
-    }
-  })();
 
   return (
-    <StatusCard
-      title="Your application"
-      subtitle={
-        <span data-testid="submittedDate">{formatSentOn(createdAt)}</span>
-      }
-      tag={<ApplicationStatusTag status={status} typeStatus={typeStatus} />}
-      actions={
-        <>
-          {canApplyAgain && (
-            <Button variant="outline" onClick={onApplyAgain}>
-              Apply again
-            </Button>
-          )}
-          <Button
-            variant="outline"
-            onClick={onView}
-            dataTestId={{ root: 'applicationInfo' }}
-          >
-            View application
-          </Button>
-        </>
-      }
-      dataTestId="applicationStatus"
+    <ApplicationStatusCard
+      status={status}
+      typeStatus={typeStatus}
+      createdAt={createdAt}
+      onApplyAgain={onApplyAgain}
+      onView={onView}
     >
-      {body}
-    </StatusCard>
+      {getBody({ status, comments, scores })}
+    </ApplicationStatusCard>
   );
 };

@@ -46,12 +46,10 @@ export const PATH = {
   TYPE_ICS_CLAIM: '/type/ics-claim',
   TYPE_ICS_SYSTEM: '/type/ics-system',
   TYPE_ICS_APPLY: '/type/ics-apply',
-  TYPE_ICS_PARAMETERS: '/type/ics-parameters',
   TYPE_PARAMETERS: '/type/parameters',
 
   TYPE_IDVTC_DESCRIPTION: '/type/idvtc-description',
   TYPE_IDVTC_APPLY: '/type/idvtc-apply',
-  TYPE_IDVTC_PARAMETERS: '/type/idvtc-parameters',
   TYPE_IDVTC_CLAIM: '/type/idvtc-claim',
 
   IDVTC_DKG: '/idvtc/dkg',

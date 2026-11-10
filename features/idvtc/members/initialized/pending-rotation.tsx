@@ -7,6 +7,7 @@ import {
   Tag,
 } from '@lidofinance/lido-app-ui';
 import { FC, ReactNode } from 'react';
+import { StretchStack } from 'shared/components';
 import type { ProposedSlotDto } from 'modules/surveys-sdk/generated';
 import { MemberAddress, MemberContacts } from './member-summary';
 
@@ -25,7 +26,7 @@ export const PendingRotation: FC<PendingRotationProps> = ({
   divider = true,
   action,
 }) => (
-  <Stack gap={12} data-testid="pendingRotation">
+  <StretchStack gap={12} data-testid="pendingRotation">
     {divider && <Divider />}
     <Stack direction="row" align="center" justify="between" gap={8}>
       <BodyLarge weight="semibold">{title}</BodyLarge>
@@ -58,5 +59,5 @@ export const PendingRotation: FC<PendingRotationProps> = ({
         {rejected.reason}
       </Description>
     )}
-  </Stack>
+  </StretchStack>
 );

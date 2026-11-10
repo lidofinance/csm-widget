@@ -2,9 +2,9 @@ import { Button, IconPlus, Stack, TextLink } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { FC, useCallback } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
+import { ApplySection, GuideLink } from 'shared/node-operator/type-apply';
 import { trackMatomoEvent } from 'utils';
 import { MAX_ADDITIONAL_ADDRESSES, type ApplyFormInputType } from '../context';
-import { ApplySection, GuideLink } from './apply-section';
 import { AddressItem } from './address-item';
 import { ETHERSCAN_SIGNATURES_URL } from './consts';
 
@@ -24,7 +24,11 @@ export const AdditionalAddresses: FC = () => {
   return (
     <ApplySection
       title="Additional addresses"
-      action={<GuideLink />}
+      action={
+        <GuideLink
+          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsYoutubeGuideLink}
+        />
+      }
       subtitle={
         <>
           You can add up to {MAX_ADDITIONAL_ADDRESSES} addresses where your

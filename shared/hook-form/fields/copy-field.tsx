@@ -1,6 +1,6 @@
 import { IconCopy, Stack, Tag, useCopy } from '@lidofinance/lido-app-ui';
 import { FC, MouseEvent, ReactNode } from 'react';
-import { TrailingInputStyle } from './styles';
+import { TrailingInput } from './trailing-input';
 
 export type CopyFieldProps = {
   id?: string;
@@ -35,8 +35,7 @@ export const CopyField: FC<CopyFieldProps> = ({
   const { copy } = useCopy(text, { onCopy });
 
   return (
-    <TrailingInputStyle
-      $trailing
+    <TrailingInput
       id={id}
       name={name}
       aria-label={label}
@@ -44,7 +43,7 @@ export const CopyField: FC<CopyFieldProps> = ({
       readOnly
       placeholder={placeholder}
       onFocus={(e) => e.target.select()}
-      icon={
+      trailing={
         <Stack direction="row" gap={8}>
           <Tag
             variant="action"

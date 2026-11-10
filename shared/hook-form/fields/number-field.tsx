@@ -7,7 +7,7 @@ import {
   NumberRange,
   parseNumberInput,
 } from './number-input';
-import { TrailingInputStyle } from './styles';
+import { TrailingInput } from './trailing-input';
 import { useFieldController } from './use-field-controller';
 
 export type NumberFieldProps = NumberRange &
@@ -74,9 +74,8 @@ export const NumberField: FC<NumberFieldProps> = ({
   const rangeMessage = getNumberRangeError(field.value, range);
 
   return (
-    <TrailingInputStyle
-      $trailing={!!trailing}
-      icon={trailing}
+    <TrailingInput
+      trailing={trailing}
       autoComplete="off"
       {...rest}
       ref={field.ref}

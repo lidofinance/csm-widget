@@ -3,11 +3,8 @@ import { FC, ReactNode, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useEnsInput } from 'shared/hooks/use-ens-input';
 import { FIELD_ERROR_TEST_ID } from './field-error';
-import {
-  TrailingInputStyle,
-  AddressSpinnerStyle,
-  ConnectedAddressButtonStyle,
-} from './styles';
+import { AddressSpinnerStyle, ConnectedAddressButtonStyle } from './styles';
+import { TrailingInput } from './trailing-input';
 import { useFieldController } from './use-field-controller';
 
 export type AddressFieldProps = {
@@ -57,17 +54,14 @@ export const AddressField: FC<AddressFieldProps> = ({
     [currentAddress, name, setValue],
   );
 
-  const icon =
-    trailing ??
-    (isLoading ? (
-      <AddressSpinnerStyle decorative data-testid="loader" />
-    ) : (
-      !simple && address && <Identicon address={address} size={20} />
-    ));
+  const icon = isLoading ? (
+    <AddressSpinnerStyle decorative data-testid="loader" />
+  ) : (
+    !simple && address && <Identicon address={address} size={20} />
+  );
 
   return (
-    <TrailingInputStyle
-      $trailing={trailing != null}
+    <TrailingInput
       ref={field.ref}
       name={field.name}
       value={inputValue}
@@ -77,7 +71,8 @@ export const AddressField: FC<AddressFieldProps> = ({
       readOnly={locked}
       placeholder={placeholder}
       spellCheck={false}
-      icon={icon}
+      icon={trailing == null ? icon : undefined}
+      trailing={trailing}
       tooltip={tooltip}
       description={description}
       error={isLoading ? undefined : (error ?? message ?? invalid)}

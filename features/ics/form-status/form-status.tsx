@@ -1,11 +1,13 @@
 import { Stack } from '@lidofinance/lido-app-ui';
 import { FC, useCallback, useState } from 'react';
-import { IcsResponseDto } from '../shared/types';
+import {
+  ApplicationTip,
+  OperatorTypeCard,
+} from 'shared/node-operator/type-status';
+import { IcsResponseDto, useIcsState } from '../shared';
 import {
   ApplicationCard,
   ApplicationModal,
-  ApplicationTip,
-  OperatorTypeCard,
   ScoreBreakdownModal,
   ScoreCard,
 } from './components';
@@ -18,6 +20,7 @@ type FormStatusProps = {
 
 export const FormStatus: FC<FormStatusProps> = ({ data, reset }) => {
   const { status, comments, createdAt, scores } = data;
+  const { typeStatus, hasOperator } = useIcsState();
 
   const [modal, setModal] = useState<'application' | 'score'>();
   const closeModal = useCallback(() => setModal(undefined), []);
@@ -35,7 +38,12 @@ export const FormStatus: FC<FormStatusProps> = ({ data, reset }) => {
       gap={8}
       dataTestId={{ root: 'applicationFormStatus' }}
     >
-      <OperatorTypeCard status={status} />
+      <OperatorTypeCard
+        program="ICS"
+        formStatus={status}
+        typeStatus={typeStatus}
+        hasOperator={hasOperator}
+      />
       <ApplicationCard
         status={status}
         comments={comments}

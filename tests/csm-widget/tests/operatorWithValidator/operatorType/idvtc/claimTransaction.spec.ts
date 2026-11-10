@@ -139,18 +139,9 @@ test.describe(
           ).toHaveText('DKG files');
         });
 
-        await test.step('DKG files section is loaded', async () => {
-          const page = widgetService.page;
-
-          await expect(page.getByText('Uploaded DKG files')).toBeVisible({
-            timeout: PAGE_WAIT_TIMEOUT,
-          });
-          await expect(page.getByTestId('dkgAddFileButton')).toBeVisible();
-        });
-
         await test.step('DKG required card is shown', async () => {
           const card = widgetService.page.getByTestId('dkgRequiredCard');
-          await expect(card).toBeVisible();
+          await expect(card).toBeVisible({ timeout: PAGE_WAIT_TIMEOUT });
           await expect(card).toContainText('Upload DKG Files Required');
           await expect(
             card.getByRole('button', { name: 'Upload files' }),

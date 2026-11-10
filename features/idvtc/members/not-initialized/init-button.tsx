@@ -1,5 +1,6 @@
-import { Body, Button, Card, Stack } from '@lidofinance/lido-app-ui';
+import { Body, Button, Card } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
+import { StretchStack } from 'shared/components';
 import { useInitMembers } from '../hooks/use-init-members';
 import { useMembersModalStages } from '../hooks/use-members-modal-stages';
 
@@ -19,7 +20,7 @@ export const InitButton: FC = () => {
 
   return (
     <Card data-testid="initMembers">
-      <Stack gap={16}>
+      <StretchStack gap={16}>
         <Body>
           Initialize your cluster members from your approved application
         </Body>
@@ -31,7 +32,7 @@ export const InitButton: FC = () => {
         >
           Initialize cluster members
         </Button>
-      </Stack>
+      </StretchStack>
     </Card>
   );
 };

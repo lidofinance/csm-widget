@@ -1,45 +1,19 @@
-import { Copy, SectionTitle, Stack } from '@lidofinance/lido-app-ui';
+import { SectionTitle, Stack } from '@lidofinance/lido-app-ui';
 import { IdvtcResponseDto } from 'features/idvtc/shared';
-import { FC, PropsWithChildren, ReactNode } from 'react';
-import { WideModalStyle } from 'features/ics/styles';
+import { FC } from 'react';
 import { StretchStack } from 'shared/components';
-import { TrailingInputStyle } from 'shared/hook-form/fields/styles';
-import { formatSentOn, VerifiedTag } from 'shared/node-operator/type-status';
+import {
+  AnswerField,
+  AnswerSection,
+  VerifiedTag,
+  WideModalStyle,
+  formatSentOn,
+} from 'shared/node-operator/type-status';
 import { MemberCardStyle } from '../styles';
 
 type Props = Pick<IdvtcResponseDto, 'comments' | 'form' | 'createdAt'> & {
   onClose: () => void;
 };
-
-type FieldProps = {
-  name: string;
-  value: string;
-  label?: string;
-  error?: string | null;
-};
-
-const Section: FC<PropsWithChildren<{ title: string; action?: ReactNode }>> = ({
-  title,
-  action,
-  children,
-}) => (
-  <StretchStack gap={12}>
-    <SectionTitle title={title} action={action} />
-    {children}
-  </StretchStack>
-);
-
-const AnswerField: FC<FieldProps> = ({ name, value, label, error }) => (
-  <TrailingInputStyle
-    $trailing
-    disabled
-    name={name}
-    label={label}
-    value={value}
-    error={error || false}
-    icon={<Copy text={value} aria-label="Copy" />}
-  />
-);
 
 export const ApplicationModal: FC<Props> = ({
   comments,
@@ -55,15 +29,15 @@ export const ApplicationModal: FC<Props> = ({
     dataTestId={{ root: 'applicationSection' }}
   >
     <StretchStack gap={24}>
-      <Section title="Main address" action={<VerifiedTag />}>
+      <AnswerSection title="Main address" action={<VerifiedTag />}>
         <AnswerField
           name="mainAddress"
           value={form.mainAddress}
           error={comments.mainAddress}
         />
-      </Section>
+      </AnswerSection>
       {(form.discordLink || form.telegramUsername) && (
-        <Section title="Socials">
+        <AnswerSection title="Socials">
           {form.discordLink && (
             <AnswerField
               name="discordLink"
@@ -80,7 +54,7 @@ export const ApplicationModal: FC<Props> = ({
               error={comments.telegramUsername}
             />
           )}
-        </Section>
+        </AnswerSection>
       )}
       {form.clusterMembers.map((member, index) => (
         <MemberCardStyle

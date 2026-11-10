@@ -1,9 +1,7 @@
 import {
-  Body,
   IconLink,
   SectionTitle,
   Stack,
-  Tag,
   TextLink,
 } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
@@ -12,24 +10,19 @@ import { trackMatomoEvent } from 'utils';
 
 const GUIDE_URL = 'https://www.youtube.com/watch?v=yUX34iCbCWE';
 
-export const GuideLink: FC = () => (
+type GuideLinkProps = {
+  matomoEvent: MATOMO_CLICK_EVENTS_TYPES;
+};
+
+export const GuideLink: FC<GuideLinkProps> = ({ matomoEvent }) => (
   <TextLink
     external
     href={GUIDE_URL}
     icon={<IconLink />}
-    onClick={() =>
-      trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.idvtcYoutubeGuideLink)
-    }
+    onClick={() => trackMatomoEvent(matomoEvent)}
   >
     View the guide
   </TextLink>
-);
-
-export const OptionalHeading: FC<PropsWithChildren> = ({ children }) => (
-  <Stack direction="row" align="center" gap={8}>
-    <Body weight="semibold">{children}</Body>
-    <Tag variant="neutral">Optional</Tag>
-  </Stack>
 );
 
 type ApplySectionProps = PropsWithChildren<{

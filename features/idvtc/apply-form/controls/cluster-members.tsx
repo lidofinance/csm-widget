@@ -2,7 +2,7 @@ import { Description, ProgressBar, Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
 import { CLUSTER_SIZE, type IdvtcApplyFormInputType } from '../context';
-import { ApplySection } from './apply-section';
+import { ApplySection } from 'shared/node-operator/type-apply';
 import { ClusterMemberItem } from './cluster-member-item';
 
 export const ClusterMembers: FC = () => {

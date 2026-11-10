@@ -1,12 +1,6 @@
-import { Card, SectionTitle, Stack } from '@lidofinance/lido-app-ui';
+import { SectionTitle, Stack } from '@lidofinance/lido-app-ui';
 import { FC, PropsWithChildren, ReactNode } from 'react';
-import styled from 'styled-components';
-
-const FormCardStyle = styled(Card)`
-  && {
-    align-items: stretch;
-  }
-`;
+import { StretchCard } from 'shared/components/stretch-stack';
 
 export type FormCardProps = PropsWithChildren<{
   title?: string;
@@ -25,7 +19,7 @@ export const FormCard: FC<FormCardProps> = ({
   children,
   'data-testid': testId,
 }) => (
-  <FormCardStyle data-testid={testId}>
+  <StretchCard data-testid={testId}>
     <Stack gap={24}>
       {title && (
         <SectionTitle
@@ -42,5 +36,5 @@ export const FormCard: FC<FormCardProps> = ({
       )}
       {children}
     </Stack>
-  </FormCardStyle>
+  </StretchCard>
 );

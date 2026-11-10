@@ -12,6 +12,7 @@ import {
   HubRowStyle,
   HubTrailingStyle,
   HubTitleRowStyle,
+  HubTitleTextStyle,
   hubRowCss,
   hubRowLinkCss,
 } from './styles';
@@ -64,7 +65,7 @@ export const HubRow: FC<HubRowProps> = ({
       <HubMainStyle>
         <HubTitleRowStyle>
           <BodyLarge weight="semibold" as="span" color="default">
-            {title}
+            <HubTitleTextStyle>{title}</HubTitleTextStyle>
           </BodyLarge>
           {tag}
         </HubTitleRowStyle>

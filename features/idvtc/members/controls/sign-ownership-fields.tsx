@@ -11,7 +11,8 @@ import {
 } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { FC, MouseEvent } from 'react';
-import { TrailingInputStyle } from 'shared/hook-form/fields/styles';
+import { StretchStack } from 'shared/components';
+import { TrailingInput } from 'shared/hook-form/fields/trailing-input';
 import { isAddress } from 'viem';
 import { useOperatorKey } from 'modules/surveys-sdk';
 import { trackMatomoEvent } from 'utils';
@@ -75,7 +76,7 @@ export const SignOwnershipFields: FC<SignOwnershipFieldsProps> = ({
   const { copy } = useCopy(message);
 
   return (
-    <Stack gap={16}>
+    <StretchStack gap={16}>
       <Stack direction="row" align="center" gap={8}>
         <Body weight="semibold">{title}</Body>
         {verified ? (
@@ -88,12 +89,11 @@ export const SignOwnershipFields: FC<SignOwnershipFieldsProps> = ({
       </Stack>
 
       {verified ? (
-        <TrailingInputStyle
-          $trailing={!!onClear}
+        <TrailingInput
           aria-label={title}
           value={address}
           readOnly
-          icon={
+          trailing={
             onClear && (
               <Tag
                 variant="action"
@@ -119,13 +119,12 @@ export const SignOwnershipFields: FC<SignOwnershipFieldsProps> = ({
               disabled={disableAddress}
               onChange={(e) => onAddressChange(e.currentTarget.value)}
             />
-            <TrailingInputStyle
-              $trailing
+            <TrailingInput
               aria-label="Message to sign"
               value={message}
               readOnly
               placeholder="Message to sign"
-              icon={
+              trailing={
                 <Stack direction="row" gap={8}>
                   <Tag
                     variant="action"
@@ -151,14 +150,13 @@ export const SignOwnershipFields: FC<SignOwnershipFieldsProps> = ({
             <Description color="secondary">
               Step 2. Copy the signature and paste in the field below
             </Description>
-            <TrailingInputStyle
-              $trailing
+            <TrailingInput
               aria-label="Signature"
               placeholder="Signature"
               value={signature}
               error={signatureError}
               onChange={(e) => onSignatureChange(e.currentTarget.value)}
-              icon={
+              trailing={
                 <Tag
                   variant="action"
                   disabled={isVerifying}
@@ -193,6 +191,6 @@ export const SignOwnershipFields: FC<SignOwnershipFieldsProps> = ({
           />
         </Stack>
       </Stack>
-    </Stack>
+    </StretchStack>
   );
 };

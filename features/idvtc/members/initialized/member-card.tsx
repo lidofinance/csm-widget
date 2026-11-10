@@ -1,5 +1,6 @@
-import { Button, Card, IconRotate, Stack } from '@lidofinance/lido-app-ui';
+import { Button, Card, IconRotate } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
+import { StretchStack } from 'shared/components';
 import type { MemberDto } from 'modules/surveys-sdk/generated';
 import { useMembersModalStages } from '../hooks/use-members-modal-stages';
 import { useSubmitRotation } from '../hooks/use-submit-rotation';
@@ -63,7 +64,7 @@ export const MemberCard: FC<MemberCardProps> = ({
 
   return (
     <Card data-testid={`memberCard${index}`}>
-      <Stack gap={16}>
+      <StretchStack gap={16}>
         <MemberSummary
           title={`Cluster member #${index + 1}`}
           member={member}
@@ -82,7 +83,7 @@ export const MemberCard: FC<MemberCardProps> = ({
             }
           />
         )}
-      </Stack>
+      </StretchStack>
     </Card>
   );
 };

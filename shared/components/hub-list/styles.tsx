@@ -65,10 +65,15 @@ export const HubMainStyle = styled.div`
 
 export const HubTitleRowStyle = styled.div`
   display: flex;
-  white-space: nowrap;
+  min-width: 0;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
+`;
+
+export const HubTitleTextStyle = styled.span`
+  min-width: 0;
+  overflow-wrap: anywhere;
 `;
 
 export const HubAsideStyle = styled.div`

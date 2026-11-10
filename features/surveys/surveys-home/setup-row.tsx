@@ -23,6 +23,7 @@ export const SetupRow: FC<SetupRowProps> = ({
   const { remove } = useOperatorSetup(setup.index, {
     operatorKey,
     invalidateOnMutate: !!operatorKey,
+    skipFetching: true,
   });
   const { mutate: mutateKeys } = useSetupsKeys(operatorKey);
   const { txModalStages: modals } = useModalStages();

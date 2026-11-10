@@ -13,7 +13,6 @@ export { Tooltip, type TooltipProps } from './tooltip/tooltip';
 export { KeysLimitWarning } from './keys-limit-warning/keys-limit-warning';
 export { InverseThemeProvider } from './inverse-theme-provider/inverse-theme-provider';
 export * from './chip';
-export * from './score-chip';
 export * from './logos/logos';
 export * from './status-chip';
 export * from './security-status-banner';

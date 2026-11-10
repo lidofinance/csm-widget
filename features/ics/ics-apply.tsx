@@ -1,69 +1,22 @@
-import { Card, Skeleton } from '@lidofinance/lido-app-ui';
-import { useSiweAuth } from 'modules/siwe';
-import { useDappStatus } from 'modules/web3';
 import { FC } from 'react';
-import { StretchStack } from 'shared/components';
-import { SiweConnect, SiweSignInAddress } from 'shared/wallet';
+import { TypeApplyGate } from 'shared/node-operator/type-status';
 import { ApplyForm } from './apply-form';
 import { FormStatus } from './form-status';
-import { OperatorTypeCard } from './form-status/components';
 import { IcsProviders, useIcsState } from './shared';
 
-const Loader: FC = () => (
-  <Card data-testid="loader">
-    <StretchStack>
-      <Skeleton variant="text" lines={3} />
-    </StretchStack>
-  </Card>
-);
-
 const IcsApplyContent: FC = () => {
-  const { isAccountActive } = useDappStatus();
-  const { token } = useSiweAuth();
-  const { typeStatus, data, isPending, isTypePending, applyMode, reset } =
-    useIcsState();
+  const state = useIcsState();
 
-  const status = <OperatorTypeCard />;
-
-  if (!isAccountActive) {
-    return (
-      <SiweConnect description="Connect your wallet and sign a verification message to continue" />
-    );
-  }
-
-  if (isTypePending) {
-    return <Loader />;
-  }
-
-  if (
-    typeStatus === 'CLAIMED' ||
-    typeStatus === 'PROOF_USED' ||
-    typeStatus === 'PROOF_USED_ELSEWHERE'
-  ) {
-    return status;
-  }
-
-  if (!token) {
-    return typeStatus !== 'PENDING' ? (
-      status
-    ) : (
-      <SiweSignInAddress operatorType="ICS" />
-    );
-  }
-
-  if (isPending) {
-    return <Loader />;
-  }
-
-  if (data && !applyMode) {
-    return <FormStatus data={data} reset={reset} />;
-  }
-
-  if (typeStatus !== 'PENDING') {
-    return status;
-  }
-
-  return <ApplyForm />;
+  return (
+    <TypeApplyGate
+      program="ICS"
+      state={state}
+      formStatus={
+        state.data && <FormStatus data={state.data} reset={state.reset} />
+      }
+      form={<ApplyForm />}
+    />
+  );
 };
 
 export const IcsApply: FC = () => (

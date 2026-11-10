@@ -2,7 +2,7 @@ import { Body } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import styled from 'styled-components';
 import { ScoreSource } from '../shared';
-import { WideModalStyle } from '../styles';
+import { WideModalStyle } from 'shared/node-operator/type-status';
 import { Points } from './points';
 
 type Props = {

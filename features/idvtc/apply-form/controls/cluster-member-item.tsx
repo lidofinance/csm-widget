@@ -8,7 +8,7 @@ import {
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { FC, useCallback, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { FormCard } from 'shared/form-page';
+import { MemberCardStyle } from '../../form-status/styles';
 import {
   AddressField,
   CopyField,
@@ -24,7 +24,7 @@ import {
   useVerifyMessage,
   type IdvtcApplyFormInputType,
 } from '../context';
-import { OptionalHeading } from './apply-section';
+import { OptionalHeading } from './optional-heading';
 
 const ETHERSCAN_SIGNATURES_URL = 'https://etherscan.io/verifiedSignatures#';
 
@@ -120,7 +120,7 @@ export const ClusterMemberItem: FC<ClusterMemberItemProps> = ({ index }) => {
   }, [index, setValue]);
 
   return (
-    <FormCard data-testid={`clusterMember-${index}`}>
+    <MemberCardStyle data-testid={`clusterMember-${index}`}>
       <Stack gap={16}>
         <Stack direction="row" align="center" gap={8}>
           <Body weight="semibold">Cluster member #{index + 1}</Body>
@@ -218,6 +218,6 @@ export const ClusterMemberItem: FC<ClusterMemberItemProps> = ({ index }) => {
           </Stack>
         </Stack>
       </Stack>
-    </FormCard>
+    </MemberCardStyle>
   );
 };

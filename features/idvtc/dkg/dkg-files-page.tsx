@@ -1,7 +1,7 @@
-import { Body, Card, SectionTitle } from '@lidofinance/lido-app-ui';
+import { Body, SectionTitle } from '@lidofinance/lido-app-ui';
 import { FC, useCallback, useState } from 'react';
 import { PATH } from 'consts/urls';
-import { Stack, WhenLoaded } from 'shared/components';
+import { Stack, StretchCard, WhenLoaded } from 'shared/components';
 import { useHasNonWithdrawnKeys, useNodeOperatorId } from 'modules/web3';
 import { useShowRule } from 'shared/hooks';
 import { IdvtcSiwePage } from '../idvtc-siwe-page';
@@ -105,7 +105,7 @@ const DkgFilesContent: FC = () => {
   );
 
   return (
-    <Card>
+    <StretchCard>
       <WhenLoaded loading={loading} morePadding>
         {canManage ? (
           <DkgDropArea zone={zone}>{content}</DkgDropArea>
@@ -113,7 +113,7 @@ const DkgFilesContent: FC = () => {
           <DropArea>{content}</DropArea>
         )}
       </WhenLoaded>
-    </Card>
+    </StretchCard>
   );
 };
 

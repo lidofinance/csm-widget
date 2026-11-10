@@ -13,4 +13,14 @@ describe('CopyField', () => {
     expect(html).toContain('role="button"');
     expect(html).toContain('Copy');
   });
+
+  it('keeps the Copy tag-button out of an aria-hidden slot', () => {
+    const html = renderToStaticMarkup(
+      <CopyField name="message" label="Message" text="sign me" />,
+    );
+
+    expect(html).not.toMatch(
+      /<span[^>]*aria-hidden="true"[^>]*>(?:(?!<\/span>).)*copyBtn/,
+    );
+  });
 });

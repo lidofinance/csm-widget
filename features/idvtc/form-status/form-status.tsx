@@ -1,12 +1,11 @@
 import { Stack } from '@lidofinance/lido-app-ui';
-import { ApplicationTip } from 'features/ics/form-status/components/application-tip';
 import { FC, useCallback, useState } from 'react';
-import { IdvtcResponseDto } from '../shared/types';
 import {
-  ApplicationCard,
-  ApplicationModal,
+  ApplicationTip,
   OperatorTypeCard,
-} from './components';
+} from 'shared/node-operator/type-status';
+import { IdvtcResponseDto, useIdvtcState } from '../shared';
+import { ApplicationCard, ApplicationModal } from './components';
 
 type FormStatusProps = {
   data: IdvtcResponseDto;
@@ -15,6 +14,7 @@ type FormStatusProps = {
 
 export const FormStatus: FC<FormStatusProps> = ({ data, reset }) => {
   const { status, comments, createdAt, form } = data;
+  const { typeStatus, hasOperator } = useIdvtcState();
   const [isModalOpen, setModalOpen] = useState(false);
 
   const handleApplyAgain = useCallback(() => {
@@ -28,7 +28,12 @@ export const FormStatus: FC<FormStatusProps> = ({ data, reset }) => {
       gap={8}
       dataTestId={{ root: 'applicationFormStatus' }}
     >
-      <OperatorTypeCard status={status} />
+      <OperatorTypeCard
+        program="IDVTC"
+        formStatus={status}
+        typeStatus={typeStatus}
+        hasOperator={hasOperator}
+      />
       <ApplicationCard
         status={status}
         comments={comments}

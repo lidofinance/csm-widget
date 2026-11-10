@@ -49,12 +49,19 @@ const ValuesStyle = styled.ul`
 
 const HIDDEN_PARAMETERS = ['Penalty fee'];
 
-const Values: FC<{ values?: ReactNode[] }> = ({ values }) =>
+const Values: FC<{ values?: ReactNode[]; strong?: boolean }> = ({
+  values,
+  strong,
+}) =>
   values ? (
     <ValuesStyle>
       {values.map((value, index) => (
         <li key={index}>
-          <Body as="span" color="secondary">
+          <Body
+            as="span"
+            color={strong ? 'default' : 'secondary'}
+            weight={strong ? 'bold' : undefined}
+          >
             {value}
           </Body>
         </li>
@@ -139,7 +146,7 @@ export const TypeParametersCard: FC<Props> = ({ type }) => {
                 />
               ),
               render: ({ render }) => (
-                <Values values={typeParams && render(typeParams)} />
+                <Values strong values={typeParams && render(typeParams)} />
               ),
             },
           ]}
