@@ -1,9 +1,9 @@
 import { FC } from 'react';
 
 import { useFaq } from 'faq';
-import { Faq, TypeBackButton } from 'shared/components';
+import { PATH } from 'consts/urls';
+import { Faq } from 'shared/components';
 import { Layout } from 'shared/layout';
-import { IcsPageSwitcher } from 'shared/navigate';
 import { IcsApplyButton } from './apply-button';
 import { RoundBanner } from './round-banner';
 import { ApplicationFlow, Introduction, ScoreSources } from './score-system';
@@ -12,12 +12,13 @@ import { IcsProviders } from './shared';
 
 export const IcsScoresPage: FC = () => (
   <Layout
-    title="Apply for Identified Community Stakers List"
-    subtitle="Get verified as an Identified Community Staker"
+    wide
     pageName="TypeIcsSystem"
-    mainPrefix={<TypeBackButton />}
+    breadcrumbs={[
+      { label: 'Operator Type', href: PATH.TYPE },
+      { label: 'Identified Community Staker' },
+    ]}
   >
-    <IcsPageSwitcher />
     <RoundBanner />
     <IcsProviders>
       <BlockStyle>

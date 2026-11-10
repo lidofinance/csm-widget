@@ -1,20 +1,18 @@
 import { FC } from 'react';
 
-import { TypeBackButton } from 'shared/components';
+import { PATH } from 'consts/urls';
 import { Layout } from 'shared/layout';
-import { Gate, IcsPageSwitcher, TypePageSwitcher } from 'shared/navigate';
 import { ClaimIcs } from './claim-ics';
 
 export const ClaimIcsPage: FC = () => (
   <Layout
-    title="Apply for Identified Community Stakers List"
-    subtitle="Get verified as an Identified Community Staker"
     pageName="ClaimIcs"
-    mainPrefix={<TypeBackButton />}
+    breadcrumbs={[
+      { label: 'Operator Type', href: PATH.TYPE },
+      { label: 'Identified Community Staker', href: PATH.TYPE_ICS_SYSTEM },
+      { label: 'Claim' },
+    ]}
   >
-    <Gate rule="ICS_APPLY_ENABLED" fallback={<TypePageSwitcher />}>
-      <IcsPageSwitcher />
-    </Gate>
     <ClaimIcs />
   </Layout>
 );

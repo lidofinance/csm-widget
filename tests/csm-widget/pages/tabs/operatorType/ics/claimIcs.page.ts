@@ -4,7 +4,6 @@ import { BasePage } from 'tests/shared/pages/base.page';
 export class ClaimIcsPage extends BasePage {
   page: Page;
   title: Locator;
-  subtitle: Locator;
   formTitle: Locator;
   whatsChanging: Locator;
   viewFullListButton: Locator;
@@ -20,7 +19,6 @@ export class ClaimIcsPage extends BasePage {
     this.title = this.page
       .getByTestId('pageTitle')
       .locator('[aria-current="page"]');
-    this.subtitle = this.page.getByTestId('pageSubtitle');
     this.formTitle = this.page.getByTestId('formTitle');
     this.whatsChanging = this.page.getByTestId('claimChanges');
     this.viewFullListButton =

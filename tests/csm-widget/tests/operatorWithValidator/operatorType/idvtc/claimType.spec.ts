@@ -82,9 +82,7 @@ test.describe(
         await operatorType.idvtcApplyButton.click();
 
         await widgetService.page.waitForURL(/\/type\/idvtc-claim/);
-        await expect(operatorType.claimPageTitle).toHaveText(
-          'Apply for Identified DVT Cluster',
-        );
+        await expect(operatorType.claimPageTitle).toHaveText('Claim');
       },
     );
 
@@ -97,9 +95,7 @@ test.describe(
         await operatorType.claimAlertButton.click();
 
         await widgetService.page.waitForURL(/\/type\/idvtc-claim/);
-        await expect(operatorType.claimPageTitle).toHaveText(
-          'Apply for Identified DVT Cluster',
-        );
+        await expect(operatorType.claimPageTitle).toHaveText('Claim');
       },
     );
 
@@ -109,13 +105,8 @@ test.describe(
         const claim = widgetService.operatorType.claimIdvtc;
         await claim.open();
 
-        await test.step('Page header', async () => {
-          await expect(claim.title).toHaveText(
-            'Apply for Identified DVT Cluster',
-          );
-          await expect(claim.subtitle).toHaveText(
-            'Get verified as an Independent DVT Cluster',
-          );
+        await test.step('Page crumbs', async () => {
+          await expect(claim.title).toHaveText('Claim');
         });
 
         await test.step('Claim card', async () => {

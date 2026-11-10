@@ -110,7 +110,7 @@ test.describe(
           await cards.getCardButton('ics').click();
           await expect(widgetService.page).toHaveURL(/\/type\/ics-apply/);
           await expect(widgetService.operatorType.pageTitle).toHaveText(
-            'Apply for Identified Community Stakers List',
+            'Application',
           );
         });
 
@@ -119,7 +119,7 @@ test.describe(
           await cards.getCardButton('idvtc').click();
           await expect(widgetService.page).toHaveURL(/\/type\/idvtc-apply/);
           await expect(widgetService.operatorType.pageTitle).toHaveText(
-            'Apply for Identified DVT Cluster',
+            'Application',
           );
         });
       },

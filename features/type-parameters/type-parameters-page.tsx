@@ -1,19 +1,19 @@
 import { useFaq } from 'faq';
+import { PATH } from 'consts/urls';
 import { IcsProviders } from 'features/ics/shared';
 import { FC } from 'react';
-import { ExtraWidth, Faq, TypeBackButton } from 'shared/components';
+import { ExtraWidth, Faq } from 'shared/components';
 import { Layout } from 'shared/layout';
-import { TypePageSwitcher } from 'shared/navigate';
 import { TypeParameters } from './type-parameters';
 
 export const TypeParametersPage: FC = () => (
   <Layout
-    title="Operator Type Parameters"
-    subtitle="Compare parameters"
     pageName="TypeParameters"
-    mainPrefix={<TypeBackButton />}
+    breadcrumbs={[
+      { label: 'Operator Type', href: PATH.TYPE },
+      { label: 'Parameters' },
+    ]}
   >
-    <TypePageSwitcher />
     <ExtraWidth>
       <IcsProviders>
         <TypeParameters />

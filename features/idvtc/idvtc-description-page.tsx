@@ -1,8 +1,8 @@
 import { FC } from 'react';
 
+import { PATH } from 'consts/urls';
 import { Layout } from 'shared/layout';
-import { IdvtcPageSwitcher } from 'shared/navigate';
-import { Faq, TypeBackButton } from 'shared/components';
+import { Faq } from 'shared/components';
 import { useFaq } from 'faq';
 import { BlockStyle } from './description/styles';
 import {
@@ -15,12 +15,13 @@ import { IdvtcProviders } from './shared';
 
 export const IdvtcDescriptionPage: FC = () => (
   <Layout
-    title="Apply for Identified DVT Cluster"
-    subtitle="Get verified as an Independent DVT Cluster"
+    wide
     pageName="TypeDvtDescription"
-    mainPrefix={<TypeBackButton />}
+    breadcrumbs={[
+      { label: 'Operator Type', href: PATH.TYPE },
+      { label: 'Identified DVT Cluster' },
+    ]}
   >
-    <IdvtcPageSwitcher />
     <IdvtcProviders>
       <BlockStyle>
         <Introduction />
