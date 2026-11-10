@@ -1,7 +1,8 @@
 import { FC } from 'react';
 import { TrailingInputStyle } from 'shared/hook-form/fields/styles';
+import { VerifiedTag } from 'shared/node-operator/type-status';
 import { useApplyFormData } from '../context';
-import { ApplySection, VerifiedTag } from './apply-section';
+import { ApplySection } from './apply-section';
 
 export const MainAddress: FC = () => {
   const { mainAddress } = useApplyFormData(true);

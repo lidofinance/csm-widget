@@ -118,7 +118,7 @@ test.describe(
               'You are eligible to claim a new operator type. Claiming the Identified DVT Cluster operator type will change some parameters for your node operator according to the section below.',
             ),
           ).toBeVisible();
-          await expect(claim.whatsChanging).toContainText("What's changing");
+          await expect(claim.whatsChanging).toContainText('What’s changing');
           await expect(claim.viewFullListButton).toBeVisible();
           await expect(claim.claimButton).toBeVisible();
         });

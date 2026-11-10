@@ -1,38 +1,37 @@
 import { InfoTooltip } from '@lidofinance/lido-app-ui';
-import { ICON_TOOLTIP_TEST_ID } from 'shared/components/icon-tooltip/test-ids';
-import { Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
-import { FormTitle, InputAddress, Stack } from 'shared/components';
-import { VerifiedChip } from 'shared/components/input-address/verified-chip';
+import { ICON_TOOLTIP_TEST_ID } from 'shared/components/icon-tooltip/test-ids';
+import { TrailingInputStyle } from 'shared/hook-form/fields/styles';
+import { VerifiedTag } from 'shared/node-operator/type-status';
 import { useApplyFormData } from '../context';
+import { ApplySection } from './apply-section';
 import { MainAddressTooltipContent } from './main-address-tooltip-content';
 
 export const MainAddress: FC = () => {
   const { mainAddress } = useApplyFormData(true);
 
   return (
-    <Stack direction="column" gap="md" data-testid="mainAddressSection">
-      <Stack direction="column" gap="xxs">
-        <FormTitle>Main address</FormTitle>
-        <Text size="xs" color="secondary">
+    <ApplySection
+      title="Main address"
+      subtitle={
+        <>
           You are requesting IDVTC operator type for the following address:{' '}
           <InfoTooltip
             dataTestId={ICON_TOOLTIP_TEST_ID}
             content={<MainAddressTooltipContent />}
           />
-        </Text>
-      </Stack>
-      <InputAddress
-        fullwidth
-        disabled
+        </>
+      }
+      data-testid="mainAddressSection"
+    >
+      <TrailingInputStyle
+        $trailing
         name="mainAddress"
-        label={
-          <>
-            Main address <VerifiedChip color="primary">Verified</VerifiedChip>
-          </>
-        }
+        aria-label="Main address"
         value={mainAddress}
+        disabled
+        icon={<VerifiedTag />}
       />
-    </Stack>
+    </ApplySection>
   );
 };

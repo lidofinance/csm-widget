@@ -1,9 +1,7 @@
 import {
-  IconCheck,
   IconLink,
   SectionTitle,
   Stack,
-  Tag,
   TextLink,
 } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
@@ -23,16 +21,6 @@ export const GuideLink: FC = () => (
   >
     View the guide
   </TextLink>
-);
-
-export const VerifiedTag: FC = () => (
-  <Tag
-    variant="success"
-    icon={<IconCheck />}
-    dataTestId={{ root: 'verifiedChip' }}
-  >
-    Verified
-  </Tag>
 );
 
 type ApplySectionProps = PropsWithChildren<{

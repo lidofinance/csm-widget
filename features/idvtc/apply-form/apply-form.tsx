@@ -1,6 +1,8 @@
+import { Divider } from '@lidofinance/lido-app-ui';
 import { FC, memo } from 'react';
-import { FormBlock } from 'shared/components';
-import { FormLoader, Form } from 'shared/hook-form/form-controller';
+import { FormCard, FormReady } from 'shared/form-page';
+import { Form } from 'shared/hook-form/form-controller';
+import { AppFormUi } from 'shared/hook-form/form-ui';
 import { ApplyDataProvider, ApplyFormProvider } from './context';
 import {
   ClusterMembers,
@@ -11,19 +13,23 @@ import {
 } from './controls';
 
 export const ApplyForm: FC = memo(() => (
-  <ApplyDataProvider>
-    <ApplyFormProvider>
-      <FormBlock $gap="xxl" data-testid="applyForm">
-        <FormLoader>
-          <Form>
-            <MainAddress />
-            <SocialProof />
-            <ClusterMembers />
-            <Confirmations />
-            <SubmitButton />
+  <AppFormUi>
+    <ApplyDataProvider>
+      <ApplyFormProvider>
+        <FormReady>
+          <Form data-testid="applyForm">
+            <FormCard>
+              <MainAddress />
+              <Divider />
+              <SocialProof />
+              <Divider />
+              <ClusterMembers />
+              <Confirmations />
+              <SubmitButton />
+            </FormCard>
           </Form>
-        </FormLoader>
-      </FormBlock>
-    </ApplyFormProvider>
-  </ApplyDataProvider>
+        </FormReady>
+      </ApplyFormProvider>
+    </ApplyDataProvider>
+  </AppFormUi>
 ));

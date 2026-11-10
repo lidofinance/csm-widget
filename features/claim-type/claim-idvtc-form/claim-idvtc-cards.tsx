@@ -48,7 +48,7 @@ const WhatsChanging: FC = () => {
 
   return (
     <ClaimChanges
-      title="What's changing"
+      title="What’s changing"
       from={currentParameters}
       to={newParameters}
       fromLabel={`Current (${currentShort})`}

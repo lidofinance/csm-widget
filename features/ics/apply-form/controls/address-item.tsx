@@ -17,6 +17,7 @@ import {
   stopFocus,
 } from 'shared/hook-form/fields';
 import { VALIDATION_MESSAGES } from 'shared/hook-form/validation';
+import { VerifiedTag } from 'shared/node-operator/type-status';
 import { trackMatomoEvent } from 'utils';
 import { isAddress, isHex } from 'viem';
 import {
@@ -24,7 +25,6 @@ import {
   useVerifyMessage,
   type ApplyFormInputType,
 } from '../context';
-import { VerifiedTag } from './apply-section';
 import { ETHERSCAN_SIGNATURES_URL } from './consts';
 
 const StepsStyle = styled(Stack)`
