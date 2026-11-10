@@ -1,6 +1,6 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
-export const ClusterMemberCard = styled.div<{ $dimmed?: boolean }>`
+export const ClusterMemberCard = styled.div`
   border: 1px solid var(--lido-color-border);
   border-radius: 10px;
   padding: 20px;
@@ -10,13 +10,6 @@ export const ClusterMemberCard = styled.div<{ $dimmed?: boolean }>`
     var(--lido-color-accentControlBg) 100%,
     #fff
   );
-
-  ${({ $dimmed }) =>
-    $dimmed &&
-    css`
-      opacity: 0.5;
-      pointer-events: none;
-    `}
 `;
 
 export const ProgressBar = styled.div`

@@ -1,6 +1,5 @@
-import { Button, Text } from '@lidofinance/lido-ui';
+import { Body, Button, Card, Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import { FormBlock } from 'shared/components';
 import { useInitMembers } from '../hooks/use-init-members';
 import { useMembersModalStages } from '../hooks/use-members-modal-stages';
 
@@ -19,18 +18,20 @@ export const InitButton: FC = () => {
   };
 
   return (
-    <FormBlock $gap="lg" data-testid="initMembers">
-      <Text size="sm">
-        Initialize your cluster members from your approved application
-      </Text>
-      <Button
-        onClick={onInit}
-        loading={init.isPending}
-        fullwidth
-        data-testid="initMembersButton"
-      >
-        Initialize cluster members
-      </Button>
-    </FormBlock>
+    <Card data-testid="initMembers">
+      <Stack gap={16}>
+        <Body>
+          Initialize your cluster members from your approved application
+        </Body>
+        <Button
+          fullWidth
+          onClick={onInit}
+          loading={init.isPending}
+          dataTestId={{ root: 'initMembersButton' }}
+        >
+          Initialize cluster members
+        </Button>
+      </Stack>
+    </Card>
   );
 };

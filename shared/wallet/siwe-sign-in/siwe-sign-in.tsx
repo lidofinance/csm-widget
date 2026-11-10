@@ -11,7 +11,7 @@ export const SiweConnect: FC<{ description: ReactNode }> = ({
   description,
 }) => (
   <Card>
-    <Stack direction="column" gap="lg">
+    <Stack direction="column" gap="lg" selfAlign="stretch">
       <Stack direction="column" gap="md">
         <H3>Connect your wallet</H3>
         <Description color="secondary">{description}</Description>
@@ -28,9 +28,17 @@ export const SiweSignIn: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <Card>
-      <Stack direction="column" gap="lg">
-        <Description>{children}</Description>
-        <Button size="small" onClick={signIn} data-testid="siweSignInButton">
+      <Stack direction="column" gap="lg" selfAlign="stretch">
+        <Stack direction="column" gap="md">
+          <H3>Sign in</H3>
+          <Description color="secondary">{children}</Description>
+        </Stack>
+        <Button
+          size="small"
+          fullWidth
+          onClick={signIn}
+          data-testid="siweSignInButton"
+        >
           Sign in
         </Button>
       </Stack>

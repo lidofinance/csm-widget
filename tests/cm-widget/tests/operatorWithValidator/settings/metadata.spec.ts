@@ -24,16 +24,9 @@ test.describe(
     });
 
     test(
-      qase(
-        180,
-        'Should display form with correct section title and input labels',
-      ),
+      qase(180, 'Should display form with correct input labels'),
       async ({ widgetService }) => {
         const { metadataPage } = widgetService.settingsPage;
-
-        await test.step('Section title is visible', async () => {
-          await expect(metadataPage.formTitle).toBeVisible();
-        });
 
         await test.step('Name input is visible with correct label', async () => {
           await expect(metadataPage.nameInput).toBeVisible();
@@ -47,7 +40,7 @@ test.describe(
           );
         });
 
-        await test.step('Save button is visible and enabled on initial load', async () => {
+        await test.step('Update button is visible and enabled on initial load', async () => {
           await expect(metadataPage.saveButton).toBeVisible();
           await expect(metadataPage.saveButton).toBeEnabled();
         });
@@ -93,7 +86,7 @@ test.describe(
           );
         });
 
-        await test.step('Save button is disabled', async () => {
+        await test.step('Update button is disabled', async () => {
           await expect(metadataPage.saveButton).toBeDisabled();
         });
       },
@@ -119,7 +112,7 @@ test.describe(
           );
         });
 
-        await test.step('Save button is disabled', async () => {
+        await test.step('Update button is disabled', async () => {
           await expect(metadataPage.saveButton).toBeDisabled();
         });
       },

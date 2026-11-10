@@ -1,4 +1,5 @@
-import { Text } from '@lidofinance/lido-ui';
+import { Body, Card } from '@lidofinance/lido-app-ui';
+import { ReactComponent as DkgFileWarning } from 'assets/illustrations/dkg-file-warning.svg';
 import styled, { css } from 'styled-components';
 
 export const DropArea = styled.div<{ $dragActive?: boolean }>`
@@ -27,9 +28,10 @@ export const DkgTable = styled.div`
 `;
 
 export const DkgTableHead = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
   align-items: center;
-  justify-content: space-between;
+  gap: ${({ theme }) => theme.spaceMap.md}px;
   padding-bottom: ${({ theme }) => theme.spaceMap.sm}px;
 `;
 
@@ -53,27 +55,30 @@ export const RowActions = styled.div`
   gap: ${({ theme }) => theme.spaceMap.xs}px;
 `;
 
-export const FileName = styled(Text).attrs({ size: 'xs' })<{
-  $inactive?: boolean;
-}>`
+export const FileName = styled(Body)<{ $inactive?: boolean }>`
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  opacity: ${({ $inactive }) => ($inactive ? 0.5 : 1)};
+  color: ${({ $inactive }) =>
+    $inactive ? 'var(--lido-app-ui-color-text-tertiary)' : 'inherit'};
 `;
 
-export const EmptyStateBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: ${({ theme }) => theme.spaceMap.sm}px;
-  padding: ${({ theme }) => theme.spaceMap.xxl}px 0;
-`;
-
-export const EmptyStateIcon = styled.div`
+export const EmptyStateIllustration = styled.span`
+  display: block;
   line-height: 0;
-  margin-bottom: ${({ theme }) => theme.spaceMap.sm}px;
-  color: var(--lido-color-textSecondary);
+  color: var(--lido-app-ui-color-text-tertiary);
+`;
+
+export const DkgCardStyle = styled(Card)`
+  && {
+    align-items: stretch;
+  }
+`;
+
+export const DkgIllustration = styled(DkgFileWarning)`
+  flex-shrink: 0;
+  width: 200px;
+  height: 200px;
+  overflow: visible;
 `;

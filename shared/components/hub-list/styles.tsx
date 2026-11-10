@@ -20,6 +20,7 @@ export const hubRowCss = css`
   flex-wrap: wrap;
   gap: 8px 16px;
   box-sizing: border-box;
+  min-height: 60px;
   padding: 12px 8px;
   border-radius: var(--lido-app-ui-border-radius-card);
   text-decoration: none;

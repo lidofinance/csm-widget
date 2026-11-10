@@ -1,7 +1,12 @@
 import { FC, useCallback, useState } from 'react';
-import { ButtonIcon, Text } from '@lidofinance/lido-ui';
+import {
+  Body,
+  IconButton,
+  IconDownload,
+  IconTrash,
+  Switch,
+} from '@lidofinance/lido-app-ui';
 import type { FileMetadataDto } from 'modules/surveys-sdk/generated';
-import { Stack, Toggle } from 'shared/components';
 import { useToggleDkgFile } from '../hooks/use-toggle-dkg-file';
 import { useDeleteDkgFile } from '../hooks/use-delete-dkg-file';
 import { useDownloadDkgFile } from '../hooks/use-download-dkg-file';
@@ -14,18 +19,13 @@ import {
   RowActions,
 } from '../styles';
 
-import DownloadIcon from 'assets/icons/download-2.svg?react';
-import Trash from 'assets/icons/trash.svg?react';
-
 const DkgDeleteButton: FC<{ onClick: () => void; disabled?: boolean }> = ({
   onClick,
   disabled,
 }) => (
-  <ButtonIcon
-    icon={<Trash />}
+  <IconButton
+    icon={<IconTrash />}
     variant="ghost"
-    size="xxs"
-    color="error"
     type="button"
     disabled={disabled}
     onClick={onClick}
@@ -81,34 +81,25 @@ export const DkgFilesTable: FC<Props> = ({ files, canManage }) => {
     <>
       <DkgTable>
         <DkgTableHead>
-          <Stack gap="sm">
-            <Text size="xxs" color="secondary">
-              Status
-            </Text>
-            <Text size="xxs" color="secondary">
-              Filename
-            </Text>
-          </Stack>
-          <Text size="xxs" color="secondary">
-            Actions
-          </Text>
+          <Body color="tertiary">Status</Body>
+          <Body color="tertiary">Filename</Body>
+          <Body color="tertiary">Actions</Body>
         </DkgTableHead>
         {files.map((file) => {
           const busy = busyId === file.id;
           return (
-            <DkgRow key={file.id} $columns="auto 1fr auto">
-              <Toggle
+            <DkgRow key={file.id} $columns="64px 1fr auto">
+              <Switch
                 checked={file.active}
                 disabled={!canManage || busy}
-                onChange={(active) => void onToggle(file, active)}
+                aria-label={`Toggle ${file.name}`}
+                onChange={(e) => void onToggle(file, e.target.checked)}
               />
               <FileName $inactive={!file.active}>{file.name}</FileName>
               <RowActions>
-                <ButtonIcon
-                  icon={<DownloadIcon />}
+                <IconButton
+                  icon={<IconDownload />}
                   variant="ghost"
-                  size="xxs"
-                  color="primary"
                   type="button"
                   loading={downloadingId === file.id}
                   onClick={() => void download(file)}
@@ -126,11 +117,7 @@ export const DkgFilesTable: FC<Props> = ({ files, canManage }) => {
           );
         })}
       </DkgTable>
-      {actionError && (
-        <Text size="xs" color="error">
-          {actionError.message}
-        </Text>
-      )}
+      {actionError && <Body color="error">{actionError.message}</Body>}
     </>
   );
 };

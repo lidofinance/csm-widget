@@ -12,7 +12,7 @@ import {
 } from './metadata-read-only-card';
 
 describe('MetadataReadOnlyCard', () => {
-  it('shows the current values in disabled inputs under the card title', () => {
+  it('shows the current values in disabled inputs', () => {
     const html = renderToStaticMarkup(
       <MetadataReadOnlyCard
         name="Simply Staking"
@@ -22,12 +22,11 @@ describe('MetadataReadOnlyCard', () => {
     );
 
     expect(html).toContain('data-testid="metadataForm"');
-    expect(html).toContain('Node Operator name');
     expect(html).toContain('Name');
     expect(html).toContain('Description');
     expect(html).toMatch(/<input[^>]*value="Simply Staking"/);
-    expect(html).toMatch(/<input[^>]*value="Solo staker since 2020"/);
-    expect(html.match(/<input[^>]*disabled=""/g)).toHaveLength(2);
+    expect(html).toContain('Solo staker since 2020</textarea>');
+    expect(html.match(/<(input|textarea)[^>]*disabled=""/g)).toHaveLength(2);
     expect(html).toContain('data-testid="someNotice"');
   });
 
@@ -45,7 +44,8 @@ describe('MetadataReadOnlyCard', () => {
       <MetadataReadOnlyCard name="" notice={null} />,
     );
 
-    expect(html.match(/<input[^>]*value="—"/g)).toHaveLength(2);
+    expect(html).toMatch(/<input[^>]*value="—"/);
+    expect(html).toContain('—</textarea>');
   });
 });
 

@@ -136,33 +136,24 @@ test.describe(
             widgetService.page
               .getByTestId('pageTitle')
               .locator('[aria-current="page"]'),
-          ).toHaveText('DKG');
+          ).toHaveText('DKG files');
         });
 
         await test.step('DKG files section is loaded', async () => {
           const page = widgetService.page;
 
-          await expect(page.getByTestId('dkgFilesCounter')).toHaveText('0', {
+          await expect(page.getByText('Uploaded DKG files')).toBeVisible({
             timeout: PAGE_WAIT_TIMEOUT,
           });
-          await expect(page.getByTestId('sectionHeader')).toContainText(
-            'Your DKG files',
-          );
           await expect(page.getByTestId('dkgAddFileButton')).toBeVisible();
-          await expect(page.getByTestId('switcherTab')).toHaveText([
-            'DKG files',
-            'Cluster members',
-          ]);
         });
 
-        await test.step('Empty state is shown', async () => {
+        await test.step('DKG required card is shown', async () => {
+          const card = widgetService.page.getByTestId('dkgRequiredCard');
+          await expect(card).toBeVisible();
+          await expect(card).toContainText('Upload DKG Files Required');
           await expect(
-            widgetService.page.getByText('No DKG files at the moment'),
-          ).toBeVisible();
-          await expect(
-            widgetService.page.getByText(
-              'Upload your first distributed key generation file',
-            ),
+            card.getByRole('button', { name: 'Upload files' }),
           ).toBeVisible();
         });
       },

@@ -1,4 +1,4 @@
-import { Input, MessageBox } from '@lidofinance/lido-app-ui';
+import { Input, MessageBox, Textarea } from '@lidofinance/lido-app-ui';
 import { FC, ReactNode } from 'react';
 import { FormCard } from 'shared/form-page';
 
@@ -21,10 +21,12 @@ export const MetadataReadOnlyCard: FC<MetadataReadOnlyCardProps> = ({
   description,
   notice,
 }) => (
-  <FormCard title="Node Operator name" data-testid="metadataForm">
+  <FormCard data-testid="metadataForm">
     {notice}
     <Input label="Name" value={name || EMPTY_VALUE} disabled readOnly />
-    <Input
+    <Textarea
+      autosize
+      rows={3}
       label="Description"
       value={description || EMPTY_VALUE}
       disabled

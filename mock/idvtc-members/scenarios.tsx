@@ -4,7 +4,6 @@ import { MembersSection } from 'features/idvtc/members/initialized/members-secti
 import { NotInitialized } from 'features/idvtc/members/not-initialized/not-initialized';
 import { useConfirmRotationModal } from 'features/idvtc/members/rotation/confirm-rotation-modal';
 import {
-  ACTIVE_ADDRESSES,
   PROPOSED_ADDRESSES,
   initRejectedRequest,
   initReviewRequest,
@@ -20,8 +19,13 @@ const ConfirmModalPreview: FC = () => {
     <Button
       onClick={() =>
         void confirm({
-          currentAddress: ACTIVE_ADDRESSES[1],
-          newAddress: PROPOSED_ADDRESSES[0],
+          index: 1,
+          current: mockMembers[1],
+          next: {
+            newAddress: PROPOSED_ADDRESSES[0],
+            signature: '',
+            verified: true,
+          },
         })
       }
     >
@@ -42,7 +46,7 @@ export const testScenarios: TestScenario[] = [
     group: 'members',
     title: 'Idle (manager)',
     description:
-      '4 verified members with Rotate buttons. Press Rotate to open the inline editor (siblings dim); typing an address generates the message to sign. Verify/submit hit the real API and fail on the stand.',
+      '4 verified members with Rotate buttons. Press Rotate to open the rotation modal; typing an address generates the message to sign. Verify/submit hit the real API and fail on the stand.',
     render: () => (
       <MembersSection members={mockMembers} request={null} canManage />
     ),

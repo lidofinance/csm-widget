@@ -1,5 +1,3 @@
-import { Card } from '@lidofinance/lido-app-ui';
-import DkgFileWarning from 'assets/illustrations/dkg-file-warning.svg?react';
 import styled from 'styled-components';
 
 export const NarrowStyle = styled.div`
@@ -22,17 +20,4 @@ export const CardsGridStyle = styled.div`
   @media (max-width: 899px) {
     grid-template-columns: minmax(0, 1fr);
   }
-`;
-
-export const DkgCardStyle = styled(Card)`
-  && {
-    align-items: stretch;
-  }
-`;
-
-export const DkgIllustration = styled(DkgFileWarning)`
-  flex-shrink: 0;
-  width: 93px;
-  height: 100px;
-  overflow: visible;
 `;

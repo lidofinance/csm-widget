@@ -10,7 +10,6 @@ import {
   IconWallet,
 } from '@lidofinance/lido-app-ui';
 import { Eth as EthIcon } from '@lidofinance/lido-ui';
-import DvtIcon from 'assets/icons/file-2.svg?react';
 import FileIcon from 'assets/icons/file.svg?react';
 import GearIcon from 'assets/icons/gear.svg?react';
 import HomeIcon from 'assets/icons/home.svg?react';
@@ -83,6 +82,8 @@ const routes: Route[] = [
       PATH.SETTINGS_INBOX,
       PATH.SETTINGS_METADATA,
       PATH.SETTINGS_GENERAL,
+      PATH.IDVTC_DKG,
+      PATH.IDVTC_MEMBERS,
     ],
     showRules: ['IS_NODE_OPERATOR'],
     suffix: <CounterInvites />,
@@ -163,13 +164,6 @@ const routes: Route[] = [
       ['IS_CSM_FAMILY_SCOPE', 'ICS_APPLY_ENABLED'],
     ],
     suffix: <CounterClaimType />,
-  },
-  {
-    name: 'DVT',
-    path: PATH.IDVTC_DKG,
-    icon: <DvtIcon />,
-    subPaths: [PATH.IDVTC_MEMBERS],
-    showRules: ['IS_IDVTC'],
   },
 ];
 

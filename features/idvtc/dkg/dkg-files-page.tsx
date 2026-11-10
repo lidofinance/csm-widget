@@ -1,13 +1,15 @@
-import { Counter } from '@lidofinance/lido-app-ui';
-import { Text } from '@lidofinance/lido-ui';
+import { Body, Card, SectionTitle } from '@lidofinance/lido-app-ui';
 import { FC, useCallback, useState } from 'react';
-import { Block, SectionTitle, Stack, WhenLoaded } from 'shared/components';
+import { PATH } from 'consts/urls';
+import { Stack, WhenLoaded } from 'shared/components';
+import { useHasNonWithdrawnKeys, useNodeOperatorId } from 'modules/web3';
 import { useShowRule } from 'shared/hooks';
 import { IdvtcSiwePage } from '../idvtc-siwe-page';
 import { DkgAddFileButton } from './components/dkg-add-file-button';
 import { DkgDropArea } from './components/dkg-drop-area';
 import { DkgEmptyState } from './components/dkg-empty-state';
 import { DkgFilesTable } from './components/dkg-files-table';
+import { DkgRequiredCard } from './components/dkg-required-card';
 import { DkgRejectedFiles } from './components/dkg-rejected-files';
 import { DkgSignInPage } from './dkg-signin-page';
 import { useDkgFiles } from './hooks/use-dkg-files';
@@ -22,6 +24,9 @@ const DkgFilesContent: FC = () => {
   // Both the Manager and the Rewards address can manage DKG files.
   const canManage = check('HAS_MANAGER_ROLE') || check('HAS_REWARDS_ROLE');
   const { data: files, isLoading } = useDkgFiles();
+  const nodeOperatorId = useNodeOperatorId();
+  const { data: hasNonWithdrawnKeys, isLoading: isKeysLoading } =
+    useHasNonWithdrawnKeys(nodeOperatorId);
   const upload = useUploadDkgFiles();
   const [batchError, setBatchError] = useState<string>();
 
@@ -44,10 +49,41 @@ const DkgFilesContent: FC = () => {
     onAccepted,
   });
 
+  const showRequired = canManage && hasNonWithdrawnKeys && !files?.length;
+
+  const messages = (
+    <>
+      <DkgRejectedFiles
+        rejected={zone.rejected}
+        onDismiss={zone.dismissRejected}
+      />
+      {batchError && <Body color="error">{batchError}</Body>}
+      {upload.error && (
+        <Body color="error">Upload failed: {upload.error.message}</Body>
+      )}
+    </>
+  );
+
+  const loading = isLoading || (canManage && isKeysLoading);
+
+  if (showRequired) {
+    return (
+      <WhenLoaded loading={loading} morePadding>
+        <DkgDropArea zone={zone}>
+          <Stack direction="column" gap="lg">
+            <DkgRequiredCard onAction={zone.open} />
+            {messages}
+          </Stack>
+        </DkgDropArea>
+      </WhenLoaded>
+    );
+  }
+
   const content = (
     <Stack direction="column" gap="lg">
       <SectionTitle
-        extra={
+        title="Uploaded DKG files"
+        action={
           canManage && (
             <DkgAddFileButton
               onClick={zone.open}
@@ -56,14 +92,7 @@ const DkgFilesContent: FC = () => {
             />
           )
         }
-      >
-        <Stack center gap="sm">
-          Your DKG files
-          <Counter variant="neutral" dataTestId={{ root: 'dkgFilesCounter' }}>
-            {files?.length ?? 0}
-          </Counter>
-        </Stack>
-      </SectionTitle>
+      />
 
       {files && files.length > 0 ? (
         <DkgFilesTable files={files} canManage={canManage} />
@@ -71,38 +100,32 @@ const DkgFilesContent: FC = () => {
         <DkgEmptyState />
       )}
 
-      <DkgRejectedFiles
-        rejected={zone.rejected}
-        onDismiss={zone.dismissRejected}
-      />
-      {batchError && (
-        <Text size="xs" color="error">
-          {batchError}
-        </Text>
-      )}
-      {upload.error && (
-        <Text size="xs" color="error">
-          Upload failed: {upload.error.message}
-        </Text>
-      )}
+      {messages}
     </Stack>
   );
 
   return (
-    <Block>
-      <WhenLoaded loading={isLoading} morePadding>
+    <Card>
+      <WhenLoaded loading={loading} morePadding>
         {canManage ? (
           <DkgDropArea zone={zone}>{content}</DkgDropArea>
         ) : (
           <DropArea>{content}</DropArea>
         )}
       </WhenLoaded>
-    </Block>
+    </Card>
   );
 };
 
 export const DkgFilesPage: FC = () => (
-  <IdvtcSiwePage title="DKG" pageName="DKG" fallback={<DkgSignInPage />}>
+  <IdvtcSiwePage
+    breadcrumbs={[
+      { label: 'Settings', href: PATH.SETTINGS },
+      { label: 'DKG files' },
+    ]}
+    pageName="DKG"
+    fallback={<DkgSignInPage />}
+  >
     <DkgFilesContent />
   </IdvtcSiwePage>
 );
