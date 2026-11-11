@@ -14,9 +14,7 @@ export const PATH = {
 
   KEYS: '/keys',
   KEYS_SUBMIT: '/keys/submit',
-  KEYS_REMOVE: '/keys/remove',
-  KEYS_EJECT: '/keys/eject',
-  KEYS_EXIT: '/keys/exit',
+  KEYS_DELETE: '/keys/delete',
   KEYS_NORMALIZE: '/keys/normalize',
 
   MONITORING: '/monitoring',

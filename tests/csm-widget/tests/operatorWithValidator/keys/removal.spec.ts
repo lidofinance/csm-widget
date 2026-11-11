@@ -62,7 +62,7 @@ test.describe(
               await expect(
                 keysPage.removePage.removalFeeInfoTooltipText,
               ).toContainText(
-                "Key deletion incurs a removal charge, deducted from the node operator's bond. This charge covers the maximum possible operational costs of queue processing",
+                "Key deletion incurs a removal charge, deducted from the Node Operator's bond. This charge covers the maximum possible operational costs of queue processing",
               );
             });
           });

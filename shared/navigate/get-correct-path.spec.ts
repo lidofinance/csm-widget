@@ -226,6 +226,24 @@ describe('getCorrectPath(PATH.KEYS)', () => {
   });
 });
 
+describe('getCorrectPath(PATH.KEYS_DELETE)', () => {
+  it('keeps delete for a manager', () => {
+    expect(
+      getCorrectPath(PATH.KEYS_DELETE, flags({ HAS_MANAGER_ROLE: true })),
+    ).toBe(PATH.KEYS_DELETE);
+  });
+
+  it('keeps delete for a rewards-only wallet', () => {
+    expect(
+      getCorrectPath(PATH.KEYS_DELETE, flags({ HAS_REWARDS_ROLE: true })),
+    ).toBe(PATH.KEYS_DELETE);
+  });
+
+  it('sends a wallet without a role to create', () => {
+    expect(getCorrectPath(PATH.KEYS_DELETE, flags({}))).toBe(PATH.CREATE);
+  });
+});
+
 describe('getCorrectPath(PATH.KEYS_SUBMIT)', () => {
   it('sends a non-manager to the hub', () => {
     expect(

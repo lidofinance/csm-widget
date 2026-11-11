@@ -1,5 +1,3 @@
-export * from './delete-keys-switcher';
-export * from './delete-keys-layout';
 export * from './delayed-penalty-page-switcher';
 export * from './switcher';
 export * from './types';

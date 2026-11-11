@@ -38,10 +38,7 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
       return hasRole ? path : PATH.CREATE;
     case PATH.KEYS_SUBMIT:
       return flags.HAS_MANAGER_ROLE ? path : PATH.KEYS;
-    case PATH.KEYS_REMOVE:
-      return flags.HAS_MANAGER_ROLE ? path : PATH.KEYS_EXIT;
-    case PATH.KEYS_EJECT:
-    case PATH.KEYS_EXIT:
+    case PATH.KEYS_DELETE:
       return hasRole ? path : PATH.CREATE;
 
     // Bond — a claimer-only wallet is kept inside the claim page

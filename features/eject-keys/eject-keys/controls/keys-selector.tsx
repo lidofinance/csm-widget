@@ -5,6 +5,7 @@ import {
   TextLink,
 } from '@lidofinance/lido-app-ui';
 import { PATH } from 'consts/urls';
+import { useDeleteMode } from 'features/delete-keys/delete-mode-provider';
 import { useModule } from 'modules/web3';
 import { FC } from 'react';
 import { KeyListField } from 'shared/hook-form/fields';
@@ -17,6 +18,7 @@ import {
 
 const NotNormalExitNotice: FC = () => {
   const { isCsmFamily } = useModule();
+  const { setMode } = useDeleteMode();
 
   return (
     <MessageBox variant="info" headline={NOT_NORMAL_EXIT_HEADLINE}>
@@ -26,7 +28,15 @@ const NotNormalExitNotice: FC = () => {
       don’t have an ability to access your validator keys. If you can exit your
       keys normally, please proceed with the{' '}
       {isCsmFamily ? (
-        <TextLink href={PATH.KEYS_EXIT}>regular exit flow</TextLink>
+        <TextLink
+          href={`${PATH.KEYS_DELETE}?mode=exit`}
+          onClick={(e) => {
+            e.preventDefault();
+            setMode('exit');
+          }}
+        >
+          regular exit flow
+        </TextLink>
       ) : (
         'regular exit flow'
       )}

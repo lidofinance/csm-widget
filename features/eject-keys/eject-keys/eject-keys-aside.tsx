@@ -19,7 +19,7 @@ const AsideRows: FC = () => {
   return (
     <>
       <DataListRow
-        label="Estimated ejection cost"
+        label="Ejection cost"
         info={EJECTION_COST_TOOLTIP}
         value={<FormatToken amount={feeAmount ?? 0n} token={TOKENS.eth} />}
         description="Will be deducted from your wallet balance"

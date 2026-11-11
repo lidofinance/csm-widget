@@ -56,7 +56,7 @@ export class RemovePage {
     await test.step('Open remove tab for Keys page', async () => {
       // an empty operator has no key rows, so accept the empty state too
       await this.base.openWithRetry(
-        '/keys/remove',
+        '/keys/delete?mode=remove',
         this.keyRow.first().or(this.emptyState).first(),
       );
     });

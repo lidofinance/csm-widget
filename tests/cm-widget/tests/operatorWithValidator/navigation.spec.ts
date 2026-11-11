@@ -19,7 +19,7 @@ const SIDEBAR_ITEMS = [
 
 const KEYS_ACTIONS = [
   { title: 'Submit new key', url: '/keys/submit' },
-  { title: 'Delete key', url: '/keys/exit' },
+  { title: 'Delete key', url: '/keys/delete' },
 ];
 
 const BOND_ACTIONS = [
@@ -51,9 +51,9 @@ const SETTINGS_PAGES = [
 ];
 
 const DELETE_KEYS_CARDS = [
-  { title: 'Remove', url: '/keys/remove' },
-  { title: 'Exit', url: '/keys/exit' },
-  { title: 'Eject', url: '/keys/eject' },
+  { title: 'Exit', mode: 'exit' },
+  { title: 'Eject', mode: 'eject' },
+  { title: 'Remove', mode: 'remove' },
 ];
 
 test.describe(
@@ -203,7 +203,7 @@ test.describe(
         await widgetService.page
           .getByRole('link', { name: 'Delete key' })
           .click();
-        await widgetService.page.waitForURL(/\/keys\/exit/);
+        await expect(widgetService.page).toHaveURL(/\/keys\/delete/);
 
         await test.step('All Delete keys cards are visible', async () => {
           for (const { title } of DELETE_KEYS_CARDS) {
@@ -214,10 +214,12 @@ test.describe(
           }
         });
 
-        for (const { title, url } of DELETE_KEYS_CARDS) {
+        for (const { title, mode } of DELETE_KEYS_CARDS) {
           await test.step(`Navigate to "${title}" on click`, async () => {
             await navigation.deleteKeysCard(title).click();
-            await expect(widgetService.page).toHaveURL(new RegExp(url));
+            await expect(widgetService.page).toHaveURL(
+              new RegExp(`/keys/delete\\?mode=${mode}`),
+            );
           });
         }
       },

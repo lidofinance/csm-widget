@@ -8,7 +8,7 @@ import type { Hex } from 'viem';
 export const REMOVE_KEYS_FORM_TEST_ID = 'removeKeysForm';
 
 export const REMOVAL_FEE_TOOLTIP =
-  "Key deletion incurs a removal charge, deducted from the node operator's bond. This charge covers the maximum possible operational costs of queue processing.";
+  "Key deletion incurs a removal charge, deducted from the Node Operator's bond. This charge covers the maximum possible operational costs of queue processing.";
 
 export const NO_KEYS_TO_REMOVE = 'No keys available to remove';
 

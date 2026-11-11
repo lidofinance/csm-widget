@@ -6,7 +6,7 @@ import { useFormDataPending } from 'shared/hook-form/form-controller/form-data-c
 const LABEL: CSSProperties = { width: '40%' };
 const FIELD: CSSProperties = { height: 52 };
 const AREA: CSSProperties = { height: 240 };
-const LOADING = {
+export const FORM_SKELETON_PROPS = {
   role: 'status',
   'aria-busy': 'true',
   'aria-label': 'Loading',
@@ -32,13 +32,13 @@ export const FormAsideSkeletonContent: FC = () => (
 );
 
 const FormSkeleton: FC = () => (
-  <Card {...LOADING}>
+  <Card {...FORM_SKELETON_PROPS}>
     <FormMainSkeletonContent />
   </Card>
 );
 
 export const FormMainAsideSkeleton: FC = () => (
-  <FormLayout {...LOADING} aside={<FormAsideSkeletonContent />}>
+  <FormLayout {...FORM_SKELETON_PROPS} aside={<FormAsideSkeletonContent />}>
     <FormMainSkeletonContent />
   </FormLayout>
 );

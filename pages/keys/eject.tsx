@@ -1,12 +1,11 @@
 import { PATH } from 'consts/urls';
-import { EjectKeysPage } from 'features/eject-keys';
-import { Gate, GateLoaded, Navigate } from 'shared/navigate';
+import { GateLoaded, Navigate } from 'shared/navigate';
+
+const QUERY = { mode: 'eject' };
 
 const Page = () => (
   <GateLoaded>
-    <Gate rule="HAS_OWNER_ROLE" fallback={<Navigate path={PATH.KEYS} />}>
-      <EjectKeysPage />
-    </Gate>
+    <Navigate replace path={PATH.KEYS_DELETE} query={QUERY} />
   </GateLoaded>
 );
 

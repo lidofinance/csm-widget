@@ -30,7 +30,7 @@ export const KeysActions: FC = () => {
       {canManage && <Button href={PATH.KEYS_SUBMIT}>Submit new key</Button>}
       <Button
         variant="outline"
-        href={PATH.KEYS_EXIT}
+        href={PATH.KEYS_DELETE}
         disabled={!check('HAS_KEYS')}
         counter={
           canManage && invalid ? <Counter variant="error">1</Counter> : null

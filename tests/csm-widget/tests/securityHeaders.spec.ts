@@ -8,6 +8,7 @@ const WIDGET_PAGES = [
   '/create',
   '/type',
   '/keys/submit',
+  '/keys/delete',
   '/keys',
   '/keys/view',
   '/bond',

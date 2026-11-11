@@ -14,6 +14,8 @@ import {
   useShareLimitStatus,
 } from 'modules/web3';
 
+const REMOVE_QUERY = { mode: 'remove' };
+
 const VALIDATOR_ACTIVE_ANCHOR = '#when-does-a-validator-become-active';
 
 // TODO: check role
@@ -43,7 +45,9 @@ export const CommentUnbonded: FC = () => (
 );
 
 export const CommentInvalid: FC = () => (
-  <LocalLink href={PATH.KEYS_REMOVE}>Remove the key</LocalLink>
+  <LocalLink href={PATH.KEYS_DELETE} query={REMOVE_QUERY}>
+    Remove the key
+  </LocalLink>
 );
 
 export const CommentUnchecked: FC = () => (
@@ -56,7 +60,9 @@ export const CommentUnchecked: FC = () => (
 export const CommentUnbondedNonQueued: FC = () => (
   <>
     <LocalLink href={PATH.BOND_ADD}>Top up the bond</LocalLink> or{' '}
-    <LocalLink href={PATH.KEYS_REMOVE}>Remove the key</LocalLink>
+    <LocalLink href={PATH.KEYS_DELETE} query={REMOVE_QUERY}>
+      Remove the key
+    </LocalLink>
   </>
 );
 

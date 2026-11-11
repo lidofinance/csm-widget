@@ -47,7 +47,7 @@ export class RemovePage extends BasePage {
 
   async open() {
     await test.step('Open remove tab for Keys page', async () => {
-      await this.openWithRetry('/keys/remove', this.removeKeysForm);
+      await this.openWithRetry('/keys/delete?mode=remove', this.removeKeysForm);
     });
   }
 
