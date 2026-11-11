@@ -1,13 +1,25 @@
+import {
+  Grid,
+  Skeleton,
+  Stack,
+  StatItem,
+  Typography,
+} from '@lidofinance/lido-app-ui';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { Text } from '@lidofinance/lido-ui';
-import { Balance } from 'features/dashboard/bond/balance';
-import { FC } from 'react';
-import { Block, IssuesChip, Stack, TextBlock } from 'shared/components';
+import { CSM_FAMILY_MODULES } from 'consts';
+import { FC, useId } from 'react';
+import { StretchCard } from 'shared/components';
+import {
+  SUMMARY_COLUMNS,
+  SUMMARY_GAP,
+} from 'shared/components/stake-allocation';
+import { INFO_TEST_ID } from 'shared/components/bond-stats-card/bond-stats-card';
+import { UsdValue } from 'shared/components/bond-stats-card/usd-value';
 import { FormatToken } from 'shared/formatters';
 import { useMyOperatorsOverview } from 'shared/hooks';
-import { TilesRow } from './styles';
+import { ActiveKeysValue, IssuesTag } from './parts';
 
-export const SummaryCard: FC = () => {
+export const MyOperatorsSummaryCard: FC = () => {
   const {
     activeValidators,
     liveKeys,
@@ -16,27 +28,43 @@ export const SummaryCard: FC = () => {
     bondBalance,
     totalIssues,
     isPending,
-  } = useMyOperatorsOverview();
+  } = useMyOperatorsOverview({ modules: CSM_FAMILY_MODULES });
+  const titleId = useId();
+  const loading = <Skeleton variant="text" />;
 
   return (
-    <Block data-testid="myOperatorsSummary">
-      <Stack direction="column" gap="xl">
-        <Stack center spaceBetween>
-          <Text as="h4" size="sm" weight={700}>
-            My operators summary
-          </Text>
-          <IssuesChip
-            issues={isPending ? undefined : totalIssues}
-            data-testid="summaryIssuesChip"
-          />
-        </Stack>
-        <TilesRow>
-          <TextBlock
-            data-testid="summaryActiveValidators"
-            title="Active validators"
-            help="Active validators out of all non-withdrawn keys across your operators"
-            loading={isPending}
-            description={
+    <StretchCard
+      dataTestId={{ root: 'myOperatorsSummary' }}
+      aria-labelledby={titleId}
+    >
+      <Stack direction="row" justify="between" align="center" gap={16} wrap>
+        <Typography variant="h3" as="p" id={titleId}>
+          My operators summary
+        </Typography>
+        <IssuesTag
+          count={isPending ? undefined : totalIssues}
+          dataTestId="summaryIssuesChip"
+        />
+      </Stack>
+      <Grid columns={SUMMARY_COLUMNS} gap={SUMMARY_GAP}>
+        <StatItem
+          align="left"
+          label="Active keys"
+          info="Active keys out of all non-withdrawn keys across your operators"
+          dataTestId={{ ...INFO_TEST_ID, root: 'summaryActiveValidators' }}
+          value={
+            isPending ? (
+              loading
+            ) : (
+              <ActiveKeysValue
+                active={activeValidators}
+                total={liveKeys}
+                spaced
+              />
+            )
+          }
+          subValue={
+            isPending ? undefined : (
               <FormatToken
                 amount={activeBalance}
                 token={TOKENS.eth}
@@ -44,27 +72,50 @@ export const SummaryCard: FC = () => {
                 trimTrailingZeros
                 fallback=""
               />
-            }
-          >
-            {activeValidators}
-            <i> / {liveKeys}</i>
-          </TextBlock>
-          <Balance
-            data-testid="summaryAvailableToClaim"
-            title="Available to claim"
-            loading={isPending}
-            amount={availableToClaim}
-            approx
-          />
-          <Balance
-            data-testid="summaryBondBalance"
-            title="Bond balance"
-            loading={isPending}
-            amount={bondBalance}
-            approx
-          />
-        </TilesRow>
-      </Stack>
-    </Block>
+            )
+          }
+        />
+        <StatItem
+          align="left"
+          label="Total balance, stETH"
+          info="Total bond held by your operators across the CSM modules"
+          dataTestId={{
+            ...INFO_TEST_ID,
+            root: 'summaryBondBalance',
+            value: 'textContent',
+          }}
+          value={
+            isPending ? (
+              loading
+            ) : (
+              <FormatToken amount={bondBalance} maxDecimalDigits={4} />
+            )
+          }
+          subValue={
+            isPending ? undefined : (
+              <UsdValue amount={bondBalance} approx={false} />
+            )
+          }
+        />
+        <StatItem
+          align="left"
+          label="Available to claim, stETH"
+          info="The amount you can claim now, including rewards and excess bond across your operators"
+          dataTestId={{ ...INFO_TEST_ID, root: 'summaryAvailableToClaim' }}
+          value={
+            isPending ? (
+              loading
+            ) : (
+              <FormatToken amount={availableToClaim} maxDecimalDigits={4} />
+            )
+          }
+          subValue={
+            isPending ? undefined : (
+              <UsdValue amount={availableToClaim} approx={false} />
+            )
+          }
+        />
+      </Grid>
+    </StretchCard>
   );
 };

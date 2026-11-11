@@ -15,6 +15,7 @@ const SIDEBAR_ITEMS = [
   { name: 'Monitoring', url: '/monitoring' },
   { name: 'Bond & Rewards', url: '/bond' },
   { name: 'Settings', url: '/settings' },
+  { name: 'My Operators', url: '/operators' },
 ];
 
 const KEYS_ACTIONS = [
@@ -89,6 +90,10 @@ test.describe(
             await expect(widgetService.page).toHaveURL(new RegExp(url));
           });
         }
+
+        await test.step('My Operators shows the group', async () => {
+          await expect(widgetService.groupPage.groupSection).toBeVisible();
+        });
       },
     );
 

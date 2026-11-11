@@ -1,16 +1,15 @@
-import {
-  KEY_STATUS,
-  KeyWithStatus,
-  MODULE_NAME,
-} from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, type NodeOperatorInfo } from '@lidofinance/lido-csm-sdk';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { useUserConfig } from 'config/user-config';
 import {
   KEY_FEE_SPLITS,
   KEY_OPERATOR_BALANCE,
   KEY_OPERATOR_CURVE_ID,
+  KEY_OPERATOR_GROUP_ID,
+  KEY_OPERATOR_GROUP_SUMMARY,
   KEY_OPERATOR_INFO,
   KEY_OPERATOR_KEYS,
+  KEY_OPERATOR_METADATA,
   KEY_OPERATOR_REWARDS,
   KEY_OPERATORS,
   KEY_STETH_POOL_DATA,
@@ -19,12 +18,8 @@ import {
   NodeOperatorContext,
   type NodeOperatorContextValue,
 } from 'modules/web3/operator-provider/node-operator-provider';
-import type {
-  ModuleNodeOperator,
-  OperatorRef,
-} from 'modules/web3/operator-provider/types';
+import type { OperatorRef } from 'modules/web3/operator-provider/types';
 import { FC, PropsWithChildren, useCallback, useMemo, useState } from 'react';
-import { parseEther } from 'viem';
 import { WagmiProvider } from 'wagmi';
 import { AutoConnect } from '../shared/auto-connect';
 import { createMockQueryClient } from '../shared/create-mock-query-client';
@@ -32,97 +27,25 @@ import {
   makeBond,
   makeOperatorInfo,
   makeRewards,
-  MOCK_CLAIMER,
   MOCK_MANAGER,
   MOCK_POOL_DATA,
-  MOCK_REWARDS_ADDRESS,
-  type RawBond,
 } from '../claim-bond/mock-data';
 import { createMockWagmiConfig } from '../claim-bond/mock-wagmi';
+import {
+  VARIANTS,
+  type MyOperatorsVariant,
+  type OperatorSeed,
+  type VariantRecord,
+} from './variants';
 
 const ADDRESS = MOCK_MANAGER;
 
-const OPERATORS: ModuleNodeOperator[] = [
-  {
-    nodeOperatorId: 37n,
-    module: MODULE_NAME.CSM_02,
-    managerAddress: ADDRESS,
-    rewardsAddress: ADDRESS,
-    extendedManagerPermissions: false,
-    curveId: 0n,
-  },
-  {
-    nodeOperatorId: 38n,
-    module: MODULE_NAME.CSM,
-    managerAddress: ADDRESS,
-    rewardsAddress: MOCK_REWARDS_ADDRESS,
-    extendedManagerPermissions: false,
-    curveId: 1n,
-  },
-  {
-    nodeOperatorId: 40n,
-    module: MODULE_NAME.CSM,
-    managerAddress: MOCK_REWARDS_ADDRESS,
-    rewardsAddress: ADDRESS,
-    extendedManagerPermissions: false,
-    curveId: 0n,
-  },
-];
-
-const key = (
-  index: number,
-  statuses: KEY_STATUS[],
-  effectiveBalance?: bigint,
-): KeyWithStatus => ({
-  pubkey: `0x${index.toString(16).padStart(96, '0')}`,
-  index,
-  statuses,
-  effectiveBalance,
-});
-
-// Builds a flat KeyWithStatus[] from status groups, keeping per-operator indices unique.
-const keysFor = (
-  groups: {
-    count: number;
-    statuses: KEY_STATUS[];
-    effectiveBalance?: bigint;
-  }[],
-) => {
-  let i = 0;
-  return groups.flatMap(({ count, statuses, effectiveBalance }) =>
-    Array.from({ length: count }, () => key(i++, statuses, effectiveBalance)),
-  );
-};
-
-// 37: fully active, effectiveBalance set so the CSM_02 keys row shows an ETH balance.
-const KEYS_37 = keysFor([
-  { count: 2, statuses: [KEY_STATUS.DEPOSITABLE] },
-  {
-    count: 10,
-    statuses: [KEY_STATUS.ACTIVE],
-    effectiveBalance: parseEther('32'),
-  },
-]);
-
-// 38: one pending-activation key plus one WITH_STRIKES and one UNBONDED key → 2 issues.
-const KEYS_38 = keysFor([
-  { count: 1, statuses: [KEY_STATUS.ACTIVATION_PENDING] },
-  { count: 10, statuses: [KEY_STATUS.ACTIVE] },
-  { count: 1, statuses: [KEY_STATUS.WITH_STRIKES] },
-  { count: 1, statuses: [KEY_STATUS.UNBONDED] },
-]);
-
-const KEYS_40 = keysFor([{ count: 3, statuses: [KEY_STATUS.ACTIVE] }]);
-
-const DEFAULT_ACTIVE: OperatorRef = {
-  nodeOperatorId: 37n,
-  module: MODULE_NAME.CSM_02,
-};
-
 // Local NodeOperatorContext whose switchNodeOperator flips the active card,
 // mirroring the real provider without hitting the network.
-const MockOperatorProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [active, setActive] = useState<OperatorRef>(DEFAULT_ACTIVE);
+const MockOperatorProvider: FC<
+  PropsWithChildren<{ record: VariantRecord }>
+> = ({ record, children }) => {
+  const [active, setActive] = useState<OperatorRef>(record.active);
 
   const switchNodeOperator = useCallback((operator: OperatorRef) => {
     setActive(operator);
@@ -130,12 +53,12 @@ const MockOperatorProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const nodeOperator = useMemo(
     () =>
-      OPERATORS.find(
+      record.available.find(
         (op) =>
           op.nodeOperatorId === active.nodeOperatorId &&
           op.module === active.module,
       ),
-    [active],
+    [active, record],
   );
 
   const value: NodeOperatorContextValue = useMemo(
@@ -159,10 +82,11 @@ const MockOperatorProvider: FC<PropsWithChildren> = ({ children }) => {
   );
 };
 
-export const MockMyOperatorsProvider: FC<PropsWithChildren> = ({
-  children,
-}) => {
+export const MockMyOperatorsProvider: FC<
+  PropsWithChildren<{ variant?: MyOperatorsVariant }>
+> = ({ variant = 'csm-many', children }) => {
   const { defaultChain } = useUserConfig();
+  const record = VARIANTS[variant];
 
   const wagmiConfig = useMemo(
     () => createMockWagmiConfig(defaultChain, ADDRESS),
@@ -172,19 +96,28 @@ export const MockMyOperatorsProvider: FC<PropsWithChildren> = ({
   const queryClient = useMemo(() => {
     const client = createMockQueryClient();
 
-    client.setQueryData([...KEY_OPERATORS, { address: ADDRESS }], OPERATORS);
+    client.setQueryData(
+      [...KEY_OPERATORS, { address: ADDRESS }],
+      record.available,
+    );
 
-    const seedOperator = (
-      operator: ModuleNodeOperator,
-      keys: KeyWithStatus[],
-      bond: RawBond,
-      rewardsAvailable: number,
-      infoOverrides: Parameters<typeof makeOperatorInfo>[0],
-    ) => {
+    const seedOperator = ({
+      operator,
+      keys,
+      bond,
+      rewardsAvailable,
+      info,
+    }: OperatorSeed) => {
       const idKey = {
         nodeOperatorId: operator.nodeOperatorId,
         module: operator.module,
       };
+      const {
+        managerAddress,
+        rewardsAddress,
+        proposedManagerAddress,
+        ...rest
+      } = info;
       client.setQueryData([...KEY_OPERATOR_KEYS, idKey], keys);
       client.setQueryData([...KEY_OPERATOR_BALANCE, idKey], makeBond(bond));
       client.setQueryData(
@@ -192,41 +125,53 @@ export const MockMyOperatorsProvider: FC<PropsWithChildren> = ({
         makeRewards(rewardsAvailable),
       );
       client.setQueryData([...KEY_FEE_SPLITS, idKey], []);
-      client.setQueryData(
-        [...KEY_OPERATOR_INFO, idKey],
-        makeOperatorInfo(infoOverrides),
-      );
+      client.setQueryData([...KEY_OPERATOR_INFO, idKey], {
+        ...makeOperatorInfo({
+          managerAddress,
+          rewardsAddress,
+          proposedManagerAddress,
+        }),
+        ...rest,
+      } as NodeOperatorInfo);
       client.setQueryData([...KEY_OPERATOR_CURVE_ID, idKey], {
         curveId: operator.curveId,
         module: operator.module,
       });
     };
 
-    seedOperator(OPERATORS[0], KEYS_37, { current: 40, forKeys: 32 }, 0.5, {
-      managerAddress: ADDRESS,
-      rewardsAddress: ADDRESS,
-    });
-    seedOperator(OPERATORS[1], KEYS_38, { current: 9.8, forKeys: 10 }, 0.2, {
-      managerAddress: ADDRESS,
-      rewardsAddress: MOCK_REWARDS_ADDRESS,
-      proposedManagerAddress: MOCK_CLAIMER,
-    });
-    seedOperator(OPERATORS[2], KEYS_40, { current: 10, forKeys: 9 }, 0.1, {
-      managerAddress: MOCK_REWARDS_ADDRESS,
-      rewardsAddress: ADDRESS,
+    record.csm.forEach(seedOperator);
+
+    record.cm.forEach((seed) => {
+      seedOperator(seed);
+      const idKey = {
+        nodeOperatorId: seed.operator.nodeOperatorId,
+        module: MODULE_NAME.CM,
+      };
+      const summary = record.groups.find((g) => g.groupId === seed.groupId);
+      client.setQueryData([...KEY_OPERATOR_GROUP_ID, idKey], seed.groupId);
+      client.setQueryData(
+        [...KEY_OPERATOR_GROUP_SUMMARY, idKey],
+        summary ?? null,
+      );
+      client.setQueryData([...KEY_OPERATOR_METADATA, idKey], {
+        name: seed.metadataName,
+        description: '',
+        ownerEditsRestricted: false,
+      });
     });
 
     client.setQueryData([...KEY_STETH_POOL_DATA], MOCK_POOL_DATA);
 
     return client;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [record]);
 
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
         <AutoConnect>
-          <MockOperatorProvider>{children}</MockOperatorProvider>
+          <MockOperatorProvider record={record}>
+            {children}
+          </MockOperatorProvider>
         </AutoConnect>
       </QueryClientProvider>
     </WagmiProvider>

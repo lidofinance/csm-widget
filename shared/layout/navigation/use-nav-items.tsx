@@ -1,4 +1,3 @@
-import { CSM_FAMILY_MODULES } from 'consts';
 import { PATH } from 'consts/urls';
 import { ReactNode } from 'react';
 
@@ -86,8 +85,8 @@ const routes: Route[] = [
     name: 'My Operators',
     path: PATH.MY_OPERATORS,
     icon: <UsersIcon />,
+    subPaths: [PATH.GROUP],
     showRules: ['IS_NODE_OPERATOR'],
-    modules: CSM_FAMILY_MODULES,
     suffix: <CounterMyOperators />,
   },
   {

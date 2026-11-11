@@ -43,7 +43,7 @@ test.describe(
       qase(217, 'Should navigate to My Operators via the crumb'),
       async ({ widgetService }) => {
         await widgetService.groupPage.myOperatorsCrumb.click();
-        await expect(widgetService.page).toHaveURL('/');
+        await expect(widgetService.page).toHaveURL('/operators');
       },
     );
 
