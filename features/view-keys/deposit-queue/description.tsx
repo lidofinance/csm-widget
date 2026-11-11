@@ -1,3 +1,4 @@
+import { Stack, Typography } from '@lidofinance/lido-app-ui';
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import {
@@ -28,53 +29,59 @@ const DepositsFlowLink: FC<PropsWithChildren> = ({ children }) => (
   </MatomoLink>
 );
 
+const Paragraph: FC<PropsWithChildren> = ({ children }) => (
+  <Typography variant="body" color="secondary">
+    {children}
+  </Typography>
+);
+
 const Csm02Description: FC = () => (
-  <>
-    <p>
+  <Stack direction="column" gap={12}>
+    <Paragraph>
       Queued stake shows how much stake is already waiting to be deposited
       before the next keys can receive their initial 32 ETH deposit
-    </p>
-    <p>
+    </Paragraph>
+    <Paragraph>
       Once active, validators move to the top-up queue, where they may continue
       receiving deposits toward 2,048 ETH
-    </p>
-    <p>
+    </Paragraph>
+    <Paragraph>
       Deposit timing in either stage is not guaranteed and depends on stake
       inflows and outflows, gas conditions, and module limits
-    </p>
-    <p>
+    </Paragraph>
+    <Paragraph>
       Subscribe to <SubscribeLink>important CSM events</SubscribeLink> to stay
       notified about related deposits
-    </p>
-    <p>
+    </Paragraph>
+    <Paragraph>
       Read more about <DepositsFlowLink>the deposits flow</DepositsFlowLink>
-    </p>
-  </>
+    </Paragraph>
+  </Stack>
 );
 
 const DefaultDescription: FC = () => (
-  <>
-    <p>
+  <Stack direction="column" gap={12}>
+    <Paragraph>
       The time to deposit a validator is unpredictable and depends on factors
       such as total stake inflows and outflows, gas considerations, module
       shares, CSM deposit queue size, and the Node Operator&apos;s place in the
       queue
-    </p>
-    <p>
+    </Paragraph>
+    <Paragraph>
       You can subscribe to{' '}
       <SubscribeLink>the important CSM events</SubscribeLink> to stay notified
       about your validator being deposited to
-    </p>
-    <p>
+    </Paragraph>
+    <Paragraph>
       Read more information about{' '}
       <DepositsFlowLink>the deposits flow</DepositsFlowLink>
-    </p>
-  </>
+    </Paragraph>
+  </Stack>
 );
 
 export const Description: FC<{ module?: MODULE_NAME }> = ({ module }) => {
   const resolvedModule = useDepositQueueModule(module);
   const isCsm02 = resolvedModule === MODULE_NAME.CSM_02;
 
-  return <div>{isCsm02 ? <Csm02Description /> : <DefaultDescription />}</div>;
+  return isCsm02 ? <Csm02Description /> : <DefaultDescription />;
 };

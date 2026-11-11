@@ -1,7 +1,7 @@
+import { Stack, Tag, Typography } from '@lidofinance/lido-app-ui';
 import { FC, useCallback } from 'react';
-import { Stack } from 'shared/components';
 import { useGraphInteraction } from './hover-provider';
-import { ChipStyle, CircleStyle, LegendStyle, PartStyle } from './style';
+import { CircleStyle, getPartColors, LegendStyle, PartStyle } from './style';
 import { getPriorityName } from './get-priority-name';
 import { QueueAmount } from './queue-amount';
 import { GraphPart, QueueUnit } from './types';
@@ -40,17 +40,18 @@ export const Legend: FC<LegendProps> = ({
 
   return (
     <LegendStyle onMouseEnter={handleHover} onMouseLeave={handleLeave}>
-      <Stack center gap="sm">
+      <Stack direction="row" align="center" gap={8}>
         <CircleStyle>
           <PartStyle $type={type} />
         </CircleStyle>
-        <span>{title}</span>
-        {(amount !== undefined && (
-          <ChipStyle $type={type}>
+        <Typography variant="body" as="span">
+          {title}
+        </Typography>
+        {amount !== undefined && (
+          <Tag variant="custom" style={getPartColors(type)}>
             <QueueAmount amount={amount} unit={unit} />
-          </ChipStyle>
-        )) ||
-          null}
+          </Tag>
+        )}
       </Stack>
     </LegendStyle>
   );

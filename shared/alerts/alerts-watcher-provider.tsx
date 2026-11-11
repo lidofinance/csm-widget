@@ -5,7 +5,6 @@ import {
   useModule,
   useNodeOperatorId,
   useOperatorBalance,
-  useOperatorInfo,
   useOperatorKeysWithStatus,
 } from 'modules/web3';
 import {
@@ -19,6 +18,7 @@ import {
   useCanClaimICS,
   useCanClaimIDVTC,
   useDismiss,
+  useNeedsNormalize,
   useShowFlags,
 } from 'shared/hooks';
 import { useAlertActions } from './alert-provider';
@@ -34,19 +34,16 @@ import { useAlertWatcher } from './use-alert-watcher';
 
 export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
   const { closeAlert } = useAlertActions();
-  const { module, isCsmFamily } = useModule();
+  const { module } = useModule();
   const { IS_NODE_OPERATOR } = useShowFlags();
 
   const { isSupportedChain } = useDappStatus();
   const nodeOperatorId = useNodeOperatorId();
-  const { data: info } = useOperatorInfo({ nodeOperatorId });
   const canClaimICS = useCanClaimICS();
   const canClaimIDVTC = useCanClaimIDVTC();
   const { route } = useRouter();
 
-  const normalizeQueue = useMemo(() => {
-    return info && info.enqueuedCount < info.depositableValidatorsCount;
-  }, [info]);
+  const needsNormalize = useNeedsNormalize();
 
   const { data: balance } = useOperatorBalance({ nodeOperatorId });
   const { data: isLockExpired } = useIsLockExpired({ nodeOperatorId });
@@ -85,7 +82,7 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
 
   useAlertWatcher({
     component: AlertNomalizeQueue,
-    shouldShow: IS_NODE_OPERATOR && isCsmFamily && !!normalizeQueue,
+    shouldShow: IS_NODE_OPERATOR && needsNormalize,
   });
 
   useAlertWatcher({
