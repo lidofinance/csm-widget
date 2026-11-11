@@ -1,14 +1,21 @@
 import { Caption, Card } from '@lidofinance/lido-app-ui';
 import { Children, FC, PropsWithChildren, ReactNode } from 'react';
-import { HubDividerStyle, HubListStyle, HubOverlineStyle } from './styles';
+import {
+  HubDividerStyle,
+  HubFooterStyle,
+  HubListStyle,
+  HubOverlineStyle,
+} from './styles';
 
 export type HubListProps = PropsWithChildren<{
   overline?: ReactNode;
+  footer?: ReactNode;
   dataTestId?: string;
 }>;
 
 export const HubList: FC<HubListProps> = ({
   overline,
+  footer,
   dataTestId,
   children,
 }) => {
@@ -28,6 +35,7 @@ export const HubList: FC<HubListProps> = ({
             {row}
           </div>
         ))}
+        {footer && <HubFooterStyle>{footer}</HubFooterStyle>}
       </HubListStyle>
     </Card>
   );

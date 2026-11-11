@@ -9,6 +9,10 @@ export const HubOverlineStyle = styled.div`
   padding: 0 0 8px;
 `;
 
+export const HubFooterStyle = styled.div`
+  padding: 16px 8px 0;
+`;
+
 export const HubDividerStyle = styled.div`
   border-top: 1px solid var(--lido-app-ui-color-border-default);
 `;

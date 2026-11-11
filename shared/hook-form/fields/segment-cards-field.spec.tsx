@@ -81,7 +81,7 @@ describe('SegmentCardsField', () => {
     const html = render({ claimOption: 'all' }, notAllowed);
     const list = html.match(/<div[^>]*role="tablist"[^>]*>/)?.[0] ?? '';
     const error =
-      html.match(/<p[^>]*data-testid="inputMessageError"[^>]*>/)?.[0] ?? '';
+      html.match(/<span[^>]*data-testid="inputMessageError"[^>]*>/)?.[0] ?? '';
     const errorId = error.match(/\sid="([^"]+)"/)?.[1];
 
     expect(errorId).toBeTruthy();

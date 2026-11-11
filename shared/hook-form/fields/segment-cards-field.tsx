@@ -1,4 +1,5 @@
 import {
+  getFieldErrorId,
   SegmentedControlCard,
   type SegmentCardItem,
   Stack,
@@ -12,11 +13,8 @@ import { useFocusableRef } from './use-focusable-ref';
 const SEGMENT_TAB_STOP_SELECTOR = '[role="tab"]:not([disabled])';
 
 // lib stacks below count * 216px, which wraps 3 cards in a ~600px form column
-const SegmentedControlCardStyled = styled(SegmentedControlCard)<{
-  $count: number;
-}>`
+const SegmentedControlCardStyled = styled(SegmentedControlCard)`
   && {
-    --local-stack-at: ${({ $count }) => $count * 160}px;
     --local-stack-at: 480px;
   }
 `;
@@ -52,13 +50,12 @@ export const SegmentCardsField: FC<SegmentCardsFieldProps> = ({
     <Stack direction="column" gap={12} ref={ref}>
       <SegmentedControlCardStyled
         items={options}
-        $count={options.length}
         value={field.value ?? ''}
         onChange={field.onChange}
         onBlur={field.onBlur}
         aria-label={ariaLabel}
         aria-invalid={invalid || undefined}
-        aria-describedby={message ? errorId : undefined}
+        aria-describedby={message ? getFieldErrorId(errorId) : undefined}
         dataTestId={{ root: testId }}
       />
       <FieldError id={errorId}>{message}</FieldError>
