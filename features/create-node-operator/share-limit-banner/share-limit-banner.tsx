@@ -65,13 +65,14 @@ const SeedQueueFullBanner: FC = () => (
 
 const ReachedBanner: FC<NameProps> = ({ name }) => (
   <MessageBox
-    variant="warning"
+    variant="default"
     headline={`${name} has reached its stake share limit`}
   >
-    You can still upload keys, but they are very unlikely to receive deposits in
-    the near future (possibly for months).
+    You still can upload keys, but the module is unlikely to receive deposits in
+    the near term (possibly for months).
     <br />
     <ShareLimitFaqLink />
+    .
   </MessageBox>
 );
 

@@ -1,11 +1,10 @@
 import { KEYS_UPLOAD_TX_LIMIT } from 'consts/keys';
-import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
 import { pluralKeys } from 'utils/plural';
 
-export const KEYS_LIMIT_REASON = 'Keys limit has reached';
+const BOND_INSUFFICIENT_LABEL = 'Insufficient Bond';
+const BOND_EXCESS_LABEL = 'Excess Bond';
 
-export const AMOUNT_TOOLTIP =
-  'This field is calculated automatically based on the number of keys and the bond curve. Follow the FAQ section to learn more.';
+export const KEYS_LIMIT_REASON = 'Keys limit has reached';
 
 export const KEYS_CONFIRM_CM =
   'I confirm that my nodes are synced, running, and ready for the validator activation';
@@ -64,13 +63,13 @@ export const getBondDeltaRow = (
   return bond.isInsufficient
     ? {
         insufficient: true,
-        label: BOND_INSUFFICIENT,
+        label: BOND_INSUFFICIENT_LABEL,
         hint: 'Will be added to the transaction amount',
         amount: bond.delta,
       }
     : {
         insufficient: false,
-        label: BOND_EXCESS,
+        label: BOND_EXCESS_LABEL,
         hint: 'Will be subtracted from the transaction amount',
         amount: bond.delta,
       };

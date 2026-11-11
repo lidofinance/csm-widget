@@ -61,7 +61,7 @@ describe('getBondDeltaRow', () => {
   it('describes an insufficient bond', () => {
     expect(getBondDeltaRow({ delta: 5n, isInsufficient: true })).toEqual({
       insufficient: true,
-      label: 'Insufficient bond',
+      label: 'Insufficient Bond',
       hint: 'Will be added to the transaction amount',
       amount: 5n,
     });
@@ -70,7 +70,7 @@ describe('getBondDeltaRow', () => {
   it('describes an excess bond', () => {
     expect(getBondDeltaRow({ delta: 7n, isInsufficient: false })).toEqual({
       insufficient: false,
-      label: 'Excess bond',
+      label: 'Excess Bond',
       hint: 'Will be subtracted from the transaction amount',
       amount: 7n,
     });

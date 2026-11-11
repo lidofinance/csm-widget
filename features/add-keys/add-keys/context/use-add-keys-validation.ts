@@ -36,6 +36,7 @@ export const useAddKeysValidation = () => {
         ethBalance,
         stethBalance,
         wstethBalance,
+        keysAvailable,
       },
       validate,
     ) => {
@@ -49,6 +50,13 @@ export const useAddKeysValidation = () => {
           ethBalance,
           stethBalance,
           wstethBalance,
+          affordableKeys:
+            keysAvailable && depositData?.length
+              ? {
+                  count: keysAvailable[token].byBalance,
+                  uploaded: depositData.length,
+                }
+              : undefined,
         }),
       );
 

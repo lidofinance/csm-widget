@@ -128,6 +128,10 @@ export const validationMessage = {
 
   // Token balance
   notEnoughBalance: (token: string): string => `Not enough balance of ${token}`,
+  cannotUploadMoreKeys: (count: number): string =>
+    `Cannot upload more than ${count} ${pluralKeys({
+      value: count,
+    })} according to your wallet balance`,
 
   // Ether amount validation
   enterAmount: (token: string, field: string): string =>

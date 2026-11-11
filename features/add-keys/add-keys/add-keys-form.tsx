@@ -5,7 +5,7 @@ import { DkgFilesField } from 'features/idvtc/dkg/components/dkg-files-field';
 import { DepositQueue } from 'features/view-keys/deposit-queue';
 import { FC, memo } from 'react';
 import { Faq } from 'shared/components';
-import { FormPage, FormReady } from 'shared/form-page';
+import { FormPage, FormReady, FormMainAsideSkeleton } from 'shared/form-page';
 import { Form } from 'shared/hook-form/form-controller';
 import { AppFormUi } from 'shared/hook-form/form-ui';
 import { Gate } from 'shared/navigate';
@@ -13,7 +13,6 @@ import { AddKeysAside } from './add-keys-aside';
 import { AddKeysFormGate } from './add-keys-form-gate';
 import { AddKeysDataProvider, AddKeysFormProvider } from './context';
 import { AmountInput } from './controls/amount-input';
-import { ExcessBondRow } from './controls/bond-delta';
 import { KeysInput } from './controls/keys-input';
 import { KeysLimitWarning } from './controls/keys-limit-warning';
 import { TokenSelect } from './controls/token-select';
@@ -39,13 +38,12 @@ export const AddKeysForm: FC = memo(() => {
             }
             faq={<Faq items={faq} />}
           >
-            <FormReady>
+            <FormReady skeleton={<FormMainAsideSkeleton />}>
               <AddKeysFormGate>
                 <Form data-testid="submitKeysForm">
                   <FormLayout aside={<AddKeysAside />}>
                     <Stack direction="column" gap={32}>
                       <TokenSelect />
-                      <ExcessBondRow />
                       <Stack direction="column" gap={16}>
                         <KeysInput />
                         <AmountInput />

@@ -1,6 +1,7 @@
 import {
   Address,
-  CloseButton,
+  IconButton,
+  IconTrash,
   TableBody,
   TableCell,
   TableHead,
@@ -14,13 +15,17 @@ import { useSmSDK, useTargetModule } from 'modules/web3';
 import { FC, useCallback } from 'react';
 import { useFormContext, useFormState, useWatch } from 'react-hook-form';
 import invariant from 'tiny-invariant';
+import { useConfirmDeleteKeyModal } from './confirm-delete-key-modal-app';
 import { ErrorList, TableScroll } from './styles';
 import { DepositDataInputType } from './use-parse-deposit-data';
+
+const TRASH_STYLE = { color: 'var(--lido-app-ui-color-icons-error)' };
 
 // TODO: refactor to separate component and hook
 export const DepositDataParsed: FC = () => {
   const targetModule = useTargetModule();
   const sm = useSmSDK(targetModule);
+  const confirmDelete = useConfirmDeleteKeyModal();
 
   const { setValue, setError, clearErrors } =
     useFormContext<DepositDataInputType>();
@@ -32,6 +37,7 @@ export const DepositDataParsed: FC = () => {
       name: ['depositData', 'rawDepositData'],
     });
 
+  const busy = isValidating || isSubmitting;
   const depositDataErrors = errors.depositData?.types;
 
   const [depositData, rawDepositData] = useWatch<
@@ -68,9 +74,9 @@ export const DepositDataParsed: FC = () => {
         <TableHead>
           <TableRow>
             <TableHeaderCell>Recognized Pubkey</TableHeaderCell>
-            <TableHeaderCell align="right">Key number</TableHeaderCell>
+            <TableHeaderCell>Key number</TableHeaderCell>
             <TableHeaderCell align="right">Errors detected</TableHeaderCell>
-            <TableHeaderCell align="right">Delete key</TableHeaderCell>
+            <TableHeaderCell align="right">Delete</TableHeaderCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -107,7 +113,7 @@ export const DepositDataParsed: FC = () => {
                     </ErrorList>
                   )}
                 </TableCell>
-                <TableCell align="right" data-testid="deposit-data-index">
+                <TableCell data-testid="deposit-data-index">
                   <Typography as="span" color={color}>
                     #{index + 1}
                   </Typography>
@@ -121,10 +127,15 @@ export const DepositDataParsed: FC = () => {
                   </Typography>
                 </TableCell>
                 <TableCell align="right" data-testid="deposit-data-delete-key">
-                  <CloseButton
+                  <IconButton
+                    icon={<IconTrash style={busy ? undefined : TRASH_STYLE} />}
+                    type="button"
+                    variant="ghost"
                     aria-label="Delete key"
-                    onClick={() => remove(index)}
-                    disabled={isValidating || isSubmitting}
+                    onClick={async () => {
+                      if (await confirmDelete({})) remove(index);
+                    }}
+                    disabled={busy}
                   />
                 </TableCell>
               </TableRow>

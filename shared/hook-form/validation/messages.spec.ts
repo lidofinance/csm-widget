@@ -108,6 +108,15 @@ describe('validationMessage builders', () => {
     expect(msg).toContain('stETH');
   });
 
+  it('cannotUploadMoreKeys: pluralizes, no trailing dot', () => {
+    expect(validationMessage.cannotUploadMoreKeys(1)).toBe(
+      'Cannot upload more than 1 key according to your wallet balance',
+    );
+    expect(validationMessage.cannotUploadMoreKeys(3)).toBe(
+      'Cannot upload more than 3 keys according to your wallet balance',
+    );
+  });
+
   it('enterAmount: contains token and field', () => {
     const msg = validationMessage.enterAmount('stETH', 'amount');
     expect(msg).toContain('stETH');

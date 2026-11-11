@@ -32,13 +32,18 @@ export type DepositDataFieldProps = {
   label?: string;
   action?: ReactNode;
   showGuideNote?: boolean;
+  highlightFrom?: number;
 };
 
 // Dropzone shows its textarea only while children is nullish
-const TAB_CONTENT: Record<DepositDataTab, ReactNode> = {
-  json: undefined,
-  parsed: <DepositDataParsed />,
-  parameters: <DepositDataParameters />,
+const getTabContent = (
+  tab: DepositDataTab,
+  highlightFrom?: number,
+): ReactNode => {
+  if (tab === 'parsed') return <DepositDataParsed />;
+  if (tab === 'parameters')
+    return <DepositDataParameters highlightFrom={highlightFrom} />;
+  return undefined;
 };
 
 const Placeholder: FC<{ showGuideNote?: boolean }> = ({ showGuideNote }) =>
@@ -58,6 +63,7 @@ export const DepositDataField: FC<DepositDataFieldProps> = ({
   label,
   action,
   showGuideNote,
+  highlightFrom,
 }) => {
   const { field } = useController<DepositDataInputType, 'rawDepositData'>({
     name: 'rawDepositData',
@@ -123,7 +129,7 @@ export const DepositDataField: FC<DepositDataFieldProps> = ({
           onChange: (value) => setTab(value as DepositDataTab),
         }}
       >
-        {TAB_CONTENT[activeTab]}
+        {getTabContent(activeTab, highlightFrom)}
       </Dropzone>
       {isWcTypeMismatch && <WcTypeWarning />}
     </Stack>
