@@ -17,10 +17,9 @@ const SIDEBAR_ITEMS = [
   { name: 'Settings', url: '/settings' },
 ];
 
-const KEYS_TABS = [
-  { title: 'Submit', url: '/keys/submit' },
-  { title: 'Delete', url: '/keys/exit' },
-  { title: 'View keys', url: '/keys/view' },
+const KEYS_ACTIONS = [
+  { title: 'Submit new key', url: '/keys/submit' },
+  { title: 'Delete key', url: '/keys/exit' },
 ];
 
 const BOND_ACTIONS = [
@@ -96,22 +95,25 @@ test.describe(
     test(
       qase(174, 'Should display Keys tabs and navigate correctly'),
       async ({ widgetService }) => {
+        const { page } = widgetService;
         await navigation.navItem('Keys').click();
-        await widgetService.page.waitForURL(/\/keys/);
+        await expect(page).toHaveURL(/\/keys$/);
 
-        await test.step('All Keys tabs are visible', async () => {
-          for (const { title } of KEYS_TABS) {
+        await test.step('All Keys hub actions are visible', async () => {
+          for (const { title } of KEYS_ACTIONS) {
             await expect(
-              navigation.switcherTab(title),
-              `"${title}" tab should be visible`,
+              page.getByRole('link', { name: title }),
+              `"${title}" action should be visible`,
             ).toBeVisible();
           }
         });
 
-        for (const { title, url } of KEYS_TABS) {
-          await test.step(`Navigate to "${title}" tab`, async () => {
-            await navigation.switcherTab(title).click();
-            await expect(widgetService.page).toHaveURL(new RegExp(url));
+        for (const { title, url } of KEYS_ACTIONS) {
+          await test.step(`Navigate to "${title}" action`, async () => {
+            await page.getByRole('link', { name: title }).click();
+            await expect(page).toHaveURL(new RegExp(url));
+            await navigation.navItem('Keys').click();
+            await expect(page).toHaveURL(/\/keys$/);
           });
         }
       },
@@ -198,7 +200,9 @@ test.describe(
       qase(179, 'Should display Delete keys cards and navigate correctly'),
       async ({ widgetService }) => {
         await navigation.navItem('Keys').click();
-        await navigation.switcherTab('Delete').click();
+        await widgetService.page
+          .getByRole('link', { name: 'Delete key' })
+          .click();
         await widgetService.page.waitForURL(/\/keys\/exit/);
 
         await test.step('All Delete keys cards are visible', async () => {

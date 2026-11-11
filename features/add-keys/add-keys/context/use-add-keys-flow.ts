@@ -76,7 +76,7 @@ export const useAddKeysFlowResolver = (): FlowResolver<
             callback: buildCallback(input, data),
           });
 
-          void n(PATH.KEYS_VIEW);
+          void n(PATH.KEYS);
         },
       };
     },

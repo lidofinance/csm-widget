@@ -25,7 +25,7 @@ describe('getCorrectPath(PATH.CREATE)', () => {
         PATH.CREATE,
         flags({ CAN_CREATE: false, HAS_MANAGER_ROLE: true }),
       ),
-    ).toBe(PATH.KEYS_VIEW);
+    ).toBe(PATH.KEYS);
   });
 
   it('jumps straight to the only creatable type', () => {
@@ -196,5 +196,46 @@ describe('getCorrectPath — settings hub', () => {
       PATH.SETTINGS_INBOX,
     );
     expect(getCorrectPath(PATH.SETTINGS, flags({}))).toBe(PATH.SETTINGS_INBOX);
+  });
+});
+
+describe('getCorrectPath(PATH.KEYS)', () => {
+  it('keeps the hub for a manager', () => {
+    expect(getCorrectPath(PATH.KEYS, flags({ HAS_MANAGER_ROLE: true }))).toBe(
+      PATH.KEYS,
+    );
+  });
+
+  it('keeps the hub for a rewards-only wallet', () => {
+    expect(getCorrectPath(PATH.KEYS, flags({ HAS_REWARDS_ROLE: true }))).toBe(
+      PATH.KEYS,
+    );
+  });
+
+  it('keeps the hub for a manager with zero keys', () => {
+    expect(
+      getCorrectPath(
+        PATH.KEYS,
+        flags({ HAS_MANAGER_ROLE: true, HAS_KEYS: false }),
+      ),
+    ).toBe(PATH.KEYS);
+  });
+
+  it('sends a wallet without a role to create', () => {
+    expect(getCorrectPath(PATH.KEYS, flags({}))).toBe(PATH.CREATE);
+  });
+});
+
+describe('getCorrectPath(PATH.KEYS_SUBMIT)', () => {
+  it('sends a non-manager to the hub', () => {
+    expect(
+      getCorrectPath(PATH.KEYS_SUBMIT, flags({ HAS_REWARDS_ROLE: true })),
+    ).toBe(PATH.KEYS);
+  });
+
+  it('keeps submit for a manager', () => {
+    expect(
+      getCorrectPath(PATH.KEYS_SUBMIT, flags({ HAS_MANAGER_ROLE: true })),
+    ).toBe(PATH.KEYS_SUBMIT);
   });
 });

@@ -1,22 +1,17 @@
 import { FC } from 'react';
 
+import { PATH } from 'consts/urls';
 import { Layout } from 'shared/layout';
-import {
-  DeleteKeysSwitcher,
-  DeleteKeysSwitcherRoutes,
-  KeysPageSwitcher,
-} from 'shared/navigate';
+import { DeleteKeysSwitcher, DeleteKeysSwitcherRoutes } from 'shared/navigate';
 import { ExitKeys } from './exit-keys';
 import { Faq, FormBlock } from 'shared/components';
 import { useFaq } from 'faq';
 
 export const ExitKeysPage: FC = () => (
   <Layout
-    title="Delete validator keys"
-    subtitle="Remove or eject your validator keys"
     pageName="ExitKeys"
+    breadcrumbs={[{ label: 'Keys', href: PATH.KEYS }, { label: 'Delete' }]}
   >
-    <KeysPageSwitcher />
     <FormBlock>
       <DeleteKeysSwitcher active={DeleteKeysSwitcherRoutes.EXIT} />
       <ExitKeys />

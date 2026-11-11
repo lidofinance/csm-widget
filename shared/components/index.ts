@@ -20,7 +20,6 @@ export * from './test-env-banner';
 export * from './plurals';
 export * from './status-comment';
 export * from './address';
-export * from './extra-width';
 export * from './external-icon-link';
 export * from './text-block';
 export * from './copy-button';

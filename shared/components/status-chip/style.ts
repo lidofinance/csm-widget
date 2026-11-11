@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components';
-import { StyledPriorityChip } from '../chip/styles';
 
 export type Variants = keyof typeof variants;
 
@@ -50,8 +49,4 @@ export const ChipStyle = styled.div<{
   line-height: ${({ theme }) => theme.fontSizesMap.lg}px;
   font-weight: 700;
   ${(props) => variants[props.$variant || 'default']}
-
-  ${StyledPriorityChip} {
-    margin-right: -4px;
-  }
 `;

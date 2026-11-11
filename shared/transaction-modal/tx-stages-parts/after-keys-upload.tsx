@@ -25,7 +25,7 @@ export const AfterKeysUpload: FC<Props> = ({ keys }) => {
         Once your keys become active (you can check their statuses on the{' '}
         <LocalLink
           matomoEvent={MATOMO_CLICK_EVENTS_TYPES.createSuccessKeysTab}
-          href={PATH.KEYS_VIEW}
+          href={PATH.KEYS}
         >
           Keys tab
         </LocalLink>

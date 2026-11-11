@@ -17,7 +17,6 @@ export const PATH = {
   KEYS_REMOVE: '/keys/remove',
   KEYS_EJECT: '/keys/eject',
   KEYS_EXIT: '/keys/exit',
-  KEYS_VIEW: '/keys/view',
   KEYS_NORMALIZE: '/keys/normalize',
 
   MONITORING: '/monitoring',

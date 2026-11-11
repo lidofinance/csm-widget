@@ -15,7 +15,7 @@ export const CsmCreateActions: FC<{ created: CreateSuccess }> = ({
   created,
 }) => {
   const needsSwitch = useNeedsOperatorSwitch(created.operator);
-  const switchToKeysView = useSwitchOperator(PATH.KEYS_VIEW);
+  const switchToKeysView = useSwitchOperator(PATH.KEYS);
   const disconnect = useDisconnectWallet();
 
   const handleDisconnect = () => {

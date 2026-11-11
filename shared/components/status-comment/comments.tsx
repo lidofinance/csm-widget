@@ -70,7 +70,7 @@ export const CommentNonQueued: FC = () => (
 
 export const CommentExiting: FC = () => (
   <LocalLink
-    href={PATH.KEYS_VIEW}
+    href={PATH.KEYS}
     anchor="#when-does-a-validator-become-withdrawn"
     matomoEvent={
       MATOMO_CLICK_EVENTS_TYPES.whenValidatorBecomeWithdrawnLinkComment
@@ -83,7 +83,7 @@ export const CommentExiting: FC = () => (
 export const CommentActivationPending: FC = () => {
   return (
     <LocalLink
-      href={PATH.KEYS_VIEW}
+      href={PATH.KEYS}
       anchor={VALIDATOR_ACTIVE_ANCHOR}
       matomoEvent={
         MATOMO_CLICK_EVENTS_TYPES.whenValidatorBecomeActiveLinkComment
@@ -122,7 +122,7 @@ export const CommentDepositable: FC = () => {
       The key may not receive deposits in the near future because {name} has
       reached its{' '}
       <LocalLink
-        href={PATH.KEYS_VIEW}
+        href={PATH.KEYS}
         anchor={STAKE_SHARE_LIMIT_ANCHOR}
         matomoEvent={MATOMO_CLICK_EVENTS_TYPES.stakeShareLimitLinkComment}
       >
@@ -131,7 +131,7 @@ export const CommentDepositable: FC = () => {
     </>
   ) : (
     <LocalLink
-      href={PATH.KEYS_VIEW}
+      href={PATH.KEYS}
       anchor={VALIDATOR_ACTIVE_ANCHOR}
       matomoEvent={
         MATOMO_CLICK_EVENTS_TYPES.whenValidatorBecomeActiveLinkComment

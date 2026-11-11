@@ -19,7 +19,7 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
 
     // Create
     case PATH.CREATE: {
-      if (hasRole && !flags.CAN_CREATE) return PATH.KEYS_VIEW;
+      if (hasRole && !flags.CAN_CREATE) return PATH.KEYS;
       // an apply card turns a single creatable type into a real choice
       if (flags.HAS_APPLY_OPTIONS) return path;
       const candidates: (PATH | false)[] = [
@@ -35,20 +35,14 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
 
     // Keys
     case PATH.KEYS:
-      return hasRole
-        ? flags.HAS_KEYS || !flags.HAS_MANAGER_ROLE
-          ? PATH.KEYS_VIEW
-          : PATH.KEYS_SUBMIT
-        : PATH.CREATE;
+      return hasRole ? path : PATH.CREATE;
     case PATH.KEYS_SUBMIT:
-      return flags.HAS_MANAGER_ROLE ? path : PATH.KEYS_VIEW;
+      return flags.HAS_MANAGER_ROLE ? path : PATH.KEYS;
     case PATH.KEYS_REMOVE:
       return flags.HAS_MANAGER_ROLE ? path : PATH.KEYS_EXIT;
     case PATH.KEYS_EJECT:
     case PATH.KEYS_EXIT:
       return hasRole ? path : PATH.CREATE;
-    case PATH.KEYS_VIEW:
-      return hasRole ? path : PATH.HOME;
 
     // Bond — a claimer-only wallet is kept inside the claim page
     case PATH.BOND:

@@ -11,8 +11,16 @@ const CardStyled = styled(Card)`
   }
 `;
 
-const BodyStyled = styled(Stack)`
+const BodyStyled = styled(Stack)<{ $compactOnMobile?: boolean }>`
   padding: 24px;
+
+  ${({ $compactOnMobile }) =>
+    $compactOnMobile &&
+    `
+    @media (max-width: 599px) {
+      padding: 20px;
+    }
+  `}
 `;
 
 type StatsCardShellProps = {
@@ -20,6 +28,7 @@ type StatsCardShellProps = {
   actions?: ReactNode;
   children: ReactNode;
   dataTestId?: string;
+  compactOnMobile?: boolean;
 };
 
 export const StatsCardShell: FC<StatsCardShellProps> = ({
@@ -27,10 +36,11 @@ export const StatsCardShell: FC<StatsCardShellProps> = ({
   actions,
   children,
   dataTestId,
+  compactOnMobile,
 }) => (
   <CardStyled dataTestId={{ root: dataTestId }}>
     {header}
-    <BodyStyled gap={24}>
+    <BodyStyled gap={24} $compactOnMobile={compactOnMobile}>
       {children}
       {actions}
     </BodyStyled>

@@ -1,31 +1,4 @@
-import { FC, ReactNode } from 'react';
-import { ChipStyle, Variants } from './style';
 import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
-import { Chip } from '../chip';
-
-type Props = {
-  status?: KEY_STATUS;
-  suffix?: ReactNode;
-};
-
-const variants: { [key in KEY_STATUS]?: Variants } = {
-  [KEY_STATUS.NON_QUEUED]: 'warning',
-  [KEY_STATUS.DEPOSITABLE]: 'default',
-  [KEY_STATUS.ACTIVATION_PENDING]: 'default',
-  [KEY_STATUS.ACTIVE]: 'success',
-  [KEY_STATUS.EXITING]: 'secondary',
-  [KEY_STATUS.WITHDRAWAL_PENDING]: 'secondary',
-  [KEY_STATUS.WITHDRAWN]: 'secondary',
-
-  [KEY_STATUS.UNCHECKED]: 'warning',
-  [KEY_STATUS.DUPLICATED]: 'error',
-  [KEY_STATUS.INVALID]: 'error',
-
-  [KEY_STATUS.UNBONDED]: 'error',
-  [KEY_STATUS.TRIGGERED_EJECTION]: 'secondary',
-  [KEY_STATUS.EXIT_REQUESTED]: 'warning',
-  [KEY_STATUS.SLASHED]: 'secondary',
-};
 
 export const StatusTitle: { [key in KEY_STATUS]?: string } = {
   [KEY_STATUS.NON_QUEUED]: 'Non queued',
@@ -47,16 +20,3 @@ export const StatusTitle: { [key in KEY_STATUS]?: string } = {
 
   [KEY_STATUS.WITH_STRIKES]: 'Strikes',
 };
-
-Chip;
-
-export const KeyStatusChip: FC<Props> = ({ status, suffix }) => (
-  <>
-    {status && variants[status] ? (
-      <ChipStyle $variant={variants[status]}>
-        {StatusTitle[status]}
-        {suffix}
-      </ChipStyle>
-    ) : null}
-  </>
-);

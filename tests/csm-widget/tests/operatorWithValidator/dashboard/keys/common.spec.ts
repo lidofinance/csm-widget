@@ -29,7 +29,7 @@ test.describe(
             'e_n',
             'csm_widget_dashboard_keys_section',
           ),
-          widgetService.page.waitForURL('**/keys/view'),
+          widgetService.page.waitForURL(/\/keys$/),
           widgetService.dashboardPage.keysSection.sectionHeaderLink.click(),
         ]);
       },

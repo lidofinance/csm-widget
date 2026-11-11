@@ -39,7 +39,7 @@ export const WhatsNext: FC<WhatsNextProps> = ({ created }) => {
               {' '}
               on the{' '}
               <LocalLink
-                href={PATH.KEYS_VIEW}
+                href={PATH.KEYS}
                 onClick={() => needsSwitch && switchOperator(created.operator)}
                 matomoEvent={MATOMO_CLICK_EVENTS_TYPES.createSuccessKeysTab}
               >
