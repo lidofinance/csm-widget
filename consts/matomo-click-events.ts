@@ -88,6 +88,8 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   claimIdvtcLinkAlert = 'claimIdvtcLinkAlert',
   feeRecipientDocsLink = 'feeRecipientDocsLink',
   feeRecipientDismissButton = 'feeRecipientDismissButton',
+  keyStrikeViewStrikes = 'keyStrikeViewStrikes',
+  keyStrikeDismiss = 'keyStrikeDismiss',
   wrappedAlertClose = 'wrappedAlertClose',
   wrappedAlertLink = 'wrappedAlertLink',
   wrappedLetsGo = 'wrappedLetsGo',
@@ -458,6 +460,14 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.feeRecipientDismissButton]: createEvent(
     "Click «I've changed the feeRecipient» button on Wrong Fee Recipient alert",
     'fee_recipient_dismiss_button_alert',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.keyStrikeViewStrikes]: createEvent(
+    'Click «View strikes» button on Key Strike alert',
+    'key_strike_view_strikes_alert',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.keyStrikeDismiss]: createEvent(
+    'Click «Dismiss» button on Key Strike alert',
+    'key_strike_dismiss_alert',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.wrappedAlertClose]: createEvent(
     'Click close button on Wrapped alert',

@@ -2,11 +2,15 @@ import { FC } from 'react';
 import { useAlertActions } from '../alert-provider';
 import { AlertContainerStyled } from './styles';
 
-export const AlertContainer: FC = () => {
+type AlertContainerProps = {
+  wide?: boolean;
+};
+
+export const AlertContainer: FC<AlertContainerProps> = ({ wide }) => {
   const { alerts } = useAlertActions();
 
   return (
-    <AlertContainerStyled>
+    <AlertContainerStyled $wide={wide}>
       {alerts.map((alert) => (
         <alert.component {...alert.props} key={alert.session} />
       ))}

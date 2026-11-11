@@ -1,6 +1,7 @@
 import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
 import { ALERT_FEE_RECIPIENT_DISMISS_HOURS, PATH } from 'consts';
 import {
+  useFrameInfo,
   useIsLockExpired,
   useModule,
   useNodeOperatorId,
@@ -25,16 +26,22 @@ import { useAlertActions } from './alert-provider';
 import { AlertClaimIcs } from './components/alert-claim-ics';
 import { AlertClaimIdvtc } from './components/alert-claim-idvtc';
 import { AlertExpiredLockedBond } from './components/alert-expired-locked-bond';
+import { AlertKeyStrike } from './components/alert-key-strike';
 import { AlertLockedBond } from './components/alert-locked-bond';
 import { AlertNomalizeQueue } from './components/alert-normalize-queue';
 import { AlertRequestToExit } from './components/alert-request-to-exit';
 import { AlertUnsupportedChain } from './components/alert-unsupported-chain';
 import { AlertWrongFeeRecipient } from './components/alert-wrong-fee-recipient';
+import {
+  getLatestFrameRange,
+  getStrikeDismissKey,
+  selectStruckPubkeys,
+} from './strike-alert';
 import { useAlertWatcher } from './use-alert-watcher';
 
 export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
   const { closeAlert } = useAlertActions();
-  const { module } = useModule();
+  const { module, isCsmFamily } = useModule();
   const { IS_NODE_OPERATOR } = useShowFlags();
 
   const { isSupportedChain } = useDappStatus();
@@ -68,6 +75,28 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
     `alert-fee-recipient-dismissed-${operatorKey(module, nodeOperatorId)}`,
     ALERT_FEE_RECIPIENT_DISMISS_HOURS,
   );
+
+  const { data: info } = useFrameInfo();
+  // Joined so key refetches with the same struck set keep alert props stable
+  const struckKey = selectStruckPubkeys(keysWithStatus ?? []).join(',');
+  const struckPubkeys = useMemo(
+    () => (struckKey ? struckKey.split(',') : []),
+    [struckKey],
+  );
+  // The report lands after the ref slot; the dismiss key is per frame
+  const nextReport = useMemo(
+    () =>
+      new Date(info ? (info.lastReport + 2 * info.frameDuration) * 1000 : 0),
+    [info],
+  );
+  const { isDismissed: isStrikeAlertDismissed, dismiss: dismissStrikeAlert } =
+    useDismiss(
+      getStrikeDismissKey(
+        operatorKey(module, nodeOperatorId) ?? '',
+        info?.lastReport ?? 0,
+      ),
+      nextReport,
+    );
 
   useAlertWatcher({
     component: AlertUnsupportedChain,
@@ -137,6 +166,27 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
         },
       }),
       [closeAlert, dismissFeeRecipientAlert, keysWithWrongFeeRecipient],
+    ),
+  });
+
+  useAlertWatcher({
+    component: AlertKeyStrike,
+    shouldShow:
+      IS_NODE_OPERATOR &&
+      isCsmFamily &&
+      !!info &&
+      struckPubkeys.length > 0 &&
+      !isStrikeAlertDismissed,
+    props: useMemo(
+      () => ({
+        pubkeys: struckPubkeys,
+        ...(info ? getLatestFrameRange(info) : { start: 0, end: 0 }),
+        onDismiss: () => {
+          dismissStrikeAlert();
+          closeAlert(AlertKeyStrike);
+        },
+      }),
+      [closeAlert, dismissStrikeAlert, info, struckPubkeys],
     ),
   });
 

@@ -64,7 +64,7 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
           <SidebarInset>
             <Header dummy={mode} crumbs={crumbs} />
             <MainStyled>
-              {!mode && !fullwidth && <AlertContainer />}
+              {!mode && !fullwidth && <AlertContainer wide={wide} />}
               <PageContent variant={fullwidth || wide ? 'default' : 'narrow'}>
                 <AppStack direction="column" gap={24} align="stretch">
                   <Hidden above="md" data-testid="pageTitle">
