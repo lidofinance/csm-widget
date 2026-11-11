@@ -49,5 +49,6 @@ export { AppShellLoader } from './app-shell-loader/app-shell-loader';
 export * from './error-boundary';
 export * from './page-disclaimers';
 export * from './bond-stats-card';
+export * from './stats-card';
 export * from './hub-list';
 export * from './stretch-stack';
