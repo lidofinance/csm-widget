@@ -4,6 +4,7 @@ import {
   IconButton,
   IconDownload,
   IconTrash,
+  Stack,
   Switch,
 } from '@lidofinance/lido-app-ui';
 import type { FileMetadataDto } from 'modules/surveys-sdk/generated';
@@ -19,12 +20,15 @@ import {
   RowActions,
 } from '../styles';
 
-const DkgDeleteButton: FC<{ onClick: () => void; disabled?: boolean }> = ({
-  onClick,
-  disabled,
-}) => (
+const ERROR_ICON_STYLE = { color: 'var(--lido-app-ui-color-icons-error)' };
+
+const DkgDeleteButton: FC<{
+  onClick: () => void;
+  disabled?: boolean;
+  danger?: boolean;
+}> = ({ onClick, disabled, danger }) => (
   <IconButton
-    icon={<IconTrash />}
+    icon={<IconTrash style={danger ? ERROR_ICON_STYLE : undefined} />}
     variant="ghost"
     type="button"
     disabled={disabled}
@@ -127,17 +131,32 @@ type StagedProps = {
   onRemove: (index: number) => void;
 };
 
-// Staged variant: filename · delete only. No header, toggle or download —
-// these files exist only client-side until the parent flow uploads them.
-export const DkgStagedTable: FC<StagedProps> = ({ items, onRemove }) => (
-  <DkgTable>
-    {items.map((item, index) => (
-      <DkgRow key={`${item.name}-${index}`} $columns="1fr auto">
-        <FileName>{item.name}</FileName>
-        <RowActions>
-          <DkgDeleteButton onClick={() => onRemove(index)} />
-        </RowActions>
-      </DkgRow>
-    ))}
-  </DkgTable>
-);
+// Staged files exist only client-side until the parent flow uploads them.
+export const DkgStagedTable: FC<StagedProps> = ({ items, onRemove }) => {
+  if (items.length === 1) {
+    return (
+      <Stack direction="row" align="center" gap={8}>
+        <FileName>
+          <Body as="span" weight="semibold">
+            Attached file:
+          </Body>{' '}
+          {items[0].name}
+        </FileName>
+        <DkgDeleteButton danger onClick={() => onRemove(0)} />
+      </Stack>
+    );
+  }
+
+  return (
+    <DkgTable>
+      {items.map((item, index) => (
+        <DkgRow key={`${item.name}-${index}`} $columns="1fr auto">
+          <FileName>{item.name}</FileName>
+          <RowActions>
+            <DkgDeleteButton onClick={() => onRemove(index)} />
+          </RowActions>
+        </DkgRow>
+      ))}
+    </DkgTable>
+  );
+};
