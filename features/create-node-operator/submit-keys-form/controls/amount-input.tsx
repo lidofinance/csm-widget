@@ -13,7 +13,6 @@ export const AmountInput: FC = () => {
       locked
       token={token}
       label={`${getTokenDisplayName(token)} amount`}
-      tooltip="This field is calculated automatically based on the number of keys and the bond curve. Follow the FAQ section to learn more."
     />
   );
 };

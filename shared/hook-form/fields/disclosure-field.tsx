@@ -16,6 +16,7 @@ export const hasAnyFieldError = (
 export type DisclosureFieldProps = PropsWithChildren<{
   name: string;
   label: ReactNode;
+  openLabel?: ReactNode;
   dependentFields?: string[];
   'data-testid'?: string;
 }>;
@@ -24,6 +25,7 @@ export type DisclosureFieldProps = PropsWithChildren<{
 export const DisclosureField: FC<DisclosureFieldProps> = ({
   name,
   label,
+  openLabel = label,
   dependentFields,
   children,
   'data-testid': testId,
@@ -38,10 +40,12 @@ export const DisclosureField: FC<DisclosureFieldProps> = ({
     if (dependentFields?.length) void trigger(dependentFields);
   };
 
+  const open = !!field.value || hasAnyFieldError(errors, dependentFields);
+
   return (
     <Disclosure
-      label={label}
-      open={!!field.value || hasAnyFieldError(errors, dependentFields)}
+      label={open ? openLabel : label}
+      open={open}
       onOpenChange={handleOpenChange}
       data-testid={testId}
     >

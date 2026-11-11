@@ -12,15 +12,19 @@ export const CustomAddressesSection: FC = () => (
   <DisclosureField
     name="specifyCustomAddresses"
     label="Specify custom addresses"
+    openLabel="Do not specify custom addresses"
     dependentFields={['rewardsAddress', 'managerAddress']}
   >
     <Stack direction="column" gap={16} align="stretch">
+      <SectionTitle title="Specify custom addresses" />
       <MessageBox variant="warning">
-        Setting custom addresses for the Node Operator is{' '}
-        <b>at your own risk</b>. In the case that an incorrect or incompatible
-        address is specified, it may be possible that you permanently lose
-        access to your Node Operator, bond, and potential rewards. Please check
-        the{' '}
+        <b>
+          Setting custom addresses for the Node Operator is at your own risk.
+        </b>
+        <br />
+        In the case that an incorrect or incompatible address is specified, it
+        may be possible that you permanently lose access to your Node Operator,
+        bond, and potential rewards. Please check the{' '}
         <MatomoLink
           $inline
           href={EXTENDED_MODE_LINK}
@@ -34,8 +38,10 @@ export const CustomAddressesSection: FC = () => (
       <ManagerAddressInput />
       <SectionTitle title="Select the Manager Address permissions type" />
       <MessageBox variant="warning">
-        This permissions option can only be set once during Node Operator
-        creation.
+        <b>
+          This permissions option can only be set once during Node Operator
+          creation.
+        </b>
         <br />
         It can not be changed later on. Please check the{' '}
         <MatomoLink

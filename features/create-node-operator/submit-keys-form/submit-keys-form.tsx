@@ -29,7 +29,7 @@ import { DkgFilesSection } from './controls/dkg-files-section';
 import { KeysConfirm } from './controls/keys-confirm';
 import { KeysInput } from './controls/keys-input';
 import { KeysLimitWarning } from './controls/keys-limit-warning';
-import { ReferrerInput } from './controls/referrer-input';
+import { ReferrerSection } from './controls/referrer-section';
 import { CreateSubmitButton } from './controls/submit-button';
 import { TokenSelect } from './controls/token-select';
 import { SubmitKeysFormGate } from './submit-keys-form-gate';
@@ -93,7 +93,7 @@ const SubmitKeysPage: FC<Props> = ({ type }) => {
                   <DkgFilesSection />
                   <Stack direction="column" gap={16} align="stretch">
                     <CustomAddressesSection />
-                    <ReferrerInput />
+                    <ReferrerSection />
                   </Stack>
                 </Stack>
               </FormLayout>

@@ -38,9 +38,9 @@ export class CreateNodeOperatorForm {
     this.validationInputError = this.formBlock.getByTestId(
       'input-message-error',
     );
-    this.specifyCustomAdresses = this.formBlock.getByText(
-      'Specify custom addresses',
-    );
+    this.specifyCustomAdresses = this.formBlock
+      .getByText('Specify custom addresses', { exact: true })
+      .first();
     this.extendedManagerPermissionsRadio = this.formBlock
       .locator(
         'xpath=//input[@name="extendedManagerPermissions"]/ancestor::label',

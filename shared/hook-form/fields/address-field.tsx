@@ -1,4 +1,10 @@
-import { Address, Identicon, Stack, Tag } from '@lidofinance/lido-app-ui';
+import {
+  Address,
+  IconCheck,
+  Identicon,
+  Stack,
+  Tag,
+} from '@lidofinance/lido-app-ui';
 import { FC, ReactNode, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useEnsInput } from 'shared/hooks/use-ens-input';
@@ -90,7 +96,11 @@ export const AddressField: FC<AddressFieldProps> = ({
               <Tag variant="neutral">{ensName}</Tag>
             )}
             {addressName && (
-              <Tag variant="success" data-testid="verifiedChip">
+              <Tag
+                variant="success"
+                icon={<IconCheck />}
+                data-testid="verifiedChip"
+              >
                 {addressName}
               </Tag>
             )}

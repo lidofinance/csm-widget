@@ -32,6 +32,7 @@ const render = (values: Values, errors?: FieldErrors<Values>) =>
       <DisclosureField
         name="specifyCustomAddresses"
         label="Specify custom addresses"
+        openLabel="Do not specify custom addresses"
         dependentFields={['rewardsAddress', 'managerAddress']}
         data-testid="customAddressesDisclosure"
       >
@@ -61,6 +62,7 @@ describe('DisclosureField', () => {
     const html = render(closed);
 
     expect(html).toContain('Specify custom addresses');
+    expect(html).not.toContain('Do not specify custom addresses');
     expect(html).toContain('aria-expanded="false"');
     expect(html).not.toContain('Inner fields');
   });
@@ -70,6 +72,7 @@ describe('DisclosureField', () => {
 
     expect(html).toContain('aria-expanded="true"');
     expect(html).toContain('Inner fields');
+    expect(html).toContain('Do not specify custom addresses');
   });
 
   it('opens while a dependent field has an error', () => {
