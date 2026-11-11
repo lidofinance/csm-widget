@@ -2,7 +2,7 @@ import { FC, PropsWithChildren } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { FormProvider, useForm } from 'react-hook-form';
 import { FormDataContext } from 'shared/hook-form/form-controller/form-data-context';
-import { FormReady } from './form-ready';
+import { FormMainAsideSkeleton, FormReady } from './form-ready';
 
 type HostProps = PropsWithChildren<{
   isPending: boolean;
@@ -49,4 +49,22 @@ it('renders children once loaded', () => {
   const html = renderReady({ isPending: false });
   expect(html).toContain('FORM');
   expect(html).not.toContain('formSkeleton');
+});
+
+it('renders the main+aside skeleton with an aside landmark', () => {
+  const html = renderToStaticMarkup(<FormMainAsideSkeleton />);
+  expect(html).toContain('data-testid="formSkeleton"');
+  expect(html).toContain('<aside');
+});
+
+it('renders a custom skeleton while pending', () => {
+  const html = renderToStaticMarkup(
+    <Host isPending>
+      <FormReady skeleton={<b>CUSTOM</b>}>
+        <i>FORM</i>
+      </FormReady>
+    </Host>,
+  );
+  expect(html).toContain('CUSTOM');
+  expect(html).not.toContain('FORM');
 });
