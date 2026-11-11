@@ -5,8 +5,8 @@ import { StatusTitle } from 'shared/components/status-chip/key-status-chip';
 
 const VARIANTS: Partial<Record<KEY_STATUS, TagVariant>> = {
   [KEY_STATUS.NON_QUEUED]: 'warning',
-  [KEY_STATUS.DEPOSITABLE]: 'default',
-  [KEY_STATUS.ACTIVATION_PENDING]: 'default',
+  [KEY_STATUS.DEPOSITABLE]: 'warning',
+  [KEY_STATUS.ACTIVATION_PENDING]: 'warning',
   [KEY_STATUS.ACTIVE]: 'success',
   [KEY_STATUS.EXITING]: 'neutral',
   [KEY_STATUS.WITHDRAWAL_PENDING]: 'neutral',
@@ -24,12 +24,15 @@ export const getKeyStatusTagVariant = (
   status: KEY_STATUS,
 ): TagVariant | undefined => VARIANTS[status];
 
-export type KeyStatusTagProps = { status: KEY_STATUS };
+export type KeyStatusTagProps = {
+  status: KEY_STATUS;
+  titles?: Partial<Record<KEY_STATUS, string>>;
+};
 
-/** app-ui `Tag` for a key status; renders nothing for statuses the legacy chip hides. */
-export const KeyStatusTag: FC<KeyStatusTagProps> = ({ status }) => {
+/** app-ui `Tag` for a key status; renders nothing for statuses without a variant. */
+export const KeyStatusTag: FC<KeyStatusTagProps> = ({ status, titles }) => {
   const variant = getKeyStatusTagVariant(status);
   if (!variant) return null;
 
-  return <Tag variant={variant}>{StatusTitle[status]}</Tag>;
+  return <Tag variant={variant}>{titles?.[status] ?? StatusTitle[status]}</Tag>;
 };
