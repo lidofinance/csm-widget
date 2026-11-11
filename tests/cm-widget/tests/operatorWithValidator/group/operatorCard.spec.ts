@@ -131,11 +131,9 @@ test.describe(
               );
             });
 
-            await test.step(`Operator #${id} — "Potential additional capacity" column`, async () => {
-              await expect(op.stakeColumnPotential).toBeVisible();
-              await expect(op.stakeColumnPotential).toContainText(
-                'Potential additional capacity',
-              );
+            await test.step(`Operator #${id} — "TSA" column`, async () => {
+              await expect(op.stakeColumnTsa).toBeVisible();
+              await expect(op.stakeColumnTsa).toContainText('TSA, ETH');
             });
           }
         },
@@ -181,11 +179,11 @@ test.describe(
             );
           });
 
-          await test.step('"Potential additional capacity" column tooltip', async () => {
-            await op0.stakeColumnPotentialTooltip.hover();
+          await test.step('"TSA" column tooltip', async () => {
+            await op0.stakeColumnTsaTooltip.hover();
             await expect(op0.tooltipWrapper).toHaveCount(1);
             await expect(op0.tooltipWrapper).toContainText(
-              'The additional stake the Lido protocol could allocate to this Node Operator based on its current weight, assuming enough validator keys are available',
+              'Target Stake Allocation',
             );
           });
         },
@@ -225,32 +223,30 @@ test.describe(
 
     test.describe('Action buttons', () => {
       test(
-        qase(227, 'Should show "Upload keys" link for the current operator'),
+        qase(
+          227,
+          'Should show "View dashboard" button for the current operator',
+        ),
         async ({ widgetService }) => {
           const op0 = widgetService.groupPage.operator(noId);
 
-          await expect(op0.uploadKeysLink).toBeVisible({
+          await expect(op0.goToDashboardBtn).toBeVisible({
             timeout: STAGE_WAIT_TIMEOUT,
           });
-          await expect(op0.uploadKeysLink).toContainText('Upload keys');
+          await expect(op0.goToDashboardBtn).toContainText('View dashboard');
         },
       );
 
       test(
-        qase(
-          228,
-          'Should show disabled message for operator managed by a different wallet',
-        ),
+        qase(228, 'Should show no action for an operator of another wallet'),
         async ({ widgetService }) => {
           const op1 = widgetService.groupPage.operator(companionId);
 
-          await expect(op1.differentWalletMessage).toBeVisible({
+          await expect(op1.weight).toBeVisible({
             timeout: STAGE_WAIT_TIMEOUT,
           });
-          await expect(op1.differentWalletMessage).toContainText(
-            'This Node Operator is managed by a different wallet. Switch wallets to upload keys.',
-          );
-          await expect(op1.differentWalletMessage).toBeDisabled();
+          await expect(op1.switchToOperatorBtn).toHaveCount(0);
+          await expect(op1.goToDashboardBtn).toHaveCount(0);
         },
       );
     });

@@ -19,17 +19,17 @@ export class OperatorCard extends BasePage {
   stakeColumnDepositable: Locator;
   stakeColumnDepositableTooltip: Locator;
   stakeColumnDepositableKeys: Locator;
-  stakeColumnPotential: Locator;
-  stakeColumnPotentialTooltip: Locator;
+  stakeColumnTsa: Locator;
+  stakeColumnTsaTooltip: Locator;
+  stakeColumnTsaKeys: Locator;
 
   // Footer
   keyLimit: Locator;
 
   // Actions
-  uploadKeysLink: Locator;
-  switchAndUploadButton: Locator;
-  switchOperatorButton: Locator;
-  differentWalletMessage: Locator;
+  goToDashboardBtn: Locator;
+  switchToOperatorBtn: Locator;
+  currentTag: Locator;
 
   constructor(page: Page, root: Locator) {
     super(page);
@@ -54,17 +54,14 @@ export class OperatorCard extends BasePage {
     this.stakeColumnDepositableKeys = this.root.getByTestId(
       'stakeColumnDepositableKeys',
     );
-    this.stakeColumnPotential = this.root.getByTestId('stakeColumnPotential');
-    this.stakeColumnPotentialTooltip =
-      this.stakeColumnPotential.getByTestId('iconTooltip');
+    this.stakeColumnTsa = this.root.getByTestId('stakeColumnTsa');
+    this.stakeColumnTsaTooltip = this.stakeColumnTsa.getByTestId('iconTooltip');
+    this.stakeColumnTsaKeys = this.root.getByTestId('stakeColumnTsaKeys');
 
     this.keyLimit = this.root.getByTestId('operatorKeyLimit');
 
-    this.uploadKeysLink = this.root.getByTestId('uploadKeysLink');
-    this.switchAndUploadButton = this.root.getByTestId('switchAndUploadButton');
-    this.switchOperatorButton = this.root.getByTestId('switchOperatorButton');
-    this.differentWalletMessage = this.root.getByTestId(
-      'differentWalletMessage',
-    );
+    this.goToDashboardBtn = this.root.getByTestId('goToDashboardBtn');
+    this.switchToOperatorBtn = this.root.getByTestId('switchToOperatorBtn');
+    this.currentTag = this.root.getByTestId('currentTag');
   }
 }

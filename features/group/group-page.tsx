@@ -1,50 +1,26 @@
-import {
-  useModule,
-  useNodeOperatorId,
-  useOperatorGroup,
-  useOperatorGroupId,
-} from 'modules/web3';
-import { FC } from 'react';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import { PATH } from 'consts/urls';
+import { GroupSection } from 'features/my-operators/group-section';
+import { FC, useCallback } from 'react';
 import { Layout } from 'shared/layout';
-import { Group } from './group';
-import { BackButton, ShortInlineLoader } from 'shared/components';
-import { formatGroupTitle } from 'shared/node-operator';
+import { useNavigate } from 'shared/navigate';
 
-export const GroupPage: FC = () => (
-  <Layout
-    fullwidth
-    mainPrefix={<BackButton />}
-    title={<GroupTitle />}
-    subtitle={<GroupSubtitle />}
-    pageName="Group"
-  >
-    <Group />
-  </Layout>
-);
+type Props = { nodeOperatorId: NodeOperatorId };
 
-const GroupTitle: FC = () => {
-  const { module } = useModule();
-  const nodeOperatorId = useNodeOperatorId();
-  const { data: group, isPending } = useOperatorGroup({
-    nodeOperatorId,
-    module,
-  });
+export const GroupPage: FC<Props> = ({ nodeOperatorId }) => {
+  const navigate = useNavigate();
+  const onMissing = useCallback(() => navigate(PATH.MY_OPERATORS), [navigate]);
 
-  return isPending ? (
-    <ShortInlineLoader />
-  ) : group ? (
-    <>{formatGroupTitle(group)}</>
-  ) : (
-    <>No group attached to operator</>
+  return (
+    <Layout
+      wide
+      pageName="Group"
+      breadcrumbs={[
+        { label: 'My Operators', href: PATH.MY_OPERATORS },
+        { label: 'Group' },
+      ]}
+    >
+      <GroupSection nodeOperatorId={nodeOperatorId} onMissing={onMissing} />
+    </Layout>
   );
-};
-
-const GroupSubtitle: FC = () => {
-  const { module } = useModule();
-  const nodeOperatorId = useNodeOperatorId();
-  const { data: groupId } = useOperatorGroupId({ nodeOperatorId, module });
-
-  return groupId ? (
-    <>View all of the sub-operators within your Node Operator Group</>
-  ) : null;
 };
