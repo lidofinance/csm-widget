@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { useQueries } from '@tanstack/react-query';
 import {
   operatorBalanceQueryOptions,
@@ -14,10 +15,15 @@ import { useMyOperators } from './use-my-operators';
 const EMPTY: ModuleNodeOperator[] = [];
 
 /** Cross-operator totals for the summary card and nav counter; shares cache with the cards. */
-export const useMyOperatorsOverview = () => {
+export const useMyOperatorsOverview = ({
+  modules,
+}: { modules?: MODULE_NAME[] } = {}) => {
   const { sm } = useLidoSDK();
   const { data, isPending: isRosterPending } = useMyOperators();
-  const operators = data ?? EMPTY;
+  const operators = useMemo(() => {
+    const all = data ?? EMPTY;
+    return modules ? all.filter((op) => modules.includes(op.module)) : all;
+  }, [data, modules]);
 
   const keys = useQueries({
     queries: operators.map((op) =>
