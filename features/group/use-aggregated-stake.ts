@@ -46,6 +46,8 @@ export const useAggregatedStake = (operators: SubOperatorStakeSummary[]) => {
           acc.potentialAdditionalStake + item.potentialAdditionalStake,
         potentialAdditionalKeys:
           acc.potentialAdditionalKeys + item.potentialAdditionalKeys,
+        targetStake: acc.targetStake + item.targetStake,
+        targetKeys: acc.targetKeys + item.targetKeys,
       }),
       {
         activeStake: 0n,
@@ -54,6 +56,8 @@ export const useAggregatedStake = (operators: SubOperatorStakeSummary[]) => {
         depositableKeys: 0,
         potentialAdditionalStake: 0n,
         potentialAdditionalKeys: 0,
+        targetStake: 0n,
+        targetKeys: 0,
       },
     );
 

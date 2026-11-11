@@ -25,7 +25,10 @@ import { useBondStats } from './use-bond-stats';
 import { ReactComponent as BondIcon } from 'assets/balance/bond.svg';
 import { ReactComponent as RewardsIcon } from 'assets/balance/rewards.svg';
 
-const INFO_TEST_ID = { info: 'iconTooltip', infoContent: 'tooltipWrapper' };
+export const INFO_TEST_ID = {
+  info: 'iconTooltip',
+  infoContent: 'tooltipWrapper',
+};
 const INHERIT_FONT = { font: 'inherit' };
 const STATS_COLUMNS = { base: 3, mdDown: 1 };
 

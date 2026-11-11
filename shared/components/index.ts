@@ -49,3 +49,4 @@ export * from './bond-stats-card';
 export * from './stats-card';
 export * from './hub-list';
 export * from './stretch-stack';
+export * from './stake-allocation';
