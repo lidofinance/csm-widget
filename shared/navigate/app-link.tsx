@@ -6,6 +6,7 @@ import { PATH } from 'consts/urls';
 import { useModalActions } from 'providers/modal-provider';
 import { useCorrectPath } from './use-correct-path';
 import { useForwardedQuery } from './use-forwarded-query';
+import { buildNavigateTarget } from './build-navigate-target';
 
 const PATHS: string[] = Object.values(PATH);
 
@@ -17,14 +18,16 @@ export const AppLink = forwardRef<HTMLAnchorElement, LinkComponentProps>(
 
     const target = useMemo(() => {
       const url = new URL(href, 'http://app.local');
-      const pathname = PATHS.includes(url.pathname)
+      const corrected = PATHS.includes(url.pathname)
         ? correct(url.pathname as PATH)
         : url.pathname;
-      return {
-        pathname,
-        query: { ...forwarded, ...Object.fromEntries(url.searchParams) },
+      return buildNavigateTarget({
+        path: url.pathname,
+        corrected,
+        forwarded,
+        query: Object.fromEntries(url.searchParams),
         hash: url.hash,
-      };
+      });
     }, [href, correct, forwarded]);
 
     const onClickHandler = useCallback(
