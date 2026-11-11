@@ -12,7 +12,11 @@ import {
 } from 'shared/form-page';
 import { Form } from 'shared/hook-form/form-controller';
 import { AppFormUi } from 'shared/hook-form/form-ui';
-import { CreatableOperatorType, useCreateOptions } from 'shared/hooks';
+import {
+  CreatableOperatorType,
+  getCreateFlow,
+  useCreateOptions,
+} from 'shared/hooks';
 import { useCreateSuccess } from '../create-success';
 import { getCsmCreateSteps } from '../csm-create-steps';
 import { OtherModuleBanner } from '../other-module-banner';
@@ -38,7 +42,7 @@ const SubmitKeysPage: FC<Props> = ({ type }) => {
   // The module being created, not the active operator's: /create has none to fall back on
   const targetModule = OPERATOR_TYPE_INFO[type].module;
   const { created } = useCreateSuccess();
-  const liveHasChoose = useCreateOptions().length > 1;
+  const liveHasChoose = getCreateFlow(useCreateOptions()).willChoose;
   // Options shrink after create; keep the pre-success step list
   const hasChooseRef = useRef(liveHasChoose);
   if (!created) hasChooseRef.current = liveHasChoose;

@@ -28,22 +28,18 @@ describe('getCorrectPath(PATH.CREATE)', () => {
     ).toBe(PATH.KEYS);
   });
 
-  it('jumps straight to the only creatable type', () => {
-    expect(getCorrectPath(PATH.CREATE, flags({ CAN_CREATE_0X01: true }))).toBe(
-      PATH.CREATE_0x01,
-    );
-    expect(getCorrectPath(PATH.CREATE, flags({ CAN_CREATE_ICS: true }))).toBe(
-      PATH.CREATE_ICS,
-    );
-    expect(getCorrectPath(PATH.CREATE, flags({ CAN_CREATE_IDVTC: true }))).toBe(
-      PATH.CREATE_IDVTC,
-    );
-    expect(getCorrectPath(PATH.CREATE, flags({ CAN_CREATE_0X02: true }))).toBe(
-      PATH.CREATE_0x02,
+  it.each([
+    ['CAN_CREATE_0X01'],
+    ['CAN_CREATE_ICS'],
+    ['CAN_CREATE_IDVTC'],
+    ['CAN_CREATE_0X02'],
+  ] as const)('keeps /create when only %s is set', (flag) => {
+    expect(getCorrectPath(PATH.CREATE, flags({ [flag]: true }))).toBe(
+      PATH.CREATE,
     );
   });
 
-  it('keeps the selection page when several types are creatable', () => {
+  it('keeps /create when several types are creatable', () => {
     expect(
       getCorrectPath(
         PATH.CREATE,
@@ -52,11 +48,13 @@ describe('getCorrectPath(PATH.CREATE)', () => {
     ).toBe(PATH.CREATE);
   });
 
-  it('keeps the selection page when no per-type flag is set', () => {
-    expect(getCorrectPath(PATH.CREATE, flags({}))).toBe(PATH.CREATE);
+  it('keeps /create when nothing is creatable and there is no role', () => {
+    expect(getCorrectPath(PATH.CREATE, flags({ CAN_CREATE: false }))).toBe(
+      PATH.CREATE,
+    );
   });
 
-  it('keeps the selection page when an apply card makes it a real choice', () => {
+  it('keeps /create when an apply card is present', () => {
     expect(
       getCorrectPath(
         PATH.CREATE,
@@ -65,13 +63,22 @@ describe('getCorrectPath(PATH.CREATE)', () => {
     ).toBe(PATH.CREATE);
   });
 
-  it('sends a CM-eligible wallet with no other option straight to /create/cm', () => {
+  it('keeps /create for apply plus CM', () => {
+    expect(
+      getCorrectPath(
+        PATH.CREATE,
+        flags({ CAN_CREATE_CM: true, HAS_APPLY_OPTIONS: true }),
+      ),
+    ).toBe(PATH.CREATE);
+  });
+
+  it('sends a CM-only wallet to /create/cm', () => {
     expect(getCorrectPath(PATH.CREATE, flags({ CAN_CREATE_CM: true }))).toBe(
       PATH.CREATE_CM,
     );
   });
 
-  it('keeps the picker when CM and 0x01 are both creatable', () => {
+  it('keeps /create when CM and 0x01 are both creatable', () => {
     expect(
       getCorrectPath(
         PATH.CREATE,

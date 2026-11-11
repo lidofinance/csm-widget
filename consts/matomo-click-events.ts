@@ -34,6 +34,18 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   csmViewDetails = 'csmViewDetails',
   csmJoinTestnet = 'csmJoinTestnet',
   csmJoinMainnet = 'csmJoinMainnet',
+  // Starter Pack
+  starterPackGetStarted = 'starterPackGetStarted',
+  starterPackCSMLink = 'starterPackCSMLink',
+  starterPackBondLink = 'starterPackBondLink',
+  starterPackHardwareLink = 'starterPackHardwareLink',
+  starterPackSetupValidatorLink = 'starterPackSetupValidatorLink',
+  starterPackGenerateKeysLink = 'starterPackGenerateKeysLink',
+  partnerDappnode = 'partnerDappnode',
+  partnerSedge = 'partnerSedge',
+  partnerEthdocker = 'partnerEthdocker',
+  partnerEthPillar = 'partnerEthPillar',
+  partnerPremia = 'partnerPremia',
   operatorTypeModalJoinPermissionless = 'operatorTypeModalJoinPermissionless',
   operatorTypeModalJoinCsm02 = 'operatorTypeModalJoinCsm02',
   operatorTypeModalApplyIcs = 'operatorTypeModalApplyIcs',
@@ -243,6 +255,51 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.csmJoinMainnet]: createEvent(
     'Click «Join CSM mainnet» on Community Staking screen',
     'csm_join_mainnet',
+  ),
+  // Starter Pack
+  [MATOMO_CLICK_EVENTS_TYPES.starterPackGetStarted]: createEvent(
+    'Push «Get started» on StarterPack screen',
+    'starterpack_get_started',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.starterPackCSMLink]: createEvent(
+    'Click «About CSM» link on StarterPack screen',
+    'starterpack_csm_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.starterPackBondLink]: createEvent(
+    'Click «Learn about Bond» link on StarterPack screen',
+    'starterpack_bond_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.starterPackHardwareLink]: createEvent(
+    'Click «Run hardware» link on StarterPack screen',
+    'starterpack_hardware_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.starterPackSetupValidatorLink]: createEvent(
+    'Click «Setup validator» link on StarterPack screen',
+    'starterpack_setup_validator_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.starterPackGenerateKeysLink]: createEvent(
+    'Click «Generation Keys guide» link on StarterPack screen',
+    'starterpack_generate_keys_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.partnerDappnode]: createEvent(
+    'Click partner «Dappnode» link on StarterPack screen',
+    'starterpack_partner_dappnode_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.partnerSedge]: createEvent(
+    'Click partner «Sedge» link on StarterPack screen',
+    'starterpack_partner_sedge_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.partnerEthdocker]: createEvent(
+    'Click partner «Eth Docker» link on StarterPack screen',
+    'starterpack_partner_ethdocker_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.partnerEthPillar]: createEvent(
+    'Click partner «EthPillar» link on StarterPack screen',
+    'starterpack_partner_ethpillar_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.partnerPremia]: createEvent(
+    'Click partner «Premia» link on StarterPack screen',
+    'starterpack_partner_premia_link',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalJoinPermissionless]: createEvent(
     'Push «Join permissionlessly» button on Operator Type modal',

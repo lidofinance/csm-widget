@@ -14,6 +14,6 @@ export const TypesDocsNote: FC = () => (
     >
       operator types and parameters
     </MatomoLink>{' '}
-    to learn more.
+    to learn more
   </Description>
 );

@@ -40,6 +40,24 @@ describe('getCsmCreateSteps', () => {
     });
   });
 
+  it('marks Acknowledgement as current with several types', () => {
+    expect(getCsmCreateSteps('acknowledgement', true)).toEqual({
+      steps: ALL,
+      current: 0,
+    });
+  });
+
+  it('hides Choose on Acknowledgement when only one type is creatable', () => {
+    expect(getCsmCreateSteps('acknowledgement', false)).toEqual({
+      steps: [
+        CSM_CREATE_STEPS.acknowledgement,
+        CSM_CREATE_STEPS.upload,
+        CSM_CREATE_STEPS.create,
+      ],
+      current: 0,
+    });
+  });
+
   it('uses the Figma step labels', () => {
     expect(ALL).toEqual([
       'Acknowledgement',

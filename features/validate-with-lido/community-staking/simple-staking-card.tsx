@@ -15,19 +15,14 @@ import styled from 'styled-components';
 import { trackMatomoEvent } from 'utils';
 import allnodes from 'assets/partners/simple-staking/allnodes.svg';
 import beaconchain from 'assets/partners/simple-staking/beaconchain.svg';
-import dappnode from 'assets/partners/simple-staking/dappnode.svg';
-import ethDocker from 'assets/partners/simple-staking/eth-docker.svg';
-import ethereumOnArm from 'assets/partners/simple-staking/ethereum-on-arm.svg';
-import ethpillar from 'assets/partners/simple-staking/ethpillar.svg';
 import launchnodes from 'assets/partners/simple-staking/launchnodes.svg';
 import migalabs from 'assets/partners/simple-staking/migalabs.svg';
 import obol from 'assets/partners/simple-staking/obol.svg';
-import premia from 'assets/partners/simple-staking/premia.svg';
 import rated from 'assets/partners/simple-staking/rated.svg';
-import sedge from 'assets/partners/simple-staking/sedge.svg';
 import ssv from 'assets/partners/simple-staking/ssv.svg';
 import stakely from 'assets/partners/simple-staking/stakely.svg';
 import { PromoCard } from '../components';
+import { LOW_CODE_PARTNERS } from './low-code-partners';
 
 type Partner = { name: string; src: string };
 
@@ -42,14 +37,7 @@ const BLOCKS: Block[] = [
     title: 'Low/no-code Integrations',
     description:
       'Use Plug & Play solutions for a smoother validator node setup experience',
-    partners: [
-      { name: 'DAppNode', src: dappnode },
-      { name: 'EthPillar', src: ethpillar },
-      { name: 'eth-docker', src: ethDocker },
-      { name: 'Sedge', src: sedge },
-      { name: 'Premia', src: premia },
-      { name: 'Ethereum on ARM', src: ethereumOnArm },
-    ],
+    partners: LOW_CODE_PARTNERS,
   },
   {
     title: 'Run with DVTs',

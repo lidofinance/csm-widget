@@ -1,13 +1,28 @@
-import { Button, Description, H3, Stack } from '@lidofinance/lido-app-ui';
+import {
+  Button,
+  Description,
+  H3,
+  IconInfo,
+  Stack,
+  Tooltip,
+  upQuery,
+} from '@lidofinance/lido-app-ui';
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { MODULE_METADATA, OPERATOR_TYPE_METADATA } from 'consts';
 import { FC } from 'react';
 import { useOperatorTypeCurve } from 'shared/hooks';
 import { TypeBadgeButton } from 'shared/node-operator/operator-type';
+import styled from 'styled-components';
 import { trackMatomoEvent } from 'utils';
 import { Parameters } from './parameters';
 import { getTypeTagline } from './type-taglines';
-import { VisibleType } from './use-visible-types';
+import { VisibleType } from './prepend-blocked-0x01';
+
+const TaglineStyle = styled.div`
+  @media ${upQuery('md')} {
+    min-height: 48px;
+  }
+`;
 
 export const TypeCard: FC<{ type: VisibleType }> = ({ type }) => {
   const metadata = type.type ? OPERATOR_TYPE_METADATA[type.type] : undefined;
@@ -38,18 +53,30 @@ export const TypeCard: FC<{ type: VisibleType }> = ({ type }) => {
           <H3 as="h2">
             {metadata?.short ?? MODULE_METADATA[MODULE_NAME.CM].title}
           </H3>
-          <Description as="p">{getTypeTagline(type.type)}</Description>
+          <TaglineStyle>
+            <Description as="p">{getTypeTagline(type.type)}</Description>
+          </TaglineStyle>
         </Stack>
         {type.type && curve && <Parameters type={type.type} />}
       </Stack>
-      <Button
-        fullWidth
-        href={type.href}
-        variant={type.primary ? 'primary' : 'outline'}
-        onClick={() => trackMatomoEvent(type.matomoEvent)}
-      >
-        {type.label}
-      </Button>
+      {type.disabledReason ? (
+        <Tooltip content={type.disabledReason} position="bottom" width={320}>
+          <span>
+            <Button fullWidth disabled iconRight={<IconInfo />}>
+              {type.label}
+            </Button>
+          </span>
+        </Tooltip>
+      ) : (
+        <Button
+          fullWidth
+          href={type.href}
+          variant={type.primary ? 'primary' : 'outline'}
+          onClick={() => trackMatomoEvent(type.matomoEvent)}
+        >
+          {type.label}
+        </Button>
+      )}
     </Stack>
   );
 };

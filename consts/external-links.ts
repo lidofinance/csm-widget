@@ -29,6 +29,10 @@ export const OPERATOR_TYPES_LINK =
   'https://docs.lido.fi/staking-modules/csm/join-csm/#node-operator-types';
 export const CM_BOND_AMOUNTS_LINK =
   'https://docs.lido.fi/run-on-lido/cm-v2/bond-and-key-management#bond-amounts';
+export const HOW_TO_GENERATE_DEPOSIT_DATA_LINK =
+  'https://docs.lido.fi/run-on-lido/csm/generating-validator-keys/';
+export const PREPARE_HARDWARE_LINK =
+  'https://dvt-homestaker.stakesaurus.com/hardware-and-systems-setup/hardware-and-system-requirements';
 export const FEE_RECIPIENT_LINK =
   'https://docs.lido.fi/run-on-lido/csm/troubleshooting/setting-the-fee-recipient-for-csm-validators/#change-fee-recipient-on-existing-validator-keys';
 
@@ -43,6 +47,7 @@ export const LIDO_OPERATOR_PORTAL_CURATED =
   'https://operatorportal.lido.fi/modules/curated-module';
 export const LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE = `${LIDO_OPERATOR_PORTAL_BASE}#block-c6dc8d00f13243fcb17de3fa07ecc52c`;
 export const LIDO_OPERATOR_PORTAL_DEPOSITS_FLOW = `${LIDO_OPERATOR_PORTAL_BASE}#block-90b8ff95edc64cf7a051584820219616`;
+export const LIDO_OPERATOR_PORTAL_BONDS_INFO = `${LIDO_OPERATOR_PORTAL_BASE}#block-e4a6daadca12480d955524247f03f380`;
 export const PHASED_DEPOSIT_APPROACH_LINK =
   'https://research.lido.fi/t/0x02-csm-landscape/11697/10';
 export const LIDO_RESEARCH_FORUM_NODE_OPERATORS_LINK =

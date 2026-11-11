@@ -7,6 +7,7 @@ import { Description, Skeleton, Stack } from '@lidofinance/lido-app-ui';
 import { OPERATOR_TYPE_METADATA } from 'consts';
 import { useCurveParameters } from 'modules/web3';
 import { FC, ReactNode } from 'react';
+import { ParameterRow as ParameterRowItem } from 'shared/components/parameters-list/format';
 import { useParameters } from 'shared/components/parameters-list/parameters';
 import { useOperatorTypeCurve } from 'shared/hooks';
 
@@ -31,6 +32,13 @@ const ParameterRow: FC<ParameterRowProps> = ({ label, value, strong }) => (
   </Stack>
 );
 
+const REWARD_TITLE = 'Node Operator reward';
+
+const withRewardPlaceholder = (title: string, rows: ParameterRowItem[]) =>
+  title === REWARD_TITLE && rows.length === 1
+    ? [...rows, { label: '—', value: '—' }]
+    : rows;
+
 export const Parameters: FC<{ type: OPERATOR_TYPE }> = ({ type }) => {
   const metadata = OPERATOR_TYPE_METADATA[type];
   const wcType =
@@ -48,9 +56,11 @@ export const Parameters: FC<{ type: OPERATOR_TYPE }> = ({ type }) => {
             {title}:
           </Description>
           {parameters ? (
-            renderRows?.(parameters).map(({ label, value }) => (
-              <ParameterRow key={label} label={label} value={value} />
-            ))
+            withRewardPlaceholder(title, renderRows?.(parameters) ?? []).map(
+              ({ label, value }) => (
+                <ParameterRow key={label} label={label} value={value} />
+              ),
+            )
           ) : (
             <Skeleton variant="text" />
           )}

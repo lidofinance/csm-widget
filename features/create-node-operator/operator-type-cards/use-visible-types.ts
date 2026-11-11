@@ -7,17 +7,10 @@ import {
   ApplicableOperatorType,
   CreatableOperatorType,
   CreateOption,
+  useCanCreate0x01,
   useCreateOptions,
 } from 'shared/hooks';
-
-export type VisibleType = {
-  key: string;
-  type?: OPERATOR_TYPE;
-  href: PATH;
-  label: string;
-  matomoEvent: MATOMO_CLICK_EVENTS_TYPES;
-  primary: boolean;
-};
+import { prependBlocked0x01, VisibleType } from './prepend-blocked-0x01';
 
 type Presentation = { label: string; matomoEvent: MATOMO_CLICK_EVENTS_TYPES };
 
@@ -90,6 +83,10 @@ const toVisibleType = (option: CreateOption): VisibleType => {
 
 export const useVisibleTypes = (): VisibleType[] => {
   const options = useCreateOptions();
+  const { blockedByOperator } = useCanCreate0x01();
 
-  return useMemo(() => options.map(toVisibleType), [options]);
+  return useMemo(
+    () => prependBlocked0x01(options.map(toVisibleType), blockedByOperator),
+    [options, blockedByOperator],
+  );
 };

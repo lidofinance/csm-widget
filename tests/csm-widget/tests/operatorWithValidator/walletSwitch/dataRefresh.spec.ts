@@ -68,9 +68,9 @@ test.describe(
 
         await test.step('Switch to another wallet', async () => {
           await walletPage.importKey(OTHER_WALLET_KEY);
-          await expect(
-            widgetService.mainPage.starterPackSection.section,
-          ).toBeVisible({ timeout: RPC_WAIT_TIMEOUT });
+          await expect(widgetService.mainPage.moduleCardCsm).toBeVisible({
+            timeout: RPC_WAIT_TIMEOUT,
+          });
         });
 
         await test.step('Propose the operator wallet as a rewards address', async () => {

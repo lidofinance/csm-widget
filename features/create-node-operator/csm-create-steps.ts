@@ -5,7 +5,7 @@ export const CSM_CREATE_STEPS = {
   create: 'Create Node Operator',
 } as const;
 
-export type CsmCreateStage = 'choose' | 'upload';
+export type CsmCreateStage = 'acknowledgement' | 'choose' | 'upload';
 
 export type CsmCreateSteps = { steps: string[]; current: number };
 
@@ -20,8 +20,6 @@ export const getCsmCreateSteps = (
     CSM_CREATE_STEPS.upload,
     CSM_CREATE_STEPS.create,
   ];
-  const currentLabel =
-    stage === 'choose' ? CSM_CREATE_STEPS.choose : CSM_CREATE_STEPS.upload;
 
-  return { steps, current: steps.indexOf(currentLabel) };
+  return { steps, current: steps.indexOf(CSM_CREATE_STEPS[stage]) };
 };

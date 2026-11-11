@@ -20,17 +20,14 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
     // Create
     case PATH.CREATE: {
       if (hasRole && !flags.CAN_CREATE) return PATH.KEYS;
-      // an apply card turns a single creatable type into a real choice
       if (flags.HAS_APPLY_OPTIONS) return path;
-      const candidates: (PATH | false)[] = [
-        flags.CAN_CREATE_0X01 && PATH.CREATE_0x01,
-        flags.CAN_CREATE_ICS && PATH.CREATE_ICS,
-        flags.CAN_CREATE_IDVTC && PATH.CREATE_IDVTC,
-        flags.CAN_CREATE_0X02 && PATH.CREATE_0x02,
-        flags.CAN_CREATE_CM && PATH.CREATE_CM,
-      ];
-      const creatable = candidates.filter((p): p is PATH => !!p);
-      return creatable.length === 1 ? creatable[0] : path;
+      const csmCreatable =
+        flags.CAN_CREATE_0X01 ||
+        flags.CAN_CREATE_ICS ||
+        flags.CAN_CREATE_IDVTC ||
+        flags.CAN_CREATE_0X02;
+      // CM-only wallets have no Acknowledgement; curated-operator-success relies on this collapse
+      return flags.CAN_CREATE_CM && !csmCreatable ? PATH.CREATE_CM : path;
     }
 
     // Keys
