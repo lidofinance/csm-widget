@@ -1,37 +1,48 @@
+// Relative .ts imports and no path aliases: the QA panel runs this under
+// plain node (tests/scripts/qa-panel/server.ts)
 import { randomBytes } from 'node:crypto';
-import { toHex } from 'viem';
+import { toHex, type Address } from 'viem';
 import { AccountingAbi, BaseModuleAbi } from '@lidofinance/lido-csm-sdk/abi';
-import { KEYS_UPLOAD_TX_LIMIT } from 'consts/keys';
-import type { ForkActionsService } from '../contracts/forkActions.service';
-import { LidoSDKClient as csmClient } from '../../csm-widget/services/csmSDK.client';
-import { LidoSDKClient as cmClient } from '../../cm-widget/services/cmSDK.client';
 import { mnemonicToAccount } from 'viem/accounts';
-import { type NodeOperatorId } from '@lidofinance/lido-csm-sdk';
-import { FORK_WARM_UP_TIMEOUT } from '../consts/timeouts';
+import type {
+  LidoSDKCm,
+  LidoSDKCsm,
+  LidoSDKCsm02,
+  NodeOperatorId,
+} from '@lidofinance/lido-csm-sdk';
+import { KEYS_UPLOAD_TX_LIMIT } from '../../../consts/keys.ts';
+import type { ForkActionsService } from '../contracts/forkActions.service.ts';
+import { FORK_WARM_UP_TIMEOUT } from '../consts/timeouts.ts';
+
+type Sdk = LidoSDKCsm | LidoSDKCsm02 | LidoSDKCm;
+type Log = (line: string) => void;
 
 const SLOW_MS = 2000;
 const ts = () => new Date().toISOString().slice(11, 23);
 
-const track = async <T>(name: string, value: Promise<T> | T): Promise<T> => {
-  const startMs = Date.now();
-  try {
-    const result = await value;
-    const ms = Date.now() - startMs;
-    console.info(
-      `${ms >= SLOW_MS ? '[warmUp ⚠]' : '[warmUp ✓]'} ${ts()}  ${name}  ${ms}ms`,
-    );
-    return result;
-  } catch (err) {
-    const ms = Date.now() - startMs;
-    const msg = ((err as Error)?.message ?? String(err)).split('\n')[0];
-    console.warn(`[warmUp ✗] ${ts()}  ${name}  ${ms}ms  ${msg}`);
-    throw err;
-  }
-};
+const tracker =
+  (log: Log = console.info) =>
+  async <T>(name: string, value: Promise<T> | T): Promise<T> => {
+    const startMs = Date.now();
+    try {
+      const result = await value;
+      const ms = Date.now() - startMs;
+      log(
+        `${ms >= SLOW_MS ? '[warmUp ⚠]' : '[warmUp ✓]'} ${ts()}  ${name}  ${ms}ms`,
+      );
+      return result;
+    } catch (err) {
+      const ms = Date.now() - startMs;
+      const msg = ((err as Error)?.message ?? String(err)).split('\n')[0];
+      log(`[warmUp ✗] ${ts()}  ${name}  ${ms}ms  ${msg}`);
+      throw err;
+    }
+  };
 
 const warmUpKeysEvents = async (
-  sdk: csmClient | cmClient,
+  sdk: Sdk,
   nodeOperatorId: NodeOperatorId,
+  track: ReturnType<typeof tracker>,
 ) => {
   const options = { maxBlocksDepth: undefined };
   await Promise.all([
@@ -50,11 +61,16 @@ const warmUpKeysEvents = async (
   ]);
 };
 
-export const warmUpForkedNode = async (
-  sdk: csmClient | cmClient,
-  secretPhrase: string,
+export const warmUpForkedNode = (sdk: Sdk, secretPhrase: string) =>
+  warmUpAddress(sdk, mnemonicToAccount(secretPhrase).address);
+
+/** Returns the number of the address's operators */
+export const warmUpAddress = async (
+  sdk: Sdk,
+  address: Address,
+  log: Log = console.info,
 ) => {
-  const address = mnemonicToAccount(secretPhrase).address;
+  const track = tracker(log);
   const started = Date.now();
   let lastError: unknown;
   while (Date.now() - started < FORK_WARM_UP_TIMEOUT) {
@@ -82,21 +98,19 @@ export const warmUpForkedNode = async (
       ]);
 
       // Same operator ids the widget queries, so the topic filters match
-      console.info(
-        `[warmUp] ${ts()}  keys events for ${operators.length} operator(s)`,
-      );
+      log(`[warmUp] ${ts()}  keys events for ${operators.length} operator(s)`);
       await Promise.all(
         operators.map(({ nodeOperatorId }) =>
-          warmUpKeysEvents(sdk, nodeOperatorId),
+          warmUpKeysEvents(sdk, nodeOperatorId, track),
         ),
       );
 
-      console.info(`[warmUp] ${ts()}  done in ${Date.now() - callStart}ms`);
-      return;
+      log(`[warmUp] ${ts()}  done in ${Date.now() - callStart}ms`);
+      return operators.length;
     } catch (error) {
       lastError = error;
       const msg = ((error as Error)?.message ?? String(error)).split('\n')[0];
-      console.error(`[warmUp] retry — ${msg}`);
+      log(`[warmUp] retry — ${msg}`);
     }
   }
   throw new Error(
@@ -109,6 +123,7 @@ export const warmUpSubmitKeys = async (
   address: `0x${string}`,
   noId: number,
 ) => {
+  const track = tracker();
   const count = BigInt(KEYS_UPLOAD_TX_LIMIT);
 
   const value = await track(

@@ -51,6 +51,19 @@ export class KeysViewPage {
     }
   }
 
+  // Locator-based: assertions on it wait for the row to appear
+  rowByStatus(status: string) {
+    return new TableRow(
+      this.tableRows
+        .filter({
+          has: this.page
+            .getByTestId('statusCell')
+            .getByText(status, { exact: true }),
+        })
+        .first(),
+    );
+  }
+
   async open() {
     await test.step('Open keys view tab for Keys page', async () => {
       await this.base.openWithRetry('/keys/view', this.viewKeysBlock);

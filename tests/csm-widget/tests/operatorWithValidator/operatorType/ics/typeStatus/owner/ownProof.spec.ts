@@ -5,6 +5,7 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 import { generateAddress } from 'tests/shared/helpers/accountData';
 import { Tags } from 'tests/shared/consts/common.const';
+import { RPC_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 
 test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR.secretPhrase });
 
@@ -64,7 +65,9 @@ test.describe(
         await test.step('Claim page opens from the card', async () => {
           await operatorType.icsApplyButton.click();
           await widgetService.page.waitForURL(/\/type\/ics-claim/);
-          await expect(operatorType.claimIcs.claimButton).toBeVisible();
+          await expect(operatorType.claimIcs.claimButton).toBeVisible({
+            timeout: RPC_WAIT_TIMEOUT,
+          });
         });
       },
     );

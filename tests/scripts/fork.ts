@@ -9,6 +9,11 @@ import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import type { ChainName } from '../shared/contracts/constants.ts';
 import { forkPort } from '../shared/config/forkPorts.ts';
 import { ROLES } from '../shared/contracts/commands/grantRole.ts';
+import {
+  CATEGORIES,
+  HELP,
+  type Command,
+} from '../shared/contracts/commandsHelp.ts';
 
 // Same env as the tests use, so RPC URLs and the wallet come from .env.local.
 nextEnv.loadEnvConfig(process.cwd());
@@ -17,141 +22,17 @@ const CHAINS: ChainName[] = ['hoodi', 'mainnet'];
 const MODULES = Object.values(MODULE_NAME);
 const normalize = (value: string) => value.toUpperCase().replaceAll('_', '');
 
-type Command = (typeof COMMANDS)[number];
-
-const HELP: Record<Command, { args: string; example: string }> = {
-  snapshot: {
-    args: '',
-    example: 'yarn fork csm hoodi snapshot',
-  },
-  revert: {
-    args: '[snapshotId]',
-    example: 'yarn fork csm hoodi revert 0x2',
-  },
-  addBond: {
-    args: '<noId> <amountEth>',
-    example: 'yarn fork csm hoodi addBond 12 3',
-  },
-  addKeys: {
-    args: '<noId> <keysCount>',
-    example: 'yarn fork csm hoodi addKeys 12 5',
-  },
-  depositKeys: {
-    args: '<depositsCount>',
-    example: 'yarn fork csm hoodi depositKeys 10',
-  },
-  fundTokens: {
-    args: '<address> <amountEth>',
-    example: 'yarn fork csm hoodi fundTokens 0xAbC... 10',
-  },
-  grantRole: {
-    args: '<role> <address>',
-    example:
-      'yarn fork csm hoodi grantRole REPORT_GENERAL_DELAYED_PENALTY_ROLE 0x1111111111111111111111111111111111111111',
-  },
-  removeKeys: {
-    args: '<noId> [startIndex] [keysCount]',
-    example: 'yarn fork csm hoodi removeKeys 12',
-  },
-  proposeManager: {
-    args: '<noId> <address>',
-    example:
-      'yarn fork csm hoodi proposeManager 12 0x1111111111111111111111111111111111111111',
-  },
-  confirmManager: {
-    args: '<noId>',
-    example: 'yarn fork csm hoodi confirmManager 12',
-  },
-  proposeReward: {
-    args: '<noId> <address>',
-    example:
-      'yarn fork csm hoodi proposeReward 12 0x1111111111111111111111111111111111111111',
-  },
-  confirmReward: {
-    args: '<noId>',
-    example: 'yarn fork csm hoodi confirmReward 12',
-  },
-  reportPenalty: {
-    args: '<noId> <amountEth>',
-    example: 'yarn fork csm hoodi reportPenalty 12 1',
-  },
-  settlePenalty: {
-    args: '<noId>',
-    example: 'yarn fork csm hoodi settlePenalty 12',
-  },
-  reportRewards: {
-    args: '',
-    example: 'yarn fork csm hoodi reportRewards',
-  },
-  setGateAddrs: {
-    args: '<selector|[selectors]> <address...>',
-    example:
-      'yarn fork csm hoodi setGateAddrs ics 0x1111111111111111111111111111111111111111',
-  },
-  setRewardsClaimer: {
-    args: '<noId> <address>',
-    example:
-      'yarn fork csm hoodi setRewardsClaimer 12 0x1111111111111111111111111111111111111111',
-  },
-  setShareLimit: {
-    args: '<REACHED|EXHAUSTED|APPROACHING>',
-    example: 'yarn fork csm hoodi setShareLimit REACHED',
-  },
-  createCuratedOperator: {
-    args: '<selector> <address>',
-    example:
-      'yarn fork cm hoodi createCuratedOperator po 0x1111111111111111111111111111111111111111',
-  },
-  createPermissionlessOperator: {
-    args: '<address> [keysCount]',
-    example:
-      'yarn fork csm hoodi createPermissionlessOperator 0x1111111111111111111111111111111111111111 3',
-  },
-  claimGateCurve: {
-    args: '<ics|idvtc> <noId> <member> [[treeAddresses]]',
-    example:
-      'yarn fork csm hoodi claimGateCurve ics 12 0x1111111111111111111111111111111111111111',
-  },
-  createOperatorGroup: {
-    args: '<[{ id, weight }]>',
-    example: `yarn fork cm hoodi createOperatorGroup '[{"id":12,"weight":50},{"id":1,"weight":50}]'`,
-  },
-};
-
 const heading = (text: string) => styleText(['bold', 'cyan'], text);
 const dim = (text: string) => styleText('gray', text);
 
-const CATEGORIES: Record<string, Command[]> = {
-  'Fork state': ['snapshot', 'revert'],
-  'Wallet & access': ['fundTokens', 'grantRole'],
-  Operators: [
-    'createPermissionlessOperator',
-    'createCuratedOperator',
-    'createOperatorGroup',
-    'proposeManager',
-    'confirmManager',
-    'proposeReward',
-    'confirmReward',
-    'setRewardsClaimer',
-    'claimGateCurve',
-  ],
-  Keys: ['addKeys', 'removeKeys', 'depositKeys'],
-  'Bond & rewards': ['addBond', 'reportRewards'],
-  Penalties: ['reportPenalty', 'settlePenalty'],
-  Module: ['setGateAddrs', 'setShareLimit'],
-};
-
-const categorized = new Set(Object.values(CATEGORIES).flat());
-const uncategorized = COMMANDS.filter((name) => !categorized.has(name));
-if (uncategorized.length > 0) CATEGORIES.Other = uncategorized;
-
 const nameWidth = Math.max(...COMMANDS.map((name) => name.length));
 const formatCommand = (name: Command) => {
-  const { args, example } = HELP[name];
+  const { about, args, example } = HELP[name];
   const title = styleText(['bold', 'green'], name.padEnd(nameWidth));
   const indent = ' '.repeat(nameWidth + 6);
   return [
     args ? `    ${title}  ${styleText('yellow', args)}` : `    ${title}`,
+    indent + about,
     indent + dim('$ ' + example),
   ].join('\n');
 };

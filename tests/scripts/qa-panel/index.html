@@ -1,0 +1,2614 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>QA panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    />
+    <style>
+      :root {
+        --bg: #1a1b19;
+        --side: #161715;
+        --card: #222320;
+        --card-2: #1d1e1b;
+        --term: #131412;
+        --line: #31322e;
+        --line-2: #3c3d38;
+        --text: #efeee8;
+        --muted: #a5a59c;
+        --dim: #6f6f68;
+        --green: #5fc58f;
+        --green-ink: #0e2318;
+        --green-soft: rgba(95, 197, 143, 0.12);
+        --amber: #d9aa5f;
+        --amber-soft: rgba(217, 170, 95, 0.12);
+        --red: #e0756c;
+        --red-soft: rgba(224, 117, 108, 0.12);
+        --blue: #86b4dc;
+        --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+        --sans: Inter, -apple-system, 'Segoe UI', sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+      }
+      body {
+        font: 15px/1.5 var(--sans);
+        -webkit-font-smoothing: antialiased;
+      }
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+        color: inherit;
+      }
+      ::selection {
+        background: var(--green);
+        color: var(--green-ink);
+      }
+      .mono {
+        font-family: var(--mono);
+      }
+      .c {
+        color: var(--dim);
+      }
+      [hidden] {
+        display: none !important;
+      }
+
+      /* shell: sidebar · one view · log */
+      .app {
+        display: grid;
+        grid-template-columns: 252px minmax(0, 1fr) 420px;
+        min-height: 100vh;
+      }
+      .side {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow: auto;
+        background: var(--side);
+        border-right: 1px solid var(--line);
+        padding: 24px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+      }
+      .main {
+        min-width: 0;
+        padding: 36px 40px 64px;
+      }
+      .logpane {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: var(--term);
+        border-left: 1px solid var(--line);
+      }
+
+      /* sidebar */
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 14px;
+        align-self: flex-start;
+        border: 1px solid var(--line-2);
+        border-radius: 999px;
+        font: 12px var(--mono);
+        color: var(--muted);
+        background: var(--card-2);
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--green);
+        flex: none;
+        animation: pulse 2s infinite;
+      }
+      .dot.off {
+        background: var(--red);
+        animation: none;
+      }
+      .dot.warn {
+        background: var(--amber);
+        animation: none;
+      }
+      .dot.idle {
+        background: var(--dim);
+        animation: none;
+      }
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(95, 197, 143, 0.45);
+        }
+        70% {
+          box-shadow: 0 0 0 8px rgba(95, 197, 143, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(95, 197, 143, 0);
+        }
+      }
+      .brand h1 {
+        margin: 0;
+        font-size: 30px;
+        line-height: 1.1;
+        font-weight: 600;
+        letter-spacing: -0.03em;
+      }
+      .brand p {
+        margin: 6px 0 0;
+        font: 12px var(--mono);
+        color: var(--muted);
+      }
+      .side-label {
+        font: 11px var(--mono);
+        color: var(--dim);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+      .seg {
+        display: flex;
+        border: 1px solid var(--line-2);
+        border-radius: 10px;
+        padding: 3px;
+        gap: 3px;
+      }
+      .seg button {
+        flex: 1;
+        border: 0;
+        background: transparent;
+        padding: 6px 8px;
+        border-radius: 7px;
+        font: 500 12px var(--mono);
+        color: var(--muted);
+        cursor: pointer;
+      }
+      .seg button.on {
+        background: var(--green);
+        color: var(--green-ink);
+      }
+      .nav {
+        display: grid;
+        gap: 2px;
+      }
+      .nav a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 12px;
+        border-radius: 9px;
+        font: 500 14px var(--mono);
+        color: var(--muted);
+        text-decoration: none;
+        transition:
+          background 0.15s,
+          color 0.15s;
+      }
+      .nav a:hover {
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--text);
+      }
+      .nav a.on {
+        background: var(--card);
+        color: var(--text);
+        box-shadow: inset 2px 0 0 var(--green);
+      }
+      .nav .k {
+        color: var(--dim);
+        width: 14px;
+      }
+      .nav .badge {
+        margin-left: auto;
+      }
+      .facts {
+        margin-top: auto;
+        display: grid;
+        gap: 14px;
+        padding-top: 18px;
+        border-top: 1px solid var(--line);
+      }
+      .fact .v {
+        font: 600 20px var(--mono);
+        letter-spacing: -0.01em;
+      }
+      .fact .l {
+        font: 11px var(--mono);
+        color: var(--dim);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .fact .a {
+        display: flex;
+        gap: 12px;
+        margin-top: 4px;
+      }
+
+      /* view header */
+      .view-h {
+        margin-bottom: 26px;
+      }
+      .eyebrow {
+        font: 13px var(--mono);
+        color: var(--muted);
+      }
+      .view-h h2 {
+        margin: 8px 0 0;
+        font-size: 40px;
+        line-height: 1.1;
+        font-weight: 600;
+        letter-spacing: -0.03em;
+      }
+      .view-h p {
+        margin: 10px 0 0;
+        color: var(--muted);
+        max-width: 680px;
+      }
+
+      /* buttons */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        height: 44px;
+        padding: 0 20px;
+        border-radius: 10px;
+        border: 1px solid var(--line-2);
+        background: transparent;
+        font: 500 14px var(--mono);
+        cursor: pointer;
+        transition:
+          background 0.15s,
+          border-color 0.15s,
+          opacity 0.15s;
+        white-space: nowrap;
+      }
+      .btn:hover {
+        border-color: #55564f;
+        background: #262724;
+      }
+      .btn.primary {
+        background: var(--green);
+        border-color: var(--green);
+        color: var(--green-ink);
+      }
+      .btn.primary:hover {
+        background: #6fd09d;
+      }
+      .btn.sm {
+        height: 34px;
+        padding: 0 14px;
+        font-size: 13px;
+        border-radius: 8px;
+      }
+      .btn.danger:hover {
+        border-color: var(--red);
+        color: var(--red);
+        background: var(--red-soft);
+      }
+      .btn:disabled {
+        opacity: 0.4;
+        cursor: default;
+        pointer-events: none;
+      }
+      .link {
+        background: none;
+        border: 0;
+        padding: 0;
+        font: 11px var(--mono);
+        color: var(--muted);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+      .link:hover {
+        color: var(--green);
+      }
+      .link:disabled {
+        opacity: 0.35;
+        cursor: default;
+      }
+      .copy {
+        border: 1px solid var(--line-2);
+        background: transparent;
+        color: var(--muted);
+        border-radius: 6px;
+        font: 11px var(--mono);
+        padding: 2px 9px;
+        cursor: pointer;
+        line-height: 1.6;
+        white-space: nowrap;
+      }
+      .copy:hover {
+        color: var(--green);
+        border-color: var(--green);
+      }
+      .copy:disabled {
+        opacity: 0.35;
+        pointer-events: none;
+      }
+
+      /* cards */
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 24px 26px;
+        min-width: 0;
+      }
+      .card-h {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 18px;
+        flex-wrap: wrap;
+      }
+      .kicker {
+        font: 13px var(--mono);
+        color: var(--muted);
+      }
+      .card-h .grow {
+        flex: 1;
+      }
+      .stack {
+        display: grid;
+        gap: 20px;
+      }
+      .two {
+        display: grid;
+        grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+        gap: 20px;
+        align-items: start;
+      }
+      .note {
+        font: 13px/1.7 var(--mono);
+        color: var(--dim);
+        margin: 16px 0 0;
+      }
+      .empty {
+        padding: 36px 0 16px;
+        text-align: center;
+        color: var(--dim);
+        font: 14px/1.8 var(--mono);
+      }
+      .banner {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        padding: 12px 14px;
+        margin-bottom: 18px;
+        border: 1px solid var(--amber);
+        background: var(--amber-soft);
+        border-radius: 10px;
+        font: 13px/1.6 var(--mono);
+      }
+      .banner .grow {
+        flex: 1;
+      }
+      .banner b {
+        color: var(--amber);
+        font-weight: 500;
+      }
+      .banner.err {
+        border-color: var(--red);
+        background: var(--red-soft);
+      }
+      .banner.err b {
+        color: var(--red);
+      }
+
+      /* terminal */
+      .term {
+        background: var(--term);
+        border: 1px solid var(--line-2);
+        border-radius: 16px;
+        overflow: hidden;
+      }
+      .term-bar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 13px 20px;
+        border-bottom: 1px solid var(--line);
+        font: 13px var(--mono);
+        color: var(--muted);
+      }
+      .term-bar i {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        background: #4a4b46;
+      }
+      .term-bar i:nth-child(3) {
+        background: var(--green);
+        margin-right: 10px;
+      }
+      .term-bar .grow {
+        flex: 1;
+      }
+      .term-body {
+        padding: 18px 22px 22px;
+        font: 14px/2 var(--mono);
+      }
+      .p {
+        color: var(--green);
+        margin-right: 10px;
+      }
+      .cfg-row {
+        display: grid;
+        grid-template-columns: 52px minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 8px;
+      }
+      .val {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .val.none {
+        color: var(--dim);
+      }
+      .cursor {
+        display: inline-block;
+        width: 9px;
+        height: 18px;
+        background: var(--green);
+        vertical-align: -3px;
+        animation: blink 1.1s steps(1) infinite;
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+
+      /* badges */
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font: 12px var(--mono);
+        padding: 2px 9px;
+        border-radius: 6px;
+        white-space: nowrap;
+      }
+      .badge::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+      .badge.plain::before {
+        display: none;
+      }
+      .badge.ok {
+        color: var(--green);
+        background: var(--green-soft);
+      }
+      .badge.warn {
+        color: var(--amber);
+        background: var(--amber-soft);
+      }
+      .badge.err {
+        color: var(--red);
+        background: var(--red-soft);
+      }
+      .badge.idle {
+        color: var(--dim);
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      /* docker */
+      .svc {
+        padding: 16px 0;
+        border-bottom: 1px solid var(--line);
+        display: grid;
+        gap: 10px;
+      }
+      .svc:first-child {
+        padding-top: 0;
+      }
+      .svc:last-child {
+        border-bottom: 0;
+        padding-bottom: 0;
+      }
+      .svc-head {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .svc-name {
+        font: 600 16px var(--mono);
+      }
+      .svc-url {
+        display: grid;
+        grid-template-columns: 56px minmax(0, 1fr) auto;
+        gap: 8px;
+        align-items: center;
+        font: 13px var(--mono);
+      }
+      .svc-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      /* warm-up */
+      .warm-state {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        padding: 16px 18px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: var(--card-2);
+        font: 14px var(--mono);
+      }
+      .warm-state small {
+        display: block;
+        color: var(--dim);
+        font-size: 12px;
+        margin-top: 2px;
+      }
+      .warm-form {
+        display: flex;
+        gap: 10px;
+        margin-top: 14px;
+      }
+      .warm-form .field {
+        flex: 1;
+      }
+
+      /* fields */
+      .field {
+        height: 44px;
+        border-radius: 10px;
+        border: 1px solid var(--line-2);
+        background: var(--card-2);
+        padding: 0 14px;
+        font: 14px var(--mono);
+        outline: none;
+        min-width: 0;
+        transition: border-color 0.15s;
+        width: 100%;
+      }
+      .field:focus {
+        border-color: var(--green);
+      }
+
+      /* operator */
+      .op-head {
+        display: grid;
+        gap: 18px;
+      }
+      .op-left {
+        display: flex;
+        gap: 10px 14px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .lookup {
+        display: flex;
+        gap: 8px;
+      }
+      .lookup .field {
+        width: 96px;
+        font-size: 18px;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 8px;
+        padding: 6px 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--card-2);
+        font: 12px var(--mono);
+        color: var(--muted);
+      }
+      .chip b {
+        color: var(--text);
+        font-weight: 600;
+        font-size: 14px;
+      }
+      .roles {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        gap: 6px 12px;
+        margin-top: 14px;
+        font: 13px var(--mono);
+        align-items: center;
+      }
+      .roles .k {
+        color: var(--dim);
+      }
+      .roles span:not(.k) {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        margin: 22px 0 14px;
+      }
+      .toolbar .grow {
+        flex: 1;
+      }
+      .qgroup {
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+      }
+      .qgroup .field {
+        height: 34px;
+        width: 60px;
+        font-size: 13px;
+        padding: 0 10px;
+        border-radius: 8px;
+      }
+      .tabs {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+      }
+      .tab {
+        border: 1px solid transparent;
+        background: transparent;
+        border-radius: 8px;
+        padding: 5px 12px;
+        font: 12px var(--mono);
+        color: var(--muted);
+        cursor: pointer;
+      }
+      .tab.on {
+        border-color: var(--line-2);
+        color: var(--text);
+        background: var(--card-2);
+      }
+      .tab span {
+        color: var(--dim);
+        margin-left: 6px;
+      }
+      .bulk {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        margin-bottom: 10px;
+        border: 1px solid var(--green);
+        background: var(--green-soft);
+        border-radius: 10px;
+        font: 13px var(--mono);
+        flex-wrap: wrap;
+      }
+      .bulk .grow {
+        flex: 1;
+      }
+      .bulk select.cl {
+        min-width: 0;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font: 13px var(--mono);
+      }
+      th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background: var(--card);
+        text-align: left;
+        font-weight: 400;
+        color: var(--dim);
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 0 10px 10px;
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+      }
+      td {
+        padding: 9px 10px;
+        border-bottom: 1px solid var(--line);
+        vertical-align: middle;
+      }
+      tr:last-child td {
+        border-bottom: 0;
+      }
+      tbody tr:hover td {
+        background: rgba(255, 255, 255, 0.015);
+      }
+      tr.sel td {
+        background: var(--green-soft) !important;
+      }
+      .scroll {
+        overflow: auto;
+        margin: 0 -10px;
+        padding: 0 10px;
+      }
+      .keys-scroll {
+        max-height: calc(100vh - 420px);
+        min-height: 260px;
+      }
+      .pk {
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+        white-space: nowrap;
+      }
+      .stage {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        padding: 2px 9px;
+        border-radius: 6px;
+        white-space: nowrap;
+      }
+      .stage::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+      .stage.dep {
+        color: var(--green);
+        background: var(--green-soft);
+      }
+      .stage.vet {
+        color: var(--amber);
+        background: var(--amber-soft);
+      }
+      .stage.new {
+        color: var(--dim);
+        background: rgba(255, 255, 255, 0.04);
+      }
+      .stage.bad {
+        color: var(--red);
+        background: var(--red-soft);
+      }
+      select.cl {
+        appearance: none;
+        height: 30px;
+        border-radius: 7px;
+        border: 1px solid var(--line-2);
+        background-color: var(--card-2);
+        padding: 0 28px 0 10px;
+        font: 12px var(--mono);
+        cursor: pointer;
+        min-width: 190px;
+        background-image:
+          linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+          linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+        background-position:
+          calc(100% - 15px) 12px,
+          calc(100% - 10px) 12px;
+        background-size: 5px 5px;
+        background-repeat: no-repeat;
+      }
+      select.cl.set {
+        border-color: var(--green);
+        color: var(--green);
+      }
+      select.cl:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      input[type='checkbox'] {
+        accent-color: var(--green);
+        width: 15px;
+        height: 15px;
+        cursor: pointer;
+      }
+      .hint {
+        display: none;
+        margin-top: 14px;
+        padding: 12px 14px;
+        border: 1px dashed var(--line-2);
+        border-radius: 10px;
+        font: 13px var(--mono);
+        color: var(--muted);
+      }
+      .hint.show {
+        display: block;
+      }
+      .hint b {
+        color: var(--amber);
+        font-weight: 500;
+      }
+
+      /* presets */
+      .tags {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+      }
+      .tag {
+        font-size: 11px;
+        color: var(--muted);
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        padding: 0 6px;
+      }
+      .secret {
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+      }
+      .secret span {
+        max-width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .nolink {
+        background: none;
+        border: 0;
+        padding: 0;
+        font: inherit;
+        color: var(--green);
+        cursor: pointer;
+        text-decoration: underline dotted;
+        text-underline-offset: 3px;
+      }
+
+      /* commands: list · form */
+      .cmd-layout {
+        display: grid;
+        grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+        gap: 20px;
+        align-items: start;
+      }
+      .cmd-list {
+        max-height: calc(100vh - 290px);
+        overflow: auto;
+        margin-top: 14px;
+      }
+      .group {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--card-2);
+      }
+      .group + .group {
+        margin-top: 10px;
+      }
+      .group-h {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 11px 14px;
+        border: 0;
+        background: none;
+        cursor: pointer;
+        text-align: left;
+        font: 600 13px var(--mono);
+        color: var(--text);
+      }
+      .group-h .chev {
+        color: var(--green);
+        width: 12px;
+        transition: transform 0.15s;
+      }
+      .group.closed .group-h .chev {
+        transform: rotate(-90deg);
+      }
+      .group-h .count {
+        margin-left: auto;
+        font-weight: 400;
+        font-size: 11px;
+        color: var(--dim);
+        border: 1px solid var(--line-2);
+        border-radius: 999px;
+        padding: 0 8px;
+      }
+      .group-body {
+        padding: 0 6px 6px;
+        border-top: 1px solid var(--line);
+      }
+      .group.closed .group-body {
+        display: none;
+      }
+      .cmd-item {
+        width: 100%;
+        display: block;
+        text-align: left;
+        padding: 9px 10px;
+        margin-top: 4px;
+        border: 0;
+        border-radius: 8px;
+        background: none;
+        cursor: pointer;
+      }
+      .cmd-item:hover {
+        background: rgba(255, 255, 255, 0.035);
+      }
+      .cmd-item.on {
+        background: var(--green-soft);
+        box-shadow: inset 2px 0 0 var(--green);
+      }
+      .cmd-item .name {
+        display: block;
+        font: 500 13px var(--mono);
+      }
+      .cmd-item .about {
+        display: block;
+        margin-top: 2px;
+        font: 13px/1.4 var(--sans);
+        color: var(--muted);
+      }
+      .cmd-item.na .name,
+      .cmd-item.na .about {
+        opacity: 0.45;
+      }
+      .mods {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+        margin-top: 6px;
+      }
+      .mod {
+        font: 10px var(--mono);
+        letter-spacing: 0.04em;
+        color: var(--dim);
+        border: 1px solid var(--line-2);
+        border-radius: 4px;
+        padding: 0 5px;
+        line-height: 16px;
+      }
+      .mod.cur {
+        color: var(--green);
+        border-color: rgba(95, 197, 143, 0.45);
+      }
+      .mod.all {
+        color: var(--muted);
+      }
+      .cmd-detail .mods {
+        margin-top: 10px;
+      }
+      .cmd-detail {
+        position: sticky;
+        top: 24px;
+      }
+      .cmd-title {
+        font: 600 24px var(--mono);
+        letter-spacing: -0.01em;
+      }
+      .cmd-about {
+        margin-top: 6px;
+        color: var(--muted);
+      }
+      .cmd-spec {
+        font: 12px var(--mono);
+        color: var(--dim);
+        margin-top: 6px;
+      }
+      .args-form {
+        display: grid;
+        gap: 12px;
+        margin-top: 20px;
+      }
+      .arg label {
+        display: block;
+        font: 12px var(--mono);
+        color: var(--muted);
+        margin-bottom: 5px;
+      }
+      .arg label em {
+        color: var(--dim);
+        font-style: normal;
+      }
+      .arg textarea.field {
+        height: 80px;
+        padding: 10px 14px;
+        resize: vertical;
+      }
+      .arg select.field {
+        appearance: none;
+        cursor: pointer;
+        padding-right: 36px;
+        background-image:
+          linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+          linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+        background-position:
+          calc(100% - 19px) 19px,
+          calc(100% - 14px) 19px;
+        background-size: 5px 5px;
+        background-repeat: no-repeat;
+      }
+      .arg-note {
+        margin-top: 6px;
+        font: 12px var(--mono);
+        color: var(--dim);
+      }
+      .pick {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .pick-item {
+        position: relative;
+        cursor: pointer;
+      }
+      .pick-item input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+      .pick-item span {
+        display: inline-flex;
+        align-items: center;
+        height: 36px;
+        padding: 0 14px;
+        border-radius: 8px;
+        border: 1px solid var(--line-2);
+        background: var(--card-2);
+        font: 500 13px var(--mono);
+        color: var(--muted);
+        transition: all 0.15s;
+      }
+      .pick-item span:hover {
+        border-color: #55564f;
+        color: var(--text);
+      }
+      .pick-item input:checked + span {
+        border-color: var(--green);
+        background: var(--green-soft);
+        color: var(--green);
+      }
+      .pick-item input:focus-visible + span {
+        outline: 2px solid var(--green);
+        outline-offset: 2px;
+      }
+      .example {
+        font: 12px var(--mono);
+        color: var(--dim);
+        margin: 16px 0;
+        padding: 10px 12px;
+        background: var(--term);
+        border-radius: 8px;
+        word-break: break-all;
+      }
+      .ctx {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 12px;
+        font: 12px var(--mono);
+        color: var(--dim);
+      }
+
+      /* log */
+      .logpane .term-bar {
+        border-radius: 0;
+      }
+      .logpane .term-body {
+        flex: 1;
+        overflow: auto;
+        font-size: 12.5px;
+        line-height: 1.85;
+      }
+      .entry + .entry {
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 1px dashed var(--line);
+      }
+      .entry .cmdline {
+        word-break: break-all;
+      }
+      .step {
+        color: var(--muted);
+        word-break: break-word;
+      }
+      .ok {
+        color: var(--green);
+      }
+      .err {
+        color: var(--red);
+      }
+      .res {
+        color: var(--blue);
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+      .t {
+        color: var(--dim);
+        float: right;
+        margin-left: 12px;
+      }
+      .spin {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border: 2px solid var(--line-2);
+        border-top-color: var(--green);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        vertical-align: -1px;
+        margin-right: 8px;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* toast */
+      .toasts {
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 24px;
+        display: grid;
+        gap: 10px;
+        z-index: 10;
+      }
+      .toast {
+        background: #2a2b28;
+        border: 1px solid var(--line-2);
+        border-left: 3px solid var(--green);
+        border-radius: 10px;
+        padding: 12px 16px;
+        font: 13px var(--mono);
+        max-width: 460px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+        animation: up 0.2s ease-out;
+      }
+      .toast.err {
+        border-left-color: var(--red);
+      }
+      @keyframes up {
+        from {
+          transform: translateY(8px);
+          opacity: 0;
+        }
+      }
+
+      /* narrower: the log drops under the view */
+      @media (max-width: 1640px) {
+        .two {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+      @media (max-width: 1360px) {
+        .app {
+          grid-template-columns: 232px minmax(0, 1fr);
+        }
+        .logpane {
+          grid-column: 2;
+          position: static;
+          height: 460px;
+          border-left: 0;
+          border-top: 1px solid var(--line);
+        }
+      }
+      /* phone: the sidebar becomes a top bar */
+      @media (max-width: 860px) {
+        .app {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .side {
+          position: static;
+          height: auto;
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+          padding: 18px 16px;
+          gap: 14px;
+        }
+        .nav {
+          grid-auto-flow: column;
+          overflow-x: auto;
+        }
+        .nav a {
+          white-space: nowrap;
+        }
+        .facts {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          margin-top: 0;
+        }
+        .main {
+          padding: 24px 16px 40px;
+        }
+        .logpane {
+          grid-column: 1;
+        }
+        .view-h h2 {
+          font-size: 30px;
+        }
+        .card {
+          padding: 20px 16px;
+        }
+        .cmd-layout {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .cmd-list {
+          max-height: 320px;
+        }
+        .cmd-detail {
+          position: static;
+        }
+        .warm-form {
+          flex-wrap: wrap;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="side">
+        <span class="pill"
+          ><span class="dot" id="aliveDot"></span
+          ><span id="alivePill">connecting…</span></span
+        >
+        <div class="brand">
+          <h1>QA panel</h1>
+          <p>csm-widget · <span id="chainName">…</span></p>
+        </div>
+        <div>
+          <div class="side-label">module</div>
+          <div class="seg" id="modules"></div>
+        </div>
+        <nav class="nav" id="nav">
+          <a href="#/setup" data-view="setup"
+            ><span class="k">01</span>Setup<span
+              class="badge"
+              id="navSetup"
+              hidden
+            ></span
+          ></a>
+          <a href="#/operator" data-view="operator"
+            ><span class="k">02</span>Operator<span
+              class="badge plain idle"
+              id="navOperator"
+              hidden
+            ></span
+          ></a>
+          <a href="#/commands" data-view="commands"
+            ><span class="k">03</span>Commands</a
+          >
+          <a href="#/presets" data-view="presets"
+            ><span class="k">04</span>Presets<span
+              class="badge"
+              id="navPresets"
+              hidden
+            ></span
+          ></a>
+        </nav>
+        <div class="facts">
+          <div class="fact">
+            <div class="v" id="statBlock">—</div>
+            <div class="l" id="statRpc">fork block</div>
+          </div>
+          <div class="fact">
+            <div class="v" id="statSnapshot">—</div>
+            <div class="l">snapshot</div>
+            <div class="a">
+              <button class="link" id="snapshotLink">take</button
+              ><button class="link" id="revertLink">revert</button>
+            </div>
+          </div>
+          <div class="fact">
+            <div class="v" id="statMocked">—</div>
+            <div class="l">keys in CL mock</div>
+            <div class="a">
+              <span class="link" style="cursor: default" id="statUpstream"
+                >…</span
+              ><button class="link" id="resetCl">reset</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main">
+        <!-- setup -->
+        <section data-panel="setup">
+          <header class="view-h">
+            <div class="eyebrow">— 01 · setup</div>
+            <h2>Environment</h2>
+            <p>
+              Start the fork and IPFS, copy their URLs into the widget's
+              /qa-config, then warm the fork up for your wallet
+            </p>
+          </header>
+          <div class="stack">
+            <div class="term">
+              <div class="term-bar">
+                <i></i><i></i><i></i><span>~/qa-config — zsh</span>
+              </div>
+              <div class="term-body">
+                <div class="c"># paste into the widget's /qa-config</div>
+                <div class="cfg-row">
+                  <span><span class="p">$</span>rpc</span
+                  ><span class="val" id="cfgRpc">…</span
+                  ><button class="copy" data-copy="cfgRpc">copy</button>
+                </div>
+                <div class="cfg-row">
+                  <span><span class="p">$</span>cl</span
+                  ><span class="val" id="cfgCl">…</span
+                  ><button class="copy" data-copy="cfgCl">copy</button>
+                </div>
+                <div class="cfg-row">
+                  <span><span class="p">$</span>ipfs</span
+                  ><span class="val" id="cfgIpfs">…</span
+                  ><button class="copy" data-copy="cfgIpfs">copy</button>
+                </div>
+                <div class="c" style="margin-top: 8px">
+                  # after changing a CL status
+                </div>
+                <div>
+                  <span class="p">$</span>reload the widget page
+                  <span class="cursor"></span>
+                </div>
+              </div>
+            </div>
+            <div class="two">
+              <div class="card">
+                <div class="card-h"><span class="kicker">— docker</span></div>
+                <div id="nonceBanner"></div>
+                <div id="docker">
+                  <div class="empty">reading containers…</div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-h"><span class="kicker">— warm-up</span></div>
+                <div id="warmState" class="warm-state">
+                  <span class="dot idle"></span><span>…</span>
+                </div>
+                <form class="warm-form" id="warmForm">
+                  <input
+                    class="field"
+                    id="warmAddress"
+                    placeholder="0x… wallet to warm up for"
+                    list="knownAddresses"
+                    autocomplete="off"
+                  />
+                  <button class="btn primary">› warm up</button>
+                </form>
+                <p class="note">
+                  The fork pulls state from the live chain on the first read, so
+                  the widget's first load after a fork start is slow and can
+                  time out. Warm-up makes the same calls ahead: the wallet's
+                  operators, all operators, keys events. Run it for the wallet
+                  you are about to connect
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- operator -->
+        <section data-panel="operator" hidden>
+          <header class="view-h">
+            <div class="eyebrow">— 02 · operator</div>
+            <h2 id="operatorTitle">Operator keys</h2>
+            <p>
+              Every key of the operator, where it is in the contract and what
+              the CL mock answers for it
+            </p>
+          </header>
+          <div class="card" id="operatorCard">
+            <div class="op-head">
+              <div class="op-left">
+                <form class="lookup" id="lookup">
+                  <input
+                    class="field"
+                    id="noId"
+                    placeholder="#id"
+                    inputmode="numeric"
+                    autocomplete="off"
+                  />
+                  <button class="btn primary">› load</button>
+                </form>
+                <div class="actions" id="operatorActions" hidden>
+                  <span class="qgroup"
+                    ><input
+                      class="field"
+                      id="addCount"
+                      value="3"
+                      inputmode="numeric"
+                    /><button class="btn sm" data-quick="addKeys">
+                      + keys
+                    </button></span
+                  >
+                  <span class="qgroup"
+                    ><input
+                      class="field"
+                      id="depositCount"
+                      value="1"
+                      inputmode="numeric"
+                    /><button
+                      class="btn sm"
+                      data-quick="depositKeys"
+                      title="Deposits follow the module queue, not just this operator"
+                    >
+                      deposit
+                    </button></span
+                  >
+                  <button
+                    class="btn sm"
+                    data-quick="reload"
+                    title="Reload from the fork"
+                  >
+                    ↻ refresh
+                  </button>
+                </div>
+              </div>
+              <div id="operatorSummary" class="c mono" style="font-size: 13px">
+                enter an operator id
+              </div>
+            </div>
+            <div id="operator"></div>
+          </div>
+        </section>
+
+        <!-- commands -->
+        <section data-panel="commands" hidden>
+          <header class="view-h">
+            <div class="eyebrow">— 03 · commands</div>
+            <h2>Fork commands</h2>
+            <p>
+              Everything <span class="mono">yarn fork</span> can do. Arguments
+              are prefilled from the loaded operator
+            </p>
+          </header>
+          <div class="cmd-layout">
+            <div class="card">
+              <input
+                class="field"
+                id="search"
+                placeholder="› find a command…"
+                autocomplete="off"
+              />
+              <div class="cmd-list" id="commands"></div>
+            </div>
+            <div class="card cmd-detail" id="commandDetail"></div>
+          </div>
+        </section>
+
+        <!-- presets -->
+        <section data-panel="presets" hidden>
+          <header class="view-h">
+            <div class="eyebrow">— 04 · presets</div>
+            <h2>Wallet presets</h2>
+            <p>
+              The wallets the e2e tests set up on the fork. Their operators live
+              on the fork, so a fork restart makes them stale
+            </p>
+          </header>
+          <div class="card">
+            <div class="card-h">
+              <span class="kicker mono" id="presetsFile"></span>
+              <span class="grow"></span>
+              <button class="btn sm" id="presetsReload">↻ refresh</button>
+              <button class="btn sm danger" id="presetsDelete">
+                delete file
+              </button>
+            </div>
+            <div id="presets"><div class="empty">reading presets…</div></div>
+          </div>
+        </section>
+      </main>
+
+      <aside class="logpane">
+        <div class="term-bar">
+          <i></i><i></i><i></i><span>~/qa-panel — zsh</span
+          ><span class="grow"></span
+          ><button class="copy" id="clearLog">clear</button>
+        </div>
+        <div class="term-body" id="log">
+          <div class="c"># command output shows up here</div>
+        </div>
+      </aside>
+    </div>
+    <datalist id="knownAddresses"></datalist>
+    <div class="toasts" id="toasts"></div>
+
+    <script>
+      const $ = (id) => document.getElementById(id);
+      const esc = (value) =>
+        String(value ?? '').replace(
+          /[&<>"']/g,
+          (ch) =>
+            ({
+              '&': '&amp;',
+              '<': '&lt;',
+              '>': '&gt;',
+              '"': '&quot;',
+              "'": '&#39;',
+            })[ch],
+        );
+      const short = (hex, n = 6) =>
+        hex ? `${hex.slice(0, n + 2)}…${hex.slice(-n)}` : '—';
+      const ago = (time) => {
+        const s = Math.max(
+          0,
+          Math.round((Date.now() - new Date(time).getTime()) / 1000),
+        );
+        if (s < 60) return `${s}s ago`;
+        if (s < 3600) return `${Math.floor(s / 60)}m ago`;
+        if (s < 86400)
+          return `${Math.floor(s / 3600)}h ${Math.floor((s % 3600) / 60)}m ago`;
+        return `${Math.floor(s / 86400)}d ago`;
+      };
+      const store = {
+        get: (key, fallback) => {
+          try {
+            return JSON.parse(localStorage.getItem(key)) ?? fallback;
+          } catch {
+            return fallback;
+          }
+        },
+        set: (key, value) => {
+          try {
+            localStorage.setItem(key, JSON.stringify(value));
+          } catch {}
+        },
+      };
+
+      const VIEWS = ['setup', 'operator', 'commands', 'presets'];
+      const state = {
+        meta: null,
+        live: null,
+        module: store.get('qa.module', null),
+        operator: null,
+        presets: null,
+        filter: 'all',
+        selected: new Set(),
+        open: store.get('qa.open', null),
+        collapsed: new Set(store.get('qa.collapsed', [])),
+        snapshots: store.get('qa.snapshots', []),
+        secrets: new Map(),
+        logCleared: 0,
+      };
+
+      const api = async (path, body) => {
+        const response = await fetch(
+          path,
+          body === undefined
+            ? undefined
+            : {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body),
+              },
+        );
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error ?? response.statusText);
+        return data;
+      };
+
+      const toast = (text, isError = false) => {
+        const el = document.createElement('div');
+        el.className = `toast${isError ? ' err' : ''}`;
+        el.textContent = text;
+        $('toasts').append(el);
+        setTimeout(() => el.remove(), isError ? 6000 : 3000);
+      };
+
+      const copy = async (text, label) => {
+        try {
+          await navigator.clipboard.writeText(text);
+          toast(`copied ${label ?? short(text, 14)}`);
+        } catch {
+          toast('could not copy', true);
+        }
+      };
+
+      /* ---------- views ---------- */
+
+      const showView = (view) => {
+        if (!VIEWS.includes(view)) view = 'setup';
+        for (const panel of document.querySelectorAll('[data-panel]'))
+          panel.hidden = panel.dataset.panel !== view;
+        for (const link of document.querySelectorAll('[data-view]'))
+          link.classList.toggle('on', link.dataset.view === view);
+        if (location.hash !== `#/${view}`)
+          history.replaceState(null, '', `#/${view}`);
+      };
+      const viewFromHash = () => location.hash.replace(/^#\/?/, '');
+      window.addEventListener('hashchange', () => showView(viewFromHash()));
+
+      const setBadge = (id, text, kind) => {
+        $(id).hidden = !text;
+        $(id).textContent = text ?? '';
+        $(id).className = `badge ${kind ?? ''}`;
+      };
+
+      /* ---------- live state ---------- */
+
+      const renderState = (s) => {
+        const previous = state.live;
+        state.live = s;
+        $('aliveDot').className = `dot${s.forkAlive ? '' : ' off'}`;
+        $('alivePill').textContent = s.forkAlive
+          ? `fork ${s.chain} · live`
+          : `fork ${s.chain} is down`;
+        $('chainName').textContent = s.chain;
+        $('statBlock').textContent = s.block
+          ? Number(s.block).toLocaleString('en-US')
+          : '—';
+        $('statRpc').textContent = s.forkStartedAt
+          ? `block · started ${ago(s.forkStartedAt)}`
+          : 'fork block';
+        $('statMocked').textContent = s.clMocked;
+        $('statUpstream').textContent =
+          `real CL ${s.clUpstream ? 'on' : 'off'}`;
+        const setCfg = (id, value, fallback) => {
+          $(id).textContent = value ?? fallback;
+          $(id).classList.toggle('none', !value);
+          $(id).dataset.value = value ?? '';
+        };
+        setCfg('cfgRpc', s.rpcTunnel, 'no tunnel: start it below');
+        setCfg('cfgCl', s.clUrl);
+        setCfg('cfgIpfs', s.ipfsTunnel, 'no tunnel: start it below');
+
+        // a restarted fork drops its snapshots and the presets' operators
+        if (
+          previous?.forkStartedAt &&
+          s.forkStartedAt &&
+          previous.forkStartedAt !== s.forkStartedAt
+        ) {
+          state.snapshots = [];
+          store.set('qa.snapshots', []);
+          renderSnapshot();
+          loadPresets();
+          toast('fork restarted: snapshots dropped');
+        }
+        renderDocker();
+        renderWarm();
+        renderRunning(s.running);
+      };
+
+      const pollState = async () => {
+        try {
+          renderState(await api('/api/state'));
+        } catch {
+          $('aliveDot').className = 'dot off';
+          $('alivePill').textContent = 'panel is not responding';
+        }
+      };
+
+      const renderModules = () => {
+        $('modules').innerHTML = state.meta.modules
+          .map(
+            (m) =>
+              `<button data-module="${esc(m)}" class="${m === state.module ? 'on' : ''}">${esc(m)}</button>`,
+          )
+          .join('');
+      };
+
+      /* ---------- jobs ---------- */
+
+      const resultText = (result) =>
+        result === undefined || result === null
+          ? ''
+          : typeof result === 'string'
+            ? result
+            : JSON.stringify(result, null, 2);
+
+      const entryHtml = (run, live = false) => `
+        <div class="entry">
+          <div class="cmdline"><span class="p">$</span>${esc(run.line)}${live ? '' : `<span class="t">${new Date(run.at).toLocaleTimeString('en-GB')}</span>`}</div>
+          ${run.log.map((l) => `<div class="step" style="padding-left:${16 + l.depth * 16}px">${l.depth ? '└ ' : '› '}${esc(l.text)}</div>`).join('')}
+          ${
+            live
+              ? '<div><span class="spin"></span><span class="c">running…</span></div>'
+              : run.ok
+                ? `<div class="ok">✓ done in ${(run.ms / 1000).toFixed(1)}s</div>${resultText(run.result) ? `<div class="res">${esc(resultText(run.result))}</div>` : ''}`
+                : `<div class="err">✗ ${esc(run.error)}</div>`
+          }
+        </div>`;
+
+      let runs = [];
+      let running = null;
+      const renderLog = () => {
+        const done = runs.filter((run) => run.at > state.logCleared);
+        const html =
+          (running ? entryHtml(running, true) : '') +
+          done.map((run) => entryHtml(run)).join('');
+        $('log').innerHTML =
+          html || '<div class="c"># command output shows up here</div>';
+      };
+      const renderRunning = (run) => {
+        if (run?.at === running?.at && run?.log.length === running?.log.length)
+          return;
+        running = run;
+        renderLog();
+      };
+      const loadHistory = async () => {
+        runs = await api('/api/history');
+        renderLog();
+      };
+
+      // every long action goes through here, so the log follows it live
+      const job = async (path, body, { quiet = false, label } = {}) => {
+        const poll = setInterval(pollState, 700);
+        try {
+          const result = await api(path, body);
+          running = null;
+          await loadHistory();
+          if (!quiet)
+            result.ok
+              ? toast(`✓ ${label}`)
+              : toast(`✗ ${label}: ${result.error}`, true);
+          if (result.ok && state.operator)
+            await loadOperator(state.operator.id, { keepSelection: true });
+          return result;
+        } catch (error) {
+          toast(error.message, true);
+          return { ok: false };
+        } finally {
+          clearInterval(poll);
+          pollState();
+        }
+      };
+      const run = (command, args = [], options) =>
+        job(
+          '/api/run',
+          { module: state.module, command, args },
+          { label: command, ...options },
+        );
+
+      /* ---------- docker ---------- */
+
+      const nodeBadge = (node) => {
+        if (!node) return '<span class="badge idle">not created</span>';
+        if (node.status !== 'running')
+          return `<span class="badge err">${esc(node.status)}</span>`;
+        if (node.health === 'healthy')
+          return '<span class="badge ok">healthy</span>';
+        if (node.health)
+          return `<span class="badge warn">${esc(node.health)}</span>`;
+        return '<span class="badge ok">running</span>';
+      };
+
+      const renderDocker = () => {
+        const docker = state.live?.docker;
+        if (!docker) return;
+        if (!docker.available) {
+          $('docker').innerHTML =
+            '<div class="empty">docker is not running<br />start Docker Desktop</div>';
+          $('nonceBanner').innerHTML = '';
+          return;
+        }
+        const tunnelUrl = state.live.tunnelUrl;
+        $('docker').innerHTML = docker.profiles
+          .map((p) => {
+            const up = p.node?.status === 'running';
+            const isFork = p.profile === 'hoodi' || p.profile === 'mainnet';
+            const isTunnel = p.profile === 'tunnel';
+            const path = state.meta.tunnelPaths[p.profile];
+            // what goes into /qa-config: the tunnel itself, or a service behind it
+            const url = isTunnel
+              ? tunnelUrl
+              : tunnelUrl && `${tunnelUrl}${path}`;
+            const missing = isTunnel
+              ? 'waiting for the URL…'
+              : 'no tunnel: start it';
+            return `
+            <div class="svc">
+              <div class="svc-head">
+                <span class="svc-name">${esc(p.profile)}</span>
+                ${nodeBadge(p.node)}
+                ${up ? `<span class="c mono" style="font-size: 12px">started ${ago(p.node.startedAt)}</span>` : ''}
+              </div>
+              ${
+                up
+                  ? `
+                <div class="svc-url">
+                  <span class="c">${isTunnel ? 'url' : 'public'}</span>
+                  <span class="val ${url ? '' : 'none'}">${url ? esc(url) : missing}</span>
+                  <button class="copy" data-text="${esc(url ?? '')}" ${url ? '' : 'disabled'}>copy</button>
+                </div>`
+                  : ''
+              }
+              <div class="svc-actions">
+                ${
+                  up
+                    ? `<button class="btn sm" data-docker="restart" data-profile="${esc(p.profile)}">${isFork ? 'restart fork' : isTunnel ? 'new URL' : 'restart'}</button>
+                     <button class="btn sm danger" data-docker="stop" data-profile="${esc(p.profile)}">stop</button>`
+                    : `<button class="btn sm primary" data-docker="up" data-profile="${esc(p.profile)}">› start</button>`
+                }
+              </div>
+            </div>`;
+          })
+          .join('');
+
+        const started = state.live.forkStartedAt;
+        const showNonce = started && store.get('qa.nonceAck', null) !== started;
+        $('nonceBanner').innerHTML = showNonce
+          ? `
+          <div class="banner">
+            <span class="grow"><b>fork started ${ago(started)}.</b> If your wallet sent transactions to an earlier fork, new ones will hang:
+            MetaMask → Settings → Developer tools → Clear activity and nonce data</span>
+            <button class="copy" id="nonceAck">got it</button>
+          </div>`
+          : '';
+      };
+
+      const CONFIRM = {
+        restart: (p) =>
+          p === 'tunnel'
+            ? 'Get a new tunnel URL? Every public URL changes: update /qa-config and the wallet network'
+            : p === 'hoodi' || p === 'mainnet'
+              ? `Restart the ${p} fork? It resets to the live chain: operators, keys and snapshots made on it are gone, and the wallet nonce has to be reset. The tunnel URL stays`
+              : `Restart ${p}?`,
+        stop: (p) =>
+          p === 'tunnel'
+            ? 'Stop the tunnel? The deployed widget loses every local service'
+            : `Stop ${p}?`,
+      };
+
+      $('docker').addEventListener('click', async (event) => {
+        const el = event.target.closest('[data-docker]');
+        if (!el) return;
+        const { docker: action, profile } = el.dataset;
+        if (CONFIRM[action] && !confirm(CONFIRM[action](profile))) return;
+        await job(
+          '/api/docker',
+          { profile, action },
+          { label: `${action} ${profile}` },
+        );
+      });
+      $('nonceBanner').addEventListener('click', (event) => {
+        if (event.target.id !== 'nonceAck') return;
+        store.set('qa.nonceAck', state.live.forkStartedAt);
+        renderDocker();
+      });
+
+      /* ---------- warm-up ---------- */
+
+      const renderWarm = () => {
+        const { warm, forkStartedAt, forkAlive } = state.live;
+        let dot = 'idle';
+        let title = 'never warmed up';
+        let sub = 'run it before opening the widget';
+        let badge = ['cold', 'idle'];
+        if (!forkAlive) {
+          dot = 'off';
+          title = 'fork is down';
+          sub = 'start it in docker';
+          badge = ['down', 'err'];
+        } else if (warm?.current) {
+          dot = '';
+          title = `warm · ${ago(warm.at)}`;
+          sub = `${short(warm.address, 4)} · ${warm.module} · took ${(warm.ms / 1000).toFixed(1)}s`;
+          badge = ['warm', 'ok'];
+        } else if (warm) {
+          dot = 'warn';
+          title = 'cold: the fork restarted after the last warm-up';
+          sub = `fork started ${ago(forkStartedAt)}, warmed ${ago(warm.at)}`;
+          badge = ['cold', 'warn'];
+        }
+        $('warmState').innerHTML =
+          `<span class="dot ${dot}"></span><span>${esc(title)}<small>${esc(sub)}</small></span>`;
+        setBadge('navSetup', ...badge);
+        if (!$('warmAddress').value && warm?.address)
+          $('warmAddress').value = warm.address;
+      };
+
+      const renderKnownAddresses = () => {
+        const known = new Map();
+        for (const p of state.presets?.presets ?? [])
+          known.set(p.address, `preset ${p.module} ${p.name}`);
+        if (state.operator) {
+          known.set(
+            state.operator.info.manager,
+            `#${state.operator.id} manager`,
+          );
+          known.set(state.operator.info.reward, `#${state.operator.id} reward`);
+        }
+        $('knownAddresses').innerHTML = [...known]
+          .map(
+            ([address, label]) =>
+              `<option value="${address}">${esc(label)}</option>`,
+          )
+          .join('');
+      };
+
+      $('warmForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const address = $('warmAddress').value.trim();
+        if (!/^0x[0-9a-fA-F]{40}$/.test(address))
+          return toast('enter a wallet address', true);
+        await job(
+          '/api/warmup',
+          { module: state.module, address },
+          { label: 'warm-up' },
+        );
+      });
+
+      /* ---------- presets ---------- */
+
+      const loadPresets = async () => {
+        try {
+          state.presets = await api('/api/presets');
+          renderPresets();
+          renderKnownAddresses();
+        } catch (error) {
+          $('presets').innerHTML =
+            `<div class="empty">${esc(error.message)}</div>`;
+        }
+      };
+
+      const renderPresets = () => {
+        const { file, exists } = state.presets;
+        const presets = state.presets.presets.filter(
+          (p) => p.module === state.module,
+        );
+        $('presetsFile').textContent = file.split('/').pop();
+        $('presetsDelete').disabled = !exists;
+        const stale = presets.filter((p) => p.onFork === false);
+        setBadge(
+          'navPresets',
+          !exists
+            ? 'none'
+            : stale.length
+              ? `${stale.length} stale`
+              : `${presets.length}`,
+          !exists || !presets.length ? 'idle' : stale.length ? 'err' : 'ok',
+        );
+        if (!exists) {
+          $('presets').innerHTML =
+            '<div class="empty">no presets file<br />the next e2e run generates it in globalSetup</div>';
+          return;
+        }
+        if (!presets.length) {
+          const others = [
+            ...new Set(state.presets.presets.map((p) => p.module)),
+          ];
+          $('presets').innerHTML =
+            `<div class="empty">no ${esc(state.module)} presets in the file${others.length ? `<br />it has ${esc(others.join(', '))}: switch the module in the sidebar` : ''}<br />the ${esc(state.module)} e2e run generates them</div>`;
+          return;
+        }
+        $('presets').innerHTML = `
+          ${
+            stale.length
+              ? `<div class="banner err"><span class="grow"><b>${stale.length} preset(s) are stale:</b> their operators are not on this fork, it was restarted.
+            Delete the file and the next e2e run rebuilds the presets</span></div>`
+              : ''
+          }
+          <div class="scroll"><table>
+            <thead><tr><th>module</th><th>preset</th><th>address</th><th>operator</th><th>setup</th><th>mnemonic</th><th>on fork</th></tr></thead>
+            <tbody>
+              ${presets
+                .map((p) => {
+                  const key = `${p.module}.${p.name}`;
+                  const secret = state.secrets.get(key);
+                  return `<tr>
+                  <td class="c">${esc(p.module)}</td>
+                  <td>${esc(p.name)}</td>
+                  <td><span class="pk">${short(p.address, 4)}<button class="copy" data-text="${esc(p.address)}">copy</button></span></td>
+                  <td>${p.noId === undefined ? '<span class="c">—</span>' : `<button class="nolink" data-open="${esc(p.noId)}" data-module="${esc(p.module)}">#${p.noId}</button>`}</td>
+                  <td><span class="tags">${p.state.map((s) => `<span class="tag">${esc(s.replace(/^with(?=[A-Z])/, ''))}</span>`).join('') || '<span class="c">—</span>'}</span></td>
+                  <td><span class="secret"><span>${secret ? esc(secret) : '•••• •••• •••• ••••'}</span>
+                    <button class="copy" data-reveal="${esc(key)}">${secret ? 'hide' : 'show'}</button>
+                    <button class="copy" data-secret="${esc(key)}">copy</button></span></td>
+                  <td>${p.onFork === null ? '<span class="c">—</span>' : p.onFork ? '<span class="stage dep">yes</span>' : '<span class="stage bad">stale</span>'}</td>
+                </tr>`;
+                })
+                .join('')}
+            </tbody>
+          </table></div>`;
+      };
+
+      // the mnemonics stay on the server until asked for
+      const readSecret = async (key) => {
+        const [module, ...name] = key.split('.');
+        try {
+          return (
+            await api('/api/presets/secret', { module, preset: name.join('.') })
+          ).secretPhrase;
+        } catch (error) {
+          toast(error.message, true);
+          return undefined;
+        }
+      };
+
+      $('presets').addEventListener('click', async (event) => {
+        const el = event.target.closest('button');
+        if (!el) return;
+        if (el.dataset.reveal) {
+          const key = el.dataset.reveal;
+          if (state.secrets.has(key)) state.secrets.delete(key);
+          else {
+            const secret = await readSecret(key);
+            if (secret) state.secrets.set(key, secret);
+          }
+          renderPresets();
+        }
+        if (el.dataset.secret) {
+          const secret = await readSecret(el.dataset.secret);
+          if (secret) copy(secret, 'mnemonic');
+        }
+        if (el.dataset.open) {
+          if (state.meta.modules.includes(el.dataset.module))
+            setModule(el.dataset.module);
+          $('noId').value = el.dataset.open;
+          loadOperator(el.dataset.open);
+          showView('operator');
+        }
+      });
+      $('presetsReload').addEventListener('click', loadPresets);
+      $('presetsDelete').addEventListener('click', async () => {
+        if (
+          !confirm(
+            'Delete the presets file? The next e2e run rebuilds the presets on the fork',
+          )
+        )
+          return;
+        try {
+          await api('/api/presets/delete', {});
+          toast('presets file deleted');
+        } catch (error) {
+          toast(error.message, true);
+        }
+        loadPresets();
+      });
+
+      /* ---------- snapshots ---------- */
+
+      const renderSnapshot = () => {
+        const last = state.snapshots.at(-1);
+        $('statSnapshot').textContent = last ? last.id : '—';
+        $('revertLink').disabled = !last;
+      };
+      const takeSnapshot = async () => {
+        const result = await run('snapshot', [], { quiet: true });
+        if (!result.ok) return;
+        state.snapshots.push({ id: result.result, at: Date.now() });
+        store.set('qa.snapshots', state.snapshots);
+        renderSnapshot();
+        toast(`snapshot ${result.result}`);
+      };
+      const revertSnapshot = async () => {
+        const last = state.snapshots.at(-1);
+        if (
+          !last ||
+          !confirm(
+            `Revert the fork to snapshot ${last.id}? Everything done since is lost`,
+          )
+        )
+          return;
+        const result = await run('revert', [last.id], { quiet: true });
+        // anvil drops the snapshot it reverts to
+        state.snapshots.pop();
+        store.set('qa.snapshots', state.snapshots);
+        renderSnapshot();
+        if (result.ok) toast(`reverted to ${last.id}`);
+      };
+
+      /* ---------- operator ---------- */
+
+      const filters = {
+        all: { label: 'all', test: () => true },
+        deposited: { label: 'deposited', test: (k) => k.deposited },
+        mocked: { label: 'mocked', test: (k) => k.cl },
+        pending: { label: 'not deposited', test: (k) => !k.deposited },
+      };
+
+      const loadOperator = async (id, { keepSelection = false } = {}) => {
+        try {
+          const op = await api(
+            `/api/operator?module=${encodeURIComponent(state.module)}&id=${encodeURIComponent(id)}`,
+          );
+          state.operator = op;
+          if (!keepSelection) state.selected.clear();
+          store.set('qa.noId', id);
+          renderOperator();
+          renderCommands();
+          renderKnownAddresses();
+        } catch (error) {
+          toast(error.message, true);
+        }
+      };
+
+      const stage = (k) =>
+        k.deposited
+          ? '<span class="stage dep">deposited</span>'
+          : k.vetted
+            ? '<span class="stage vet">queued</span>'
+            : '<span class="stage new">not vetted</span>';
+
+      const clSelect = (k) => `
+        <select class="cl${k.cl ? ' set' : ''}" data-pubkey="${esc(k.pubkey)}" ${k.deposited ? '' : 'disabled title="CL only affects deposited keys"'}>
+          <option value="">${k.deposited ? '— real CL —' : '— deposit first —'}</option>
+          ${state.meta.statuses.map((s) => `<option value="${s}" ${s === k.cl ? 'selected' : ''}>${s}</option>`).join('')}
+        </select>`;
+
+      const renderOperator = () => {
+        const op = state.operator;
+        const { info } = op;
+        const keys = op.keys.filter(filters[state.filter].test);
+        const allSelected =
+          keys.length > 0 && keys.every((k) => state.selected.has(k.pubkey));
+        const selected = op.keys.filter((k) => state.selected.has(k.pubkey));
+        const selectedDeposited = selected.filter((k) => k.deposited);
+
+        $('operatorTitle').textContent = `Operator #${op.id}`;
+        $('operatorActions').hidden = false;
+        if (document.activeElement !== $('depositCount'))
+          $('depositCount').value = Math.max(info.depositable, 1);
+        setBadge('navOperator', `#${op.id}`, 'plain idle');
+        $('operatorSummary').innerHTML = `
+          <div class="chips">
+            <span class="chip">${esc(op.module)}</span>
+            <span class="chip">added <b>${info.added}</b></span>
+            <span class="chip">vetted <b>${info.vetted}</b></span>
+            <span class="chip">deposited <b>${info.deposited}</b></span>
+            <span class="chip">depositable <b>${info.depositable}</b></span>
+            <span class="chip">exited <b>${info.exited}</b></span>
+            <span class="chip">withdrawn <b>${info.withdrawn}</b></span>
+          </div>
+          <div class="roles">
+            <span class="k">manager</span><span>${esc(info.manager)}</span><button class="copy" data-text="${esc(info.manager)}">copy</button>
+            <span class="k">reward</span><span>${esc(info.reward)}</span><button class="copy" data-text="${esc(info.reward)}">copy</button>
+          </div>`;
+
+        $('operator').innerHTML = `
+          <div class="toolbar">
+            <div class="tabs">
+              ${Object.entries(filters)
+                .map(
+                  ([key, f]) =>
+                    `<button class="tab ${key === state.filter ? 'on' : ''}" data-filter="${esc(key)}">${f.label}<span>${op.keys.filter(f.test).length}</span></button>`,
+                )
+                .join('')}
+            </div>
+          </div>
+
+          ${
+            selected.length
+              ? `
+            <div class="bulk">
+              <span>${selected.length} selected${selectedDeposited.length < selected.length ? ` · ${selectedDeposited.length} deposited` : ''}</span>
+              <span class="grow"></span>
+              <select class="cl" id="bulkStatus">${state.meta.statuses.map((s) => `<option>${s}</option>`).join('')}</select>
+              <button class="btn sm primary" data-bulk="set" ${selectedDeposited.length ? '' : 'disabled'}>apply</button>
+              <button class="btn sm" data-bulk="clear">clear mock</button>
+              <button class="btn sm" data-bulk="none">cancel</button>
+            </div>`
+              : ''
+          }
+
+          ${
+            keys.length
+              ? `
+            <div class="scroll keys-scroll"><table>
+              <thead><tr>
+                <th style="width: 28px"><input type="checkbox" id="selectAll" ${allSelected ? 'checked' : ''} /></th>
+                <th>#</th><th>pubkey</th><th>contract</th><th>CL status</th>
+              </tr></thead>
+              <tbody>
+                ${keys
+                  .map(
+                    (k) => `
+                  <tr class="${state.selected.has(k.pubkey) ? 'sel' : ''}">
+                    <td><input type="checkbox" data-select="${esc(k.pubkey)}" ${state.selected.has(k.pubkey) ? 'checked' : ''} /></td>
+                    <td class="c">${k.index}</td>
+                    <td><span class="pk">${short(k.pubkey)}<button class="copy" data-text="${esc(k.pubkey)}">copy</button></span></td>
+                    <td>${stage(k)}</td>
+                    <td>${clSelect(k)}</td>
+                  </tr>`,
+                  )
+                  .join('')}
+              </tbody>
+            </table></div>`
+              : '<div class="empty">no keys in this filter</div>'
+          }
+
+          <div class="hint" id="reloadHint"><b>↻</b> reload the widget page: the SDK caches CL responses</div>`;
+      };
+
+      const setCl = async (pubkeys, status) => {
+        try {
+          await api('/api/cl', { pubkeys, status });
+          for (const key of state.operator.keys)
+            if (pubkeys.includes(key.pubkey)) key.cl = status;
+          renderOperator();
+          $('reloadHint').classList.add('show');
+          pollState();
+          toast(
+            status
+              ? `${pubkeys.length} key(s) → ${status}`
+              : `mock cleared on ${pubkeys.length} key(s)`,
+          );
+        } catch (error) {
+          toast(error.message, true);
+        }
+      };
+
+      $('lookup').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const id = $('noId').value.trim();
+        if (id) loadOperator(id);
+      });
+
+      $('operator').addEventListener('change', (event) => {
+        const el = event.target;
+        if (el.matches('select.cl[data-pubkey]'))
+          setCl([el.dataset.pubkey], el.value || null);
+        if (el.matches('[data-select]')) {
+          el.checked
+            ? state.selected.add(el.dataset.select)
+            : state.selected.delete(el.dataset.select);
+          renderOperator();
+        }
+        if (el.id === 'selectAll') {
+          const keys = state.operator.keys.filter(filters[state.filter].test);
+          for (const k of keys)
+            el.checked
+              ? state.selected.add(k.pubkey)
+              : state.selected.delete(k.pubkey);
+          renderOperator();
+        }
+      });
+
+      $('operatorCard').addEventListener('click', (event) => {
+        const el = event.target.closest('button');
+        if (!el) return;
+        if (el.dataset.filter) {
+          state.filter = el.dataset.filter;
+          renderOperator();
+        }
+        if (el.dataset.quick === 'reload')
+          loadOperator(state.operator.id, { keepSelection: true });
+        if (el.dataset.quick === 'addKeys')
+          run('addKeys', [String(state.operator.id), $('addCount').value]);
+        if (el.dataset.quick === 'depositKeys')
+          run('depositKeys', [$('depositCount').value]);
+        if (el.dataset.bulk === 'none') {
+          state.selected.clear();
+          renderOperator();
+        }
+        if (el.dataset.bulk === 'set') {
+          const pubkeys = state.operator.keys
+            .filter((k) => k.deposited && state.selected.has(k.pubkey))
+            .map((k) => k.pubkey);
+          setCl(pubkeys, $('bulkStatus').value);
+        }
+        if (el.dataset.bulk === 'clear') setCl([...state.selected], null);
+      });
+
+      /* ---------- commands ---------- */
+
+      // `<noId> [keysCount]`, `<address...>`, `<REACHED|EXHAUSTED>`, `[[treeAddresses]]`
+      const parseArgs = (spec) =>
+        (spec.match(/<[^>]*>|\[(?:[^[\]]|\[[^\]]*\])*\]/g) ?? []).map(
+          (token) => {
+            const optional = token.startsWith('[');
+            let name = token.slice(1, -1);
+            const variadic = name.endsWith('...');
+            name = name.replace('...', '');
+            const options = /^[A-Za-z_]+(\|[A-Za-z_]+)+$/.test(name)
+              ? name.split('|')
+              : null;
+            const json = /^[[{]/.test(name) || name.includes('[');
+            return { name, optional, variadic, options, json };
+          },
+        );
+
+      const allCommands = () =>
+        state.meta.categories.flatMap((c) => c.commands);
+
+      // ICS and IDVTC are vetted gates: no curated operators through them
+      const VETTED_GATES = ['ics', 'idvtc'];
+
+      // arguments whose values the panel knows: gates of the module, roles
+      const choicesFor = (cmd, arg) => {
+        if (arg.name === 'role') {
+          return {
+            options: state.meta.roles.map((r) => ({
+              value: r.name,
+              label: `${r.name} · ${r.contract}`,
+              title: r.about,
+            })),
+          };
+        }
+        if (!arg.name.startsWith('selector')) return null;
+        const gates = state.meta.gates[state.module] ?? [];
+        const usable =
+          cmd === 'createCuratedOperator'
+            ? gates.filter((g) => !VETTED_GATES.includes(g))
+            : gates;
+        return { gates: usable, multiple: arg.name.includes('[selectors]') };
+      };
+
+      const fieldFor = (cmd, arg, i) => {
+        const id = `arg-${cmd}-${i}`;
+        const op = state.operator;
+        const prefill = op && arg.name === 'noId' ? op.id : '';
+        const choices = choicesFor(cmd, arg);
+        const name = choices?.gates
+          ? choices.multiple
+            ? 'gates'
+            : 'gate'
+          : arg.name;
+        const hint = choices?.multiple
+          ? ' <em>pick one or more</em>'
+          : arg.variadic
+            ? ' <em>space-separated</em>'
+            : '';
+        const label = `<label for="${id}">${esc(name)}${arg.optional ? ' <em>optional</em>' : ''}${hint}</label>`;
+        if (choices?.gates && !choices.gates.length) {
+          return `<div class="arg">${label}<div class="c mono" style="font-size: 13px">no gates in ${esc(state.module)} on this chain</div></div>`;
+        }
+        if (choices?.gates && choices.multiple) {
+          return `<div class="arg">${label}<div class="pick" id="${id}">${choices.gates
+            .map(
+              (g, n) =>
+                `<label class="pick-item"><input type="checkbox" value="${esc(g)}" ${n === 0 ? 'checked' : ''} /><span>${esc(g)}</span></label>`,
+            )
+            .join('')}</div></div>`;
+        }
+        if (choices?.gates) {
+          return `<div class="arg">${label}<select class="field" id="${id}">${choices.gates.map((g) => `<option>${esc(g)}</option>`).join('')}</select></div>`;
+        }
+        if (choices?.options) {
+          return `<div class="arg">${label}<select class="field" id="${id}">${choices.options
+            .map(
+              (o) =>
+                `<option value="${esc(o.value)}" title="${esc(o.title)}">${esc(o.label)}</option>`,
+            )
+            .join(
+              '',
+            )}</select><div class="arg-note" id="${id}-note"></div></div>`;
+        }
+        if (arg.options) {
+          return `<div class="arg">${label}<select class="field" id="${id}">${arg.options.map((o) => `<option>${esc(o)}</option>`).join('')}</select></div>`;
+        }
+        if (arg.json) {
+          return `<div class="arg">${label}<textarea class="field" id="${id}" placeholder="JSON or a plain value"></textarea></div>`;
+        }
+        const list = /address|member/i.test(arg.name)
+          ? 'list="knownAddresses"'
+          : '';
+        return `<div class="arg">${label}<input class="field" id="${id}" value="${esc(prefill)}" ${list} autocomplete="off" /></div>`;
+      };
+
+      const NEEDS_TEXT = {
+        permissionlessGate: 'a permissionless gate',
+        curatedGates: 'curated gates',
+        vettedGates: 'the ICS or IDVTC gate',
+        gates: 'gates',
+        metaRegistry: 'the MetaRegistry',
+      };
+      const moduleTags = (c) =>
+        `<span class="mods">${
+          c.modules.length === state.meta.modules.length
+            ? '<span class="mod all">all modules</span>'
+            : c.modules
+                .map(
+                  (m) =>
+                    `<span class="mod ${m === state.module ? 'cur' : ''}">${m}</span>`,
+                )
+                .join('') || '<span class="mod">not on this chain</span>'
+        }</span>`;
+
+      const renderCommands = () => {
+        const query = $('search').value.trim().toLowerCase();
+        const matches = (c, cat) =>
+          [c.command, c.about, cat.name].some((text) =>
+            text.toLowerCase().includes(query),
+          );
+        $('commands').innerHTML =
+          state.meta.categories
+            .map((cat) => {
+              const cmds = cat.commands.filter(
+                (c) => !query || matches(c, cat),
+              );
+              if (!cmds.length) return '';
+              // a search shows every match, collapsed or not
+              const closed = !query && state.collapsed.has(cat.name);
+              return `<div class="group ${closed ? 'closed' : ''}">
+            <button class="group-h" data-group="${esc(cat.name)}"><span class="chev">▾</span>${esc(cat.name)}<span class="count">${cmds.length}</span></button>
+            <div class="group-body">${cmds
+              .map(
+                (c) => `
+              <button class="cmd-item ${state.open === c.command ? 'on' : ''} ${c.modules.includes(state.module) ? '' : 'na'}" data-pick="${esc(c.command)}" title="${esc(c.args) || 'no arguments'}">
+                <span class="name">${esc(c.command)}</span><span class="about">${esc(c.about)}</span>
+                ${moduleTags(c)}
+              </button>`,
+              )
+              .join('')}</div>
+          </div>`;
+            })
+            .join('') || '<div class="empty">nothing found</div>';
+
+        const c = allCommands().find((cmd) => cmd.command === state.open);
+        if (!c) {
+          $('commandDetail').innerHTML =
+            '<div class="empty">pick a command on the left</div>';
+          return;
+        }
+        const op = state.operator;
+        $('commandDetail').innerHTML = `
+          <form data-run="${esc(c.command)}">
+            <div class="cmd-title">${esc(c.command)}</div>
+            <div class="cmd-about">${esc(c.about)}</div>
+            <div class="cmd-spec">${esc(c.args) || 'no arguments'}</div>
+            ${moduleTags(c)}
+            ${
+              c.modules.includes(state.module)
+                ? ''
+                : `<div class="banner err" style="margin: 14px 0 0"><span class="grow"><b>not available in ${esc(state.module)}:</b>
+              it needs ${esc(NEEDS_TEXT[c.needs] ?? c.needs)}, which ${esc(state.module)} does not have on this chain. Switch the module in the sidebar</span></div>`
+            }
+            <div class="ctx">
+              <span class="badge plain ok">${esc(state.module)}</span>
+              ${!c.args.includes('noId') ? '' : op ? `<span class="badge plain idle">operator #${op.id}</span>` : '<span>load an operator to prefill noId</span>'}
+            </div>
+            <div class="args-form">${parseArgs(c.args)
+              .map((a, i) => fieldFor(c.command, a, i))
+              .join('')}</div>
+            <div class="example">$ ${esc(c.example)}</div>
+            <button class="btn primary" ${c.modules.includes(state.module) ? '' : 'disabled'}>› run ${c.command}</button>
+          </form>`;
+        renderRoleNote();
+      };
+
+      const renderRoleNote = () => {
+        for (const note of $('commandDetail').querySelectorAll('.arg-note')) {
+          const role = state.meta.roles.find(
+            (r) => r.name === $(note.id.replace(/-note$/, '')).value,
+          );
+          note.textContent = role ? role.about : '';
+        }
+      };
+      $('commandDetail').addEventListener('change', renderRoleNote);
+
+      $('search').addEventListener('input', renderCommands);
+      $('commands').addEventListener('click', (event) => {
+        const group = event.target.closest('[data-group]');
+        if (group) {
+          const name = group.dataset.group;
+          state.collapsed.has(name)
+            ? state.collapsed.delete(name)
+            : state.collapsed.add(name);
+          store.set('qa.collapsed', [...state.collapsed]);
+          return renderCommands();
+        }
+        const el = event.target.closest('[data-pick]');
+        if (!el) return;
+        state.open = el.dataset.pick;
+        store.set('qa.open', state.open);
+        renderCommands();
+      });
+      $('commandDetail').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const command = event.target.dataset.run;
+        const spec = allCommands().find((c) => c.command === command);
+        const args = [];
+        for (const [i, arg] of parseArgs(spec.args).entries()) {
+          const field = $(`arg-${command}-${i}`);
+          if (field?.classList.contains('pick')) {
+            const picked = [...field.querySelectorAll('input:checked')].map(
+              (el) => el.value,
+            );
+            if (!picked.length) return toast('pick at least one gate', true);
+            args.push(picked.length === 1 ? picked[0] : JSON.stringify(picked));
+            continue;
+          }
+          if (!field) return toast(`nothing to pick for ${arg.name}`, true);
+          const value = field.value.trim();
+          if (!value) {
+            if (arg.optional) break;
+            return toast(`fill in ${arg.name}`, true);
+          }
+          args.push(...(arg.variadic ? value.split(/[\s,]+/) : [value]));
+        }
+        if (
+          command === 'revert' &&
+          !confirm(
+            'Revert the fork? Everything done since the snapshot is lost',
+          )
+        )
+          return;
+        run(command, args);
+      });
+
+      /* ---------- misc ---------- */
+
+      const setModule = (module) => {
+        if (module === state.module) return;
+        state.module = module;
+        store.set('qa.module', module);
+        renderModules();
+        state.operator = null;
+        $('operatorTitle').textContent = 'Operator keys';
+        $('operatorSummary').textContent = `${module}: enter an operator id`;
+        $('operator').innerHTML = '';
+        $('operatorActions').hidden = true;
+        setBadge('navOperator', null);
+        renderCommands();
+        renderKnownAddresses();
+        if (state.presets) renderPresets();
+      };
+
+      document.addEventListener('click', (event) => {
+        const el = event.target.closest('.copy');
+        if (
+          !el ||
+          el.id === 'clearLog' ||
+          el.id === 'nonceAck' ||
+          el.dataset.reveal ||
+          el.dataset.secret
+        )
+          return;
+        const text = el.dataset.text ?? $(el.dataset.copy)?.dataset.value;
+        if (text) copy(text, el.dataset.label);
+      });
+      $('clearLog').addEventListener('click', () => {
+        state.logCleared = Date.now();
+        renderLog();
+      });
+      $('modules').addEventListener(
+        'click',
+        (event) =>
+          event.target.dataset.module && setModule(event.target.dataset.module),
+      );
+      $('snapshotLink').addEventListener('click', takeSnapshot);
+      $('revertLink').addEventListener('click', revertSnapshot);
+      $('resetCl').addEventListener('click', async () => {
+        if (!confirm('Clear the CL mock for every key?')) return;
+        await api('/api/cl/reset', {});
+        if (state.operator) {
+          for (const k of state.operator.keys) k.cl = null;
+          renderOperator();
+        }
+        pollState();
+        toast('CL mock cleared');
+      });
+
+      (async () => {
+        showView(viewFromHash() || 'setup');
+        state.meta = await api('/api/meta');
+        if (!state.meta.modules.includes(state.module))
+          state.module = state.meta.modules[0];
+        renderModules();
+        renderCommands();
+        renderSnapshot();
+        await Promise.all([pollState(), loadHistory(), loadPresets()]);
+        setInterval(pollState, 5000);
+        const lastId = store.get('qa.noId', null);
+        if (lastId !== null) {
+          $('noId').value = lastId;
+          loadOperator(lastId);
+        }
+      })();
+    </script>
+  </body>
+</html>
