@@ -9,7 +9,7 @@ import {
   Modal,
 } from '@lidofinance/lido-app-ui';
 import { useCallback, useEffect } from 'react';
-import { useConnectorInfo, useDisconnect } from 'reef-knot/core-react';
+import { useConnectorInfo, useDisconnect } from 'reef-knot';
 
 import { useDappStatus } from 'modules/web3';
 import type { ModalComponentType } from 'providers/modal-provider';

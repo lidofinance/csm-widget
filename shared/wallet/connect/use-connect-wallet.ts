@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useConnect, useDisconnect } from 'reef-knot/core-react';
+import { useConnectionFlow, useDisconnect } from 'reef-knot';
 
 import { useUserConfig } from 'config/user-config';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
@@ -11,7 +11,7 @@ export const useConnectWallet = (
 ) => {
   const { isSupportedChain, isWalletConnected } = useDappStatus();
   const { isWalletConnectionAllowed } = useUserConfig();
-  const { connect } = useConnect();
+  const { startConnection } = useConnectionFlow();
   const { disconnect } = useDisconnect();
 
   const handleClick = useCallback(() => {
@@ -21,9 +21,9 @@ export const useConnectWallet = (
     if (isWalletConnected && !isSupportedChain) {
       disconnect?.();
     }
-    void connect();
+    void startConnection();
   }, [
-    connect,
+    startConnection,
     disconnect,
     isSupportedChain,
     isWalletConnected,

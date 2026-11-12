@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext } from 'react';
-import { useConnectorInfo } from 'reef-knot/core-react';
+import { useConnectorInfo } from 'reef-knot';
 import { getUseModal, ModalComponentType } from 'providers/modal-provider';
 import { getFormRetry } from 'shared/hook-form/form-controller/form-retry';
 import { FormUi, FormUiProvider } from 'shared/hook-form/form-ui';
