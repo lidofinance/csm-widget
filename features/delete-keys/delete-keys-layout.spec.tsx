@@ -1,7 +1,7 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DeleteKeysLayout } from './delete-keys-layout';
 
-jest.mock('./delete-mode-cards', () => ({
+vi.mock('./delete-mode-cards', () => ({
   DeleteModeCards: () => <nav data-testid="cardsStub" />,
 }));
 

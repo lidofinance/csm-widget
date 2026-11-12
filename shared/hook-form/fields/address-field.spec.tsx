@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { FieldErrors, FormProvider, useForm } from 'react-hook-form';
 import { AddressField, AddressFieldProps } from './address-field';
 
-jest.mock('shared/hooks/use-ens-input', () => ({
+vi.mock('shared/hooks/use-ens-input', () => ({
   useEnsInput: ({ value }: { value?: string }) => ({
     inputValue: value ?? '',
     address: value || undefined,

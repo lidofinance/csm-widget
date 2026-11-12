@@ -1,8 +1,8 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 
 // the shared/form-page barrel pulls wagmi through SubmitButton; only FormCard is needed
-jest.mock('shared/form-page', () =>
-  jest.requireActual('shared/form-page/form-card'),
+vi.mock('shared/form-page', async () =>
+  vi.importActual('shared/form-page/form-card'),
 );
 
 // eslint-disable-next-line import/first

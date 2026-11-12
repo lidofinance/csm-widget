@@ -3,7 +3,7 @@ import { FormModalShell, getModalCloseProps } from './form-modal-shell';
 
 describe('getModalCloseProps', () => {
   it('passes onClose and enables Escape and overlay close when closable', () => {
-    const onClose = jest.fn();
+    const onClose = vi.fn();
     expect(getModalCloseProps(true, onClose)).toEqual({
       onClose,
       closeOnEscape: true,
@@ -12,7 +12,7 @@ describe('getModalCloseProps', () => {
   });
 
   it('drops onClose and disables Escape and overlay close when locked', () => {
-    expect(getModalCloseProps(false, jest.fn())).toEqual({
+    expect(getModalCloseProps(false, vi.fn())).toEqual({
       onClose: undefined,
       closeOnEscape: false,
       closeOnOverlayClick: false,

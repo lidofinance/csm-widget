@@ -4,7 +4,7 @@ import { NoAccessNotice } from './no-access-notice';
 
 let mockExtended = false;
 
-jest.mock('modules/web3', () => ({
+vi.mock('modules/web3', () => ({
   useNodeOperator: () => ({
     nodeOperator: { extendedManagerPermissions: mockExtended },
   }),

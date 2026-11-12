@@ -3,8 +3,8 @@ import { ReactNode } from 'react';
 import { CLAIM_OPTION } from '../context';
 import { ClaimOptionIconsStyle, RewardsAddressChipStyle } from '../styles';
 
-import { ReactComponent as BondIcon } from 'assets/balance/bond.svg';
-import { ReactComponent as RewardsIcon } from 'assets/balance/rewards.svg';
+import BondIcon from 'assets/balance/bond.svg?react';
+import RewardsIcon from 'assets/balance/rewards.svg?react';
 
 const RewardsAddressChip = () => (
   <RewardsAddressChipStyle>R</RewardsAddressChipStyle>

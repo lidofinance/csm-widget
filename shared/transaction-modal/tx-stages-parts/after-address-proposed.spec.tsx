@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { ThemeProvider } from 'styled-components';
 import { AfterAddressProposed } from './after-address-proposed';
 
-jest.mock('shared/hooks/use-module-meta', () => ({
+vi.mock('shared/hooks/use-module-meta', () => ({
   useModuleMeta: () => ({ shortTitle: 'CSM' }),
 }));
 

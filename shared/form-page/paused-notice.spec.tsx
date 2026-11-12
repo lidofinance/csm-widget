@@ -3,7 +3,7 @@ import { PausedNotice } from './paused-notice';
 
 let mockMeta: { shortName: string } | undefined = { shortName: 'CM' };
 
-jest.mock('shared/hooks/use-module-meta', () => ({
+vi.mock('shared/hooks/use-module-meta', () => ({
   useModuleMeta: () => mockMeta,
 }));
 

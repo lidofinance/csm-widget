@@ -10,7 +10,7 @@ const render = () =>
       <AppFormUi>
         <TxStageMembersInitFailed
           title="IDVTC type claimed — cluster members not initialized"
-          onRetry={jest.fn()}
+          onRetry={vi.fn()}
         />
       </AppFormUi>
     </ThemeProvider>,

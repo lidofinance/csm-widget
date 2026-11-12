@@ -6,10 +6,10 @@ const at = (days: number) =>
 
 describe('getDistributionLabel', () => {
   beforeEach(() => {
-    jest.useFakeTimers().setSystemTime(NOW);
+    vi.useFakeTimers().setSystemTime(NOW);
   });
   afterEach(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   it('says soon for today and the past', () => {

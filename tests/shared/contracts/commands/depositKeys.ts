@@ -1,5 +1,5 @@
 import { maxUint256, parseEther } from 'viem';
-import { TOPUP_QUEUE_MODULES } from '@lidofinance/lido-csm-sdk';
+import { MODULE_PROFILE } from '@lidofinance/lido-csm-sdk';
 import { BaseModuleAbi, CSModuleAbi } from '@lidofinance/lido-csm-sdk/abi';
 import { stakingRouter } from '../constants.ts';
 import type { ForkActionsService } from '../forkActions.service.ts';
@@ -30,7 +30,7 @@ export const depositKeys = async function (
 
     // A 0x02 module parks each deposited key in the top-up queue, and a full
     // queue leaves nothing depositable. Topping the keys up drains it.
-    if (TOPUP_QUEUE_MODULES.has(this.module)) {
+    if (MODULE_PROFILE[this.module].topUpQueue) {
       await this.step('Top up keys in the top-up queue', async () => {
         const length = (
           await this.client.readContract({

@@ -1,4 +1,4 @@
-jest.mock('utils', () => jest.requireActual('utils/get-token-display-name'));
+vi.mock('utils', async () => vi.importActual('utils/get-token-display-name'));
 
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { validateBondAmount } from './validate-bond-amount';

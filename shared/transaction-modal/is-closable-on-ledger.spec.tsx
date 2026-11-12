@@ -27,7 +27,7 @@ describe('Ledger closability', () => {
 
   it('gives a locked stage no close affordance', () => {
     expect(
-      getModalCloseProps(isClosableOnLedgerStage(<Pending />), jest.fn()),
+      getModalCloseProps(isClosableOnLedgerStage(<Pending />), vi.fn()),
     ).toEqual({
       onClose: undefined,
       closeOnEscape: false,

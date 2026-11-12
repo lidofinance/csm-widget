@@ -1,4 +1,4 @@
-import { ComponentProps, FC } from 'react';
+import { Fragment, ComponentProps, FC } from 'react';
 import { useFaq } from 'faq';
 
 import { PATH } from 'consts/urls';
@@ -6,7 +6,6 @@ import { EjectKeysForm } from 'features/eject-keys/eject-keys/eject-keys-form';
 import { ExitKeys } from 'features/exit-keys/exit-keys';
 import { RemoveKeysForm } from 'features/remove-keys/remove-keys/remove-keys-form';
 import { Faq } from 'shared/components';
-import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
 import { useWeb3Key } from 'shared/hooks';
 import { Layout } from 'shared/layout';
 import { SplashPage } from 'shared/navigate';
@@ -31,11 +30,11 @@ const DeleteKeysContent: FC = () => {
 
   return (
     <Layout wide pageName={PAGE_NAME[mode]} breadcrumbs={DELETE_CRUMBS}>
-      <NoSSRWrapper key={key}>
+      <Fragment key={key}>
         {mode === 'remove' && <RemoveKeysForm />}
         {mode === 'exit' && <ExitKeys />}
         {mode === 'eject' && <EjectKeysForm />}
-      </NoSSRWrapper>
+      </Fragment>
       <Faq items={faq} />
     </Layout>
   );

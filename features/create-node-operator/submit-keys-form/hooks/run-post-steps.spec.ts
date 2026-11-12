@@ -2,14 +2,14 @@ import { type PostStep, runPostSteps } from './run-post-steps';
 
 const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
 
-const passing = () => jest.fn().mockResolvedValue(undefined);
+const passing = () => vi.fn().mockResolvedValue(undefined);
 
 const failingOnce = (error: Error) =>
-  jest.fn().mockRejectedValueOnce(error).mockResolvedValue(undefined);
+  vi.fn().mockRejectedValueOnce(error).mockResolvedValue(undefined);
 
 describe('runPostSteps', () => {
   it('resolves true without steps and leaves the retry callback alone', async () => {
-    const onRetryDone = jest.fn();
+    const onRetryDone = vi.fn();
 
     await expect(runPostSteps([], onRetryDone)).resolves.toBe(true);
     expect(onRetryDone).not.toHaveBeenCalled();
@@ -18,28 +18,28 @@ describe('runPostSteps', () => {
   it('runs the steps in order and resolves true', async () => {
     const calls: string[] = [];
     const steps: PostStep[] = ['upload', 'init'].map((name) => ({
-      run: jest.fn(() => {
+      run: vi.fn(() => {
         calls.push(name);
         return Promise.resolve();
       }),
-      onFail: jest.fn(),
+      onFail: vi.fn(),
     }));
 
-    await expect(runPostSteps(steps, jest.fn())).resolves.toBe(true);
+    await expect(runPostSteps(steps, vi.fn())).resolves.toBe(true);
     expect(calls).toEqual(['upload', 'init']);
   });
 
   it('stops at a failed step and hands it the error and a retry', async () => {
     const error = new Error('upload failed');
-    const uploadFail = jest.fn<void, [unknown, () => void]>();
+    const uploadFail = vi.fn<(error: unknown, retry: () => void) => void>();
     const initRun = passing();
 
     const done = await runPostSteps(
       [
-        { run: jest.fn().mockRejectedValue(error), onFail: uploadFail },
-        { run: initRun, onFail: jest.fn() },
+        { run: vi.fn().mockRejectedValue(error), onFail: uploadFail },
+        { run: initRun, onFail: vi.fn() },
       ],
-      jest.fn(),
+      vi.fn(),
     );
 
     expect(done).toBe(false);
@@ -48,15 +48,15 @@ describe('runPostSteps', () => {
   });
 
   it('resumes from the failed step on retry and closes once the rest pass', async () => {
-    const onRetryDone = jest.fn();
+    const onRetryDone = vi.fn();
     const uploadRun = failingOnce(new Error('upload failed'));
-    const uploadFail = jest.fn<void, [unknown, () => void]>();
+    const uploadFail = vi.fn<(error: unknown, retry: () => void) => void>();
     const initRun = passing();
 
     await runPostSteps(
       [
         { run: uploadRun, onFail: uploadFail },
-        { run: initRun, onFail: jest.fn() },
+        { run: initRun, onFail: vi.fn() },
       ],
       onRetryDone,
     );
@@ -71,15 +71,15 @@ describe('runPostSteps', () => {
   });
 
   it('retries only the failed later step', async () => {
-    const onRetryDone = jest.fn();
+    const onRetryDone = vi.fn();
     const uploadRun = passing();
     const initRun = failingOnce(new Error('init failed'));
-    const initFail = jest.fn<void, [unknown, () => void]>();
+    const initFail = vi.fn<(error: unknown, retry: () => void) => void>();
 
     await expect(
       runPostSteps(
         [
-          { run: uploadRun, onFail: jest.fn() },
+          { run: uploadRun, onFail: vi.fn() },
           { run: initRun, onFail: initFail },
         ],
         onRetryDone,
@@ -95,13 +95,13 @@ describe('runPostSteps', () => {
   });
 
   it('hands out a fresh retry when the retry fails again', async () => {
-    const onRetryDone = jest.fn();
-    const uploadRun = jest
+    const onRetryDone = vi.fn();
+    const uploadRun = vi
       .fn()
       .mockRejectedValueOnce(new Error('first'))
       .mockRejectedValueOnce(new Error('second'))
       .mockResolvedValue(undefined);
-    const uploadFail = jest.fn<void, [unknown, () => void]>();
+    const uploadFail = vi.fn<(error: unknown, retry: () => void) => void>();
 
     await runPostSteps([{ run: uploadRun, onFail: uploadFail }], onRetryDone);
 

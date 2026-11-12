@@ -1,7 +1,7 @@
 import { LidoLogo, Loader } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
-import { moduleMeta } from 'consts/module';
+import { WIDGET_DESCRIPTION, WIDGET_TITLE } from 'consts/module';
 
 // rendered without providers: CSS vars from LidoUIHead only, no `theme` access
 const ShellGlobalStyle = createGlobalStyle`
@@ -70,11 +70,11 @@ export const AppShellLoader: FC = () => (
       <Header>
         <LidoLogo as="span" />
         <Divider />
-        <ShortTitle>{moduleMeta.shortTitle}</ShortTitle>
+        <ShortTitle>{WIDGET_TITLE}</ShortTitle>
       </Header>
       <Main>
-        <Title>{moduleMeta.title}</Title>
-        <Description>{moduleMeta.description}</Description>
+        <Title>{WIDGET_TITLE}</Title>
+        <Description>{WIDGET_DESCRIPTION}</Description>
         <Loader size="large" />
       </Main>
     </Wrapper>

@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import { FC, RefCallback } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import type { RefCallBack } from 'react-hook-form';
@@ -8,17 +9,17 @@ import {
   useFocusableRef,
 } from './use-focusable-ref';
 
-const makeRoot = (inner: { focus: jest.Mock } | null) => {
+const makeRoot = (inner: { focus: Mock } | null) => {
   const root = {
-    focus: jest.fn(),
-    querySelector: jest.fn(() => inner),
+    focus: vi.fn(),
+    querySelector: vi.fn(() => inner),
   };
   return root as unknown as HTMLElement & typeof root;
 };
 
 describe('toFocusable', () => {
   it('focuses the first focusable descendant', () => {
-    const inner = { focus: jest.fn() };
+    const inner = { focus: vi.fn() };
     const root = makeRoot(inner);
 
     toFocusable(root).focus();
@@ -37,7 +38,7 @@ describe('toFocusable', () => {
   });
 
   it('looks the target up on every focus call', () => {
-    const root = makeRoot({ focus: jest.fn() });
+    const root = makeRoot({ focus: vi.fn() });
     const focusable = toFocusable(root);
 
     focusable.focus();
@@ -55,7 +56,7 @@ describe('toFocusable', () => {
 
 describe('toFocusable with a selector', () => {
   it('focuses the first match of the given selector', () => {
-    const inner = { focus: jest.fn() };
+    const inner = { focus: vi.fn() };
     const root = makeRoot(inner);
 
     toFocusable(root, 'textarea').focus();
@@ -73,9 +74,9 @@ describe('useFocusableRef', () => {
   };
 
   it('registers a focusable for the wrapper with the RHF ref', () => {
-    const fieldRef = jest.fn();
+    const fieldRef = vi.fn();
     renderToStaticMarkup(<Probe fieldRef={fieldRef} />);
-    const inner = { focus: jest.fn() };
+    const inner = { focus: vi.fn() };
 
     captured?.(makeRoot(inner));
 
@@ -86,14 +87,14 @@ describe('useFocusableRef', () => {
   });
 
   it('passes the selector through to the registered focusable', () => {
-    const fieldRef = jest.fn();
+    const fieldRef = vi.fn();
     let withSelector: RefCallback<HTMLElement> | undefined;
     const SelectorProbe: FC = () => {
       withSelector = useFocusableRef(fieldRef, '[role="radio"][tabindex="0"]');
       return null;
     };
     renderToStaticMarkup(<SelectorProbe />);
-    const root = makeRoot({ focus: jest.fn() });
+    const root = makeRoot({ focus: vi.fn() });
 
     withSelector?.(root);
     (fieldRef.mock.calls[0][0] as Focusable).focus();
@@ -104,7 +105,7 @@ describe('useFocusableRef', () => {
   });
 
   it('forwards null on unmount', () => {
-    const fieldRef = jest.fn();
+    const fieldRef = vi.fn();
     renderToStaticMarkup(<Probe fieldRef={fieldRef} />);
 
     captured?.(null);

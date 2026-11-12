@@ -14,7 +14,6 @@ import {
 } from 'modules/web3';
 import { NodeOperatorContext } from 'modules/web3/operator-provider/node-operator-provider';
 import { FC, memo, useContext } from 'react';
-import { NoSSRWrapper } from 'shared/components';
 import { useInitialLoading, useRouterPath } from 'shared/hooks';
 import { getIsActivePath } from 'utils';
 import { OperatorSwitcher } from './operator-switcher';
@@ -46,9 +45,7 @@ const OperatorNavigation: FC = () => {
       logo={<SidebarLogo />}
       footer={
         !showFooter ? undefined : (
-          <NoSSRWrapper>
-            <OperatorSwitcher />
-          </NoSSRWrapper>
+          <OperatorSwitcher />
         )
       }
     >

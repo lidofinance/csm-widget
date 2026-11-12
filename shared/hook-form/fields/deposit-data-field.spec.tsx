@@ -3,11 +3,11 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { FieldErrors, FormProvider, useForm } from 'react-hook-form';
 import { DepositDataField, DepositDataFieldProps } from './deposit-data-field';
 
-const mockWcTypeMismatch = jest.fn(() => false);
+const mockWcTypeMismatch = vi.fn(() => false);
 
-// The real barrel pulls modules/web3 and the SDK, which jest can't load
-jest.mock('../deposit-data', () => ({
-  useParseDepositData: jest.fn(),
+// The real barrel pulls modules/web3 and the SDK, which vitest can't load
+vi.mock('../deposit-data', () => ({
+  useParseDepositData: vi.fn(),
   useIsWcTypeMismatch: () => mockWcTypeMismatch(),
   WcTypeWarning: () => <div data-testid="wcTypeWarning" />,
   DepositDataParsed: () => <div data-testid="parsedStub" />,

@@ -2,7 +2,7 @@ import { MODULE_NAME, ROLES } from '@lidofinance/lido-csm-sdk';
 import type { ModuleInvite } from 'modules/web3';
 
 // 'consts' pulls in next/config, which throws outside a Next.js runtime
-jest.mock('consts', () => ({
+vi.mock('consts', () => ({
   ROLES_METADATA: {
     MANAGER: { short: 'M', capitalizedTitle: 'Manager' },
     REWARDS: { short: 'R', capitalizedTitle: 'Rewards' },

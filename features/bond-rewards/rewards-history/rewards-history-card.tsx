@@ -7,7 +7,7 @@ import { RewardsHistoryHeader } from './rewards-history-header';
 import { RewardsHistoryTable } from './rewards-history-table';
 import { sortFunctions } from './sort';
 
-import { ReactComponent as RewardsIcon } from 'assets/balance/rewards.svg';
+import RewardsIcon from 'assets/balance/rewards.svg?react';
 
 const CardStyled = styled(Card)`
   && {

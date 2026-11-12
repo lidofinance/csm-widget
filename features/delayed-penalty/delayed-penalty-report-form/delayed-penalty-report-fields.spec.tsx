@@ -3,10 +3,10 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { FieldErrors, FormProvider, useForm } from 'react-hook-form';
 import { DelayedPenaltyReportFields } from './delayed-penalty-report-fields';
 
-// the fields barrel pulls AddressField → wagmi (ESM), which jest can't load
-jest.mock('shared/hook-form/fields', () => ({
-  ...jest.requireActual('shared/hook-form/fields/text-field'),
-  ...jest.requireActual('shared/hook-form/fields/amount-field'),
+// the fields barrel pulls AddressField → wagmi (ESM), which vitest can't load
+vi.mock('shared/hook-form/fields', async () => ({
+  ...(await vi.importActual('shared/hook-form/fields/text-field')),
+  ...(await vi.importActual('shared/hook-form/fields/amount-field')),
 }));
 
 type Values = {

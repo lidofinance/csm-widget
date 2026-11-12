@@ -22,8 +22,8 @@ import { NEGATIVE_FIELDS, useNegativeMetadata } from './negative-metadata';
 import { UsdValue } from './usd-value';
 import { useBondStats } from './use-bond-stats';
 
-import { ReactComponent as BondIcon } from 'assets/balance/bond.svg';
-import { ReactComponent as RewardsIcon } from 'assets/balance/rewards.svg';
+import BondIcon from 'assets/balance/bond.svg?react';
+import RewardsIcon from 'assets/balance/rewards.svg?react';
 
 export const INFO_TEST_ID = {
   info: 'iconTooltip',

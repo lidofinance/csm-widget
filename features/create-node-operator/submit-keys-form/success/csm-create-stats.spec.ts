@@ -3,7 +3,7 @@ import { parseEther } from 'viem';
 import type { CreateSuccess } from 'features/create-node-operator/create-success/create-success';
 import { getCsmCreateStats } from './csm-create-stats';
 
-jest.mock('modules/web3', () => ({}));
+vi.mock('modules/web3', () => ({}));
 
 const created = (patch: Partial<CreateSuccess> = {}): CreateSuccess => ({
   address: '0x0000000000000000000000000000000000000001',

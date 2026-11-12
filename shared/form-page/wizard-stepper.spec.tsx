@@ -1,8 +1,8 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { WizardStepper } from './wizard-stepper';
 
-jest.mock('@lidofinance/lido-app-ui', () => ({
-  ...jest.requireActual('@lidofinance/lido-app-ui'),
+vi.mock('@lidofinance/lido-app-ui', async () => ({
+  ...(await vi.importActual('@lidofinance/lido-app-ui')),
   Steps: ({
     steps,
     current,

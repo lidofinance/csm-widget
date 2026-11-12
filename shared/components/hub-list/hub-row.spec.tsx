@@ -2,7 +2,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { PATH } from 'consts/urls';
 import { HubRow, HubRowEmptyValue } from './hub-row';
 
-jest.mock('shared/navigate/local-link', () => ({
+vi.mock('shared/navigate/local-link', () => ({
   LocalLink: ({ href, children, ...rest }: any) => (
     <a href={href} {...rest}>
       {children}

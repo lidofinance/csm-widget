@@ -8,7 +8,7 @@ const render = () =>
   renderToStaticMarkup(
     <ThemeProvider theme={themeLight}>
       <AppFormUi>
-        <TxStageDkgUploadFailed nodeOperatorId={12n} onRetry={jest.fn()} />
+        <TxStageDkgUploadFailed nodeOperatorId={12n} onRetry={vi.fn()} />
       </AppFormUi>
     </ThemeProvider>,
   );

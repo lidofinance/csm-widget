@@ -1,9 +1,8 @@
 import { useFaq } from 'faq';
-import { FC } from 'react';
+import { Fragment, FC } from 'react';
 import { Stack } from '@lidofinance/lido-app-ui';
 
 import { Faq } from 'shared/components';
-import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
 import { useWeb3Key } from 'shared/hooks';
 import { Layout } from 'shared/layout';
 import { Gate } from 'shared/navigate';
@@ -17,7 +16,7 @@ export const KeysPage: FC = () => {
 
   return (
     <Layout wide pageName="ViewKeys" breadcrumbs={[{ label: 'Keys' }]}>
-      <NoSSRWrapper key={web3Key}>
+      <Fragment key={web3Key}>
         <Stack direction="column" gap={8}>
           <KeysStatsCard />
           <KeysTableCard />
@@ -25,7 +24,7 @@ export const KeysPage: FC = () => {
             <HubDepositQueue />
           </Gate>
         </Stack>
-      </NoSSRWrapper>
+      </Fragment>
       <Faq items={faq} />
     </Layout>
   );

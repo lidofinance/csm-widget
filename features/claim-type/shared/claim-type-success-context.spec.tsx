@@ -1,4 +1,4 @@
-jest.mock('modules/web3', () => ({
+vi.mock('modules/web3', () => ({
   useNodeOperatorId: () => 1,
   useModule: () => ({ module: 'csm' }),
 }));

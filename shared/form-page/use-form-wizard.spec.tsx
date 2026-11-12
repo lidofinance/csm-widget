@@ -2,11 +2,11 @@ import type { KeyboardEvent } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { FormWizard, useFormWizard, WizardStep } from './use-form-wizard';
 
-const mockTrigger = jest.fn();
-const mockSetValue = jest.fn();
+const mockTrigger = vi.fn();
+const mockSetValue = vi.fn();
 let mockStep = 0;
 
-jest.mock('react-hook-form', () => ({
+vi.mock('react-hook-form', () => ({
   useFormContext: () => ({ trigger: mockTrigger, setValue: mockSetValue }),
   useWatch: () => mockStep,
 }));
@@ -40,7 +40,7 @@ const renderWizard = (step: number): FormWizard => {
 };
 
 const keyEvent = (target: { tagName: string; type?: string }) => {
-  const preventDefault = jest.fn();
+  const preventDefault = vi.fn();
   const event = {
     key: 'Enter',
     target,
@@ -53,7 +53,7 @@ const keyEvent = (target: { tagName: string; type?: string }) => {
 const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 it('reports position flags', () => {

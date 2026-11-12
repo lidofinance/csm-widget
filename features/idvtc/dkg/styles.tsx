@@ -1,5 +1,5 @@
 import { Body } from '@lidofinance/lido-app-ui';
-import { ReactComponent as DkgFileWarning } from 'assets/illustrations/dkg-file-warning.svg';
+import DkgFileWarning from 'assets/illustrations/dkg-file-warning.svg?react';
 import styled, { css } from 'styled-components';
 
 export const DropArea = styled.div<{ $dragActive?: boolean }>`

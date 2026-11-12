@@ -1,5 +1,5 @@
 import { Counter, InfoTooltip } from '@lidofinance/lido-app-ui';
-import { ReactComponent as CalendarIcon } from 'assets/icons/info-calendar.svg';
+import CalendarIcon from 'assets/icons/info-calendar.svg?react';
 import { ICON_TOOLTIP_TEST_ID } from 'shared/components/icon-tooltip/test-ids';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import {

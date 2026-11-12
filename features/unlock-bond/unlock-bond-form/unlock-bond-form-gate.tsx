@@ -12,7 +12,7 @@ import { NoAccessNotice } from 'shared/form-page';
 import { useUnlockBondFlow } from './context';
 import { LockedBondNotice } from './controls/locked-bond';
 
-import { ReactComponent as EmptyIcon } from 'assets/balance/empty.svg';
+import EmptyIcon from 'assets/balance/empty.svg?react';
 
 const GateLayout: FC<PropsWithChildren> = ({ children }) => (
   <FormLayout>

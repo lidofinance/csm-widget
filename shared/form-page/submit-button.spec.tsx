@@ -5,12 +5,12 @@ import { SubmitButton } from './submit-button';
 
 let mockIsAccountActive = true;
 
-jest.mock('modules/web3', () => ({
+vi.mock('modules/web3', () => ({
   useDappStatus: () => ({ isAccountActive: mockIsAccountActive }),
 }));
 
-jest.mock('shared/wallet/connect/use-connect-wallet', () => ({
-  useConnectWallet: () => ({ handleClick: jest.fn(), disabled: false }),
+vi.mock('shared/wallet/connect/use-connect-wallet', () => ({
+  useConnectWallet: () => ({ handleClick: vi.fn(), disabled: false }),
 }));
 
 const Host: FC<PropsWithChildren<{ errors?: FieldErrors }>> = ({
