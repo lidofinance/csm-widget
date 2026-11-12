@@ -110,6 +110,8 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   dashboardExternalRatedLink = 'dashboardExternalRatedLink',
   dashboardExternalMigaLabsLink = 'dashboardExternalMigaLabsLink',
   dashboardNotificationSentinelLink = 'dashboardNotificationSentinelLink',
+  dashboardExternalTestnetLink = 'dashboardExternalTestnetLink',
+  dashboardClaimLink = 'dashboardClaimLink',
   // Actions
   switchNodeOperator = 'switchNodeOperator',
   groupSwitchOperator = 'groupSwitchOperator',
@@ -158,7 +160,6 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   unbondedValidatorsLink = 'unbondedValidatorsLink',
   // Monitoring
   monitoringMigalabsLink = 'monitoringMigalabsLink',
-  monitoringRewardsDocsLink = 'monitoringRewardsDocsLink',
   performanceTipsLink = 'performanceTipsLink',
   // View Keys
   subscribeEventsLink = 'subscribeEventsLink',
@@ -545,6 +546,14 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «Notification Sentinel» on Dashboard screen',
     'dashboard_notification_sentinel_link',
   ),
+  [MATOMO_CLICK_EVENTS_TYPES.dashboardExternalTestnetLink]: createEvent(
+    'Click «Testnet» on Dashboard screen',
+    'dashboard_external_testnet_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.dashboardClaimLink]: createEvent(
+    'Click «Claim» on Dashboard screen',
+    'dashboard_claim_link',
+  ),
   // Actions
   [MATOMO_CLICK_EVENTS_TYPES.switchNodeOperator]: createEvent(
     'Switch Node Operator',
@@ -709,10 +718,6 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.monitoringMigalabsLink]: createEvent(
     'Click «MigaLabs» link on Monitoring page',
     'monitoring_migalabs_link',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.monitoringRewardsDocsLink]: createEvent(
-    'Click «Rewards» docs link on Monitoring page',
-    'monitoring_rewards_docs_link',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.performanceTipsLink]: createEvent(
     'Click «Performance tips» link',

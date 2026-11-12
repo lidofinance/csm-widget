@@ -17,8 +17,6 @@ export const PATH = {
   KEYS_DELETE: '/keys/delete',
   KEYS_NORMALIZE: '/keys/normalize',
 
-  MONITORING: '/monitoring',
-
   BOND: '/bond',
   BOND_CLAIM: '/bond/claim',
   BOND_ADD: '/bond/add',

@@ -110,12 +110,6 @@ const routes: Route[] = [
     showRules: ['CAN_CREATE'],
   },
   {
-    name: 'Monitoring',
-    path: PATH.MONITORING,
-    icon: <MeterIcon />,
-    showRules: ['IS_NODE_OPERATOR'],
-  },
-  {
     name: 'Inbox Requests',
     path: PATH.SETTINGS_INBOX,
     icon: <GearIcon />,
