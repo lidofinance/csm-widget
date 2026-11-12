@@ -2,7 +2,12 @@ import { Button } from '@lidofinance/lido-app-ui';
 import { PATH } from 'consts/urls';
 import { FC, MouseEventHandler } from 'react';
 import { FieldPath, useFormState } from 'react-hook-form';
-import { SubmitAside, SubmitButton, useFormWizard } from 'shared/form-page';
+import {
+  GasCostRow,
+  SubmitAside,
+  SubmitButton,
+  useFormWizard,
+} from 'shared/form-page';
 import { useNavigate } from 'shared/navigate';
 import type { CuratedOperatorFormInputType } from '../context/types';
 import {
@@ -23,7 +28,7 @@ const LastStepAside: FC<{ back: () => void }> = ({ back }) => {
   const { isSubmitting } = useFormState();
 
   return (
-    <SubmitAside>
+    <SubmitAside rows={<GasCostRow />}>
       <SubmitGuardStyle onClickCapture={guardRepeatClick}>
         <SubmitButton>Create Node Operator</SubmitButton>
       </SubmitGuardStyle>

@@ -1,7 +1,7 @@
 import { Button, Stack } from '@lidofinance/lido-app-ui';
 import { FC, useCallback } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { SubmitButton } from 'shared/form-page';
+import { GasCostList, SubmitButton } from 'shared/form-page';
 import { SplitsFormInputType, useSplitsFormData } from '../context';
 import { getSplitsSubmitLabel, splitsEqual } from '../splits-state';
 
@@ -19,6 +19,7 @@ export const SplitsCtas: FC = () => {
 
   return (
     <Stack gap={12}>
+      <GasCostList />
       <SubmitButton disabled={splitsEqual(feeSplits ?? [], currentFeeSplits)}>
         {getSplitsSubmitLabel(currentFeeSplits.length > 0)}
       </SubmitButton>

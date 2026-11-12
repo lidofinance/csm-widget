@@ -3,7 +3,7 @@ import { convertSharesToEth, TOKENS } from '@lidofinance/lido-csm-sdk';
 import { ONE_ETH } from 'consts/tokens';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
-import { SubmitAside, SubmitButton } from 'shared/form-page';
+import { GasCostRow, SubmitAside, SubmitButton } from 'shared/form-page';
 import { FormatToken } from 'shared/formatters';
 import { AddBondFormInputType, useAddBondFormData } from './context';
 
@@ -29,6 +29,7 @@ const TokenInfoRows: FC = () => {
         }
         dataTestId={{ root: 'balanceWillReceive' }}
       />
+      <GasCostRow />
       {token !== TOKENS.steth && (
         <DataListRow
           label="Exchange rate"

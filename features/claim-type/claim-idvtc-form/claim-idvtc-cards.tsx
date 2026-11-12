@@ -2,7 +2,7 @@ import { Button, SectionTitle } from '@lidofinance/lido-app-ui';
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { PATH } from 'consts/urls';
 import { FC, ReactNode } from 'react';
-import { SubmitButton } from 'shared/form-page';
+import { GasCostList, SubmitButton } from 'shared/form-page';
 import { useCurveMetadata, useDisplayOperatorType } from 'shared/hooks';
 import { useNavigate } from 'shared/navigate';
 import { ClaimChanges, ClaimTypeBadges, ClaimTypeCard } from '../shared';
@@ -39,7 +39,12 @@ export const CreateIdvtcButton: FC = () => {
 export const ClaimIdvtcSubmitButton: FC = () => {
   const { isCurrentIcs } = useClaimIdvtcFormData(true);
 
-  return <SubmitButton>{getClaimIdvtcCopy(isCurrentIcs).cta}</SubmitButton>;
+  return (
+    <>
+      <GasCostList />
+      <SubmitButton>{getClaimIdvtcCopy(isCurrentIcs).cta}</SubmitButton>
+    </>
+  );
 };
 
 const WhatsChanging: FC = () => {

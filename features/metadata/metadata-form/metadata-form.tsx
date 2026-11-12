@@ -1,6 +1,12 @@
 import { Stack } from '@lidofinance/lido-app-ui';
 import { FC, memo } from 'react';
-import { FormCard, FormPage, FormReady, SubmitButton } from 'shared/form-page';
+import {
+  FormCard,
+  FormPage,
+  FormReady,
+  GasCostList,
+  SubmitButton,
+} from 'shared/form-page';
 import { TextField } from 'shared/hook-form/fields';
 import { Form } from 'shared/hook-form/form-controller';
 import { AppFormUi } from 'shared/hook-form/form-ui';
@@ -32,6 +38,7 @@ export const MetadataForm: FC = memo(() => (
                       label="Description"
                       placeholder={`Node Operator description (up to ${METADATA_DESCRIPTION_MAX_LENGTH} characters)`}
                     />
+                    <GasCostList />
                     <SubmitButton>Update</SubmitButton>
                   </Stack>
                 </FormCard>

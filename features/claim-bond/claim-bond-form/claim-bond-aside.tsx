@@ -2,7 +2,7 @@ import { DataListRow } from '@lidofinance/lido-app-ui';
 import { STETH_ROUNDING_THRESHOLD, TOKENS } from '@lidofinance/lido-csm-sdk';
 import { FC } from 'react';
 import { Address } from 'shared/components';
-import { SubmitAside, SubmitButton } from 'shared/form-page';
+import { GasCostRow, SubmitAside, SubmitButton } from 'shared/form-page';
 import { FormatToken } from 'shared/formatters';
 import { useClaimBondFormData } from './context';
 import { SplittersRow } from './controls/splitters-row';
@@ -83,6 +83,7 @@ const InfoRows: FC = () => {
           dataTestId={{ root: 'bondDecreaseRow' }}
         />
       )}
+      <GasCostRow />
     </>
   );
 };
@@ -92,35 +93,10 @@ const ClaimSubmitButton: FC = () => {
   return <SubmitButton>{submitLabel}</SubmitButton>;
 };
 
-const useHasRows = () => {
-  const {
-    coverAmount,
-    splittable,
-    toRA,
-    bondDelta,
-    debtBurned,
-    debtRemain,
-    includesRewards,
-    hasSplits,
-  } = useClaimBreakdown();
-
-  return (
-    (includesRewards && coverAmount > STETH_ROUNDING_THRESHOLD) ||
-    (includesRewards && debtBurned > 0n) ||
-    debtRemain > 0n ||
-    (hasSplits && splittable > 0n) ||
-    toRA > 0n ||
-    bondDelta !== 0n
-  );
-};
-
-export const ClaimBondAside: FC = () => {
-  const hasRows = useHasRows();
-  return (
-    <div data-testid="claimBondFormInfo">
-      <SubmitAside rows={hasRows ? <InfoRows /> : undefined}>
-        <ClaimSubmitButton />
-      </SubmitAside>
-    </div>
-  );
-};
+export const ClaimBondAside: FC = () => (
+  <div data-testid="claimBondFormInfo">
+    <SubmitAside rows={<InfoRows />}>
+      <ClaimSubmitButton />
+    </SubmitAside>
+  </div>
+);

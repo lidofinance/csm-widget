@@ -2,7 +2,7 @@ import { DataListRow, Skeleton, Typography } from '@lidofinance/lido-app-ui';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { CSSProperties, FC } from 'react';
 import { useWatch } from 'react-hook-form';
-import { SubmitAside, SubmitButton } from 'shared/form-page';
+import { GasCostRow, SubmitAside, SubmitButton } from 'shared/form-page';
 import { FormatToken } from 'shared/formatters';
 import { RemoveKeysFormInputType, useRemoveKeysFormData } from './context';
 import { useBondBalanceAfterRemoveKeys } from './hooks/use-bond-balance-after-remove-keys';
@@ -80,6 +80,7 @@ export const RemoveKeysAside: FC = () => (
       <>
         <RemovalFeeRow />
         <KeysCountRow />
+        <GasCostRow />
         <BondAfterRow />
       </>
     }

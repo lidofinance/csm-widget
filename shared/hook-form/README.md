@@ -195,6 +195,7 @@ export const useMyFlow = (): MyFlow => {
 - `useCanPerform(sdkModule, 'method')` returns `[allowed, access]`. A `no-access` variant carries `access` for `NoAccessNotice`.
 - Rollback on failure goes in `onError`, not in a try/catch inside `submit`.
 - Side effects that need the tx result (`appendNO`, cache updates, `setCreated`) go inside `submit`, after the SDK call resolves.
+- A single-write variant also carries `estimate: () => sdk.estimateX(props())`. Build the write props once in a `props()` helper, spread them plus `callback` in `submit`, and pass the same object to `estimate`. Pass `resolve` to `FormControllerProvider`; `<GasCostRow />` / `<GasCostList />` (`shared/form-page`) call it with the live form values and show the max-fee USD cost, or N/A on any estimate error.
 - The gate reads the same union through `useMyFlow()` (resolved with empty input), so gating and submitting can't disagree.
 
 ## Transaction stages

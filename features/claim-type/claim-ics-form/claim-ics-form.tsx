@@ -1,7 +1,12 @@
 import { useFaq } from 'faq';
 import { FC, memo } from 'react';
 import { Faq } from 'shared/components';
-import { FormPage, FormReady, SubmitButton } from 'shared/form-page';
+import {
+  FormPage,
+  FormReady,
+  GasCostList,
+  SubmitButton,
+} from 'shared/form-page';
 import { Form } from 'shared/hook-form/form-controller';
 import { AppFormUi } from 'shared/hook-form/form-ui';
 import { ClaimTypeSuccessProvider, useClaimTypeSuccess } from '../shared';
@@ -26,7 +31,12 @@ const ClaimIcsContent: FC = () => {
           <ClaimIcsFormGate>
             <Form data-testid="claimIcsForm">
               <ClaimIcsCard
-                cta={<SubmitButton>Claim operator type</SubmitButton>}
+                cta={
+                  <>
+                    <GasCostList />
+                    <SubmitButton>Claim operator type</SubmitButton>
+                  </>
+                }
               />
             </Form>
           </ClaimIcsFormGate>

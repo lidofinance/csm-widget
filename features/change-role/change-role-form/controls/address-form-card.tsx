@@ -2,7 +2,7 @@ import { MessageBox, Tag } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
 import { RoleActionsList } from 'shared/components';
-import { FormCard, SubmitButton } from 'shared/form-page';
+import { FormCard, GasCostList, SubmitButton } from 'shared/form-page';
 import { AddressField } from 'shared/hook-form/fields';
 import { isAddressEqual } from 'viem';
 import {
@@ -72,6 +72,7 @@ export const AddressFormCard: FC = () => {
           affect the operators shown in the interface.
         </MessageBox>
       )}
+      <GasCostList />
       <SubmitButton disableIfClean={!isReset}>
         {getChangeRoleSubmitLabel(flow.action, roleTitle)}
       </SubmitButton>

@@ -1,7 +1,7 @@
 import { DataListRow, Stack, TextLink } from '@lidofinance/lido-app-ui';
 import { PATH } from 'consts/urls';
 import { FC } from 'react';
-import { SubmitAside, SubmitButton } from 'shared/form-page';
+import { GasCostRow, SubmitAside, SubmitButton } from 'shared/form-page';
 import { Gate } from 'shared/navigate';
 import { useNormalizeQueueFlow, useNormalizeQueueFormData } from './context';
 import { getNormalizeQueueView } from './normalize-queue-state';
@@ -15,14 +15,17 @@ export const NormalizeQueueAside: FC = () => {
   return (
     <SubmitAside
       rows={
-        <DataListRow
-          label="Unqueued keys count"
-          value={unqueuedCount}
-          dataTestId={{
-            root: 'unqueuedKeysCount',
-            value: 'unqueuedKeysCountValue',
-          }}
-        />
+        <>
+          <DataListRow
+            label="Unqueued keys count"
+            value={unqueuedCount}
+            dataTestId={{
+              root: 'unqueuedKeysCount',
+              value: 'unqueuedKeysCountValue',
+            }}
+          />
+          <GasCostRow />
+        </>
       }
     >
       <SubmitButton
