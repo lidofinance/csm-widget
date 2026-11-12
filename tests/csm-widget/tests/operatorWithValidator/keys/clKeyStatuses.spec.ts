@@ -34,6 +34,9 @@ test.describe(
 
       await keysPage.keysView.open();
       await keysPage.keysView.table.waitFor({ state: 'visible' });
+      // depositable keys are listed first, and FULL_OPERATOR has more than a
+      // page of them
+      await keysPage.keysView.showAllKeys();
     });
 
     test.afterAll(async ({ clMock }) => {
