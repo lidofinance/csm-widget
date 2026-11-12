@@ -16,7 +16,6 @@ export * from './format-balance';
 export * from './format-date';
 export * from './format-percent';
 export * from './get-array-sum';
-export * from './get-percent';
 export * from './contract-errors';
 export * from './error-tree';
 export * from './get-error-code';
