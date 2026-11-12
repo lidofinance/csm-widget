@@ -3,6 +3,7 @@ import {
   PERFORMANCE_TIPS_LINK,
 } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
+import { MODULE_METADATA } from 'consts/module';
 import { PATH } from 'consts/urls';
 import { FC } from 'react';
 import { LocalLink } from 'shared/navigate';
@@ -109,7 +110,8 @@ export const CommentWithStrikes: FC = () => {
 };
 
 export const CommentDepositable: FC = () => {
-  const { isCsmFamily } = useModule();
+  const { isCsmFamily, module } = useModule();
+  const name = MODULE_METADATA[module].variantName;
   const { data: status } = useShareLimitStatus();
   const STAKE_SHARE_LIMIT_ANCHOR = isCsmFamily
     ? '#what-is-the-csm-stake-share-limit'
@@ -117,7 +119,7 @@ export const CommentDepositable: FC = () => {
 
   return status === SHARE_LIMIT_STATUS.REACHED ? (
     <>
-      The key may not receive deposits in the near future because CSM has
+      The key may not receive deposits in the near future because {name} has
       reached its{' '}
       <LocalLink
         href={PATH.KEYS_VIEW}

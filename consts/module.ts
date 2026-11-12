@@ -12,7 +12,7 @@ const CSM_METADATA = {
 } as const;
 
 export const MODULE_METADATA = {
-  [MODULE_NAME.CSM]: CSM_METADATA,
+  [MODULE_NAME.CSM]: { ...CSM_METADATA, variantName: '0x01 CSM' },
   [MODULE_NAME.CM]: {
     title: 'Curated Module',
     shortTitle: 'CM v2',
@@ -21,8 +21,9 @@ export const MODULE_METADATA = {
       'The Curated Module v2 consists of allow-listed independent professional staking organizations and Ethereum client teams, which operate validators using the protocol',
     host: 'https://cm.lido.fi',
     previewFile: 'cm-preview.png',
+    variantName: 'CM',
   },
-  [MODULE_NAME.CSM_02]: CSM_METADATA,
+  [MODULE_NAME.CSM_02]: { ...CSM_METADATA, variantName: '0x02 CSM' },
 } as const;
 
 export const moduleMeta = MODULE_METADATA[config.module];

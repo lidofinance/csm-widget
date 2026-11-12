@@ -1,6 +1,7 @@
 import { CONTRACT_NAMES, MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { config } from 'config';
+import { MODULE_METADATA } from 'consts/module';
 import { useDappStatus, useModule, useSmSDK } from 'modules/web3';
 import { FC, PropsWithChildren } from 'react';
 import { useChainName } from 'shared/hooks';
@@ -50,8 +51,8 @@ export const FaqIfModule: FC<PropsWithChildren<{ module: MODULE_NAME }>> = ({
 };
 
 export const FaqModuleName: FC = () => {
-  const { isCSM02 } = useModule();
-  return <>{isCSM02 ? '0x02 CSM' : '0x01 CSM'}</>;
+  const { module } = useModule();
+  return <>{MODULE_METADATA[module].variantName}</>;
 };
 
 const FaqContractAddress: FC<{ name: CONTRACT_NAMES }> = ({ name }) => {
