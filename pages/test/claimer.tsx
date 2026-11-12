@@ -1,10 +1,9 @@
-import { Block } from '@lidofinance/lido-ui';
+import { Stack } from '@lidofinance/lido-app-ui';
 import { Dashboard } from 'features/dashboard/dashboard';
 import { ClaimerDebugPanel } from 'mock/claimer/claimer-debug-panel';
 import { MockClaimBondProvider } from 'mock/claim-bond/mock-providers';
 import { testScenarios } from 'mock/claim-bond/scenarios';
 import { FC } from 'react';
-import { Stack } from 'shared/components';
 import { Layout } from 'shared/layout';
 import styled from 'styled-components';
 import { getTestProps } from 'utilsApi';
@@ -18,19 +17,17 @@ const Container = styled.div`
 `;
 
 // Connected mock account is the operator's custom rewards claimer only.
-// Expect: Bond + Roles sections (no Keys/Surveys), "You" chip on the claimer
-// row, no Roles header link, HAS_CLAIMER_ROLE=true, IS_NODE_OPERATOR=false.
+// Expect: header without Settings, balance + claim cards only; no Roles / "You" chip,
+// HAS_CLAIMER_ROLE=true, IS_NODE_OPERATOR=false.
 const ClaimerTestPage: FC = () => (
   <Layout dummy title="Claimer Shell Test">
     <Container>
-      <Block>
-        <Stack direction="column" gap="md">
-          <MockClaimBondProvider scenario={testScenarios[0].data}>
-            <ClaimerDebugPanel />
-            <Dashboard />
-          </MockClaimBondProvider>
-        </Stack>
-      </Block>
+      <Stack direction="column" gap={24}>
+        <MockClaimBondProvider scenario={testScenarios[0].data}>
+          <ClaimerDebugPanel />
+          <Dashboard />
+        </MockClaimBondProvider>
+      </Stack>
     </Container>
   </Layout>
 );
