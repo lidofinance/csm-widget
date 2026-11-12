@@ -18,3 +18,4 @@ export * from './use-operator-title';
 export * from './operator-rows';
 export * from './type-badge';
 export * from './operator-type-section';
+export * from './operator-addresses';

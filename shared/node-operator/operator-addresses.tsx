@@ -8,14 +8,33 @@ import {
 } from '@lidofinance/lido-app-ui';
 import { NodeOperatorInfo } from '@lidofinance/lido-csm-sdk';
 import { FC } from 'react';
-import { EtherscanAddressLink } from 'shared/components';
+import { EtherscanAddressLink } from 'shared/components/external-icon-link/etherscan-address-link';
 import styled from 'styled-components';
 
-const AddressStyle = styled(Address)`
+type Size = 'description' | 'body';
+type SizeProps = { $size: Size };
+
+const fontSize = ({ $size }: SizeProps) =>
+  $size === 'body'
+    ? 'var(--lido-app-ui-font-size-label)'
+    : 'var(--lido-app-ui-font-size-tooltip)';
+const lineHeight = ({ $size }: SizeProps) =>
+  $size === 'body'
+    ? 'var(--lido-app-ui-line-height-label)'
+    : 'var(--lido-app-ui-line-height-description)';
+
+const AddressStyle = styled(Address)<SizeProps>`
   && {
     color: var(--lido-app-ui-color-text-tertiary);
-    font-size: var(--lido-app-ui-font-size-tooltip);
-    line-height: var(--lido-app-ui-line-height-description);
+    font-size: ${fontSize};
+    line-height: ${lineHeight};
+  }
+`;
+
+const LabelStyle = styled(Typography)<SizeProps>`
+  && {
+    font-size: ${fontSize};
+    line-height: ${lineHeight};
   }
 `;
 
@@ -45,6 +64,7 @@ type AddressItemProps = {
   address: string;
   proposed?: string;
   dataTestId: string;
+  size: Size;
 };
 
 const AddressItem: FC<AddressItemProps> = ({
@@ -52,6 +72,7 @@ const AddressItem: FC<AddressItemProps> = ({
   address,
   proposed,
   dataTestId,
+  size,
 }) => (
   <Stack
     direction="row"
@@ -72,19 +93,23 @@ const AddressItem: FC<AddressItemProps> = ({
         </PendingIconStyle>
       </Tooltip>
     )}
-    <Typography variant="description" color="tertiary">
+    <LabelStyle variant="description" color="tertiary" $size={size}>
       {label}
-    </Typography>
-    <AddressStyle address={address} symbols={4} copy />
+    </LabelStyle>
+    <AddressStyle address={address} symbols={4} copy $size={size} />
     <EtherscanLinkStyle address={address} />
   </Stack>
 );
 
 type Props = {
   info: NodeOperatorInfo | undefined;
+  size?: Size;
 };
 
-export const OperatorAddresses: FC<Props> = ({ info }) => {
+export const OperatorAddresses: FC<Props> = ({
+  info,
+  size = 'description',
+}) => {
   if (!info) return <Skeleton variant="text" />;
 
   return (
@@ -100,12 +125,14 @@ export const OperatorAddresses: FC<Props> = ({ info }) => {
         address={info.rewardsAddress}
         proposed={info.proposedRewardsAddress}
         dataTestId="operatorRewardsAddress"
+        size={size}
       />
       <AddressItem
         label="Manager:"
         address={info.managerAddress}
         proposed={info.proposedManagerAddress}
         dataTestId="operatorManagerAddress"
+        size={size}
       />
     </Stack>
   );

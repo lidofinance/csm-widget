@@ -15,6 +15,7 @@ import { useDisplayOperatorType, useOperatorOverview } from 'shared/hooks';
 import {
   OperatorTypeTag,
   OperatorAvatar,
+  OperatorAddresses,
   useOperatorTitle,
 } from 'shared/node-operator';
 import {
@@ -22,7 +23,6 @@ import {
   CardHeader,
   CardHeaderLine,
   IssuesTag,
-  OperatorAddresses,
   OperatorCardAction,
 } from '../parts';
 import { CardStatItem } from './card-stat-item';

@@ -20,11 +20,12 @@ import { useCurveMetadata } from 'shared/hooks';
 import {
   getOperatorName,
   OperatorAvatar,
+  OperatorAddresses,
   useOperatorTitle,
 } from 'shared/node-operator';
 import styled from 'styled-components';
 import { formatBP, formatPercent } from 'utils';
-import { CardHeader, OperatorAddresses, OperatorCardAction } from '../parts';
+import { CardHeader, OperatorCardAction } from '../parts';
 import type { GroupMemberStake } from './use-group-stake';
 
 const NameRowStyle = styled(Stack)`

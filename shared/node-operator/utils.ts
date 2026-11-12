@@ -13,7 +13,7 @@ type GroupLike = {
   groupId: bigint;
 };
 
-export const formatGroupTitle = ({ name, groupId }: GroupLike) =>
+const formatGroupTitle = ({ name, groupId }: GroupLike) =>
   name || `Operator Group #${groupId}`;
 
 export const formatGroupLabel = (group: GroupLike) =>
