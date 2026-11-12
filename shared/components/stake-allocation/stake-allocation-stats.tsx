@@ -5,6 +5,7 @@ import { FC, ReactNode } from 'react';
 import { pluralKeys } from 'utils';
 import type { StakeAndKeysData } from 'utils/compute-stake-data';
 import { LegendDot, LegendMarker } from './legend';
+import { STAKE_LABELS, STAKE_TOOLTIPS } from './labels';
 import { CompactStatItem } from './styles';
 
 type Props = {
@@ -37,9 +38,9 @@ export const StakeAllocationStats: FC<Props> = ({ data, size, error }) => {
     <>
       <Item
         align="left"
-        label="Active, ETH"
+        label={STAKE_LABELS.active}
         titleIcon={<LegendDot color="success" size={legendSize} />}
-        info="The amount of ETH currently staked by the Lido protocol with this Node Operator"
+        info={STAKE_TOOLTIPS.active}
         value={value(data?.activeStake)}
         subValue={keys(data?.activeKeys)}
         dataTestId={{
@@ -50,9 +51,9 @@ export const StakeAllocationStats: FC<Props> = ({ data, size, error }) => {
       />
       <Item
         align="left"
-        label="Depositable, ETH"
+        label={STAKE_LABELS.depositable}
         titleIcon={<LegendDot color="active" size={legendSize} />}
-        info="Available capacity ready to receive stake from the Lido protocol"
+        info={STAKE_TOOLTIPS.depositable}
         value={value(data?.depositableStake)}
         subValue={keys(data?.depositableKeys)}
         dataTestId={{
@@ -63,12 +64,12 @@ export const StakeAllocationStats: FC<Props> = ({ data, size, error }) => {
       />
       <Item
         align="left"
-        label={size === 'summary' ? 'Total Stake Allocation' : 'TSA, ETH'}
+        label={size === 'summary' ? 'Total Stake Allocation' : STAKE_LABELS.tsa}
         titleIcon={<LegendMarker size={legendSize} />}
         info={
           size === 'summary'
             ? 'Sum of the Target Stake Allocations of all Node Operators in the group'
-            : 'Target Stake Allocation'
+            : STAKE_TOOLTIPS.tsa
         }
         value={value(data?.targetStake)}
         subValue={keys(data?.targetKeys)}

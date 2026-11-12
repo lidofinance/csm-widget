@@ -4,6 +4,8 @@ export {
   SUMMARY_COLUMNS,
   SUMMARY_GAP,
 } from './stake-allocation-stats';
+export { STAKE_LABELS, STAKE_TOOLTIPS } from './labels';
+export { StakeAllocationRows } from './stake-allocation-rows';
 export { StakeAllocationBar } from './stake-allocation-bar';
 export { KeysNeededTag, getKeysNeededVariant } from './keys-needed-tag';
 export { KeyLimitNote } from './key-limit-note';
