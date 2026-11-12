@@ -11,6 +11,7 @@ import {
 import { getServerConfig } from 'utilsApi/server-config';
 
 const SERVICE_TIMEOUT_MS = 10_000;
+const LOWERCASE_ADDRESS_REGEX = /^0x[0-9a-f]{40}$/;
 
 export type AddressValidity =
   | { status: 'ok'; isValid: boolean }
@@ -22,8 +23,10 @@ const checkService = async (
   address: string,
   clientHeaders: Record<string, string>,
 ): Promise<AddressValidity | null> => {
+  if (!LOWERCASE_ADDRESS_REGEX.test(address)) return null;
+
   const version = config.defaultChain === CHAINS.Mainnet ? 'v2' : 'v1';
-  const url = `${baseUrl}/${version}/check/${address}`;
+  const url = `${baseUrl}/${version}/check/${encodeURIComponent(address)}`;
   // set() is case-insensitive, so forwarded headers can't override these
   const headers = new Headers(clientHeaders);
   headers.set('Accept', 'application/json');

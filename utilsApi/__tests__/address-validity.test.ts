@@ -117,6 +117,15 @@ describe('resolveAddressValidity', () => {
       expect(standardFetcher.mock.calls[0][0]).toBe(url);
     });
 
+    test.each([['0xABC'], [`${ADDR}/../x`], [ADDR.toUpperCase()]])(
+      'skips the service and uses the file for unsafe address %s',
+      async (bad) => {
+        await resolveAddressValidity(bad, {});
+        expect(standardFetcher).not.toHaveBeenCalled();
+        expect(isAddressDenied).toHaveBeenCalledWith(bad);
+      },
+    );
+
     test('forwards client headers; fixed headers cannot be overridden', async () => {
       standardFetcher.mockResolvedValue({ isValid: true });
       await resolveAddressValidity(ADDR, {

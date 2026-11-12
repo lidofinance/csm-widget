@@ -11,6 +11,8 @@ import { API } from 'types';
 import { getFirstParam } from 'utils';
 import { getPerformance } from 'utilsApi/getPerformance';
 
+const NODE_OPERATOR_ID_REGEX = /^\d+$/;
+
 const cache = new Cache<string, unknown>();
 
 // Proxy for third-party API.
@@ -19,6 +21,10 @@ const performanceRate: API = async (req, res) => {
   if (!id) {
     res.statusCode = 400;
     throw new Error('Error: empty query param node-operator-id');
+  }
+  if (!NODE_OPERATOR_ID_REGEX.test(id)) {
+    res.statusCode = 400;
+    throw new Error('Error: invalid query param node-operator-id');
   }
 
   const cacheKey = `${config.CACHE_MIGALABS_RATE_KEY}_${id}`;
