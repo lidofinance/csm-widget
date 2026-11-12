@@ -29,7 +29,7 @@ test.describe(
             'csm_widget_dashboard_bond_section',
           ),
           widgetService.page.waitForURL(/\/bond$/),
-          widgetService.dashboardPage.bondRewards.sectionHeaderLink.click(),
+          widgetService.dashboardPage.balanceCard.link.click(),
         ]);
       },
     );

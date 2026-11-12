@@ -13,7 +13,6 @@ import { BondRewardsPage } from '../pages/bondRewards.page';
 import {
   DashboardPage,
   KeysPage,
-  MonitoringPage,
   NotEligiblePage,
   SettingsPage,
   CreateNodeOperatorPage,
@@ -38,7 +37,6 @@ export class WidgetService {
   public groupPage: GroupPage;
   public notEligiblePage: NotEligiblePage;
   public settingsPage: SettingsPage;
-  public monitoringPage: MonitoringPage;
   public bondRewardsPage: BondRewardsPage;
   public welcomePage: WelcomePage;
 
@@ -59,7 +57,6 @@ export class WidgetService {
     this.groupPage = new GroupPage(this.page);
     this.notEligiblePage = new NotEligiblePage(this.page);
     this.settingsPage = new SettingsPage(this.page, this.walletPage);
-    this.monitoringPage = new MonitoringPage(this.page);
     this.bondRewardsPage = new BondRewardsPage(this.page);
     this.welcomePage = new WelcomePage(this.page);
 

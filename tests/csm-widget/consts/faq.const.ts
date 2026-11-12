@@ -502,7 +502,7 @@ CSM 0x02 operator - the Node Operator type assigned to all Node Operators joinin
   },
 ];
 
-export const FAQ_MONITORING: FaqSection[] = [
+export const FAQ_DASHBOARD: FaqSection[] = [
   {
     qaseId: 625,
     title: 'What is the performance threshold?',

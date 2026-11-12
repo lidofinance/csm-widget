@@ -1,36 +1,38 @@
 import { Locator, Page, test } from '@playwright/test';
 import { BasePage } from '../../shared/pages/base.page';
-import { BondRewards } from './elements/dashboard/element.bondRewards';
-import { KeysSection } from './elements/dashboard/element.keysSection';
-import { RolesSection } from './elements/dashboard/element.rolesSection';
+import { BalanceCard } from './elements/dashboard/element.balanceCard';
+import { ClaimCard } from './elements/dashboard/element.claimCard';
+import { HeaderCard } from './elements/dashboard/element.header';
+import { StakeCard } from './elements/dashboard/element.stakeCard';
+import { Tools } from './elements/dashboard/element.tools';
 
 export class DashboardPage extends BasePage {
-  keysSection: KeysSection;
-  bondRewards: BondRewards;
-  rolesSection: RolesSection;
+  operatorHeader: HeaderCard;
+  stakeCard: StakeCard;
+  balanceCard: BalanceCard;
+  claimCard: ClaimCard;
+  tools: Tools;
 
   whyModal: Locator;
-  operatorName: Locator;
-  operatorGroupLink: Locator;
-  editMetadataLink: Locator;
+  depositsPausedNotice: Locator;
+  topUpDisabledNotice: Locator;
 
   constructor(page: Page) {
     super(page);
-    this.keysSection = new KeysSection(this.page);
-    this.bondRewards = new BondRewards(this.page);
-    this.rolesSection = new RolesSection(this.page);
+    this.operatorHeader = new HeaderCard(this.page);
+    this.stakeCard = new StakeCard(this.page);
+    this.balanceCard = new BalanceCard(this.page);
+    this.claimCard = new ClaimCard(this.page);
+    this.tools = new Tools(this.page);
 
     this.whyModal = this.page.getByTestId('whyModal');
-    this.operatorName = this.page.getByTestId('operatorName');
-    this.operatorGroupLink = this.page.getByTestId('operatorGroupLink');
-    this.editMetadataLink = this.page.getByTestId('editMetadataLink');
+    this.depositsPausedNotice = this.page.getByTestId('depositsPausedNotice');
+    this.topUpDisabledNotice = this.page.getByTestId('topUpDisabledNotice');
   }
 
   async open() {
     await test.step('Open the Dasboard page', async () => {
-      await this.openWithRetry('/', [
-        this.bondRewards.bondBalance.commonBalance_Text,
-      ]);
+      await this.openWithRetry('/', [this.operatorHeader.root]);
     });
   }
 }

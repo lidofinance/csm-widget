@@ -1,15 +1,15 @@
 import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { PRESETS } from 'tests/csm-widget/config/walletSetup';
-import { FAQ_MONITORING } from 'tests/csm-widget/consts/faq.const';
+import { FAQ_DASHBOARD } from 'tests/csm-widget/consts/faq.const';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { test } from '../test.fixture';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
-test.describe(...suite({ epic: EPIC.faq, story: 'Monitoring' }), () => {
+test.describe(...suite({ epic: EPIC.faq, story: 'Dashboard' }), () => {
   test.beforeAll(async ({ widgetService }) => {
-    await widgetService.monitoringPage.open();
+    await widgetService.dashboardPage.open();
     await widgetService.faq.waitForVisible();
   });
 
@@ -19,14 +19,14 @@ test.describe(...suite({ epic: EPIC.faq, story: 'Monitoring' }), () => {
       const { faq } = widgetService;
 
       await test.step('Check section titles', async () => {
-        await expect(faq.titles).toHaveCount(FAQ_MONITORING.length);
+        await expect(faq.titles).toHaveCount(FAQ_DASHBOARD.length);
         await expect(faq.titles).toContainText(
-          FAQ_MONITORING.map((s) => s.title),
+          FAQ_DASHBOARD.map((s) => s.title),
         );
       });
 
       await test.step('Check only the first section is expanded', async () => {
-        for (const [index, section] of FAQ_MONITORING.entries()) {
+        for (const [index, section] of FAQ_DASHBOARD.entries()) {
           await expect(
             faq.getItem(section.title).toggle,
             `"${section.title}" expanded state`,
@@ -36,7 +36,7 @@ test.describe(...suite({ epic: EPIC.faq, story: 'Monitoring' }), () => {
     },
   );
 
-  FAQ_MONITORING.forEach((section) => {
+  FAQ_DASHBOARD.forEach((section) => {
     test(
       qase(section.qaseId, `Should show "${section.title}" answer`),
       async ({ widgetService }) => {

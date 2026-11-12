@@ -180,9 +180,9 @@ test.describe(
 
         await test.step('Operator name is updated on dashboard', async () => {
           await widgetService.dashboardPage.open();
-          await expect(widgetService.dashboardPage.operatorName).toHaveText(
-            newName,
-          );
+          await expect(
+            widgetService.dashboardPage.operatorHeader.operatorName,
+          ).toHaveText(newName);
         });
 
         await test.step('Operator name is updated in the operator switch popup', async () => {

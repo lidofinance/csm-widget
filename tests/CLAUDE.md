@@ -168,7 +168,7 @@ or when the name would just restate the surface: `Group / Operator card / Operat
 nothing twice.
 
 **A feature may reuse an epic's name when it names a view of that epic's area.** Under `Dashboard`
-the blocks are `Keys`, `Bond & Rewards` and `Roles` — the same words as the epics, because that is
+the blocks are `Operator`, `Keys`, `Bond & Rewards` and `Tools` — the same words as the epics, because that is
 what those blocks show, and the parent already says they are the dashboard's view of them. Invented
 synonyms (`Keys stats`, `Bond stats`) only add a word nobody uses when reading the path aloud.
 

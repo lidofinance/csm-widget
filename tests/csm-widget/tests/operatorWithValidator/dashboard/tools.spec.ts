@@ -16,7 +16,8 @@ test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
   ...suite({
-    epic: EPIC.monitoring,
+    epic: EPIC.dashboard,
+    feature: 'Tools',
     story: 'External links',
   }),
   async () => {
@@ -24,7 +25,7 @@ test.describe(
 
     test.beforeEach(async ({ widgetService, widgetConfig }) => {
       matomoEventService = new MatomoService(widgetService.page, widgetConfig);
-      await widgetService.monitoringPage.open();
+      await widgetService.dashboardPage.open();
     });
 
     test(
@@ -34,7 +35,7 @@ test.describe(
       ),
       async ({ widgetService, widgetConfig }) => {
         const beaconchainBaseUrl = normalizeBaseUrl(
-          widgetConfig.standConfig.monitoringConfig.urls.beaconchain,
+          widgetConfig.standConfig.toolsConfig.urls.beaconchain,
         );
         const beaconchainUrlPattern = new RegExp(
           `^${escapeRegex(beaconchainBaseUrl)}/dashboard(?:\\?validators=[^#]*|/[A-Za-z0-9]+(?:\\?validators=[^#]*)?#summary)$`,
@@ -42,12 +43,12 @@ test.describe(
         );
 
         const [beaconchainPage] = await Promise.all([
-          widgetService.monitoringPage.waitForPage(PAGE_WAIT_TIMEOUT),
+          widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
           matomoEventService.waitForEvent(
             'e_n',
             'csm_widget_dashboard_external_beaconcha_link',
           ),
-          widgetService.monitoringPage.beaconchainV2Link.click(),
+          widgetService.dashboardPage.tools.beaconchainV2.click(),
         ]);
 
         await expect(beaconchainPage).toHaveURL(beaconchainUrlPattern);
@@ -55,51 +56,51 @@ test.describe(
     );
 
     test(
-      qase(424, 'Should open Lido Fees monitoring after click'),
+      qase(424, 'Should open Lido MEV monitoring after click'),
       async ({ widgetService, widgetConfig }) => {
         const feesMonitoringBaseUrl = normalizeBaseUrl(
-          widgetConfig.standConfig.monitoringConfig.urls.feesMonitoring,
+          widgetConfig.standConfig.toolsConfig.urls.feesMonitoring,
         );
         const stakingModuleIndex =
-          widgetConfig.standConfig.monitoringConfig.stakingModuleIndex;
+          widgetConfig.standConfig.toolsConfig.stakingModuleIndex;
         const feesMonitoringUrlPattern = new RegExp(
           `^${escapeRegex(feesMonitoringBaseUrl)}/operatorInfo\\?stakingModuleIndex=${stakingModuleIndex}&operatorIndex=\\d+/?$`,
           'i',
         );
 
-        const [feesMonitoringPage] = await Promise.all([
-          widgetService.monitoringPage.waitForPage(PAGE_WAIT_TIMEOUT),
+        const [feesPage] = await Promise.all([
+          widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
           matomoEventService.waitForEvent(
             'e_n',
             'csm_widget_dashboard_external_mev_monitoring_link',
           ),
-          widgetService.monitoringPage.feesMonitoringLink.click(),
+          widgetService.dashboardPage.tools.mevMonitoring.click(),
         ]);
 
-        await expect(feesMonitoringPage).toHaveURL(feesMonitoringUrlPattern);
+        await expect(feesPage).toHaveURL(feesMonitoringUrlPattern);
       },
     );
 
     test(
-      qase(425, 'Should open Lido Operators Portal after click'),
+      qase(425, 'Should open Lido operators after click'),
       async ({ widgetService, widgetConfig }) => {
         const operatorsBaseUrl = normalizeBaseUrl(
-          widgetConfig.standConfig.monitoringConfig.urls.operators,
+          widgetConfig.standConfig.toolsConfig.urls.operators,
         );
         const stakingModuleIndex =
-          widgetConfig.standConfig.monitoringConfig.stakingModuleIndex;
+          widgetConfig.standConfig.toolsConfig.stakingModuleIndex;
         const operatorsUrlPattern = new RegExp(
           `^${escapeRegex(operatorsBaseUrl)}/module/${stakingModuleIndex}/\\d+/?$`,
           'i',
         );
 
         const [operatorsPortalPage] = await Promise.all([
-          widgetService.monitoringPage.waitForPage(PAGE_WAIT_TIMEOUT),
+          widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
           matomoEventService.waitForEvent(
             'e_n',
             'csm_widget_dashboard_external_operators_link',
           ),
-          widgetService.monitoringPage.operatorsPortalLink.click(),
+          widgetService.dashboardPage.tools.operatorsPortal.click(),
         ]);
 
         await expect(operatorsPortalPage).toHaveURL(operatorsUrlPattern);
@@ -110,16 +111,16 @@ test.describe(
       qase(426, 'Should open CSM Sentinel after click'),
       async ({ widgetService, widgetConfig }) => {
         const csmSentinelUrl = normalizeBaseUrl(
-          widgetConfig.standConfig.monitoringConfig.urls.csmSentinel,
+          widgetConfig.standConfig.toolsConfig.urls.csmSentinel,
         );
 
         const [csmSentinelPage] = await Promise.all([
-          widgetService.monitoringPage.waitForPage(PAGE_WAIT_TIMEOUT),
+          widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
           matomoEventService.waitForEvent(
             'e_n',
             'csm_widget_dashboard_notification_sentinel_link',
           ),
-          widgetService.monitoringPage.csmSentinelLink.click(),
+          widgetService.dashboardPage.tools.sentinel.click(),
         ]);
 
         await expect(csmSentinelPage).toHaveURL(
@@ -137,8 +138,7 @@ test.describe(
         );
 
         const beaconchainEntityBaseUrl = new URL(
-          widgetConfig.standConfig.monitoringConfig.urls.beaconchainEntity ??
-            '',
+          widgetConfig.standConfig.toolsConfig.urls.beaconchainEntity ?? '',
         ).origin;
         const beaconchainEntityUrlPattern = new RegExp(
           `^${escapeRegex(beaconchainEntityBaseUrl)}/entity/Lido%20CSM/CSM%20Operator%20\\d+/?$`,
@@ -146,12 +146,12 @@ test.describe(
         );
 
         const [beaconchainEntityPage] = await Promise.all([
-          widgetService.monitoringPage.waitForPage(PAGE_WAIT_TIMEOUT),
+          widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
           matomoEventService.waitForEvent(
             'e_n',
             'csm_widget_dashboard_external_beaconcha_entity_link',
           ),
-          widgetService.monitoringPage.beaconchainEntityLink.click(),
+          widgetService.dashboardPage.tools.entity.click(),
         ]);
 
         await expect(beaconchainEntityPage).toHaveURL(
@@ -172,7 +172,7 @@ test.describe(
         );
 
         const ratedOrigin = new URL(
-          widgetConfig.standConfig.monitoringConfig.urls.rated ?? '',
+          widgetConfig.standConfig.toolsConfig.urls.rated ?? '',
         ).origin;
         const ratedUrlPattern = new RegExp(
           `^${escapeRegex(ratedOrigin)}/o/.+\\?network=[A-Za-z0-9-]+(?:&.*)?$`,
@@ -180,12 +180,12 @@ test.describe(
         );
 
         const [ratedPage] = await Promise.all([
-          widgetService.monitoringPage.waitForPage(PAGE_WAIT_TIMEOUT),
+          widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
           matomoEventService.waitForEvent(
             'e_n',
             'csm_widget_dashboard_external_rated_link',
           ),
-          widgetService.monitoringPage.ratedExplorerLink.click(),
+          widgetService.dashboardPage.tools.rated.click(),
         ]);
 
         await expect(ratedPage).toHaveURL(ratedUrlPattern);
@@ -193,7 +193,7 @@ test.describe(
     );
 
     test(
-      qase(429, 'Should open MigaLabs after click'),
+      qase(429, 'Should open EthSeer after click'),
       async ({ widgetService, widgetConfig }) => {
         const isExtendedMonitoringEnv = isProdOrStaging(
           widgetConfig.standConfig.standType,
@@ -204,7 +204,7 @@ test.describe(
         );
 
         const migaLabsUrl = new URL(
-          widgetConfig.standConfig.monitoringConfig.urls.migaLabs ?? '',
+          widgetConfig.standConfig.toolsConfig.urls.migaLabs ?? '',
         );
         const migaLabsHostPattern = migaLabsUrl.hostname.startsWith('www.')
           ? escapeRegex(migaLabsUrl.hostname)
@@ -215,12 +215,12 @@ test.describe(
         );
 
         const [migaLabsPage] = await Promise.all([
-          widgetService.monitoringPage.waitForPage(PAGE_WAIT_TIMEOUT),
+          widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
           matomoEventService.waitForEvent(
             'e_n',
             'csm_widget_dashboard_external_migalabs_link',
           ),
-          widgetService.monitoringPage.migaLabsLink.click(),
+          widgetService.dashboardPage.tools.ethseer.click(),
         ]);
 
         await expect(migaLabsPage).toHaveURL(migaLabsUrlPattern);

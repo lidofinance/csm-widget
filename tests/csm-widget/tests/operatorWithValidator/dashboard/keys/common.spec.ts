@@ -30,7 +30,7 @@ test.describe(
             'csm_widget_dashboard_keys_section',
           ),
           widgetService.page.waitForURL(/\/keys$/),
-          widgetService.dashboardPage.keysSection.sectionHeaderLink.click(),
+          widgetService.dashboardPage.keysCard.link.click(),
         ]);
       },
     );

@@ -27,12 +27,13 @@ test.describe(
       ),
       async ({ widgetService }) => {
         const { dashboardPage, groupPage, page } = widgetService;
+        const { operatorGroupLink } = dashboardPage.operatorHeader;
 
         await dashboardPage.open();
-        await expect(dashboardPage.operatorGroupLink).toBeVisible({
+        await expect(operatorGroupLink).toBeVisible({
           timeout: PAGE_WAIT_TIMEOUT,
         });
-        await dashboardPage.operatorGroupLink.click();
+        await operatorGroupLink.click();
 
         await expect(page).toHaveURL(/\/group/);
         await expect(groupPage.sectionTitle).toContainText('Operator Group #');

@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { test } from '../../test.fixture';
@@ -14,8 +13,8 @@ test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 test.describe(
   ...suite({
     epic: EPIC.dashboard,
-    feature: 'Roles',
-    story: 'Views address',
+    feature: 'Operator',
+    story: 'Operator header',
   }),
   () => {
     let matomoEventService: MatomoService;
@@ -29,21 +28,15 @@ test.describe(
       qase(127, 'Should correct display reward address information'),
       { tag: Tags.smoke },
       async ({ widgetService, widgetConfig, secretPhrase }) => {
-        const rewardAddressRow =
-          widgetService.dashboardPage.rolesSection.rewardAddressRow;
+        const { rewardsAddress } = widgetService.dashboardPage.operatorHeader;
         const currentAddress = mnemonicToAccount(secretPhrase).address;
 
         await test.step('Check reward address information', async () => {
-          await expect(rewardAddressRow.locator('p')).toContainText(
-            'Rewards Address',
+          await expect(rewardsAddress).toContainText('Rewards:');
+          await expect(rewardsAddress).toContainText(
+            currentAddress.slice(0, 4),
           );
-          await expect(rewardAddressRow.getByTestId('youChip')).toBeVisible();
-          await expect(
-            rewardAddressRow.getByTestId('ownerChip'),
-          ).not.toBeVisible();
-          await expect(
-            rewardAddressRow.getByTestId('addressContainer'),
-          ).toContainText(currentAddress);
+          await expect(rewardsAddress).toContainText(currentAddress.slice(-4));
         });
 
         await test.step('Check reward address etherscan link and Matomo event', async () => {
@@ -53,7 +46,7 @@ test.describe(
               'e_n',
               'cm_widget_etherscan_address_link',
             ),
-            rewardAddressRow.getByTestId('etherscanLink').click(),
+            rewardsAddress.getByTitle('View on etherscan').click(),
           ]);
           expect(etherscanPage.url()).toContain(
             `${widgetConfig.standConfig.networkConfig.scan}address/${currentAddress}`,
@@ -65,21 +58,15 @@ test.describe(
     test(
       qase(128, 'Should correct display manager address information'),
       async ({ widgetService, widgetConfig, secretPhrase }) => {
-        const managerAddressRow =
-          widgetService.dashboardPage.rolesSection.managerAddressRow;
+        const { managerAddress } = widgetService.dashboardPage.operatorHeader;
         const currentAddress = mnemonicToAccount(secretPhrase).address;
 
         await test.step('Check manager address information', async () => {
-          await expect(managerAddressRow.locator('p')).toContainText(
-            'Manager Address',
+          await expect(managerAddress).toContainText('Manager:');
+          await expect(managerAddress).toContainText(
+            currentAddress.slice(0, 4),
           );
-          await expect(managerAddressRow.getByTestId('youChip')).toBeVisible();
-          await expect(
-            managerAddressRow.getByTestId('ownerChip'),
-          ).toBeVisible();
-          await expect(
-            managerAddressRow.getByTestId('addressContainer'),
-          ).toContainText(currentAddress);
+          await expect(managerAddress).toContainText(currentAddress.slice(-4));
         });
 
         await test.step('Check manager address etherscan link and Matomo event', async () => {
@@ -89,7 +76,7 @@ test.describe(
               'e_n',
               'cm_widget_etherscan_address_link',
             ),
-            managerAddressRow.getByTestId('etherscanLink').click(),
+            managerAddress.getByTitle('View on etherscan').click(),
           ]);
           expect(etherscanPage.url()).toContain(
             `${widgetConfig.standConfig.networkConfig.scan}address/${currentAddress}`,
@@ -101,24 +88,11 @@ test.describe(
     test(
       qase(129, 'Should correct display empty rewards claimer'),
       async ({ widgetService }) => {
-        const claimerAddressRow =
-          widgetService.dashboardPage.rolesSection.claimerAddressRow;
-        await test.step('Check reward claimer information', async () => {
-          await expect(claimerAddressRow.locator('p')).toContainText(
-            'Rewards claimer',
-          );
-          await expect(
-            claimerAddressRow.getByRole('button', { name: 'Set up' }),
-          ).toBeVisible();
-        });
+        const { claimerFlag } = widgetService.dashboardPage.operatorHeader;
 
-        await test.step('Check reward address etherscan link', async () => {
-          await claimerAddressRow
-            .getByRole('button', { name: 'Set up' })
-            .click();
-          await widgetService.page.waitForURL('**/settings/claimer', {
-            timeout: PAGE_WAIT_TIMEOUT,
-          });
+        await test.step('Check claimer flag is absent', async () => {
+          await widgetService.page.waitForLoadState('networkidle');
+          await expect(claimerFlag).toHaveCount(0);
         });
       },
     );
@@ -126,45 +100,34 @@ test.describe(
     test(
       qase(130, 'Should correct display empty rewards splitter'),
       async ({ widgetService }) => {
-        const feeSplitsRow =
-          widgetService.dashboardPage.rolesSection.feeSplitsRow;
-        await test.step('Check reward splitter information', async () => {
-          await expect(feeSplitsRow.locator('p').first()).toContainText(
-            'Rewards splitter',
-          );
-          await expect(
-            feeSplitsRow.getByRole('button', { name: 'Set up' }),
-          ).toBeVisible();
-        });
+        const { splittersFlag } = widgetService.dashboardPage.operatorHeader;
 
-        await test.step('Check reward address etherscan link', async () => {
-          await feeSplitsRow.getByRole('button', { name: 'Set up' }).click();
-          await widgetService.page.waitForURL('**/settings/splits', {
-            timeout: PAGE_WAIT_TIMEOUT,
-          });
+        await test.step('Check splitters flag is absent', async () => {
+          await widgetService.page.waitForLoadState('networkidle');
+          await expect(splittersFlag).toHaveCount(0);
         });
       },
     );
 
     test(
-      qase(465, 'Should navigate to roles settings on header link click'),
+      qase(465, 'Should navigate to settings on header link click'),
       async ({ widgetService }) => {
-        const { rolesSection } = widgetService.dashboardPage;
+        const { settingsLink } = widgetService.dashboardPage.operatorHeader;
 
-        await test.step('Click section header link and check Matomo event', async () => {
+        await test.step('Click settings link and check Matomo event', async () => {
           await Promise.all([
             matomoEventService.waitForEvent(
               'e_n',
               'cm_widget_dashboard_roles_section',
             ),
-            rolesSection.sectionHeaderLink.click(),
+            settingsLink.click(),
           ]);
         });
 
-        await test.step('Check navigation to roles settings page', async () => {
+        await test.step('Check navigation to settings page', async () => {
           await expect(
             widgetService.page,
-            'Should navigate to roles settings page',
+            'Should navigate to settings page',
           ).toHaveURL(/\/settings$/);
         });
       },

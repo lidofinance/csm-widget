@@ -12,7 +12,6 @@ const SIDEBAR_ITEMS = [
   { name: 'Dashboard', url: '/' },
   { name: 'Create Operator', url: '/create' },
   { name: 'Keys', url: '/keys' },
-  { name: 'Monitoring', url: '/monitoring' },
   { name: 'Bond & Rewards', url: '/bond' },
   { name: 'Settings', url: '/settings' },
   { name: 'My Operators', url: '/operators' },
@@ -185,17 +184,22 @@ test.describe(
     test(
       qase(
         178,
-        'Should display edit metadata button on dashboard and navigate to metadata page',
+        'Should reach metadata page from dashboard header Settings link',
       ),
       async ({ widgetService }) => {
-        const { editMetadataLink } = widgetService.dashboardPage;
+        const { settingsLink } = widgetService.dashboardPage.operatorHeader;
 
-        await test.step('Edit metadata button is visible', async () => {
-          await expect(editMetadataLink).toBeVisible();
+        await test.step('Settings link is visible', async () => {
+          await expect(settingsLink).toBeVisible();
         });
 
-        await test.step('Navigate to metadata page on click', async () => {
-          await editMetadataLink.click();
+        await test.step('Navigate to settings on click', async () => {
+          await settingsLink.click();
+          await expect(widgetService.page).toHaveURL(/\/settings$/);
+        });
+
+        await test.step('Open metadata page from settings hub', async () => {
+          await widgetService.page.getByTestId('metadataRow').click();
           await expect(widgetService.page).toHaveURL(/\/settings\/metadata/);
         });
       },
@@ -233,17 +237,20 @@ test.describe(
     test(
       qase(
         177,
-        'Should display Operator Group link in dashboard subtitle and navigate to group page',
+        'Should display Operator Group link in dashboard header and navigate to group page',
       ),
       async ({ widgetService }) => {
-        const { operatorGroupLink } = widgetService.dashboardPage;
+        const { operatorGroupLink } =
+          widgetService.dashboardPage.operatorHeader;
 
         await test.step('Operator Group link is visible', async () => {
           await expect(operatorGroupLink).toBeVisible();
         });
 
         await test.step('Operator Group link has correct text', async () => {
-          await expect(operatorGroupLink).toContainText(/Operator Group #\d+/);
+          await expect(operatorGroupLink).toContainText(
+            /(Operator Group #\d+|\(#\d+\))/,
+          );
         });
 
         await test.step('Navigate to group page on click', async () => {

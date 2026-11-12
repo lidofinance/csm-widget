@@ -19,7 +19,6 @@ import {
   DelayedPenaltyPage,
   KeysPage,
   MainPage,
-  MonitoringPage,
   MyOperatorsPage,
   SettingsPage,
   SurveysPage,
@@ -42,7 +41,6 @@ export class WidgetService {
   public delayedPenaltyPage: DelayedPenaltyPage;
   public myOperatorsPage: MyOperatorsPage;
   public settingsPage: SettingsPage;
-  public monitoringPage: MonitoringPage;
   public bondRewardsPage: BondRewardsPage;
   public operatorType: OperatorTypePage;
   public surveysPage: SurveysPage;
@@ -66,7 +64,6 @@ export class WidgetService {
     this.delayedPenaltyPage = new DelayedPenaltyPage(this.page);
     this.myOperatorsPage = new MyOperatorsPage(this.page);
     this.settingsPage = new SettingsPage(this.page, this.walletPage);
-    this.monitoringPage = new MonitoringPage(this.page);
     this.bondRewardsPage = new BondRewardsPage(this.page);
     this.operatorType = new OperatorTypePage(this.page, this.walletPage);
     this.surveysPage = new SurveysPage(this.page);

@@ -9,6 +9,7 @@ import {
 } from '@lidofinance/lido-csm-sdk';
 import { LidoSDKCore } from '@lidofinance/lido-ethereum-sdk';
 import { formatEther, isAddressEqual, type Address } from 'viem';
+import { calculateAvailableToClaim } from 'utils/calculate-available-to-claim';
 
 export class LidoSDKClient extends LidoSDKCsm {
   private readonly sdkCore: LidoSDKCore;
@@ -83,6 +84,20 @@ export class LidoSDKClient extends LidoSDKCsm {
         ...data,
         available: formatEther(data.available),
       };
+    });
+  }
+
+  async getAvailableToClaim(nodeOperatorId: number) {
+    return test.step(`Get available to claim for #${nodeOperatorId} node`, async () => {
+      const id = BigInt(nodeOperatorId);
+      const [bond, rewards, feeSplits] = await Promise.all([
+        this.operator.getBondBalance(id),
+        this.rewards.getRewards(id),
+        this.operator.getFeeSplits(id),
+      ]);
+      return parseFloat(
+        formatEther(calculateAvailableToClaim({ bond, rewards, feeSplits })),
+      );
     });
   }
 

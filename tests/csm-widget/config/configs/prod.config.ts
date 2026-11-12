@@ -32,7 +32,7 @@ export class ProdConfig extends BaseConfig {
           csmSurveysApi: 'https://csm-survey-api.lido.tools',
         },
       },
-      monitoringConfig: {
+      toolsConfig: {
         urls: {
           beaconchain: 'https://beaconcha.in',
           operators: 'https://operators.lido.fi',

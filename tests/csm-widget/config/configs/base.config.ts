@@ -28,7 +28,7 @@ export type StandConfig = {
       csmSurveysApi: string;
     };
   };
-  monitoringConfig: {
+  toolsConfig: {
     urls: {
       beaconchain: string;
       operators: string;
