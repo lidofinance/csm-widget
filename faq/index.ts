@@ -103,14 +103,14 @@ const FAQ_LOCKED_CM = [CmLockedBond1, CmLockedBond2, CmLockedBond3];
 const FAQ_MAIN_CSM = [Main1, Main2, Main3, Main4, Main5, Main6, Main7, Main8];
 const FAQ_MAIN_CM = [CmMain1, CmMain2, CmMain3];
 
-const FAQ_MONITORING_CSM = [
+const FAQ_DASHBOARD_CSM = [
   Monitoring1,
   Monitoring2,
   Monitoring3,
   Monitoring4,
   Monitoring5,
 ];
-const FAQ_MONITORING_CM: typeof FAQ_MONITORING_CSM = [];
+const FAQ_DASHBOARD_CM: typeof FAQ_DASHBOARD_CSM = [];
 
 const FAQ_KEYS_CSM = [
   Keys1,
@@ -149,7 +149,7 @@ const CSM_FAQ = {
   BOND: FAQ_BOND_CSM,
   LOCKED: FAQ_LOCKED_CSM,
   MAIN: FAQ_MAIN_CSM,
-  MONITORING: FAQ_MONITORING_CSM,
+  DASHBOARD: FAQ_DASHBOARD_CSM,
   KEYS: FAQ_KEYS_CSM,
 };
 const CM_FAQ = {
@@ -158,7 +158,7 @@ const CM_FAQ = {
   BOND: FAQ_BOND_CM,
   LOCKED: FAQ_LOCKED_CM,
   MAIN: FAQ_MAIN_CM,
-  MONITORING: FAQ_MONITORING_CM,
+  DASHBOARD: FAQ_DASHBOARD_CM,
   KEYS: FAQ_KEYS_CM,
 };
 

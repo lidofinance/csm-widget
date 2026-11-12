@@ -6,7 +6,7 @@ import { ShortInlineLoader } from './styles';
 import { formatSecondsDuration } from '../parameters-list/format';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 
-// FAQ items using this are CSM-only content (FAQ_BOND_CSM / FAQ_MONITORING_CSM).
+// FAQ items using this are CSM-only content (FAQ_BOND_CSM / FAQ_DASHBOARD_CSM).
 export const FaqFrameDuration: FC = () => {
   const { data, isPending } = useFrameInfo(
     (data) => data.frameDuration,

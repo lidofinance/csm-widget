@@ -62,7 +62,7 @@ export const useSurveyEnabled = (skipClosed = false) => {
 const SURVEY_COUNT_WEEKS = 3;
 const SURVEY_START_DAY_OF_WEEK = 4;
 
-export const getSurveyDates = (currentDate: Date = new Date()) => {
+const getSurveyDates = (currentDate: Date = new Date()) => {
   const today = new Date();
 
   const _corner = startOfQuarter(currentDate);
