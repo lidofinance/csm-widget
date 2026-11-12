@@ -1,7 +1,7 @@
 import { IconWarning, Tag, Typography } from '@lidofinance/lido-app-ui';
 import { WIDGET_TITLE } from 'consts';
 import { FC } from 'react';
-import { SubmitButton } from 'shared/form-page';
+import { GasCostList, SubmitButton } from 'shared/form-page';
 import { useModuleMeta } from 'shared/hooks';
 import { isAddressEqual } from 'viem';
 import { RoleAddress } from '../../shared/role-address';
@@ -71,6 +71,7 @@ export const PendingChangeCard: FC = () => {
           <li>Go to Settings tab → Inbox requests to confirm the change</li>
         </StepsListStyle>
       </Typography>
+      {intent && <GasCostList intent={intent} />}
     </RoleCard>
   );
 };

@@ -1,7 +1,7 @@
 import { Card, Stack, Typography } from '@lidofinance/lido-app-ui';
 import { ModuleInvite } from 'modules/web3';
 import { FC } from 'react';
-import { SubmitButton } from 'shared/form-page';
+import { GasCostList, SubmitButton } from 'shared/form-page';
 import { useDisplayOperatorType } from 'shared/hooks';
 import {
   getInviteId,
@@ -27,6 +27,7 @@ export const InviteCard: FC<{ invite: ModuleInvite }> = ({ invite }) => {
         <Typography variant="body" as="p">
           {getProposedRoleText(invite.role)}
         </Typography>
+        <GasCostList intent={inviteId} />
         <SubmitButton intent={inviteId} size="small" fullWidth={false}>
           Accept request
         </SubmitButton>

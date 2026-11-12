@@ -15,13 +15,18 @@ const DEBOUNCE_MS = 500;
 
 type Settled = { key: string; estimate?: () => Promise<GasEstimate> };
 
-export const useGasCost = () => {
+/** `intent` estimates that button's flow in isolation: only the intent is the input and field validity is ignored. */
+export const useGasCost = (intent?: string) => {
   const { address, chainId } = useDappStatus();
   const { resolve, formName } = useFormControllerContext();
   const { data, isPending } = useFormDataContext();
   const { control, formState } = useFormContext();
-  const values = useWatch({ control });
-  const { isValid } = formState;
+  const watched = useWatch({ control });
+  const values = useMemo(
+    () => (intent ? { intent } : watched),
+    [intent, watched],
+  );
+  const isValid = intent ? true : formState.isValid;
   const { maxGasPrice } = useMaxGasPrice();
 
   const flow = useMemo(

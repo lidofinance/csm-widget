@@ -6,8 +6,10 @@ import { useGasCost } from './use-gas-cost';
 export const GAS_COST_INFO =
   'Estimated maximum network fee for this transaction';
 
-export const GasCostRow: FC = () => {
-  const { value } = useGasCost();
+type GasCostProps = { intent?: string };
+
+export const GasCostRow: FC<GasCostProps> = ({ intent }) => {
+  const { value } = useGasCost(intent);
 
   return (
     <DataListRow
@@ -19,8 +21,8 @@ export const GasCostRow: FC = () => {
   );
 };
 
-export const GasCostList: FC = () => (
+export const GasCostList: FC<GasCostProps> = ({ intent }) => (
   <DataList divided>
-    <GasCostRow />
+    <GasCostRow intent={intent} />
   </DataList>
 );
