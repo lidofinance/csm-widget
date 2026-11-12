@@ -23,12 +23,14 @@ export const DelayedPenaltyCancelFormProvider: FC<
     mode: 'onChange',
   });
 
-  const submitter = useFlowSubmit(useDelayedPenaltyCancelFlowResolver(module));
+  const resolve = useDelayedPenaltyCancelFlowResolver(module);
+  const submitter = useFlowSubmit(resolve);
 
   return (
     <FormProvider {...formObject}>
       <FormControllerProvider
         submitter={submitter}
+        resolve={resolve}
         formName="delayedPenaltyCancel"
       >
         <DelayedPenaltyCancelUpdater module={module} />

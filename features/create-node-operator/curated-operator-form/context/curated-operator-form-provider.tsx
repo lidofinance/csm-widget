@@ -21,12 +21,14 @@ export const CuratedOperatorFormProvider: FC<PropsWithChildren> = ({
     mode: 'onChange',
   });
 
-  const submitter = useFlowSubmit(useCuratedOperatorFlowResolver());
+  const resolve = useCuratedOperatorFlowResolver();
+  const submitter = useFlowSubmit(resolve);
 
   return (
     <FormProvider {...formObject}>
       <FormControllerProvider
         submitter={submitter}
+        resolve={resolve}
         formName="createCuratedOperator"
       >
         {children}

@@ -25,23 +25,31 @@ export const useDelayedPenaltyCancelFlowResolver = (
   const buildCallback = useTxModalStagesDelayedPenaltyCancel();
 
   return useCallback(
-    (input, data) => ({
-      action: 'cancel' as const,
-      submit: () => {
-        invariant(sdk, 'Delayed penalty module is not resolved');
+    (input, data) => {
+      const props = () => {
         invariant(input.amount !== undefined, 'Amount is not defined');
         invariant(
           input.nodeOperatorId !== undefined,
           'NodeOperatorId is not defined',
         );
+        return { nodeOperatorId: input.nodeOperatorId, amount: input.amount };
+      };
 
-        return sdk.delayedPenalty.cancel({
-          nodeOperatorId: input.nodeOperatorId,
-          amount: input.amount,
-          callback: buildCallback(input, data),
-        });
-      },
-    }),
+      return {
+        action: 'cancel' as const,
+        submit: () => {
+          invariant(sdk, 'Delayed penalty module is not resolved');
+          return sdk.delayedPenalty.cancel({
+            ...props(),
+            callback: buildCallback(input, data),
+          });
+        },
+        estimate: async () => {
+          invariant(sdk, 'Delayed penalty module is not resolved');
+          return sdk.delayedPenalty.estimateCancel(props());
+        },
+      };
+    },
     [sdk, buildCallback],
   );
 };

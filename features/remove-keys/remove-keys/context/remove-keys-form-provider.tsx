@@ -22,11 +22,16 @@ export const RemoveKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
     mode: 'onChange',
   });
 
-  const submitter = useFlowSubmit(useRemoveKeysFlowResolver());
+  const resolve = useRemoveKeysFlowResolver();
+  const submitter = useFlowSubmit(resolve);
 
   return (
     <FormProvider {...formObject}>
-      <FormControllerProvider submitter={submitter} formName="removeKeys">
+      <FormControllerProvider
+        submitter={submitter}
+        resolve={resolve}
+        formName="removeKeys"
+      >
         {children}
       </FormControllerProvider>
     </FormProvider>

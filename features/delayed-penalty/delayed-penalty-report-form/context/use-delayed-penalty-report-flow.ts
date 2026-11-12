@@ -26,26 +26,37 @@ export const useDelayedPenaltyReportFlowResolver = (
   const buildCallback = useTxModalStagesDelayedPenaltyReport();
 
   return useCallback(
-    (input, data) => ({
-      action: 'report' as const,
-      submit: () => {
-        invariant(sdk, 'Delayed penalty module is not resolved');
+    (input, data) => {
+      const props = () => {
         invariant(input.amount !== undefined, 'Amount is not defined');
         invariant(
           input.nodeOperatorId !== undefined,
           'NodeOperatorId is not defined',
         );
         invariant(input.penaltyType, 'PenaltyType is not defined');
-
-        return sdk.delayedPenalty.report({
+        return {
           nodeOperatorId: input.nodeOperatorId,
           amount: input.amount,
           penaltyType: pad(input.penaltyType, { size: 32 }),
           details: input.details || '',
-          callback: buildCallback(input, data),
-        });
-      },
-    }),
+        };
+      };
+
+      return {
+        action: 'report' as const,
+        submit: () => {
+          invariant(sdk, 'Delayed penalty module is not resolved');
+          return sdk.delayedPenalty.report({
+            ...props(),
+            callback: buildCallback(input, data),
+          });
+        },
+        estimate: async () => {
+          invariant(sdk, 'Delayed penalty module is not resolved');
+          return sdk.delayedPenalty.estimateReport(props());
+        },
+      };
+    },
     [sdk, buildCallback],
   );
 };

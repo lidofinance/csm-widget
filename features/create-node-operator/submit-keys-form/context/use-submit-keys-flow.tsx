@@ -89,6 +89,50 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
       // Resolved in confirm() once the SIWE token exists; consumed in submit()
       let willInitMembers = false;
 
+      const buildParams = () => {
+        invariant(amount !== undefined, 'BondAmount is not defined');
+
+        return {
+          token,
+          amount,
+          depositData,
+          rewardsAddress: (specifyCustomAddresses && rewardsAddress) || '',
+          managerAddress: (specifyCustomAddresses && managerAddress) || '',
+          extendedManagerPermissions:
+            specifyCustomAddresses && extendedManagerPermissions,
+          referrer: referrer || undefined,
+        };
+      };
+
+      // Gate-specific SDK call: send and estimate share the same props
+      const getAddNodeOperator = <P extends ReturnType<typeof buildParams>>(
+        params: P,
+      ) => {
+        if (data.type === OPERATOR_TYPE.CSM_ICS) {
+          invariant(data.proof, 'ICS proof is required to create');
+          invariant(csmSdk, 'CSM SDK is required for ICS');
+          const p = { ...params, proof: data.proof };
+          return {
+            send: () => csmSdk.icsGate.addNodeOperator(p),
+            estimate: () => csmSdk.icsGate.estimateAddNodeOperator(p),
+          };
+        }
+        if (data.type === OPERATOR_TYPE.CSM_IDVTC) {
+          invariant(data.proof, 'IDVTC proof is required to create');
+          invariant(csmSdk, 'CSM SDK is required for IDVTC');
+          const p = { ...params, proof: data.proof };
+          return {
+            send: () => csmSdk.idvtcGate.addNodeOperator(p),
+            estimate: () => csmSdk.idvtcGate.estimateAddNodeOperator(p),
+          };
+        }
+        return {
+          send: () => sdk.permissionlessGate.addNodeOperator(params),
+          estimate: () =>
+            sdk.permissionlessGate.estimateAddNodeOperator(params),
+        };
+      };
+
       return {
         action: 'submit-keys' as const,
         confirm: async () => {
@@ -126,44 +170,13 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
           }
           return true;
         },
+        estimate: async () => getAddNodeOperator(buildParams()).estimate(),
         submit: async () => {
-          invariant(amount !== undefined, 'BondAmount is not defined');
-
           const callback = buildCallback(input, { ...data, willInitMembers });
-
-          const params = {
-            token,
-            amount,
-            depositData,
-            rewardsAddress: (specifyCustomAddresses && rewardsAddress) || '',
-            managerAddress: (specifyCustomAddresses && managerAddress) || '',
-            extendedManagerPermissions:
-              specifyCustomAddresses && extendedManagerPermissions,
-            referrer: referrer || undefined,
+          const { result, hash } = await getAddNodeOperator({
+            ...buildParams(),
             callback,
-          };
-
-          const addNodeOperator = async () => {
-            if (data.type === OPERATOR_TYPE.CSM_ICS) {
-              invariant(data.proof, 'ICS proof is required to create');
-              invariant(csmSdk, 'CSM SDK is required for ICS');
-              return csmSdk.icsGate.addNodeOperator({
-                ...params,
-                proof: data.proof,
-              });
-            }
-            if (data.type === OPERATOR_TYPE.CSM_IDVTC) {
-              invariant(data.proof, 'IDVTC proof is required to create');
-              invariant(csmSdk, 'CSM SDK is required for IDVTC');
-              return csmSdk.idvtcGate.addNodeOperator({
-                ...params,
-                proof: data.proof,
-              });
-            }
-            return sdk.permissionlessGate.addNodeOperator(params);
-          };
-
-          const { result, hash } = await addNodeOperator();
+          }).send();
           // The tx callback already left the modal on its terminal stage (multisig or undecoded receipt)
           if (!result) return;
 

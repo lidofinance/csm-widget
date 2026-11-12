@@ -40,14 +40,18 @@ export const useTopUpAllocationFlowResolver = (): FlowResolver<
       if (!canDisable) return { action: 'no-access', access: disableAccess };
       if (!data.enabled) return { action: 'locked' };
 
+      const props = { nodeOperatorId: data.nodeOperatorId };
+
       return {
         action: 'disable' as const,
         confirm: () => confirmModal({}),
         submit: () =>
           sdk.metaRegistry.disableTopUpAllocation({
-            nodeOperatorId: data.nodeOperatorId,
+            ...props,
             callback: buildCallback(input, data),
           }),
+        estimate: async () =>
+          sdk.metaRegistry.estimateDisableTopUpAllocation(props),
       };
     },
     [sdk.metaRegistry, canDisable, disableAccess, confirmModal, buildCallback],

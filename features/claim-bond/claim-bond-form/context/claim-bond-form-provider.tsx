@@ -20,12 +20,14 @@ export const ClaimBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
     mode: 'onChange',
   });
 
-  const submitter = useFlowSubmit(useClaimBondFlowResolver());
+  const resolve = useClaimBondFlowResolver();
+  const submitter = useFlowSubmit(resolve);
 
   return (
     <FormProvider {...formObject}>
       <FormControllerProvider
         submitter={submitter}
+        resolve={resolve}
         formName="claimBond"
         // onReset={formObject.reset}
       >

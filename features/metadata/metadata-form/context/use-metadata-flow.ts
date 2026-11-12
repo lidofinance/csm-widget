@@ -34,15 +34,20 @@ export const useMetadataFlowResolver = (): FlowResolver<
       if (!canUpdate) return { action: 'no-access', access: updateAccess };
       if (data.ownerEditsRestricted) return { action: 'restricted' };
 
+      const props = {
+        nodeOperatorId: data.nodeOperatorId,
+        name: input.name,
+        description: input.description,
+      };
+
       return {
         action: 'update' as const,
         submit: () =>
           sdk.metaRegistry.setOperatorInfo({
-            nodeOperatorId: data.nodeOperatorId,
-            name: input.name,
-            description: input.description,
+            ...props,
             callback: buildCallback(input, data),
           }),
+        estimate: async () => sdk.metaRegistry.estimateSetOperatorInfo(props),
       };
     },
     [sdk.metaRegistry, canUpdate, updateAccess, buildCallback],

@@ -37,27 +37,38 @@ export const useCuratedOperatorFlowResolver = (): FlowResolver<
     (input, data) => {
       if (data.availableGates.length === 0) return { action: 'no-gates' };
 
+      const props = () => {
+        invariant(input.gateName !== undefined, 'Gate not selected');
+        invariant(input.rewardAddress, 'Rewards Address required');
+        invariant(input.managerAddress, 'Manager Address required');
+
+        const selectedGate = data.availableGates.find(
+          (gate) => gate.gateName === input.gateName,
+        );
+        invariant(selectedGate, 'Selected gate not found');
+        invariant(selectedGate.proof, 'Proof not available');
+
+        return {
+          gateName: input.gateName,
+          name: input.name,
+          description: input.description,
+          managerAddress: input.managerAddress,
+          rewardAddress: input.rewardAddress,
+          proof: selectedGate.proof,
+        };
+      };
+
       return {
         action: 'create-operator' as const,
+        estimate: async () => {
+          invariant(sdk, 'CM SDK not initialized');
+          return sdk.curatedGates.estimateCreateNodeOperator(props());
+        },
         submit: async () => {
           invariant(sdk, 'CM SDK not initialized');
-          invariant(input.gateName !== undefined, 'Gate not selected');
-          invariant(input.rewardAddress, 'Rewards Address required');
-          invariant(input.managerAddress, 'Manager Address required');
-
-          const selectedGate = data.availableGates.find(
-            (gate) => gate.gateName === input.gateName,
-          );
-          invariant(selectedGate, 'Selected gate not found');
-          invariant(selectedGate.proof, 'Proof not available');
 
           const { result } = await sdk.curatedGates.createNodeOperator({
-            gateName: input.gateName,
-            name: input.name,
-            description: input.description,
-            managerAddress: input.managerAddress,
-            rewardAddress: input.rewardAddress,
-            proof: selectedGate.proof,
+            ...props(),
             callback: buildCallback(input, data),
           });
 

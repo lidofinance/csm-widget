@@ -37,28 +37,34 @@ export const useSplitsFlowResolver = (): FlowResolver<
     (input, data) => {
       if (!data.canEdit) return { action: 'view' };
 
+      const props = () => {
+        assertFeeSplits(input.feeSplits);
+        invariant(
+          data.rewards,
+          'Rewards data is required for submitting splits',
+        );
+        const { shares, proof } = data.rewards;
+
+        return {
+          nodeOperatorId: data.nodeOperatorId,
+          feeSplits: input.feeSplits,
+          shares,
+          proof,
+        };
+      };
+
       return {
         action: 'set-splits' as const,
         confirm: async () => {
           assertFeeSplits(input.feeSplits);
           return confirmSplits({ feeSplits: input.feeSplits });
         },
-        submit: () => {
-          assertFeeSplits(input.feeSplits);
-          invariant(
-            data.rewards,
-            'Rewards data is required for submitting splits',
-          );
-          const { shares, proof } = data.rewards;
-
-          return sdk.roles.setFeeSplits({
-            nodeOperatorId: data.nodeOperatorId,
-            feeSplits: input.feeSplits,
-            shares,
-            proof,
+        submit: () =>
+          sdk.roles.setFeeSplits({
+            ...props(),
             callback: buildCallback(input, data),
-          });
-        },
+          }),
+        estimate: async () => sdk.roles.estimateSetFeeSplits(props()),
       };
     },
     [sdk, confirmSplits, buildCallback],

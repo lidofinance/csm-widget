@@ -45,23 +45,27 @@ export const useUnlockBondFlowResolver = (): FlowResolver<
       if (!data.isExpired && !data.compensationAmount)
         return { action: 'insufficient-bond' };
 
+      const props = { nodeOperatorId: data.nodeOperatorId };
+
       if (data.isExpired)
         return {
           action: 'unlock-expired' as const,
           submit: () =>
             bondSDK.unlockExpiredLock({
-              nodeOperatorId: data.nodeOperatorId,
+              ...props,
               callback: buildUnlockExpiredCallback(input, data),
             }),
+          estimate: async () => bondSDK.estimateUnlockExpiredLock(props),
         };
 
       return {
         action: 'compensate' as const,
         submit: () =>
           bondSDK.compensateLockedBond({
-            nodeOperatorId: data.nodeOperatorId,
+            ...props,
             callback: buildCompensateCallback(input, data),
           }),
+        estimate: async () => bondSDK.estimateCompensateLockedBond(props),
       };
     },
     [

@@ -44,6 +44,16 @@ export const useAddKeysFlowResolver = (): FlowResolver<
 
       const { depositData, token, bondAmount: amount, dkgFiles = [] } = input;
 
+      const props = () => {
+        invariant(amount !== undefined, 'BondAmount is not defined');
+        return {
+          nodeOperatorId: data.nodeOperatorId,
+          token,
+          amount,
+          depositData,
+        };
+      };
+
       return {
         action: 'add-keys' as const,
         // The operator already exists, so auth + upload both happen here
@@ -65,14 +75,10 @@ export const useAddKeysFlowResolver = (): FlowResolver<
             return false;
           }
         },
+        estimate: async () => keysSDK.estimateAddKeys(props()),
         submit: async () => {
-          invariant(amount !== undefined, 'BondAmount is not defined');
-
           await keysSDK.addKeys({
-            nodeOperatorId: data.nodeOperatorId,
-            token,
-            amount,
-            depositData,
+            ...props(),
             callback: buildCallback(input, data),
           });
 

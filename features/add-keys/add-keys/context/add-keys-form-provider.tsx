@@ -20,11 +20,16 @@ export const AddKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
     mode: 'onChange',
   });
 
-  const submitter = useFlowSubmit(useAddKeysFlowResolver());
+  const resolve = useAddKeysFlowResolver();
+  const submitter = useFlowSubmit(resolve);
 
   return (
     <FormProvider {...formObject}>
-      <FormControllerProvider submitter={submitter} formName="addKeys">
+      <FormControllerProvider
+        submitter={submitter}
+        resolve={resolve}
+        formName="addKeys"
+      >
         <AddKeysUpdater />
         {children}
       </FormControllerProvider>

@@ -21,12 +21,14 @@ export const EnableTopUpAllocationFormProvider: FC<PropsWithChildren> = ({
     mode: 'onChange',
   });
 
-  const submitter = useFlowSubmit(useEnableTopUpAllocationFlowResolver());
+  const resolve = useEnableTopUpAllocationFlowResolver();
+  const submitter = useFlowSubmit(resolve);
 
   return (
     <FormProvider {...formObject}>
       <FormControllerProvider
         submitter={submitter}
+        resolve={resolve}
         formName="enableTopUpAllocation"
       >
         {children}

@@ -24,14 +24,20 @@ export const useClaimerFlowResolver = (): FlowResolver<
     (input, data) => {
       if (!data.canEdit) return { action: 'view' };
 
+      const props = () => ({
+        nodeOperatorId: data.nodeOperatorId,
+        claimerAddress: getClaimerAddress(input),
+      });
+
       return {
         action: 'set-claimer' as const,
         submit: () =>
           sdk.roles.setCustomRewardsClaimer({
-            nodeOperatorId: data.nodeOperatorId,
-            claimerAddress: getClaimerAddress(input),
+            ...props(),
             callback: buildCallback(input, data),
           }),
+        estimate: async () =>
+          sdk.roles.estimateSetCustomRewardsClaimer(props()),
       };
     },
     [sdk, buildCallback],

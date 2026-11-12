@@ -32,13 +32,16 @@ export const useNormalizeQueueFlowResolver = (): FlowResolver<
       if (!canNormalize) return { action: 'no-access', access };
       if (data.unqueuedCount === 0) return { action: 'nothing' };
 
+      const props = { nodeOperatorId: data.nodeOperatorId };
+
       return {
         action: 'normalize' as const,
         submit: () =>
           sdk.depositQueue.normalize({
-            nodeOperatorId: data.nodeOperatorId,
+            ...props,
             callback: buildCallback(input, data),
           }),
+        estimate: async () => sdk.depositQueue.estimateNormalize(props),
       };
     },
     [sdk.depositQueue, canNormalize, access, buildCallback],

@@ -31,7 +31,11 @@ export const ClaimerFormProvider: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <FormProvider {...formObject}>
-      <FormControllerProvider submitter={submitter} formName="claimer">
+      <FormControllerProvider
+        submitter={submitter}
+        resolve={resolve}
+        formName="claimer"
+      >
         {children}
       </FormControllerProvider>
     </FormProvider>

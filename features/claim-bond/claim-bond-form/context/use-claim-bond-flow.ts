@@ -56,20 +56,22 @@ export const useClaimBondFlowResolver = (): FlowResolver<
       const maxValueIndex =
         input.claimOption === CLAIM_OPTION.BOND_TO_RA ? 0 : 1;
 
+      const props = {
+        nodeOperatorId: data.nodeOperatorId,
+        token: input.token,
+        amount,
+        proof: includeRewards ? data.rewards?.proof : undefined,
+        shares: includeRewards ? data.rewards?.shares : undefined,
+      };
+
       return {
         action: 'claim',
         includeRewards,
         showAmount,
         maxValueIndex,
         submit: () =>
-          bondSDK.claimBond({
-            nodeOperatorId: data.nodeOperatorId,
-            token: input.token,
-            amount,
-            proof: includeRewards ? data.rewards?.proof : undefined,
-            shares: includeRewards ? data.rewards?.shares : undefined,
-            callback: buildCallback(input, data),
-          }),
+          bondSDK.claimBond({ ...props, callback: buildCallback(input, data) }),
+        estimate: async () => bondSDK.estimateClaimBond(props),
       };
     },
     [bondSDK, canClaim, claimAccess, buildCallback],

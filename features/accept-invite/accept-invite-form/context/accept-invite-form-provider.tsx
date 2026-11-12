@@ -14,11 +14,16 @@ export const AcceptInviteFormProvider: FC<PropsWithChildren> = ({
     defaultValues: { intent: undefined },
   });
 
-  const submitter = useFlowSubmit(useAcceptInviteFlowResolver());
+  const resolve = useAcceptInviteFlowResolver();
+  const submitter = useFlowSubmit(resolve);
 
   return (
     <FormProvider {...formObject}>
-      <FormControllerProvider submitter={submitter} formName="acceptInvite">
+      <FormControllerProvider
+        submitter={submitter}
+        resolve={resolve}
+        formName="acceptInvite"
+      >
         {children}
       </FormControllerProvider>
     </FormProvider>

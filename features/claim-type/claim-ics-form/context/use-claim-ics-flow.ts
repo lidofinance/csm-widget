@@ -52,15 +52,18 @@ export const useClaimIcsFlowResolver = (): FlowResolver<
       if (action === 'no-access') return { action, access: claimAccess };
       if (action !== 'claim') return { action };
 
+      const props = () => {
+        invariant(data.proof.proof, 'Proof is not defined');
+        return { nodeOperatorId: data.nodeOperatorId, proof: data.proof.proof };
+      };
+
       return {
         action,
         confirm: () => confirmClaimIcs({}),
+        estimate: async () => sdk.icsGate.estimateClaimCurve(props()),
         submit: async () => {
-          invariant(data.proof.proof, 'Proof is not defined');
-
           const { receipt } = await sdk.icsGate.claimCurve({
-            nodeOperatorId: data.nodeOperatorId,
-            proof: data.proof.proof,
+            ...props(),
             callback: buildCallback(input, data),
           });
           // A multisig tx is only proposed: its own stage stays open

@@ -30,18 +30,23 @@ export const useRemoveKeysFlowResolver = (): FlowResolver<
       if (!canRemoveKeys) return { action: 'no-access', access };
       if (!data.keys?.length) return { action: 'no-keys' };
 
+      const props = () => ({
+        nodeOperatorId: data.nodeOperatorId,
+        ...getRemoveKeysArgs(
+          data.keys,
+          data.info.totalDepositedKeys,
+          input.selection,
+        ),
+      });
+
       return {
         action: 'remove' as const,
         submit: async () =>
           keysSDK.removeKeys({
-            nodeOperatorId: data.nodeOperatorId,
-            ...getRemoveKeysArgs(
-              data.keys,
-              data.info.totalDepositedKeys,
-              input.selection,
-            ),
+            ...props(),
             callback: buildCallback(input, data),
           }),
+        estimate: async () => keysSDK.estimateRemoveKeys(props()),
       };
     },
     [canRemoveKeys, access, keysSDK, buildCallback],

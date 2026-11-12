@@ -18,11 +18,16 @@ export const NormalizeQueueFormProvider: FC<PropsWithChildren> = ({
     mode: 'onChange',
   });
 
-  const submitter = useFlowSubmit(useNormalizeQueueFlowResolver());
+  const resolve = useNormalizeQueueFlowResolver();
+  const submitter = useFlowSubmit(resolve);
 
   return (
     <FormProvider {...formObject}>
-      <FormControllerProvider submitter={submitter} formName="normalizeQueue">
+      <FormControllerProvider
+        submitter={submitter}
+        resolve={resolve}
+        formName="normalizeQueue"
+      >
         {children}
       </FormControllerProvider>
     </FormProvider>

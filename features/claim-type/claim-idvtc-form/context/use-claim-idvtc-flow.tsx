@@ -75,6 +75,15 @@ export const useClaimIdvtcFlowResolver = (): FlowResolver<
       if (action === 'no-access') return { action, access: claimAccess };
       if (action !== 'claim') return { action };
 
+      const props = () => {
+        invariant(data.proof.proof, 'Proof is not defined');
+        invariant(
+          data.nodeOperatorId !== undefined,
+          'NodeOperatorId is not defined',
+        );
+        return { nodeOperatorId: data.nodeOperatorId, proof: data.proof.proof };
+      };
+
       // Resolved in confirm() once the SIWE token exists; consumed in submit()
       let willInitMembers = false;
 
@@ -98,16 +107,10 @@ export const useClaimIdvtcFlowResolver = (): FlowResolver<
           }
           return true;
         },
+        estimate: async () => sdk.idvtcGate.estimateClaimCurve(props()),
         submit: async () => {
-          invariant(data.proof.proof, 'Proof is not defined');
-          invariant(
-            data.nodeOperatorId !== undefined,
-            'NodeOperatorId is not defined',
-          );
-
           const { receipt } = await sdk.idvtcGate.claimCurve({
-            nodeOperatorId: data.nodeOperatorId,
-            proof: data.proof.proof,
+            ...props(),
             callback: buildCallback(input, { ...data, willInitMembers }),
           });
           // A multisig tx is only proposed: its own stage stays open

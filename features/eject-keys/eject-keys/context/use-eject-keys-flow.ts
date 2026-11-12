@@ -36,6 +36,15 @@ export const useEjectKeysFlowResolver = (): FlowResolver<
       if (!canEjectKeys) return { action: 'no-access', access };
       if (!data.keys?.length) return { action: 'no-keys' };
 
+      const props = () => {
+        invariant(input.feeAmount !== undefined, 'Fee amount is required');
+        return {
+          nodeOperatorId: data.nodeOperatorId,
+          keyIndices: input.selection.map(BigInt),
+          amount: input.feeAmount,
+        };
+      };
+
       return {
         action: 'eject' as const,
         confirm: async () => {
@@ -51,16 +60,12 @@ export const useEjectKeysFlowResolver = (): FlowResolver<
 
           return confirmEject({});
         },
-        submit: () => {
-          invariant(input.feeAmount !== undefined, 'Fee amount is required');
-
-          return keysSDK.ejectKeys({
-            nodeOperatorId: data.nodeOperatorId,
-            keyIndices: input.selection.map(BigInt),
-            amount: input.feeAmount,
+        submit: () =>
+          keysSDK.ejectKeys({
+            ...props(),
             callback: buildCallback(input, data),
-          });
-        },
+          }),
+        estimate: async () => keysSDK.estimateEjectKeys(props()),
       };
     },
     [

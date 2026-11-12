@@ -22,12 +22,14 @@ export const DelayedPenaltyReportFormProvider: FC<
     mode: 'onChange',
   });
 
-  const submitter = useFlowSubmit(useDelayedPenaltyReportFlowResolver(module));
+  const resolve = useDelayedPenaltyReportFlowResolver(module);
+  const submitter = useFlowSubmit(resolve);
 
   return (
     <FormProvider {...formObject}>
       <FormControllerProvider
         submitter={submitter}
+        resolve={resolve}
         formName="delayedPenaltyReport"
       >
         {children}

@@ -36,15 +36,22 @@ export const useAcceptInviteFlowResolver = (): FlowResolver<
       const invite = findInviteById(data.invites, input.intent);
       if (!invite) return { action: 'no-invite' };
 
+      const props = {
+        nodeOperatorId: invite.nodeOperatorId,
+        role: invite.role,
+      };
+      const getSdk = () => {
+        const sdk = sm.get(invite.module);
+        invariant(sdk, `${invite.module} SDK not initialized`);
+        return sdk;
+      };
+
       return {
         action: 'accept' as const,
+        estimate: async () => getSdk().roles.estimateConfirmAddress(props),
         submit: async () => {
-          const sdk = sm.get(invite.module);
-          invariant(sdk, `${invite.module} SDK not initialized`);
-
-          const { result } = await sdk.roles.confirmAddress({
-            nodeOperatorId: invite.nodeOperatorId,
-            role: invite.role,
+          const { result } = await getSdk().roles.confirmAddress({
+            ...props,
             callback: buildCallback({ invite }, data),
           });
 
