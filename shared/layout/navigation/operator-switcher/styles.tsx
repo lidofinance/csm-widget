@@ -1,6 +1,8 @@
 import { Popover, Stack, Typography } from '@lidofinance/lido-app-ui';
 import styled from 'styled-components';
 
+import { popoverBeak } from 'shared/components/popover-beak';
+
 export const TriggerStyle = styled.button`
   display: flex;
   align-items: center;
@@ -25,7 +27,7 @@ export const TriggerStyle = styled.button`
 export const NameStyle = styled(Typography).attrs({
   variant: 'body',
   weight: 'bold',
-  as: 'span',
+  forwardedAs: 'span',
 })`
   display: flex;
   align-items: center;
@@ -62,12 +64,15 @@ export const PopupStyle = styled(Popover)`
     /* Figma strokes sit inside the box: padding minus the 1px border */
     padding: 11px;
   }
+
+  ${popoverBeak}
 `;
 
 export const HeaderStyle = styled(Stack).attrs({
   align: 'center',
   gap: 12,
 })`
+  flex-shrink: 0;
   width: 100%;
   padding-top: 20px;
 `;
@@ -83,7 +88,7 @@ export const HeaderTextStyle = styled(Stack).attrs({
 export const TitleStyle = styled(Typography).attrs({
   variant: 'h3',
   weight: 'semibold',
-  as: 'span',
+  forwardedAs: 'span',
 })`
   overflow-wrap: anywhere;
 `;
@@ -91,7 +96,7 @@ export const TitleStyle = styled(Typography).attrs({
 export const SubLineStyle = styled(Typography).attrs({
   variant: 'body',
   color: 'tertiary',
-  as: 'span',
+  forwardedAs: 'span',
 })`
   display: flex;
   align-items: center;
@@ -113,6 +118,8 @@ export const HeaderTagsStyle = styled(Stack).attrs({
 
 export const BodyStyle = styled(Stack).attrs({ gap: 0 })`
   width: 100%;
+  min-height: 0;
+  overflow-y: auto;
 `;
 
 export const BodyContentStyle = styled(Stack).attrs({ gap: 20 })`

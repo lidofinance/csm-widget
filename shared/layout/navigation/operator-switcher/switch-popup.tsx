@@ -7,6 +7,7 @@ import {
 } from 'modules/web3';
 import { ModuleNodeOperator } from 'modules/web3/operator-provider/types';
 import { FC, RefObject, useCallback, useMemo } from 'react';
+import { usePopoverBeak } from 'shared/components/popover-beak';
 import {
   formatGroupLabel,
   isSameOperator,
@@ -96,6 +97,7 @@ export const SwitchPopup: FC<SwitchPopupProps> = ({
   active,
   list,
 }) => {
+  const beakRef = usePopoverBeak(anchorRef);
   const createRows = useCreateRows();
   const switchOperator = useSwitchOperator();
   const others = useMemo(
@@ -113,6 +115,7 @@ export const SwitchPopup: FC<SwitchPopupProps> = ({
 
   return (
     <PopupStyle
+      ref={beakRef}
       open
       onClose={onClose}
       anchorRef={anchorRef}
