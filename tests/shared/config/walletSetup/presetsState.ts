@@ -1,9 +1,10 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import path from 'path';
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+// Type-only imports from aliased paths: the QA panel runs this under plain node
 import type { ChainName, ModuleName } from 'tests/shared/contracts/constants';
-export { type PresetRuntime } from './types';
-import { type PresetRuntime } from './types';
+import type { PresetRuntime } from './types';
+export type { PresetRuntime } from './types';
 
 export const stateFile = (chain: ChainName): string =>
   path.join(process.cwd(), `.${chain}.walletPresets.state.json`);
@@ -14,7 +15,7 @@ type PresetsFile = Partial<Record<ModuleName, ModulePresets>>;
 
 const MODULES = Object.values(MODULE_NAME) as ModuleName[];
 
-const readFile = (chain: ChainName): PresetsFile => {
+export const readPresetsFile = (chain: ChainName): PresetsFile => {
   const file = stateFile(chain);
   if (!existsSync(file)) return {};
   const raw = JSON.parse(readFileSync(file, 'utf-8')) as PresetsFile;
@@ -29,7 +30,7 @@ const readFile = (chain: ChainName): PresetsFile => {
 export const hasModulePresets = (
   chain: ChainName,
   module: ModuleName,
-): boolean => readFile(chain)[module] !== undefined;
+): boolean => readPresetsFile(chain)[module] !== undefined;
 
 export const writeModulePresets = (
   chain: ChainName,
@@ -38,7 +39,7 @@ export const writeModulePresets = (
 ): void => {
   writeFileSync(
     stateFile(chain),
-    JSON.stringify({ ...readFile(chain), [module]: presets }, null, 2),
+    JSON.stringify({ ...readPresetsFile(chain), [module]: presets }, null, 2),
   );
 };
 
@@ -47,7 +48,7 @@ export const readPreset = (
   module: ModuleName,
   name: string,
 ): PresetRuntime => {
-  const runtime = readFile(chain)[module]?.[name];
+  const runtime = readPresetsFile(chain)[module]?.[name];
   if (!runtime) {
     throw new Error(
       `[PRESETS] No "${name}" preset for ${module} in ${stateFile(chain)}.\n` +

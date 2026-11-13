@@ -50,4 +50,6 @@ docs/superpowers/
 
 deposit_data.json
 local_fork_config.json
+cl-mock.json
+.qa-panel.state.json
 *.walletPresets.state.json
