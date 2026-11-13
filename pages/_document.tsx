@@ -7,7 +7,6 @@ import Document, {
   DocumentInitialProps,
 } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
-import { LidoUIHead } from '@lidofinance/lido-ui';
 
 import { config } from 'config';
 import {
@@ -114,7 +113,6 @@ export default class MyDocument extends Document {
           <meta name="twitter:creator" content="@lomashuk" />
           <meta name="description" content={this.metaDescription} />
           <FiraCodeFont />
-          <LidoUIHead />
           {/* eslint-disable-next-line @next/next/no-sync-scripts */}
           <script src={`${config.BASE_PATH_ASSET}/runtime/window-env.js`} />
         </Head>

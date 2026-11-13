@@ -1,12 +1,11 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { Accordion, Block, Text } from '@lidofinance/lido-ui';
 import { deployedModules } from 'consts';
 import { RewardsHistoryCard } from 'features/bond-rewards';
 import { MockRewardsHistoryProvider } from 'mock/rewards/mock-providers';
 import { testScenarios } from 'mock/rewards/test-scenarios';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
-import { Stack } from '@lidofinance/lido-app-ui';
+import { Accordion, Card, Description, Stack } from '@lidofinance/lido-app-ui';
 import { Layout } from 'shared/layout';
 import { LocalLink } from 'shared/navigate';
 import styled from 'styled-components';
@@ -24,7 +23,7 @@ const TestContainer = styled.div`
   margin: 0 auto;
 `;
 
-const TestBlock = styled(Block)`
+const TestBlock = styled(Card)`
   padding: 16px;
 `;
 
@@ -32,24 +31,13 @@ const TestTitle = styled.h3`
   margin: 0 0 8px 0;
   font-size: 18px;
   font-weight: 600;
-  color: var(--lido-color-text);
+  color: var(--lido-app-ui-color-text-default);
 `;
 
 const TestDescription = styled.p`
   margin: 0;
   font-size: 14px;
-  color: var(--lido-color-textSecondary);
-`;
-
-const StyledAccordion = styled(Accordion)`
-  margin-top: 16px;
-  & > [type='button'] {
-    padding: 0;
-    min-height: 24px;
-  }
-  & > [type='button'] + div > div {
-    padding: 8px 0 0;
-  }
+  color: var(--lido-app-ui-color-text-secondary);
 `;
 
 const RewardsHistoryTestPage: FC = () => {
@@ -68,20 +56,19 @@ const RewardsHistoryTestPage: FC = () => {
           <TestTitle>{scenario.title}</TestTitle>
           <TestDescription>{scenario.description}</TestDescription>
           <Stack direction="row" gap={4} align="center">
-            <Text size="xs" color="secondary">
-              Module:
-            </Text>
+            <Description color="secondary">Module:</Description>
             {MODULES.map((m) => (
               <LocalLink key={m} query={{ case: `${_case}`, module: m }}>
                 {m === selectedModule ? <b>{m}</b> : m}
               </LocalLink>
             ))}
           </Stack>
-          <StyledAccordion
-            summary={
-              <Text size="xs" color="secondary">
+          <Accordion
+            border={false}
+            title={
+              <Description color="secondary">
                 All Test Cases ({testScenarios.length})
-              </Text>
+              </Description>
             }
           >
             <Stack direction="column" gap={2}>
@@ -94,7 +81,7 @@ const RewardsHistoryTestPage: FC = () => {
                 </LocalLink>
               ))}
             </Stack>
-          </StyledAccordion>
+          </Accordion>
         </TestBlock>
         <MockRewardsHistoryProvider
           key={`${_case}-${selectedModule}`}

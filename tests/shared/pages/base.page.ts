@@ -184,19 +184,9 @@ export class BasePage {
   }
 
   async getHoveredContent(timeout = 10000) {
-    const start = Date.now();
-    while (Date.now() - start < timeout) {
-      const result = await this.page.evaluate(() => {
-        return (
-          document.querySelectorAll('#lido-ui-modal-root div[data-placement]')
-            .length === 1
-        );
-      });
-      if (result) {
-        break;
-      }
-    }
-    return this.page.locator('#lido-ui-modal-root');
+    const tooltip = this.page.getByRole('tooltip');
+    await tooltip.waitFor({ state: 'visible', timeout });
+    return tooltip;
   }
 
   async hoverElement(element: Locator) {

@@ -33,7 +33,6 @@ export class CreateOperatorStep2Page extends BasePage {
     this.stepDescription = this.stepHeader.getByTestId('stepDescription');
     this.backButton = this.form.getByRole('button', { name: 'Back' });
     this.continueButton = this.form.getByRole('button', { name: 'Continue' });
-    // app-ui tooltips portal to document.body, outside the lido-ui modal root
     this.tooltip = this.page.getByRole('tooltip');
 
     this.managerAddressInput = this.form.locator(

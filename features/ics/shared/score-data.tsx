@@ -46,7 +46,7 @@ const IconStyle = (styled.img<{ src: string }>).attrs(({ src }) => ({
   height: 32px;
 
   border-radius: 100%;
-  outline: 1px solid var(--lido-color-border);
+  outline: 1px solid var(--lido-app-ui-color-border-default);
   outline-offset: -1px;
 `;
 

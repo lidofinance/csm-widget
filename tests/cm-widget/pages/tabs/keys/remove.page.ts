@@ -34,7 +34,6 @@ export class RemovePage extends BasePage {
       name: 'More info',
     });
 
-    // app-ui tooltips portal to document.body, outside the lido-ui modal root
     this.removalFeeInfoTooltipText = this.page.getByRole('tooltip');
 
     this.excessBondAfterExecution = this.removeKeysForm.getByTestId(

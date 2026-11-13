@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import 'nprogress/nprogress.css';
 import '@lidofinance/lido-app-ui/index.css';
 import '@reef-knot/ui-lido/styles.css';
-import { Toaster } from '@lidofinance/lido-app-ui';
+import { ThemeName, Toaster, useThemeToggle } from '@lidofinance/lido-app-ui';
 import { Providers } from 'providers';
 import { memo } from 'react';
 import {
@@ -33,6 +33,17 @@ const App = (props: AppProps) => {
 
 const MemoApp = memo(App);
 
+const ThemedBackgroundGradient = () => {
+  const { themeName } = useThemeToggle();
+  return (
+    <BackgroundGradient
+      width={1560}
+      height={784}
+      style={{ opacity: themeName === ThemeName.dark ? 1 : 0 }}
+    />
+  );
+};
+
 type AppParams = {
   isError?: boolean;
   dummy?: boolean;
@@ -49,13 +60,7 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
 
   const renderApp = (dummy?: boolean) => (
     <Providers dummy={dummy} isError={isError}>
-      <BackgroundGradient
-        width={1560}
-        height={784}
-        style={{
-          opacity: 'var(--lido-color-darkThemeOpacity)',
-        }}
-      />
+      <ThemedBackgroundGradient />
       <SVGGradientDefs />
       <Toaster />
       {isMaintenance ? <MaintenancePage /> : <MemoApp {...props} />}

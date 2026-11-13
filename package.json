@@ -40,7 +40,6 @@
     "@lidofinance/lido-app-ui": "npm:@exromany/lido-app-ui@0.0.1-pre.7",
     "@lidofinance/lido-csm-sdk": "4.0.0-alpha.2",
     "@lidofinance/lido-ethereum-sdk": "^4.8.0",
-    "@lidofinance/lido-ui": "^3.43.0",
     "@lidofinance/next-api-wrapper": "^0.63.0",
     "@lidofinance/next-ip-rate-limit": "^0.63.0",
     "@lidofinance/next-pages": "^0.63.0",

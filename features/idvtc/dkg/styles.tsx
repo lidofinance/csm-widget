@@ -7,15 +7,15 @@ export const DropArea = styled.div<{ $dragActive?: boolean }>`
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spaceMap.md}px;
-  border-radius: ${({ theme }) => theme.borderRadiusesMap.lg}px;
+  gap: var(--lido-app-ui-space-16);
+  border-radius: 10px;
   transition: outline-color 0.1s ease;
   outline: 2px dashed transparent;
   outline-offset: 4px;
   ${({ $dragActive }) =>
     $dragActive &&
     css`
-      outline-color: var(--lido-color-primary);
+      outline-color: var(--lido-app-ui-color-border-active);
     `}
 `;
 
@@ -33,17 +33,17 @@ export const DkgTableHead = styled.div`
   display: grid;
   grid-template-columns: 64px 1fr auto;
   align-items: center;
-  gap: ${({ theme }) => theme.spaceMap.md}px;
-  padding-bottom: ${({ theme }) => theme.spaceMap.sm}px;
+  gap: var(--lido-app-ui-space-16);
+  padding-bottom: var(--lido-app-ui-space-8);
 `;
 
 export const DkgRow = styled.div<{ $columns: string }>`
   display: grid;
   grid-template-columns: ${({ $columns }) => $columns};
   align-items: center;
-  gap: ${({ theme }) => theme.spaceMap.md}px;
-  padding: ${({ theme }) => theme.spaceMap.md}px 0;
-  border-top: 1px solid var(--lido-color-border);
+  gap: var(--lido-app-ui-space-16);
+  padding: var(--lido-app-ui-space-16) 0;
+  border-top: 1px solid var(--lido-app-ui-color-border-default);
 
   &:first-child {
     border-top: none;
@@ -54,7 +54,7 @@ export const RowActions = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: ${({ theme }) => theme.spaceMap.xs}px;
+  gap: var(--lido-app-ui-space-4);
 `;
 
 export const FileName = styled(Body)<{ $inactive?: boolean }>`

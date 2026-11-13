@@ -68,7 +68,7 @@ describe('getFailedStage', () => {
       code: ErrorCode.SOMETHING_WRONG,
       description: undefined,
     });
-    const modalProps = { center: true };
+    const modalProps = { open: true };
 
     getFailedStage(transitStage, undefined, modalProps)(new Error('oops'));
 

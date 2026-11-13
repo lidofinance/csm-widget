@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const TooltipText = styled.div`
   p + *,
   li + * {
-    margin-top: ${({ theme }) => theme.spaceMap.xs}px;
+    margin-top: var(--lido-app-ui-space-4);
   }
 `;
 

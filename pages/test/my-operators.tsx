@@ -1,4 +1,4 @@
-import { Block, Text } from '@lidofinance/lido-ui';
+import { Body, Card } from '@lidofinance/lido-app-ui';
 import { OtherOperatorsClaimable } from 'features/claim-bond/claim-bond-form/hooks/other-operators-claimable';
 import { MyOperators } from 'features/my-operators/my-operators';
 import { MockMyOperatorsProvider } from 'mock/my-operators/mock-providers';
@@ -19,7 +19,7 @@ const NarrowBlock = styled.div`
   margin: 0 auto;
 `;
 
-const PreviewBlock = styled(Block)`
+const PreviewCard = styled(Card)`
   max-width: 400px;
   padding: 24px;
   margin: 0 auto;
@@ -46,17 +46,15 @@ const MyOperatorsTestPage: FC = () => {
           <NarrowBlock>
             {/* Active operator is #37; only #40 has a positive claimable balance, so
                 #38 (0 claimable after rewards cover its bond deficit) is excluded. */}
-            <Text size="sm" weight={700}>
-              Other operators claimable (bare)
-            </Text>
-            <Block>
+            <Body weight="bold">Other operators claimable (bare)</Body>
+            <Card>
               <OtherOperatorsClaimable />
-            </Block>
+            </Card>
 
-            <Text size="sm" weight={700}>
+            <Body weight="bold">
               Other operators claimable (success-stage preview)
-            </Text>
-            <PreviewBlock>
+            </Body>
+            <PreviewCard>
               <TxStageSuccess
                 title="Requested amount has been successfully claimed"
                 description={
@@ -66,7 +64,7 @@ const MyOperatorsTestPage: FC = () => {
                   </>
                 }
               />
-            </PreviewBlock>
+            </PreviewCard>
           </NarrowBlock>
         </PreviewRoot>
       </MockMyOperatorsProvider>

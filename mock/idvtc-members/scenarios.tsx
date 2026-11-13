@@ -1,4 +1,4 @@
-import { Button } from '@lidofinance/lido-ui';
+import { Button } from '@lidofinance/lido-app-ui';
 import { FC, ReactNode } from 'react';
 import { MembersSection } from 'features/idvtc/members/initialized/members-section';
 import { NotInitialized } from 'features/idvtc/members/not-initialized/not-initialized';

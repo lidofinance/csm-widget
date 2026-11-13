@@ -80,10 +80,10 @@ import { Card } from '@lidofinance/lido-app-ui';
 
 const VARIANTS = {
   default: css`
-    background: var(--lido-color-background);
+    background: var(--lido-app-ui-color-background-page);
   `,
   warning: css`
-    background: var(--lido-color-warning);
+    background: var(--lido-app-ui-color-text-warning);
   `,
 };
 
@@ -332,7 +332,7 @@ export const useFormSubmit = ({ onConfirm, onRetry }) => {
 // Use theme properties
 gap: ${({ theme }) => theme.spaceMap.md}px;
 border-radius: ${({ theme }) => theme.borderRadiusesMap.md}px;
-color: var(--lido-color-text);
+color: var(--lido-app-ui-color-text-default);
 ```
 
 ## Common Anti-Patterns to Avoid

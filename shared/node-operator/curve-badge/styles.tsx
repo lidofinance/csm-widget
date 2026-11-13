@@ -3,10 +3,10 @@ import { CUSTOM_CURVE, DisplayOperatorType } from 'consts';
 import styled, { css } from 'styled-components';
 
 const BadgeStyle = styled.span`
-  border-radius: ${({ theme }) => theme.borderRadiusesMap.md}px;
+  border-radius: var(--lido-app-ui-border-radius-sm);
   min-width: 28px;
   height: 28px;
-  font-size: ${({ theme }) => theme.fontSizesMap.xs}px;
+  font-size: var(--lido-app-ui-font-size-label);
 
   display: inline-flex;
   justify-content: center;
@@ -37,13 +37,13 @@ export const CURVE_GRADIENTS: Record<DisplayOperatorType, string> = {
   [OPERATOR_TYPE.CSM_IDVTC]:
     'linear-gradient(91deg, #c4a8ff 2.95%, #f7a3cc 103.56%)',
   [CUSTOM_CURVE]: 'linear-gradient(93deg, #08d1ff -23.5%, #88f493 121.99%)',
-  [OPERATOR_TYPE.CM_PO]: 'var(--lido-color-textDark)',
-  [OPERATOR_TYPE.CM_PTO]: 'var(--lido-color-textDark)',
-  [OPERATOR_TYPE.CM_DO]: 'var(--lido-color-textDark)',
-  [OPERATOR_TYPE.CM_IODC]: 'var(--lido-color-textDark)',
-  [OPERATOR_TYPE.CM_IODCP]: 'var(--lido-color-textDark)',
-  [OPERATOR_TYPE.CM_EEO]: 'var(--lido-color-textDark)',
-  [OPERATOR_TYPE.CM_PGO]: 'var(--lido-color-textDark)',
+  [OPERATOR_TYPE.CM_PO]: '#273852',
+  [OPERATOR_TYPE.CM_PTO]: '#273852',
+  [OPERATOR_TYPE.CM_DO]: '#273852',
+  [OPERATOR_TYPE.CM_IODC]: '#273852',
+  [OPERATOR_TYPE.CM_IODCP]: '#273852',
+  [OPERATOR_TYPE.CM_EEO]: '#273852',
+  [OPERATOR_TYPE.CM_PGO]: '#273852',
 };
 
 export const CURVE_VARIANTS = Object.fromEntries(
@@ -60,7 +60,7 @@ export const DescriptorCurveStyle = styled(BadgeStyle)<{
   $inline?: boolean;
 }>`
   font-weight: 700;
-  color: var(--lido-color-primaryContrast);
+  color: #fff;
   padding-inline: ${({ $inline }) => ($inline ? '6px' : '0px')};
   width: max-content;
 
