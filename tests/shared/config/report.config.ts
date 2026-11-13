@@ -39,7 +39,12 @@ export const getReportConfig: GetReportConfig = function (app) {
       reporters.chatReporter,
       [
         '@lidofinance/bochqa-reporter',
-        { appId: BOCHQA_APP_IDS[app], launchName: getTestRunName() },
+        {
+          appId: BOCHQA_APP_IDS[app],
+          launchName: getTestRunName(),
+          slackWebhookUrl: process.env.QA_METRICS_SLACK_WEBHOOK_URL,
+          slackMentions: [process.env.SLACK_DUTY_TAG],
+        },
       ],
     );
 

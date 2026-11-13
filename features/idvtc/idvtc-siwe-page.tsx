@@ -1,6 +1,5 @@
 import { FC, PropsWithChildren, ReactNode } from 'react';
 import { SiweAuthGate } from 'modules/siwe';
-import { NoSSRWrapper } from 'shared/components';
 import { Layout } from 'shared/layout';
 import { IdvtcClusterSwitcher } from 'shared/navigate';
 
@@ -11,8 +10,6 @@ export const IdvtcSiwePage: FC<
 > = ({ title, pageName, fallback, children }) => (
   <Layout title={title} pageName={pageName}>
     <IdvtcClusterSwitcher />
-    <NoSSRWrapper>
-      <SiweAuthGate fallback={fallback}>{children}</SiweAuthGate>
-    </NoSSRWrapper>
+    <SiweAuthGate fallback={fallback}>{children}</SiweAuthGate>
   </Layout>
 );

@@ -7,7 +7,6 @@ import {
   useSmSDK,
 } from 'modules/web3';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
-import { getProps } from 'utilsApi';
 
 const Page = () => {
   const cmSdk = useSmSDK(MODULE_NAME.CM);
@@ -36,5 +35,3 @@ const Page = () => {
 };
 
 export default Page;
-
-export const getServerSideProps = getProps();

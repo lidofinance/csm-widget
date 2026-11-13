@@ -1,6 +1,7 @@
 import Metrics from 'utilsApi/metrics';
 import { promises as fs } from 'fs';
-import type { AddressValidationFile } from 'utils';
+
+type AddressValidationFile = { addresses: string[] };
 
 const ERROR_BUCKET = {
   STAT_FAILED: 'stat_failed',
@@ -9,12 +10,12 @@ const ERROR_BUCKET = {
   INVALID_FORMAT: 'invalid_format',
 } as const;
 
-const EMPTY: AddressValidationFile = { addresses: [] };
+const EMPTY: ReadonlySet<string> = new Set();
 
 type CacheEntry = {
   path: string;
   mtimeMs: number;
-  data: AddressValidationFile;
+  denied: ReadonlySet<string>;
 };
 
 let cache: CacheEntry | null = null;
@@ -41,13 +42,12 @@ const reportError = (bucket: string, details: string) => {
   Metrics.request.validationFileLoadError.labels({ error: bucket }).inc(1);
 };
 
-export const loadValidationFile = async (): Promise<AddressValidationFile> => {
-  const filePath = process.env.VALIDATION_FILE_PATH;
+const getFilePath = () => process.env.VALIDATION_FILE_PATH;
+
+const loadDeniedAddresses = async (): Promise<ReadonlySet<string>> => {
+  const filePath = getFilePath();
 
   if (!filePath) {
-    console.warn(
-      '[loadValidationFile] No validation file path provided in env or config',
-    );
     return EMPTY;
   }
 
@@ -61,7 +61,7 @@ export const loadValidationFile = async (): Promise<AddressValidationFile> => {
   }
 
   if (cache && cache.path === filePath && cache.mtimeMs === mtimeMs) {
-    return cache.data;
+    return cache.denied;
   }
 
   let raw: string;
@@ -73,7 +73,7 @@ export const loadValidationFile = async (): Promise<AddressValidationFile> => {
   }
 
   if (raw.trim() === '') {
-    cache = { path: filePath, mtimeMs, data: EMPTY };
+    cache = { path: filePath, mtimeMs, denied: EMPTY };
     return EMPTY;
   }
 
@@ -97,6 +97,15 @@ export const loadValidationFile = async (): Promise<AddressValidationFile> => {
     `[loadValidationFile] parsed with ${parsed.addresses.length} addresses`,
   );
 
-  cache = { path: filePath, mtimeMs, data: parsed };
-  return parsed;
+  const denied: ReadonlySet<string> = new Set(
+    parsed.addresses.map((addr) => addr.trim().toLowerCase()),
+  );
+  cache = { path: filePath, mtimeMs, denied };
+  return denied;
 };
+
+export const isDenyListConfigured = (): boolean => !!getFilePath();
+
+/** Missing or broken file denies nothing (reported via metric). */
+export const isAddressDenied = async (address: string): Promise<boolean> =>
+  (await loadDeniedAddresses()).has(address.trim().toLowerCase());

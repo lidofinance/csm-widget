@@ -1,11 +1,5 @@
-jest.mock('config', () => ({
+vi.mock('config', () => ({
   config: { surveysApiUrl: 'https://surveys.test' },
-}));
-
-jest.mock('config/qa-tools', () => ({ qaToolsEnabled: true }));
-
-jest.mock('consts/external-links', () => ({
-  getExternalLinks: () => ({ surveyApi: 'https://default.test' }),
 }));
 
 import { isSurveysApiConfigured, SURVEYS_API_BASE_URL } from '../surveys-api';

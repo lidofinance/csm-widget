@@ -1,6 +1,6 @@
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { Accordion, Button, Text } from '@lidofinance/lido-ui';
-import { ReactComponent as DkgFileWarning } from 'assets/illustrations/dkg-file-warning.svg';
+import DkgFileWarning from 'assets/illustrations/dkg-file-warning.svg?react';
 import { StackStyle } from 'shared/components';
 import { CURVE_VARIANTS } from 'shared/node-operator/curve-badge/styles';
 import styled, { CSSProperties } from 'styled-components';

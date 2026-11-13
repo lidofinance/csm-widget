@@ -1,6 +1,5 @@
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { ThemeName, useThemeToggle } from '@lidofinance/lido-ui';
-import Image from 'next/image';
 import { FC } from 'react';
 import { useCurrentCurve, useModuleOperatorType } from 'shared/hooks';
 
@@ -36,5 +35,15 @@ export const FaqCurveImage: FC<{ type?: OPERATOR_TYPE }> = ({
 
   const [img, imgDark] = pickImages(type);
 
-  return <Image src={isDark ? imgDark : img} alt="Bond Curve" />;
+  const image = isDark ? imgDark : img;
+
+  return (
+    <img
+      src={image.src}
+      width={image.width}
+      height={image.height}
+      alt="Bond Curve"
+      style={{ maxWidth: '100%', height: 'auto' }}
+    />
+  );
 };

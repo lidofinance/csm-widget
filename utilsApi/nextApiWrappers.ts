@@ -8,7 +8,7 @@ import {
 } from '@lidofinance/next-api-wrapper';
 import { rateLimitWrapper } from '@lidofinance/next-ip-rate-limit';
 
-import { secretConfig } from 'config';
+import { getServerConfig } from './server-config';
 
 import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 import { collectRequestAddressMetric } from './collect-request-address-metric';
@@ -124,8 +124,8 @@ export const requestAddressMetric =
   };
 
 export const rateLimit = rateLimitWrapper({
-  rateLimit: secretConfig.rateLimit,
-  rateLimitTimeFrame: secretConfig.rateLimitTimeFrame,
+  rateLimit: getServerConfig().rateLimit,
+  rateLimitTimeFrame: getServerConfig().rateLimitTimeFrame,
 });
 
 export const nextDefaultErrorHandler =

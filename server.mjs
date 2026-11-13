@@ -1,8 +1,15 @@
 import { createServer } from 'http';
-import { parse } from 'url';
 import next from 'next';
 import { registerShutdownSignals } from './scripts/shutdown.mjs';
+import { loadDevnetAddresses } from './scripts/load-devnet-addresses.mjs';
+import {
+  CACHE_CONTROL_HEADER,
+  CACHE_CONTROL_VALUE,
+} from './scripts/cache-control.mjs';
 import { toBoolean } from './scripts/to-boolean.mjs';
+import { buildCspHeader } from './config/csp/policy.mjs';
+import { buildClientEnv, serializeClientEnv } from './config/client-env.mjs';
+import { logEnvironmentVariables } from './scripts/log-environment-variables.mjs';
 import { startupCheckRPCs } from './scripts/startup-checks/rpc.mjs';
 import { startupCheckValidationFile } from './scripts/startup-checks/validation-file.mjs';
 
@@ -12,8 +19,30 @@ const port = Number(process.env.PORT) || 3000;
 // when using middleware `hostname` and `port` must be provided below
 const app = next({ dev, hostname, port });
 const handle = app.getRequestHandler();
-// cannot import from next.config.mjs because this will break env load
-const CACHE_CONTROL_HEADER = 'x-cache-control';
+
+const createWindowEnvRoute = (basePath) => {
+  const routePath = `${basePath}/runtime/window-env.js`;
+  const clientEnv = buildClientEnv(process.env, {
+    devnetAddresses: loadDevnetAddresses(
+      process.env.DEVNET_ADDRESSES_FILE_PATH,
+    ),
+  });
+  const body = `window.__env__=${serializeClientEnv(clientEnv)};`;
+
+  return (req, res, pathname) => {
+    if (
+      pathname !== routePath ||
+      (req.method !== 'GET' && req.method !== 'HEAD')
+    ) {
+      return false;
+    }
+    res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+    res.setHeader('Cache-Control', CACHE_CONTROL_VALUE);
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.end(req.method === 'HEAD' ? undefined : body);
+    return true;
+  };
+};
 
 // allows us to override cache-control header
 const overrideSetHeader = (res) => {
@@ -42,8 +71,22 @@ const overrideSetHeader = (res) => {
 app
   .prepare()
   .then(async () => {
-    // Next loads .env* inside prepare(), so checks must run after it; config errors
-    // throw before the port opens, RPC reachability is only logged
+    // Next loads .env* inside prepare(), so env logging, window-env and checks must run
+    // after it; config errors throw before the port opens, RPC reachability is only logged
+    logEnvironmentVariables();
+    // must match next.config.mjs basePath (baked at build)
+    const basePath = process.env.BASE_PATH ?? '';
+    const serveWindowEnv = createWindowEnvRoute(basePath);
+    // runtime env, so not in next.config headers() (serialized at build)
+    const csp = dev
+      ? null
+      : buildCspHeader({
+          trustedHosts: process.env.CSP_TRUSTED_HOSTS,
+          reportUri: process.env.CSP_REPORT_URI,
+          reportOnly: process.env.CSP_REPORT_ONLY,
+        });
+    const isStaticAsset = (pathname = '') =>
+      pathname.startsWith(`${basePath}/_next/static/`);
     if (toBoolean(process.env.RUN_STARTUP_CHECKS)) {
       void startupCheckRPCs();
       await startupCheckValidationFile();
@@ -51,15 +94,20 @@ app
 
     const server = createServer(async (req, res) => {
       try {
-        // Be sure to pass `true` as the second argument to `url.parse`.
-        // This tells it to parse the query portion of the URL.
-        const parsedUrl = parse(req.url, true);
+        // raw target: Next does not collapse dot segments, so neither may the static-asset check
+        const pathname = (req.url ?? '/').replace(/[?#].*$/, '');
 
         overrideSetHeader(res);
 
-        await handle(req, res, parsedUrl);
+        if (csp && !isStaticAsset(pathname)) {
+          res.setHeader(csp.name, csp.value);
+        }
+
+        if (serveWindowEnv(req, res, pathname)) return;
+
+        await handle(req, res);
       } catch (err) {
-        // an unhandled rejection here kills the process (--unhandled-rejections=throw); url.parse throws on e.g. `GET http://[ HTTP/1.1`
+        // an unhandled rejection here kills the process (--unhandled-rejections=throw)
         console.error(err);
         if (!res.headersSent) {
           res.statusCode = 500;

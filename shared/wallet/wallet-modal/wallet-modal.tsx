@@ -10,7 +10,6 @@ import { useCallback, useEffect } from 'react';
 import { useConnectorInfo, useDisconnect } from 'reef-knot/core-react';
 
 import { useDappStatus } from 'modules/web3';
-import Link from 'next/link';
 import type { ModalComponentType } from 'providers/modal-provider';
 import { useCopyToClipboard } from 'shared/hooks';
 import {
@@ -21,6 +20,7 @@ import {
   WalletModalConnectorStyle,
   WalletModalContentStyle,
   WalletModalDisconnectStyle,
+  WalletModalLinkStyle,
 } from './styles';
 import { getEtherscanAddressLink } from 'utils';
 
@@ -91,16 +91,15 @@ export const WalletModal: ModalComponentType = ({ onClose, ...props }) => {
           >
             Copy address
           </ButtonIcon>
-          <Link href={getEtherscanAddressLink(chainId ?? 1, address)}>
-            <ButtonIcon
-              data-testid="etherscanBtn"
-              icon={<External />}
-              size="xs"
-              variant="ghost"
-            >
-              View on Etherscan
-            </ButtonIcon>
-          </Link>
+          <WalletModalLinkStyle
+            data-testid="etherscanBtn"
+            href={getEtherscanAddressLink(chainId ?? 1, address)}
+            icon={<External />}
+            size="xs"
+            variant="ghost"
+          >
+            View on Etherscan
+          </WalletModalLinkStyle>
         </WalletModalActionsStyle>
       </WalletModalContentStyle>
     </Modal>

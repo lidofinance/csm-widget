@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
 import { useWeb3Key } from 'shared/hooks';
 import { Layout } from 'shared/layout';
 import { SettingsPageSwitcher } from 'shared/navigate';
@@ -15,9 +14,7 @@ export const MetadataPage: FC = () => {
       pageName="SettingsMetadata"
     >
       <SettingsPageSwitcher />
-      <NoSSRWrapper key={key}>
-        <MetadataForm />
-      </NoSSRWrapper>
+      <MetadataForm key={key} />
     </Layout>
   );
 };

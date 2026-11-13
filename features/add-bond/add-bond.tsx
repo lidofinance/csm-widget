@@ -1,15 +1,8 @@
-import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
 import { useWeb3Key } from 'shared/hooks';
 
 import { AddBondForm } from './add-bond-form';
 
 export const AddBond = () => {
   const key = useWeb3Key();
-  return (
-    <>
-      <NoSSRWrapper>
-        <AddBondForm key={key} />
-      </NoSSRWrapper>
-    </>
-  );
+  return <AddBondForm key={key} />;
 };

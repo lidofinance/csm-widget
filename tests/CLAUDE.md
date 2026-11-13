@@ -1,6 +1,6 @@
 # Testing
 
-Guidance for writing Playwright e2e tests (`tests/csm-widget`, `tests/cm-widget`).
+Guidance for writing Playwright e2e tests (`tests/csm-widget`, `tests/cm-widget`). Unit tests (vitest, `yarn test:unit`) live next to the code, not here.
 
 ## PageObject rules
 

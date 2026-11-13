@@ -22,7 +22,8 @@ import { mainnet } from 'viem/chains';
 import { ENSUniversalResolverAbi } from 'abi/ens-universal-resolver-abi';
 import { config } from 'config';
 import { resolveDeployedModules } from 'consts/modules/resolve-deployed-modules';
-import { overridedAddresses } from 'modules/web3/web3-provider/devnet';
+import { parseDevnetAddresses } from 'modules/web3/web3-provider/devnet';
+import { getServerConfig } from './server-config';
 import { AggregatorAbi } from 'abi/aggregator-abi';
 
 const AlL_CONTRACT_NAMES = {
@@ -63,6 +64,11 @@ const STATIC_ADDRESSES: {
   },
 };
 
+const { devnetAddresses } = getServerConfig();
+const devnetOverrides = devnetAddresses
+  ? parseDevnetAddresses(devnetAddresses)
+  : undefined;
+
 // CSM and CSM_02 share contract names on the same chain, so addresses are collected
 // per module rather than merged into one name -> address map before inverting.
 const getModuleAddresses = (
@@ -71,7 +77,7 @@ const getModuleAddresses = (
 ): Partial<Record<CONTRACT_NAMES, Address>> => ({
   ...MODULE_CONFIG[module][chainId]?.contractAddresses,
   ...(module === config.module && chainId === config.defaultChain
-    ? overridedAddresses
+    ? devnetOverrides
     : undefined),
 });
 

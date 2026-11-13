@@ -11,15 +11,15 @@ export const proposeReward = async function (
   await this.step(
     `[Contract] Propose reward address for NO #${noId} to ${address}`,
     async () => {
-      const manager = await this.manager(noId);
-      await this.fund(manager, parseEther('1'));
-      await this.sendAs(manager, () =>
+      const rewardAddress = await this.rewardAddress(noId);
+      await this.fund(rewardAddress, parseEther('1'));
+      await this.sendAs(rewardAddress, () =>
         this.client.writeContract({
           address: this.addresses.module,
           abi: BaseModuleAbi,
           functionName: 'proposeNodeOperatorRewardAddressChange',
           args: [BigInt(noId), address],
-          account: manager,
+          account: rewardAddress,
           chain: null,
         }),
       );

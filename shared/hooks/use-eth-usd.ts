@@ -5,7 +5,7 @@ import { AggregatorAbi } from 'abi/aggregator-abi';
 import { STRATEGY_LAZY } from 'consts';
 import { useMainnetOnlyWagmi } from 'modules/web3/web3-provider/web3-provider';
 import invariant from 'tiny-invariant';
-import { weiToEth } from 'utils';
+import { pow10n, weiToEth } from 'utils';
 import { getContract } from 'viem';
 
 export const MAINNET_AGGREGATOR_ADDRESS =
@@ -45,7 +45,7 @@ export const useEthUsd = (amount?: bigint) => {
         contract.read.decimals(),
       ]);
 
-      return latestAnswer / 10n ** BigInt(decimals);
+      return latestAnswer / pow10n(decimals);
     },
   });
 

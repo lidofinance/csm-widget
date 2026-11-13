@@ -1,5 +1,5 @@
 import type { FieldValues, Path, UseFormSetError } from 'react-hook-form';
-import { isSurveysApiError } from 'utils/surveys-api-guard';
+import { SurveysApiError } from 'modules/surveys-sdk/api/errors';
 
 // Root segment of a dotted/bracketed DTO path, e.g. `additionalAddresses[0]`
 // and `items[0].signature` both root to their leading identifier. Used to match
@@ -21,16 +21,12 @@ const rootField = (path: string): string => path.split(/[.[]/, 1)[0];
 // inline. If any detail is fieldless or unknown, returns false so the failure
 // modal still shows: it renders ALL details as a bullet list, so no message is
 // lost.
-//
-// Uses the structural guard (not `instanceof SurveysApiError`) to avoid
-// importing modules/surveys-sdk, which transitively loads Next.js runtime
-// config and breaks Jest unit tests.
 export const applyApiFieldErrors = <T extends FieldValues>(
   error: unknown,
   setError: UseFormSetError<T>,
   knownFields?: ReadonlyArray<string>,
 ): boolean => {
-  const api = isSurveysApiError(error) ? error.apiError : undefined;
+  const api = error instanceof SurveysApiError ? error.apiError : undefined;
   if (!api || api.code !== 'VALIDATION_FAILED' || !api.details?.length)
     return false;
   let everyHandledInline = true;
