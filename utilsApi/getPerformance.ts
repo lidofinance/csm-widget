@@ -55,14 +55,17 @@ const fetchPerformance = async (
     Math.max(countEpochs, MIN_NUMBER_EPOCHS),
   );
 
-  const url = `${apiUrl}?operator_number=${nodeOperatorId}&number_epochs=${numberEpochs}&network=mainnet`;
+  const url = new URL(apiUrl);
+  url.searchParams.set('operator_number', nodeOperatorId);
+  url.searchParams.set('number_epochs', String(numberEpochs));
+  url.searchParams.set('network', 'mainnet');
 
   return responseTimeExternalMetricWrapper({
     target: apiUrl,
     route: API_ROUTES.PERFORMANCE,
     entity: 'migalabs',
     request: () =>
-      standardFetcher<MigaLabsApiResponse>(url, {
+      standardFetcher<MigaLabsApiResponse>(url.toString(), {
         signal: AbortSignal.timeout(ms('5s')),
         headers: { 'X-Api-Key': apiToken },
       }),
