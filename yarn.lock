@@ -2307,19 +2307,19 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/github-summary-reporter/-/github-summary-reporter-1.0.0.tgz#12351a4bb3be8f2f189620e41fe579e5f98c2548"
   integrity sha512-i+OKGONoS8CH9SGAVlz/zmB/VLddldaCE9f8UH7KA5pzVtDQ++8LCHxac1HKwguqPzF5dllq3pTuXkbIH+spiw==
 
-"@lidofinance/lido-app-ui@npm:@exromany/lido-app-ui@0.0.1-pre.7":
-  version "0.0.1-pre.7"
-  resolved "https://registry.yarnpkg.com/@exromany/lido-app-ui/-/lido-app-ui-0.0.1-pre.7.tgz#bbce5440a4d1aeb0c4ebf4f91c25bc4a02144175"
-  integrity sha512-y05XpT8DINPEwHeqzxrjXa8KVZC7c+h01vSeuDTRnrC8N+kSHtcjj/x7I26psAT1iMGGQnfVCuv+8ZF4pWHoLg==
+"@lidofinance/lido-app-ui@npm:@exromany/lido-app-ui@0.0.1-pre.8":
+  version "0.0.1-pre.8"
+  resolved "https://registry.yarnpkg.com/@exromany/lido-app-ui/-/lido-app-ui-0.0.1-pre.8.tgz#c2a3212e62a195128408b5f7c56db8cbde9f5671"
+  integrity sha512-o1edFvBSPRmov3BxFUb2YgD7eg4pUgblWph/PaPhlNrg2trIZTdA4xhniwc7Y9FhzCSXeO0Zu/S0vGEcszsz5A==
   dependencies:
     "@lidofinance/lido-shared-ui" "^1.1.5"
     classnames "2.5.1"
     react-jazzicon "1.0.4"
 
-"@lidofinance/lido-csm-sdk@4.0.0-alpha.2":
-  version "4.0.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/@lidofinance/lido-csm-sdk/-/lido-csm-sdk-4.0.0-alpha.2.tgz#a19afb5382d0cbf53f8467ac43dbe402e880ea2e"
-  integrity sha512-OkwQNDQpQRqSvxY71EyUXuGx/wBX02hlIbTn8RnjlQrCN7ybX54wBpcRNPdO3tIi2ccfhe85+fnvlpyEPZFAug==
+"@lidofinance/lido-csm-sdk@4.0.0-alpha.3":
+  version "4.0.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@lidofinance/lido-csm-sdk/-/lido-csm-sdk-4.0.0-alpha.3.tgz#fc773de60ec4b6c3188b4978a7c8f48612623be8"
+  integrity sha512-Lux+CY9sAKIw3mi0GmXqBVxv0wPBgYfzAJ9K6gTyhMo675c+yJsKnU1YXF6d2dTAL5WBjGOg42v3YGdhudeEqQ==
   dependencies:
     "@chainsafe/ssz" "^1.7.0"
     "@openzeppelin/merkle-tree" "^1.0.8"
