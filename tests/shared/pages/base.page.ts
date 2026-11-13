@@ -17,7 +17,9 @@ export class BasePage {
     this.header = new Header(this.page);
     this.connectWalletModal = new ConnectWalletModal(this.page);
     this.tooltipWrapper = this.page.getByTestId('tooltipWrapper');
-    this.pageTitle = this.page.getByTestId('pageTitle');
+    this.pageTitle = this.page
+      .getByTestId('pageTitle')
+      .locator('[aria-current="page"]');
     this.pageSubtitle = this.page.getByTestId('pageSubtitle');
   }
 
@@ -182,19 +184,9 @@ export class BasePage {
   }
 
   async getHoveredContent(timeout = 10000) {
-    const start = Date.now();
-    while (Date.now() - start < timeout) {
-      const result = await this.page.evaluate(() => {
-        return (
-          document.querySelectorAll('#lido-ui-modal-root div[data-placement]')
-            .length === 1
-        );
-      });
-      if (result) {
-        break;
-      }
-    }
-    return this.page.locator('#lido-ui-modal-root');
+    const tooltip = this.page.getByRole('tooltip');
+    await tooltip.waitFor({ state: 'visible', timeout });
+    return tooltip;
   }
 
   async hoverElement(element: Locator) {

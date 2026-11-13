@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
-import { SubmitButtonHookForm } from 'shared/hook-form/controls';
+import { SubmitButton as KitSubmitButton } from 'shared/form-page';
 import { CLUSTER_SIZE, type IdvtcApplyFormInputType } from '../context';
 
 export const SubmitButton: FC = () => {
@@ -23,8 +23,8 @@ export const SubmitButton: FC = () => {
       .every((m) => !!m?.address && !!m?.signature);
 
   return (
-    <SubmitButtonHookForm data-testid="submitBtn" disabled={!isComplete}>
+    <KitSubmitButton data-testid="submitBtn" disabled={!isComplete}>
       Submit application
-    </SubmitButtonHookForm>
+    </KitSubmitButton>
   );
 };

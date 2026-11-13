@@ -1,13 +1,13 @@
-import { LidoLogo, Loader } from '@lidofinance/lido-ui';
+import { Logo, Spinner } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
-import { moduleMeta } from 'consts/module';
+import { WIDGET_DESCRIPTION, WIDGET_TITLE } from 'consts/module';
 
-// rendered without providers: CSS vars from LidoUIHead only, no `theme` access
+// rendered without providers: app-ui CSS vars are global (index.css), no `theme` access
 const ShellGlobalStyle = createGlobalStyle`
   body {
     margin: 0;
-    background: var(--lido-color-background);
+    background: var(--lido-app-ui-color-background-default);
   }
 `;
 
@@ -17,26 +17,13 @@ const Wrapper = styled.div`
   min-height: 100vh;
   padding: 0 20px;
   box-sizing: border-box;
-  color: var(--lido-color-text);
+  color: var(--lido-app-ui-color-text-default);
 `;
 
 const Header = styled.header`
   display: flex;
   align-items: center;
-  gap: 12px;
-  height: 28px;
   padding: 18px 0;
-`;
-
-const Divider = styled.span`
-  align-self: stretch;
-  border-left: 1px solid var(--lido-color-text);
-  opacity: 0.6;
-`;
-
-const ShortTitle = styled.span`
-  font-size: 16px;
-  font-weight: 700;
 `;
 
 const Main = styled.main`
@@ -60,7 +47,7 @@ const Description = styled.p`
   margin: 0 0 32px;
   font-size: 16px;
   line-height: 1.5;
-  color: var(--lido-color-textSecondary);
+  color: var(--lido-app-ui-color-text-secondary);
 `;
 
 export const AppShellLoader: FC = () => (
@@ -68,14 +55,12 @@ export const AppShellLoader: FC = () => (
     <ShellGlobalStyle />
     <Wrapper>
       <Header>
-        <LidoLogo as="span" />
-        <Divider />
-        <ShortTitle>{moduleMeta.shortTitle}</ShortTitle>
+        <Logo variant="full" product={WIDGET_TITLE} />
       </Header>
       <Main>
-        <Title>{moduleMeta.title}</Title>
-        <Description>{moduleMeta.description}</Description>
-        <Loader size="large" />
+        <Title>{WIDGET_TITLE}</Title>
+        <Description>{WIDGET_DESCRIPTION}</Description>
+        <Spinner size="lg" label="Loading" />
       </Main>
     </Wrapper>
   </>

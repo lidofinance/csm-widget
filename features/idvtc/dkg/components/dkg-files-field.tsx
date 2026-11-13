@@ -1,8 +1,13 @@
-import { Text } from '@lidofinance/lido-ui';
+import {
+  Caption,
+  SectionTitle,
+  Stack,
+  Typography,
+} from '@lidofinance/lido-app-ui';
 import type { FileUploadItemDto } from 'modules/surveys-sdk/generated';
 import { FC } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
-import { FormTitle, Stack } from 'shared/components';
+import { FieldError } from 'shared/hook-form/fields/field-error';
 import { useDkgUploadZone } from '../hooks/use-dkg-upload-zone';
 import { mergeDkgFiles } from '../utils/merge-dkg-files';
 import {
@@ -37,12 +42,12 @@ export const DkgFilesField: FC<{ name?: string }> = ({ name = 'dkgFiles' }) => {
   return (
     <>
       <DkgDropArea zone={zone}>
-        <Stack direction="column" gap="xs">
-          <FormTitle>Upload DKG files</FormTitle>
-          <Text size="xxs" color="secondary">
+        <Stack direction="column" gap={8} align="stretch">
+          <SectionTitle title="Upload DKG files" />
+          <Typography variant="body" color="tertiary">
             Upload a DKG file with all the keys you&apos;ve generated (even if
             you&apos;re not uploading all of them)
-          </Text>
+          </Typography>
           <DkgStagedTable
             items={staged}
             onRemove={(index) =>
@@ -50,19 +55,17 @@ export const DkgFilesField: FC<{ name?: string }> = ({ name = 'dkgFiles' }) => {
             }
           />
           {staged.length > 0 && (
-            <Text size="xxs" color={isOverCap ? 'error' : 'secondary'}>
+            <Caption color={isOverCap ? 'error' : 'secondary'}>
               Total {formatMegabytes(bytes)} /{' '}
               {formatMegabytesFloor(MAX_TOTAL_BYTES)}
-            </Text>
+            </Caption>
           )}
-          {fieldState.error?.message && (
-            <Text size="xxs" color="error">
-              {fieldState.error.message}
-            </Text>
+          {staged.length !== 1 && (
+            <AddButtonRow>
+              <DkgAddFileButton onClick={zone.open} />
+            </AddButtonRow>
           )}
-          <AddButtonRow>
-            <DkgAddFileButton onClick={zone.open} />
-          </AddButtonRow>
+          <FieldError>{fieldState.error?.message}</FieldError>
         </Stack>
       </DkgDropArea>
 

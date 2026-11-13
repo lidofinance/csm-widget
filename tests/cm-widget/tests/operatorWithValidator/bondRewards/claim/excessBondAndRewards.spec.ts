@@ -86,33 +86,32 @@ test.describe(
           await expect(
             claim.getClaimOptionRadio(CLAIM_OPTION.ALL_TO_RA),
           ).toBeEnabled({ timeout: PAGE_WAIT_TIMEOUT });
-          await expect(
-            claim.getClaimOptionRadio(CLAIM_OPTION.ALL_TO_RA),
-          ).toBeChecked();
+          await claim.expectClaimOptionSelected(CLAIM_OPTION.ALL_TO_RA);
           await expect(
             claim.getClaimOptionDescription(CLAIM_OPTION.ALL_TO_RA),
-          ).toHaveText('Claim both Excess Bond and Rewards');
+          ).toHaveText('Claim both Excess Bond and Rewards to Rewards Address');
         });
 
         await test.step('"Excess Bond" option is enabled, not checked, description reads "Claim only Excess Bond. Rewards remain unclaimed"', async () => {
           await expect(
             claim.getClaimOptionRadio(CLAIM_OPTION.BOND_TO_RA),
           ).toBeEnabled();
-          await expect(
-            claim.getClaimOptionRadio(CLAIM_OPTION.BOND_TO_RA),
-          ).not.toBeChecked();
+          await claim.expectClaimOptionSelected(CLAIM_OPTION.BOND_TO_RA, false);
           await expect(
             claim.getClaimOptionDescription(CLAIM_OPTION.BOND_TO_RA),
-          ).toHaveText('Claim only Excess Bond. Rewards remain unclaimed.');
+          ).toHaveText(
+            'Claim only Excess Bond. Rewards remain unclaimed to Rewards Address.',
+          );
         });
 
         await test.step('"Rewards to Bond" option is enabled, not checked, description reads "Move all rewards to the bond"', async () => {
           await expect(
             claim.getClaimOptionRadio(CLAIM_OPTION.REWARDS_TO_BOND),
           ).toBeEnabled();
-          await expect(
-            claim.getClaimOptionRadio(CLAIM_OPTION.REWARDS_TO_BOND),
-          ).not.toBeChecked();
+          await claim.expectClaimOptionSelected(
+            CLAIM_OPTION.REWARDS_TO_BOND,
+            false,
+          );
           await expect(
             claim.getClaimOptionDescription(CLAIM_OPTION.REWARDS_TO_BOND),
           ).toHaveText(
@@ -143,9 +142,9 @@ test.describe(
 
         await test.step('Select "Claim All" option', async () => {
           await claim.selectClaimOption(CLAIM_OPTION.ALL_TO_RA);
-          await expect(
-            claim.getClaimOptionRadio(CLAIM_OPTION.ALL_TO_RA),
-          ).toBeChecked({ timeout: PAGE_WAIT_TIMEOUT });
+          await claim.expectClaimOptionSelected(CLAIM_OPTION.ALL_TO_RA, true, {
+            timeout: PAGE_WAIT_TIMEOUT,
+          });
         });
 
         await test.step('stETH token card shows correct amount from SDK', async () => {
@@ -158,7 +157,7 @@ test.describe(
 
         await test.step('Before filling amount — "Excess bond will increase by" row is shown', async () => {
           await expect(claim.claimBondFormInfo).toContainText(
-            'Excess bond will increase by',
+            'Bond balance will increase by',
           );
         });
 
@@ -171,17 +170,17 @@ test.describe(
 
         await test.step('After filling max amount — "Excess bond will decrease by" row is shown', async () => {
           await expect(claim.claimBondFormInfo).toContainText(
-            'Excess bond will decrease by',
+            'Bond balance will decrease by',
           );
           await expect(claim.claimBondFormInfo).not.toContainText(
-            'Excess bond will increase by',
+            'Bond balance will increase by',
           );
         });
 
         await test.step('"Rewards Address will receive" row shows correct stETH amount', async () => {
           await expect(claim.claimBondFormInfoTitle).toBeVisible();
           await expect(claim.claimBondFormInfoTitle).toContainText(
-            'will receive',
+            'Rewards Address to receive',
           );
           const infoText = await claim.claimBondFormInfoTitle
             .getByTestId('tokenAmount')
@@ -206,9 +205,9 @@ test.describe(
 
         await test.step('Select "Excess Bond" option', async () => {
           await claim.selectClaimOption(CLAIM_OPTION.BOND_TO_RA);
-          await expect(
-            claim.getClaimOptionRadio(CLAIM_OPTION.BOND_TO_RA),
-          ).toBeChecked({ timeout: PAGE_WAIT_TIMEOUT });
+          await claim.expectClaimOptionSelected(CLAIM_OPTION.BOND_TO_RA, true, {
+            timeout: PAGE_WAIT_TIMEOUT,
+          });
         });
 
         await test.step('stETH token card shows correct amount from SDK', async () => {
@@ -229,7 +228,7 @@ test.describe(
         await test.step('"Rewards Address will receive" row shows correct stETH amount', async () => {
           await expect(claim.claimBondFormInfoTitle).toBeVisible();
           await expect(claim.claimBondFormInfoTitle).toContainText(
-            'will receive',
+            'Rewards Address to receive',
           );
           const infoText = await claim.claimBondFormInfoTitle
             .getByTestId('tokenAmount')
@@ -244,7 +243,7 @@ test.describe(
     test(
       qase(
         318,
-        'Should hide token selector and show "Bond will receive" when "Rewards to Bond" selected',
+        'Should hide token selector and show "Bond balance will increase by" when "Rewards to Bond" selected',
       ),
       async ({ widgetService, cmSDK }) => {
         const { claim } = widgetService.bondRewardsPage;
@@ -254,9 +253,11 @@ test.describe(
 
         await test.step('Select "Rewards to Bond" option', async () => {
           await claim.selectClaimOption(CLAIM_OPTION.REWARDS_TO_BOND);
-          await expect(
-            claim.getClaimOptionRadio(CLAIM_OPTION.REWARDS_TO_BOND),
-          ).toBeChecked({ timeout: PAGE_WAIT_TIMEOUT });
+          await claim.expectClaimOptionSelected(
+            CLAIM_OPTION.REWARDS_TO_BOND,
+            true,
+            { timeout: PAGE_WAIT_TIMEOUT },
+          );
         });
 
         await test.step('Token selector and amount input are not visible', async () => {
@@ -269,9 +270,9 @@ test.describe(
           await expect(claim.claimRewardsToBondButton).toBeEnabled();
         });
 
-        await test.step('"Bond will receive" row shows correct rewards amount', async () => {
+        await test.step('"Bond balance will increase by" row shows correct rewards amount', async () => {
           await expect(claim.claimBondFormInfo).toContainText(
-            'Bond will receive',
+            'Bond balance will increase by',
           );
           const infoText = await claim.claimBondFormInfo
             .getByTestId('tokenAmount')

@@ -3,7 +3,7 @@ import { PATH } from 'consts/urls';
 import { useDkgInFlowUpload } from 'features/idvtc/dkg/hooks/use-dkg-in-flow-upload';
 import { useSurveyInFlowAuth } from 'features/idvtc/shared/use-survey-in-flow-auth';
 import { operatorKey } from 'modules/surveys-sdk';
-import { useModule, useSmSDK } from 'modules/web3';
+import { useActiveOperatorSDK, useTargetModule } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -29,8 +29,8 @@ export const useAddKeysFlowResolver = (): FlowResolver<
   AddKeysFormNetworkData,
   AddKeysFlow
 > => {
-  const { keys: keysSDK } = useSmSDK();
-  const { module } = useModule();
+  const { keys: keysSDK } = useActiveOperatorSDK();
+  const targetModule = useTargetModule();
   const [canAddKeys, addKeysAccess] = useCanPerform(keysSDK, 'addKeys');
   const n = useNavigate();
   const buildCallback = useTxModalStagesAddKeys();
@@ -44,6 +44,16 @@ export const useAddKeysFlowResolver = (): FlowResolver<
 
       const { depositData, token, bondAmount: amount, dkgFiles = [] } = input;
 
+      const props = () => {
+        invariant(amount !== undefined, 'BondAmount is not defined');
+        return {
+          nodeOperatorId: data.nodeOperatorId,
+          token,
+          amount,
+          depositData,
+        };
+      };
+
       return {
         action: 'add-keys' as const,
         // The operator already exists, so auth + upload both happen here
@@ -52,7 +62,7 @@ export const useAddKeysFlowResolver = (): FlowResolver<
           if (!(await confirmOperator())) return false;
           if (dkgFiles.length === 0) return true;
           try {
-            const op = operatorKey(module, data.nodeOperatorId);
+            const op = operatorKey(targetModule, data.nodeOperatorId);
             invariant(op, 'nodeOperatorId is required to upload DKG files');
             await ensureAuth(dkgFiles);
             await uploadStaged(op, dkgFiles);
@@ -65,24 +75,20 @@ export const useAddKeysFlowResolver = (): FlowResolver<
             return false;
           }
         },
+        estimate: async () => keysSDK.estimateAddKeys(props()),
         submit: async () => {
-          invariant(amount !== undefined, 'BondAmount is not defined');
-
           await keysSDK.addKeys({
-            nodeOperatorId: data.nodeOperatorId,
-            token,
-            amount,
-            depositData,
+            ...props(),
             callback: buildCallback(input, data),
           });
 
-          void n(PATH.KEYS_VIEW);
+          void n(PATH.KEYS);
         },
       };
     },
     [
       keysSDK,
-      module,
+      targetModule,
       canAddKeys,
       addKeysAccess,
       n,

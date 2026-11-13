@@ -5,7 +5,11 @@ import { DelayedPenaltyPageSwitcher } from 'shared/navigate';
 import { DelayedPenaltyCancel } from './delayed-penalty-cancel';
 
 export const DelayedPenaltyCancelPage: FC = () => (
-  <Layout title="Cancel delayed penalty" subtitle="General delayed penalty">
+  <Layout
+    wide
+    title="Cancel delayed penalty"
+    subtitle="General delayed penalty"
+  >
     <DelayedPenaltyPageSwitcher />
     <DelayedPenaltyCancel />
   </Layout>

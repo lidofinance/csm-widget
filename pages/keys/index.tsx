@@ -1,9 +1,12 @@
 import { PATH } from 'consts/urls';
-import { GateLoaded, Navigate } from 'shared/navigate';
+import { KeysPage } from 'features/view-keys';
+import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 
 const Page = () => (
   <GateLoaded>
-    <Navigate path={PATH.KEYS} />
+    <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.CREATE} />}>
+      <KeysPage />
+    </Gate>
   </GateLoaded>
 );
 

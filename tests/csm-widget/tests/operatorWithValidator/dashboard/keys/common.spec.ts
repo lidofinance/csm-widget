@@ -29,8 +29,8 @@ test.describe(
             'e_n',
             'csm_widget_dashboard_keys_section',
           ),
-          widgetService.page.waitForURL('**/keys/view'),
-          widgetService.dashboardPage.keysSection.sectionHeaderLink.click(),
+          widgetService.page.waitForURL(/\/keys$/),
+          widgetService.dashboardPage.keysCard.link.click(),
         ]);
       },
     );

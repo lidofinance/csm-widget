@@ -1,8 +1,6 @@
-# Lido Community Staking Module Widget
+# Lido Operators Widget
 
-A widget for participating in Lido CSM based on [Lido Frontend Template](https://github.com/lidofinance/lido-frontend-template).
-
-Lido Community Staking Module (CSM) is a permissionless module allowing community stakers to operate Ethereum validators with lower entry costs. Stakers provide stETH bonds, serving as security collateral, and receive rewards in the form of bond rebase and staking rewards (including execution layer rewards), which are socialized across Lido’s staking modules.
+A widget for Lido Node Operators based on [Lido Frontend Template](https://github.com/lidofinance/lido-frontend-template). One deployment serves every staking module: the Community Staking Module (CSM), a permissionless module allowing community stakers to operate Ethereum validators with lower entry costs, and the Curated Module v2 (CM), for allow-listed professional operators.
 
 More on CSM in the [docs](https://docs.lido.fi/staking-modules/csm/intro).
 
@@ -32,8 +30,7 @@ yarn install
 Step 4. Start the development server
 
 ```bash
-yarn dev               # CSM on :3000
-PORT=3001 yarn dev:cm  # CM, can run next to CSM
+yarn dev
 ```
 
 `yarn dev` runs `server.mjs` in dev mode, so `/runtime/window-env.js` and `/api/*` behave as in production (there is no CSP header in dev).
@@ -46,15 +43,11 @@ Every page is a static shell prerendered at build time; the app renders in the b
 
 - **Client, runtime.** `server.mjs` reads them on start (`config/client-env.mjs`) and serves them as `window.__env__` at `{BASE_PATH}/runtime/window-env.js`, loaded before the app bundle. Restart to apply, no rebuild: `DEFAULT_CHAIN`, `MAINTENANCE`, `IS_PROD`, `MATOMO_URL`, `WALLETCONNECT_PROJECT_ID`, `KEYS_API_URL`, `FEES_MONITORING_API_URL`, `SURVEYS_API_URL`, `IPFS_GATEWAYS`, `VALIDATION_SERVICE_BASE_PATH` and `VALIDATION_FILE_PATH` (only whether they are set), `DEVNET_ADDRESSES_FILE_PATH` (also read server-side for the `/api/rpc` allowlist).
 - **Server, runtime.** `EL_RPC_URLS_*`, `CL_API_URLS_*`, `ETHSEER_*`, `CSP_*`, `RATE_LIMIT*`, `VALIDATION_SERVICE_BASE_PATH`, `VALIDATION_FILE_PATH`, `DEVNET_ADDRESSES_FILE_PATH`: read from `process.env` by `server.mjs` and the API routes only, never sent to the browser. `server.mjs` builds the `Content-Security-Policy` header from `CSP_*`.
-- **Build time.** `MODULE` and `BASE_PATH` are inlined into the bundle (see below).
+- **Build time.** `BASE_PATH` is inlined into the bundle (Next.js requirement): use the same value for build and start.
 
 ### Modules
 
-`MODULE` (`csm` | `cm`, default `csm`) selects the module at build time. Each build goes to `.next/<module>` with its own title, meta tags, favicon and `manifest.json`.
-
-- `yarn build` builds the current `MODULE`; `yarn build:all` builds both. The Docker image ships both.
-- On start, `MODULE` picks which build `server.mjs` serves, so one image runs either module. Starting a module that was not built fails.
-- `BASE_PATH` is build time as well (Next.js requirement): use the same value for build and start.
+One build serves every staking module deployed on the chain (CSM, CSM_02, CM). The module a screen is about comes from the active node operator, not from the environment.
 
 ### Maintenance
 
@@ -74,8 +67,8 @@ git commit -m "feat: dark theme"
 ## Production
 
 ```bash
-yarn build:all
-MODULE=cm yarn start   # MODULE=csm is the default
+yarn build
+yarn start
 ```
 
 ## Running Tests

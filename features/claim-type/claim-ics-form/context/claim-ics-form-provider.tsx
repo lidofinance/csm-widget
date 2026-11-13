@@ -16,11 +16,16 @@ export const ClaimIcsFormProvider: FC<PropsWithChildren> = ({ children }) => {
     mode: 'onChange',
   });
 
-  const submitter = useFlowSubmit(useClaimIcsFlowResolver());
+  const resolve = useClaimIcsFlowResolver();
+  const submitter = useFlowSubmit(resolve);
 
   return (
     <FormProvider {...formObject}>
-      <FormControllerProvider submitter={submitter} formName="claimIcs">
+      <FormControllerProvider
+        submitter={submitter}
+        resolve={resolve}
+        formName="claimIcs"
+      >
         {children}
       </FormControllerProvider>
     </FormProvider>

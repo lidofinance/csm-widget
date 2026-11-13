@@ -1,13 +1,14 @@
 import { FC, useCallback } from 'react';
 import { trackMatomoFormEvent } from 'utils/track-matomo-event';
 import { FormProvider, useForm } from 'react-hook-form';
-import { FormTitle, SectionBlock, Stack, WhenLoaded } from 'shared/components';
+import { WhenLoaded } from 'shared/components';
+import { FormCard, FormPage, SubmitButton } from 'shared/form-page';
 import {
-  NumberInputHookForm,
-  OptionsButtonsHookForm,
-  SubmitButtonHookForm,
-  TextInputHookForm,
-} from 'shared/hook-form/controls';
+  NumberField,
+  SegmentCardsField,
+  TextField,
+} from 'shared/hook-form/fields';
+import { Field, Stack } from '@lidofinance/lido-app-ui';
 import {
   callSurvey,
   isAuthError,
@@ -25,7 +26,17 @@ import {
   transformOutgoing,
 } from './transform';
 import { useModalStages } from './use-modal-stages';
-import { SurveysBackButton } from '../shared';
+
+const YES_NO_OPTIONS = [
+  { value: 'on', title: 'Yes' },
+  { value: 'off', title: 'No' },
+];
+
+const MODULE_OPTIONS = [
+  { value: 'curated', title: 'Curated' },
+  { value: 'sdvt', title: 'Simple DVT' },
+  { value: 'both', title: 'Both' },
+];
 
 export const SurveyExperience: FC = () => {
   const { data, mutate } = useOperatorSurvey<ExperienceForm, Experience>(
@@ -74,112 +85,91 @@ export const SurveyExperience: FC = () => {
   );
 
   return (
-    <SectionBlock
-      title="Your validation experience"
-      mainPrefix={<SurveysBackButton />}
-    >
-      <FormProvider {...formObject}>
-        <WhenLoaded loading={formObject.formState.isLoading}>
-          <Stack direction="column">
+    <FormProvider {...formObject}>
+      <WhenLoaded loading={formObject.formState.isLoading}>
+        <FormPage>
+          <FormCard>
             <form
               autoComplete="off"
               onSubmit={formObject.handleSubmit(handleSubmit)}
             >
-              <Stack direction="column" gap="xxl">
-                <Stack direction="column">
-                  <FormTitle>
-                    Are you a professional node operator or an independent
-                    staker?
-                  </FormTitle>
-                  <OptionsButtonsHookForm
-                    fieldName="professional"
-                    options={{
-                      on: 'Professional operator',
-                      off: 'Independent staker',
-                    }}
-                    rules={{ required: true }}
+              <Stack gap={32}>
+                <Field
+                  id="professional"
+                  label="Are you a professional node operator or an independent staker?"
+                  group
+                >
+                  <SegmentCardsField
+                    name="professional"
+                    aria-label="Professional operator or independent staker"
+                    required
+                    options={[
+                      { value: 'on', title: 'Professional operator' },
+                      { value: 'off', title: 'Independent staker' },
+                    ]}
                   />
-                </Stack>
-
-                <Stack direction="column">
-                  <FormTitle>
-                    Have you ever validated on Ethereum Mainnet before joining
-                    CSM?
-                  </FormTitle>
-                  <OptionsButtonsHookForm
-                    fieldName="validatedBefore"
-                    options={{ on: 'Yes', off: 'No' }}
-                    rules={{ required: true }}
+                </Field>
+                <Field
+                  id="validatedBefore"
+                  label="Have you ever validated on Ethereum Mainnet before joining CSM?"
+                  group
+                >
+                  <SegmentCardsField
+                    name="validatedBefore"
+                    aria-label="Validated on Ethereum Mainnet before"
+                    required
+                    options={YES_NO_OPTIONS}
                   />
-                </Stack>
-
-                <Stack direction="column">
-                  <FormTitle>
-                    Are you an organization from the Curated Module or the
-                    Simple DVT Module in Lido?
-                  </FormTitle>
-                  <OptionsButtonsHookForm
-                    fieldName="otherModules"
-                    options={{ on: 'Yes', off: 'No' }}
-                    rules={{ required: true }}
+                </Field>
+                <Field
+                  id="otherModules"
+                  label="Are you an organization from the Curated Module or the Simple DVT Module in Lido?"
+                  group
+                >
+                  <SegmentCardsField
+                    name="otherModules"
+                    aria-label="Organization from other Lido modules"
+                    required
+                    options={YES_NO_OPTIONS}
                   />
-                </Stack>
-
+                </Field>
                 {otherModules === 'on' && (
-                  <Stack direction="column">
-                    <FormTitle>
-                      Which module you are participating in?
-                    </FormTitle>
-                    <OptionsButtonsHookForm
-                      fieldName="modules"
-                      options={{
-                        curated: 'Curated',
-                        sdvt: 'Simple DVT',
-                        both: 'Both',
-                      }}
-                      rules={{ required: true }}
+                  <Field
+                    id="modules"
+                    label="Which module you are participating in?"
+                    group
+                  >
+                    <SegmentCardsField
+                      name="modules"
+                      aria-label="Participating module"
+                      required
+                      options={MODULE_OPTIONS}
                     />
-                  </Stack>
+                  </Field>
                 )}
-
                 {otherModules === 'on' && (
-                  <Stack direction="column">
-                    <FormTitle>
-                      What is the name of your organization in the other Lido
-                      modules?
-                    </FormTitle>
-                    <TextInputHookForm
-                      fieldName="nameInModules"
-                      label="Name of your organisation"
-                      rules={{ required: true }}
-                    />
-                  </Stack>
-                )}
-
-                <Stack direction="column">
-                  <FormTitle>
-                    How many other Mainnet validators do you run outside of Lido
-                    CSM?
-                  </FormTitle>
-                  <NumberInputHookForm
-                    fieldName="otherValidatorsCount"
-                    label="Keys number"
-                    rules={{
-                      min: { value: 0, message: 'Minimum keys amount is 0' },
-                      max: {
-                        value: 999999999,
-                        message: 'Maximum keys amount is 999 999 999',
-                      },
-                    }}
+                  <TextField
+                    name="nameInModules"
+                    label="What is the name of your organization in the other Lido modules?"
+                    placeholder="Name of your organisation"
+                    required
                   />
-                </Stack>
-
-                <SubmitButtonHookForm>Submit</SubmitButtonHookForm>
+                )}
+                <NumberField
+                  name="otherValidatorsCount"
+                  label="How many other Mainnet validators do you run outside of Lido CSM?"
+                  placeholder="Keys number"
+                  min={0}
+                  minMessage="Minimum keys amount is 0"
+                  max={999999999}
+                  maxMessage="Maximum keys amount is 999 999 999"
+                />
+                <SubmitButton>Submit</SubmitButton>
               </Stack>
             </form>
-          </Stack>
-        </WhenLoaded>
-      </FormProvider>
-    </SectionBlock>
+          </FormCard>
+        </FormPage>
+      </WhenLoaded>
+    </FormProvider>
   );
 };

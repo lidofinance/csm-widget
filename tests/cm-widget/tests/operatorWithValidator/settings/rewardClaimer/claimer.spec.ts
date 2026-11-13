@@ -25,17 +25,6 @@ test.describe(
       async ({ widgetService }) => {
         const { claimerPage } = widgetService.settingsPage;
 
-        await test.step('"Back" button is visible', async () => {
-          await expect(claimerPage.backButton).toBeVisible();
-        });
-
-        await test.step('"Rewards claimer" section title is visible', async () => {
-          await expect(claimerPage.currentClaimerSection).toBeVisible();
-          await expect(claimerPage.currentClaimerSection).toHaveText(
-            'Rewards claimer',
-          );
-        });
-
         await test.step('"Current Rewards claimer" row is visible with "Not set" value', async () => {
           await expect(claimerPage.currentClaimerTitle).toBeVisible();
           await expect(claimerPage.currentClaimerTitle).toContainText(
@@ -46,24 +35,24 @@ test.describe(
           );
         });
 
-        await test.step('"Specify a new Rewards Claimer Address" title is visible', async () => {
+        await test.step('"Specify a new Rewards claimer address" title is visible', async () => {
           await expect(claimerPage.addressInputTitle).toBeVisible();
           await expect(claimerPage.addressInputTitle).toHaveText(
-            'Specify a new Rewards Claimer Address',
+            'Specify a new Rewards claimer address',
           );
         });
 
         await test.step('Address input is visible with correct placeholder', async () => {
           await expect(claimerPage.addressInput).toBeVisible();
           await expect(claimerPage.addressInputContainer).toContainText(
-            'New Rewards Claimer Address',
+            'New Rewards claimer address',
           );
         });
 
         await test.step('Submit button is visible with correct text', async () => {
           await expect(claimerPage.submitButton).toBeVisible();
           await expect(claimerPage.submitButton).toHaveText(
-            'Set new Rewards Claimer Address',
+            'Set new Rewards claimer address',
           );
         });
       },
@@ -82,14 +71,14 @@ test.describe(
     );
 
     test(
-      qase(207, 'Should navigate back to Settings on "Back" button click'),
+      qase(207, 'Should navigate back to Settings from breadcrumbs'),
       async ({ widgetService }) => {
         const { claimerPage } = widgetService.settingsPage;
 
-        await claimerPage.backButton.click();
-        await expect(widgetService.page).toHaveURL(/\/settings/);
+        await claimerPage.settingsCrumb.click();
+        await expect(widgetService.page).toHaveURL(/\/settings$/);
         await expect(
-          widgetService.page.getByTestId('pageSwitcher'),
+          widgetService.page.getByTestId('settingsRolesSection'),
         ).toBeVisible();
       },
     );

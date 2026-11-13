@@ -1,27 +1,36 @@
+import { FormLayout } from '@lidofinance/lido-app-ui';
+import { useFaq } from 'faq';
 import { FC, memo } from 'react';
-import { FormBlock } from 'shared/components';
+import { BondStatsCard, Faq } from 'shared/components';
+import { FormPage, FormReady } from 'shared/form-page';
 import { Form } from 'shared/hook-form/form-controller';
+import { PenaltyHistory } from '../penalty-history';
 import { UnlockBondDataProvider, UnlockBondFormProvider } from './context';
-import { CompensatingAmount } from './controls/compensating-amount';
-import { Info } from './controls/info';
-import { SubmitButton } from './controls/submit-button';
-import { UnlockBondFormInfo } from './unlock-bond-form-info';
-import { UnlockBondFormLoader } from './unlock-bond-form-loader';
+import { LockedBondNotice } from './controls/locked-bond';
+import { UnlockBondAside } from './unlock-bond-aside';
+import { UnlockBondFormGate } from './unlock-bond-form-gate';
 
 export const UnlockBondForm: FC = memo(() => {
+  const faq = useFaq('LOCKED');
+
   return (
     <UnlockBondDataProvider>
       <UnlockBondFormProvider>
-        <FormBlock>
-          <UnlockBondFormLoader>
-            <Form>
-              <Info />
-              <CompensatingAmount />
-              <SubmitButton />
-            </Form>
-            <UnlockBondFormInfo />
-          </UnlockBondFormLoader>
-        </FormBlock>
+        <FormPage
+          notices={<BondStatsCard />}
+          below={<PenaltyHistory />}
+          faq={<Faq items={faq} />}
+        >
+          <FormReady>
+            <UnlockBondFormGate>
+              <Form data-testid="unlockBondForm">
+                <FormLayout aside={<UnlockBondAside />}>
+                  <LockedBondNotice />
+                </FormLayout>
+              </Form>
+            </UnlockBondFormGate>
+          </FormReady>
+        </FormPage>
       </UnlockBondFormProvider>
     </UnlockBondDataProvider>
   );

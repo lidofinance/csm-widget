@@ -1,19 +1,18 @@
+import { PATH } from 'consts/urls';
 import { FC } from 'react';
 
 import { Layout } from 'shared/layout';
-import { BondPageSwitcher } from 'shared/navigate';
 import { ClaimBond } from './claim-bond';
-import { Faq } from 'shared/components';
-import { FAQ_BOND } from 'faq';
 
 export const ClaimBondPage: FC = () => (
   <Layout
-    title="Manage Bond & Rewards"
-    subtitle="Select a claiming option for bond and rewards"
+    wide
     pageName="ClaimBond"
+    breadcrumbs={[
+      { label: 'Bond & Rewards', href: PATH.BOND },
+      { label: 'Claim' },
+    ]}
   >
-    <BondPageSwitcher />
     <ClaimBond />
-    <Faq items={FAQ_BOND} />
   </Layout>
 );

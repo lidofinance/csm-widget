@@ -44,13 +44,11 @@ test.describe(
       qase(649, 'Should show Issued without a claim offer'),
       async ({ widgetService }) => {
         const operatorType = widgetService.operatorType;
-        await operatorType.openTypePage();
+        await operatorType.openIcsOverviewPage();
 
-        await test.step('ICS card is issued but not claimable', async () => {
+        await test.step('ICS banner is issued but not claimable', async () => {
           await expect(operatorType.icsCardChip).toHaveText('Issued');
-          await expect(operatorType.icsApplyButton).toHaveText(
-            'View ICS status',
-          );
+          await expect(operatorType.icsApplyButton).toHaveText('View details');
         });
 
         await test.step('No claim notification and nav counter', async () => {
@@ -95,7 +93,7 @@ test.describe(
         await test.step('Open the ICS claim page directly', async () => {
           await widgetService.page.goto('/type/ics-claim');
           await expect(claim.formTitle).toContainText(
-            'Claim Identified Community Staker operator type',
+            'You are eligible to claim a new operator type',
           );
         });
 

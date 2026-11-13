@@ -37,11 +37,7 @@ export const EPIC = {
   dashboard: {
     name: 'Dashboard',
     /** sections of the page */
-    features: ['Bond & Rewards'],
-  },
-  monitoring: {
-    name: 'Monitoring',
-    features: [],
+    features: ['Operator', 'Keys', 'Performance', 'Bond & Rewards', 'Tools'],
   },
   common: {
     name: 'Common',

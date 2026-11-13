@@ -1,19 +1,30 @@
-import { useSmVersionSupported } from 'modules/web3';
+import {
+  useDappStatus,
+  useModule,
+  useNodeOperator,
+  useSmVersionSupported,
+} from 'modules/web3';
 import { FC, PropsWithChildren, ReactNode } from 'react';
-import { SplashPage, UnsupportedPage } from '../inner-pages';
+import { LoadingPage, UnsupportedPage } from '../inner-pages';
 
 type Props = {
   fallback?: ReactNode;
   unsupported?: ReactNode;
-  additional?: boolean;
 };
 
 export const GateSupported: FC<PropsWithChildren<Props>> = ({
-  fallback = <SplashPage />,
+  fallback = <LoadingPage />,
   unsupported = <UnsupportedPage />,
   children,
 }) => {
-  const { data: isSupported, isPending } = useSmVersionSupported();
+  const { isAccountActive } = useDappStatus();
+  const { isPending: isOperatorPending } = useNodeOperator();
+  const { module } = useModule();
+  // no module yet → checks every deployed module; wait for the operator so we check the right one
+  const { data: isSupported, isPending } = useSmVersionSupported(module);
 
-  return <>{isPending ? fallback : isSupported ? children : unsupported}</>;
+  if (isPending || (isAccountActive && isOperatorPending)) {
+    return <>{fallback}</>;
+  }
+  return <>{isSupported ? children : unsupported}</>;
 };

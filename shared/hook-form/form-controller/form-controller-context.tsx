@@ -7,6 +7,7 @@ import {
 } from 'react';
 import { type FieldValues } from 'react-hook-form';
 import invariant from 'tiny-invariant';
+import { type FlowResolver } from './flow';
 import { FormSubmitter } from './types';
 
 export type FormControllerContextValueType<
@@ -15,6 +16,7 @@ export type FormControllerContextValueType<
 > = {
   formName?: string;
   onSubmit: FormSubmitter<F, C>;
+  resolve?: FlowResolver<F, C, { action: string }>;
   onReset?: (args: F) => void;
 };
 
@@ -31,17 +33,19 @@ export const useFormControllerContext = () => {
 export const FormControllerProvider: FC<
   PropsWithChildren<{
     submitter: FormSubmitter<any, any>;
+    resolve?: FlowResolver<any, any, { action: string }>;
     formName?: string;
     onReset?: (args: any) => any;
   }>
-> = ({ children, submitter, formName, onReset }) => {
+> = ({ children, submitter, resolve, formName, onReset }) => {
   const formController: FormControllerContextValueType = useMemo(
     () => ({
       formName,
       onSubmit: submitter,
+      resolve,
       onReset,
     }),
-    [formName, onReset, submitter],
+    [formName, onReset, resolve, submitter],
   );
 
   return (

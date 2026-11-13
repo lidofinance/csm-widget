@@ -11,9 +11,9 @@ export class RemovePage {
   keyCheckbox: Locator;
   numberOfKeysToRemove: Locator;
   numberOfKeysToRemoveValue: Locator;
-  ejectionCostInput: Locator;
-  ejectionCostLabel: Locator;
-  ejectionCostInputSVG: Locator;
+  removalFee: Locator;
+  removalFeeValue: Locator;
+  removalFeeInfoIcon: Locator;
 
   removalFeeInfoTooltipText: Locator;
 
@@ -24,9 +24,7 @@ export class RemovePage {
     this.page = page;
     this.base = new BasePage(page);
     this.removeKeysForm = this.page.getByTestId('removeKeysForm');
-    this.keyRow = this.removeKeysForm.locator('label', {
-      hasText: /0x[0-9a-fA-F]+/,
-    });
+    this.keyRow = this.removeKeysForm.getByTestId('keyRow');
     this.emptyState = this.removeKeysForm.getByText(
       'No keys available to remove',
     );
@@ -34,18 +32,16 @@ export class RemovePage {
     this.numberOfKeysToRemove = this.removeKeysForm.getByTestId(
       'numbersOfKeysToRemove',
     );
-    this.numberOfKeysToRemoveValue = this.numberOfKeysToRemove
-      .locator('div')
-      .nth(1);
-    this.ejectionCostInput = this.removeKeysForm.getByTestId(
-      'ejectionCostAmountInput',
+    this.numberOfKeysToRemoveValue = this.removeKeysForm.getByTestId(
+      'numbersOfKeysToRemoveValue',
     );
-    this.ejectionCostLabel = this.removeKeysForm.locator(
-      'xpath=//input[@data-testid="ejectionCostAmountInput"]/ancestor::label',
-    );
-    this.ejectionCostInputSVG = this.ejectionCostLabel.locator('svg');
+    this.removalFee = this.removeKeysForm.getByTestId('removalFee');
+    this.removalFeeValue = this.removeKeysForm.getByTestId('removalFeeValue');
+    this.removalFeeInfoIcon = this.removalFee.getByRole('img', {
+      name: 'More info',
+    });
 
-    this.removalFeeInfoTooltipText = this.page.locator('#lido-ui-modal-root');
+    this.removalFeeInfoTooltipText = this.page.getByRole('tooltip');
 
     this.excessBondAfterExecution = this.removeKeysForm.getByTestId(
       'excessBondAfterExecution',
@@ -59,7 +55,7 @@ export class RemovePage {
     await test.step('Open remove tab for Keys page', async () => {
       // an empty operator has no key rows, so accept the empty state too
       await this.base.openWithRetry(
-        '/keys/remove',
+        '/keys/delete?mode=remove',
         this.keyRow.first().or(this.emptyState).first(),
       );
     });
@@ -68,8 +64,10 @@ export class RemovePage {
   getCheckboxByAddress(key: string) {
     const trimmedPubkey = trimAddress(`0x${key}`, 16);
     return this.page
-      .locator('label', { hasText: trimmedPubkey })
-      .locator('svg');
+      .getByTestId('keyRow')
+      .filter({ hasText: trimmedPubkey })
+      .locator('label svg')
+      .first();
   }
 
   async getRandomKeys(count = 1) {

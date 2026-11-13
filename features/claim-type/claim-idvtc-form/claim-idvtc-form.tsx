@@ -1,31 +1,53 @@
+import { useFaq } from 'faq';
 import { FC, memo } from 'react';
-
-import { FormBlock } from 'shared/components';
+import { Faq } from 'shared/components';
+import { FormPage, FormReady } from 'shared/form-page';
 import { Form } from 'shared/hook-form/form-controller';
-import { ClaimIdvtcFormLoader } from './claim-idvtc-form-loader';
+import { ClaimTypeSuccessProvider, useClaimTypeSuccess } from '../shared';
+import { ClaimIdvtcCards, ClaimIdvtcSubmitButton } from './claim-idvtc-cards';
+import { ClaimIdvtcFormGate } from './claim-idvtc-form-gate';
+import { ClaimIdvtcSuccess } from './claim-idvtc-success';
 import { ClaimIdvtcDataProvider, ClaimIdvtcFormProvider } from './context';
-import { Info } from './controls/info';
-import { ModeSelector } from './controls/mode-selector';
-import { Parameters } from './controls/parameters';
-import { SubmitButton } from './controls/submit-button';
-import { DkgRequiredCard } from './dkg-required-card';
+import { NarrowStyle } from './styles';
 
-export const ClaimIdvtcForm: FC = memo(() => {
+const ClaimIdvtcContent: FC = () => {
+  const { justClaimed } = useClaimTypeSuccess();
+  const faq = useFaq('OPERATOR_TYPE');
+
   return (
+    <FormPage
+      faq={
+        justClaimed ? undefined : (
+          <NarrowStyle>
+            <Faq items={faq} />
+          </NarrowStyle>
+        )
+      }
+      done={justClaimed}
+    >
+      {justClaimed ? (
+        <NarrowStyle>
+          <ClaimIdvtcSuccess />
+        </NarrowStyle>
+      ) : (
+        <FormReady>
+          <ClaimIdvtcFormGate>
+            <Form data-testid="claimIdvtcForm">
+              <ClaimIdvtcCards cta={<ClaimIdvtcSubmitButton />} />
+            </Form>
+          </ClaimIdvtcFormGate>
+        </FormReady>
+      )}
+    </FormPage>
+  );
+};
+
+export const ClaimIdvtcForm: FC = memo(() => (
+  <ClaimTypeSuccessProvider>
     <ClaimIdvtcDataProvider>
       <ClaimIdvtcFormProvider>
-        <FormBlock>
-          <ClaimIdvtcFormLoader>
-            <Form>
-              <Info />
-              <ModeSelector />
-              <Parameters />
-              <SubmitButton />
-            </Form>
-          </ClaimIdvtcFormLoader>
-        </FormBlock>
+        <ClaimIdvtcContent />
       </ClaimIdvtcFormProvider>
-      <DkgRequiredCard />
     </ClaimIdvtcDataProvider>
-  );
-});
+  </ClaimTypeSuccessProvider>
+));

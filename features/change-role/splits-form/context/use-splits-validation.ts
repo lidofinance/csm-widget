@@ -8,18 +8,8 @@ import {
 } from 'shared/hook-form/validation';
 import { compareLowercase } from 'utils';
 import type { SplitsFormInputType, SplitsFormNetworkData } from './types';
-import {
-  FeeSplit,
-  MAX_FEE_SPLITS_COUNT,
-  PERCENT_BASIS,
-} from '@lidofinance/lido-csm-sdk';
-
-export const splitsEqual = (a: Partial<FeeSplit>[], b: FeeSplit[]) =>
-  a.length === b.length &&
-  a.every(
-    (s, i) =>
-      compareLowercase(s.recipient, b[i].recipient) && s.share === b[i].share,
-  );
+import { MAX_FEE_SPLITS_COUNT, PERCENT_BASIS } from '@lidofinance/lido-csm-sdk';
+import { splitsEqual } from '../splits-state';
 
 export const useSplitsValidation = () => {
   return useFormValidation<SplitsFormInputType, SplitsFormNetworkData>(

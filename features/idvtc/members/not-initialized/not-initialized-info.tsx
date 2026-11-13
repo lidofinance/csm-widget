@@ -1,13 +1,14 @@
-import { Text } from '@lidofinance/lido-ui';
+import { Body, Card, Description, Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import { FormBlock } from 'shared/components';
 
 export const NotInitializedInfo: FC = () => (
-  <FormBlock $gap="lg" data-testid="notInitializedInfo">
-    <Text size="sm">Members have not been initialized yet</Text>
-    <Text size="xs" color="secondary">
-      The Manager or Reward Address of this operator needs to initialize the
-      cluster members
-    </Text>
-  </FormBlock>
+  <Card data-testid="notInitializedInfo">
+    <Stack gap={8}>
+      <Body weight="semibold">Members have not been initialized yet</Body>
+      <Description color="secondary">
+        The Manager or Rewards Address of this operator needs to initialize the
+        cluster members
+      </Description>
+    </Stack>
+  </Card>
 );

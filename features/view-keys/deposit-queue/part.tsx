@@ -1,5 +1,5 @@
 import { Tooltip } from 'shared/components';
-import { FC, useCallback } from 'react';
+import { CSSProperties, FC, useCallback } from 'react';
 import { useGraphInteraction } from './hover-provider';
 import { PartStyle } from './style';
 import { BatchMetadata, GraphPart, QueueUnit } from './types';
@@ -31,37 +31,41 @@ export const Part: FC<PartProps> = ({
     return null;
   }
 
-  const part = (
+  const renderPart = (inner?: boolean) => (
     <PartStyle
       $type={type}
-      $width={width}
-      $offset={offset}
+      $width={inner ? 100 : width}
+      $offset={inner ? 0 : offset}
       $fade={hover && hover !== type}
       onMouseEnter={type === 'active' ? onMouseEnter : undefined}
     />
   );
 
-  if (type === 'batch' && metadata) {
+  // The Tooltip trigger span sizes the segment, so it takes over width/offset
+  const wrapperStyle: CSSProperties = {
+    display: 'inline-block',
+    verticalAlign: 'top',
+    height: '100%',
+    width: `${width}%`,
+    ...(type === 'batch' && {
+      position: 'absolute',
+      left: `${offset}%`,
+    }),
+  };
+
+  if ((type === 'batch' || type === 'added') && metadata) {
+    const Content =
+      type === 'batch' ? BatchTooltipContent : AddedTooltipContent;
     return (
       <Tooltip
-        title={<BatchTooltipContent metadata={metadata} unit={unit} />}
+        title={<Content metadata={metadata} unit={unit} />}
         placement="top"
+        style={wrapperStyle}
       >
-        {part}
+        {renderPart(true)}
       </Tooltip>
     );
   }
 
-  if (type === 'added' && metadata) {
-    return (
-      <Tooltip
-        title={<AddedTooltipContent metadata={metadata} unit={unit} />}
-        placement="top"
-      >
-        {part}
-      </Tooltip>
-    );
-  }
-
-  return part;
+  return renderPart();
 };

@@ -1,10 +1,8 @@
+import { PATH } from 'consts/urls';
 import { ROLES } from '@lidofinance/lido-csm-sdk';
-import { FAQ_ROLES } from 'faq';
 import { FC } from 'react';
-import { Faq } from 'shared/components';
 import { useWeb3Key } from 'shared/hooks';
 import { Layout } from 'shared/layout';
-import { SettingsPageSwitcher } from 'shared/navigate';
 import { ChangeRoleForm } from './change-role-form';
 
 export const ManagerAddressPage: FC = () => {
@@ -12,13 +10,13 @@ export const ManagerAddressPage: FC = () => {
 
   return (
     <Layout
-      title="Settings"
-      subtitle="Manage your operator"
       pageName="SettingsManagerAddress"
+      breadcrumbs={[
+        { label: 'Settings', href: PATH.SETTINGS },
+        { label: 'Manager Address' },
+      ]}
     >
-      <SettingsPageSwitcher />
       <ChangeRoleForm key={key} role={ROLES.MANAGER} />
-      <Faq items={FAQ_ROLES} />
     </Layout>
   );
 };

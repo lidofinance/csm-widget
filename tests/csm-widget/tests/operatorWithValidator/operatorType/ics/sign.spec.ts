@@ -39,7 +39,7 @@ test.describe(
         await applicationForm.signInForm.signIn();
 
         await expect(
-          widgetService.page.locator('text=Submit application'),
+          applicationForm.submitApplicationForm.submitBtn,
         ).toBeVisible();
 
         const address = mnemonicToAccount(secretPhrase).address;

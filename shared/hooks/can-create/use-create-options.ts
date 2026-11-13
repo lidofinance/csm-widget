@@ -5,6 +5,7 @@ import { useIcsApplyEnabled } from '../use-ics-apply-enabled';
 import { resolvePairedOptionKind } from './rules';
 import { useCanCreate0x01 } from './use-can-create-0x01';
 import { useCanCreate0x02 } from './use-can-create-0x02';
+import { useCanCreateCM } from './use-can-create-cm';
 import { useCanCreateICS } from './use-can-create-ics';
 import { useCanCreateIDVTC } from './use-can-create-idvtc';
 
@@ -16,7 +17,8 @@ export type ApplicableOperatorType =
 
 export type CreateOption =
   | { type: CreatableOperatorType; kind: 'create' }
-  | { type: ApplicableOperatorType; kind: 'apply' };
+  | { type: ApplicableOperatorType; kind: 'apply' }
+  | { kind: 'create-cm' };
 
 type ApplyState = ReturnType<typeof useCanCreateICS>;
 
@@ -34,6 +36,7 @@ export const useCreateOptions = (): CreateOption[] => {
   const csm02 = useCanCreate0x02();
   const ics = useCanCreateICS();
   const idvtc = useCanCreateIDVTC();
+  const cm = useCanCreateCM();
   const icsApplyEnabled = useIcsApplyEnabled();
 
   return useMemo(() => {
@@ -42,7 +45,15 @@ export const useCreateOptions = (): CreateOption[] => {
       toPairedOption(OPERATOR_TYPE.CSM_ICS, ics, icsApplyEnabled),
       toPairedOption(OPERATOR_TYPE.CSM_IDVTC, idvtc, icsApplyEnabled),
       csm02.canCreate ? { type: OPERATOR_TYPE.CSM2_DEF, kind: 'create' } : null,
+      cm.canCreate ? { kind: 'create-cm' } : null,
     ];
     return options.filter((option): option is CreateOption => option !== null);
-  }, [def.canCreate, csm02.canCreate, ics, idvtc, icsApplyEnabled]);
+  }, [
+    def.canCreate,
+    csm02.canCreate,
+    ics,
+    idvtc,
+    cm.canCreate,
+    icsApplyEnabled,
+  ]);
 };

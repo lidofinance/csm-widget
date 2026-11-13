@@ -1,41 +1,43 @@
-import { Text } from '@lidofinance/lido-ui';
+import { Button, EmptyState } from '@lidofinance/lido-app-ui';
 import { PATH } from 'consts/urls';
 import { FC } from 'react';
-import { Stack, WhenLoaded } from 'shared/components';
-import { SurveyItem, SurveyLink, SurveySection } from '../components';
+import { WhenLoaded } from 'shared/components';
+import { HubList, HubRow, HubSection } from 'shared/components/hub-list';
+import { SurveyCards } from '../components';
 import { useSurveyContext } from '../surveys-provider';
-import { SurveysBackButton } from '../shared';
 
 export const DelegatorHome: FC = () => {
   const { delegatedOperators, isLoading } = useSurveyContext();
 
   return (
     <WhenLoaded loading={isLoading}>
-      <SurveySection
+      <HubSection
         title="Delegated operators"
-        subtitle="How delegation works"
-        help="As a delegate, you can access and submit Setup surveys on behalf of node operators who have added you as their delegate"
-        mainPrefix={<SurveysBackButton />}
+        tooltip="As a delegate, you can access and submit Setup surveys on behalf of node operators who have added you as their delegate"
       >
         {delegatedOperators?.length === 0 ? (
-          <Text size="sm" color="secondary">
-            You are not a delegate for any node operator yet
-          </Text>
+          <EmptyState title="You are not a delegate for any node operator yet" />
         ) : (
-          <Stack direction="column" gap="md">
+          <SurveyCards>
             {delegatedOperators?.map((operatorId) => (
-              <SurveyItem
-                key={operatorId}
-                title={`Node Operator ${operatorId}`}
-              >
-                <SurveyLink path={`${PATH.SURVEYS_DELEGATOR}/${operatorId}`}>
-                  Manage setups
-                </SurveyLink>
-              </SurveyItem>
+              <HubList key={operatorId}>
+                <HubRow
+                  title={`Node Operator ${operatorId}`}
+                  trailing={
+                    <Button
+                      variant="outline"
+                      size="small"
+                      href={`${PATH.SURVEYS_DELEGATOR}/${operatorId}`}
+                    >
+                      Manage setups
+                    </Button>
+                  }
+                />
+              </HubList>
             ))}
-          </Stack>
+          </SurveyCards>
         )}
-      </SurveySection>
+      </HubSection>
     </WhenLoaded>
   );
 };

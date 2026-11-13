@@ -1,3 +1,4 @@
+import { MessageBox } from '@lidofinance/lido-app-ui';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { OPERATOR_TYPE_METADATA } from 'consts';
 import { useOperatorCurveId } from 'modules/web3';
@@ -10,24 +11,11 @@ import {
 import { TxAmount } from 'shared/transaction-modal';
 import styled from 'styled-components';
 
-// The success description renders as a <p> (lido-ui Text), whose content
-// model only allows phrasing content — spans, not divs, keep this valid.
-const Box = styled.span`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+const TEST_ID = 'otherOperatorsClaimable';
 
-  margin-top: ${({ theme }) => theme.spaceMap.lg}px;
-  padding: 12px 16px;
-  border-radius: 16px;
-  border: 1px solid
-    color-mix(in srgb, var(--lido-color-primary) 20%, transparent);
-  background: color-mix(in srgb, var(--lido-color-primary) 5%, transparent);
-
+const BoxStyle = styled.div`
+  margin-top: 16px;
   text-align: left;
-  color: var(--lido-color-text);
-  font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
-  line-height: 20px;
 `;
 
 const Line = styled.span`
@@ -56,15 +44,19 @@ export const OtherOperatorsClaimable: FC = () => {
 
   if (items.length === 0) return null;
 
+  const lines = items.map(({ operator, amount }) => (
+    <ClaimableLine
+      key={`${operator.module}-${operator.nodeOperatorId}`}
+      operator={operator}
+      amount={amount}
+    />
+  ));
+
   return (
-    <Box data-testid="otherOperatorsClaimable">
-      {items.map(({ operator, amount }) => (
-        <ClaimableLine
-          key={`${operator.module}-${operator.nodeOperatorId}`}
-          operator={operator}
-          amount={amount}
-        />
-      ))}
-    </Box>
+    <BoxStyle>
+      <MessageBox variant="info" icon={false} dataTestId={{ root: TEST_ID }}>
+        {lines}
+      </MessageBox>
+    </BoxStyle>
   );
 };

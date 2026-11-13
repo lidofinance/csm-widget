@@ -42,6 +42,7 @@ export const SplitsFormProvider: FC<PropsWithChildren> = ({ children }) => {
     <FormProvider {...formObject}>
       <FormControllerProvider
         submitter={submitter}
+        resolve={resolve}
         formName="splits"
         onReset={handleReset}
       >

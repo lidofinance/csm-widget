@@ -1,6 +1,5 @@
-import { Divider } from '@lidofinance/lido-ui';
+import { Divider, Stack } from '@lidofinance/lido-app-ui';
 import { FC, Fragment } from 'react';
-import { Stack } from 'shared/components';
 import { getPriorityName } from './get-priority-name';
 import { QueueAmount } from './queue-amount';
 import { TooltipContentStyle } from './style';
@@ -16,10 +15,10 @@ export const BatchTooltipContent: FC<BatchTooltipContentProps> = ({
   unit,
 }) => {
   return (
-    <Stack direction="row" gap="md">
+    <Stack direction="row" gap={16}>
       {metadata.map((batch, index) => (
         <Fragment key={index}>
-          {index > 0 && <Divider type="vertical" />}
+          {index > 0 && <Divider orientation="vertical" />}
           <TooltipContentStyle>
             <strong>
               {batch.combined

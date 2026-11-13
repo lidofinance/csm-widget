@@ -1,5 +1,6 @@
 import {
   KEY_OPERATOR_METADATA,
+  useModule,
   useNodeOperatorId,
   useOperatorIsOwner,
   useOperatorMetadata,
@@ -11,7 +12,11 @@ import type { MetadataFormNetworkData } from './types';
 
 const useMetadataFormNetworkData = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const { data: metadata, isPending } = useOperatorMetadata({ nodeOperatorId });
+  const { module } = useModule();
+  const { data: metadata, isPending } = useOperatorMetadata({
+    nodeOperatorId,
+    module,
+  });
   const { data: isOwner, isPending: isOwnerPending } = useOperatorIsOwner({
     nodeOperatorId,
   });

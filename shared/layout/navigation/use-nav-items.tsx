@@ -1,19 +1,19 @@
-import { CSM_FAMILY_MODULES } from 'consts';
 import { PATH } from 'consts/urls';
 import { ReactNode } from 'react';
 
-import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { Eth as EthIcon, Plus as PlusIcon } from '@lidofinance/lido-ui';
-import DashboardIcon from 'assets/icons/dashboard.svg?react';
-import DvtIcon from 'assets/icons/file-2.svg?react';
+import {
+  IconDashboard,
+  IconKeyRound,
+  IconPlus,
+  IconUser,
+  IconWallet,
+} from '@lidofinance/lido-app-ui';
+import EthIcon from 'assets/icons/eth.svg?react';
 import FileIcon from 'assets/icons/file.svg?react';
 import GearIcon from 'assets/icons/gear.svg?react';
 import HomeIcon from 'assets/icons/home.svg?react';
-import KeyIcon from 'assets/icons/key.svg?react';
 import MeterIcon from 'assets/icons/meter.svg?react';
-import UserIcon from 'assets/icons/user.svg?react';
 import UsersIcon from 'assets/icons/users-round.svg?react';
-import WalletIcon from 'assets/icons/wallet.svg?react';
 import {
   CounterClaimType,
   CounterInvalidKeys,
@@ -35,54 +35,30 @@ export type Route = ShowRuleProps & {
 
 const routes: Route[] = [
   {
-    name: 'Main',
+    name: 'Validate with Lido',
     path: PATH.HOME,
     icon: <HomeIcon />,
+    subPaths: [PATH.CSM],
     showRules: ['NOT_NODE_OPERATOR'],
-    modules: [MODULE_NAME.CSM],
   },
   {
     name: 'Dashboard',
     path: PATH.HOME,
-    icon: <DashboardIcon />,
+    icon: <IconDashboard />,
     showRules: ['HAS_ANY_ROLE'],
-  },
-  {
-    name: 'Create Operator',
-    path: PATH.CREATE,
-    icon: <PlusIcon />,
-    subPaths: [
-      PATH.CREATE_0x01,
-      PATH.CREATE_ICS,
-      PATH.CREATE_IDVTC,
-      PATH.CREATE_0x02,
-    ],
-    showRules: ['CAN_CREATE'],
   },
   {
     name: 'Keys',
     path: PATH.KEYS,
-    icon: <KeyIcon />,
-    subPaths: [
-      PATH.KEYS_SUBMIT,
-      PATH.KEYS_REMOVE,
-      PATH.KEYS_EJECT,
-      PATH.KEYS_EXIT,
-      PATH.KEYS_VIEW,
-    ],
+    icon: <IconKeyRound />,
+    subPaths: [PATH.KEYS_SUBMIT, PATH.KEYS_DELETE, PATH.KEYS_NORMALIZE],
     showRules: ['IS_NODE_OPERATOR'],
     suffix: <CounterInvalidKeys />,
   },
   {
-    name: 'Monitoring',
-    path: PATH.MONITORING,
-    icon: <MeterIcon />,
-    showRules: ['IS_NODE_OPERATOR'],
-  },
-  {
     name: 'Bond & Rewards',
     path: PATH.BOND,
-    icon: <WalletIcon />,
+    icon: <IconWallet />,
     subPaths: [PATH.BOND_ADD, PATH.BOND_CLAIM, PATH.BOND_UNLOCK],
     showRules: ['HAS_ANY_ROLE'],
     suffix: <CounterLockedBond />,
@@ -99,9 +75,39 @@ const routes: Route[] = [
       PATH.SETTINGS_INBOX,
       PATH.SETTINGS_METADATA,
       PATH.SETTINGS_GENERAL,
+      PATH.IDVTC_DKG,
+      PATH.IDVTC_MEMBERS,
     ],
     showRules: ['IS_NODE_OPERATOR'],
     suffix: <CounterInvites />,
+  },
+  {
+    name: 'My Operators',
+    path: PATH.MY_OPERATORS,
+    icon: <UsersIcon />,
+    subPaths: [PATH.GROUP],
+    showRules: ['IS_NODE_OPERATOR'],
+    suffix: <CounterMyOperators />,
+  },
+  {
+    name: 'Surveys',
+    path: PATH.SURVEYS,
+    icon: <FileIcon />,
+    showRules: ['IS_SURVEYS_ACTIVE'],
+    suffix: <CounterSurveys />,
+  },
+  {
+    name: 'Create Operator',
+    path: PATH.CREATE,
+    icon: <IconPlus />,
+    subPaths: [
+      PATH.CREATE_0x01,
+      PATH.CREATE_ICS,
+      PATH.CREATE_IDVTC,
+      PATH.CREATE_0x02,
+      PATH.CREATE_CM,
+    ],
+    showRules: ['CAN_CREATE'],
   },
   {
     name: 'Inbox Requests',
@@ -127,44 +133,23 @@ const routes: Route[] = [
     showRules: ['EL_TOP_UP_ALLOCATION_ENABLER'],
   },
   {
-    name: 'Surveys',
-    path: PATH.SURVEYS,
-    icon: <FileIcon />,
-    showRules: ['IS_SURVEYS_ACTIVE'],
-    suffix: <CounterSurveys />,
-  },
-  {
     name: 'Operator Type',
     path: PATH.TYPE,
-    icon: <UserIcon />,
+    icon: <IconUser />,
     subPaths: [
       PATH.TYPE_ICS_SYSTEM,
       PATH.TYPE_ICS_APPLY,
-      PATH.TYPE_ICS_PARAMETERS,
       PATH.TYPE_ICS_CLAIM,
       PATH.TYPE_IDVTC_DESCRIPTION,
       PATH.TYPE_IDVTC_APPLY,
-      PATH.TYPE_IDVTC_PARAMETERS,
       PATH.TYPE_IDVTC_CLAIM,
-      PATH.TYPE_PARAMETERS,
     ],
-    showRules: ['CAN_CLAIM_ICS', 'CAN_CLAIM_IDVTC', 'ICS_APPLY_ENABLED'],
+    showRules: [
+      'CAN_CLAIM_ICS',
+      'CAN_CLAIM_IDVTC',
+      ['IS_CSM_FAMILY_SCOPE', 'ICS_APPLY_ENABLED'],
+    ],
     suffix: <CounterClaimType />,
-  },
-  {
-    name: 'My operators',
-    path: PATH.MY_OPERATORS,
-    icon: <UsersIcon />,
-    showRules: ['IS_NODE_OPERATOR'],
-    modules: CSM_FAMILY_MODULES,
-    suffix: <CounterMyOperators />,
-  },
-  {
-    name: 'DVT',
-    path: PATH.IDVTC_DKG,
-    icon: <DvtIcon />,
-    subPaths: [PATH.IDVTC_MEMBERS],
-    showRules: ['IS_IDVTC'],
   },
 ];
 

@@ -1,78 +1,26 @@
-import { isModuleCM } from 'consts';
-import { CM_BOND_AMOUNTS_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
-import { PATH } from 'consts/urls';
-import {
-  FormTitle,
-  KeysAvailable,
-  MatomoLink,
-  Stack,
-  TokenAmount,
-} from 'shared/components';
-import { TokenButtonsHookForm } from 'shared/hook-form/controls';
+import { FC, useMemo } from 'react';
+import { getBondTokenOptions, TokenSelectField } from 'shared/hook-form/fields';
 import { LocalLink } from 'shared/navigate';
 import { useSubmitKeysFormData } from '../context';
-import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
-export const TokenSelect: React.FC = () => {
-  const { ethBalance, stethBalance, wstethBalance, keysAvailable } =
-    useSubmitKeysFormData();
+export const TokenSelect: FC = () => {
+  const data = useSubmitKeysFormData(true);
+  const options = useMemo(() => getBondTokenOptions(data), [data]);
 
   return (
-    <>
-      <FormTitle
-        extra={
-          isModuleCM ? (
-            <MatomoLink
-              href={CM_BOND_AMOUNTS_LINK}
-              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore}
-            >
-              How bond is calculated
-            </MatomoLink>
-          ) : (
-            <LocalLink
-              href={PATH.CREATE}
-              anchor="#how-much-bond-is-needed"
-              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore}
-            >
-              How bond is calculated
-            </LocalLink>
-          )
-        }
-      >
-        Choose bond token
-      </FormTitle>
-      <TokenButtonsHookForm
-        options={{
-          [TOKENS.eth]: (
-            <Stack direction="column">
-              <TokenAmount token={TOKENS.eth} amount={ethBalance} />
-              <KeysAvailable
-                {...keysAvailable?.[TOKENS.eth]}
-                token={TOKENS.eth}
-              />
-            </Stack>
-          ),
-          [TOKENS.steth]: (
-            <Stack direction="column">
-              <TokenAmount token={TOKENS.steth} amount={stethBalance} />
-              <KeysAvailable
-                {...keysAvailable?.[TOKENS.steth]}
-                token={TOKENS.steth}
-              />
-            </Stack>
-          ),
-          [TOKENS.wsteth]: (
-            <Stack direction="column">
-              <TokenAmount token={TOKENS.wsteth} amount={wstethBalance} />
-              <KeysAvailable
-                {...keysAvailable?.[TOKENS.wsteth]}
-                token={TOKENS.wsteth}
-              />
-            </Stack>
-          ),
-        }}
-      />
-    </>
+    <TokenSelectField
+      name="token"
+      label="Choose bond token"
+      options={options}
+      action={
+        <LocalLink
+          anchor="#how-much-bond-is-needed"
+          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore}
+        >
+          How bond is calculated
+        </LocalLink>
+      }
+    />
   );
 };

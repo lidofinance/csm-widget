@@ -10,6 +10,7 @@ type ValidateBondAmountProps = {
   ethBalance: bigint;
   stethBalance: bigint;
   wstethBalance: bigint;
+  affordableKeys?: { count: number; uploaded: number };
 };
 
 export const validateBondAmount = ({
@@ -19,6 +20,7 @@ export const validateBondAmount = ({
   ethBalance,
   stethBalance,
   wstethBalance,
+  affordableKeys,
 }: ValidateBondAmountProps) => {
   if (bondAmount && bondAmount > 0) {
     if (token === TOKENS.eth && maxStakeEth < bondAmount) {
@@ -40,7 +42,9 @@ export const validateBondAmount = ({
     if (tokenBalance !== undefined && tokenBalance < bondAmount) {
       throw new ValidationError(
         'bondAmount',
-        validationMessage.notEnoughBalance(getTokenDisplayName(token)),
+        affordableKeys && affordableKeys.count < affordableKeys.uploaded
+          ? validationMessage.cannotUploadMoreKeys(affordableKeys.count)
+          : validationMessage.notEnoughBalance(getTokenDisplayName(token)),
       );
     }
   }

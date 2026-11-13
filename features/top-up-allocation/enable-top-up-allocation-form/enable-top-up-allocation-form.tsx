@@ -1,26 +1,32 @@
 import { FC, memo } from 'react';
-import { FormBlock } from 'shared/components';
-import { Form, FormLoader } from 'shared/hook-form/form-controller';
+import {
+  FormCard,
+  FormPage,
+  FormReady,
+  GasCostList,
+  SubmitButton,
+} from 'shared/form-page';
+import { TextField } from 'shared/hook-form/fields';
+import { Form } from 'shared/hook-form/form-controller';
 import {
   EnableTopUpAllocationDataProvider,
   EnableTopUpAllocationFormProvider,
 } from './context';
-import { NodeOperatorInput } from './controls/node-operator-input';
-import { SubmitButton } from './controls/submit-button';
 
-export const EnableTopUpAllocationForm: FC = memo(() => {
-  return (
-    <EnableTopUpAllocationDataProvider>
-      <EnableTopUpAllocationFormProvider>
-        <FormBlock data-testid="enableTopUpAllocationForm">
-          <FormLoader>
-            <Form>
-              <NodeOperatorInput />
-              <SubmitButton />
-            </Form>
-          </FormLoader>
-        </FormBlock>
-      </EnableTopUpAllocationFormProvider>
-    </EnableTopUpAllocationDataProvider>
-  );
-});
+export const EnableTopUpAllocationForm: FC = memo(() => (
+  <EnableTopUpAllocationDataProvider>
+    <EnableTopUpAllocationFormProvider>
+      <FormPage>
+        <FormReady>
+          <Form data-testid="enableTopUpAllocationForm">
+            <FormCard title="Specify Node Operator">
+              <TextField name="nodeOperatorId" label="Node Operator ID" />
+              <GasCostList />
+              <SubmitButton>Enable top-up allocation</SubmitButton>
+            </FormCard>
+          </Form>
+        </FormReady>
+      </FormPage>
+    </EnableTopUpAllocationFormProvider>
+  </EnableTopUpAllocationDataProvider>
+));

@@ -1,7 +1,6 @@
-import { Block, Text } from '@lidofinance/lido-ui';
 import { PATH } from 'consts/urls';
 import { FC } from 'react';
-import { Stack } from 'shared/components';
+import { Card, Description, Stack } from '@lidofinance/lido-app-ui';
 import { ShowRule, useShowFlags } from 'shared/hooks';
 import { useNavItems } from 'shared/layout/navigation/use-nav-items';
 import { getCorrectPath } from 'shared/navigate/get-correct-path';
@@ -16,7 +15,7 @@ const Row = styled.div`
 `;
 
 const Ok = styled.span<{ $ok: boolean }>`
-  color: ${({ $ok }) => ($ok ? 'var(--lido-color-success)' : 'var(--lido-color-error)')};
+  color: ${({ $ok }) => ($ok ? 'var(--lido-app-ui-color-text-success)' : 'var(--lido-app-ui-color-text-error)')};
 `;
 
 const FLAGS: ShowRule[] = [
@@ -36,7 +35,7 @@ const PATHS: [PATH, PATH][] = [
   [PATH.BOND_ADD, PATH.BOND_CLAIM],
   [PATH.BOND_UNLOCK, PATH.BOND_CLAIM],
   [PATH.KEYS, PATH.CREATE],
-  [PATH.KEYS_VIEW, PATH.HOME],
+  [PATH.KEYS_DELETE, PATH.CREATE],
   [PATH.SETTINGS, PATH.SETTINGS_INBOX],
 ];
 
@@ -47,20 +46,18 @@ export const ClaimerDebugPanel: FC = () => {
   const nav = useNavItems().map((r) => r.name);
 
   return (
-    <Block>
-      <Stack direction="column" gap="md">
-        <Text size="xs" color="secondary">
-          Show flags
-        </Text>
+    <Card>
+      <Stack direction="column" gap={16}>
+        <Description color="secondary">Show flags</Description>
         {FLAGS.map((f) => (
           <Row key={f}>
             <span>{f}</span>
             <span>{String(flags[f])}</span>
           </Row>
         ))}
-        <Text size="xs" color="secondary">
+        <Description color="secondary">
           getCorrectPath (expected for claimer-only)
-        </Text>
+        </Description>
         {PATHS.map(([from, expected]) => {
           const actual = getCorrectPath(from, flags);
           return (
@@ -72,9 +69,7 @@ export const ClaimerDebugPanel: FC = () => {
             </Row>
           );
         })}
-        <Text size="xs" color="secondary">
-          Nav items
-        </Text>
+        <Description color="secondary">Nav items</Description>
         <Row>
           <span>{nav.join(', ') || '—'}</span>
           <Ok $ok={nav.every((n) => EXPECTED_NAV.includes(n))}>
@@ -84,6 +79,6 @@ export const ClaimerDebugPanel: FC = () => {
           </Ok>
         </Row>
       </Stack>
-    </Block>
+    </Card>
   );
 };

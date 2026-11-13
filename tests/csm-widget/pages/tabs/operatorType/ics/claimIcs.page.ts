@@ -4,18 +4,26 @@ import { BasePage } from 'tests/shared/pages/base.page';
 export class ClaimIcsPage extends BasePage {
   page: Page;
   title: Locator;
-  subtitle: Locator;
   formTitle: Locator;
+  whatsChanging: Locator;
+  viewFullListButton: Locator;
+  parameterChanges: Locator;
   claimButton: Locator;
   confirmModal: Locator;
   confirmContinueButton: Locator;
+  successScreen: Locator;
 
   constructor(page: Page) {
     super(page);
     this.page = page;
-    this.title = this.page.getByTestId('pageTitle');
-    this.subtitle = this.page.getByTestId('pageSubtitle');
+    this.title = this.page
+      .getByTestId('pageTitle')
+      .locator('[aria-current="page"]');
     this.formTitle = this.page.getByTestId('formTitle');
+    this.whatsChanging = this.page.getByTestId('claimChanges');
+    this.viewFullListButton =
+      this.whatsChanging.getByTestId('viewFullListButton');
+    this.parameterChanges = this.page.getByTestId('parameterChangesModal');
     this.claimButton = this.page.getByRole('button', {
       name: 'Claim operator type',
     });
@@ -25,6 +33,7 @@ export class ClaimIcsPage extends BasePage {
     this.confirmContinueButton = this.confirmModal.getByRole('button', {
       name: 'Continue',
     });
+    this.successScreen = this.page.getByTestId('successScreen');
   }
 
   async open() {

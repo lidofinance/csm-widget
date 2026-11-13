@@ -17,7 +17,12 @@ const byModuleThenId = (a: ModuleNodeOperator, b: ModuleNodeOperator) =>
 /** Operators where the wallet is manager or rewards address; claimer-only entries excluded. */
 export const useMyOperators = () => {
   const { address } = useDappStatus();
-  const { data: list, isPending } = useAvailableOperators();
+  const {
+    data: list,
+    isPending,
+    isPlaceholderData,
+    isError,
+  } = useAvailableOperators();
 
   const data = useMemo(
     () =>
@@ -25,5 +30,5 @@ export const useMyOperators = () => {
     [list, address],
   );
 
-  return { data, isPending };
+  return { data, isPending: isPending || isPlaceholderData, isError };
 };

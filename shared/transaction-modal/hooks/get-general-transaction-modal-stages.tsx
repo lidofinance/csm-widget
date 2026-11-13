@@ -1,10 +1,12 @@
 import {
   TxStagePermit,
   TxStageSuccessMultisig,
+  TxStageSuccessMultisigApprove,
 } from 'shared/transaction-modal/tx-stages-basic';
 import { TxStageSignOperationAmount } from '../tx-stages-composed';
 import type { TransactionModalTransitStage } from './use-transaction-modal-stage';
 import { getFailedStage } from './get-failed-stage';
+import type { MultisigDonePayload } from 'shared/hook-form/form-controller';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const getGeneralTransactionModalStages = (
@@ -29,6 +31,9 @@ export const getGeneralTransactionModalStages = (
         txHash={txHash}
       />,
     ),
-  successMultisig: () => transitStage(<TxStageSuccessMultisig />),
+  successMultisig: ({ approve }: MultisigDonePayload) =>
+    transitStage(
+      approve ? <TxStageSuccessMultisigApprove /> : <TxStageSuccessMultisig />,
+    ),
   failed: getFailedStage(transitStage),
 });

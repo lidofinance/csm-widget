@@ -1,6 +1,6 @@
 import { getUseConfirmModal } from 'shared/hooks';
-import { ConfirmEjectKeysModal } from '../confirm-eject-keys-modal';
+import { ConfirmEjectKeysModalApp } from '../confirm-eject-keys-modal-app';
 
 export const useConfirmEjectKeysModal = getUseConfirmModal(
-  ConfirmEjectKeysModal,
+  ConfirmEjectKeysModalApp,
 );

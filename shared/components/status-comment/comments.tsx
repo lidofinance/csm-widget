@@ -14,6 +14,8 @@ import {
   useShareLimitStatus,
 } from 'modules/web3';
 
+const REMOVE_QUERY = { mode: 'remove' };
+
 const VALIDATOR_ACTIVE_ANCHOR = '#when-does-a-validator-become-active';
 
 // TODO: check role
@@ -43,7 +45,9 @@ export const CommentUnbonded: FC = () => (
 );
 
 export const CommentInvalid: FC = () => (
-  <LocalLink href={PATH.KEYS_REMOVE}>Remove the key</LocalLink>
+  <LocalLink href={PATH.KEYS_DELETE} query={REMOVE_QUERY}>
+    Remove the key
+  </LocalLink>
 );
 
 export const CommentUnchecked: FC = () => (
@@ -56,7 +60,9 @@ export const CommentUnchecked: FC = () => (
 export const CommentUnbondedNonQueued: FC = () => (
   <>
     <LocalLink href={PATH.BOND_ADD}>Top up the bond</LocalLink> or{' '}
-    <LocalLink href={PATH.KEYS_REMOVE}>Remove the key</LocalLink>
+    <LocalLink href={PATH.KEYS_DELETE} query={REMOVE_QUERY}>
+      Remove the key
+    </LocalLink>
   </>
 );
 
@@ -70,7 +76,7 @@ export const CommentNonQueued: FC = () => (
 
 export const CommentExiting: FC = () => (
   <LocalLink
-    href={PATH.KEYS_VIEW}
+    href={PATH.KEYS}
     anchor="#when-does-a-validator-become-withdrawn"
     matomoEvent={
       MATOMO_CLICK_EVENTS_TYPES.whenValidatorBecomeWithdrawnLinkComment
@@ -83,7 +89,7 @@ export const CommentExiting: FC = () => (
 export const CommentActivationPending: FC = () => {
   return (
     <LocalLink
-      href={PATH.KEYS_VIEW}
+      href={PATH.KEYS}
       anchor={VALIDATOR_ACTIVE_ANCHOR}
       matomoEvent={
         MATOMO_CLICK_EVENTS_TYPES.whenValidatorBecomeActiveLinkComment
@@ -111,7 +117,7 @@ export const CommentWithStrikes: FC = () => {
 
 export const CommentDepositable: FC = () => {
   const { isCsmFamily, module } = useModule();
-  const name = MODULE_METADATA[module].variantName;
+  const name = module && MODULE_METADATA[module].variantName;
   const { data: status } = useShareLimitStatus();
   const STAKE_SHARE_LIMIT_ANCHOR = isCsmFamily
     ? '#what-is-the-csm-stake-share-limit'
@@ -122,7 +128,7 @@ export const CommentDepositable: FC = () => {
       The key may not receive deposits in the near future because {name} has
       reached its{' '}
       <LocalLink
-        href={PATH.KEYS_VIEW}
+        href={PATH.KEYS}
         anchor={STAKE_SHARE_LIMIT_ANCHOR}
         matomoEvent={MATOMO_CLICK_EVENTS_TYPES.stakeShareLimitLinkComment}
       >
@@ -131,7 +137,7 @@ export const CommentDepositable: FC = () => {
     </>
   ) : (
     <LocalLink
-      href={PATH.KEYS_VIEW}
+      href={PATH.KEYS}
       anchor={VALIDATOR_ACTIVE_ANCHOR}
       matomoEvent={
         MATOMO_CLICK_EVENTS_TYPES.whenValidatorBecomeActiveLinkComment

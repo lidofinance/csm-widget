@@ -51,16 +51,14 @@ test.describe(
         const operatorType = widgetService.operatorType;
         const form = operatorType.applicationForm;
 
-        await operatorType.openTypePage();
+        await operatorType.openIcsOverviewPage();
 
-        await test.step('Header and ICS card show the claimed type', async () => {
+        await test.step('Header and ICS banner show the claimed type', async () => {
           await expect(widgetService.header.operatorTypeCurve).toContainText(
             'ICS',
           );
           await expect(operatorType.icsCardChip).toHaveText('Claimed');
-          await expect(operatorType.icsApplyButton).toHaveText(
-            'View ICS status',
-          );
+          await expect(operatorType.icsApplyButton).toHaveText('View details');
           await expect(operatorType.claimIcsAlert).toBeHidden();
         });
 
@@ -69,7 +67,7 @@ test.describe(
         await test.step('Apply page shows the claimed status', async () => {
           await expect(form.operatorTypeChip).toHaveText('Claimed');
           await expect(
-            form.page.getByText('Your Node Operator already has ICS type'),
+            form.page.getByText('You successfully claimed your Operator type'),
           ).toBeVisible();
           await expect(form.signInForm.form).toBeHidden();
         });

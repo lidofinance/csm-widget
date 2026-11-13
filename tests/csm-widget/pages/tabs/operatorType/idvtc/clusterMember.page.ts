@@ -69,10 +69,10 @@ export class ClusterMemberPage {
     this.clearBtn = this.card.getByTestId('clearBtn');
 
     this.addressError = this.addressInput
-      .locator('xpath=ancestor::label[1]')
+      .locator('xpath=ancestor::label[1]/..')
       .getByTestId('inputMessageError');
     this.signatureError = this.signatureInput
-      .locator('xpath=ancestor::label[1]')
+      .locator('xpath=ancestor::label[1]/..')
       .getByTestId('inputMessageError');
   }
 

@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren, ReactNode } from 'react';
 import { useInitialLoading } from 'shared/hooks';
-import { SplashPage } from '../inner-pages';
+import { LoadingPage } from '../inner-pages';
 
 type Props = {
   fallback?: ReactNode;
@@ -8,7 +8,7 @@ type Props = {
 };
 
 export const GateLoaded: FC<PropsWithChildren<Props>> = ({
-  fallback = <SplashPage />,
+  fallback = <LoadingPage />,
   additional,
   children,
 }) => {

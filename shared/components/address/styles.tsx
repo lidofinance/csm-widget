@@ -1,14 +1,14 @@
 import styled, { css } from 'styled-components';
 import { LinkStyled } from '../matomo-link/styles';
-import { StackStyle } from '../stack/style';
-import { ComponentProps } from 'react';
-import { Text } from '@lidofinance/lido-ui';
+import { TypographyColor } from '@lidofinance/lido-app-ui';
 
-export const AddressContainerStyle = styled(StackStyle).attrs({
-  $gap: 'xs',
-  $align: 'center',
-})<{ $big?: boolean; $monospace?: boolean }>`
+export const AddressContainerStyle = styled.span<{
+  $big?: boolean;
+  $monospace?: boolean;
+}>`
   display: inline-flex;
+  align-items: center;
+  gap: 4px;
 
   > span > span {
     font-weight: inherit;
@@ -31,33 +31,30 @@ export const AddressContainerStyle = styled(StackStyle).attrs({
   }
 `;
 
-const VARIANTS = {
-  default: css`
-    color: var(--lido-color-text);
-  `,
-  secondary: css`
-    color: var(--lido-color-secondary);
-  `,
-  primary: css`
-    color: var(--lido-color-primary);
-  `,
-  error: css`
-    color: var(--lido-color-error);
-  `,
-  warning: css`
-    color: var(--lido-color-warning);
-  `,
-  success: css`
-    color: var(--lido-color-success);
-  `,
+const COLORS: Record<TypographyColor, string> = {
+  default: 'var(--lido-app-ui-color-text-default)',
+  secondary: 'var(--lido-app-ui-color-text-secondary)',
+  tertiary: 'var(--lido-app-ui-color-text-tertiary)',
+  neutral: 'var(--lido-app-ui-color-text-neutral)',
+  active: 'var(--lido-app-ui-color-text-active)',
+  success: 'var(--lido-app-ui-color-text-success)',
+  warning: 'var(--lido-app-ui-color-text-warning)',
+  error: 'var(--lido-app-ui-color-text-error)',
+  info: 'var(--lido-app-ui-color-text-info)',
+  inverse: 'var(--lido-app-ui-color-text-inverse)',
+  disabled: 'var(--lido-app-ui-color-text-disabled)',
 };
 
 export const PubkeyContainerStyle = styled(AddressContainerStyle)<{
-  $color?: ComponentProps<typeof Text>['color'];
+  $color?: TypographyColor;
 }>`
-  font-family: 'Fira Code', monospace;
-  font-size: ${({ theme }) => theme.fontSizesMap.xs}px;
-  ${({ $color = 'default' }) => $color && VARIANTS[$color]}
+  ${({ $monospace = true }) =>
+    $monospace &&
+    css`
+      font-family: 'Fira Code', monospace;
+      font-size: 12px;
+    `}
+  color: ${({ $color = 'default' }) => COLORS[$color]};
 `;
 
 export const Avatar = styled.img<{

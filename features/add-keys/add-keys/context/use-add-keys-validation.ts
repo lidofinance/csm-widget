@@ -4,7 +4,7 @@ import {
   DISABLE_DEPOSIT_DATA_VALIDATION,
 } from 'config/feature-flags/types';
 import { validateDkgBatch } from 'features/idvtc/dkg/utils/validate-dkg-batch';
-import { useSmSDK } from 'modules/web3';
+import { useActiveOperatorSDK } from 'modules/web3';
 import {
   useFormValidation,
   validateBondAmount,
@@ -15,7 +15,7 @@ import {
 import type { AddKeysFormInputType, AddKeysFormNetworkData } from './types';
 
 export const useAddKeysValidation = () => {
-  const { depositData: sdk } = useSmSDK();
+  const { depositData: sdk } = useActiveOperatorSDK();
   const featureFlags = useFeatureFlags();
 
   return useFormValidation<AddKeysFormInputType, AddKeysFormNetworkData>(
@@ -36,6 +36,7 @@ export const useAddKeysValidation = () => {
         ethBalance,
         stethBalance,
         wstethBalance,
+        keysAvailable,
       },
       validate,
     ) => {
@@ -49,6 +50,13 @@ export const useAddKeysValidation = () => {
           ethBalance,
           stethBalance,
           wstethBalance,
+          affordableKeys:
+            keysAvailable && depositData?.length
+              ? {
+                  count: keysAvailable[token].byBalance,
+                  uploaded: depositData.length,
+                }
+              : undefined,
         }),
       );
 

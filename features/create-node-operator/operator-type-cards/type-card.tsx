@@ -1,56 +1,82 @@
-import { Button, Text } from '@lidofinance/lido-ui';
-import { OPERATOR_TYPE_METADATA } from 'consts';
+import {
+  Button,
+  Description,
+  H3,
+  IconInfo,
+  Stack,
+  Tooltip,
+  upQuery,
+} from '@lidofinance/lido-app-ui';
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { MODULE_METADATA, OPERATOR_TYPE_METADATA } from 'consts';
 import { FC } from 'react';
-import { Stack } from 'shared/components';
 import { useOperatorTypeCurve } from 'shared/hooks';
 import { TypeBadgeButton } from 'shared/node-operator/operator-type';
-import { LocalLink } from 'shared/navigate';
+import styled from 'styled-components';
+import { trackMatomoEvent } from 'utils';
 import { Parameters } from './parameters';
-import { CardBody, CardColumn, CardDivider, OptionCard } from './styles';
-import { VisibleType } from './use-visible-types';
+import { getTypeTagline } from './type-taglines';
+import { VisibleType } from './prepend-blocked-0x01';
+
+const TaglineStyle = styled.div`
+  @media ${upQuery('md')} {
+    min-height: 48px;
+  }
+`;
 
 export const TypeCard: FC<{ type: VisibleType }> = ({ type }) => {
-  const metadata = OPERATOR_TYPE_METADATA[type.type];
+  const metadata = type.type ? OPERATOR_TYPE_METADATA[type.type] : undefined;
   const curve = useOperatorTypeCurve(type.type);
 
   return (
-    <OptionCard
-      data-testid={`operatorTypeCard-${metadata.short.toLowerCase()}`}
+    <Stack
+      grow
+      gap={16}
+      justify="between"
+      data-testid={
+        metadata
+          ? `operatorTypeCard-${metadata.short.toLowerCase()}`
+          : 'operatorTypeCard-cm'
+      }
     >
-      <CardBody>
-        <CardColumn>
-          <Stack direction="column" gap="md">
+      <Stack gap={16}>
+        {type.type && (
+          <div>
             <TypeBadgeButton
               displayType={type.type}
               curve={curve}
               data-testid="operatorTypeCardBadge"
             />
-            <Stack direction="column" gap="sm">
-              <Text size="sm" weight={700}>
-                {metadata.name}
-              </Text>
-              <Text size="xxs">{metadata.description}</Text>
-              {metadata.descriptionNote && (
-                <Text size="xxs">
-                  <b>{metadata.descriptionNote.lead}</b>
-                  {metadata.descriptionNote.rest}
-                </Text>
-              )}
-            </Stack>
-          </Stack>
-        </CardColumn>
-        <CardDivider />
-        <CardColumn>{curve && <Parameters type={type.type} />}</CardColumn>
-      </CardBody>
-      <LocalLink href={type.href} matomoEvent={type.matomoEvent}>
+          </div>
+        )}
+        <Stack gap={8}>
+          <H3 as="h2">
+            {metadata?.short ?? MODULE_METADATA[MODULE_NAME.CM].title}
+          </H3>
+          <TaglineStyle>
+            <Description as="p">{getTypeTagline(type.type)}</Description>
+          </TaglineStyle>
+        </Stack>
+        {type.type && curve && <Parameters type={type.type} />}
+      </Stack>
+      {type.disabledReason ? (
+        <Tooltip content={type.disabledReason} position="bottom" width={320}>
+          <span>
+            <Button fullWidth disabled iconRight={<IconInfo />}>
+              {type.label}
+            </Button>
+          </span>
+        </Tooltip>
+      ) : (
         <Button
-          fullwidth
-          size="sm"
-          variant={type.primary ? 'filled' : 'translucent'}
+          fullWidth
+          href={type.href}
+          variant={type.primary ? 'primary' : 'outline'}
+          onClick={() => trackMatomoEvent(type.matomoEvent)}
         >
           {type.label}
         </Button>
-      </LocalLink>
-    </OptionCard>
+      )}
+    </Stack>
   );
 };

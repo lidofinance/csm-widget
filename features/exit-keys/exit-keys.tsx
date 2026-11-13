@@ -1,105 +1,77 @@
-import { Text } from '@lidofinance/lido-ui';
-import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
-import { moduleMeta } from 'consts/module';
 import {
-  FormTitle,
-  MatomoLink,
-  StackStyle,
-  WarningBlock,
-} from 'shared/components';
+  MessageBox,
+  SectionTitle,
+  Stack,
+  Typography,
+} from '@lidofinance/lido-app-ui';
+import { FC } from 'react';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
+import { LIDO_RESEARCH_FORUM_NODE_OPERATORS_LINK } from 'consts/external-links';
+import { DeleteKeysLayout } from 'features/delete-keys/delete-keys-layout';
+import { MatomoLink } from 'shared/components';
+import { useModuleMeta } from 'shared/hooks';
 import { Gate } from 'shared/navigate';
 
-export const ExitKeys = () => {
+const GUIDES_URL =
+  'https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores';
+
+const GUIDES = [
+  ['Dappnode', 'dappnode', MATOMO_CLICK_EVENTS_TYPES.exitKeysDappnodeLink],
+  ['Sedge', 'sedge', MATOMO_CLICK_EVENTS_TYPES.exitKeysSedgeLink],
+  ['Stereum', 'stereum', MATOMO_CLICK_EVENTS_TYPES.exitKeysStereumLink],
+  ['EthPillar', 'ethpillar', MATOMO_CLICK_EVENTS_TYPES.exitKeysEthpillarLink],
+  ['EthDocker', 'eth-docker', MATOMO_CLICK_EVENTS_TYPES.exitKeysEthdockerLink],
+  ['Systemd', 'systemd', MATOMO_CLICK_EVENTS_TYPES.exitKeysSystemdLink],
+] as const;
+
+export const ExitKeys: FC = () => {
+  const meta = useModuleMeta();
+
   return (
-    <>
-      <Gate rule="IS_CSM_FAMILY">
-        <FormTitle>Follow the instuctions</FormTitle>
-        <Text size="xs">
-          Sign and broadcast an exit message for each validator key you want to
-          exit using one of the guides below:
-        </Text>
-        <StackStyle as="ul" $gap="sm" $direction="column">
-          <li>
+    <DeleteKeysLayout focusCards>
+      <Stack direction="column" gap={16}>
+        <Gate rule="IS_CSM_FAMILY">
+          <SectionTitle title="Follow the instructions" />
+          <Typography variant="body" color="secondary">
+            Sign and broadcast an exit message for each validator key you want
+            to exit using one of the guides below:
+          </Typography>
+          <Stack direction="row" wrap gap={16}>
+            {GUIDES.map(([label, anchor, matomoEvent]) => (
+              <MatomoLink
+                key={anchor}
+                icon="external"
+                href={`${GUIDES_URL}#${anchor}`}
+                matomoEvent={matomoEvent}
+              >
+                {label}
+              </MatomoLink>
+            ))}
+          </Stack>
+        </Gate>
+        <Gate rule="IS_CM">
+          <MessageBox variant="warning">
+            Out of order exits are discouraged by{' '}
             <MatomoLink
-              icon="external"
-              href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#dappnode"
-              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysDappnodeLink}
+              $inline
+              href="https://ipfs.io/ipfs/QmW9kE61zC61PcuikCQRwn82aoTCj9yPuENGNPML9QLkSM"
             >
-              Guide for Dappnode
+              the Validator Exits Standard Node Operator Protocol (SNOP)
             </MatomoLink>
-          </li>
-          <li>
-            <MatomoLink
-              icon="external"
-              href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#sedge"
-              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysSedgeLink}
-            >
-              Guide for Sedge
+            . In case an out of order exit is required, the Node Operator must
+            notify the community, specifying the number of validators affected,
+            their indices, and the reason for the exit request via{' '}
+            <MatomoLink $inline href={LIDO_RESEARCH_FORUM_NODE_OPERATORS_LINK}>
+              the Node Operator category of the Lido Research Forum
             </MatomoLink>
-          </li>
-          <li>
-            <MatomoLink
-              icon="external"
-              href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#stereum"
-              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysStereumLink}
-            >
-              Guide for Stereum
-            </MatomoLink>
-          </li>
-          <li>
-            <MatomoLink
-              icon="external"
-              href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#ethpillar"
-              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysEthpillarLink}
-            >
-              Guide for EthPillar
-            </MatomoLink>
-          </li>
-          <li>
-            <MatomoLink
-              icon="external"
-              href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#eth-docker"
-              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysEthdockerLink}
-            >
-              Guide for EthDocker
-            </MatomoLink>
-          </li>
-          <li>
-            <MatomoLink
-              icon="external"
-              href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#systemd"
-              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysSystemdLink}
-            >
-              Guide for Systemd
-            </MatomoLink>
-          </li>
-        </StackStyle>
-      </Gate>
-      <Gate rule="IS_CM">
-        <WarningBlock type="warning">
-          Out of order exits are discouraged by{' '}
-          <MatomoLink
-            $inline
-            href="https://ipfs.io/ipfs/QmW9kE61zC61PcuikCQRwn82aoTCj9yPuENGNPML9QLkSM"
-          >
-            the Validator Exits Standard Node Operator Protocol (SNOP)
-          </MatomoLink>
-          . In case an out of order exit is required, the Node Operator must
-          notify the community, specifying the number of validators affected,
-          their indices, and the reason for the exit request via{' '}
-          <MatomoLink
-            $inline
-            href="https://research.lido.fi/c/node-operators/12"
-          >
-            the Node Operator category of the Lido Research Forum
-          </MatomoLink>
-          .
-        </WarningBlock>
-      </Gate>
-      <WarningBlock type="notice">
-        This action should be performed{' '}
-        <b>outside the {moduleMeta.shortName} UI</b>
-      </WarningBlock>
-    </>
+            .
+          </MessageBox>
+        </Gate>
+        <MessageBox>
+          This action should be performed outside the{' '}
+          {meta?.shortName ?? 'module'} UI
+        </MessageBox>
+      </Stack>
+    </DeleteKeysLayout>
   );
 };

@@ -1,5 +1,4 @@
 import { TransactionModalContent } from 'shared/transaction-modal/transaction-modal-content';
-import { StageIconSign } from './icons';
 
 type TxStageSignProps = {
   description: React.ReactNode;
@@ -9,7 +8,7 @@ type TxStageSignProps = {
 export const TxStageSign = ({ title, description }: TxStageSignProps) => {
   return (
     <TransactionModalContent
-      icon={<StageIconSign />}
+      status="loading"
       title={title}
       description={description}
       footerHint="Confirm this transaction in your wallet"

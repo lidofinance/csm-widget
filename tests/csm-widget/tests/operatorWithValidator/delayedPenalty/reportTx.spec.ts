@@ -108,7 +108,7 @@ test.describe(
           );
         });
 
-        await test.step('Locked bond tab shows the locked amount', async () => {
+        await test.step('Compensate locked bond page shows the locked amount', async () => {
           await unlockBond.open();
           const shown = parseAmount(
             await unlockBond.lockedBondAmount.textContent(),
@@ -118,7 +118,7 @@ test.describe(
           ).toBeLessThan(AMOUNT_TOLERANCE);
         });
 
-        await test.step('Penalty History lists the report', async () => {
+        await test.step('History lists the report', async () => {
           await unlockBond.expandPenaltyHistory();
           const row = unlockBond.penaltyHistoryRows.filter({
             hasText: DETAILS,

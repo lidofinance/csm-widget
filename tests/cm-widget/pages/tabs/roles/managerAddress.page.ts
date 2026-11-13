@@ -15,6 +15,7 @@ export class ManagerAddressPage extends BasePage {
   pendingTitledAddress: Locator;
   pendingAddress: Locator;
   pendingAddressEtherscanLink: Locator;
+  actionRequired: Locator;
   revokeButton: Locator;
 
   addressInput: Locator;
@@ -30,26 +31,32 @@ export class ManagerAddressPage extends BasePage {
   ) {
     super(page);
     this.form = this.page.getByTestId('changeRoleForm');
-    this.currentTitledAddress = this.form.getByTestId('titledAddress').nth(0);
-    this.currentAddress = this.currentTitledAddress.locator('> div').nth(1);
-    this.currentAddressEtherscanLink = this.currentAddress.locator('a');
+    this.currentTitledAddress = this.form.getByTestId('currentRoleAddress');
+    this.currentAddress =
+      this.currentTitledAddress.getByTestId('currentAddress');
+    this.currentAddressEtherscanLink = this.currentAddress.getByRole('link');
 
     // Proposed address elements
     this.proposedAddress = this.form.getByTestId('proposedAddress');
-    this.pendingTitledAddress =
-      this.proposedAddress.getByTestId('titledAddress');
-    this.pendingAddress = this.pendingTitledAddress.locator('> div').nth(1);
-    this.pendingAddressEtherscanLink = this.pendingAddress.locator('a');
+    this.pendingTitledAddress = this.proposedAddress;
+    this.pendingAddress = this.proposedAddress.getByTestId('pendingAddress');
+    this.pendingAddressEtherscanLink = this.pendingAddress.getByRole('link');
+    this.actionRequired = this.proposedAddress.getByTestId(
+      'pendingActionRequired',
+    );
     this.revokeButton = this.proposedAddress.getByRole('button', {
       name: 'Cancel',
     });
 
     this.addressInput = this.form.locator('input[name="address"]');
     this.inputLabel = this.form.locator(
-      'xpath=//input[@name="address"]/ancestor::label',
+      'xpath=//input[@name="address"]/ancestor::label/..',
     );
-    this.validationInputTooltip = this.inputLabel.locator('> span').nth(1);
-    this.addressValidIcon = this.inputLabel.locator('svg');
+    this.validationInputTooltip =
+      this.inputLabel.getByTestId('inputMessageError');
+    this.addressValidIcon = this.form
+      .locator('xpath=//input[@name="address"]/ancestor::label')
+      .locator('svg');
     this.proposeButton = this.form.getByRole('button', {
       name: 'Propose a new manager address',
     });

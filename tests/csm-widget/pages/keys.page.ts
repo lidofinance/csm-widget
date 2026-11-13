@@ -1,6 +1,7 @@
 import { Locator, Page, test } from '@playwright/test';
 import { BasePage } from '../../shared/pages/base.page';
 import { CreateNodeOperatorForm } from './elements/keys/element.createNodeOperatorForm';
+import { CreateSuccessScreen } from './elements/keys/element.createSuccessScreen';
 import { OperatorTypeCard } from './elements/main/element.operatorTypeCards';
 import { RemovePage } from './tabs/keys/remove.page';
 import { SubmitPage } from './tabs/keys/submit.page';
@@ -11,8 +12,8 @@ export class KeysPage extends BasePage {
 
   // Own elements
   createNodeOperatorForm: CreateNodeOperatorForm;
+  createSuccessScreen: CreateSuccessScreen;
   headerTitle: Locator;
-  headerSubTitle: Locator;
   typeBadge: Locator;
 
   // Tabs
@@ -27,8 +28,8 @@ export class KeysPage extends BasePage {
     this.submitPage = new SubmitPage(page);
     this.keysView = new KeysViewPage(page);
     this.createNodeOperatorForm = new CreateNodeOperatorForm(this.page);
+    this.createSuccessScreen = new CreateSuccessScreen(this.page);
     this.headerTitle = this.pageTitle;
-    this.headerSubTitle = this.page.getByTestId('pageSubtitle');
     this.typeBadge = this.page.getByTestId('createTypeBadge');
   }
 
@@ -55,9 +56,10 @@ export class KeysPage extends BasePage {
 
   async isNewOperator() {
     await this.base.header.accountSection.waitFor({ state: 'visible' });
-    return (
-      (await this.headerTitle.isVisible()) &&
-      (await this.headerSubTitle.isVisible())
-    );
+    await this.typeBadge
+      .or(this.createNodeOperatorForm.formBlock)
+      .first()
+      .waitFor({ state: 'visible' });
+    return this.typeBadge.isVisible();
   }
 }

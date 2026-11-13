@@ -1,35 +1,31 @@
-import { Text } from '@lidofinance/lido-ui';
+import { Accordion, Body } from '@lidofinance/lido-app-ui';
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { MODULE_METADATA } from 'consts/module';
 import { getExternalLinks } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { useOtherModule } from 'modules/web3';
 import { FC } from 'react';
 import { MatomoLink } from 'shared/components';
-import { StyledAccordion } from './styles';
-import { isModuleCSM, moduleMeta } from 'consts';
 
 const REPLACEMENTS: Record<string, string> = {
   'curated-onchain-v1': 'Lido Curated v1',
 };
 
-export const OtherModuleBanner: FC = () => {
+export const OtherModuleBanner: FC<{ module: MODULE_NAME }> = ({ module }) => {
   const { operatorsWidget } = getExternalLinks();
-  const { data } = useOtherModule();
+  const { data } = useOtherModule(undefined, module);
   const moduleName = (data && REPLACEMENTS[data]) ?? data;
 
   if (!moduleName) return null;
 
   return (
-    <StyledAccordion
-      defaultExpanded={true}
-      summary={
-        <Text size="sm" weight={700}>
-          You have a Node Operator in the {moduleName} module
-        </Text>
-      }
+    <Accordion
+      defaultExpanded
+      title={`You have a Node Operator in the ${moduleName} module`}
     >
-      <Text size="xxs">
-        To become a Node Operator in {moduleMeta.shortTitle},{' '}
-        {isModuleCSM ? 'start by uploading your first key' : 'continue'} here.
+      <Body as="div">
+        To become a Node Operator in {MODULE_METADATA[module].shortTitle},
+        continue here.
         <br />
         If you want to upload keys to another module (Curated v1 or Simple DVT),
         navigate to{' '}
@@ -40,7 +36,7 @@ export const OtherModuleBanner: FC = () => {
         >
           operators.lido.fi
         </MatomoLink>
-      </Text>
-    </StyledAccordion>
+      </Body>
+    </Accordion>
   );
 };

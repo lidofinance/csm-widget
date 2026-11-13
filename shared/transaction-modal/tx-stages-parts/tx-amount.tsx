@@ -1,4 +1,5 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { TokenAmount, TokenIconSymbol } from '@lidofinance/lido-app-ui';
 import { FormatToken } from 'shared/formatters';
 
 type TxAmountProps = {
@@ -6,11 +7,21 @@ type TxAmountProps = {
   token: TOKENS;
 };
 
-export const TxAmount = ({ amount, token }: TxAmountProps) => (
-  <FormatToken
-    amount={amount}
-    token={token}
-    maxTotalLength={Infinity}
-    adaptiveDecimals
-  />
-);
+const TOKEN_ICON: Record<TOKENS, TokenIconSymbol> = {
+  [TOKENS.eth]: 'ETH',
+  [TOKENS.steth]: 'stETH',
+  [TOKENS.wsteth]: 'wstETH',
+};
+
+export const TxAmount = ({ amount, token }: TxAmountProps) => {
+  const formatted = (
+    <FormatToken
+      amount={amount}
+      token={token}
+      maxTotalLength={Infinity}
+      adaptiveDecimals
+    />
+  );
+
+  return <TokenAmount symbol={TOKEN_ICON[token]} amount={formatted} />;
+};

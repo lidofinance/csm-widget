@@ -1,3 +1,2 @@
-export * from './operator-type';
 export * from './type-badge-button';
-export * from './type-button';
+export * from './use-operator-type-modal-trigger';

@@ -1,5 +1,5 @@
 import { type MethodAccess } from '@lidofinance/lido-csm-sdk';
-import { useSmSDK } from 'modules/web3';
+import { useActiveOperatorSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -30,7 +30,7 @@ export const useClaimBondFlowResolver = (): FlowResolver<
   ClaimBondFormNetworkData,
   ClaimBondFlow
 > => {
-  const { bond: bondSDK } = useSmSDK();
+  const { bond: bondSDK } = useActiveOperatorSDK();
   const [canClaim, claimAccess] = useCanPerform(bondSDK, 'claimBond');
   const buildCallback = useTxModalStagesClaimBond();
 
@@ -56,20 +56,22 @@ export const useClaimBondFlowResolver = (): FlowResolver<
       const maxValueIndex =
         input.claimOption === CLAIM_OPTION.BOND_TO_RA ? 0 : 1;
 
+      const props = {
+        nodeOperatorId: data.nodeOperatorId,
+        token: input.token,
+        amount,
+        proof: includeRewards ? data.rewards?.proof : undefined,
+        shares: includeRewards ? data.rewards?.shares : undefined,
+      };
+
       return {
         action: 'claim',
         includeRewards,
         showAmount,
         maxValueIndex,
         submit: () =>
-          bondSDK.claimBond({
-            nodeOperatorId: data.nodeOperatorId,
-            token: input.token,
-            amount,
-            proof: includeRewards ? data.rewards?.proof : undefined,
-            shares: includeRewards ? data.rewards?.shares : undefined,
-            callback: buildCallback(input, data),
-          }),
+          bondSDK.claimBond({ ...props, callback: buildCallback(input, data) }),
+        estimate: async () => bondSDK.estimateClaimBond(props),
       };
     },
     [bondSDK, canClaim, claimAccess, buildCallback],

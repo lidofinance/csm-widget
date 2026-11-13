@@ -5,9 +5,13 @@ import {
   PropsWithChildren,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
+  useState,
 } from 'react';
+import { useConnectionEffect } from 'wagmi';
 import invariant from 'tiny-invariant';
+import { useDappStatus } from '../hooks';
 import { useRegisterForgetCachedOperator } from './forget-cached-operator';
 import { useActiveNodeOperator } from './use-active-node-operator';
 import { useAvailableOperators } from './use-available-operators';
@@ -18,6 +22,9 @@ export type NodeOperatorContextValue = {
   nodeOperator: ModuleNodeOperator | undefined;
   activeModule: MODULE_NAME | undefined;
   needsSelection: boolean;
+  isDiscovering: boolean;
+  dismissSelection: () => void;
+  requestSelection: () => void;
   switchNodeOperator: (operator: OperatorRef) => void;
 };
 
@@ -55,12 +62,30 @@ export const useNodeOperatorId = <
 
 export const NodeOperatorProvider: FC<PropsWithChildren> = ({ children }) => {
   useRegisterForgetCachedOperator();
-  const { data: list, isPending } = useAvailableOperators();
+  const { data: list, isPending, isPlaceholderData } = useAvailableOperators();
   const {
     nodeOperator: active,
     setActive,
     needsSelection,
+    hasCachedPick,
+    dismissSelection,
+    requestSelection,
   } = useActiveNodeOperator(list);
+  const { isAccountActive } = useDappStatus();
+  const [isBooting, setBooting] = useState(true);
+
+  useConnectionEffect({
+    onConnect: useCallback(({ isReconnected }: { isReconnected: boolean }) => {
+      if (!isReconnected) setBooting(false);
+    }, []),
+  });
+
+  useEffect(() => {
+    if (isAccountActive && !isPending && !isPlaceholderData) setBooting(false);
+  }, [isAccountActive, isPending, isPlaceholderData]);
+
+  const isDiscovering =
+    !isBooting && isAccountActive && isPending && !hasCachedPick;
 
   const switchNodeOperator = useCallback(
     ({ nodeOperatorId, module }: OperatorRef) => {
@@ -74,16 +99,25 @@ export const NodeOperatorProvider: FC<PropsWithChildren> = ({ children }) => {
   );
 
   const value = useMemo(
-    // needsSelection folds into isPending so GateLoaded keeps a SplashPage under the modal
-    // instead of flashing StarterPackPage/CmWelcomePage and redirecting via NOT_NODE_OPERATOR
     () => ({
-      isPending: isPending || needsSelection,
+      isPending,
       nodeOperator: active,
       activeModule: active?.module,
       needsSelection,
+      isDiscovering,
+      dismissSelection,
+      requestSelection,
       switchNodeOperator,
     }),
-    [active, isPending, needsSelection, switchNodeOperator],
+    [
+      active,
+      isPending,
+      needsSelection,
+      isDiscovering,
+      dismissSelection,
+      requestSelection,
+      switchNodeOperator,
+    ],
   );
 
   return (

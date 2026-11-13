@@ -1,14 +1,17 @@
-import { MODULE_NAME, type MethodAccess } from '@lidofinance/lido-csm-sdk';
+import { type MethodAccess, MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { useActiveSmSDK, useModule } from 'modules/web3';
+import { useModalActions } from 'providers/modal-provider';
 import { useCallback } from 'react';
 import {
   type Executable,
   type FlowResolver,
 } from 'shared/hook-form/form-controller';
 import { useCanPerform } from 'shared/hooks';
+import { TransactionModal } from 'shared/transaction-modal';
 import invariant from 'tiny-invariant';
-import { useTxModalStagesClaimIcs } from '../hooks/use-tx-modal-stages-claim-ics';
+import { getClaimTypeAction, useClaimTypeSuccess } from '../../shared';
 import { useConfirmClaimIcsModal } from '../hooks/use-confirm-modal';
+import { useTxModalStagesClaimIcs } from '../hooks/use-tx-modal-stages-claim-ics';
 import { useClaimIcsFormData } from './claim-ics-data-provider';
 import { ClaimIcsFormInputType, ClaimIcsFormNetworkData } from './types';
 
@@ -28,47 +31,58 @@ export const useClaimIcsFlowResolver = (): FlowResolver<
 > => {
   const sdk = useActiveSmSDK(MODULE_NAME.CSM);
   invariant(sdk, 'CSM SDK is required for this operation');
+  const [, claimAccess] = useCanPerform(sdk.icsGate, 'claimCurve');
   const { isCSM } = useModule();
+  const { markClaimed } = useClaimTypeSuccess();
+  const { closeModal } = useModalActions();
   const confirmClaimIcs = useConfirmClaimIcsModal();
   const buildCallback = useTxModalStagesClaimIcs();
-  const [, claimAccess] = useCanPerform(sdk.icsGate, 'claimCurve');
 
   return useCallback(
     (input, data) => {
-      // ICS is a CSM type: it cannot be claimed onto an operator of another module
-      if (!isCSM) return { action: 'wrong-module' };
-      if (data.icsPaused) return { action: 'paused' };
+      const action = getClaimTypeAction({
+        isCSM,
+        paused: data.icsPaused,
+        proof: data.proof,
+        currentCurveId: data.currentCurve?.curveId,
+        newCurveId: data.newCurve?.curveId,
+        canClaim: data.canClaimCurve,
+      });
 
-      const isEmpty = !data.proof?.proof || data.proof.isConsumed;
+      if (action === 'no-access') return { action, access: claimAccess };
+      if (action !== 'claim') return { action };
 
-      const isClaimed =
-        data.currentCurve?.curveId === data.newCurve?.curveId &&
-        !!data.currentCurve;
-      if (isClaimed) {
-        return { action: isEmpty ? 'claimed' : 'claimed-with-proof' };
-      }
-
-      if (isEmpty) return { action: 'not-eligible' };
-      if (!data.canClaimCurve)
-        return { action: 'no-access', access: claimAccess };
+      const props = () => {
+        invariant(data.proof.proof, 'Proof is not defined');
+        return { nodeOperatorId: data.nodeOperatorId, proof: data.proof.proof };
+      };
 
       return {
-        action: 'claim' as const,
+        action,
         confirm: () => confirmClaimIcs({}),
+        estimate: async () => sdk.icsGate.estimateClaimCurve(props()),
         submit: async () => {
-          invariant(data.proof.proof, 'Proof is not defined');
-
-          await sdk.icsGate.claimCurve({
-            nodeOperatorId: data.nodeOperatorId,
-            proof: data.proof.proof,
+          const { receipt } = await sdk.icsGate.claimCurve({
+            ...props(),
             callback: buildCallback(input, data),
           });
+          // A multisig tx is only proposed: its own stage stays open
+          if (!receipt) return;
 
-          window.scrollTo({ top: 0 });
+          markClaimed();
+          closeModal(TransactionModal);
         },
       };
     },
-    [isCSM, sdk, confirmClaimIcs, buildCallback, claimAccess],
+    [
+      isCSM,
+      sdk,
+      claimAccess,
+      markClaimed,
+      closeModal,
+      confirmClaimIcs,
+      buildCallback,
+    ],
   );
 };
 

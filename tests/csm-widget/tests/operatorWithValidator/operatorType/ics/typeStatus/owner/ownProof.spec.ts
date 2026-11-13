@@ -46,9 +46,9 @@ test.describe(
       { tag: [Tags.smoke] },
       async ({ widgetService }) => {
         const operatorType = widgetService.operatorType;
-        await operatorType.openTypePage();
+        await operatorType.openIcsOverviewPage();
 
-        await test.step('ICS card is claimable', async () => {
+        await test.step('ICS banner is claimable', async () => {
           await expect(operatorType.icsCardChip).toHaveText('Issued');
           await expect(operatorType.icsApplyButton).toHaveText(
             'Claim ICS type',

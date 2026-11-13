@@ -1,26 +1,48 @@
-import { Divider, Text } from '@lidofinance/lido-ui';
-import { useCurveParameters } from 'modules/web3/';
-import { type ComponentPropsWithoutRef, type FC, type ReactNode } from 'react';
+import {
+  Address,
+  Body,
+  DataListRow,
+  Divider,
+  Stack,
+} from '@lidofinance/lido-app-ui';
+import { useCurveParameters } from 'modules/web3';
+import { FC, ReactNode } from 'react';
 import { useWatch } from 'react-hook-form';
-import { Address } from 'shared/components';
+import { EtherscanAddressLink } from 'shared/components';
 import {
   formatEthKeyIntervals,
   formatPercentKeyIntervals,
 } from 'shared/components/parameters-list/format';
 import { useCurveMetadata } from 'shared/hooks';
-import styled from 'styled-components';
-import type { CuratedOperatorFormInputType } from '../context/';
-import { useCuratedOperatorFormData } from '../context/';
+import {
+  type CuratedOperatorFormInputType,
+  useCuratedOperatorFormData,
+} from '../context';
+import { CompactListStyle } from './styles';
 
-const SummaryRow: FC<
-  ComponentPropsWithoutRef<'div'> & { label: string; children: ReactNode }
-> = ({ label, children, ...rest }) => (
-  <RowStyle {...rest}>
-    <Text size="xs" color="secondary">
-      {label}
-    </Text>
-    <div>{children}</div>
-  </RowStyle>
+const SummaryAddress: FC<{ address?: string }> = ({ address }) =>
+  address ? (
+    <Stack
+      as="span"
+      inline
+      direction="row"
+      align="center"
+      gap={8}
+      style={{ wordBreak: 'break-all' }}
+    >
+      <Address address={address} symbols={0} copy />
+      <EtherscanAddressLink address={address} />
+    </Stack>
+  ) : (
+    <>—</>
+  );
+
+const ParamLines: FC<{ items: ReactNode[] }> = ({ items }) => (
+  <Stack as="span" align="end" gap={4}>
+    {items.map((item, index) => (
+      <span key={index}>{item}</span>
+    ))}
+  </Stack>
 );
 
 export const VerificationSummary: FC = () => {
@@ -41,83 +63,61 @@ export const VerificationSummary: FC = () => {
   const selectedGate = availableGates.find(
     (gate) => gate.gateName === gateName,
   );
-
   const { data: parameters } = useCurveParameters(selectedGate?.curve);
   const metadata = useCurveMetadata(selectedGate?.curve);
 
   return (
-    <ListStyle>
-      <SummaryRow label="Node Operator type:" data-testid="summaryOperatorType">
-        <Text size="xs">{metadata?.name ?? '—'}</Text>
-      </SummaryRow>
-      <SummaryRow label="Name:" data-testid="summaryName">
-        <Text size="xs">{name}</Text>
-      </SummaryRow>
-      <SummaryRow label="Description:" data-testid="summaryDescription">
-        <Text size="xs">{description}</Text>
-      </SummaryRow>
-      <DividerStyle type="horizontal" />
-      <SummaryRow label="Manager Address:" data-testid="summaryManagerAddress">
-        <Address monospace address={managerAddress} symbols={0} size="xxs" />
-      </SummaryRow>
-      <SummaryRow label="Rewards Address:" data-testid="summaryRewardsAddress">
-        <Address address={rewardAddress} symbols={0} size="xxs" />
-      </SummaryRow>
-
-      <DividerStyle />
-
-      <SummaryRow label="Node Operator reward:">
-        <ParamValues
-          items={formatPercentKeyIntervals(parameters?.rewardsConfig)}
+    <Stack gap={16}>
+      <Body as="h2" weight="semibold">
+        Node Operator details
+      </Body>
+      <CompactListStyle>
+        <DataListRow
+          label="Node Operator type:"
+          value={metadata?.name ?? '—'}
+          dataTestId={{ root: 'summaryOperatorType' }}
         />
-      </SummaryRow>
-      <SummaryRow label="Bond:">
-        <ParamValues items={formatEthKeyIntervals(parameters?.bondConfig)} />
-      </SummaryRow>
-    </ListStyle>
+        <DataListRow
+          label="Name:"
+          value={name}
+          dataTestId={{ root: 'summaryName' }}
+        />
+        <DataListRow
+          label="Description:"
+          value={description}
+          dataTestId={{ root: 'summaryDescription' }}
+        />
+      </CompactListStyle>
+      <Divider />
+      <CompactListStyle>
+        <DataListRow
+          label="Manager Address:"
+          value={<SummaryAddress address={managerAddress} />}
+          dataTestId={{ root: 'summaryManagerAddress' }}
+        />
+        <DataListRow
+          label="Rewards Address:"
+          value={<SummaryAddress address={rewardAddress} />}
+          dataTestId={{ root: 'summaryRewardsAddress' }}
+        />
+      </CompactListStyle>
+      <Divider />
+      <CompactListStyle>
+        <DataListRow
+          label="Node Operator reward:"
+          value={
+            <ParamLines
+              items={formatPercentKeyIntervals(parameters?.rewardsConfig)}
+            />
+          }
+        />
+        <DataListRow
+          label="Bond:"
+          value={
+            <ParamLines items={formatEthKeyIntervals(parameters?.bondConfig)} />
+          }
+        />
+      </CompactListStyle>
+    </Stack>
   );
 };
-
-const ListStyle = styled.div`
-  display: grid;
-  grid-template-columns: 1fr minmax(auto, 364px);
-  column-gap: ${({ theme }) => theme.spaceMap.sm}px;
-  row-gap: ${({ theme }) => theme.spaceMap.xl}px;
-
-  ${({ theme }) => theme.mediaQueries.lg} {
-    grid-template-columns: 1fr;
-  }
-`;
-
-const RowStyle = styled.div`
-  position: relative;
-  display: grid;
-  grid-column: 1 / -1;
-  grid-template-columns: subgrid;
-  align-items: start;
-`;
-
-const DividerStyle = styled(Divider)`
-  grid-column: 1 / -1;
-`;
-
-const ParamList = styled.ul`
-  margin: 4px 0 0;
-  padding-left: 16px;
-  list-style: disc;
-  color: var(--lido-color-text);
-
-  li {
-    margin-bottom: 2px;
-  }
-`;
-
-export const ParamValues: FC<{ items: ReactNode[] }> = ({ items }) => (
-  <ParamList>
-    {items.map((item, i) => (
-      <li key={i}>
-        <Text size="xs">{item}</Text>
-      </li>
-    ))}
-  </ParamList>
-);

@@ -1,7 +1,7 @@
 import { createServer } from 'http';
 import next from 'next';
 import { registerShutdownSignals } from './scripts/shutdown.mjs';
-import { loadDevnetAddresses } from './scripts/load-devnet-addresses.mjs';
+import { loadDevnetArtifacts } from './scripts/load-devnet-artifacts.mjs';
 import {
   CACHE_CONTROL_HEADER,
   CACHE_CONTROL_VALUE,
@@ -23,7 +23,7 @@ const handle = app.getRequestHandler();
 const createWindowEnvRoute = (basePath) => {
   const routePath = `${basePath}/runtime/window-env.js`;
   const clientEnv = buildClientEnv(process.env, {
-    devnetAddresses: loadDevnetAddresses(
+    devnetArtifacts: loadDevnetArtifacts(
       process.env.DEVNET_ADDRESSES_FILE_PATH,
     ),
   });

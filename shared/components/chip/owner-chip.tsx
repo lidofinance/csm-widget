@@ -1,15 +1,7 @@
-import { ComponentPropsWithoutRef, forwardRef } from 'react';
-import { StyledOwnerChip } from './styles';
+import { Tag } from '@lidofinance/lido-app-ui';
 
-export const OwnerChip = forwardRef<
-  HTMLSpanElement,
-  ComponentPropsWithoutRef<'span'>
->((props, ref) => {
-  return (
-    <StyledOwnerChip ref={ref} data-testid="ownerChip" {...props}>
-      Owner
-    </StyledOwnerChip>
-  );
-});
-
-OwnerChip.displayName = 'OwnerChip';
+export const OwnerChip = () => (
+  <Tag variant="neutral" dataTestId={{ root: 'ownerChip' }}>
+    Owner
+  </Tag>
+);

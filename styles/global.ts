@@ -15,11 +15,12 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: content-box;
   }
   body {
-    background: var(--lido-color-background);
-    color: var(--lido-color-text);
+    background: var(--lido-app-ui-color-background-page);
+    color: var(--lido-app-ui-color-text-default);
+    font-family: var(--lido-app-ui-font-family);
     position: relative;
     box-sizing: border-box;
-    font-size: ${({ theme }) => theme.fontSizesMap.xs}px;
+    font-size: var(--lido-app-ui-font-size-label);
     line-height: 1.5em;
     font-weight: 500;
     text-size-adjust: none;
@@ -29,17 +30,18 @@ const GlobalStyle = createGlobalStyle`
     overflow-x: hidden;
     padding-right: 0 !important;
   }
-  a {
+  /* lib (CSS-module) anchors own their colors */
+  a:not([class*='-module_']) {
     cursor: pointer;
     text-decoration: none;
-    color: var(--lido-color-primary);
+    color: var(--lido-app-ui-color-text-active);
 
     &:visited {
-      color: var(--lido-color-primaryVisited);
+      color: var(--lido-app-ui-color-text-active-hover);
     }
 
     &:hover {
-      color: var(--lido-color-primaryHover);
+      color: var(--lido-app-ui-color-text-active-hover);
     }
   }
 
@@ -51,17 +53,9 @@ const GlobalStyle = createGlobalStyle`
     padding-inline-start: 18px;
   }
 
-  #lido-ui-modal-root [role='listbox'] {
-    max-height: 334px;
-    overflow-y: scroll;
-  }
-
   ${NAV_MOBILE_MEDIA} {
     body {
      overflow-x: inherit;
-    }
-    body:has(nav[aria-expanded=true]){
-      overflow: hidden;
     }
   }
 `;

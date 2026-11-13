@@ -1,6 +1,6 @@
 import {
   MODULE_NAME,
-  TOPUP_QUEUE_MODULES,
+  MODULE_PROFILE,
   TopUpQueueInfo,
 } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
@@ -18,9 +18,10 @@ export const useTopUpQueueInfo = <TData = TopUpQueueInfo>({
   select?: (data: TopUpQueueInfo) => TData;
 } = {}) => {
   const { targetModule, sdk: moduleSdk } = useTargetSmSDK(module);
-  const sdk = TOPUP_QUEUE_MODULES.has(targetModule)
-    ? (moduleSdk as CsmFamilySDK | undefined)
-    : undefined;
+  const sdk =
+    targetModule && MODULE_PROFILE[targetModule].topUpQueue
+      ? (moduleSdk as CsmFamilySDK | undefined)
+      : undefined;
 
   return useQuery({
     queryKey: [...KEY_TOP_UP_QUEUE_INFO, { module: targetModule }],

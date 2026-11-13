@@ -27,36 +27,37 @@ test.describe(
       ),
       async ({ widgetService }) => {
         const { dashboardPage, groupPage, page } = widgetService;
+        const { operatorGroupLink } = dashboardPage.operatorHeader;
 
         await dashboardPage.open();
-        await expect(dashboardPage.operatorGroupLink).toBeVisible({
+        await expect(operatorGroupLink).toBeVisible({
           timeout: PAGE_WAIT_TIMEOUT,
         });
-        await dashboardPage.operatorGroupLink.click();
+        await operatorGroupLink.click();
 
         await expect(page).toHaveURL(/\/group/);
-        await expect(groupPage.pageTitle).toContainText('Operator Group #');
+        await expect(groupPage.sectionTitle).toContainText('Operator Group #');
       },
     );
 
     test(
-      qase(217, 'Should navigate back to dashboard on "Back" button click'),
+      qase(217, 'Should navigate to My Operators via the crumb'),
       async ({ widgetService }) => {
-        await widgetService.groupPage.backButton.click();
-        await expect(widgetService.page).toHaveURL('/');
+        await widgetService.groupPage.myOperatorsCrumb.click();
+        await expect(widgetService.page).toHaveURL('/operators');
       },
     );
 
     test(
-      qase(218, 'Should navigate to keys submit page from "Upload keys" link'),
+      qase(218, 'Should navigate to dashboard from "View dashboard" button'),
       async ({ widgetService }) => {
         const op0 = widgetService.groupPage.operator(noId);
 
-        await expect(op0.uploadKeysLink).toBeVisible({
+        await expect(op0.goToDashboardBtn).toBeVisible({
           timeout: PAGE_WAIT_TIMEOUT,
         });
-        await op0.uploadKeysLink.click();
-        await expect(widgetService.page).toHaveURL(/\/keys\/submit/);
+        await op0.goToDashboardBtn.click();
+        await expect(widgetService.page).toHaveURL('/');
       },
     );
   },

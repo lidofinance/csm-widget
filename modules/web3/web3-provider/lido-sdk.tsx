@@ -9,71 +9,36 @@ import {
 } from 'wagmi';
 
 import {
-  LidoSDKCm,
-  LidoSDKCsm,
-  LidoSDKCsm02,
+  LidoSmSDK,
   MODULE_NAME,
   SdkProps,
+  SmSDK,
+  SmSDKFor,
 } from '@lidofinance/lido-csm-sdk';
-import {
-  LidoSDKStake,
-  LidoSDKWithdraw,
-  LidoSDKWrap,
-} from '@lidofinance/lido-ethereum-sdk';
+import { LidoSDKStake, LidoSDKWithdraw } from '@lidofinance/lido-ethereum-sdk';
 import { CHAINS, LidoSDKCore } from '@lidofinance/lido-ethereum-sdk/core';
-import {
-  LidoSDKstETH,
-  LidoSDKwstETH,
-} from '@lidofinance/lido-ethereum-sdk/erc20';
 
 import { config } from 'config';
 import { useClApiUrl } from 'config/rpc/cl';
 import { useUserConfig } from 'config/user-config';
-import { deployedModules } from 'consts';
 
 // Safe runtime import cycle (web3-provider ↔ operator-provider): the context is
 // only read inside useSmSDK's body at render time, never at module top-level.
 import { NodeOperatorContext } from '../operator-provider/node-operator-provider';
-import { overridedAddresses } from './devnet';
+import { devnetOverridedAddresses } from './devnet';
 
-export type SmSDK = LidoSDKCsm | LidoSDKCsm02 | LidoSDKCm;
-export type CsmFamilySDK = LidoSDKCsm | LidoSDKCsm02;
-
-type SmSdkMap = Partial<Record<MODULE_NAME, SmSDK>>;
+export type { SmSDK };
+export type CsmFamilySDK = SmSDKFor<MODULE_NAME.CSM | MODULE_NAME.CSM_02>;
 
 type LidoSDKContextValue = {
   chainId: CHAINS;
   core: LidoSDKCore;
   stake: LidoSDKStake;
-  stETH: LidoSDKstETH;
-  wstETH: LidoSDKwstETH;
-  wrap: LidoSDKWrap;
   withdraw: LidoSDKWithdraw;
-  sm: SmSdkMap;
+  sm: LidoSmSDK;
 };
 
 const chainId = config.defaultChain;
-
-const SM_SDK_CONSTRUCTORS = {
-  [MODULE_NAME.CSM]: LidoSDKCsm,
-  [MODULE_NAME.CM]: LidoSDKCm,
-  [MODULE_NAME.CSM_02]: LidoSDKCsm02,
-} as const;
-
-// The primary module must construct — a throw here is fatal by design. A
-// secondary module whose SDK constructor throws is dropped from the runtime set.
-const buildSmSdkMap = (smProps: SdkProps): SmSdkMap => {
-  const map: SmSdkMap = {};
-  for (const mod of deployedModules) {
-    try {
-      map[mod] = new SM_SDK_CONSTRUCTORS[mod](smProps);
-    } catch (error) {
-      if (mod === config.module) throw error;
-      console.error(`[lido-sdk] dropping module ${mod}:`, error);
-    }
-  }
-  return map;
-};
 
 const LidoSDKContext = createContext<LidoSDKContextValue | null>(null);
 LidoSDKContext.displayName = 'LidoSDKContext';
@@ -88,47 +53,46 @@ export const useLidoSDK = () => {
  * Returns the requested module's SDK only while it is the active operator's
  * module — operator-scoped queries use the `undefined` to stay disabled.
  */
-export function useActiveSmSDK(module: MODULE_NAME.CSM): LidoSDKCsm | undefined;
-export function useActiveSmSDK(
-  module: MODULE_NAME.CSM_02,
-): LidoSDKCsm02 | undefined;
-export function useActiveSmSDK(module: MODULE_NAME.CM): LidoSDKCm | undefined;
-// eslint-disable-next-line func-style
-export function useActiveSmSDK(module: MODULE_NAME) {
+export const useActiveSmSDK = <M extends MODULE_NAME>(
+  module: M,
+): SmSDKFor<M> | undefined => {
   const { sm } = useLidoSDK();
-  // Read without throwing: also called above NodeOperatorProvider
-  // (e.g. GateSupported), where falling back to the primary avoids the #526 SSR 500.
   const operatorCtx = useContext(NodeOperatorContext);
-  const activeModule = operatorCtx?.activeModule ?? config.module;
-  return module === activeModule ? sm[module] : undefined;
-}
+  return module === operatorCtx?.activeModule ? sm.get(module) : undefined;
+};
 
 /**
- * Active module's SDK, or — with `module` — that module's SDK whether or
+ * Active operator's SDK, or — with `module` — that module's SDK whether or
  * not it is active.
  */
-export function useSmSDK(): SmSDK;
-export function useSmSDK(module: MODULE_NAME.CSM): LidoSDKCsm | undefined;
-export function useSmSDK(module: MODULE_NAME.CSM_02): LidoSDKCsm02 | undefined;
-export function useSmSDK(module: MODULE_NAME.CM): LidoSDKCm | undefined;
-export function useSmSDK(module: MODULE_NAME): SmSDK | undefined;
-export function useSmSDK(module: MODULE_NAME | undefined): SmSDK | undefined;
+export function useSmSDK(): SmSDK | undefined;
+export function useSmSDK<M extends MODULE_NAME>(
+  module: M | undefined,
+): SmSDKFor<M> | undefined;
 // eslint-disable-next-line func-style
 export function useSmSDK(...args: [module?: MODULE_NAME]) {
   const { sm } = useLidoSDK();
-  // Read without throwing: also called above NodeOperatorProvider
-  // (e.g. GateSupported), where falling back to the primary avoids the #526 SSR 500.
   const operatorCtx = useContext(NodeOperatorContext);
   // Only the zero-arg form means "active module"; an explicit undefined means "no module".
-  if (args.length === 0) return sm[operatorCtx?.activeModule ?? config.module];
+  if (args.length === 0) {
+    const active = operatorCtx?.activeModule;
+    return active ? sm.get(active) : undefined;
+  }
   const [module] = args;
-  return module ? sm[module] : undefined;
+  return module ? sm.get(module) : undefined;
 }
 
-/** Resolves the SDK for `module`, falling back to the active module. */
+/** Active operator's SDK. Throws outside an operator-scoped tree. */
+export const useActiveOperatorSDK = (): SmSDK => {
+  const sdk = useSmSDK();
+  invariant(sdk, 'useActiveOperatorSDK requires an active node operator');
+  return sdk;
+};
+
+/** Resolves the SDK for `module`, falling back to the active operator's module. */
 export const useTargetSmSDK = (module?: MODULE_NAME) => {
-  const activeSdk = useSmSDK();
-  const targetModule = module ?? activeSdk.core.moduleName;
+  const active = useSmSDK();
+  const targetModule = module ?? active?.core.moduleName;
   const sdk = useSmSDK(targetModule);
   return { targetModule, sdk };
 };
@@ -176,9 +140,6 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
     );
 
     const stake = new LidoSDKStake({ core });
-    const stETH = new LidoSDKstETH({ core });
-    const wstETH = new LidoSDKwstETH({ core });
-    const wrap = new LidoSDKWrap({ core });
     const withdraw = new LidoSDKWithdraw({ core });
 
     const smProps: SdkProps = {
@@ -192,18 +153,17 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
       keysApiUrl: config.keysApiUrl,
       feesMonitoringApiUrl: config.feesMonitoringApiUrl,
       ipfsGateways: ipfsGateways,
-      overridedAddresses,
     };
 
-    const sm = buildSmSdkMap(smProps);
+    const sm = new LidoSmSDK({
+      ...smProps,
+      overridedAddresses: devnetOverridedAddresses,
+    });
 
     return {
       chainId: core.chainId,
       core,
       stake,
-      stETH,
-      wstETH,
-      wrap,
       withdraw,
       sm,
     };

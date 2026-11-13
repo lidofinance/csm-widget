@@ -6,8 +6,10 @@ import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 const IdvtcApply: FC = () => {
   return (
     <GateLoaded>
-      <Gate rule="ICS_APPLY_ENABLED" fallback={<Navigate path={PATH.HOME} />}>
-        <IdvtcApplyPage />
+      <Gate rule="IS_CSM_FAMILY_SCOPE" fallback={<Navigate path={PATH.HOME} />}>
+        <Gate rule="ICS_APPLY_ENABLED" fallback={<Navigate path={PATH.HOME} />}>
+          <IdvtcApplyPage />
+        </Gate>
       </Gate>
     </GateLoaded>
   );

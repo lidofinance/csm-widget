@@ -41,10 +41,7 @@ test.describe(
 
           const keys = keysGeneratorService.generateKeys();
 
-          const bondTokenElement = keysPage.submitPage.getBondTokenElement(
-            TokenSymbol.ETH,
-          );
-          await bondTokenElement.click();
+          await keysPage.submitPage.selectBondToken(TokenSymbol.ETH);
           await keysPage.submitPage.fillKeys(keys);
           await keysPage.submitPage.page.waitForTimeout(LOW_TIMEOUT);
           await keysPage.submitPage.confirmKeysReady.click();

@@ -2,12 +2,9 @@ import { PATH } from 'consts/urls';
 import { FC, useCallback } from 'react';
 import { trackMatomoFormEvent } from 'utils/track-matomo-event';
 import { FormProvider, useForm } from 'react-hook-form';
-import { FormTitle, SectionBlock, Stack, WhenLoaded } from 'shared/components';
-import {
-  BooleanButtonsHookForm,
-  SubmitButtonHookForm,
-  TextInputHookForm,
-} from 'shared/hook-form/controls';
+import { WhenLoaded } from 'shared/components';
+import { FormCard, FormPage, SubmitButton } from 'shared/form-page';
+import { SegmentCardsField, TextField } from 'shared/hook-form/fields';
 import { useNavigate } from 'shared/navigate';
 import {
   callSurvey,
@@ -20,52 +17,72 @@ import {
   contactsFindOne,
   contactsUpdate,
 } from 'modules/surveys-sdk/generated';
-import { SurveyButton } from '../components';
-import { useConfirmRemoveModal } from './confirm-remove-modal';
+import { Button, Field, Stack } from '@lidofinance/lido-app-ui';
+import { useConfirmRemoveContactsModal } from './confirm-remove-modal-app';
 import { useModalStages } from './use-modal-stages';
-import { Text } from '@lidofinance/lido-ui';
 import { Contact } from '../types';
-import { SurveysBackButton } from '../shared';
+
+type ContactForm = Omit<Contact, 'allowShare'> & { allowShare: 'on' | 'off' };
+
+const SHARE_OPTIONS = [
+  { value: 'on', title: 'Yes' },
+  { value: 'off', title: 'No' },
+];
+
+const transformIncoming = (data: Contact): ContactForm => ({
+  ...data,
+  allowShare: data.allowShare ? 'on' : 'off',
+});
+
+const transformOutgoing = (data: ContactForm): Contact => ({
+  ...data,
+  allowShare: data.allowShare === 'on',
+});
 
 export const SurveyContacts: FC = () => {
-  const { data, mutate, remove } = useOperatorSurvey<Contact>('contacts', {
-    get: ({ nodeOperatorId, token, signal }) =>
-      callSurvey(() =>
-        contactsFindOne({
-          ...surveyRequest(token, signal),
-          path: { nodeOperatorId },
-        }),
-      ),
-    update: (body, { nodeOperatorId, token }) =>
-      callSurvey(() =>
-        contactsUpdate({
-          ...surveyRequest(token),
-          path: { nodeOperatorId },
-          body,
-        }),
-      ),
-    remove: async ({ nodeOperatorId, token }) => {
-      await callSurvey(() =>
-        contactsDeleteOne({
-          ...surveyRequest(token),
-          path: { nodeOperatorId },
-        }),
-      );
+  const { data, mutate, remove } = useOperatorSurvey<ContactForm, Contact>(
+    'contacts',
+    {
+      transformIncoming,
+      transformOutgoing,
+      get: ({ nodeOperatorId, token, signal }) =>
+        callSurvey(() =>
+          contactsFindOne({
+            ...surveyRequest(token, signal),
+            path: { nodeOperatorId },
+          }),
+        ),
+      update: (body, { nodeOperatorId, token }) =>
+        callSurvey(() =>
+          contactsUpdate({
+            ...surveyRequest(token),
+            path: { nodeOperatorId },
+            body,
+          }),
+        ),
+      remove: async ({ nodeOperatorId, token }) => {
+        await callSurvey(() =>
+          contactsDeleteOne({
+            ...surveyRequest(token),
+            path: { nodeOperatorId },
+          }),
+        );
+      },
     },
-  });
+  );
   const { txModalStages: modals } = useModalStages();
-  const confirmRemove = useConfirmRemoveModal();
+  const confirmRemove = useConfirmRemoveContactsModal();
   const navigate = useNavigate();
 
-  const formObject = useForm<Contact>({
+  const formObject = useForm<ContactForm>({
     values: data,
     defaultValues: {
-      allowShare: true,
+      allowShare: 'on',
     },
   });
 
   const handleSubmit = useCallback(
-    async (data: Contact) => {
+    async (data: ContactForm) => {
       trackMatomoFormEvent('surveyContacts');
       modals.pending();
       try {
@@ -93,67 +110,63 @@ export const SurveyContacts: FC = () => {
   }, [confirmRemove, modals, navigate, remove]);
 
   return (
-    <SectionBlock title="Contact info" mainPrefix={<SurveysBackButton />}>
-      <FormProvider {...formObject}>
-        <WhenLoaded loading={formObject.formState.isLoading}>
-          <Stack direction="column">
+    <FormProvider {...formObject}>
+      <WhenLoaded loading={formObject.formState.isLoading}>
+        <FormPage>
+          <FormCard>
             <form
               autoComplete="off"
               onSubmit={formObject.handleSubmit(handleSubmit)}
             >
-              <Stack direction="column" gap="xxl">
-                <Stack direction="column">
-                  <FormTitle>Name or pseudonym</FormTitle>
-                  <TextInputHookForm
-                    fieldName="name"
-                    label="Your name"
-                    rules={{ required: true }}
+              <Stack gap={32}>
+                <Stack gap={32}>
+                  <TextField
+                    name="name"
+                    label="Name or pseudonym"
+                    placeholder="Your name"
+                    required
                   />
-                </Stack>
-
-                <Stack direction="column">
-                  <FormTitle>Discord Handle</FormTitle>
-                  <TextInputHookForm fieldName="discord" label="Discord" />
-                </Stack>
-
-                <Stack direction="column">
-                  <FormTitle>Telegram Handle</FormTitle>
-                  <TextInputHookForm fieldName="telegram" label="Telegram" />
-                </Stack>
-
-                <Stack direction="column">
-                  <FormTitle>Twitter or Farcaster or both:</FormTitle>
-                  <TextInputHookForm
-                    fieldName="twitter"
-                    label="Social media account"
+                  <TextField
+                    name="discord"
+                    label="Discord Handle"
+                    placeholder="Discord"
                   />
+                  <TextField
+                    name="telegram"
+                    label="Telegram Handle"
+                    placeholder="Telegram"
+                  />
+                  <TextField
+                    name="twitter"
+                    label="Twitter or Farcaster or both:"
+                    placeholder="Social media account"
+                  />
+                  <Field
+                    id="allowShare"
+                    label="Do you allow your ID and name to be shared with others?"
+                    description="(e.g. create a public directory for Node Operators in our community)"
+                    group
+                  >
+                    <SegmentCardsField
+                      name="allowShare"
+                      aria-label="Allow sharing ID and name"
+                      options={SHARE_OPTIONS}
+                    />
+                  </Field>
                 </Stack>
-
-                <Stack direction="column">
-                  <FormTitle>
-                    Do you allow your ID and name to be shared with others?
-                    <Text size="xs" color="secondary">
-                      (e.g. create a public directory for Node Opeators in our
-                      community)
-                    </Text>
-                  </FormTitle>
-                  <BooleanButtonsHookForm fieldName="allowShare" />
+                <Stack gap={12}>
+                  <SubmitButton>Submit</SubmitButton>
+                  {!!data && (
+                    <Button variant="error" fullWidth onClick={handleRemove}>
+                      Delete
+                    </Button>
+                  )}
                 </Stack>
-
-                <SubmitButtonHookForm>Submit</SubmitButtonHookForm>
               </Stack>
             </form>
-            {!!data && (
-              <SurveyButton
-                title="Delete"
-                fullwidth
-                color="error"
-                onClick={handleRemove}
-              />
-            )}
-          </Stack>
-        </WhenLoaded>
-      </FormProvider>
-    </SectionBlock>
+          </FormCard>
+        </FormPage>
+      </WhenLoaded>
+    </FormProvider>
   );
 };

@@ -6,12 +6,20 @@ export class TableRow {
   statusCell: Locator;
   statusCommentCell: Locator;
   strikesCountCell: Locator;
+  strikesDots: Locator;
 
   constructor(tr: Locator) {
     this.pubkeyCell = tr.getByTestId('pubkeyCell');
     this.statusCell = tr.getByTestId('statusCell');
     this.statusCommentCell = tr.getByTestId('statusCommentCell');
     this.strikesCountCell = tr.getByTestId('strikesCountCell');
+    this.strikesDots = this.strikesCountCell.getByRole('img');
+  }
+
+  async strikesCount(): Promise<number | undefined> {
+    const label = await this.strikesDots.getAttribute('aria-label');
+    const match = label?.match(/^(\d+)\/\d+ strikes$/);
+    return match ? Number(match[1]) : undefined;
   }
 }
 
@@ -45,7 +53,7 @@ export class KeysViewPage {
     const rows = await this.getAllTableRows();
     for (const trRow of rows) {
       const trStatus = await trRow.statusCell.textContent();
-      if (trStatus === status) {
+      if (trStatus?.includes(status)) {
         return trRow;
       }
     }
@@ -53,7 +61,7 @@ export class KeysViewPage {
 
   async open() {
     await test.step('Open keys view tab for Keys page', async () => {
-      await this.base.openWithRetry('/keys/view', this.viewKeysBlock);
+      await this.base.openWithRetry('/keys', this.viewKeysBlock);
     });
   }
 }

@@ -1,6 +1,5 @@
 import { FC } from 'react';
-import { ButtonIcon } from '@lidofinance/lido-ui';
-import Plus from 'assets/icons/plus.svg?react';
+import { Button, IconPlus } from '@lidofinance/lido-app-ui';
 
 type Props = {
   onClick: () => void;
@@ -9,16 +8,16 @@ type Props = {
 };
 
 export const DkgAddFileButton: FC<Props> = ({ onClick, loading, disabled }) => (
-  <ButtonIcon
-    data-testid="dkgAddFileButton"
-    icon={<Plus />}
-    variant="translucent"
-    size="xs"
+  <Button
+    variant="outline"
+    size="small"
     type="button"
+    iconLeft={<IconPlus />}
     onClick={onClick}
     loading={loading}
     disabled={disabled}
+    dataTestId={{ root: 'dkgAddFileButton' }}
   >
     Add new file
-  </ButtonIcon>
+  </Button>
 );

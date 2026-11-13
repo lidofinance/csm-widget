@@ -1,8 +1,8 @@
 import { getUseConfirmModal } from 'shared/hooks';
-import { ConfirmChangeRoleModal } from '../confirm-change-role-modal';
+import { ConfirmChangeRoleModalApp } from '../confirm-change-role-modal-app';
 
 export const useConfirmChangeRoleModal = getUseConfirmModal<{
   showRewards: boolean;
   isProposal: boolean;
   showRepropose: boolean;
-}>(ConfirmChangeRoleModal);
+}>(ConfirmChangeRoleModalApp);

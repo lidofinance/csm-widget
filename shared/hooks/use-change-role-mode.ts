@@ -3,10 +3,7 @@ import { useNodeOperator } from 'modules/web3';
 import { useShowFlags } from './use-show-rule';
 
 export type ChangeRoleMode =
-  | 'managerReset'
-  | 'rewardsChange'
-  | 'propose'
-  | 'view';
+  'managerReset' | 'rewardsChange' | 'propose' | 'view';
 
 export const useCanEditManagerRole = (): ChangeRoleMode | false => {
   const { nodeOperator } = useNodeOperator();

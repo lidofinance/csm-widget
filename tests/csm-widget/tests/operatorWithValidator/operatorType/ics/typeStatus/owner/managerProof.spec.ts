@@ -45,13 +45,11 @@ test.describe(
         const operatorType = widgetService.operatorType;
         const form = operatorType.applicationForm;
 
-        await operatorType.openTypePage();
+        await operatorType.openIcsOverviewPage();
 
-        await test.step('ICS card is issued but not claimable', async () => {
+        await test.step('ICS banner is issued but not claimable', async () => {
           await expect(operatorType.icsCardChip).toHaveText('Issued');
-          await expect(operatorType.icsApplyButton).toHaveText(
-            'View ICS status',
-          );
+          await expect(operatorType.icsApplyButton).toHaveText('View details');
           await expect(operatorType.claimIcsAlert).toBeHidden();
         });
 

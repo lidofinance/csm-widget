@@ -1,28 +1,30 @@
 import { FC, memo } from 'react';
-import { FormBlock } from 'shared/components';
+import {
+  DeleteKeysFormSkeleton,
+  DeleteKeysLayout,
+} from 'features/delete-keys/delete-keys-layout';
+import { FormPage, FormReady } from 'shared/form-page';
 import { Form } from 'shared/hook-form/form-controller';
 import { EjectKeysDataProvider, EjectKeysFormProvider } from './context';
-import { AmountInput } from './controls/amount-input';
 import { KeysSelector } from './controls/keys-selector';
-import { SubmitButton } from './controls/submit-button';
-import { EjectKeysFormInfo } from './eject-keys-form-info';
-import { EjectKeysFormLoader } from './eject-keys-form-loader';
+import { EjectKeysAside } from './eject-keys-aside';
+import { EjectKeysFormGate } from './eject-keys-form-gate';
+import { EJECT_KEYS_FORM_TEST_ID } from './eject-keys-state';
 
-export const EjectKeysForm: FC = memo(() => {
-  return (
-    <EjectKeysDataProvider>
-      <EjectKeysFormProvider>
-        <FormBlock>
-          <EjectKeysFormLoader>
-            <Form>
-              <KeysSelector />
-              <AmountInput />
-              <SubmitButton />
+export const EjectKeysForm: FC = memo(() => (
+  <EjectKeysDataProvider>
+    <EjectKeysFormProvider>
+      <FormPage>
+        <FormReady skeleton={<DeleteKeysFormSkeleton />}>
+          <EjectKeysFormGate>
+            <Form data-testid={EJECT_KEYS_FORM_TEST_ID}>
+              <DeleteKeysLayout focusCards aside={<EjectKeysAside />}>
+                <KeysSelector />
+              </DeleteKeysLayout>
             </Form>
-            <EjectKeysFormInfo />
-          </EjectKeysFormLoader>
-        </FormBlock>
-      </EjectKeysFormProvider>
-    </EjectKeysDataProvider>
-  );
-});
+          </EjectKeysFormGate>
+        </FormReady>
+      </FormPage>
+    </EjectKeysFormProvider>
+  </EjectKeysDataProvider>
+));

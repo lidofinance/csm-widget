@@ -1,8 +1,17 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
-import { useSmSDK, useTargetSmSDK } from '../web3-provider';
+import { SmSDK, useLidoSDK, useTargetSmSDK } from '../web3-provider';
+import { getImpliedVersionSupport, getSmVersionKey } from './sm-version-query';
+
+export const fetchSmStatus = async (sdk: SmSDK) => {
+  const [status, registration] = await Promise.all([
+    sdk.module.getStatus(),
+    sdk.module.getRegistration(),
+  ]);
+  return { ...status, ...registration };
+};
 
 export const useSmStatus = (module?: MODULE_NAME) => {
   const { targetModule, sdk } = useTargetSmSDK(module);
@@ -10,13 +19,9 @@ export const useSmStatus = (module?: MODULE_NAME) => {
   return useQuery({
     queryKey: ['sm-status', { module: targetModule }],
     ...STRATEGY_CONSTANT,
-    queryFn: async () => {
+    queryFn: () => {
       invariant(sdk);
-      const [status, registration] = await Promise.all([
-        sdk.module.getStatus(),
-        sdk.module.getRegistration(),
-      ]);
-      return { ...status, ...registration };
+      return fetchSmStatus(sdk);
     },
     enabled: !!sdk,
     select: (data) => ({
@@ -26,12 +31,30 @@ export const useSmStatus = (module?: MODULE_NAME) => {
   });
 };
 
-export const useSmVersionSupported = () => {
-  const { module, core } = useSmSDK();
+/** No module → supported only if every deployed module is. */
+export const useSmVersionSupported = (module?: MODULE_NAME) => {
+  const { sm } = useLidoSDK();
+  const queryClient = useQueryClient();
+  const all = [...sm.modules.values()];
+  const target = module ? [sm.get(module)] : all;
 
   return useQuery({
-    queryKey: ['sm-version', { module: core.moduleName }],
+    queryKey: getSmVersionKey(target.map((s) => s?.core.moduleName)),
     ...STRATEGY_CONSTANT,
-    queryFn: async () => module.isVersionsSupported(),
+    queryFn: async () => {
+      const results = await Promise.all(
+        target.map((s) => {
+          invariant(s);
+          return s.module.isVersionsSupported();
+        }),
+      );
+      return results.every(Boolean);
+    },
+    // the first operator flips module undefined → X; without this GateSupported splashes and unmounts the page
+    placeholderData: () =>
+      getImpliedVersionSupport(
+        queryClient,
+        all.map((s) => s.core.moduleName),
+      ),
   });
 };

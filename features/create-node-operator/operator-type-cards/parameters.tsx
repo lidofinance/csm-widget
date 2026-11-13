@@ -3,63 +3,77 @@ import {
   OPERATOR_TYPE,
   OPERATOR_TYPE_INFO,
 } from '@lidofinance/lido-csm-sdk';
-import { InlineLoader, Text } from '@lidofinance/lido-ui';
+import { Description, Skeleton, Stack } from '@lidofinance/lido-app-ui';
 import { OPERATOR_TYPE_METADATA } from 'consts';
 import { useCurveParameters } from 'modules/web3';
-import { FC } from 'react';
-import { Stack } from 'shared/components';
+import { FC, ReactNode } from 'react';
+import { ParameterRow as ParameterRowItem } from 'shared/components/parameters-list/format';
 import { useParameters } from 'shared/components/parameters-list/parameters';
 import { useOperatorTypeCurve } from 'shared/hooks';
-import { ParameterRowStyle } from './styles';
+
+type ParameterRowProps = {
+  label: ReactNode;
+  value: ReactNode;
+  strong?: boolean;
+};
+
+const ParameterRow: FC<ParameterRowProps> = ({ label, value, strong }) => (
+  <Stack direction="row" justify="between" gap={8}>
+    <Description
+      as="span"
+      color={strong ? 'default' : 'secondary'}
+      weight={strong ? 'bold' : 'regular'}
+    >
+      {label}
+    </Description>
+    <Description as="span" color="default" weight="bold">
+      {value}
+    </Description>
+  </Stack>
+);
+
+const REWARD_TITLE = 'Node Operator reward';
+
+const withRewardPlaceholder = (title: string, rows: ParameterRowItem[]) =>
+  title === REWARD_TITLE && rows.length === 1
+    ? [...rows, { label: '—', value: '—' }]
+    : rows;
 
 export const Parameters: FC<{ type: OPERATOR_TYPE }> = ({ type }) => {
   const metadata = OPERATOR_TYPE_METADATA[type];
   const wcType =
     OPERATOR_TYPE_INFO[type].module === MODULE_NAME.CSM_02 ? '0x02' : '0x01';
   const { data: parameters } = useCurveParameters(useOperatorTypeCurve(type));
-  const PARAMETERS = useParameters().filter((p) => p.renderRows);
+  const PARAMETERS = useParameters(OPERATOR_TYPE_INFO[type].module).filter(
+    (p) => p.renderRows,
+  );
 
   return (
-    <Stack direction="column" gap="sm">
-      {PARAMETERS.map(({ title: paramTitle, renderRows }) => (
-        <Stack direction="column" key={paramTitle} gap="xs">
-          <Text size="xxs" weight={700}>
-            {paramTitle}:
-          </Text>
+    <Stack gap={8}>
+      {PARAMETERS.map(({ title, renderRows }) => (
+        <Stack key={title} gap={2}>
+          <Description as="span" weight="bold">
+            {title}:
+          </Description>
           {parameters ? (
-            renderRows?.(parameters).map(({ label, value }) => (
-              <ParameterRowStyle key={label}>
-                <Text size="xxs" color="secondary">
-                  {label}
-                </Text>
-                <Text size="xxs" weight={700}>
-                  {value}
-                </Text>
-              </ParameterRowStyle>
-            ))
+            withRewardPlaceholder(title, renderRows?.(parameters) ?? []).map(
+              ({ label, value }) => (
+                <ParameterRow key={label} label={label} value={value} />
+              ),
+            )
           ) : (
-            <InlineLoader />
+            <Skeleton variant="text" />
           )}
         </Stack>
       ))}
       {metadata.capitalMultiplier && (
-        <ParameterRowStyle>
-          <Text size="xxs" weight={700}>
-            Capital multiplier
-          </Text>
-          <Text size="xxs" weight={700}>
-            {metadata.capitalMultiplier}
-          </Text>
-        </ParameterRowStyle>
+        <ParameterRow
+          strong
+          label="Capital multiplier"
+          value={metadata.capitalMultiplier}
+        />
       )}
-      <ParameterRowStyle>
-        <Text size="xxs" weight={700}>
-          Withdrawal credential type
-        </Text>
-        <Text size="xxs" weight={700}>
-          {wcType}
-        </Text>
-      </ParameterRowStyle>
+      <ParameterRow strong label="Withdrawal credential type" value={wcType} />
     </Stack>
   );
 };

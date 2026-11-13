@@ -1,4 +1,4 @@
-import { trimAddress } from '@lidofinance/address';
+import { trimHex } from 'tests/shared/helpers/trimHex';
 import { test } from '../../../test.fixture';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { expect } from '@playwright/test';
@@ -52,7 +52,7 @@ test.describe(
           );
 
           await expect(managerAddressPage.currentAddress).toContainText(
-            trimAddress(address, 6),
+            trimHex(address, 6),
           );
         });
 
@@ -60,18 +60,13 @@ test.describe(
           await expect(managerAddressPage.proposedAddress).toBeVisible();
 
           await expect(managerAddressPage.pendingTitledAddress).toContainText(
-            'Pending change',
+            'Change pending',
           );
 
-          await expect(
-            managerAddressPage.proposedAddress.locator('> p').nth(0),
-          ).toContainText('Action required');
-          await expect(
-            managerAddressPage.proposedAddress.locator('> div').nth(1),
-          ).toContainText('Connect to CSM UI with the proposed address');
-          await expect(
-            managerAddressPage.proposedAddress.locator('> div').nth(1),
-          ).toContainText(
+          await expect(managerAddressPage.actionRequired).toContainText(
+            'Connect to CSM UI with the proposed address',
+          );
+          await expect(managerAddressPage.actionRequired).toContainText(
             'Go to Settings tab → Inbox requests to confirm the change',
           );
         });

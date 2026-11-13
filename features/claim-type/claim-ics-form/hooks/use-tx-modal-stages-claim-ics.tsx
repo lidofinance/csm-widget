@@ -1,7 +1,6 @@
 import {
   TxStagePending,
   TxStageSign,
-  TxStageSuccess,
   useTxStages,
 } from 'shared/transaction-modal';
 import {
@@ -23,13 +22,10 @@ export const useTxModalStagesClaimIcs = () =>
         transitStage(
           <TxStagePending title="Claiming ICS type" txHash={txHash} />,
         ),
+      // Fires before claimCurve resolves; the flow closes the modal once the success screen is set
       success: (_result: undefined, txHash) =>
         transitStage(
-          <TxStageSuccess
-            txHash={txHash}
-            title="ICS type has been successfully claimed"
-            description=""
-          />,
+          <TxStagePending title="Claiming ICS type" txHash={txHash} />,
         ),
     }),
   );

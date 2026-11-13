@@ -1,12 +1,11 @@
 import { PATH } from 'consts/urls';
-import { RemoveKeysPage } from 'features/remove-keys';
-import { Gate, GateLoaded, Navigate } from 'shared/navigate';
+import { GateLoaded, Navigate } from 'shared/navigate';
+
+const QUERY = { mode: 'remove' };
 
 const Page = () => (
   <GateLoaded>
-    <Gate rule="HAS_MANAGER_ROLE" fallback={<Navigate path={PATH.KEYS} />}>
-      <RemoveKeysPage />
-    </Gate>
+    <Navigate replace path={PATH.KEYS_DELETE} query={QUERY} />
   </GateLoaded>
 );
 

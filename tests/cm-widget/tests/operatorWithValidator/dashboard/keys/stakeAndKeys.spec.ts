@@ -4,6 +4,7 @@ import { test } from '../../../test.fixture';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 import { Tags } from 'tests/shared/consts/common.const';
+import { STAKE_TOOLTIPS } from 'shared/components/stake-allocation/labels';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
@@ -23,26 +24,18 @@ test.describe(
     });
 
     test(
-      qase(150, 'Should display section header with navigation link'),
+      qase(150, 'Should display Stake title with Keys link'),
       async ({ widgetService }) => {
-        const { keysSection } = widgetService.dashboardPage;
+        const { stakeCard } = widgetService.dashboardPage;
 
-        await test.step('Check section title is visible', async () => {
-          await expect(
-            keysSection.section,
-            'Stake & Keys section should be visible',
-          ).toBeVisible();
-          await expect(
-            keysSection.section,
-            'Section should contain "Stake & Keys" title',
-          ).toContainText('Stake & Keys');
+        await test.step('Check card title is visible', async () => {
+          await expect(stakeCard.root).toBeVisible();
+          await expect(stakeCard.root).toContainText('Stake');
         });
 
-        await test.step('Check navigation link is present', async () => {
-          await expect(
-            keysSection.sectionHeaderLink,
-            'Section header link should be visible',
-          ).toBeVisible();
+        await test.step('Check Keys link is present', async () => {
+          await expect(stakeCard.link).toBeVisible();
+          await expect(stakeCard.link).toContainText('Keys');
         });
       },
     );
@@ -50,74 +43,55 @@ test.describe(
     test(
       qase(151, 'Should display all three stake columns with correct labels'),
       async ({ widgetService }) => {
-        const { keysSection } = widgetService.dashboardPage;
+        const { stakeCard } = widgetService.dashboardPage;
 
-        await test.step('Check "Active" column is visible with label', async () => {
-          await expect(
-            keysSection.stakeColumnActive,
-            '"Active" column should be visible',
-          ).toBeVisible();
-          await expect(
-            keysSection.stakeColumnActive,
-            '"Active" column should contain label',
-          ).toContainText('Active');
-        });
+        const columns = [
+          { locator: stakeCard.stakeColumnActive, label: 'Active, ETH' },
+          {
+            locator: stakeCard.stakeColumnDepositable,
+            label: 'Depositable, ETH',
+          },
+          { locator: stakeCard.stakeColumnTsa, label: 'TSA, ETH' },
+        ];
 
-        await test.step('Check "Depositable" column is visible with label', async () => {
-          await expect(
-            keysSection.stakeColumnDepositable,
-            '"Depositable" column should be visible',
-          ).toBeVisible();
-          await expect(
-            keysSection.stakeColumnDepositable,
-            '"Depositable" column should contain label',
-          ).toContainText('Depositable');
-        });
-
-        await test.step('Check "Potential additional capacity" column is visible with label', async () => {
-          await expect(
-            keysSection.stakeColumnPotential,
-            '"Potential additional capacity" column should be visible',
-          ).toBeVisible();
-          await expect(
-            keysSection.stakeColumnPotential,
-            '"Potential additional capacity" column should contain label',
-          ).toContainText('Potential additional capacity');
-        });
+        for (const { locator, label } of columns) {
+          await test.step(`Check "${label}" column`, async () => {
+            await expect(locator).toBeVisible();
+            await expect(locator).toContainText(label);
+          });
+        }
       },
     );
 
     test(
-      qase(152, 'Should display correct tooltips for stake columns'),
+      qase(152, 'Should display stake column tooltips'),
       async ({ widgetService }) => {
-        const { keysSection } = widgetService.dashboardPage;
+        const { stakeCard } = widgetService.dashboardPage;
 
         const columns = [
           {
-            tooltipIcon: keysSection.stakeColumnActiveTooltip,
+            info: stakeCard.stakeColumnActiveInfo,
             label: 'Active',
-            tooltip:
-              'The amount of ETH currently staked by the Lido protocol with this Node Operator',
+            tooltip: STAKE_TOOLTIPS.active,
           },
           {
-            tooltipIcon: keysSection.stakeColumnDepositableTooltip,
+            info: stakeCard.stakeColumnDepositableInfo,
             label: 'Depositable',
-            tooltip:
-              'Available capacity ready to receive stake from the Lido protocol',
+            tooltip: STAKE_TOOLTIPS.depositable,
           },
           {
-            tooltipIcon: keysSection.stakeColumnPotentialTooltip,
-            label: 'Potential additional capacity',
-            tooltip:
-              'The additional stake the Lido protocol could allocate to this Node Operator based on its current weight, assuming enough validator keys are available',
+            info: stakeCard.stakeColumnTsaInfo,
+            label: 'TSA',
+            tooltip: STAKE_TOOLTIPS.tsa,
           },
         ];
 
-        for (const { tooltipIcon, label, tooltip } of columns) {
+        for (const { info, label, tooltip } of columns) {
           await test.step(`Check tooltip for "${label}" column`, async () => {
-            const tooltipText =
-              await widgetService.dashboardPage.hoverElement(tooltipIcon);
-            expect.soft(tooltipText).toContain(tooltip);
+            await info.hover();
+            await expect(widgetService.page.getByRole('tooltip')).toContainText(
+              tooltip,
+            );
             await widgetService.dashboardPage.closeTooltip();
           });
         }
@@ -128,7 +102,7 @@ test.describe(
       qase(153, 'Should display correct depositable keys count from chain'),
       { tag: [Tags.smoke] },
       async ({ widgetService, cmSDK }) => {
-        const { keysSection } = widgetService.dashboardPage;
+        const { stakeCard } = widgetService.dashboardPage;
 
         const nodeOperatorId = await widgetService.extractNodeOperatorId();
         const { depositableKeys } =
@@ -137,16 +111,16 @@ test.describe(
           depositableKeys === 1 ? '1 key' : `${depositableKeys} keys`;
 
         await expect(
-          keysSection.stakeColumnDepositableKeys,
+          stakeCard.stakeColumnDepositableKeys,
           `Depositable keys count should show "${expectedText}"`,
         ).toHaveText(expectedText);
       },
     );
 
     test(
-      qase(154, 'Should navigate to keys page on header link click'),
+      qase(154, 'Should navigate to keys page on card link click'),
       async ({ widgetService }) => {
-        const { keysSection } = widgetService.dashboardPage;
+        const { stakeCard } = widgetService.dashboardPage;
 
         await test.step('Click section header link and check Matomo event', async () => {
           await Promise.all([
@@ -154,7 +128,7 @@ test.describe(
               'e_n',
               'cm_widget_dashboard_keys_section',
             ),
-            keysSection.sectionHeaderLink.click(),
+            stakeCard.link.click(),
           ]);
         });
 

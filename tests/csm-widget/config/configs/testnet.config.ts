@@ -32,7 +32,7 @@ export class TestnetConfig extends BaseConfig {
           csmSurveysApi: 'https://csm-survey-api.testnet.fi',
         },
       },
-      monitoringConfig: {
+      toolsConfig: {
         urls: {
           beaconchain: 'https://hoodi.beaconcha.in',
           operators: 'https://operators-hoodi.testnet.fi',

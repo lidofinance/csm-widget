@@ -1,9 +1,11 @@
-import { Block, Button, Divider } from '@lidofinance/lido-ui';
-import { useIdvtcState } from 'features/idvtc/shared';
-import { FC, useCallback } from 'react';
-import { Stack } from 'shared/components';
-import { IdvtcResponseDto } from '../shared/types';
-import { Application, StatusHeader } from './components';
+import { Stack } from '@lidofinance/lido-app-ui';
+import { FC, useCallback, useState } from 'react';
+import {
+  ApplicationTip,
+  OperatorTypeCard,
+} from 'shared/node-operator/type-status';
+import { IdvtcResponseDto, useIdvtcState } from '../shared';
+import { ApplicationCard, ApplicationModal } from './components';
 
 type FormStatusProps = {
   data: IdvtcResponseDto;
@@ -11,26 +13,43 @@ type FormStatusProps = {
 };
 
 export const FormStatus: FC<FormStatusProps> = ({ data, reset }) => {
-  const { typeStatus } = useIdvtcState();
-  const { status, form, comments, createdAt } = data;
+  const { status, comments, createdAt, form } = data;
+  const { typeStatus, hasOperator } = useIdvtcState();
+  const [isModalOpen, setModalOpen] = useState(false);
 
-  const handle = useCallback(() => {
+  const handleApplyAgain = useCallback(() => {
     window.scrollTo({ top: 0 });
     reset();
   }, [reset]);
 
   return (
-    <Block data-testid="applicationFormStatus">
-      <Stack direction="column" gap="xxl">
-        <StatusHeader status={status} comments={comments} />
-        <Divider type="horizontal" />
-        <Application form={form} comments={comments} createdAt={createdAt} />
-        {status === 'REJECTED' && typeStatus === 'PENDING' && (
-          <Button variant="outlined" fullwidth onClick={handle}>
-            Apply again
-          </Button>
-        )}
-      </Stack>
-    </Block>
+    <Stack
+      direction="column"
+      gap={8}
+      dataTestId={{ root: 'applicationFormStatus' }}
+    >
+      <OperatorTypeCard
+        program="IDVTC"
+        formStatus={status}
+        typeStatus={typeStatus}
+        hasOperator={hasOperator}
+      />
+      <ApplicationCard
+        status={status}
+        comments={comments}
+        createdAt={createdAt}
+        onApplyAgain={handleApplyAgain}
+        onView={() => setModalOpen(true)}
+      />
+      {status === 'REJECTED' && <ApplicationTip />}
+      {isModalOpen && (
+        <ApplicationModal
+          comments={comments}
+          form={form}
+          createdAt={createdAt}
+          onClose={() => setModalOpen(false)}
+        />
+      )}
+    </Stack>
   );
 };

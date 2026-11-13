@@ -1,32 +1,60 @@
 import { FC } from 'react';
 
-import { FAQ_OPERATOR_TYPE } from 'faq';
-import { Faq, TypeBackButton } from 'shared/components';
+import { useFaq } from 'faq';
+import { PATH } from 'consts/urls';
+import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { Stack } from '@lidofinance/lido-app-ui';
+import { Faq } from 'shared/components';
+import { useShowFlags } from 'shared/hooks';
 import { Layout } from 'shared/layout';
-import { IcsPageSwitcher } from 'shared/navigate';
+import {
+  ApplicationBanner,
+  FlowSteps,
+  isApplicationBannerVisible,
+  TypeHero,
+  TypeParametersCard,
+} from 'shared/node-operator/type-overview';
 import { IcsApplyButton } from './apply-button';
 import { RoundBanner } from './round-banner';
-import { ApplicationFlow, Introduction, ScoreSources } from './score-system';
-import { BlockStyle } from './score-system/styles';
-import { IcsProviders } from './shared';
+import { ScoreSources } from './score-system';
+import { IcsProviders, useIcsState } from './shared';
+
+const IcsOverview: FC = () => {
+  const { ICS_APPLY_ENABLED } = useShowFlags();
+  const state = useIcsState();
+  const showCta = ICS_APPLY_ENABLED && !isApplicationBannerVisible(state);
+
+  return (
+    <Stack direction="column" gap={8}>
+      <ApplicationBanner
+        program="ICS"
+        state={state}
+        actionTestId="icsApplyButton"
+      />
+      <TypeHero
+        type={OPERATOR_TYPE.CSM_ICS}
+        cta={showCta ? <IcsApplyButton /> : undefined}
+      />
+      <ScoreSources />
+      <FlowSteps type={OPERATOR_TYPE.CSM_ICS} />
+      <TypeParametersCard type={OPERATOR_TYPE.CSM_ICS} />
+    </Stack>
+  );
+};
 
 export const IcsScoresPage: FC = () => (
   <Layout
-    title="Apply for Identified Community Stakers List"
-    subtitle="Get verified as an Identified Community Staker"
+    wide
     pageName="TypeIcsSystem"
-    mainPrefix={<TypeBackButton />}
+    breadcrumbs={[
+      { label: 'Operator Type', href: PATH.TYPE },
+      { label: 'Identified Community Staker' },
+    ]}
   >
-    <IcsPageSwitcher />
     <RoundBanner />
     <IcsProviders>
-      <BlockStyle>
-        <Introduction />
-        <ScoreSources />
-        <ApplicationFlow />
-        <IcsApplyButton />
-      </BlockStyle>
+      <IcsOverview />
     </IcsProviders>
-    <Faq items={FAQ_OPERATOR_TYPE} />
+    <Faq items={useFaq('OPERATOR_TYPE')} />
   </Layout>
 );

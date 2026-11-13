@@ -47,6 +47,7 @@ export const ChangeRoleFormProvider: FC<
     <FormProvider {...formObject}>
       <FormControllerProvider
         submitter={submitter}
+        resolve={resolve}
         formName="changeRole"
         onReset={handleReset}
       >

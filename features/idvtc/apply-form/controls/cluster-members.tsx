@@ -1,9 +1,8 @@
-import { Text } from '@lidofinance/lido-ui';
+import { Description, ProgressBar, Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
-import { FormTitle, Stack } from 'shared/components';
 import { CLUSTER_SIZE, type IdvtcApplyFormInputType } from '../context';
-import { ProgressBar, ProgressBarFill, ProgressBarTrack } from '../../shared';
+import { ApplySection } from 'shared/node-operator/type-apply';
 import { ClusterMemberItem } from './cluster-member-item';
 
 export const ClusterMembers: FC = () => {
@@ -14,27 +13,31 @@ export const ClusterMembers: FC = () => {
   const verifiedCount = clusterMembers?.filter((m) => m.verified).length ?? 0;
 
   return (
-    <Stack direction="column" gap="md" data-testid="clusterMembersSection">
-      <Stack direction="column" gap="xxs">
-        <FormTitle>Cluster member addresses</FormTitle>
-        <Text size="xs" color="secondary">
-          Verify ownership of {CLUSTER_SIZE} additional Ethereum addresses in
-          your validator cluster.
-        </Text>
-      </Stack>
-
-      <ProgressBar data-testid="clusterProgress">
-        <ProgressBarTrack>
-          <ProgressBarFill $progress={verifiedCount / CLUSTER_SIZE} />
-        </ProgressBarTrack>
-        <Text size="xxs" color="secondary">
+    <ApplySection
+      title="Cluster member addresses"
+      subtitle={`Verify ownership of ${CLUSTER_SIZE} additional Ethereum addresses in your validator cluster`}
+      data-testid="clusterMembersSection"
+    >
+      <Stack
+        direction="row"
+        align="center"
+        gap={12}
+        data-testid="clusterProgress"
+      >
+        <ProgressBar
+          aria-label="Verified cluster members"
+          segments={[{ value: verifiedCount, color: 'success' }]}
+          max={CLUSTER_SIZE}
+          style={{ flex: 1 }}
+        />
+        <Description color="secondary">
           {verifiedCount} / {CLUSTER_SIZE} verified
-        </Text>
-      </ProgressBar>
+        </Description>
+      </Stack>
 
       {Array.from({ length: CLUSTER_SIZE }, (_, index) => (
         <ClusterMemberItem key={index} index={index} />
       ))}
-    </Stack>
+    </ApplySection>
   );
 };

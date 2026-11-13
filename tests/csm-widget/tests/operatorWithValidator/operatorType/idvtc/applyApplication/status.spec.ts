@@ -53,7 +53,7 @@ test.describe(
         });
 
         await expect(status.statusChip).toContainText('Pending');
-        await expect(status.form).toContainText('Application');
+        await expect(status.form).toContainText('Your application');
         await expect(status.form).toContainText(
           'You cannot change the application while it is being reviewed.',
         );
@@ -80,7 +80,7 @@ test.describe(
         });
 
         await expect(status.form).toContainText(
-          'Please await issuance; this process typically takes up to three weeks.',
+          'Please await issuance; this process typically takes up to three weeks',
         );
       },
     );
@@ -172,27 +172,25 @@ test.describe(
 
         await test.step('All cluster members are shown', async () => {
           await expect(status.clusterMembersTitle).toContainText(
-            'Cluster member addresses',
+            'Cluster member #1',
           );
           for (const [
             index,
             member,
           ] of response.form.clusterMembers.entries()) {
-            const addressText = await status
-              .getClusterMemberAddress(index)
-              .innerText();
-            expect(addressText.toLowerCase()).toContain(
-              member.address.toLowerCase(),
+            await expect(status.getClusterMemberAddress(index)).toHaveValue(
+              member.address,
             );
           }
         });
 
         await test.step('Optional member contacts are shown', async () => {
-          const member0 = status.getClusterMemberInfo(0);
-          await expect(member0).toContainText('Discord:');
-          await expect(member0).toContainText('member_discord');
-          await expect(member0).toContainText('Telegram:');
-          await expect(member0).toContainText('member_tg');
+          await expect(status.getClusterMemberDiscord(0)).toHaveValue(
+            'member_discord',
+          );
+          await expect(status.getClusterMemberTelegram(0)).toHaveValue(
+            'member_tg',
+          );
         });
       },
     );

@@ -76,18 +76,18 @@ export const FaqItem = ({ title, content }) => (
 ```typescript
 // styles.ts
 import styled, { css } from 'styled-components';
-import { Block } from '@lidofinance/lido-ui';
+import { Card } from '@lidofinance/lido-app-ui';
 
 const VARIANTS = {
   default: css`
-    background: var(--lido-color-background);
+    background: var(--lido-app-ui-color-background-page);
   `,
   warning: css`
-    background: var(--lido-color-warning);
+    background: var(--lido-app-ui-color-text-warning);
   `,
 };
 
-export const ComponentStyled = styled(Block)<{
+export const ComponentStyled = styled(Card)<{
   $variant?: keyof typeof VARIANTS;
   $big?: boolean;
 }>`
@@ -171,7 +171,7 @@ export * from './sub-component';
 
 ```typescript
 // Named imports (preferred)
-import { Text, Button } from '@lidofinance/lido-ui';
+import { Body, Button } from '@lidofinance/lido-app-ui';
 import { Stack } from '../stack';
 
 // Type-only imports
@@ -321,7 +321,7 @@ export const useFormSubmit = ({ onConfirm, onRetry }) => {
 
 ### External Libraries
 
-- **Base components**: Extend `@lidofinance/lido-ui` components
+- **Base components**: Use `@lidofinance/lido-app-ui` (Card, Typography shortcuts, Button)
 - **Web3 integration**: Use `@lidofinance/lido-csm-sdk` for blockchain operations
 - **Form handling**: React Hook Form with custom resolvers
 - **Styling**: Styled-components with theme integration
@@ -332,7 +332,7 @@ export const useFormSubmit = ({ onConfirm, onRetry }) => {
 // Use theme properties
 gap: ${({ theme }) => theme.spaceMap.md}px;
 border-radius: ${({ theme }) => theme.borderRadiusesMap.md}px;
-color: var(--lido-color-text);
+color: var(--lido-app-ui-color-text-default);
 ```
 
 ## Common Anti-Patterns to Avoid

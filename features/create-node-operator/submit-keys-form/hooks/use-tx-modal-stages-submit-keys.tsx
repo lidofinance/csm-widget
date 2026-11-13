@@ -6,13 +6,14 @@ import {
   TxAmount,
   TxStagePending,
   TxStageSign,
+  TxStageSuccess,
   useTxStages,
 } from 'shared/transaction-modal';
 import {
   SubmitKeysFormInputType,
   SubmitKeysFormNetworkData,
 } from '../context/types';
-import { renderCreateSuccess } from './create-success-stage';
+import { getCreateHoldStage } from './create-hold-stage';
 
 export const useTxModalStagesSubmitKeys = () => {
   return useTxStages<
@@ -23,24 +24,27 @@ export const useTxModalStagesSubmitKeys = () => {
     const keysCount = input.depositData.length;
     const amount = input.bondAmount ?? 0n;
     const { token } = input;
+    const stagedFiles = input.dkgFiles?.length ?? 0;
+
+    const description = (
+      <>
+        Uploading {keysCount}{' '}
+        <Plural variants={['key', 'keys']} value={keysCount} />{' '}
+        {!!amount && (
+          <>
+            and depositing <TxAmount amount={amount} token={token} />
+          </>
+        )}
+        .
+      </>
+    );
 
     return {
       sign: () =>
         transitStage(
           <TxStageSign
             title="Creating Node Operator"
-            description={
-              <>
-                Uploading {keysCount}{' '}
-                <Plural variants={['key', 'keys']} value={keysCount} />{' '}
-                {!!amount && (
-                  <>
-                    and depositing <TxAmount amount={amount} token={token} />
-                  </>
-                )}
-                .
-              </>
-            }
+            description={description}
           />,
         ),
       pending: (txHash) =>
@@ -48,37 +52,39 @@ export const useTxModalStagesSubmitKeys = () => {
           <TxStagePending
             txHash={txHash}
             title="Creating Node Operator"
-            description={
-              <>
-                Uploading {keysCount}{' '}
-                <Plural variants={['key', 'keys']} value={keysCount} />{' '}
-                {!!amount && (
-                  <>
-                    and depositing <TxAmount amount={amount} token={token} />
-                  </>
-                )}
-                .
-              </>
-            }
+            description={description}
           />,
         ),
-      // The node operator ID (needed for the DKG upload / members init paths)
-      // only exists once the tx is confirmed, which is exactly when this
-      // fires. When files were staged or a members init is planned, hand off
-      // to the matching holding stage instead of the final success screen —
-      // the flow itself runs those steps after this resolves and renders
-      // `renderCreateSuccess` (or a failed+retry stage) once they settle.
+      // Fires before the SDK promise resolves; the flow closes the modal once the success screen is set
       success: (result, txHash) => {
-        const stagedCount = input.dkgFiles?.length ?? 0;
-        if (stagedCount > 0) {
-          return transitStage(<TxStageDkgUploading count={stagedCount} />);
+        const stage = getCreateHoldStage({
+          hasResult: !!result,
+          stagedFiles,
+          willInitMembers: !!data.willInitMembers,
+        });
+
+        if (stage === 'created-without-id') {
+          return transitStage(
+            <TxStageSuccess
+              txHash={txHash}
+              title="Node Operator has been created"
+              description={undefined}
+            />,
+          );
         }
-        if (data.willInitMembers) {
+        if (stage === 'dkg-upload') {
+          return transitStage(<TxStageDkgUploading count={stagedFiles} />);
+        }
+        if (stage === 'members-init') {
           return transitStage(<TxStageMembersInitializing />);
         }
-
-        const keys = input.depositData.map((key) => key.pubkey);
-        return renderCreateSuccess(transitStage, result, data, keys, txHash);
+        return transitStage(
+          <TxStagePending
+            txHash={txHash}
+            title="Creating Node Operator"
+            description={description}
+          />,
+        );
       },
     };
   });

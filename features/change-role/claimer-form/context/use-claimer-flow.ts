@@ -1,10 +1,10 @@
-import { useSmSDK } from 'modules/web3';
+import { useActiveOperatorSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
   type FlowResolver,
 } from 'shared/hook-form/form-controller';
-import { zeroAddress } from 'viem';
+import { getClaimerAddress } from '../claimer-state';
 import { useTxModalStagesClaimer } from '../hooks/use-tx-modal-stages-claimer';
 import { useClaimerFormData } from './claimer-data-provider';
 import { ClaimerFormInputType, ClaimerFormNetworkData } from './types';
@@ -17,27 +17,27 @@ export const useClaimerFlowResolver = (): FlowResolver<
   ClaimerFormNetworkData,
   ClaimerFlow
 > => {
-  const sdk = useSmSDK();
+  const sdk = useActiveOperatorSDK();
   const buildCallback = useTxModalStagesClaimer();
 
   return useCallback(
     (input, data) => {
       if (!data.canEdit) return { action: 'view' };
 
+      const props = () => ({
+        nodeOperatorId: data.nodeOperatorId,
+        claimerAddress: getClaimerAddress(input),
+      });
+
       return {
         action: 'set-claimer' as const,
-        submit: () => {
-          const claimerAddress =
-            input.intent === 'unset'
-              ? zeroAddress
-              : (input.address ?? zeroAddress);
-
-          return sdk.roles.setCustomRewardsClaimer({
-            nodeOperatorId: data.nodeOperatorId,
-            claimerAddress,
+        submit: () =>
+          sdk.roles.setCustomRewardsClaimer({
+            ...props(),
             callback: buildCallback(input, data),
-          });
-        },
+          }),
+        estimate: async () =>
+          sdk.roles.estimateSetCustomRewardsClaimer(props()),
       };
     },
     [sdk, buildCallback],

@@ -15,9 +15,9 @@ export const BackgroundGradientSvgStyle = styled.svg<{
 `;
 
 export const BackgroundGradientStartStyle = styled.stop`
-  stop-color: var(--lido-color-primary);
+  stop-color: var(--lido-app-ui-color-text-active);
 `;
 
 export const BackgroundGradientStopStyle = styled.stop`
-  stop-color: var(--lido-color-background);
+  stop-color: var(--lido-app-ui-color-background-page);
 `;

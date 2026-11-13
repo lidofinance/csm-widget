@@ -1,9 +1,8 @@
 /* eslint-disable no-irregular-whitespace */
-import { expect } from '@playwright/test';
+import { expect, Locator } from '@playwright/test';
 import { test } from '../../../test.fixture';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { USD_AMOUNT_REGEX } from 'tests/shared/consts/regexp.const';
 import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
@@ -20,109 +19,40 @@ test.describe(
     });
 
     test(
-      qase(135, 'Should correctly expand and display the balance'),
+      qase(135, 'Should correctly display the balance'),
       async ({ widgetService, csmSDK }) => {
-        const bondBalance = widgetService.dashboardPage.bondRewards.bondBalance;
+        const { balanceCard } = widgetService.dashboardPage;
 
         const nodeOperatorId = await widgetService.extractNodeOperatorId();
 
         const bondSummary = await csmSDK.getBondSummary(nodeOperatorId);
+        const rewards = await csmSDK.getRewards(nodeOperatorId);
 
-        await test.step('Check "Bond balance" section', async () => {
-          await expect(bondBalance.requiredBondBalance).toBeHidden();
-
-          await bondBalance.expandedButton.click();
-          await expect(bondBalance.requiredBondBalance).toBeVisible();
-          await expect(bondBalance.expandedButton).toHaveAttribute(
-            'aria-expanded',
-            'true',
+        const expectAmount = async (
+          locator: Locator,
+          expected: string | number,
+        ) => {
+          await expect(locator).toHaveText(/\d/);
+          const value = parseFloat(
+            ((await locator.textContent()) ?? '').replace(/,/g, ''),
           );
+          expect(Math.abs(value - Number(expected))).toBeLessThan(0.1);
+        };
+
+        await test.step('Verify balance value', async () => {
+          await expectAmount(balanceCard.value, bondSummary.current);
         });
 
-        await test.step('Verify "Required bond" stETH value', async () => {
-          const rewardsBalance =
-            await bondBalance.requiredBondBalance_Text.textContent();
-          expect(rewardsBalance).toEqual(`${bondSummary.required} stETH`);
-
-          const rewardsUSDBalance =
-            await bondBalance.requiredBondBalance_SubText.textContent();
-          expect(rewardsUSDBalance).toMatch(USD_AMOUNT_REGEX);
+        await test.step('Verify "Required bond"', async () => {
+          await expectAmount(balanceCard.requiredBond, bondSummary.required);
         });
 
-        await test.step('Verify "Excess bond" stETH value', async () => {
-          const excessBondBalance =
-            await bondBalance.excessBondBalance_Text.textContent();
-          expect(excessBondBalance).toEqual(
-            `${bondSummary.excess.toCut(4)} stETH`,
-          );
-
-          const excessBondUSDBalance =
-            await bondBalance.excessBondBalance_SubText.textContent();
-          expect(excessBondUSDBalance).toMatch(USD_AMOUNT_REGEX);
+        await test.step('Verify "Excess bond"', async () => {
+          await expectAmount(balanceCard.excessBond, bondSummary.excess);
         });
 
-        await test.step('Verify total claimable amount', async () => {
-          const commonBalance =
-            await bondBalance.commonBalance_Text.textContent();
-          expect(commonBalance).toEqual(
-            `${bondSummary.current.toCut(4)} stETH`,
-          );
-
-          const commonUSDBalance =
-            await bondBalance.commonBalance_SubText.textContent();
-          expect(commonUSDBalance).toMatch(USD_AMOUNT_REGEX);
-        });
-      },
-    );
-
-    test(
-      qase(141, 'Tooltip verification for "Required bond" field'),
-      async ({ widgetService }) => {
-        const bondBalance = widgetService.dashboardPage.bondRewards.bondBalance;
-
-        await bondBalance.expand();
-
-        await test.step('Check tooltip for "Required bond"', async () => {
-          const tooltip = await widgetService.dashboardPage.hoverElement(
-            bondBalance.requiredBondBalance_TitleIcon,
-          );
-
-          expect(tooltip).toContain(
-            'The amount of bond required for all submitted keys of the Node Operator',
-          );
-        });
-
-        await test.step('Check to hidden tooltip after unhover', async () => {
-          await widgetService.dashboardPage.closeTooltip();
-          const tooltip =
-            await widgetService.dashboardPage.bondRewards.getHoveredContent();
-          await expect(tooltip).toBeHidden();
-        });
-      },
-    );
-
-    test(
-      qase(142, 'Tooltip verification for "Excess bond" field'),
-      async ({ widgetService }) => {
-        const bondBalance = widgetService.dashboardPage.bondRewards.bondBalance;
-
-        await bondBalance.expand();
-
-        await test.step('Check tooltip for "Excess bond"', async () => {
-          const tooltip = await widgetService.dashboardPage.hoverElement(
-            bondBalance.excessBondBalance_TitleIcon,
-          );
-
-          expect(tooltip).toContain(
-            'The bond amount available to claim without having to exit validators. Increases daily',
-          );
-        });
-
-        await test.step('Check to hidden tooltip after unhover', async () => {
-          await widgetService.dashboardPage.closeTooltip();
-          const tooltip =
-            await widgetService.dashboardPage.bondRewards.getHoveredContent();
-          await expect(tooltip).toBeHidden();
+        await test.step('Verify "Rewards"', async () => {
+          await expectAmount(balanceCard.rewards, rewards.available);
         });
       },
     );

@@ -1,53 +1,35 @@
-import { Text } from '@lidofinance/lido-ui';
-import { Address as AddressComponent, Stack } from 'shared/components';
 import {
   TxStagePending,
   TxStageSign,
   TxStageSuccess,
   useTxStages,
 } from 'shared/transaction-modal';
-import { zeroAddress } from 'viem';
+import { TxAddressDescription } from '../../shared/tx-address-description';
+import { getClaimerAddress, getClaimerStageTitles } from '../claimer-state';
 import { ClaimerFormInputType, ClaimerFormNetworkData } from '../context/types';
 
 const getTexts = (input: ClaimerFormInputType) => {
-  const claimerAddress =
-    input.intent === 'unset' ? zeroAddress : (input.address ?? zeroAddress);
+  const titles = getClaimerStageTitles(input.intent);
+  const description =
+    input.intent === 'unset' ? (
+      'Rewards claimer delegation will be removed'
+    ) : (
+      <TxAddressDescription
+        label="New Rewards Claimer Address is"
+        address={getClaimerAddress(input)}
+      />
+    );
 
-  return input.intent === 'unset'
-    ? {
-        sign: {
-          title: 'You are unsetting Rewards claimer',
-          description: 'Rewards claimer delegation will be removed',
-        },
-        success: {
-          title: 'Rewards claimer has been unset',
-          description: 'Rewards claimer delegation has been removed',
-        },
-      }
-    : {
-        sign: {
-          title: 'You are setting Rewards Claimer Address',
-          description: (
-            <Stack gap="xs" direction="column" as="span">
-              New Rewards Claimer Address is
-              <Text size="xxs">
-                <AddressComponent address={claimerAddress} showIcon />
-              </Text>
-            </Stack>
-          ),
-        },
-        success: {
-          title: 'Rewards Claimer Address has been set',
-          description: (
-            <Stack gap="xs" direction="column" as="span">
-              New Rewards Claimer Address is
-              <Text size="xxs">
-                <AddressComponent address={claimerAddress} showIcon />
-              </Text>
-            </Stack>
-          ),
-        },
-      };
+  return {
+    sign: { title: titles.sign, description },
+    success: {
+      title: titles.success,
+      description:
+        input.intent === 'unset'
+          ? 'Rewards claimer delegation has been removed'
+          : description,
+    },
+  };
 };
 
 export const useTxModalStagesClaimer = () =>

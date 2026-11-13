@@ -11,7 +11,6 @@
  * @type {EnvKey[]}
  */
 module.exports = [
-  { key: 'MODULE', optional: true },
   { key: 'BASE_PATH', optional: true },
 
   { key: 'DEFAULT_CHAIN' },

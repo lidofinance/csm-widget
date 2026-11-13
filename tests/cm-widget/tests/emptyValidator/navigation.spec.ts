@@ -37,7 +37,6 @@ test.describe(
           for (const name of [
             'Dashboard',
             'Keys',
-            'Monitoring',
             'Bond & Rewards',
             'Settings',
           ]) {

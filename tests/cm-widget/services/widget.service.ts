@@ -5,7 +5,6 @@ import {
 } from '@lidofinance/wallets-testing-wallets';
 import { expect, Page, test } from '@playwright/test';
 import { FeatureFlagsType } from 'config/feature-flags/types';
-import { TokenSymbol } from 'tests/shared/consts/common.const';
 import {
   RPC_WAIT_TIMEOUT,
   STAGE_WAIT_TIMEOUT,
@@ -14,7 +13,6 @@ import { BondRewardsPage } from '../pages/bondRewards.page';
 import {
   DashboardPage,
   KeysPage,
-  MonitoringPage,
   NotEligiblePage,
   SettingsPage,
   CreateNodeOperatorPage,
@@ -22,7 +20,6 @@ import {
 } from '../pages';
 import { GroupPage } from '../pages/group.page';
 import { ElementController } from '../pages/elements/controller';
-import { DepositKey } from '../../shared/services/keysGenerator.service';
 import {
   ConfirmOperatorModalElement,
   NavBlockElement,
@@ -40,7 +37,6 @@ export class WidgetService {
   public groupPage: GroupPage;
   public notEligiblePage: NotEligiblePage;
   public settingsPage: SettingsPage;
-  public monitoringPage: MonitoringPage;
   public bondRewardsPage: BondRewardsPage;
   public welcomePage: WelcomePage;
 
@@ -61,7 +57,6 @@ export class WidgetService {
     this.groupPage = new GroupPage(this.page);
     this.notEligiblePage = new NotEligiblePage(this.page);
     this.settingsPage = new SettingsPage(this.page, this.walletPage);
-    this.monitoringPage = new MonitoringPage(this.page);
     this.bondRewardsPage = new BondRewardsPage(this.page);
     this.welcomePage = new WelcomePage(this.page);
 
@@ -144,21 +139,6 @@ export class WidgetService {
     });
   }
 
-  async submitKeys(keys: DepositKey[], tokenSymbol = TokenSymbol.STETH) {
-    const isNewOperator = await this.keysPage.isNewOperator();
-    if (isNewOperator) {
-      await this.keysPage.createNodeOperatorForm.addNewKeys(keys, tokenSymbol);
-    } else {
-      await this.keysPage.submitPage.submitKeys(keys, tokenSymbol);
-    }
-
-    await this.walletPage.confirmTx();
-    await this.page.waitForSelector(
-      `text=Uploading operation was successful.`,
-      { timeout: STAGE_WAIT_TIMEOUT },
-    );
-  }
-
   async removeKeys(keysToRemove: string[]) {
     await test.step(`Remove ${keysToRemove.length} keys`, async () => {
       for (const key of keysToRemove) {
@@ -178,11 +158,7 @@ export class WidgetService {
 
   async addBond(tokenName: TOKENS, amount: string) {
     await test.step(`Add ${amount} ${tokenName} as bond`, async () => {
-      await test.step(`Choose ${tokenName} symbol for bond`, async () => {
-        const bondToken =
-          this.bondRewardsPage.addBond.selectBondToken(tokenName);
-        await bondToken.click();
-      });
+      await this.bondRewardsPage.addBond.selectBondToken(tokenName);
       await this.bondRewardsPage.addBond.amountInput.fill(amount);
       await this.bondRewardsPage.addBond.addBondButton.click();
       await this.confirmOperatorModal.confirm();

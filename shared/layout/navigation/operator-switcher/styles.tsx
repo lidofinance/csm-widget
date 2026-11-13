@@ -1,0 +1,127 @@
+import { Popover, Stack, Typography } from '@lidofinance/lido-app-ui';
+import styled from 'styled-components';
+
+import { popoverBeak } from 'shared/components/popover-beak';
+
+export const TriggerStyle = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--lido-app-ui-color-background-surface);
+  font: inherit;
+  color: var(--lido-app-ui-color-text-default);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--lido-app-ui-color-background-surface-hover);
+  }
+`;
+
+export const NameStyle = styled(Typography).attrs({
+  variant: 'body',
+  weight: 'bold',
+  forwardedAs: 'span',
+})`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+
+  > :last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+`;
+
+export const TagsStyle = styled(Stack).attrs({
+  direction: 'row',
+  align: 'center',
+  gap: 4,
+  forwardedAs: 'span',
+})`
+  flex-shrink: 0;
+`;
+
+export const ChevronStyle = styled.span`
+  display: flex;
+  flex-shrink: 0;
+  color: var(--lido-app-ui-color-icons-secondary);
+`;
+
+export const PopupStyle = styled(Popover)`
+  && {
+    align-items: center;
+    gap: 24px;
+    /* Figma strokes sit inside the box: padding minus the 1px border */
+    padding: 11px;
+  }
+
+  ${popoverBeak}
+`;
+
+export const HeaderStyle = styled(Stack).attrs({
+  align: 'center',
+  gap: 12,
+})`
+  flex-shrink: 0;
+  width: 100%;
+  padding-top: 20px;
+`;
+
+export const HeaderTextStyle = styled(Stack).attrs({
+  align: 'center',
+  gap: 0,
+})`
+  max-width: 100%;
+  text-align: center;
+`;
+
+export const TitleStyle = styled(Typography).attrs({
+  variant: 'h3',
+  weight: 'semibold',
+  forwardedAs: 'span',
+})`
+  overflow-wrap: anywhere;
+`;
+
+export const SubLineStyle = styled(Typography).attrs({
+  variant: 'body',
+  color: 'tertiary',
+  forwardedAs: 'span',
+})`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+`;
+
+export const HeaderTagsStyle = styled(Stack).attrs({
+  align: 'center',
+  gap: 8,
+})`
+  width: 100%;
+
+  > * {
+    max-width: 100%;
+  }
+`;
+
+export const BodyStyle = styled(Stack).attrs({ gap: 0 })`
+  width: 100%;
+  min-height: 0;
+  overflow-y: auto;
+`;
+
+export const BodyContentStyle = styled(Stack).attrs({ gap: 20 })`
+  padding: 16px 0;
+`;

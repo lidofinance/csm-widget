@@ -1,19 +1,18 @@
+import { PATH } from 'consts/urls';
 import { FC } from 'react';
 
 import { Layout } from 'shared/layout';
-import { BondPageSwitcher } from 'shared/navigate';
 import { UnlockBond } from './unlock-bond';
-import { Faq } from 'shared/components';
-import { FAQ_LOCKED } from 'faq';
 
 export const UnlockBondPage: FC = () => (
   <Layout
-    title="Manage Bond & Rewards"
-    subtitle="Cover locked bond"
+    wide
     pageName="UnlockBond"
+    breadcrumbs={[
+      { label: 'Bond & Rewards', href: PATH.BOND },
+      { label: 'Compensate locked bond' },
+    ]}
   >
-    <BondPageSwitcher />
     <UnlockBond />
-    <Faq items={FAQ_LOCKED} />
   </Layout>
 );

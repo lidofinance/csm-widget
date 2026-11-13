@@ -1,86 +1,108 @@
+import {
+  IconLink,
+  Stack,
+  Table,
+  TableColumn,
+  Typography,
+} from '@lidofinance/lido-app-ui';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { External, Text } from '@lidofinance/lido-ui';
-import { SortButton, useTable } from 'providers/table-provider';
+import { useTable } from 'providers/table-provider';
 import { FC } from 'react';
-import { Stack, TxLinkEtherscan } from 'shared/components';
+import { TxLinkEtherscan } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
 import { formatDate } from 'utils';
-import { TableStyle } from './styles';
 import { EnrichedPenalty } from './types';
 
+const INHERIT_FONT = { font: 'inherit' };
+
+const COLUMNS: TableColumn<EnrichedPenalty>[] = [
+  {
+    key: 'timestamp',
+    header: 'Date',
+    sortable: true,
+    render: ({ timestamp, transactionHash }) => (
+      <Stack direction="row" align="center" gap={4}>
+        {formatDate(timestamp, 'dd.MM.yyyy')}
+        <TxLinkEtherscan txHash={transactionHash} text={<IconLink />} />
+      </Stack>
+    ),
+  },
+  {
+    key: 'typeLabel',
+    header: 'Type',
+    sortable: true,
+    render: ({ typeLabel }) => <span data-testid="typeCell">{typeLabel}</span>,
+  },
+  {
+    key: 'additionalFine',
+    header: 'Additional fine',
+    sortable: true,
+    align: 'right',
+    render: ({ additionalFine }) =>
+      additionalFine !== undefined ? (
+        <Typography as="span" color="error" style={INHERIT_FONT}>
+          <FormatToken amount={additionalFine} token={TOKENS.steth} />
+        </Typography>
+      ) : (
+        <>&mdash;</>
+      ),
+  },
+  {
+    key: 'amount',
+    header: 'Penalty sum',
+    sortable: true,
+    align: 'right',
+    render: ({ type, amount }) => (
+      <Typography
+        as="span"
+        color={
+          type === 'compensated'
+            ? 'success'
+            : type === 'reported'
+              ? 'error'
+              : 'warning'
+        }
+        style={INHERIT_FONT}
+        dataTestId={{ root: 'amountCell' }}
+      >
+        <FormatToken amount={amount} token={TOKENS.steth} />
+      </Typography>
+    ),
+  },
+  {
+    key: 'details',
+    header: 'Details',
+    render: ({ details }) =>
+      details ? (
+        <Typography
+          as="span"
+          color="secondary"
+          style={INHERIT_FONT}
+          dataTestId={{ root: 'detailsCell' }}
+        >
+          {details}
+        </Typography>
+      ) : null,
+  },
+];
+
+const getRowKey = ({ transactionHash, type }: EnrichedPenalty) =>
+  `${transactionHash}-${type}`;
+const getRowProps = () => ({ 'data-testid': 'penaltyHistoryRow' }) as object;
+
 export const PenaltyHistoryTable: FC = () => {
-  const { data } = useTable<EnrichedPenalty>();
+  const { data, sort, setSort } = useTable<EnrichedPenalty>();
 
   return (
-    <TableStyle>
-      <thead>
-        <tr>
-          <th>
-            <SortButton column="timestamp">Date</SortButton>
-          </th>
-          <th>
-            <SortButton column="typeLabel">Type</SortButton>
-          </th>
-          <th>
-            <SortButton column="additionalFine">Additional fine</SortButton>
-          </th>
-          <th>
-            <SortButton column="amount">Penalty sum</SortButton>
-          </th>
-          <th>Details</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((record) => (
-          <tr
-            key={`${record.transactionHash}-${record.type}`}
-            data-testid="penaltyHistoryRow"
-          >
-            <td>
-              <Stack center gap="xs">
-                {formatDate(record.timestamp, 'dd.MM.yyyy')}
-                <TxLinkEtherscan
-                  txHash={record.transactionHash}
-                  text={<External />}
-                />
-              </Stack>
-              {/* {record.details && <RowDetails>{record.details}</RowDetails>} */}
-            </td>
-            <td data-testid="typeCell">{record.typeLabel}</td>
-            <td>
-              {(record.additionalFine !== undefined && (
-                <Text size="xxs" color={'error'}>
-                  <FormatToken
-                    amount={record.additionalFine}
-                    token={TOKENS.steth}
-                  />
-                </Text>
-              )) || <>&mdash;</>}
-            </td>
-            <td data-testid="amountCell">
-              <Text
-                size="xxs"
-                color={
-                  record.type === 'compensated'
-                    ? 'success'
-                    : record.type === 'reported'
-                      ? 'error'
-                      : 'warning'
-                }
-              >
-                <FormatToken amount={record.amount} token={TOKENS.steth} />
-              </Text>
-            </td>
-            <td data-testid="detailsCell">
-              {record.details && (
-                <Text color="secondary" size="xxs">
-                  {record.details}
-                </Text>
-              )}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </TableStyle>
+    <Table
+      columns={COLUMNS}
+      rows={data}
+      rowKey={getRowKey}
+      getRowProps={getRowProps}
+      sort={sort && { key: String(sort.column), direction: sort.direction }}
+      onSortChange={({ key, direction }) =>
+        setSort({ column: key as keyof EnrichedPenalty, direction })
+      }
+    />
   );
 };

@@ -11,7 +11,7 @@ on:
   workflow_call:
     inputs:
       module:
-        description: "Module under test (csm | cm). Selects `yarn test:<module>:e2e`."
+        description: "Test suite (csm | cm)"
         required: false
         type: string
         default: csm
@@ -70,7 +70,6 @@ jobs:
       WALLET_SECRET_PHRASE: ${{ secrets.WALLET_SECRET_PHRASE }}
       WALLET_PASSWORD: ${{ secrets.WALLET_PASSWORD }}
       WC_PROJECT_ID: ${{ secrets.WC_PROJECT_ID }}
-      MODULE: ${{ inputs.module }}
       STAND_TYPE: ${{ inputs.stand_type }}
 
       # Common envs

@@ -58,14 +58,12 @@ test.describe(
         const form = operatorType.applicationForm;
 
         await selectOperator(widgetService, defNoId);
-        await operatorType.openTypePage();
+        await operatorType.openIcsOverviewPage();
 
-        await test.step('ICS card shows the used proof', async () => {
+        await test.step('ICS banner shows the used proof', async () => {
           expect(await widgetService.extractNodeOperatorId()).toBe(defNoId);
           await expect(operatorType.icsCardChip).toHaveText('Used');
-          await expect(operatorType.icsApplyButton).toHaveText(
-            'View ICS status',
-          );
+          await expect(operatorType.icsApplyButton).toHaveText('View details');
           await expect(operatorType.claimIcsAlert).toBeHidden();
         });
 
@@ -90,9 +88,9 @@ test.describe(
         const form = operatorType.applicationForm;
 
         await selectOperator(widgetService, icsNoId);
-        await operatorType.openTypePage();
+        await operatorType.openIcsOverviewPage();
 
-        await test.step('ICS card shows the claimed type', async () => {
+        await test.step('ICS banner shows the claimed type', async () => {
           expect(await widgetService.extractNodeOperatorId()).toBe(icsNoId);
           await expect(operatorType.icsCardChip).toHaveText('Claimed');
         });
@@ -102,7 +100,7 @@ test.describe(
         await test.step('Apply page shows the claimed status', async () => {
           await expect(form.operatorTypeChip).toHaveText('Claimed');
           await expect(
-            form.page.getByText('Your Node Operator already has ICS type'),
+            form.page.getByText('You successfully claimed your Operator type'),
           ).toBeVisible();
           await expect(
             form.page.getByText(/already used its ICS proof/),

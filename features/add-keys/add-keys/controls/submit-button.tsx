@@ -1,22 +1,24 @@
+import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
-import { PausedButton, SubmitButtonHookForm } from 'shared/hook-form/controls';
-import { AddKeysFormInputType, useAddKeysFormData } from '../context';
+import { SubmitButton } from 'shared/form-page';
+import { KEYS_LIMIT_REASON } from '../add-keys-state';
+import { AddKeysFormInputType } from '../context';
+import { useKeysLimit } from './keys-limit-warning';
 
-export const SubmitButton = () => {
-  const { isPaused } = useAddKeysFormData();
+export const KeysSubmitButton: FC = () => {
   const depositData = useWatch<AddKeysFormInputType, 'depositData'>({
     name: 'depositData',
   });
-
-  if (isPaused) {
-    return <PausedButton type="Module" />;
-  }
-
-  const disabled = !depositData?.length;
+  const keysLimit = useKeysLimit();
 
   return (
-    <SubmitButtonHookForm disableIfClean disabled={disabled}>
-      {'Submit keys'}
-    </SubmitButtonHookForm>
+    <SubmitButton
+      disableIfClean
+      disabled={!depositData?.length}
+      disabledReason={keysLimit?.reached ? KEYS_LIMIT_REASON : undefined}
+      data-testid="submitKeysButton"
+    >
+      Submit
+    </SubmitButton>
   );
 };

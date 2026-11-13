@@ -1,10 +1,11 @@
-import { Text } from '@lidofinance/lido-ui';
+import { Description } from '@lidofinance/lido-app-ui';
 import { OPERATOR_TYPES_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
+import { FC } from 'react';
 import { MatomoLink } from 'shared/components';
 
-export const TypesDocsNote = () => (
-  <Text size="xxs">
+export const TypesDocsNote: FC = () => (
+  <Description as="p">
     Check out details about{' '}
     <MatomoLink
       $inline
@@ -13,6 +14,6 @@ export const TypesDocsNote = () => (
     >
       operator types and parameters
     </MatomoLink>{' '}
-    to learn more.
-  </Text>
+    to learn more
+  </Description>
 );

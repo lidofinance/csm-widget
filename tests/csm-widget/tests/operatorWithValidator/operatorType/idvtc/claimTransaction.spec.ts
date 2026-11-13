@@ -61,16 +61,12 @@ test.describe(
           );
           await widgetService.walletPage.confirmTx();
 
-          await expect(txModal.title).toContainText(
-            'IDVTC type has been successfully claimed',
-            { timeout: STAGE_WAIT_TIMEOUT },
-          );
-          await expect(txModal.etherscanLink).toHaveAttribute(
-            'href',
-            /\/tx\/0x[0-9a-fA-F]+$/,
-          );
-
-          await txModal.closeModal();
+          await expect(claim.successScreen).toBeVisible({
+            timeout: STAGE_WAIT_TIMEOUT,
+          });
+          await expect(txModal.modal).toBeHidden({
+            timeout: STAGE_WAIT_TIMEOUT,
+          });
         });
       },
     );
@@ -97,7 +93,7 @@ test.describe(
           ).toBeVisible();
           await expect(
             widgetService.page.getByText(
-              'You can see the new parameters for your Node Operator by clicking the IDVTC badge at the top of the screen',
+              'You can see the new parameters for your Node Operator by opening the operator switcher in the sidebar and clicking the IDVTC tag',
             ),
           ).toBeVisible();
           await expect(
@@ -136,35 +132,19 @@ test.describe(
 
         await test.step('DKG page is opened', async () => {
           await expect(widgetService.page).toHaveURL(/\/idvtc\/dkg$/);
-          await expect(widgetService.page.getByTestId('pageTitle')).toHaveText(
-            'DKG',
-          );
+          await expect(
+            widgetService.page
+              .getByTestId('pageTitle')
+              .locator('[aria-current="page"]'),
+          ).toHaveText('DKG files');
         });
 
-        await test.step('DKG files section is loaded', async () => {
-          const page = widgetService.page;
-
-          await expect(page.getByTestId('dkgFilesCounter')).toHaveText('0', {
-            timeout: PAGE_WAIT_TIMEOUT,
-          });
-          await expect(page.getByTestId('sectionHeader')).toContainText(
-            'Your DKG files',
-          );
-          await expect(page.getByTestId('dkgAddFileButton')).toBeVisible();
-          await expect(page.getByTestId('switcherTab')).toHaveText([
-            'DKG files',
-            'Cluster members',
-          ]);
-        });
-
-        await test.step('Empty state is shown', async () => {
+        await test.step('DKG required card is shown', async () => {
+          const card = widgetService.page.getByTestId('dkgRequiredCard');
+          await expect(card).toBeVisible({ timeout: PAGE_WAIT_TIMEOUT });
+          await expect(card).toContainText('Upload DKG Files Required');
           await expect(
-            widgetService.page.getByText('No DKG files at the moment'),
-          ).toBeVisible();
-          await expect(
-            widgetService.page.getByText(
-              'Upload your first distributed key generation file',
-            ),
+            card.getByRole('button', { name: 'Upload files' }),
           ).toBeVisible();
         });
       },

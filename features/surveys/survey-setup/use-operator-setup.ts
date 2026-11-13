@@ -17,6 +17,7 @@ import { transformIncoming, transformOutgoing } from './transform';
 type UseOperatorSetupOptions = {
   operatorKey?: OperatorKey;
   invalidateOnMutate?: boolean;
+  skipFetching?: boolean;
 };
 
 // Per-operator setup resource shared by the operator and delegator setup forms:
@@ -25,14 +26,18 @@ type UseOperatorSetupOptions = {
 // off). Edit → update the indexed setup; create → POST a new setup.
 export const useOperatorSetup = (
   index: number | undefined,
-  { operatorKey, invalidateOnMutate }: UseOperatorSetupOptions = {},
+  {
+    operatorKey,
+    invalidateOnMutate,
+    skipFetching,
+  }: UseOperatorSetupOptions = {},
 ) =>
   useOperatorSurvey<Setup, SetupRaw>(
     index !== undefined ? `setups/${index}` : 'setups',
     {
       operatorKey,
       // GET only fires in edit mode — create has no index to read.
-      skipFetching: index === undefined,
+      skipFetching: skipFetching || index === undefined,
       invalidateOnMutate,
       transformIncoming,
       transformOutgoing,

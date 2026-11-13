@@ -1,5 +1,5 @@
 import { FeeSplit } from '@lidofinance/lido-csm-sdk';
-import { useSmSDK } from 'modules/web3';
+import { useActiveOperatorSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -12,8 +12,7 @@ import { useSplitsFormData } from './splits-data-provider';
 import { SplitsFormInputType, SplitsFormNetworkData } from './types';
 
 export type SplitsFlow =
-  | { action: 'view' }
-  | ({ action: 'set-splits' } & Executable);
+  { action: 'view' } | ({ action: 'set-splits' } & Executable);
 
 // eslint-disable-next-line func-style
 function assertFeeSplits(
@@ -30,7 +29,7 @@ export const useSplitsFlowResolver = (): FlowResolver<
   SplitsFormNetworkData,
   SplitsFlow
 > => {
-  const sdk = useSmSDK();
+  const sdk = useActiveOperatorSDK();
   const confirmSplits = useConfirmSplitsModal();
   const buildCallback = useTxModalStagesSplits();
 
@@ -38,28 +37,34 @@ export const useSplitsFlowResolver = (): FlowResolver<
     (input, data) => {
       if (!data.canEdit) return { action: 'view' };
 
+      const props = () => {
+        assertFeeSplits(input.feeSplits);
+        invariant(
+          data.rewards,
+          'Rewards data is required for submitting splits',
+        );
+        const { shares, proof } = data.rewards;
+
+        return {
+          nodeOperatorId: data.nodeOperatorId,
+          feeSplits: input.feeSplits,
+          shares,
+          proof,
+        };
+      };
+
       return {
         action: 'set-splits' as const,
         confirm: async () => {
           assertFeeSplits(input.feeSplits);
           return confirmSplits({ feeSplits: input.feeSplits });
         },
-        submit: () => {
-          assertFeeSplits(input.feeSplits);
-          invariant(
-            data.rewards,
-            'Rewards data is required for submitting splits',
-          );
-          const { shares, proof } = data.rewards;
-
-          return sdk.roles.setFeeSplits({
-            nodeOperatorId: data.nodeOperatorId,
-            feeSplits: input.feeSplits,
-            shares,
-            proof,
+        submit: () =>
+          sdk.roles.setFeeSplits({
+            ...props(),
             callback: buildCallback(input, data),
-          });
-        },
+          }),
+        estimate: async () => sdk.roles.estimateSetFeeSplits(props()),
       };
     },
     [sdk, confirmSplits, buildCallback],

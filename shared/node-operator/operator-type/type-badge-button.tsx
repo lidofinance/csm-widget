@@ -1,31 +1,28 @@
 import { CurveRef } from '@lidofinance/lido-csm-sdk';
-import { ComponentPropsWithoutRef, FC } from 'react';
+import { FC } from 'react';
 import { DisplayOperatorType } from 'consts';
-import { CurveBadge } from '../curve-badge/curve-badge';
-import { BadgeButtonStyle } from './styles';
+import { OperatorTypeTag } from '../operator-type-tag';
 import { useOperatorTypeModalTrigger } from './use-operator-type-modal-trigger';
 
-export type TypeBadgeButtonProps = ComponentPropsWithoutRef<'button'> & {
+export type TypeBadgeButtonProps = {
   curve: CurveRef | undefined;
   displayType: DisplayOperatorType;
+  'data-testid'?: string;
 };
 
 export const TypeBadgeButton: FC<TypeBadgeButtonProps> = ({
   curve,
   displayType,
-  onClick,
-  ...rest
+  'data-testid': testId,
 }) => {
   const { handleClick } = useOperatorTypeModalTrigger(curve);
 
   return (
-    <BadgeButtonStyle
-      type="button"
+    <OperatorTypeTag
+      type={displayType}
       disabled={!curve}
       onClick={handleClick}
-      {...rest}
-    >
-      <CurveBadge type={displayType} inline />
-    </BadgeButtonStyle>
+      data-testid={testId}
+    />
   );
 };

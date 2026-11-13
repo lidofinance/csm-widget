@@ -1,23 +1,31 @@
-import { Text } from '@lidofinance/lido-ui';
+import {
+  Address,
+  IconButton,
+  IconTrash,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeaderCell,
+  TableRoot,
+  TableRow,
+  Typography,
+} from '@lidofinance/lido-app-ui';
 import { DATA_UNAVAILABLE } from 'consts';
-import { useSmSDK } from 'modules/web3';
+import { useSmSDK, useTargetModule } from 'modules/web3';
 import { FC, useCallback } from 'react';
 import { useFormContext, useFormState, useWatch } from 'react-hook-form';
-import { Pubkey } from 'shared/components';
-import {
-  DataCell,
-  DataError,
-  DeleteButton,
-  HeaderCell,
-  TableContainer,
-  TableHeader,
-  TableRow,
-} from './styles';
+import invariant from 'tiny-invariant';
+import { useConfirmDeleteKeyModal } from './confirm-delete-key-modal-app';
+import { ErrorList, TableScroll } from './styles';
 import { DepositDataInputType } from './use-parse-deposit-data';
+
+const TRASH_STYLE = { color: 'var(--lido-app-ui-color-icons-error)' };
 
 // TODO: refactor to separate component and hook
 export const DepositDataParsed: FC = () => {
-  const { depositData: sdk } = useSmSDK();
+  const targetModule = useTargetModule();
+  const sm = useSmSDK(targetModule);
+  const confirmDelete = useConfirmDeleteKeyModal();
 
   const { setValue, setError, clearErrors } =
     useFormContext<DepositDataInputType>();
@@ -29,6 +37,7 @@ export const DepositDataParsed: FC = () => {
       name: ['depositData', 'rawDepositData'],
     });
 
+  const busy = isValidating || isSubmitting;
   const depositDataErrors = errors.depositData?.types;
 
   const [depositData, rawDepositData] = useWatch<
@@ -40,7 +49,8 @@ export const DepositDataParsed: FC = () => {
 
   const remove = useCallback(
     (index: number) => {
-      const result = sdk.removeKey(rawDepositData ?? '', index);
+      invariant(sm, 'deposit data needs a target module');
+      const result = sm.depositData.removeKey(rawDepositData ?? '', index);
 
       if (result.success && result.json !== undefined) {
         clearErrors('rawDepositData');
@@ -55,57 +65,84 @@ export const DepositDataParsed: FC = () => {
         });
       }
     },
-    [sdk, rawDepositData, setValue, setError, clearErrors],
+    [sm, rawDepositData, setValue, setError, clearErrors],
   );
 
   return (
-    <TableContainer>
-      <TableHeader>
-        <HeaderCell>Recognized Pubkey</HeaderCell>
-        <HeaderCell>Key number</HeaderCell>
-        <HeaderCell>Errors detected</HeaderCell>
-        <HeaderCell>Delete key</HeaderCell>
-      </TableHeader>
-
-      {depositData.map(({ pubkey }, index) => {
-        const errors = depositDataErrors?.[index] as string[] | undefined;
-        const hasError = !!errors?.length;
-
-        return (
-          <TableRow key={pubkey} data-testid="deposit-data-row">
-            <DataCell $error={hasError} data-testid="deposit-data-pubkey">
-              <Pubkey
-                pubkey={pubkey || DATA_UNAVAILABLE}
-                color={hasError ? 'error' : 'default'}
-              />
-            </DataCell>
-            <DataCell $error={hasError} data-testid="deposit-data-index">
-              #{index + 1}
-            </DataCell>
-            <DataCell
-              $error={hasError}
-              data-testid="deposit-data-error-detected"
-            >
-              {hasError ? 'Yes' : 'No'}
-            </DataCell>
-            <DataCell data-testid="deposit-data-delete-key">
-              <DeleteButton
-                onClick={() => remove(index)}
-                disabled={isValidating || isSubmitting}
-              />
-            </DataCell>
-            {hasError && (
-              <DataError data-testid="deposit-data-error">
-                {errors?.map((error) => (
-                  <Text key={error} color="secondary" size="xxs">
-                    {error}
-                  </Text>
-                ))}
-              </DataError>
-            )}
+    <TableScroll>
+      <TableRoot variant="dense">
+        <TableHead>
+          <TableRow>
+            <TableHeaderCell>Recognized Pubkey</TableHeaderCell>
+            <TableHeaderCell>Key number</TableHeaderCell>
+            <TableHeaderCell align="right">Errors detected</TableHeaderCell>
+            <TableHeaderCell align="right">Delete</TableHeaderCell>
           </TableRow>
-        );
-      })}
-    </TableContainer>
+        </TableHead>
+        <TableBody>
+          {depositData.map(({ pubkey }, index) => {
+            const errors = depositDataErrors?.[index] as string[] | undefined;
+            const hasError = !!errors?.length;
+            const color = hasError ? 'error' : undefined;
+
+            return (
+              <TableRow key={pubkey} data-testid="deposit-data-row">
+                <TableCell>
+                  <Typography
+                    as="span"
+                    color={color}
+                    data-testid="deposit-data-pubkey"
+                  >
+                    {pubkey ? (
+                      <Address address={pubkey} symbols={8} tooltip copy />
+                    ) : (
+                      DATA_UNAVAILABLE
+                    )}
+                  </Typography>
+                  {hasError && (
+                    <ErrorList data-testid="deposit-data-error">
+                      {errors?.map((error) => (
+                        <Typography
+                          key={error}
+                          variant="caption"
+                          color="secondary"
+                        >
+                          {error}
+                        </Typography>
+                      ))}
+                    </ErrorList>
+                  )}
+                </TableCell>
+                <TableCell data-testid="deposit-data-index">
+                  <Typography as="span" color={color}>
+                    #{index + 1}
+                  </Typography>
+                </TableCell>
+                <TableCell
+                  align="right"
+                  data-testid="deposit-data-error-detected"
+                >
+                  <Typography as="span" color={color}>
+                    {hasError ? 'Yes' : 'No'}
+                  </Typography>
+                </TableCell>
+                <TableCell align="right" data-testid="deposit-data-delete-key">
+                  <IconButton
+                    icon={<IconTrash style={busy ? undefined : TRASH_STYLE} />}
+                    type="button"
+                    variant="ghost"
+                    aria-label="Delete key"
+                    onClick={async () => {
+                      if (await confirmDelete({})) remove(index);
+                    }}
+                    disabled={busy}
+                  />
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </TableRoot>
+    </TableScroll>
   );
 };

@@ -8,14 +8,15 @@ import {
   useRef,
   useState,
 } from 'react';
-import type { ModalProps as LidoModalProps } from '@lidofinance/lido-ui';
 
 /**
  * Utility types
  */
 type EmptyObj = Record<string, never>;
 
-export type ModalProps<P extends object = EmptyObj> = LidoModalProps & P;
+type BaseModalProps = { open?: boolean; onClose?: () => void };
+
+export type ModalProps<P extends object = EmptyObj> = BaseModalProps & P;
 
 export type ModalComponentType<P extends object = EmptyObj> = React.FC<
   ModalProps<P>

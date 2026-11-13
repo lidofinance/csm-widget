@@ -7,45 +7,42 @@ import {
   ApplicableOperatorType,
   CreatableOperatorType,
   CreateOption,
+  useCanCreate0x01,
   useCreateOptions,
 } from 'shared/hooks';
-
-export type VisibleType = {
-  type: OPERATOR_TYPE;
-  href: PATH;
-  label: string;
-  matomoEvent: MATOMO_CLICK_EVENTS_TYPES;
-  primary: boolean;
-};
+import { prependBlocked0x01, VisibleType } from './prepend-blocked-0x01';
 
 type Presentation = { label: string; matomoEvent: MATOMO_CLICK_EVENTS_TYPES };
 
+const selectLabel = (type: CreatableOperatorType) =>
+  `Select ${OPERATOR_TYPE_METADATA[type].short}`;
+
 const CREATE_PRESENTATION: Record<CreatableOperatorType, Presentation> = {
   [OPERATOR_TYPE.CSM_DEF]: {
-    label: 'Join now',
+    label: selectLabel(OPERATOR_TYPE.CSM_DEF),
     matomoEvent: MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalJoinPermissionless,
   },
   [OPERATOR_TYPE.CSM2_DEF]: {
-    label: 'Join now',
+    label: selectLabel(OPERATOR_TYPE.CSM2_DEF),
     matomoEvent: MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalJoinCsm02,
   },
   [OPERATOR_TYPE.CSM_ICS]: {
-    label: `Create ${OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_ICS].short} operator`,
+    label: selectLabel(OPERATOR_TYPE.CSM_ICS),
     matomoEvent: MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalCreateIcs,
   },
   [OPERATOR_TYPE.CSM_IDVTC]: {
-    label: `Create ${OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_IDVTC].short} operator`,
+    label: selectLabel(OPERATOR_TYPE.CSM_IDVTC),
     matomoEvent: MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalCreateIdvtc,
   },
 };
 
 const APPLY_PRESENTATION: Record<ApplicableOperatorType, Presentation> = {
   [OPERATOR_TYPE.CSM_ICS]: {
-    label: `Apply for ${OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_ICS].short}`,
+    label: 'Learn more',
     matomoEvent: MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalApplyIcs,
   },
   [OPERATOR_TYPE.CSM_IDVTC]: {
-    label: `Apply for ${OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_IDVTC].short}`,
+    label: 'Learn more',
     matomoEvent: MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalApplyIdvtc,
   },
 };
@@ -59,6 +56,7 @@ const toVisibleType = (option: CreateOption): VisibleType => {
   switch (option.kind) {
     case 'create':
       return {
+        key: option.type,
         type: option.type,
         href: CREATE_PATH_BY_TYPE[option.type],
         primary: true,
@@ -66,16 +64,29 @@ const toVisibleType = (option: CreateOption): VisibleType => {
       };
     case 'apply':
       return {
+        key: option.type,
         type: option.type,
         href: APPLY_PATH_BY_TYPE[option.type],
         primary: false,
         ...APPLY_PRESENTATION[option.type],
+      };
+    case 'create-cm':
+      return {
+        key: 'cm',
+        href: PATH.CREATE_CM,
+        primary: true,
+        label: 'Continue',
+        matomoEvent: MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalCreateCm,
       };
   }
 };
 
 export const useVisibleTypes = (): VisibleType[] => {
   const options = useCreateOptions();
+  const { blockedByOperator } = useCanCreate0x01();
 
-  return useMemo(() => options.map(toVisibleType), [options]);
+  return useMemo(
+    () => prependBlocked0x01(options.map(toVisibleType), blockedByOperator),
+    [options, blockedByOperator],
+  );
 };

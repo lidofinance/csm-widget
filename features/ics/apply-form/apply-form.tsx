@@ -1,6 +1,7 @@
+import { Divider } from '@lidofinance/lido-app-ui';
 import { FC, memo } from 'react';
-import { FormBlock } from 'shared/components';
-import { FormLoader, Form } from 'shared/hook-form/form-controller';
+import { FormCard, FormReady } from 'shared/form-page';
+import { Form } from 'shared/hook-form/form-controller';
 import { ApplyDataProvider, ApplyFormProvider } from './context';
 import {
   AdditionalAddresses,
@@ -12,16 +13,18 @@ import {
 export const ApplyForm: FC = memo(() => (
   <ApplyDataProvider>
     <ApplyFormProvider>
-      <FormBlock $gap="xxl" data-testid="applyForm">
-        <FormLoader>
-          <Form>
+      <FormReady>
+        <Form data-testid="applyForm">
+          <FormCard>
             <MainAddress />
+            <Divider />
             <AdditionalAddresses />
+            <Divider />
             <SocialProof />
             <SubmitButton />
-          </Form>
-        </FormLoader>
-      </FormBlock>
+          </FormCard>
+        </Form>
+      </FormReady>
     </ApplyFormProvider>
   </ApplyDataProvider>
 ));

@@ -4,9 +4,9 @@ import { MyOperators } from './my-operators';
 
 export const MyOperatorsPage: FC = () => (
   <Layout
-    title="My operators"
-    subtitle="See and manage all the CSM operators associated with your wallet"
+    wide
     pageName="My operators"
+    breadcrumbs={[{ label: 'My Operators' }]}
   >
     <MyOperators />
   </Layout>

@@ -3,7 +3,6 @@ import { BasePage } from '../../../../shared/pages/base.page';
 
 export class MetadataPage extends BasePage {
   form: Locator;
-  formTitle: Locator;
 
   nameInput: Locator;
   nameInputContainer: Locator;
@@ -18,7 +17,6 @@ export class MetadataPage extends BasePage {
   constructor(page: Page) {
     super(page);
     this.form = this.page.locator('form');
-    this.formTitle = this.form.getByText('Node Operator name');
 
     this.nameInput = this.form.locator('input[name="name"]');
     this.nameInputContainer = this.form.locator(
@@ -27,19 +25,19 @@ export class MetadataPage extends BasePage {
     this.nameInputError =
       this.nameInputContainer.getByTestId('inputMessageError');
 
-    this.descriptionInput = this.form.locator('input[name="description"]');
+    this.descriptionInput = this.form.locator('textarea[name="description"]');
     this.descriptionInputContainer = this.form.locator(
-      'xpath=//input[@name="description"]/ancestor::label/..',
+      'xpath=//textarea[@name="description"]/ancestor::label/..',
     );
     this.descriptionInputError =
       this.descriptionInputContainer.getByTestId('inputMessageError');
 
-    this.saveButton = this.form.getByRole('button', { name: 'Save' });
+    this.saveButton = this.form.getByRole('button', { name: 'Update' });
   }
 
   async open() {
     await test.step('Open Metadata settings page', async () => {
-      await this.openWithRetry('/settings/metadata', this.formTitle);
+      await this.openWithRetry('/settings/metadata', this.nameInput);
     });
   }
 }

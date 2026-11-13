@@ -1,89 +1,102 @@
-import { ArrowBack, Button, Checkbox, Modal, Text } from '@lidofinance/lido-ui';
-import type { ModalComponentType } from 'providers/modal-provider';
-import { useState } from 'react';
-import { Stack } from 'shared/components';
+import {
+  Body,
+  Button,
+  Card,
+  CheckboxRow,
+  Description,
+  IconChevronDown,
+  Stack,
+} from '@lidofinance/lido-app-ui';
+import { FC, useState } from 'react';
+import type { MemberDto } from 'modules/surveys-sdk/generated';
 import { ConfirmModalProps, getUseConfirmModal } from 'shared/hooks';
-import styled from 'styled-components';
+import { FormModalShell } from 'shared/transaction-modal/form-modal-shell';
 import { ConfirmationList } from '../../shared';
-import { LabeledAddressBox } from '../controls/labeled-address-box';
+import { MemberSummary } from '../initialized/member-summary';
+import type { SlotDraft } from '../utils/rotation';
 
-type ConfirmRotationModalProps = {
-  currentAddress: string;
-  newAddress: string;
+type ConfirmRotationModalProps = ConfirmModalProps & {
+  open?: boolean;
+  index: number;
+  current: MemberDto;
+  next: SlotDraft;
 };
 
-const ArrowIcon = styled(ArrowBack).attrs({
-  width: 20,
-  height: 20,
-})`
-  color: var(--lido-color-textSecondary);
-  transform: rotate(-90deg);
-`;
-
-const ConfirmRotationModal: ModalComponentType<
-  ConfirmModalProps & ConfirmRotationModalProps
-> = ({ currentAddress, newAddress, onConfirm, onReject, ...props }) => {
+const ConfirmRotationModal: FC<ConfirmRotationModalProps> = ({
+  open,
+  index,
+  current,
+  next,
+  onConfirm,
+  onReject,
+}) => {
   const [confirmed, setConfirmed] = useState(false);
 
   return (
-    <Modal
-      {...props}
+    <FormModalShell
+      open={open}
       onClose={onReject}
-      title={
-        <Stack direction="column" gap="xxs">
-          <Text as="h5" size="sm" weight={700}>
-            You are submitting cluster member rotation
-          </Text>
-          <Text size="xxs" color="secondary">
-            Please review the changes below before confirming
-          </Text>
-        </Stack>
-      }
+      title="You are submitting cluster member rotation"
+      subtitle="Please review the changes below before confirming"
+      data-testid="confirmRotationModal"
     >
-      <Stack direction="column" gap="xl" data-testid="confirmRotationModal">
-        <Stack direction="column" gap="xs">
-          <LabeledAddressBox
-            label="Current member address"
-            address={currentAddress}
-          />
-          <Stack justify="center">
-            <ArrowIcon />
-          </Stack>
-          <LabeledAddressBox
-            label="New cluster member address"
-            address={newAddress}
-          />
+      <Stack gap={24}>
+        <Stack gap={8} align="center">
+          <Card style={{ width: '100%' }}>
+            <MemberSummary
+              title={`Current cluster member #${index + 1}`}
+              member={current}
+            />
+          </Card>
+          <IconChevronDown aria-hidden />
+          <Card style={{ width: '100%' }}>
+            <MemberSummary
+              title={`New cluster member #${index + 1}`}
+              member={{
+                address: next.newAddress,
+                discordHandle: next.discordHandle,
+                telegramUsername: next.telegramUsername,
+              }}
+            />
+          </Card>
         </Stack>
 
-        <Stack align="start" gap="sm">
-          <Checkbox
-            checked={confirmed}
-            onChange={() => setConfirmed((v) => !v)}
-            data-testid="confirmRotationCheckbox"
-          />
-          <Text size="xxs" color="secondary" as="div">
-            New participant confirms that:
-            <ConfirmationList>
-              <li>They understand the requirements and eligibility criteria</li>
-              <li>
-                They agree to enroll in monitoring via DVT provider specific
-                tooling (e.g. Obol Grafana metrics or automatic SSV Network
-                metrics)
-              </li>
-            </ConfirmationList>
-          </Text>
-        </Stack>
+        <CheckboxRow
+          checked={confirmed}
+          onChange={() => setConfirmed((v) => !v)}
+          label={<Body>New participant confirms that:</Body>}
+          description={
+            <Description as="div" color="secondary">
+              <ConfirmationList>
+                <li>
+                  They understand the requirements and eligibility criteria
+                </li>
+                <li>
+                  They agree to enroll in monitoring via DVT provider specific
+                  tooling (e.g. Obol Grafana metrics or automatic SSV Network
+                  metrics)
+                </li>
+              </ConfirmationList>
+            </Description>
+          }
+          dataTestId={{ input: 'confirmRotationCheckbox' }}
+        />
 
-        <Button
-          fullwidth
-          disabled={!confirmed}
-          onClick={onConfirm}
-          data-testid="submitRotationRequestButton"
-        >
-          Submit rotation request
-        </Button>
+        <Stack direction={{ base: 'row', sm: 'column' }} gap={12}>
+          <Button
+            fullWidth
+            disabled={!confirmed}
+            onClick={onConfirm}
+            dataTestId={{ root: 'submitRotationRequestButton' }}
+          >
+            Submit rotation request
+          </Button>
+          <Button fullWidth variant="outline" onClick={onReject}>
+            Back
+          </Button>
+        </Stack>
       </Stack>
-    </Modal>
+    </FormModalShell>
   );
 };
 

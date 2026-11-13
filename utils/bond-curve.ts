@@ -9,7 +9,7 @@
  *
  * The structural `Interval` type matches `bondConfig`.
  */
-type Interval = { minKeyNumber: number; value: bigint };
+export type Interval = { minKeyNumber: number; value: bigint };
 
 /** Total bond required to fund `count` keys. */
 export const bondForKeys = (intervals: Interval[], count: number): bigint => {

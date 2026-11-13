@@ -1,16 +1,16 @@
 import { FC, useCallback, useState } from 'react';
 import { trackMatomoFormEvent } from 'utils/track-matomo-event';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Text } from '@lidofinance/lido-ui';
-import { Plural, SectionBlock, Stack, WhenLoaded } from 'shared/components';
+import { Body, EmptyState, MessageBox, Stack } from '@lidofinance/lido-app-ui';
+import { Plural, WhenLoaded } from 'shared/components';
+import { HubList } from 'shared/components/hub-list';
 import { isAuthError } from 'modules/surveys-sdk';
 import { useDelegates } from './use-delegates';
 import { useModalStages } from './use-modal-stages';
-import { useConfirmRemoveDelegateModal } from './confirm-remove-modal';
+import { useConfirmRemoveDelegateModal } from './confirm-remove-delegate-modal-app';
 import { DelegateItem } from './delegate-item';
 import { AddDelegateForm } from './add-delegate-form';
 import { MAX_DELEGATES } from '../types';
-import { SurveysBackButton } from '../shared';
 
 type AddDelegateFormData = {
   address: string;
@@ -62,21 +62,23 @@ export const SurveyDelegates: FC = () => {
   );
 
   return (
-    <SectionBlock title="Manage Delegates" mainPrefix={<SurveysBackButton />}>
-      <Stack direction="column" gap="lg">
-        <Text size="xs" color="secondary">
-          Delegates can only access and submit Setup surveys on your behalf.
-          Contact and experience data remains private. Up to{' '}
-          <Plural
-            value={MAX_DELEGATES}
-            variants={['delegate', 'delegates']}
-            showValue
-          />{' '}
-          allowed.
-        </Text>
+    <Stack gap={24}>
+      <Body color="secondary">
+        Delegates can only access and submit Setup surveys on your behalf.
+        Contact and experience data remains private. Up to{' '}
+        <Plural
+          value={MAX_DELEGATES}
+          variants={['delegate', 'delegates']}
+          showValue
+        />{' '}
+        allowed.
+      </Body>
 
-        <WhenLoaded loading={isLoading}>
-          <Stack direction="column" gap="md">
+      <WhenLoaded loading={isLoading}>
+        {delegates.length === 0 ? (
+          <EmptyState title="No delegates added yet" />
+        ) : (
+          <HubList>
             {delegates.map((delegate) => (
               <DelegateItem
                 key={delegate.address}
@@ -85,27 +87,19 @@ export const SurveyDelegates: FC = () => {
                 isRemoving={removingAddress === delegate.address}
               />
             ))}
+          </HubList>
+        )}
 
-            {delegates.length === 0 && (
-              <Text size="xs" color="secondary">
-                No delegates added yet
-              </Text>
-            )}
-
-            {canAddMore && (
-              <FormProvider {...formObject}>
-                <AddDelegateForm onSubmit={handleAdd} isSubmitting={isAdding} />
-              </FormProvider>
-            )}
-
-            {!canAddMore && (
-              <Text size="xs" color="warning">
-                Maximum number of delegates reached
-              </Text>
-            )}
-          </Stack>
-        </WhenLoaded>
-      </Stack>
-    </SectionBlock>
+        {canAddMore ? (
+          <FormProvider {...formObject}>
+            <AddDelegateForm onSubmit={handleAdd} isSubmitting={isAdding} />
+          </FormProvider>
+        ) : (
+          <MessageBox variant="warning">
+            Maximum number of delegates reached
+          </MessageBox>
+        )}
+      </WhenLoaded>
+    </Stack>
   );
 };

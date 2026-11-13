@@ -1,12 +1,17 @@
-import { ButtonIcon, Close, Text } from '@lidofinance/lido-ui';
+import { Grid, IconButton, IconCross, Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { useFormContext, useFormState } from 'react-hook-form';
 import {
-  AddressInputHookForm,
-  PercentInputHookForm,
-} from 'shared/hook-form/controls';
+  AddressField,
+  FieldError,
+  PercentField,
+} from 'shared/hook-form/fields';
 import { SplitsFormInputType } from '../context/types';
-import { AddressColumn, RowStyle, ShareColumn } from './styles';
+
+const COLUMNS = {
+  base: 'minmax(0, 1fr) 120px 40px',
+  smDown: 'minmax(0, 1fr) 96px 40px',
+};
 
 type SplitRowProps = {
   index: number;
@@ -36,41 +41,30 @@ export const SplitRow: FC<SplitRowProps> = ({ index, onRemove }) => {
   const errorMessage = recipientError?.message || shareError?.message;
 
   return (
-    <div>
-      <RowStyle>
-        <AddressColumn>
-          <AddressInputHookForm
-            fieldName={`feeSplits.${index}.recipient`}
-            label={`Additional address #${index + 1}`}
-            error={!!recipientError}
-            simple
-          />
-        </AddressColumn>
-        <ShareColumn>
-          <PercentInputHookForm
-            fieldName={`feeSplits.${index}.share`}
-            label="Share, %"
-            placeholder="0.00"
-            onChange={() => {
-              clearErrors(`feeSplits.${index}.share`);
-            }}
-            error={!!shareError}
-          />
-        </ShareColumn>
-        <ButtonIcon
-          icon={<Close />}
-          variant="ghost"
-          color="secondary"
-          size="xs"
-          onClick={() => onRemove(index)}
-          aria-label="Remove"
+    <Stack gap={12}>
+      <Grid columns={COLUMNS} gap={12}>
+        <AddressField
+          name={`feeSplits.${index}.recipient`}
+          placeholder={`Additional address #${index + 1}`}
+          simple
+          error={!!recipientError}
         />
-      </RowStyle>
-      {errorMessage && (
-        <Text size="xxs" color="error">
-          {errorMessage}
-        </Text>
-      )}
-    </div>
+        <PercentField
+          name={`feeSplits.${index}.share`}
+          placeholder="Share, %"
+          error={!!shareError}
+          onChange={() => clearErrors(`feeSplits.${index}.share`)}
+        />
+        <Stack align="center" justify="center">
+          <IconButton
+            variant="outline"
+            icon={<IconCross />}
+            aria-label="Remove address"
+            onClick={() => onRemove(index)}
+          />
+        </Stack>
+      </Grid>
+      <FieldError>{errorMessage}</FieldError>
+    </Stack>
   );
 };

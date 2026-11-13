@@ -1,31 +1,45 @@
+import { Stack, FormLayout } from '@lidofinance/lido-app-ui';
+import { useFaq } from 'faq';
 import { FC, memo } from 'react';
-
-import { AddBondDataProvider, AddBondFormProvider } from './context';
-
-import { FormBlock } from 'shared/components';
+import { BondStatsCard, Faq } from 'shared/components';
+import { FormPage, FormReady } from 'shared/form-page';
 import { Form } from 'shared/hook-form/form-controller';
-import { AddBondFormInfo } from './add-bond-form-info';
-import { AddBondFormLoader } from './add-bond-form-loader';
+import { AddBondAside } from './add-bond-aside';
+import { AddBondFormGate } from './add-bond-form-gate';
+import { InsufficientBondNotice, WhyAddBondNotice } from './add-bond-notices';
+import { AddBondDataProvider, AddBondFormProvider } from './context';
 import { AmountInput } from './controls/amount-input';
-import { Info } from './controls/info';
-import { SubmitButton } from './controls/submit-button';
 import { TokenSelect } from './controls/token-select';
 
 export const AddBondForm: FC = memo(() => {
+  const faq = useFaq('BOND');
+
   return (
     <AddBondDataProvider>
       <AddBondFormProvider>
-        <FormBlock data-testid="addBondForm">
-          <AddBondFormLoader>
-            <Form>
-              <Info />
-              <TokenSelect />
-              <AmountInput />
-              <SubmitButton />
-            </Form>
-            <AddBondFormInfo />
-          </AddBondFormLoader>
-        </FormBlock>
+        <FormPage
+          notices={
+            <>
+              <BondStatsCard />
+              <InsufficientBondNotice />
+            </>
+          }
+          below={<WhyAddBondNotice />}
+          faq={<Faq items={faq} />}
+        >
+          <FormReady>
+            <AddBondFormGate>
+              <Form data-testid="addBondForm">
+                <FormLayout aside={<AddBondAside />}>
+                  <Stack direction="column" gap={32}>
+                    <TokenSelect />
+                    <AmountInput />
+                  </Stack>
+                </FormLayout>
+              </Form>
+            </AddBondFormGate>
+          </FormReady>
+        </FormPage>
       </AddBondFormProvider>
     </AddBondDataProvider>
   );

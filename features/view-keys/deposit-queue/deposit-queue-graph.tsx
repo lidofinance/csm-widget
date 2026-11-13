@@ -1,7 +1,6 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { InlineLoader } from '@lidofinance/lido-ui';
+import { Skeleton } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import { Stack } from 'shared/components';
 import { useDepositQueueGraph } from './hooks/use-deposit-queue-graph';
 import {
   GraphInteractionProvider,
@@ -10,18 +9,18 @@ import {
 import { Legend } from './legend';
 import { LineWrapper } from './line-wrapper';
 import { Part } from './part';
-import { LegendsStyle, LineStyle } from './style';
+import { GraphStyle, LegendsStyle, LineStyle } from './style';
 
 const Graph: FC = () => {
   const { fullView, module } = useGraphInteraction();
   const { data, isLoading } = useDepositQueueGraph(fullView, module);
 
   if (isLoading || !data) {
-    return <InlineLoader />;
+    return <Skeleton variant="text" />;
   }
 
   return (
-    <Stack direction="column">
+    <GraphStyle>
       <LineWrapper farAway={data.farAway}>
         <LineStyle>
           {data.parts.map((part, index) => (
@@ -48,7 +47,7 @@ const Graph: FC = () => {
           hide={data.submittingAmount === undefined}
         />
       </LegendsStyle>
-    </Stack>
+    </GraphStyle>
   );
 };
 

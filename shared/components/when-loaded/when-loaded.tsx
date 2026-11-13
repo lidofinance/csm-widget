@@ -1,7 +1,6 @@
-import { Loader } from '@lidofinance/lido-ui';
+import { EmptyState, Spinner } from '@lidofinance/lido-app-ui';
 import { FC, PropsWithChildren, ReactNode } from 'react';
-import { EmptyState } from './empty-state';
-import { WrapperStyle } from './style';
+import styled from 'styled-components';
 
 export type WhenLoaded = {
   loading: boolean;
@@ -11,6 +10,13 @@ export type WhenLoaded = {
   morePadding?: boolean;
 };
 
+const CenterStyle = styled.div<{ $morePadding?: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: ${({ $morePadding }) => ($morePadding ? 48 : 16)}px 0;
+`;
+
 export const WhenLoaded: FC<PropsWithChildren<WhenLoaded>> = ({
   loading,
   empty,
@@ -18,22 +24,34 @@ export const WhenLoaded: FC<PropsWithChildren<WhenLoaded>> = ({
   children,
   error,
   morePadding,
-}) => (
-  <>
-    {error ? (
-      <>
-        <WrapperStyle $morePadding={morePadding}>Error</WrapperStyle>
-      </>
-    ) : loading ? (
-      <WrapperStyle $morePadding={morePadding}>
-        <Loader data-testid="loader" />
-      </WrapperStyle>
-    ) : empty ? (
-      <EmptyState note={emptyNote} morePadding={morePadding}>
-        {empty}
-      </EmptyState>
-    ) : (
-      children
-    )}
-  </>
-);
+}) => {
+  if (error) {
+    return (
+      <CenterStyle $morePadding={morePadding}>
+        <EmptyState description="Error" />
+      </CenterStyle>
+    );
+  }
+  if (loading) {
+    return (
+      <CenterStyle $morePadding={morePadding}>
+        <Spinner data-testid="loader" />
+      </CenterStyle>
+    );
+  }
+  if (empty) {
+    return (
+      <CenterStyle $morePadding={morePadding}>
+        {typeof empty === 'string' ? (
+          <EmptyState title={empty} description={emptyNote} />
+        ) : (
+          <>
+            {empty}
+            {emptyNote && <EmptyState description={emptyNote} />}
+          </>
+        )}
+      </CenterStyle>
+    );
+  }
+  return <>{children}</>;
+};
