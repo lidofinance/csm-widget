@@ -41,6 +41,9 @@ export const WalletModalAddressStyle = styled.div`
 `;
 
 export const WalletModalActionsStyle = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   margin: 0 ${({ theme }) => -theme.spaceMap.sm}px;
   margin-top: ${({ theme }) => theme.spaceMap.md}px;
 
