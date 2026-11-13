@@ -117,7 +117,7 @@ export const CommentWithStrikes: FC = () => {
 
 export const CommentDepositable: FC = () => {
   const { isCsmFamily, module } = useModule();
-  const name = MODULE_METADATA[module].variantName;
+  const name = module && MODULE_METADATA[module].variantName;
   const { data: status } = useShareLimitStatus();
   const STAKE_SHARE_LIMIT_ANCHOR = isCsmFamily
     ? '#what-is-the-csm-stake-share-limit'

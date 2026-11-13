@@ -79,26 +79,42 @@ describe('getBondDeltaRow', () => {
 
 describe('getKeysConfirmItems', () => {
   it('lists the two default items, comma-separated, no trailing dot', () => {
-    expect(getKeysConfirmItems({ approaching: false, reached: false })).toEqual(
-      [
-        'My nodes are synced, running, and ready for the validator activation,',
-        'I understand that deleting keys from the deposit queue will incur a removal fee',
-      ],
-    );
+    expect(
+      getKeysConfirmItems({
+        approaching: false,
+        reached: false,
+        name: '0x01 CSM',
+      }),
+    ).toEqual([
+      'My nodes are synced, running, and ready for the validator activation,',
+      'I understand that deleting keys from the deposit queue will incur a removal fee',
+    ]);
   });
 
   it('adds the approaching share limit item before the removal fee', () => {
-    expect(getKeysConfirmItems({ approaching: true, reached: false })).toEqual([
+    expect(
+      getKeysConfirmItems({
+        approaching: true,
+        reached: false,
+        name: '0x01 CSM',
+      }),
+    ).toEqual([
       'My nodes are synced, running, and ready for the validator activation,',
-      'I understand that the deposit time for my keys can be months or longer because CSM is approaching its stake share limit,',
+      'I understand that the deposit time for my keys can be months or longer because 0x01 CSM is approaching its stake share limit,',
       'I understand that deleting keys from the deposit queue will incur a removal fee',
     ]);
   });
 
   it('adds the reached share limit item before the removal fee', () => {
-    expect(getKeysConfirmItems({ approaching: false, reached: true })).toEqual([
+    expect(
+      getKeysConfirmItems({
+        approaching: false,
+        reached: true,
+        name: '0x01 CSM',
+      }),
+    ).toEqual([
       'My nodes are synced, running, and ready for the validator activation,',
-      'I understand that my newly uploaded keys are very unlikely to receive deposits in the near future because CSM has reached its stake share limit,',
+      'I understand that my newly uploaded keys are very unlikely to receive deposits in the near future because 0x01 CSM has reached its stake share limit,',
       'I understand that deleting keys from the deposit queue will incur a removal fee',
     ]);
   });

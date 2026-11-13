@@ -1,4 +1,5 @@
 import { KeysConfirmLines } from 'features/add-keys/add-keys/controls/keys-confirm-lines';
+import { MODULE_METADATA } from 'consts/module';
 import { SHARE_LIMIT_STATUS } from 'modules/web3';
 import { FC } from 'react';
 import { useDepositDataValid } from 'shared/hook-form/deposit-data';
@@ -6,7 +7,7 @@ import { CheckboxField } from 'shared/hook-form/fields';
 import { useSubmitKeysFormData } from '../context';
 
 export const KeysConfirm: FC = () => {
-  const { shareLimitStatus } = useSubmitKeysFormData();
+  const { shareLimitStatus, targetModule } = useSubmitKeysFormData(true);
   const isDepositDataValid = useDepositDataValid();
 
   return (
@@ -17,6 +18,7 @@ export const KeysConfirm: FC = () => {
         <KeysConfirmLines
           approaching={shareLimitStatus === SHARE_LIMIT_STATUS.APPROACHING}
           reached={shareLimitStatus === SHARE_LIMIT_STATUS.REACHED}
+          name={MODULE_METADATA[targetModule].variantName}
         />
       }
     />

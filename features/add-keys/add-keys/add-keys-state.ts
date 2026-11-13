@@ -47,23 +47,25 @@ export const getBondDeltaRow = (
 export type KeysConfirmInput = {
   approaching: boolean;
   reached: boolean;
+  name: string;
 };
 
 /** Lines after "I confirm that:"; the label is one sentence, so the last line has no dot. */
 export const getKeysConfirmItems = ({
   approaching,
   reached,
+  name,
 }: KeysConfirmInput): string[] => {
   const items = [
     'My nodes are synced, running, and ready for the validator activation',
     ...(approaching
       ? [
-          'I understand that the deposit time for my keys can be months or longer because CSM is approaching its stake share limit',
+          `I understand that the deposit time for my keys can be months or longer because ${name} is approaching its stake share limit`,
         ]
       : []),
     ...(reached
       ? [
-          'I understand that my newly uploaded keys are very unlikely to receive deposits in the near future because CSM has reached its stake share limit',
+          `I understand that my newly uploaded keys are very unlikely to receive deposits in the near future because ${name} has reached its stake share limit`,
         ]
       : []),
     'I understand that deleting keys from the deposit queue will incur a removal fee',

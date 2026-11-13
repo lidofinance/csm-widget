@@ -1,13 +1,11 @@
 import { FC } from 'react';
-import { getKeysConfirmItems } from '../add-keys-state';
+import { getKeysConfirmItems, KeysConfirmInput } from '../add-keys-state';
 import { ConfirmLineStyle } from '../styles';
 
-type Props = { approaching: boolean; reached: boolean };
-
-export const KeysConfirmLines: FC<Props> = ({ approaching, reached }) => (
+export const KeysConfirmLines: FC<KeysConfirmInput> = (props) => (
   <>
     I confirm that:
-    {getKeysConfirmItems({ approaching, reached }).map((item) => (
+    {getKeysConfirmItems(props).map((item) => (
       <ConfirmLineStyle key={item}>{item}</ConfirmLineStyle>
     ))}
   </>

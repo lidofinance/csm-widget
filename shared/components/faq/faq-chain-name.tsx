@@ -51,7 +51,7 @@ export const FaqIfModule: FC<PropsWithChildren<{ module: MODULE_NAME }>> = ({
 
 export const FaqModuleName: FC = () => {
   const { module } = useModule();
-  return <>{MODULE_METADATA[module].variantName}</>;
+  return <>{MODULE_METADATA[module ?? MODULE_NAME.CSM].variantName}</>;
 };
 
 const FaqContractAddress: FC<{ name: CONTRACT_NAMES }> = ({ name }) => {
