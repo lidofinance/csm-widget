@@ -6,7 +6,6 @@ export * from './getClient';
 export * from './getCurrentFrame';
 export * from './getPerformance';
 export * from './nextApiWrappers';
-export * from './rpcProviders';
 export * from './api';
 export * from './metrics';
 export * from './get-test-props';

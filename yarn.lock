@@ -2292,16 +2292,6 @@
   dependencies:
     typescript "^4.7"
 
-"@lidofinance/eth-api-providers@^0.63.0":
-  version "0.63.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/eth-api-providers/-/eth-api-providers-0.63.0.tgz#4cb2c501290c709c6a473a72b27e306a470b07c9"
-  integrity sha512-dxpQCkTw/QzUsqLvGKi1Uc0VrCXG1NVy72CItc7+VUtYsSp3exbt+eYp3+TFGpDpXtVVORQrkjCI8e/B9fHVAg==
-
-"@lidofinance/eth-providers@^0.63.0":
-  version "0.63.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/eth-providers/-/eth-providers-0.63.0.tgz#48a4a901656fc5d3af294669a86d885ab965c25a"
-  integrity sha512-jbWshE2ohU8vkK9p0KNo0bcdY2Nf5joqAHeCY7feGH79E1NAX4aNd78ypZBS/w97SfTcdgrXoI4x50Rcdi3Mag==
-
 "@lidofinance/github-summary-reporter@1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@lidofinance/github-summary-reporter/-/github-summary-reporter-1.0.0.tgz#12351a4bb3be8f2f189620e41fe579e5f98c2548"
