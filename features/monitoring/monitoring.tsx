@@ -6,11 +6,11 @@ import { StrikesSection } from './strikes-section';
 import { AttestationRateSection } from './attestation-rate-section';
 
 export const Monitoring: FC = () => {
-  const { isCsmFamily } = useModule();
+  const { isCSM, isCsmFamily } = useModule();
 
   return (
     <>
-      {isCsmFamily && <AttestationRateSection />}
+      {isCSM && <AttestationRateSection />}
       {isCsmFamily && <StrikesSection />}
       <ExternalSection />
       <NotificationToolsSection />
