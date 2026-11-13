@@ -1,6 +1,4 @@
-import { themeLight } from '@lidofinance/lido-ui';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { ThemeProvider } from 'styled-components';
 import type { StakeAndKeysData } from 'utils/compute-stake-data';
 import { StakeAllocationRows } from './stake-allocation-rows';
 
@@ -16,11 +14,7 @@ const data: StakeAndKeysData = {
 };
 
 const render = (props: Parameters<typeof StakeAllocationRows>[0]) =>
-  renderToStaticMarkup(
-    <ThemeProvider theme={themeLight}>
-      <StakeAllocationRows {...props} />
-    </ThemeProvider>,
-  );
+  renderToStaticMarkup(<StakeAllocationRows {...props} />);
 
 describe('StakeAllocationRows', () => {
   it('renders labels, row and keys testids and tooltips', () => {

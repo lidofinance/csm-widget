@@ -34,7 +34,6 @@ const ConfirmRotationModal: FC<ConfirmRotationModalProps> = ({
 
   return (
     <FormModalShell
-      ui="app"
       open={open}
       onClose={onReject}
       title="You are submitting cluster member rotation"

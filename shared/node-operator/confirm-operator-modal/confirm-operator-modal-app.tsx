@@ -17,7 +17,6 @@ export const ConfirmOperatorModalApp: FC<ConfirmOperatorModalAppProps> = ({
   onReject,
 }) => (
   <FormModalShell
-    ui="app"
     open={open}
     onClose={onReject}
     title="Confirm your Node Operator"

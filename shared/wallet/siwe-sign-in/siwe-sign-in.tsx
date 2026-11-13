@@ -1,8 +1,14 @@
-import { Body, Button, Card, Description, H3 } from '@lidofinance/lido-app-ui';
+import {
+  Body,
+  Button,
+  Card,
+  Description,
+  H3,
+  Stack,
+} from '@lidofinance/lido-app-ui';
 import { FC, PropsWithChildren, ReactNode } from 'react';
 import { useSiweAuth } from 'modules/siwe';
 import { useDappStatus } from 'modules/web3';
-import { Stack } from 'shared/components';
 import { Connect } from '../connect/connect';
 
 // Wallet-not-connected step of a SIWE gate. The description copy varies per
@@ -11,8 +17,13 @@ export const SiweConnect: FC<{ description: ReactNode }> = ({
   description,
 }) => (
   <Card>
-    <Stack direction="column" gap="lg" selfAlign="stretch">
-      <Stack direction="column" gap="md">
+    <Stack
+      direction="column"
+      gap={20}
+      align="stretch"
+      style={{ alignSelf: 'stretch' }}
+    >
+      <Stack direction="column" gap={16}>
         <H3>Connect your wallet</H3>
         <Description color="secondary">{description}</Description>
       </Stack>
@@ -28,8 +39,13 @@ export const SiweSignIn: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <Card>
-      <Stack direction="column" gap="lg" selfAlign="stretch">
-        <Stack direction="column" gap="sm">
+      <Stack
+        direction="column"
+        gap={20}
+        align="stretch"
+        style={{ alignSelf: 'stretch' }}
+      >
+        <Stack direction="column" gap={8}>
           <H3>Sign in</H3>
           <Body color="secondary">{children}</Body>
         </Stack>

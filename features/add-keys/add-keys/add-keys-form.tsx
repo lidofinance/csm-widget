@@ -7,7 +7,6 @@ import { FC, memo } from 'react';
 import { Faq } from 'shared/components';
 import { FormPage, FormReady, FormMainAsideSkeleton } from 'shared/form-page';
 import { Form } from 'shared/hook-form/form-controller';
-import { AppFormUi } from 'shared/hook-form/form-ui';
 import { Gate } from 'shared/navigate';
 import { AddKeysAside } from './add-keys-aside';
 import { AddKeysFormGate } from './add-keys-form-gate';
@@ -21,44 +20,42 @@ export const AddKeysForm: FC = memo(() => {
   const faq = useFaq('KEYS');
 
   return (
-    <AppFormUi>
-      <AddKeysDataProvider>
-        <AddKeysFormProvider>
-          <FormPage
-            notices={
-              <>
-                <ShareLimitBanner />
-                <KeysLimitWarning />
-              </>
-            }
-            below={
-              <Gate rule="IS_CSM_FAMILY">
-                <DepositQueue />
-              </Gate>
-            }
-            faq={<Faq items={faq} />}
-          >
-            <FormReady skeleton={<FormMainAsideSkeleton />}>
-              <AddKeysFormGate>
-                <Form data-testid="submitKeysForm">
-                  <FormLayout aside={<AddKeysAside />}>
-                    <Stack direction="column" gap={32}>
-                      <TokenSelect />
-                      <Stack direction="column" gap={16}>
-                        <KeysInput />
-                        <AmountInput />
-                      </Stack>
-                      <Gate rule="IS_IDVTC">
-                        <DkgFilesField />
-                      </Gate>
+    <AddKeysDataProvider>
+      <AddKeysFormProvider>
+        <FormPage
+          notices={
+            <>
+              <ShareLimitBanner />
+              <KeysLimitWarning />
+            </>
+          }
+          below={
+            <Gate rule="IS_CSM_FAMILY">
+              <DepositQueue />
+            </Gate>
+          }
+          faq={<Faq items={faq} />}
+        >
+          <FormReady skeleton={<FormMainAsideSkeleton />}>
+            <AddKeysFormGate>
+              <Form data-testid="submitKeysForm">
+                <FormLayout aside={<AddKeysAside />}>
+                  <Stack direction="column" gap={32}>
+                    <TokenSelect />
+                    <Stack direction="column" gap={16}>
+                      <KeysInput />
+                      <AmountInput />
                     </Stack>
-                  </FormLayout>
-                </Form>
-              </AddKeysFormGate>
-            </FormReady>
-          </FormPage>
-        </AddKeysFormProvider>
-      </AddKeysDataProvider>
-    </AppFormUi>
+                    <Gate rule="IS_IDVTC">
+                      <DkgFilesField />
+                    </Gate>
+                  </Stack>
+                </FormLayout>
+              </Form>
+            </AddKeysFormGate>
+          </FormReady>
+        </FormPage>
+      </AddKeysFormProvider>
+    </AddKeysDataProvider>
   );
 });

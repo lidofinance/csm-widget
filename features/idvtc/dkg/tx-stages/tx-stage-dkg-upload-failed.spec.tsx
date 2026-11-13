@@ -1,16 +1,9 @@
-import { themeLight } from '@lidofinance/lido-ui';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { AppFormUi } from 'shared/hook-form/form-ui';
-import { ThemeProvider } from 'styled-components';
 import { TxStageDkgUploadFailed } from './tx-stage-dkg-upload-failed';
 
 const render = () =>
   renderToStaticMarkup(
-    <ThemeProvider theme={themeLight}>
-      <AppFormUi>
-        <TxStageDkgUploadFailed nodeOperatorId={12n} onRetry={vi.fn()} />
-      </AppFormUi>
-    </ThemeProvider>,
+    <TxStageDkgUploadFailed nodeOperatorId={12n} onRetry={vi.fn()} />,
   );
 
 describe('TxStageDkgUploadFailed', () => {

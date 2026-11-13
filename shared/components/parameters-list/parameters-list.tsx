@@ -1,9 +1,7 @@
-import { InfoTooltip } from '@lidofinance/lido-app-ui';
+import { Body, Button, InfoTooltip, Stack } from '@lidofinance/lido-app-ui';
 import { ICON_TOOLTIP_TEST_ID } from 'shared/components/icon-tooltip/test-ids';
 import { CurveParameters, MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { Text } from '@lidofinance/lido-ui';
 import { FC, PropsWithChildren, useState } from 'react';
-import { Stack } from '../stack/stack';
 import { useParameters } from './parameters';
 import { ParametersValue } from './parameters-value';
 import {
@@ -13,14 +11,11 @@ import {
   CompareTitleStyle,
   FoldableListStyle,
   ListStyle,
-  MoreStyle,
   RowStyle,
 } from './styles';
 
-export { DefColumnBackground, IcsColumnBackground } from './styles';
-
 const Title: FC<{ title: string; help?: string }> = ({ title, help }) => (
-  <Text size="xs" weight={700} data-testid="parameterTitle">
+  <Body weight="bold" dataTestId={{ root: 'parameterTitle' }}>
     {title}
     {help && (
       <>
@@ -28,7 +23,7 @@ const Title: FC<{ title: string; help?: string }> = ({ title, help }) => (
         <InfoTooltip dataTestId={ICON_TOOLTIP_TEST_ID} content={help} />
       </>
     )}
-  </Text>
+  </Body>
 );
 
 export const ParametersList: FC<{
@@ -40,7 +35,7 @@ export const ParametersList: FC<{
   const toggleMore = () => setMore((prev) => !prev);
 
   return (
-    <Stack direction="column" gap="xl">
+    <Stack direction="column" gap={24}>
       <ListStyle>
         {PARAMETERS.slice(0, 3).map(({ title, help, render }) => (
           <RowStyle key={title} $bordered={more}>
@@ -63,10 +58,15 @@ export const ParametersList: FC<{
           </RowStyle>
         ))}
       </FoldableListStyle>
-      <MoreStyle onClick={toggleMore} data-testid="parametersShowMore">
+      <Button
+        variant="ghost"
+        size="small"
+        onClick={toggleMore}
+        iconRight={<ArrowStyle $expanded={more} />}
+        dataTestId={{ root: 'parametersShowMore' }}
+      >
         {more ? 'Show less' : 'Show more'}
-        <ArrowStyle $expanded={more} />
-      </MoreStyle>
+      </Button>
     </Stack>
   );
 };
@@ -92,9 +92,9 @@ export const CompareParametersList: FC<
       <CompareTitleStyle>
         <p></p>
         {items.map((item, index) => (
-          <Text key={index} size="xs" weight={700}>
+          <Body key={index} weight="bold">
             {item.title}
-          </Text>
+          </Body>
         ))}
       </CompareTitleStyle>
       {PARAMETERS.map(({ title, help, render }) => (

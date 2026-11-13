@@ -4,7 +4,6 @@ import type {
   MemberDto,
   RotationRequestDto,
 } from 'modules/surveys-sdk/generated';
-import { AppFormUi } from 'shared/hook-form/form-ui';
 import { RotationModal } from '../rotation/rotation-modal';
 import {
   collectTakenAddresses,
@@ -43,18 +42,16 @@ export const MembersSection: FC<MembersSectionProps> = ({
       ))}
 
       {rotatingIndex !== null && members[rotatingIndex] && (
-        <AppFormUi>
-          <RotationModal
-            index={rotatingIndex}
-            member={members[rotatingIndex]}
-            takenAddresses={collectTakenAddresses(
-              activeAddresses,
-              request,
-              rotatingIndex,
-            )}
-            onClose={() => setRotatingIndex(null)}
-          />
-        </AppFormUi>
+        <RotationModal
+          index={rotatingIndex}
+          member={members[rotatingIndex]}
+          takenAddresses={collectTakenAddresses(
+            activeAddresses,
+            request,
+            rotatingIndex,
+          )}
+          onClose={() => setRotatingIndex(null)}
+        />
       )}
     </Stack>
   );

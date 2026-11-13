@@ -8,7 +8,7 @@ import {
   IconUser,
   IconWallet,
 } from '@lidofinance/lido-app-ui';
-import { Eth as EthIcon } from '@lidofinance/lido-ui';
+import EthIcon from 'assets/icons/eth.svg?react';
 import FileIcon from 'assets/icons/file.svg?react';
 import GearIcon from 'assets/icons/gear.svg?react';
 import HomeIcon from 'assets/icons/home.svg?react';
@@ -143,7 +143,6 @@ const routes: Route[] = [
       PATH.TYPE_IDVTC_DESCRIPTION,
       PATH.TYPE_IDVTC_APPLY,
       PATH.TYPE_IDVTC_CLAIM,
-      PATH.TYPE_PARAMETERS,
     ],
     showRules: [
       'CAN_CLAIM_ICS',

@@ -11,7 +11,6 @@ import {
   WizardStepper,
 } from 'shared/form-page';
 import { Form } from 'shared/hook-form/form-controller';
-import { AppFormUi } from 'shared/hook-form/form-ui';
 import {
   CreatableOperatorType,
   getCreateFlow,
@@ -106,11 +105,9 @@ const SubmitKeysPage: FC<Props> = ({ type }) => {
 };
 
 export const SubmitKeysForm: FC<Props> = memo(({ type }: Props) => (
-  <AppFormUi>
-    <SubmitKeysDataProvider type={type}>
-      <SubmitKeysFormProvider>
-        <SubmitKeysPage type={type} />
-      </SubmitKeysFormProvider>
-    </SubmitKeysDataProvider>
-  </AppFormUi>
+  <SubmitKeysDataProvider type={type}>
+    <SubmitKeysFormProvider>
+      <SubmitKeysPage type={type} />
+    </SubmitKeysFormProvider>
+  </SubmitKeysDataProvider>
 ));

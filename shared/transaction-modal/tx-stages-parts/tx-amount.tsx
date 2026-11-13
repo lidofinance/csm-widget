@@ -1,7 +1,6 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { TokenAmount, TokenIconSymbol } from '@lidofinance/lido-app-ui';
 import { FormatToken } from 'shared/formatters';
-import { useFormUi } from 'shared/hook-form/form-ui';
 
 type TxAmountProps = {
   amount: bigint;
@@ -15,7 +14,6 @@ const TOKEN_ICON: Record<TOKENS, TokenIconSymbol> = {
 };
 
 export const TxAmount = ({ amount, token }: TxAmountProps) => {
-  const ui = useFormUi();
   const formatted = (
     <FormatToken
       amount={amount}
@@ -25,9 +23,5 @@ export const TxAmount = ({ amount, token }: TxAmountProps) => {
     />
   );
 
-  return ui === 'app' ? (
-    <TokenAmount symbol={TOKEN_ICON[token]} amount={formatted} />
-  ) : (
-    formatted
-  );
+  return <TokenAmount symbol={TOKEN_ICON[token]} amount={formatted} />;
 };

@@ -18,7 +18,6 @@ export const ParameterChangesModal: FC<ParameterChangesModalProps> = ({
   items,
 }) => (
   <FormModalShell
-    ui="app"
     open={open}
     onClose={onClose}
     title="Parameter changes"

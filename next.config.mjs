@@ -17,7 +17,6 @@ export const CACHE_CONTROL_PAGES = [
   '/monitoring',
   '/operators',
   '/qa-config',
-  '/wrapped-2025/:path*',
   '/bond/:path*',
   '/create/:path*',
   '/delayed-penalty/:path*',

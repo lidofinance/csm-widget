@@ -8,7 +8,6 @@ import {
   SubmitButton,
 } from 'shared/form-page';
 import { Form } from 'shared/hook-form/form-controller';
-import { AppFormUi } from 'shared/hook-form/form-ui';
 import { ClaimTypeSuccessProvider, useClaimTypeSuccess } from '../shared';
 import { ClaimIcsCard } from './claim-ics-card';
 import { ClaimIcsFormGate } from './claim-ics-form-gate';
@@ -47,13 +46,11 @@ const ClaimIcsContent: FC = () => {
 };
 
 export const ClaimIcsForm: FC = memo(() => (
-  <AppFormUi>
-    <ClaimTypeSuccessProvider>
-      <ClaimIcsDataProvider>
-        <ClaimIcsFormProvider>
-          <ClaimIcsContent />
-        </ClaimIcsFormProvider>
-      </ClaimIcsDataProvider>
-    </ClaimTypeSuccessProvider>
-  </AppFormUi>
+  <ClaimTypeSuccessProvider>
+    <ClaimIcsDataProvider>
+      <ClaimIcsFormProvider>
+        <ClaimIcsContent />
+      </ClaimIcsFormProvider>
+    </ClaimIcsDataProvider>
+  </ClaimTypeSuccessProvider>
 ));

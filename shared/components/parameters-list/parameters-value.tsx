@@ -1,20 +1,18 @@
-import { InlineLoader, Text, TextProps } from '@lidofinance/lido-ui';
+import { Body, Skeleton } from '@lidofinance/lido-app-ui';
 import { FC, ReactNode } from 'react';
 
 type ParametersValueProps = {
   loading?: boolean;
   values: ReactNode[];
-  size?: TextProps['size'];
 };
 
 export const ParametersValue: FC<ParametersValueProps> = ({
   loading,
   values,
-  size = 'xs',
 }) => (
-  <Text as="div" size={size}>
+  <Body as="div">
     {loading ? (
-      <InlineLoader />
+      <Skeleton variant="text" />
     ) : (
       <ul>
         {values.map((value, index) => (
@@ -22,5 +20,5 @@ export const ParametersValue: FC<ParametersValueProps> = ({
         ))}
       </ul>
     )}
-  </Text>
+  </Body>
 );

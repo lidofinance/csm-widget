@@ -7,7 +7,7 @@ import {
   USD_AMOUNT_REGEX,
   USD_AMOUNT_WITH_APPROX_REGEX,
 } from 'tests/shared/consts/regexp.const';
-import { trimAddress } from '@lidofinance/address';
+import { trimHex } from 'tests/shared/helpers/trimHex';
 import { mnemonicToAccount } from 'viem/accounts';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { TOKEN_DISPLAY_NAMES } from 'utils/get-token-display-name';
@@ -191,7 +191,7 @@ test.describe.skip(
               .locator('> div')
               .nth(0)
               .textContent();
-          const expectedText = `Rewards Address (${trimAddress(address, 6)}) will receive`;
+          const expectedText = `Rewards Address (${trimHex(address, 6)}) will receive`;
 
           expect(textContentRewardInfo?.replace(address, '')).toEqual(
             expectedText,

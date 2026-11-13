@@ -2,7 +2,6 @@ import { type FC } from 'react';
 import { TxLinkEtherscan } from 'shared/components/tx-link-etherscan';
 import { TransactionModalContent } from 'shared/transaction-modal/transaction-modal-content';
 import type { ClosableOnLedgerStage } from 'shared/transaction-modal/is-closable-on-ledger';
-import { StageIconSuccess } from './icons';
 
 type TxStageSuccessProps = {
   txHash?: string | null;
@@ -23,7 +22,6 @@ export const TxStageSuccess: FC<TxStageSuccessProps> &
   return (
     <TransactionModalContent
       status="success"
-      icon={<StageIconSuccess />}
       title={title}
       description={description}
       footerHint={

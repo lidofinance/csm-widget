@@ -69,7 +69,6 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   etherscanAddressLink = 'etherscanAddressLink',
   beaconchainPubkeyLink = 'beaconchainPubkeyLink',
   migalabsPubkeyLink = 'migalabsPubkeyLink',
-  tryOtherNetworkLink = 'tryOtherNetworkLink',
   stakeShareLimitLinkBanner = 'stakeShareLimitLinkBanner',
   phasedDepositApproachLinkBanner = 'phasedDepositApproachLinkBanner',
   faqItemLink = 'faqItemLink',
@@ -90,15 +89,6 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   feeRecipientDismissButton = 'feeRecipientDismissButton',
   keyStrikeViewStrikes = 'keyStrikeViewStrikes',
   keyStrikeDismiss = 'keyStrikeDismiss',
-  wrappedAlertClose = 'wrappedAlertClose',
-  wrappedAlertLink = 'wrappedAlertLink',
-  wrappedLetsGo = 'wrappedLetsGo',
-  wrappedRepeat = 'wrappedRepeat',
-  wrappedShareOpen = 'wrappedShareOpen',
-  wrappedShareCopy = 'wrappedShareCopy',
-  wrappedShareNative = 'wrappedShareNative',
-  wrappedShareDownload = 'wrappedShareDownload',
-  wrappedShareX = 'wrappedShareX',
   // Dashboard
   dashboardKeysLink = 'dashboardKeysLink',
   dashboardBondLink = 'dashboardBondLink',
@@ -390,10 +380,6 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «View on migalabs.io» link on pubkey',
     'migalabs_pubkey_link',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.tryOtherNetworkLink]: createEvent(
-    'Click «Join» in other network link',
-    'try_other_link',
-  ),
   [MATOMO_CLICK_EVENTS_TYPES.stakeShareLimitLinkBanner]: createEvent(
     'Click «stake share limit» link on banner',
     'stake_share_limit_link_banner',
@@ -468,42 +454,6 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.keyStrikeDismiss]: createEvent(
     'Click «Dismiss» button on Key Strike alert',
     'key_strike_dismiss_alert',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.wrappedAlertClose]: createEvent(
-    'Click close button on Wrapped alert',
-    'wrapped_alert_close',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.wrappedAlertLink]: createEvent(
-    'Click «See my 2025 wrapped» link on Wrapped alert',
-    'wrapped_alert_link',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.wrappedLetsGo]: createEvent(
-    "Click «Let's go» button on Wrapped intro",
-    'wrapped_lets_go',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.wrappedRepeat]: createEvent(
-    'Click «Repeat» button on Wrapped summary',
-    'wrapped_repeat',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.wrappedShareOpen]: createEvent(
-    'Open share modal on Wrapped summary',
-    'wrapped_share_open',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.wrappedShareCopy]: createEvent(
-    'Copy image to clipboard in share modal',
-    'wrapped_share_copy',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.wrappedShareNative]: createEvent(
-    'Share via native share API in share modal',
-    'wrapped_share_native',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.wrappedShareDownload]: createEvent(
-    'Download image in share modal',
-    'wrapped_share_download',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.wrappedShareX]: createEvent(
-    'Click «Share on X» button on Wrapped summary',
-    'wrapped_share_x',
   ),
   // Dashboard
   [MATOMO_CLICK_EVENTS_TYPES.dashboardKeysLink]: createEvent(

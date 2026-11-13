@@ -41,7 +41,6 @@ export const PATH = {
   TYPE_ICS_CLAIM: '/type/ics-claim',
   TYPE_ICS_SYSTEM: '/type/ics-system',
   TYPE_ICS_APPLY: '/type/ics-apply',
-  TYPE_PARAMETERS: '/type/parameters',
 
   TYPE_IDVTC_DESCRIPTION: '/type/idvtc-description',
   TYPE_IDVTC_APPLY: '/type/idvtc-apply',
@@ -61,8 +60,6 @@ export const PATH = {
   GROUP: '/group',
 
   MY_OPERATORS: '/operators',
-
-  WRAPPED_SHARE: '/wrapped-2025/share',
 
   QA_CONFIG: '/qa-config',
 } as const;

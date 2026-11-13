@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { Checkbox, Text } from '@lidofinance/lido-ui';
+import { Card, Checkbox, H3, Stack } from '@lidofinance/lido-app-ui';
 
 import {
   DISABLE_DEPOSIT_DATA_SIGNATURE_VALIDATION,
@@ -13,7 +13,6 @@ import {
   SURVEYS_SETUP_ENABLED,
   useFeatureFlags,
 } from 'config/feature-flags';
-import { FormBlock, Stack } from 'shared/components';
 
 const FLAG_LABELS: Record<keyof FeatureFlagsType, string> = {
   [ICS_APPLY_FORM]: 'Operator type applications (ICS, IDVTC)',
@@ -35,22 +34,22 @@ export const QaFeatureFlags: FC = () => {
   if (!featureFlags) return null;
 
   return (
-    <FormBlock>
-      <Text size="sm" strong>
-        Feature flags
-      </Text>
-      <Stack direction="column" gap="sm">
-        {FLAGS.map((flag) => (
-          <Checkbox
-            key={flag}
-            label={FLAG_LABELS[flag] ?? flag}
-            checked={featureFlags[flag]}
-            onChange={(e) =>
-              featureFlags.setFeatureFlag(flag, e.currentTarget.checked)
-            }
-          />
-        ))}
+    <Card>
+      <Stack gap={16}>
+        <H3>Feature flags</H3>
+        <Stack gap={8}>
+          {FLAGS.map((flag) => (
+            <Checkbox
+              key={flag}
+              label={FLAG_LABELS[flag] ?? flag}
+              checked={featureFlags[flag]}
+              onChange={(e) =>
+                featureFlags.setFeatureFlag(flag, e.currentTarget.checked)
+              }
+            />
+          ))}
+        </Stack>
       </Stack>
-    </FormBlock>
+    </Card>
   );
 };

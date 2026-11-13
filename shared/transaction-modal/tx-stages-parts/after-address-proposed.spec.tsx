@@ -1,6 +1,4 @@
-import { themeLight } from '@lidofinance/lido-ui';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { ThemeProvider } from 'styled-components';
 import { AfterAddressProposed } from './after-address-proposed';
 
 vi.mock('shared/hooks/use-module-meta', () => ({
@@ -10,11 +8,7 @@ vi.mock('shared/hooks/use-module-meta', () => ({
 const ADDRESS = '0x81e5ca00000000000000000000000000000a23d7';
 
 const render = () =>
-  renderToStaticMarkup(
-    <ThemeProvider theme={themeLight}>
-      <AfterAddressProposed address={ADDRESS} />
-    </ThemeProvider>,
-  );
+  renderToStaticMarkup(<AfterAddressProposed address={ADDRESS} />);
 
 describe('AfterAddressProposed', () => {
   it('keeps the e2e copy', () => {

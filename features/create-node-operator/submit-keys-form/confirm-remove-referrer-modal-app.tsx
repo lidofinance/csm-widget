@@ -9,7 +9,6 @@ export const ConfirmRemoveReferrerModalApp: FC<
   ConfirmModalProps & { open?: boolean }
 > = ({ open, onConfirm, onReject }) => (
   <FormModalShell
-    ui="app"
     open={open}
     onClose={onReject}
     title="Are you sure?"

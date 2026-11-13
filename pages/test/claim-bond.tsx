@@ -4,7 +4,7 @@ import { MockClaimBondProvider } from 'mock/claim-bond/mock-providers';
 import { testScenarios } from 'mock/claim-bond/scenarios';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
-import { Stack } from 'shared/components';
+import { Stack } from '@lidofinance/lido-app-ui';
 import { Layout } from 'shared/layout';
 import { LocalLink } from 'shared/navigate';
 import styled from 'styled-components';
@@ -67,7 +67,7 @@ const ClaimBondTestPage: FC = () => {
               </Text>
             }
           >
-            <Stack direction="column" gap="xxs">
+            <Stack direction="column" gap={2}>
               {testScenarios.map((s, i) => (
                 <LocalLink key={i} query={{ case: `${i}` }}>
                   {i}: [{s.group}] {s.title}

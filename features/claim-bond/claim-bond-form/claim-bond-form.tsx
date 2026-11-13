@@ -4,7 +4,6 @@ import { FC, memo } from 'react';
 import { BondStatsCard, Faq } from 'shared/components';
 import { FormPage, FormReady } from 'shared/form-page';
 import { Form } from 'shared/hook-form/form-controller';
-import { AppFormUi } from 'shared/hook-form/form-ui';
 import { ClaimBondAside } from './claim-bond-aside';
 import { ClaimBondFormGate } from './claim-bond-form-gate';
 import { ClaimBondDataProvider, ClaimBondFormProvider } from './context';
@@ -16,26 +15,24 @@ export const ClaimBondForm: FC = memo(() => {
   const faq = useFaq('BOND');
 
   return (
-    <AppFormUi>
-      <ClaimBondDataProvider>
-        <ClaimBondFormProvider>
-          <FormPage notices={<BondStatsCard />} faq={<Faq items={faq} />}>
-            <FormReady>
-              <ClaimBondFormGate>
-                <Form data-testid="claimBondForm">
-                  <FormLayout aside={<ClaimBondAside />}>
-                    <Stack direction="column" gap={32}>
-                      <SourceSelect />
-                      <TokenSelect />
-                      <AmountInput />
-                    </Stack>
-                  </FormLayout>
-                </Form>
-              </ClaimBondFormGate>
-            </FormReady>
-          </FormPage>
-        </ClaimBondFormProvider>
-      </ClaimBondDataProvider>
-    </AppFormUi>
+    <ClaimBondDataProvider>
+      <ClaimBondFormProvider>
+        <FormPage notices={<BondStatsCard />} faq={<Faq items={faq} />}>
+          <FormReady>
+            <ClaimBondFormGate>
+              <Form data-testid="claimBondForm">
+                <FormLayout aside={<ClaimBondAside />}>
+                  <Stack direction="column" gap={32}>
+                    <SourceSelect />
+                    <TokenSelect />
+                    <AmountInput />
+                  </Stack>
+                </FormLayout>
+              </Form>
+            </ClaimBondFormGate>
+          </FormReady>
+        </FormPage>
+      </ClaimBondFormProvider>
+    </ClaimBondDataProvider>
   );
 });

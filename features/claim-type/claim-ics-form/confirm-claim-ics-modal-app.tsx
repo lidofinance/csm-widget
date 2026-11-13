@@ -11,7 +11,6 @@ export const ConfirmClaimIcsModalApp: FC<ConfirmClaimIcsModalAppProps> = ({
   onReject,
 }) => (
   <FormModalShell
-    ui="app"
     open={open}
     onClose={onReject}
     title="You are claiming the Identified Community Staker operator type"

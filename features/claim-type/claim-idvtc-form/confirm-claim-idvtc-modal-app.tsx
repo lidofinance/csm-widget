@@ -11,7 +11,6 @@ export const ConfirmClaimIdvtcModalApp: FC<ConfirmClaimIdvtcModalAppProps> = ({
   onReject,
 }) => (
   <FormModalShell
-    ui="app"
     open={open}
     onClose={onReject}
     title="You are claiming the Identified DVT Cluster operator type"

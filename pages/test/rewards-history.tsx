@@ -6,7 +6,7 @@ import { MockRewardsHistoryProvider } from 'mock/rewards/mock-providers';
 import { testScenarios } from 'mock/rewards/test-scenarios';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
-import { Stack } from 'shared/components';
+import { Stack } from '@lidofinance/lido-app-ui';
 import { Layout } from 'shared/layout';
 import { LocalLink } from 'shared/navigate';
 import styled from 'styled-components';
@@ -67,7 +67,7 @@ const RewardsHistoryTestPage: FC = () => {
         <TestBlock>
           <TestTitle>{scenario.title}</TestTitle>
           <TestDescription>{scenario.description}</TestDescription>
-          <Stack gap="xs" align="center">
+          <Stack direction="row" gap={4} align="center">
             <Text size="xs" color="secondary">
               Module:
             </Text>
@@ -84,7 +84,7 @@ const RewardsHistoryTestPage: FC = () => {
               </Text>
             }
           >
-            <Stack direction="column" gap="xxs">
+            <Stack direction="column" gap={2}>
               {testScenarios.map((s, i) => (
                 <LocalLink
                   key={i}

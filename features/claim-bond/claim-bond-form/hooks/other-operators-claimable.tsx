@@ -4,7 +4,6 @@ import { OPERATOR_TYPE_METADATA } from 'consts';
 import { useOperatorCurveId } from 'modules/web3';
 import { ModuleNodeOperator } from 'modules/web3/operator-provider/types';
 import { FC } from 'react';
-import { useFormUi } from 'shared/hook-form/form-ui';
 import {
   useDisplayOperatorType,
   useOtherOperatorsClaimable,
@@ -14,27 +13,7 @@ import styled from 'styled-components';
 
 const TEST_ID = 'otherOperatorsClaimable';
 
-// The legacy success description renders as a <p> (lido-ui Text), whose
-// content model only allows phrasing content — spans, not divs, keep this valid.
-const Box = styled.span`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-
-  margin-top: ${({ theme }) => theme.spaceMap.lg}px;
-  padding: 12px 16px;
-  border-radius: 16px;
-  border: 1px solid
-    color-mix(in srgb, var(--lido-color-primary) 20%, transparent);
-  background: color-mix(in srgb, var(--lido-color-primary) 5%, transparent);
-
-  text-align: left;
-  color: var(--lido-color-text);
-  font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
-  line-height: 20px;
-`;
-
-const AppBoxStyle = styled.div`
+const BoxStyle = styled.div`
   margin-top: 16px;
   text-align: left;
 `;
@@ -61,7 +40,6 @@ const ClaimableLine: FC<ClaimableLineProps> = ({ operator, amount }) => {
 };
 
 export const OtherOperatorsClaimable: FC = () => {
-  const ui = useFormUi();
   const items = useOtherOperatorsClaimable();
 
   if (items.length === 0) return null;
@@ -74,15 +52,11 @@ export const OtherOperatorsClaimable: FC = () => {
     />
   ));
 
-  if (ui === 'app') {
-    return (
-      <AppBoxStyle>
-        <MessageBox variant="info" icon={false} dataTestId={{ root: TEST_ID }}>
-          {lines}
-        </MessageBox>
-      </AppBoxStyle>
-    );
-  }
-
-  return <Box data-testid={TEST_ID}>{lines}</Box>;
+  return (
+    <BoxStyle>
+      <MessageBox variant="info" icon={false} dataTestId={{ root: TEST_ID }}>
+        {lines}
+      </MessageBox>
+    </BoxStyle>
+  );
 };

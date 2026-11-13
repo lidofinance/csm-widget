@@ -19,7 +19,7 @@ export const SurveyConfirmModal: FC<Props> = ({
   confirmLabel,
   children,
 }) => (
-  <FormModalShell ui="app" open={open} onClose={onReject} title={title}>
+  <FormModalShell open={open} onClose={onReject} title={title}>
     <Stack direction="column" gap={24}>
       <Typography color="secondary" variant="body" as="p">
         {children}

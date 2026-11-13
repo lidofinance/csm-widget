@@ -6,10 +6,7 @@ import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 const Page: FC = () => (
   <GateLoaded>
     <Gate rule="IS_CSM_FAMILY_SCOPE" fallback={<Navigate path={PATH.HOME} />}>
-      <Gate
-        rule="ICS_APPLY_ENABLED"
-        fallback={<Navigate path={PATH.TYPE_PARAMETERS} />}
-      >
+      <Gate rule="ICS_APPLY_ENABLED" fallback={<Navigate path={PATH.HOME} />}>
         <OperatorTypePage />
       </Gate>
     </Gate>

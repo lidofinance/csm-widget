@@ -172,19 +172,19 @@ describe('getCorrectPath — type claim pages', () => {
     ).toBe(PATH.TYPE_IDVTC_DESCRIPTION);
   });
 
-  it('falls back to type parameters when apply is disabled', () => {
+  it('falls back to home when apply is disabled', () => {
     expect(
       getCorrectPath(
         PATH.TYPE_ICS_CLAIM,
         flags({ CAN_CLAIM_ICS: false, ICS_APPLY_ENABLED: false }),
       ),
-    ).toBe(PATH.TYPE_PARAMETERS);
+    ).toBe(PATH.HOME);
     expect(
       getCorrectPath(
         PATH.TYPE_IDVTC_CLAIM,
         flags({ CAN_CLAIM_IDVTC: false, ICS_APPLY_ENABLED: false }),
       ),
-    ).toBe(PATH.TYPE_PARAMETERS);
+    ).toBe(PATH.HOME);
   });
 });
 

@@ -1,17 +1,21 @@
 import { Fragment, useCallback, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { toast } from '@lidofinance/lido-app-ui';
+import {
+  Body,
+  Button,
+  Card,
+  Input,
+  Stack,
+  toast,
+} from '@lidofinance/lido-app-ui';
 import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
-import { Block, Button, Input } from '@lidofinance/lido-ui';
 
 import { useUserConfig } from 'config/user-config';
 import { CHAIN_METADATA } from 'consts/chains';
-import { FormBlock, Stack } from 'shared/components';
+import { StretchCard, StretchStack } from 'shared/components';
 import { isUrl } from 'utils/is-url';
-
-import { Description } from './styles';
 
 type FormValues = Record<string, string>;
 
@@ -124,84 +128,77 @@ export const QaConfigForm = () => {
 
   return (
     <>
-      <FormBlock>
+      <StretchCard>
         <form onSubmit={handleSubmit(save)} noValidate>
-          {rows.map(({ chainId, name, withCl }) => (
-            <Fragment key={chainId}>
-              <Input
-                fullwidth
-                label={`${name} — RPC URL`}
-                error={formState.errors[rpcKey(chainId)]?.message}
-                {...register(rpcKey(chainId), { validate: validateUrl })}
-              />
-              {withCl && (
+          <StretchStack gap={16}>
+            {rows.map(({ chainId, name, withCl }) => (
+              <Fragment key={chainId}>
                 <Input
-                  fullwidth
-                  label={`${name} — CL API URL`}
-                  error={formState.errors[clKey(chainId)]?.message}
-                  {...register(clKey(chainId), { validate: validateUrl })}
+                  label={`${name} — RPC URL`}
+                  error={formState.errors[rpcKey(chainId)]?.message}
+                  {...register(rpcKey(chainId), { validate: validateUrl })}
                 />
-              )}
-            </Fragment>
-          ))}
-          <Input
-            fullwidth
-            label="IPFS gateway"
-            placeholder="https://ipfs.io/ipfs/{cid}, https://{cid}.ipfs.dweb.link"
-            error={formState.errors[IPFS_GATEWAYS_KEY]?.message}
-            {...register(IPFS_GATEWAYS_KEY, { validate: validateGateways })}
-          />
-          <Input
-            fullwidth
-            label="Surveys API URL"
-            placeholder="https://csm-surveys-api-mainnet.up.railway.app"
-            error={formState.errors[SURVEY_API_URL_KEY]?.message}
-            {...register(SURVEY_API_URL_KEY, { validate: validateUrl })}
-          />
-          <Stack>
-            <Button
-              fullwidth
-              variant="translucent"
-              type="button"
-              onClick={handleReset}
-            >
-              Reset
-            </Button>
-            <Button
-              fullwidth
-              type="submit"
-              color="primary"
-              disabled={!formState.isValid}
-            >
-              Save
-            </Button>
-          </Stack>
+                {withCl && (
+                  <Input
+                    label={`${name} — CL API URL`}
+                    error={formState.errors[clKey(chainId)]?.message}
+                    {...register(clKey(chainId), { validate: validateUrl })}
+                  />
+                )}
+              </Fragment>
+            ))}
+            <Input
+              label="IPFS gateway"
+              placeholder="https://ipfs.io/ipfs/{cid}, https://{cid}.ipfs.dweb.link"
+              error={formState.errors[IPFS_GATEWAYS_KEY]?.message}
+              {...register(IPFS_GATEWAYS_KEY, { validate: validateGateways })}
+            />
+            <Input
+              label="Surveys API URL"
+              placeholder="https://csm-surveys-api-mainnet.up.railway.app"
+              error={formState.errors[SURVEY_API_URL_KEY]?.message}
+              {...register(SURVEY_API_URL_KEY, { validate: validateUrl })}
+            />
+            <Stack direction="row" gap={16}>
+              <Button
+                variant="subtle"
+                fullWidth
+                type="button"
+                onClick={handleReset}
+              >
+                Reset
+              </Button>
+              <Button fullWidth type="submit" disabled={!formState.isValid}>
+                Save
+              </Button>
+            </Stack>
+          </StretchStack>
         </form>
-      </FormBlock>
+      </StretchCard>
 
-      <Block>
-        <Description>
-          <p>
+      <Card>
+        <Stack gap={8}>
+          <Body>
             Override the JSON-RPC endpoint, Consensus Layer API base URL, IPFS
             gateway, and Surveys API base URL used by the widget. Intended for
             QA against custom forks or staging backends — not for end users.
-          </p>
-          <p>
+          </Body>
+          <Body>
             The IPFS gateway is tried before the default public gateways and may
             include a <code>{'{cid}'}</code> placeholder; otherwise the CID is
             appended to the URL
-          </p>
-          <p>
+          </Body>
+          <Body>
             Values are stored in <code>localStorage</code> under{' '}
             <code>lido-user-config</code> and persist across reloads. Leave a
             field empty to fall back to the default backend proxy.
-          </p>
-          <p>
+          </Body>
+          <Body>
             <strong>Reload the page after saving</strong> for the new endpoints
             to be picked up everywhere
-          </p>
-        </Description>
-      </Block>
+          </Body>
+        </Stack>
+      </Card>
     </>
   );
 };

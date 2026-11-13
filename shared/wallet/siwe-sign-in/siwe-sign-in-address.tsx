@@ -5,11 +5,11 @@ import {
   H3,
   Identicon,
   Input,
+  Stack,
 } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { useDappStatus } from 'modules/web3';
 import { useSiweAuth } from 'modules/siwe';
-import { Stack } from 'shared/components';
 
 // Sign-in step that also confirms the connected address as the operator's main
 // address, used by the ICS / IDVTC apply flows.
@@ -21,8 +21,8 @@ export const SiweSignInAddress: FC<{ operatorType: string }> = ({
 
   return (
     <Card data-testid="signInForm">
-      <Stack direction="column" gap="lg" selfAlign="stretch">
-        <Stack direction="column" gap="sm">
+      <Stack direction="column" gap={20} align="stretch">
+        <Stack direction="column" gap={8}>
           <H3>Sign in</H3>
           <Body color="secondary">
             To continue, please sign a message with your connected address to

@@ -59,7 +59,6 @@ export const ConfirmSplitsModalApp: FC<ConfirmSplitsModalAppProps> = ({
 
   return (
     <FormModalShell
-      ui="app"
       open={open}
       onClose={onReject}
       title="Confirm splitter configuration"

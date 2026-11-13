@@ -11,7 +11,6 @@ export const ConfirmDisableTopUpModalApp: FC<
   ConfirmDisableTopUpModalAppProps
 > = ({ open, onConfirm, onReject }) => (
   <FormModalShell
-    ui="app"
     open={open}
     onClose={onReject}
     title="Confirm disabling top-ups"

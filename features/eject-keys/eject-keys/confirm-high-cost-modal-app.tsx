@@ -11,7 +11,6 @@ export const ConfirmHighCostModalApp: FC<ConfirmHighCostModalAppProps> = ({
   onReject,
 }) => (
   <FormModalShell
-    ui="app"
     open={open}
     onClose={onReject}
     title="High ejection cost detected"

@@ -1,6 +1,3 @@
-import { KEYS_UPLOAD_TX_LIMIT } from 'consts/keys';
-import { pluralKeys } from 'utils/plural';
-
 const BOND_INSUFFICIENT_LABEL = 'Insufficient Bond';
 const BOND_EXCESS_LABEL = 'Excess Bond';
 
@@ -9,39 +6,11 @@ export const KEYS_LIMIT_REASON = 'Keys limit has reached';
 export const KEYS_CONFIRM_CM =
   'I confirm that my nodes are synced, running, and ready for the validator activation';
 
-export type KeysLimitInput = {
-  keysLimit?: number;
-  nonWithdrawnKeys?: number;
-};
-
-export type KeysLimitState = {
-  gap: number;
-  reached: boolean;
-  message: string;
-};
-
-/** Undefined while the limit is unknown or a full upload still fits. */
-export const getKeysLimitState = ({
-  keysLimit,
-  nonWithdrawnKeys,
-}: KeysLimitInput): KeysLimitState | undefined => {
-  if (keysLimit === undefined || nonWithdrawnKeys === undefined) {
-    return undefined;
-  }
-
-  const gap = keysLimit - nonWithdrawnKeys;
-  if (gap >= KEYS_UPLOAD_TX_LIMIT) return undefined;
-
-  const reached = gap <= 0;
-
-  return {
-    gap,
-    reached,
-    message: reached
-      ? "Keys limit reached. New keys can't be uploaded until some of the current keys are withdrawn."
-      : `Approaching the keys limit. Only ${gap} more ${pluralKeys({ value: gap })} can be uploaded.`,
-  };
-};
+export { getKeysLimitState } from 'shared/components/keys-limit-warning/keys-limit-state';
+export type {
+  KeysLimitInput,
+  KeysLimitState,
+} from 'shared/components/keys-limit-warning/keys-limit-state';
 
 export type BondDeltaInput = {
   delta?: bigint;

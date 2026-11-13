@@ -2,7 +2,6 @@ import { PATH } from 'consts/urls';
 import { SiweAuthGate } from 'modules/siwe';
 import { useNodeOperator } from 'modules/web3';
 import { FC, useMemo } from 'react';
-import { AppFormUi } from 'shared/hook-form/form-ui';
 import { Layout } from 'shared/layout';
 import type { Crumb } from 'shared/layout/crumbs';
 import { SurveysContactsPage } from './surveys-contacts-page';
@@ -84,9 +83,7 @@ export const SurveysPage: FC<{ slug?: string[] }> = ({ slug = [] }) => {
   return (
     <Layout pageName="Surveys" breadcrumbs={crumbs}>
       <SiweAuthGate fallback={<SurveysSignInPage />}>
-        <AppFormUi>
-          <SurveyProvider>{page}</SurveyProvider>
-        </AppFormUi>
+        <SurveyProvider>{page}</SurveyProvider>
       </SiweAuthGate>
     </Layout>
   );

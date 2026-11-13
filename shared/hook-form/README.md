@@ -6,25 +6,21 @@ How forms are built: React Hook Form state, network data, a flow resolver that t
 - Fields: `shared/hook-form/fields`
 - Page pieces: `shared/form-page`
 - Layout ports of unpublished app-ui parts: `shared/ui`
-- UI flag: `shared/hook-form/form-ui`
 - Tx and confirm modals: `shared/transaction-modal`, `shared/hooks/use-confirm-modal.ts`
-- Legacy controls, used only by the forms still waiting for the separate pass: `shared/hook-form/controls`
 
 ## Tree
 
 ```text
-<AppFormUi>
-  <XDataProvider>
-    <XFormProvider>
-      <FormPage notices below faq done>
-        <FormReady>
-          <XFormGate>
-            <Form data-testid="xForm">
-              <FormLayout aside={<XAside />}>   archetype A
-              <FormCard>                         archetype B
+<XDataProvider>
+  <XFormProvider>
+    <FormPage notices below faq done>
+      <FormReady>
+        <XFormGate>
+          <Form data-testid="xForm">
+            <FormLayout aside={<XAside />}>   archetype A
+            <FormCard>                         archetype B
 ```
 
-- `AppFormUi` is outermost. It sets `ui = 'app'` for the subtree; `TransactionModal` re-provides it, and `useConfirmModal` passes `ui: 'app'` to confirm modals.
 - `FormPage` is the page shell, not a `<form>`. `notices` render above the form and `below` under it, and both hide while `done`. `faq` is always last.
 - `FormReady` shows a skeleton card (`formSkeleton`) while `useFormState().isLoading` is true or the data provider is pending.
 - `XFormGate` reads `useXFlow()` and returns a notice for the non-executable actions (`no-access`, `paused`, empty data). Otherwise it renders its children.
@@ -232,8 +228,8 @@ export const useTxModalStagesMy = () =>
   }));
 ```
 
-- Every stage renders through `TransactionModalContent`. Under `AppFormUi` that's app-ui `TxStatus` (testids `txStage`, `title`, `description`, `footer`).
-- Content inside a stage's `description` or `footer` that isn't plain text must be ui-aware: branch on `useFormUi()` and render app-ui under `'app'`. The shared parts already do: `TxAmount`, `TxLinkEtherscan`, `AfterAddressProposed`, `AfterKeysUpload`, `WhatsNextBlock`, `SkeletonBalance`. `TxStatus` centers its message, so block content sets its own `text-align: left`.
+- Every stage renders through `TransactionModalContent`. That's app-ui `TxStatus` (testids `txStage`, `title`, `description`, `footer`).
+- Content inside a stage's `description` or `footer` that isn't plain text must render app-ui. The shared parts already do: `TxAmount`, `TxLinkEtherscan`, `AfterAddressProposed`, `AfterKeysUpload`, `WhatsNextBlock`, `SkeletonBalance`. `TxStatus` centers its message, so block content sets its own `text-align: left`.
 - Stage copy is e2e-pinned. Don't reword it as part of a UI change.
 
 ## UI kit

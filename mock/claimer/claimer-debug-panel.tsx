@@ -1,7 +1,7 @@
 import { Block, Text } from '@lidofinance/lido-ui';
 import { PATH } from 'consts/urls';
 import { FC } from 'react';
-import { Stack } from 'shared/components';
+import { Stack } from '@lidofinance/lido-app-ui';
 import { ShowRule, useShowFlags } from 'shared/hooks';
 import { useNavItems } from 'shared/layout/navigation/use-nav-items';
 import { getCorrectPath } from 'shared/navigate/get-correct-path';
@@ -48,7 +48,7 @@ export const ClaimerDebugPanel: FC = () => {
 
   return (
     <Block>
-      <Stack direction="column" gap="md">
+      <Stack direction="column" gap={16}>
         <Text size="xs" color="secondary">
           Show flags
         </Text>

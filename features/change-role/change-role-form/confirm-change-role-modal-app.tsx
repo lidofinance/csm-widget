@@ -38,7 +38,6 @@ export const ConfirmChangeRoleModalApp: FC<ConfirmChangeRoleModalAppProps> = ({
 
   return (
     <FormModalShell
-      ui="app"
       open={open}
       onClose={onReject}
       data-testid="confirmChangeRoleModal"

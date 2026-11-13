@@ -1,7 +1,5 @@
 import { Modal } from '@lidofinance/lido-app-ui';
-import { Modal as LegacyModal } from '@lidofinance/lido-ui';
 import type { FC, ReactNode } from 'react';
-import type { FormUi } from 'shared/hook-form/form-ui';
 
 export type ModalCloseProps = {
   onClose?: () => void;
@@ -19,7 +17,6 @@ export const getModalCloseProps = (
 });
 
 export type FormModalShellProps = {
-  ui?: FormUi;
   open?: boolean;
   onClose?: () => void;
   isClosable?: boolean;
@@ -31,7 +28,6 @@ export type FormModalShellProps = {
 };
 
 export const FormModalShell: FC<FormModalShellProps> = ({
-  ui = 'legacy',
   open,
   onClose,
   isClosable = true,
@@ -40,20 +36,6 @@ export const FormModalShell: FC<FormModalShellProps> = ({
   children,
   ...rest
 }) => {
-  if (ui === 'legacy') {
-    return (
-      <LegacyModal
-        {...rest}
-        title={title}
-        subtitle={subtitle}
-        open={open && Boolean(children)}
-        onClose={isClosable ? onClose : undefined}
-      >
-        {children}
-      </LegacyModal>
-    );
-  }
-
   // app-ui Modal has no `open` prop: mounting is the parent's job
   if (!open || !children) return null;
 

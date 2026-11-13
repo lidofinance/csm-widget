@@ -84,8 +84,8 @@ export class OperatorTypePage extends BasePage {
   }
 
   async openParametersPage() {
-    await test.step('Open the Operator Type Parameters page', async () => {
-      await this.openWithRetry('/type/parameters', this.pageTitle);
+    await test.step('Open the Operator Type page', async () => {
+      await this.openWithRetry('/type', this.pageTitle);
     });
   }
 }

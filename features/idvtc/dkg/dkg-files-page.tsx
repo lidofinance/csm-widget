@@ -1,7 +1,7 @@
-import { Body, SectionTitle } from '@lidofinance/lido-app-ui';
+import { Body, SectionTitle, Stack } from '@lidofinance/lido-app-ui';
 import { FC, useCallback, useState } from 'react';
 import { PATH } from 'consts/urls';
-import { Stack, StretchCard, WhenLoaded } from 'shared/components';
+import { StretchCard, WhenLoaded } from 'shared/components';
 import { useHasNonWithdrawnKeys, useNodeOperatorId } from 'modules/web3';
 import { useShowRule } from 'shared/hooks';
 import { IdvtcSiwePage } from '../idvtc-siwe-page';
@@ -70,7 +70,7 @@ const DkgFilesContent: FC = () => {
     return (
       <WhenLoaded loading={loading} morePadding>
         <DkgDropArea zone={zone}>
-          <Stack direction="column" gap="lg">
+          <Stack direction="column" gap={20}>
             <DkgRequiredCard onAction={zone.open} />
             {messages}
           </Stack>
@@ -80,7 +80,7 @@ const DkgFilesContent: FC = () => {
   }
 
   const content = (
-    <Stack direction="column" gap="lg">
+    <Stack direction="column" gap={20}>
       <SectionTitle
         title="Uploaded DKG files"
         action={

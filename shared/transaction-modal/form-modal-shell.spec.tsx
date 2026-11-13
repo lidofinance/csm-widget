@@ -22,26 +22,18 @@ describe('getModalCloseProps', () => {
 
 describe('FormModalShell app', () => {
   it('renders nothing without children', () => {
-    expect(renderToStaticMarkup(<FormModalShell ui="app" open />)).toBe('');
+    expect(renderToStaticMarkup(<FormModalShell open />)).toBe('');
   });
 
   it('renders nothing when closed', () => {
     expect(
-      renderToStaticMarkup(
-        <FormModalShell ui="app" open={false}>
-          body
-        </FormModalShell>,
-      ),
+      renderToStaticMarkup(<FormModalShell open={false}>body</FormModalShell>),
     ).toBe('');
   });
 
   it('mounts the portaled modal when open with children', () => {
     expect(
-      renderToStaticMarkup(
-        <FormModalShell ui="app" open>
-          body
-        </FormModalShell>,
-      ),
+      renderToStaticMarkup(<FormModalShell open>body</FormModalShell>),
     ).not.toBe('');
   });
 });

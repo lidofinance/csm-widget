@@ -9,7 +9,6 @@ export const ConfirmDeleteKeyModalApp: FC<
   ConfirmModalProps & { open?: boolean }
 > = ({ open, onConfirm, onReject }) => (
   <FormModalShell
-    ui="app"
     open={open}
     onClose={onReject}
     title="Are you sure you want to delete the key?"

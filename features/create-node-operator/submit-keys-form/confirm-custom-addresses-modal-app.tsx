@@ -126,7 +126,6 @@ export const ConfirmCustomAddressesModalApp: FC<
 
   return (
     <FormModalShell
-      ui="app"
       open={open}
       onClose={onReject}
       title="Confirm addresses configuration"

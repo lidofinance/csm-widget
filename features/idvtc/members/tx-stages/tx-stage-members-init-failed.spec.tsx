@@ -1,19 +1,12 @@
-import { themeLight } from '@lidofinance/lido-ui';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { AppFormUi } from 'shared/hook-form/form-ui';
-import { ThemeProvider } from 'styled-components';
 import { TxStageMembersInitFailed } from './tx-stage-members-init-failed';
 
 const render = () =>
   renderToStaticMarkup(
-    <ThemeProvider theme={themeLight}>
-      <AppFormUi>
-        <TxStageMembersInitFailed
-          title="IDVTC type claimed — cluster members not initialized"
-          onRetry={vi.fn()}
-        />
-      </AppFormUi>
-    </ThemeProvider>,
+    <TxStageMembersInitFailed
+      title="IDVTC type claimed — cluster members not initialized"
+      onRetry={vi.fn()}
+    />,
   );
 
 describe('TxStageMembersInitFailed', () => {

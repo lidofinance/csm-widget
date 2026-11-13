@@ -6,7 +6,6 @@ export type TxAddressDescriptionProps = {
   address: string;
 };
 
-// Role forms always render under AppFormUi, so there is no legacy branch
 export const TxAddressDescription: FC<TxAddressDescriptionProps> = ({
   label,
   address,

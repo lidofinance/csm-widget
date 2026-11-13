@@ -11,7 +11,6 @@ export const ConfirmEjectKeysModalApp: FC<ConfirmEjectKeysModalAppProps> = ({
   onReject,
 }) => (
   <FormModalShell
-    ui="app"
     open={open}
     onClose={onReject}
     title="Selected keys will be ejected from the Consensus Layer"
