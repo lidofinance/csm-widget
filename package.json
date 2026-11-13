@@ -137,7 +137,7 @@
     "qaseio": "^2.4.3",
     "typechain": "^8.1.1",
     "typescript": "^5.7.3",
-    "vitest": "4.1.9"
+    "vitest": "4.1.12"
   },
   "resolutions": {
     "@types/react": "^18.3.31",
