@@ -1,5 +1,12 @@
 import { OPERATOR_TYPE, TOKENS } from '@lidofinance/lido-csm-sdk';
-import { Body, Card, H1, StatItem, downQuery } from '@lidofinance/lido-app-ui';
+import {
+  Body,
+  Card,
+  H1,
+  Stack,
+  StatItem,
+  downQuery,
+} from '@lidofinance/lido-app-ui';
 import { OPERATOR_TYPE_METADATA } from 'consts';
 import { FC, ReactNode } from 'react';
 import { formatPercentKeyIntervalRows } from 'shared/components/parameters-list/format';
@@ -12,21 +19,6 @@ type Props = {
   type: OPERATOR_TYPE.CSM_ICS | OPERATOR_TYPE.CSM_IDVTC;
   cta?: ReactNode;
 };
-
-const HeroStyle = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-`;
-
-const BodyStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
-  min-width: 0;
-`;
 
 const StatsStyle = styled.div`
   display: grid;
@@ -68,8 +60,8 @@ export const TypeHero: FC<Props> = ({ type, cta }) => {
 
   return (
     <Card dataTestId={{ root: 'typeHero' }}>
-      <HeroStyle>
-        <BodyStyle>
+      <Stack direction="row" align="center" justify="between" gap={24}>
+        <Stack grow align="start" gap={16}>
           <H1>{name}</H1>
           <Body color="secondary">{description}</Body>
           <StatsStyle>
@@ -98,11 +90,11 @@ export const TypeHero: FC<Props> = ({ type, cta }) => {
             <StatItem align="left" label="Credential type" value="0x01" />
           </StatsStyle>
           {cta && <CtaStyle>{cta}</CtaStyle>}
-        </BodyStyle>
+        </Stack>
         <BadgeStyle>
           <TypeBadge type={type} size={240} />
         </BadgeStyle>
-      </HeroStyle>
+      </Stack>
     </Card>
   );
 };

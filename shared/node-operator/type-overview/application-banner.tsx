@@ -1,6 +1,5 @@
-import { Banner, Button } from '@lidofinance/lido-app-ui';
+import { Banner, Button, Stack } from '@lidofinance/lido-app-ui';
 import { FC, ReactNode } from 'react';
-import styled from 'styled-components';
 import { useShowFlags } from 'shared/hooks';
 import { getApplicationDisplayState } from '../type-status/application-display-state';
 import { TYPE_PROGRAM, TypeProgram } from '../type-status/consts';
@@ -22,19 +21,6 @@ type Props = {
   state: ApplicationBannerState;
   actionTestId?: string;
 };
-
-const TitleStyle = styled.span`
-  display: inline-flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-`;
-
-const ActionsStyle = styled.span`
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: 12px;
-`;
 
 export const isApplicationBannerVisible = ({
   typeStatus,
@@ -59,7 +45,7 @@ const renderAction = (
     case 'claim':
     case 'create':
       return (
-        <ActionsStyle>
+        <Stack as="span" inline direction="row" wrap gap={12}>
           {canViewDetails && (
             <Button variant="outline" href={applyPath}>
               View details
@@ -73,7 +59,7 @@ const renderAction = (
               ? `Claim ${program} type`
               : `Create ${program} operator`}
           </Button>
-        </ActionsStyle>
+        </Stack>
       );
     default:
       return canViewDetails ? (
@@ -92,10 +78,10 @@ export const ApplicationBanner: FC<Props> = (props) => {
 
   // BannerProps intersects div's `title: string` with ReactNode; the lib renders nodes fine
   const title = (
-    <TitleStyle>
+    <Stack as="span" inline direction="row" wrap align="center" gap={12}>
       Your {program} application
       <TypeCardChip typeStatus={typeStatus} formStatus={data?.status} />
-    </TitleStyle>
+    </Stack>
   );
 
   return (

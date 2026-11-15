@@ -24,14 +24,6 @@ export const DkgTable = styled.div`
   flex-direction: column;
 `;
 
-export const DkgTableHead = styled.div`
-  display: grid;
-  grid-template-columns: 64px 1fr auto;
-  align-items: center;
-  gap: var(--lido-app-ui-space-16);
-  padding-bottom: var(--lido-app-ui-space-8);
-`;
-
 export const DkgRow = styled.div<{ $columns: string }>`
   display: grid;
   grid-template-columns: ${({ $columns }) => $columns};

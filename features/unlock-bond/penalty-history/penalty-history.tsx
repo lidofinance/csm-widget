@@ -1,7 +1,7 @@
 import type { PenaltyRecord } from '@lidofinance/lido-csm-sdk';
-import { Accordion, Card, Stack } from '@lidofinance/lido-app-ui';
+import { Accordion, Card } from '@lidofinance/lido-app-ui';
 import { useNodeOperatorId, useOperatorPenalties } from 'modules/web3';
-import { TablePagination, TableProvider } from 'providers/table-provider';
+import { TableProvider } from 'providers/table-provider';
 import { FC } from 'react';
 import styled from 'styled-components';
 import { WhenLoaded } from 'shared/components';
@@ -52,14 +52,8 @@ export const PenaltyHistory: FC = () => {
           sort={sortFunctions}
           defaultSort={{ column: 'timestamp', direction: 'desc' }}
         >
-          <WhenLoaded
-            loading={isPending}
-            empty={!data?.length && 'No penalty history'}
-          >
-            <Stack gap={16}>
-              <PenaltyHistoryTable />
-              <TablePagination />
-            </Stack>
+          <WhenLoaded loading={isPending}>
+            <PenaltyHistoryTable />
           </WhenLoaded>
         </TableProvider>
       </Accordion>

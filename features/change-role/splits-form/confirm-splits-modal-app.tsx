@@ -4,22 +4,15 @@ import {
   DataList,
   DataListRow,
   Grid,
-  IconLink,
   Stack,
-  TextLink,
   Typography,
 } from '@lidofinance/lido-app-ui';
 import { type FeeSplit, PERCENT_BASIS } from '@lidofinance/lido-csm-sdk';
-import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
-import { useDappStatus } from 'modules/web3';
 import { FC } from 'react';
+import { EtherscanAddressLink } from 'shared/components';
 import { ConfirmModalProps } from 'shared/hooks';
 import { FormModalShell } from 'shared/transaction-modal/form-modal-shell';
-import {
-  formatPercent,
-  getEtherscanAddressLink,
-  trackMatomoEvent,
-} from 'utils';
+import { formatPercent } from 'utils';
 import { BulletsStyle, RecipientStyle } from './styles';
 
 type ConfirmSplitsModalAppProps = ConfirmModalProps & {
@@ -29,25 +22,13 @@ type ConfirmSplitsModalAppProps = ConfirmModalProps & {
 
 const formatShare = (share: bigint) => `${formatPercent(share, false, 2)} %`;
 
-const RecipientCell: FC<{ address: string }> = ({ address }) => {
-  const { chainId } = useDappStatus();
-
-  return (
-    <RecipientStyle>
-      <Address address={address} symbols={0}>
-        <TextLink
-          external
-          href={getEtherscanAddressLink(chainId, address)}
-          icon={<IconLink />}
-          aria-label="View on Etherscan"
-          onClick={() =>
-            trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.etherscanAddressLink)
-          }
-        />
-      </Address>
-    </RecipientStyle>
-  );
-};
+const RecipientCell: FC<{ address: string }> = ({ address }) => (
+  <RecipientStyle>
+    <Address address={address} symbols={0}>
+      <EtherscanAddressLink address={address} aria-label="View on Etherscan" />
+    </Address>
+  </RecipientStyle>
+);
 
 export const ConfirmSplitsModalApp: FC<ConfirmSplitsModalAppProps> = ({
   open,
@@ -62,7 +43,7 @@ export const ConfirmSplitsModalApp: FC<ConfirmSplitsModalAppProps> = ({
       open={open}
       onClose={onReject}
       title="Confirm splitter configuration"
-      data-testid="confirmSplitsModal"
+      dataTestId={{ root: 'confirmSplitsModal' }}
     >
       <Stack direction="column" gap={24}>
         <Stack direction="column" gap={8}>

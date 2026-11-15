@@ -1,19 +1,9 @@
+import { Stack } from '@lidofinance/lido-app-ui';
 import { KeyWithStatus } from '@lidofinance/lido-csm-sdk';
 import { FC } from 'react';
 import { Pubkey, PubkeyLinks, StatusComment } from 'shared/components';
 import styled from 'styled-components';
 import { TopUpQueuePosition } from './top-up-queue-position';
-
-const KeyCellStyled = styled.span`
-  display: flex;
-  flex-direction: column;
-`;
-
-const LinksStyled = styled.span`
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-`;
 
 const CommentLineStyled = styled.span`
   font-size: 14px;
@@ -35,15 +25,15 @@ type Props = {
 };
 
 export const KeyCell: FC<Props> = ({ item, topUpPosition, topUpTotal }) => (
-  <KeyCellStyled data-testid="pubkeyCell">
+  <Stack dataTestId={{ root: 'pubkeyCell' }}>
     <Pubkey
       pubkey={item.pubkey}
       symbols={6}
       monospace={false}
       link={
-        <LinksStyled>
+        <Stack as="span" inline direction="row" align="center" gap={4}>
           <PubkeyLinks {...item} />
-        </LinksStyled>
+        </Stack>
       }
     />
     <CommentLineStyled>
@@ -52,5 +42,5 @@ export const KeyCell: FC<Props> = ({ item, topUpPosition, topUpTotal }) => (
       </span>
       <TopUpQueuePosition position={topUpPosition} total={topUpTotal} />
     </CommentLineStyled>
-  </KeyCellStyled>
+  </Stack>
 );

@@ -1,4 +1,5 @@
 import {
+  EmptyState,
   IconLink,
   Stack,
   Table,
@@ -6,7 +7,7 @@ import {
   Typography,
 } from '@lidofinance/lido-app-ui';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { useTable } from 'providers/table-provider';
+import { TablePagination, useTable } from 'providers/table-provider';
 import { FC } from 'react';
 import { TxLinkEtherscan } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
@@ -91,7 +92,7 @@ const getRowKey = ({ transactionHash, type }: EnrichedPenalty) =>
 const getRowProps = () => ({ 'data-testid': 'penaltyHistoryRow' }) as object;
 
 export const PenaltyHistoryTable: FC = () => {
-  const { data, sort, setSort } = useTable<EnrichedPenalty>();
+  const { data, sort, setSort, pages } = useTable<EnrichedPenalty>();
 
   return (
     <Table
@@ -99,6 +100,8 @@ export const PenaltyHistoryTable: FC = () => {
       rows={data}
       rowKey={getRowKey}
       getRowProps={getRowProps}
+      emptyState={<EmptyState title="No penalty history" />}
+      footer={pages > 0 && <TablePagination />}
       sort={sort && { key: String(sort.column), direction: sort.direction }}
       onSortChange={({ key, direction }) =>
         setSort({ column: key as keyof EnrichedPenalty, direction })

@@ -1,8 +1,6 @@
 import { Popover, Stack, Typography } from '@lidofinance/lido-app-ui';
 import styled from 'styled-components';
 
-import { popoverBeak } from 'shared/components/popover-beak';
-
 export const TriggerStyle = styled.button`
   display: flex;
   align-items: center;
@@ -59,13 +57,10 @@ export const ChevronStyle = styled.span`
 
 export const PopupStyle = styled(Popover)`
   && {
-    align-items: center;
     gap: 24px;
     /* Figma strokes sit inside the box: padding minus the 1px border */
     padding: 11px;
   }
-
-  ${popoverBeak}
 `;
 
 export const HeaderStyle = styled(Stack).attrs({

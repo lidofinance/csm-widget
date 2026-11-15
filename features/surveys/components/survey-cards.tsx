@@ -1,9 +1,7 @@
+import { Stack } from '@lidofinance/lido-app-ui';
 import styled from 'styled-components';
 
-export const SurveyCards = styled.div`
-  display: flex;
-  flex-direction: column;
+export const SurveyCards = styled(Stack).attrs({ gap: 8 })`
   align-self: stretch;
-  gap: 8px;
   width: 100%;
 `;

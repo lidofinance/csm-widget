@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useMemo, useState } from 'react';
 import {
   Body,
   IconButton,
@@ -6,19 +6,15 @@ import {
   IconTrash,
   Stack,
   Switch,
+  Table,
+  TableColumn,
 } from '@lidofinance/lido-app-ui';
 import type { FileMetadataDto } from 'modules/surveys-sdk/generated';
 import { useToggleDkgFile } from '../hooks/use-toggle-dkg-file';
 import { useDeleteDkgFile } from '../hooks/use-delete-dkg-file';
 import { useDownloadDkgFile } from '../hooks/use-download-dkg-file';
 import { useDkgDeleteConfirm } from './dkg-delete-confirm-modal';
-import {
-  DkgRow,
-  DkgTable,
-  DkgTableHead,
-  FileName,
-  RowActions,
-} from '../styles';
+import { DkgRow, DkgTable, FileName, RowActions } from '../styles';
 
 const ERROR_ICON_STYLE = { color: 'var(--lido-app-ui-color-icons-error)' };
 
@@ -37,6 +33,8 @@ const DkgDeleteButton: FC<{
     title="Delete"
   />
 );
+
+const getFileKey = ({ id }: FileMetadataDto) => String(id);
 
 type Props = { files: FileMetadataDto[]; canManage: boolean };
 
@@ -81,46 +79,65 @@ export const DkgFilesTable: FC<Props> = ({ files, canManage }) => {
     [confirmDelete, remove],
   );
 
+  const columns = useMemo<TableColumn<FileMetadataDto>[]>(
+    () => [
+      {
+        key: 'active',
+        header: 'Status',
+        width: 80,
+        render: (file) => (
+          <Switch
+            checked={file.active}
+            disabled={!canManage || busyId === file.id}
+            aria-label={`Toggle ${file.name}`}
+            onChange={(e) => void onToggle(file, e.target.checked)}
+          />
+        ),
+      },
+      {
+        key: 'name',
+        header: 'Filename',
+        render: (file) => (
+          <FileName $inactive={!file.active}>{file.name}</FileName>
+        ),
+      },
+      {
+        key: 'actions',
+        header: 'Actions',
+        align: 'right',
+        width: 120,
+        render: (file) => (
+          <RowActions>
+            <IconButton
+              icon={<IconDownload />}
+              variant="ghost"
+              type="button"
+              loading={downloadingId === file.id}
+              onClick={() => void download(file)}
+              aria-label="Download"
+              title="Download"
+            />
+            {canManage && (
+              <DkgDeleteButton
+                disabled={busyId === file.id}
+                onClick={() => void onDelete(file)}
+              />
+            )}
+          </RowActions>
+        ),
+      },
+    ],
+    [canManage, busyId, downloadingId, download, onToggle, onDelete],
+  );
+
   return (
     <>
-      <DkgTable>
-        <DkgTableHead>
-          <Body color="tertiary">Status</Body>
-          <Body color="tertiary">Filename</Body>
-          <Body color="tertiary">Actions</Body>
-        </DkgTableHead>
-        {files.map((file) => {
-          const busy = busyId === file.id;
-          return (
-            <DkgRow key={file.id} $columns="64px 1fr auto">
-              <Switch
-                checked={file.active}
-                disabled={!canManage || busy}
-                aria-label={`Toggle ${file.name}`}
-                onChange={(e) => void onToggle(file, e.target.checked)}
-              />
-              <FileName $inactive={!file.active}>{file.name}</FileName>
-              <RowActions>
-                <IconButton
-                  icon={<IconDownload />}
-                  variant="ghost"
-                  type="button"
-                  loading={downloadingId === file.id}
-                  onClick={() => void download(file)}
-                  aria-label="Download"
-                  title="Download"
-                />
-                {canManage && (
-                  <DkgDeleteButton
-                    disabled={busy}
-                    onClick={() => void onDelete(file)}
-                  />
-                )}
-              </RowActions>
-            </DkgRow>
-          );
-        })}
-      </DkgTable>
+      <Table
+        variant="dense"
+        columns={columns}
+        rows={files}
+        rowKey={getFileKey}
+      />
       {actionError && <Body color="error">{actionError.message}</Body>}
     </>
   );

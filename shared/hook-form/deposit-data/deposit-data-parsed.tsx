@@ -2,22 +2,27 @@ import {
   Address,
   IconButton,
   IconTrash,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeaderCell,
-  TableRoot,
-  TableRow,
+  Table,
+  TableColumn,
   Typography,
 } from '@lidofinance/lido-app-ui';
 import { DATA_UNAVAILABLE } from 'consts';
 import { useSmSDK, useTargetModule } from 'modules/web3';
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import { useFormContext, useFormState, useWatch } from 'react-hook-form';
 import invariant from 'tiny-invariant';
 import { useConfirmDeleteKeyModal } from './confirm-delete-key-modal-app';
-import { ErrorList, TableScroll } from './styles';
+import { ErrorList } from './styles';
 import { DepositDataInputType } from './use-parse-deposit-data';
+
+type ParsedRow = {
+  pubkey: string;
+  index: number;
+  errors?: string[];
+};
+
+const getRowKey = ({ pubkey }: ParsedRow) => pubkey;
+const getRowProps = () => ({ 'data-testid': 'deposit-data-row' }) as object;
 
 const TRASH_STYLE = { color: 'var(--lido-app-ui-color-icons-error)' };
 
@@ -68,81 +73,102 @@ export const DepositDataParsed: FC = () => {
     [sm, rawDepositData, setValue, setError, clearErrors],
   );
 
-  return (
-    <TableScroll>
-      <TableRoot variant="dense">
-        <TableHead>
-          <TableRow>
-            <TableHeaderCell>Recognized Pubkey</TableHeaderCell>
-            <TableHeaderCell>Key number</TableHeaderCell>
-            <TableHeaderCell align="right">Errors detected</TableHeaderCell>
-            <TableHeaderCell align="right">Delete</TableHeaderCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {depositData.map(({ pubkey }, index) => {
-            const errors = depositDataErrors?.[index] as string[] | undefined;
-            const hasError = !!errors?.length;
-            const color = hasError ? 'error' : undefined;
+  const rows = useMemo<ParsedRow[]>(
+    () =>
+      depositData.map(({ pubkey }, index) => ({
+        pubkey,
+        index,
+        errors: depositDataErrors?.[index] as string[] | undefined,
+      })),
+    [depositData, depositDataErrors],
+  );
 
-            return (
-              <TableRow key={pubkey} data-testid="deposit-data-row">
-                <TableCell>
-                  <Typography
-                    as="span"
-                    color={color}
-                    data-testid="deposit-data-pubkey"
-                  >
-                    {pubkey ? (
-                      <Address address={pubkey} symbols={8} tooltip copy />
-                    ) : (
-                      DATA_UNAVAILABLE
-                    )}
-                  </Typography>
-                  {hasError && (
-                    <ErrorList data-testid="deposit-data-error">
-                      {errors?.map((error) => (
-                        <Typography
-                          key={error}
-                          variant="caption"
-                          color="secondary"
-                        >
-                          {error}
-                        </Typography>
-                      ))}
-                    </ErrorList>
-                  )}
-                </TableCell>
-                <TableCell data-testid="deposit-data-index">
-                  <Typography as="span" color={color}>
-                    #{index + 1}
-                  </Typography>
-                </TableCell>
-                <TableCell
-                  align="right"
-                  data-testid="deposit-data-error-detected"
-                >
-                  <Typography as="span" color={color}>
-                    {hasError ? 'Yes' : 'No'}
-                  </Typography>
-                </TableCell>
-                <TableCell align="right" data-testid="deposit-data-delete-key">
-                  <IconButton
-                    icon={<IconTrash style={busy ? undefined : TRASH_STYLE} />}
-                    type="button"
-                    variant="ghost"
-                    aria-label="Delete key"
-                    onClick={async () => {
-                      if (await confirmDelete({})) remove(index);
-                    }}
-                    disabled={busy}
-                  />
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </TableRoot>
-    </TableScroll>
+  const columns: TableColumn<ParsedRow>[] = [
+    {
+      key: 'pubkey',
+      header: 'Recognized Pubkey',
+      render: ({ pubkey, errors }) => (
+        <>
+          <Typography
+            as="span"
+            color={errors?.length ? 'error' : undefined}
+            data-testid="deposit-data-pubkey"
+          >
+            {pubkey ? (
+              <Address address={pubkey} symbols={8} tooltip copy />
+            ) : (
+              DATA_UNAVAILABLE
+            )}
+          </Typography>
+          {!!errors?.length && (
+            <ErrorList data-testid="deposit-data-error">
+              {errors.map((error) => (
+                <Typography key={error} variant="caption" color="secondary">
+                  {error}
+                </Typography>
+              ))}
+            </ErrorList>
+          )}
+        </>
+      ),
+    },
+    {
+      key: 'index',
+      header: 'Key number',
+      render: ({ index, errors }) => (
+        <Typography
+          as="span"
+          color={errors?.length ? 'error' : undefined}
+          data-testid="deposit-data-index"
+        >
+          #{index + 1}
+        </Typography>
+      ),
+    },
+    {
+      key: 'errors',
+      header: 'Errors detected',
+      align: 'right',
+      render: ({ errors }) => (
+        <Typography
+          as="span"
+          color={errors?.length ? 'error' : undefined}
+          data-testid="deposit-data-error-detected"
+        >
+          {errors?.length ? 'Yes' : 'No'}
+        </Typography>
+      ),
+    },
+    {
+      key: 'delete',
+      header: 'Delete',
+      align: 'right',
+      render: ({ index }) => (
+        <span data-testid="deposit-data-delete-key">
+          <IconButton
+            icon={<IconTrash style={busy ? undefined : TRASH_STYLE} />}
+            type="button"
+            variant="ghost"
+            aria-label="Delete key"
+            onClick={async () => {
+              if (await confirmDelete({})) remove(index);
+            }}
+            disabled={busy}
+          />
+        </span>
+      ),
+    },
+  ];
+
+  return (
+    <Table
+      variant="dense"
+      stickyHeader
+      maxHeight={150}
+      columns={columns}
+      rows={rows}
+      rowKey={getRowKey}
+      getRowProps={getRowProps}
+    />
   );
 };

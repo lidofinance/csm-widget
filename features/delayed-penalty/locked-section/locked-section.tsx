@@ -1,7 +1,7 @@
-import { Card, Stack } from '@lidofinance/lido-app-ui';
+import { Card } from '@lidofinance/lido-app-ui';
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { useOperatorsWithLockedBond } from 'modules/web3';
-import { TablePagination, TableProvider } from 'providers/table-provider';
+import { TableProvider } from 'providers/table-provider';
 import { FC } from 'react';
 import styled from 'styled-components';
 import { WhenLoaded } from 'shared/components';
@@ -25,20 +25,11 @@ export const LockedSection: FC<{ module?: MODULE_NAME }> = ({ module }) => {
       sort={sortFunctions}
       defaultSort={{ column: 'until', direction: 'asc' }}
     >
-      <Stack direction="column" gap={24}>
-        <CardStyled align="stretch" dataTestId={{ root: 'lockedSectionBlock' }}>
-          <WhenLoaded
-            loading={loading}
-            empty={
-              !data?.length && 'There are no Node Operators with Locked bond'
-            }
-            morePadding
-          >
-            <LockedTable />
-          </WhenLoaded>
-        </CardStyled>
-        <TablePagination />
-      </Stack>
+      <CardStyled align="stretch" dataTestId={{ root: 'lockedSectionBlock' }}>
+        <WhenLoaded loading={loading} morePadding>
+          <LockedTable />
+        </WhenLoaded>
+      </CardStyled>
     </TableProvider>
   );
 };

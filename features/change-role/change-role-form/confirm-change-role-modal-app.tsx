@@ -1,5 +1,5 @@
 import { Button, Stack, Typography } from '@lidofinance/lido-app-ui';
-import { FC, useCallback, useId, useMemo, useState } from 'react';
+import { FC, useCallback, useMemo, useState } from 'react';
 import { ConfirmModalProps } from 'shared/hooks';
 import { FormModalShell } from 'shared/transaction-modal/form-modal-shell';
 import {
@@ -26,7 +26,6 @@ export const ConfirmChangeRoleModalApp: FC<ConfirmChangeRoleModalAppProps> = ({
     () => getConfirmChangeRoleSteps({ showRewards, showRepropose }),
     [showRewards, showRepropose],
   );
-  const titleId = useId();
   const [index, setIndex] = useState(0);
   const isLast = index >= steps.length - 1;
   const copy = getConfirmChangeRoleStepCopy(steps[index], isProposal);
@@ -40,44 +39,28 @@ export const ConfirmChangeRoleModalApp: FC<ConfirmChangeRoleModalAppProps> = ({
     <FormModalShell
       open={open}
       onClose={onReject}
-      data-testid="confirmChangeRoleModal"
-      aria-labelledby={titleId}
+      title={copy.title}
+      subtitle={copy.body}
+      dataTestId={{
+        root: 'confirmChangeRoleModal',
+        title: 'changeRoleModalTitle',
+        subtitle: 'changeRoleModalText',
+      }}
     >
-      <Stack direction="column" gap={24}>
-        <Stack direction="column" gap={8}>
-          <Typography
-            variant="bodyLarge"
-            weight="semibold"
-            as="h3"
-            id={titleId}
-            dataTestId={{ root: 'changeRoleModalTitle' }}
-          >
-            {copy.title}
-          </Typography>
+      <Stack direction="column" gap={12}>
+        <Button fullWidth onClick={onContinue}>
+          Continue
+        </Button>
+        {copy.hint && (
           <Typography
             color="secondary"
-            variant="body"
+            variant="description"
             as="p"
             dataTestId={{ root: 'changeRoleModalText' }}
           >
-            {copy.body}
+            {copy.hint}
           </Typography>
-        </Stack>
-        <Stack direction="column" gap={12}>
-          <Button fullWidth onClick={onContinue}>
-            Continue
-          </Button>
-          {copy.hint && (
-            <Typography
-              color="secondary"
-              variant="description"
-              as="p"
-              dataTestId={{ root: 'changeRoleModalText' }}
-            >
-              {copy.hint}
-            </Typography>
-          )}
-        </Stack>
+        )}
       </Stack>
     </FormModalShell>
   );

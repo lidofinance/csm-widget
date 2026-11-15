@@ -1,4 +1,4 @@
-import { Modal } from '@lidofinance/lido-app-ui';
+import { Modal, type ModalDataTestId } from '@lidofinance/lido-app-ui';
 import type { FC, ReactNode } from 'react';
 
 export type ModalCloseProps = {
@@ -23,8 +23,7 @@ export type FormModalShellProps = {
   title?: ReactNode;
   subtitle?: ReactNode;
   children?: ReactNode;
-  'data-testid'?: string;
-  'aria-labelledby'?: string;
+  dataTestId?: ModalDataTestId;
 };
 
 export const FormModalShell: FC<FormModalShellProps> = ({
@@ -36,7 +35,6 @@ export const FormModalShell: FC<FormModalShellProps> = ({
   children,
   ...rest
 }) => {
-  // app-ui Modal has no `open` prop: mounting is the parent's job
   if (!open || !children) return null;
 
   return (

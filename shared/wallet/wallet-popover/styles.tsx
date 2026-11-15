@@ -1,17 +1,13 @@
 import { Copy, Popover, Stack, Typography } from '@lidofinance/lido-app-ui';
 import styled from 'styled-components';
 
-import { popoverBeak } from 'shared/components/popover-beak';
 import { EtherscanAddressLink } from 'shared/components/external-icon-link/etherscan-address-link';
 
 export const PopupStyle = styled(Popover)`
   && {
-    align-items: center;
     gap: 32px;
     padding: 32px;
   }
-
-  ${popoverBeak}
 `;
 
 export const AccountStyle = styled(Stack).attrs({ align: 'center', gap: 24 })`

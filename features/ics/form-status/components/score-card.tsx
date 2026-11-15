@@ -4,12 +4,9 @@ import {
   IconCheck,
   IconCross,
   SectionTitle,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeaderCell,
-  TableRoot,
-  TableRow,
+  Stack,
+  Table,
+  TableColumn,
 } from '@lidofinance/lido-app-ui';
 import {
   IcsResponseDto,
@@ -19,7 +16,7 @@ import {
 import { FC } from 'react';
 import { StretchStack } from 'shared/components';
 import { calculateScores, isMinScoresReached } from '../utils';
-import { CategoryCell, ScoreIconStyle } from '../styles';
+import { ScoreIconStyle } from '../styles';
 
 type Props = Pick<IcsResponseDto, 'scores'> & {
   onView: () => void;
@@ -32,6 +29,34 @@ type Row = {
   value: number;
   passed: boolean;
 };
+
+const getRowKey = ({ id }: Row) => id;
+const getRowProps = ({ id }: Row) =>
+  ({
+    'data-testid': id === 'total' ? 'totalScoreBreakdown' : undefined,
+  }) as object;
+
+const COLUMNS: TableColumn<Row>[] = [
+  {
+    key: 'title',
+    header: 'Category',
+    render: ({ title, passed }) => (
+      <Stack direction="row" align="center" gap={8}>
+        <ScoreIconStyle $passed={passed}>
+          {passed ? <IconCheck /> : <IconCross />}
+        </ScoreIconStyle>
+        {title}
+      </Stack>
+    ),
+  },
+  { key: 'required', header: 'Required', align: 'right' },
+  {
+    key: 'value',
+    header: 'Your score',
+    align: 'right',
+    render: ({ value }) => <span data-testid="points">{value}</span>,
+  },
+];
 
 export const ScoreCard: FC<Props> = ({ scores, onView }) => {
   const total = calculateScores(scores);
@@ -54,36 +79,13 @@ export const ScoreCard: FC<Props> = ({ scores, onView }) => {
     <Card dataTestId={{ root: 'scorePointsSection' }}>
       <StretchStack gap={16}>
         <SectionTitle title="Your score" />
-        <TableRoot variant="dense">
-          <TableHead>
-            <TableRow>
-              <TableHeaderCell>Category</TableHeaderCell>
-              <TableHeaderCell align="right">Required</TableHeaderCell>
-              <TableHeaderCell align="right">Your score</TableHeaderCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map(({ id, title, required, value, passed }) => (
-              <TableRow
-                key={id}
-                data-testid={id === 'total' ? 'totalScoreBreakdown' : undefined}
-              >
-                <TableCell>
-                  <CategoryCell>
-                    <ScoreIconStyle $passed={passed}>
-                      {passed ? <IconCheck /> : <IconCross />}
-                    </ScoreIconStyle>
-                    {title}
-                  </CategoryCell>
-                </TableCell>
-                <TableCell align="right">{required}</TableCell>
-                <TableCell align="right" data-testid="points">
-                  {value}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </TableRoot>
+        <Table
+          variant="dense"
+          columns={COLUMNS}
+          rows={rows}
+          rowKey={getRowKey}
+          getRowProps={getRowProps}
+        />
         <div>
           <Button variant="outline" onClick={onView}>
             View breakdown

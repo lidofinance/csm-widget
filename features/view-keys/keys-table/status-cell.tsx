@@ -7,15 +7,13 @@ import { HUB_STATUS_TITLES } from './hub-status-titles';
 type Props = { item: KeyWithStatus; maxPriorityKeyIndex: number };
 
 export const StatusCell: FC<Props> = ({ item, maxPriorityKeyIndex }) => (
-  <span data-testid="statusCell">
-    <Stack direction="row" wrap gap={4}>
-      {item.statuses.map((status) => (
-        <Fragment key={status}>
-          <KeyStatusTag status={status} titles={HUB_STATUS_TITLES} />
-          {status === KEY_STATUS.DEPOSITABLE &&
-            item.index <= maxPriorityKeyIndex && <Tag variant="neutral">P</Tag>}
-        </Fragment>
-      ))}
-    </Stack>
-  </span>
+  <Stack direction="row" wrap gap={4} dataTestId={{ root: 'statusCell' }}>
+    {item.statuses.map((status) => (
+      <Fragment key={status}>
+        <KeyStatusTag status={status} titles={HUB_STATUS_TITLES} />
+        {status === KEY_STATUS.DEPOSITABLE &&
+          item.index <= maxPriorityKeyIndex && <Tag variant="neutral">P</Tag>}
+      </Fragment>
+    ))}
+  </Stack>
 );

@@ -1,19 +1,10 @@
-import {
-  TableAlign,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeaderCell,
-  TableRoot,
-  TableRow,
-  Typography,
-} from '@lidofinance/lido-app-ui';
+import { Table, TableColumn, Typography } from '@lidofinance/lido-app-ui';
 import {
   CurveParameters,
   NodeOperatorInfo,
   TOKENS,
 } from '@lidofinance/lido-csm-sdk';
-import { FC, PropsWithChildren, useMemo } from 'react';
+import { FC, ReactNode, useMemo } from 'react';
 import { useModule } from 'modules/web3';
 import { FormatToken } from 'shared/formatters';
 import {
@@ -22,7 +13,6 @@ import {
   getFeeForKey,
   getQueueTypeForKey,
 } from 'utils';
-import { TableScroll } from './styles';
 import { useWatch } from 'react-hook-form';
 import { DepositDataInputType } from './use-parse-deposit-data';
 import { useFormData } from '../form-controller';
@@ -32,16 +22,14 @@ type FormData = {
   curveParameters?: CurveParameters;
 };
 
-type ParameterCellProps = PropsWithChildren<{
-  align?: TableAlign;
-  error: boolean;
-}>;
+type KeyRow = {
+  keyNumber: number;
+  bondAmount: bigint;
+  feePercentage: bigint;
+  queueType?: string;
+};
 
-const ParameterCell: FC<ParameterCellProps> = ({ align, error, children }) => (
-  <TableCell align={align}>
-    <Typography color={error ? 'error' : undefined}>{children}</Typography>
-  </TableCell>
-);
+const getRowKey = ({ keyNumber }: KeyRow) => String(keyNumber);
 
 export type DepositDataParametersProps = {
   highlightFrom?: number;
@@ -89,59 +77,66 @@ export const DepositDataParameters: FC<DepositDataParametersProps> = ({
     });
   }, [curveParameters, depositData.length, operatorInfo, isCsmFamily]);
 
+  const columns = useMemo<TableColumn<KeyRow>[]>(() => {
+    const cell = (keyNumber: number, content: ReactNode) => (
+      <Typography
+        color={
+          highlightFrom !== undefined && keyNumber > highlightFrom
+            ? 'error'
+            : undefined
+        }
+      >
+        {content}
+      </Typography>
+    );
+
+    return [
+      {
+        key: 'keyNumber',
+        header: 'Key number',
+        render: ({ keyNumber }) => cell(keyNumber, `#${keyNumber}`),
+      },
+      {
+        key: 'feePercentage',
+        header: 'Fee',
+        align: 'right',
+        info: 'A share of the Consensus and Execution layers rewards',
+        render: ({ keyNumber, feePercentage }) =>
+          cell(keyNumber, formatPercent(feePercentage)),
+      },
+      ...(isCsmFamily
+        ? [
+            {
+              key: 'queueType',
+              header: 'Queue',
+              align: 'right',
+              info: 'Priority queue stays ahead of the general queue',
+              render: ({ keyNumber, queueType }) => cell(keyNumber, queueType),
+            } as TableColumn<KeyRow>,
+          ]
+        : []),
+      {
+        key: 'bondAmount',
+        header: 'Bond',
+        align: 'right',
+        info: 'Security collateral required per validator key',
+        render: ({ keyNumber, bondAmount }) =>
+          cell(
+            keyNumber,
+            <FormatToken amount={bondAmount} token={TOKENS.eth} />,
+          ),
+      },
+    ];
+  }, [highlightFrom, isCsmFamily]);
+
   return (
-    <TableScroll>
-      <TableRoot variant="dense">
-        <TableHead>
-          <TableRow>
-            <TableHeaderCell>Key number</TableHeaderCell>
-            <TableHeaderCell
-              align="right"
-              info="A share of the Consensus and Execution layers rewards"
-            >
-              Fee
-            </TableHeaderCell>
-            {isCsmFamily && (
-              <TableHeaderCell
-                align="right"
-                info="Priority queue stays ahead of the general queue"
-              >
-                Queue
-              </TableHeaderCell>
-            )}
-            <TableHeaderCell
-              align="right"
-              info="Security collateral required per validator key"
-            >
-              Bond
-            </TableHeaderCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {keyData.map(
-            ({ keyNumber, bondAmount, feePercentage, queueType }, index) => {
-              const error =
-                highlightFrom !== undefined && index >= highlightFrom;
-              return (
-                <TableRow key={keyNumber}>
-                  <ParameterCell error={error}>#{keyNumber}</ParameterCell>
-                  <ParameterCell align="right" error={error}>
-                    {formatPercent(feePercentage)}
-                  </ParameterCell>
-                  {isCsmFamily && (
-                    <ParameterCell align="right" error={error}>
-                      {queueType}
-                    </ParameterCell>
-                  )}
-                  <ParameterCell align="right" error={error}>
-                    <FormatToken amount={bondAmount} token={TOKENS.eth} />
-                  </ParameterCell>
-                </TableRow>
-              );
-            },
-          )}
-        </TableBody>
-      </TableRoot>
-    </TableScroll>
+    <Table
+      variant="dense"
+      stickyHeader
+      maxHeight={150}
+      columns={columns}
+      rows={keyData}
+      rowKey={getRowKey}
+    />
   );
 };

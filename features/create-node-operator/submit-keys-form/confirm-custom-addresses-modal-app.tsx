@@ -2,20 +2,16 @@ import {
   Address,
   Button,
   Grid,
-  IconLink,
   MessageBox,
   Stack,
-  TextLink,
   Typography,
 } from '@lidofinance/lido-app-ui';
-import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
-import { useDappStatus } from 'modules/web3';
 import { FC, Fragment, useCallback, useState } from 'react';
+import { EtherscanAddressLink } from 'shared/components';
 import { ConfirmModalProps } from 'shared/hooks';
 import { FormModalShell } from 'shared/transaction-modal/form-modal-shell';
 import styled from 'styled-components';
 import invariant from 'tiny-invariant';
-import { getEtherscanAddressLink, trackMatomoEvent } from 'utils';
 import { getAddressesConfirmState } from './confirm-custom-addresses-steps';
 
 type ConfirmCustomAddressesModalAppProps = ConfirmModalProps & {
@@ -72,30 +68,21 @@ const StepDots: FC<{ count: number; current: number }> = ({
 const AddressRow: FC<{ label: string; address: string }> = ({
   label,
   address,
-}) => {
-  const { chainId } = useDappStatus();
-
-  return (
-    <Stack direction="column" gap={4}>
-      <Typography variant="body" color="secondary" as="span">
-        {label}
-      </Typography>
-      <Typography variant="body" as="div">
-        <Address address={address} symbols={0}>
-          <TextLink
-            external
-            href={getEtherscanAddressLink(chainId, address)}
-            icon={<IconLink />}
-            aria-label={`View ${label} on Etherscan`}
-            onClick={() =>
-              trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.etherscanAddressLink)
-            }
-          />
-        </Address>
-      </Typography>
-    </Stack>
-  );
-};
+}) => (
+  <Stack direction="column" gap={4}>
+    <Typography variant="body" color="secondary" as="span">
+      {label}
+    </Typography>
+    <Typography variant="body" as="div">
+      <Address address={address} symbols={0}>
+        <EtherscanAddressLink
+          address={address}
+          aria-label={`View ${label} on Etherscan`}
+        />
+      </Address>
+    </Typography>
+  </Stack>
+);
 
 export const ConfirmCustomAddressesModalApp: FC<
   ConfirmCustomAddressesModalAppProps
@@ -129,7 +116,7 @@ export const ConfirmCustomAddressesModalApp: FC<
       open={open}
       onClose={onReject}
       title="Confirm addresses configuration"
-      data-testid="confirmCustomAddressesModal"
+      dataTestId={{ root: 'confirmCustomAddressesModal' }}
     >
       <Stack direction="column" gap={24}>
         <Stack direction="column" gap={8}>

@@ -1,6 +1,12 @@
-import { Stack, Table, Tag, TableColumn } from '@lidofinance/lido-app-ui';
+import {
+  EmptyState,
+  Stack,
+  Table,
+  Tag,
+  TableColumn,
+} from '@lidofinance/lido-app-ui';
 import { OperatorWithLockedBond, TOKENS } from '@lidofinance/lido-csm-sdk';
-import { useTable } from 'providers/table-provider';
+import { TablePagination, useTable } from 'providers/table-provider';
 import { FC } from 'react';
 import { FormatToken } from 'shared/formatters';
 import { formatDate, isDayInPast } from 'utils';
@@ -43,7 +49,7 @@ const getRowKey = ({ nodeOperatorId }: Row) => nodeOperatorId.toString();
 const getRowProps = () => ({ 'data-testid': 'lockedRow' }) as object;
 
 export const LockedTable: FC = () => {
-  const { data, sort, setSort } = useTable<Row>();
+  const { data, sort, setSort, pages } = useTable<Row>();
 
   return (
     <Table
@@ -51,6 +57,10 @@ export const LockedTable: FC = () => {
       rows={data}
       rowKey={getRowKey}
       getRowProps={getRowProps}
+      emptyState={
+        <EmptyState title="There are no Node Operators with Locked bond" />
+      }
+      footer={pages > 0 && <TablePagination />}
       sort={sort && { key: String(sort.column), direction: sort.direction }}
       onSortChange={({ key, direction }) =>
         setSort({ column: key as keyof Row, direction })

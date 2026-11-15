@@ -5,6 +5,7 @@ import {
   InfoTooltip,
   SectionTitle,
   Skeleton,
+  Stack,
   Table,
   Tag,
 } from '@lidofinance/lido-app-ui';
@@ -31,17 +32,7 @@ type Props = {
 
 type ParameterRow = ReturnType<typeof useParameters>[number];
 
-const HeaderStyle = styled.span`
-  display: inline-flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-`;
-
-const ValuesStyle = styled.ul`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+const ValuesStyle = styled(Stack).attrs({ gap: 8 })`
   margin: 0;
   padding: 0;
   list-style: none;
@@ -54,7 +45,7 @@ const Values: FC<{ values?: ReactNode[]; strong?: boolean }> = ({
   strong,
 }) =>
   values ? (
-    <ValuesStyle>
+    <ValuesStyle forwardedAs="ul">
       {values.map((value, index) => (
         <li key={index}>
           <Body as="span" color="default" weight={strong ? 'bold' : undefined}>
@@ -71,10 +62,10 @@ const ColumnHeader: FC<{ title: string; current: boolean }> = ({
   title,
   current,
 }) => (
-  <HeaderStyle>
+  <Stack as="span" inline direction="row" wrap align="center" gap={8}>
     {title}
     {current && <Tag variant="neutral">Current type</Tag>}
-  </HeaderStyle>
+  </Stack>
 );
 
 export const TypeParametersCard: FC<Props> = ({ type }) => {

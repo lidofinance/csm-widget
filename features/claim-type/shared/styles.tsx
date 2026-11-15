@@ -1,27 +1,25 @@
+import { Stack } from '@lidofinance/lido-app-ui';
 import styled, { CSSProperties } from 'styled-components';
 
-export const CardHeaderStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
+export const CardHeaderStyle = styled(Stack).attrs({
+  align: 'center',
+  gap: 8,
+})`
   width: 100%;
   padding-bottom: 8px;
   text-align: center;
 `;
 
-export const CardBodyStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
+export const CardBodyStyle = styled(Stack).attrs({ gap: 32 })`
   width: 100%;
 `;
 
-export const BadgesStyle = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
+export const BadgesStyle = styled(Stack).attrs({
+  direction: 'row',
+  align: 'center',
+  justify: 'center',
+  gap: 12,
+})`
   margin-bottom: 24px;
 `;
 

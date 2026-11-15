@@ -14,7 +14,6 @@ import {
 } from 'reef-knot';
 import { useConnection } from 'wagmi';
 
-import { usePopoverBeak } from 'shared/components/popover-beak';
 import { notifyCopied } from 'shared/hooks';
 import { Disconnect } from '../disconnect/disconnect';
 import {
@@ -35,7 +34,7 @@ type WalletPopoverProps = {
   anchorRef: RefObject<HTMLElement | null>;
 };
 
-const POPUP_OFFSET = 12;
+const POPUP_OFFSET = 4;
 
 const WalletBadge: FC = () => {
   const { connector } = useConnection();
@@ -74,16 +73,14 @@ export const WalletPopover: FC<WalletPopoverProps> = ({
   onClose,
   anchorRef,
 }) => {
-  const beakRef = usePopoverBeak(anchorRef);
-
   return (
     <PopupStyle
-      ref={beakRef}
       open={open}
       onClose={onClose}
       anchorRef={anchorRef}
       placement="bottom"
       align="end"
+      arrow
       offset={POPUP_OFFSET}
       width={400}
       aria-label="Account"
