@@ -50,11 +50,6 @@ export const ChangesBoxStyle = styled.div`
   }
 `;
 
-// lib DataList brings its own 16px inset; rows sit flush with the box padding
-export const DataListFlushStyle = styled.div`
-  margin: 0 -16px;
-`;
-
 export const FaintStyle = styled.span`
   margin-left: 6px;
   color: var(--lido-app-ui-color-text-tertiary);

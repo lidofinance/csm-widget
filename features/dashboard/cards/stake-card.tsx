@@ -1,4 +1,5 @@
 import {
+  Card,
   IconArrowRight,
   ProgressBar,
   Stack,
@@ -15,7 +16,6 @@ import {
   useOperatorStakeSummary,
 } from 'modules/web3';
 import { FC } from 'react';
-import { StretchCard } from 'shared/components';
 import {
   KeyLimitNote,
   KeysNeededTag,
@@ -68,7 +68,7 @@ export const StakeCard: FC = () => {
     : [];
 
   return (
-    <StretchCard dataTestId={{ root: 'dashboardKeysSection' }}>
+    <Card align="stretch" dataTestId={{ root: 'dashboardKeysSection' }}>
       <Stack direction="column" gap={16}>
         <Stack direction="row" justify="between" align="center">
           <Stack direction="row" gap={8} align="center">
@@ -104,6 +104,6 @@ export const StakeCard: FC = () => {
         <KeyLimitNote info={info} />
         {metaItems.length > 0 && <StakeMeta items={metaItems} />}
       </Stack>
-    </StretchCard>
+    </Card>
   );
 };

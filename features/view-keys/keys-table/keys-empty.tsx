@@ -1,6 +1,5 @@
-import { EmptyState, IconKeyRound } from '@lidofinance/lido-app-ui';
+import { Card, EmptyState, IconKeyRound } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import { StretchCard } from 'shared/components/stretch-stack/stretch-stack';
 import styled from 'styled-components';
 
 const IconStyled = styled(IconKeyRound)`
@@ -10,11 +9,11 @@ const IconStyled = styled(IconKeyRound)`
 `;
 
 export const KeysEmpty: FC = () => (
-  <StretchCard dataTestId={{ root: 'viewKeysBlock' }}>
+  <Card align="stretch" dataTestId={{ root: 'viewKeysBlock' }}>
     <EmptyState
       illustration={<IconStyled />}
       title="No keys at the moment"
       description="Once you add keys, they’ll appear here"
     />
-  </StretchCard>
+  </Card>
 );

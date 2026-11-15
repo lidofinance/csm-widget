@@ -18,7 +18,6 @@ import {
   SecurityStatusBanner,
 } from 'shared/components';
 import { useIsClient } from 'shared/hooks';
-import { SVGGradientDefs } from 'shared/components/svg-gradient-defs/svg-gradient-defs';
 import { nprogress } from 'utils';
 import { MaintenancePage } from 'features/welcome/maintenance-page';
 
@@ -61,7 +60,6 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
   const renderApp = (dummy?: boolean) => (
     <Providers dummy={dummy} isError={isError}>
       <ThemedBackgroundGradient />
-      <SVGGradientDefs />
       <Toaster />
       {isMaintenance ? <MaintenancePage /> : <MemoApp {...props} />}
       <SecurityStatusBanner />

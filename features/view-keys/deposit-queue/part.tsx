@@ -1,4 +1,4 @@
-import { Tooltip } from 'shared/components';
+import { Tooltip } from '@lidofinance/lido-app-ui';
 import { CSSProperties, FC, useCallback } from 'react';
 import { useGraphInteraction } from './hover-provider';
 import { PartStyle } from './style';
@@ -58,8 +58,8 @@ export const Part: FC<PartProps> = ({
       type === 'batch' ? BatchTooltipContent : AddedTooltipContent;
     return (
       <Tooltip
-        title={<Content metadata={metadata} unit={unit} />}
-        placement="top"
+        content={<Content metadata={metadata} unit={unit} />}
+        position="top"
         style={wrapperStyle}
       >
         {renderPart(true)}

@@ -11,7 +11,6 @@ export const ShortInlineLoader = () => <ShortSkeleton variant="text" />;
 
 export const FaqCardStyle = styled(Card)`
   && {
-    align-items: stretch;
     gap: 0;
   }
 `;

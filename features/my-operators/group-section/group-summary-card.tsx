@@ -1,10 +1,10 @@
 import {
+  Card,
   MessageBox,
   Skeleton,
   Stack,
   Typography,
 } from '@lidofinance/lido-app-ui';
-import { StretchCard } from 'shared/components';
 import {
   KeysNeededTag,
   StakeAllocationBar,
@@ -31,7 +31,8 @@ export const GroupSummaryCard: FC<Props> = ({
   const weightZero = totalWeight === 0n;
 
   return (
-    <StretchCard
+    <Card
+      align="stretch"
       dataTestId={{ root: 'groupSummaryCard' }}
       aria-labelledby={titleId}
     >
@@ -73,6 +74,6 @@ export const GroupSummaryCard: FC<Props> = ({
           )}
         </Stack>
       )}
-    </StretchCard>
+    </Card>
   );
 };

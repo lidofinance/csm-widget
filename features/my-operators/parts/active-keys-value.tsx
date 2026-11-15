@@ -1,5 +1,5 @@
+import { VisuallyHidden } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import { VisuallyHiddenStyle } from 'shared/form-page/styles';
 import styled from 'styled-components';
 
 const Muted = styled.span`
@@ -21,8 +21,8 @@ export const ActiveKeysValue: FC<Props> = ({ active, total, spaced }) => (
         {total}
       </Muted>
     </span>
-    <VisuallyHiddenStyle>
+    <VisuallyHidden>
       {active} of {total}
-    </VisuallyHiddenStyle>
+    </VisuallyHidden>
   </>
 );

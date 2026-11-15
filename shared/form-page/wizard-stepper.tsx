@@ -1,6 +1,5 @@
-import { Steps } from '@lidofinance/lido-app-ui';
+import { Steps, VisuallyHidden } from '@lidofinance/lido-app-ui';
 import { FC, useMemo } from 'react';
-import { VisuallyHiddenStyle } from './styles';
 import { getStepTrackText } from './wizard';
 
 export type WizardStepperProps = {
@@ -20,9 +19,9 @@ export const WizardStepper: FC<WizardStepperProps> = ({
   return (
     <div>
       <Steps steps={items} current={active} />
-      <VisuallyHiddenStyle data-testid="stepTrackText">
+      <VisuallyHidden data-testid="stepTrackText">
         {getStepTrackText(active, steps.length)}
-      </VisuallyHiddenStyle>
+      </VisuallyHidden>
     </div>
   );
 };

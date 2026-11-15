@@ -1,8 +1,7 @@
-import { Stack } from '@lidofinance/lido-app-ui';
-import { StretchCard } from 'shared/components/stretch-stack/stretch-stack';
+import { Card, Stack } from '@lidofinance/lido-app-ui';
 import styled from 'styled-components';
 
-export const TableCardStyled = styled(StretchCard)`
+export const TableCardStyled = styled(Card)`
   && {
     padding: 0;
     overflow: hidden;

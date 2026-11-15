@@ -13,7 +13,7 @@ export const Faq: FC<{ items: FaqItem[] }> = ({ items: _items }) => {
   return (
     <FaqSection data-testid="faqSection">
       <SectionTitle size="large" title="FAQ" />
-      <FaqCardStyle>
+      <FaqCardStyle align="stretch">
         {items.map(({ title, anchor, content }, index) => {
           return (
             <AccordionNavigatable

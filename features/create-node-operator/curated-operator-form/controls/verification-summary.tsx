@@ -1,6 +1,7 @@
 import {
   Address,
   Body,
+  DataList,
   DataListRow,
   Divider,
   Stack,
@@ -18,7 +19,6 @@ import {
   type CuratedOperatorFormInputType,
   useCuratedOperatorFormData,
 } from '../context';
-import { CompactListStyle } from './styles';
 
 const SummaryAddress: FC<{ address?: string }> = ({ address }) =>
   address ? (
@@ -71,7 +71,7 @@ export const VerificationSummary: FC = () => {
       <Body as="h2" weight="semibold">
         Node Operator details
       </Body>
-      <CompactListStyle>
+      <DataList flush>
         <DataListRow
           label="Node Operator type:"
           value={metadata?.name ?? '—'}
@@ -87,9 +87,9 @@ export const VerificationSummary: FC = () => {
           value={description}
           dataTestId={{ root: 'summaryDescription' }}
         />
-      </CompactListStyle>
+      </DataList>
       <Divider />
-      <CompactListStyle>
+      <DataList flush>
         <DataListRow
           label="Manager Address:"
           value={<SummaryAddress address={managerAddress} />}
@@ -100,9 +100,9 @@ export const VerificationSummary: FC = () => {
           value={<SummaryAddress address={rewardAddress} />}
           dataTestId={{ root: 'summaryRewardsAddress' }}
         />
-      </CompactListStyle>
+      </DataList>
       <Divider />
-      <CompactListStyle>
+      <DataList flush>
         <DataListRow
           label="Node Operator reward:"
           value={
@@ -117,7 +117,7 @@ export const VerificationSummary: FC = () => {
             <ParamLines items={formatEthKeyIntervals(parameters?.bondConfig)} />
           }
         />
-      </CompactListStyle>
+      </DataList>
     </Stack>
   );
 };

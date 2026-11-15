@@ -1,4 +1,5 @@
 import {
+  Card,
   Grid,
   Skeleton,
   Stack,
@@ -8,7 +9,6 @@ import {
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { CSM_FAMILY_MODULES } from 'consts';
 import { FC, useId } from 'react';
-import { StretchCard } from 'shared/components';
 import {
   SUMMARY_COLUMNS,
   SUMMARY_GAP,
@@ -33,7 +33,8 @@ export const MyOperatorsSummaryCard: FC = () => {
   const loading = <Skeleton variant="text" />;
 
   return (
-    <StretchCard
+    <Card
+      align="stretch"
       dataTestId={{ root: 'myOperatorsSummary' }}
       aria-labelledby={titleId}
     >
@@ -116,6 +117,6 @@ export const MyOperatorsSummaryCard: FC = () => {
           }
         />
       </Grid>
-    </StretchCard>
+    </Card>
   );
 };

@@ -18,9 +18,8 @@ export type GraphInteractionContextType = {
   module: MODULE_NAME;
 };
 
-const GraphInteractionContext = createContext<GraphInteractionContextType>(
-  {} as GraphInteractionContextType,
-);
+const GraphInteractionContext =
+  createContext<GraphInteractionContextType | null>(null);
 
 export const GraphInteractionProvider: FC<
   PropsWithChildren<{ module?: MODULE_NAME }>

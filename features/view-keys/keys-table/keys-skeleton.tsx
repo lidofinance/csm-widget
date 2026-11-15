@@ -15,7 +15,7 @@ const CHIP_WIDTHS = [90, 110, 130];
 const ROWS = [0, 1, 2, 3];
 
 export const KeysSkeleton: FC = () => (
-  <TableCardStyled dataTestId={{ root: 'viewKeysBlock' }}>
+  <TableCardStyled align="stretch" dataTestId={{ root: 'viewKeysBlock' }}>
     <div data-testid="loader">
       <ChipsAreaStyled direction="row" gap={8}>
         {CHIP_WIDTHS.map((width) => (

@@ -1,4 +1,4 @@
-import { Tooltip } from '../tooltip/tooltip';
+import { Tooltip } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { formatDate } from 'utils';
 import { DateStyle } from './styles';
@@ -13,7 +13,7 @@ export const Date: FC<Props> = ({ timestamp, format }) => {
     return null;
   }
   return (
-    <Tooltip title={formatDate(timestamp, 'PP')} placement="top">
+    <Tooltip content={formatDate(timestamp, 'PP')} position="top">
       <DateStyle>{formatDate(timestamp, format)}</DateStyle>
     </Tooltip>
   );

@@ -1,14 +1,15 @@
 import {
+  Card,
   Divider,
   Grid,
   Skeleton,
   Stack,
+  StatItem,
   Typography,
 } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { ModuleNodeOperator } from 'modules/web3/operator-provider/types';
 import { FC, ReactNode, useMemo } from 'react';
-import { StretchCard } from 'shared/components';
 import { INFO_TEST_ID } from 'shared/components/bond-stats-card/bond-stats-card';
 import { FormatToken } from 'shared/formatters';
 import { useDisplayOperatorType, useOperatorOverview } from 'shared/hooks';
@@ -25,7 +26,6 @@ import {
   IssuesTag,
   OperatorCardAction,
 } from '../parts';
-import { CardStatItem } from './card-stat-item';
 
 const STATS_COLUMNS = { base: 3, smDown: 1 };
 
@@ -62,7 +62,8 @@ export const OperatorCard: FC<Props> = ({ operator }) => {
     pending ? <Skeleton variant="text" /> : node;
 
   return (
-    <StretchCard
+    <Card
+      align="stretch"
       data-operator-id={nodeOperatorId.toString()}
       data-operator-module={module}
       aria-labelledby={titleId}
@@ -114,7 +115,8 @@ export const OperatorCard: FC<Props> = ({ operator }) => {
             gap={16}
             dataTestId={{ root: 'operatorStats' }}
           >
-            <CardStatItem
+            <StatItem
+              size="xsmall"
               align="left"
               label="Active keys"
               info="Active keys out of all non-withdrawn keys of the Node Operator"
@@ -128,7 +130,8 @@ export const OperatorCard: FC<Props> = ({ operator }) => {
               )}
               dataTestId={{ ...INFO_TEST_ID, root: 'operatorActiveKeys' }}
             />
-            <CardStatItem
+            <StatItem
+              size="xsmall"
               align="left"
               label="Balance, stETH"
               info="Total bond currently held for the Node Operator"
@@ -146,7 +149,8 @@ export const OperatorCard: FC<Props> = ({ operator }) => {
                 value: 'textContent',
               }}
             />
-            <CardStatItem
+            <StatItem
+              size="xsmall"
               align="left"
               label="Available, stETH"
               info="The amount you can claim now, including rewards and excess bond"
@@ -167,6 +171,6 @@ export const OperatorCard: FC<Props> = ({ operator }) => {
           matomoSwitch={MATOMO_CLICK_EVENTS_TYPES.myOperatorsSwitch}
         />
       </Stack>
-    </StretchCard>
+    </Card>
   );
 };

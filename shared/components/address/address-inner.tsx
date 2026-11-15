@@ -8,7 +8,7 @@ import {
   TypographyWeight,
 } from '@lidofinance/lido-app-ui';
 import { FC, ReactNode } from 'react';
-import { Tooltip } from '../tooltip/tooltip';
+import { Tooltip } from '@lidofinance/lido-app-ui';
 import { EtherscanAddressLink } from '../external-icon-link';
 import { AddressContainerStyle, Avatar } from './styles';
 

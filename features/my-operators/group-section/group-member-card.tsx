@@ -1,4 +1,5 @@
 import {
+  Card,
   Divider,
   Skeleton,
   Stack,
@@ -9,7 +10,6 @@ import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { OperatorRef, useOperatorCurveId } from 'modules/web3';
 import { FC, useMemo } from 'react';
-import { StretchCard } from 'shared/components';
 import {
   KeyLimitNote,
   KeysNeededTag,
@@ -66,7 +66,8 @@ export const GroupMemberCard: FC<Props> = ({ member, isCurrent }) => {
   const weightZero = weight === 0n;
 
   return (
-    <StretchCard
+    <Card
+      align="stretch"
       data-operator-id={nodeOperatorId.toString()}
       data-operator-module={MODULE_NAME.CM}
       aria-labelledby={titleId}
@@ -179,6 +180,6 @@ export const GroupMemberCard: FC<Props> = ({ member, isCurrent }) => {
           matomoSwitch={MATOMO_CLICK_EVENTS_TYPES.groupSwitchOperator}
         />
       </Stack>
-    </StretchCard>
+    </Card>
   );
 };

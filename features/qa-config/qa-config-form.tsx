@@ -14,7 +14,7 @@ import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 
 import { useUserConfig } from 'config/user-config';
 import { CHAIN_METADATA } from 'consts/chains';
-import { StretchCard, StretchStack } from 'shared/components';
+import { StretchStack } from 'shared/components';
 import { isUrl } from 'utils/is-url';
 
 type FormValues = Record<string, string>;
@@ -128,7 +128,7 @@ export const QaConfigForm = () => {
 
   return (
     <>
-      <StretchCard>
+      <Card align="stretch">
         <form onSubmit={handleSubmit(save)} noValidate>
           <StretchStack gap={16}>
             {rows.map(({ chainId, name, withCl }) => (
@@ -174,7 +174,7 @@ export const QaConfigForm = () => {
             </Stack>
           </StretchStack>
         </form>
-      </StretchCard>
+      </Card>
 
       <Card>
         <Stack gap={8}>

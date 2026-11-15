@@ -63,7 +63,7 @@ export const KeysTableCard: FC = () => {
       defaultSort={{ column: 'statuses', direction: 'asc' }}
     >
       <PageReset status={status} />
-      <TableCardStyled dataTestId={{ root: 'viewKeysBlock' }}>
+      <TableCardStyled align="stretch" dataTestId={{ root: 'viewKeysBlock' }}>
         <ChipsAreaSpacedStyled>
           <StatusFilterChips
             chips={chips}

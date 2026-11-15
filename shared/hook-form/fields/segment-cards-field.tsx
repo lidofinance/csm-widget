@@ -5,19 +5,11 @@ import {
   Stack,
 } from '@lidofinance/lido-app-ui';
 import { FC, useId } from 'react';
-import styled from 'styled-components';
 import { FieldError } from './field-error';
 import { useFieldController } from './use-field-controller';
 import { useFocusableRef } from './use-focusable-ref';
 
 const SEGMENT_TAB_STOP_SELECTOR = '[role="tab"]:not([disabled])';
-
-// lib stacks below count * 216px, which wraps 3 cards in a ~600px form column
-const SegmentedControlCardStyled = styled(SegmentedControlCard)`
-  && {
-    --local-stack-at: 480px;
-  }
-`;
 
 export type SegmentCardsFieldOption = SegmentCardItem;
 
@@ -48,7 +40,8 @@ export const SegmentCardsField: FC<SegmentCardsFieldProps> = ({
 
   return (
     <Stack direction="column" gap={12} ref={ref}>
-      <SegmentedControlCardStyled
+      <SegmentedControlCard
+        stackAt={490}
         items={options}
         value={field.value ?? ''}
         onChange={field.onChange}

@@ -1,5 +1,11 @@
 import { CurveRef } from '@lidofinance/lido-csm-sdk';
-import { Body, DataListRow, Skeleton, Stack } from '@lidofinance/lido-app-ui';
+import {
+  Body,
+  DataList,
+  DataListRow,
+  Skeleton,
+  Stack,
+} from '@lidofinance/lido-app-ui';
 import { CUSTOM_CURVE, OPERATOR_TYPE_METADATA } from 'consts';
 import { useCurveParameters } from 'modules/web3';
 import { FC, useMemo } from 'react';
@@ -16,7 +22,7 @@ import { useCurveMetadataGetter } from 'shared/hooks';
 import { CurveBadge } from 'shared/node-operator';
 import { useCuratedOperatorFormData } from '../context';
 import { getGateCardTestId } from '../curated-operator-wizard';
-import { CompactListStyle, GateParamsStyle } from './styles';
+import { GateParamsStyle } from './styles';
 
 type ParamGroupProps = {
   title: string;
@@ -34,11 +40,11 @@ const ParamGroup: FC<ParamGroupProps> = ({
       {title}
     </Body>
     {rows ? (
-      <CompactListStyle>
+      <DataList flush>
         {rows.map(({ label, value }, index) => (
           <DataListRow key={`${label}-${index}`} label={label} value={value} />
         ))}
-      </CompactListStyle>
+      </DataList>
     ) : (
       <Skeleton variant="text" lines={2} />
     )}

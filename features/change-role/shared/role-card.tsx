@@ -19,7 +19,7 @@ export const RoleCard: FC<RoleCardProps> = ({
   children,
   'data-testid': dataTestId,
 }) => (
-  <RoleCardStyle dataTestId={{ root: dataTestId }}>
+  <RoleCardStyle align="stretch" dataTestId={{ root: dataTestId }}>
     <Stack direction="row" wrap align="center" justify="between" gap={16}>
       <Stack direction="row" align="center" gap={8}>
         {icon}

@@ -1,6 +1,5 @@
 export { BackgroundGradient } from './background-gradient/background-gradient';
 export { TxLinkEtherscan } from './tx-link-etherscan';
-export { Tooltip, type TooltipProps } from './tooltip/tooltip';
 export { KeysLimitWarning } from './keys-limit-warning/keys-limit-warning';
 export * from './chip';
 export * from './status-chip';

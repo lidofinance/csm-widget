@@ -1,4 +1,4 @@
-import { Tooltip } from 'shared/components/tooltip/tooltip';
+import { Tooltip } from '@lidofinance/lido-app-ui';
 import { DATA_UNAVAILABLE } from 'consts/text';
 
 import { config } from 'config';
@@ -28,8 +28,8 @@ export const FormatPrice: FormatPriceComponent = ({
   if (amount !== null && amount !== undefined && amount < 0.01) {
     return (
       <Tooltip
-        placement="topRight"
-        title={
+        position="top-right"
+        content={
           <span>
             {amount.toLocaleString(config.LOCALE, {
               style: 'currency',

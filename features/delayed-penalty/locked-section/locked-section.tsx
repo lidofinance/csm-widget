@@ -26,7 +26,7 @@ export const LockedSection: FC<{ module?: MODULE_NAME }> = ({ module }) => {
       defaultSort={{ column: 'until', direction: 'asc' }}
     >
       <Stack direction="column" gap={24}>
-        <CardStyled dataTestId={{ root: 'lockedSectionBlock' }}>
+        <CardStyled align="stretch" dataTestId={{ root: 'lockedSectionBlock' }}>
           <WhenLoaded
             loading={loading}
             empty={

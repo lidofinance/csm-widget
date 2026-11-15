@@ -4,17 +4,9 @@ import {
   type SegmentCardItem,
 } from '@lidofinance/lido-app-ui';
 import { FC, useEffect, useRef } from 'react';
-import styled from 'styled-components';
 import { useInvalidKeysCount } from 'shared/counters';
 import { useDeleteMode } from './delete-mode-provider';
 import { DeleteMode, isDeleteMode } from './resolve-delete-mode';
-
-// lib stacks below count * 216px, which wraps 3 cards in a ~650px column
-const SegmentedControlCardStyled = styled(SegmentedControlCard)`
-  && {
-    --local-stack-at: 480px;
-  }
-`;
 
 const ITEMS: Record<DeleteMode, (invalid: number) => SegmentCardItem> = {
   remove: (invalid) => ({
@@ -66,7 +58,8 @@ export const DeleteModeCards: FC<DeleteModeCardsProps> = ({ focusOnMount }) => {
 
   return (
     <div ref={ref}>
-      <SegmentedControlCardStyled
+      <SegmentedControlCard
+        stackAt={490}
         aria-label="Deletion option"
         items={modes.map((m) => ITEMS[m](invalid))}
         value={mode ?? ''}

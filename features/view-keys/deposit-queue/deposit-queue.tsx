@@ -1,7 +1,6 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { Accordion, Stack } from '@lidofinance/lido-app-ui';
+import { Card, Accordion, Stack } from '@lidofinance/lido-app-ui';
 import { FC, ReactNode, useEffect, useRef, useState } from 'react';
-import { StretchCard } from 'shared/components';
 import { Description } from './description';
 import { DepositQueueGraph } from './deposit-queue-graph';
 
@@ -20,7 +19,7 @@ export const DepositQueue: FC<Props> = ({ module, notice }) => {
   }, [hasNotice]);
 
   return (
-    <StretchCard dataTestId={{ root: 'depositQueue' }}>
+    <Card align="stretch" dataTestId={{ root: 'depositQueue' }}>
       <Accordion
         title="View deposit queue"
         border={false}
@@ -33,6 +32,6 @@ export const DepositQueue: FC<Props> = ({ module, notice }) => {
           <Description module={module} />
         </Stack>
       </Accordion>
-    </StretchCard>
+    </Card>
   );
 };

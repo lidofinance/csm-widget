@@ -1,5 +1,5 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { Tooltip } from 'shared/components/tooltip/tooltip';
+import { Tooltip } from '@lidofinance/lido-app-ui';
 
 import { DATA_UNAVAILABLE } from 'consts/text';
 import { Component } from 'types';
@@ -54,8 +54,8 @@ export const FormatToken: FormatTokenComponent = ({
 
   return (
     <Tooltip
-      placement="topRight"
-      title={
+      position="top-right"
+      content={
         <span>
           {actual}&nbsp;{symbol}
         </span>

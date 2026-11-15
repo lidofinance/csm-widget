@@ -6,7 +6,6 @@ const CardStyled = styled(Card)`
   && {
     padding: 0;
     overflow: hidden;
-    align-items: stretch;
     gap: 0;
   }
 `;
@@ -38,7 +37,7 @@ export const StatsCardShell: FC<StatsCardShellProps> = ({
   dataTestId,
   compactOnMobile,
 }) => (
-  <CardStyled dataTestId={{ root: dataTestId }}>
+  <CardStyled align="stretch" dataTestId={{ root: dataTestId }}>
     {header}
     <BodyStyled gap={24} $compactOnMobile={compactOnMobile}>
       {children}

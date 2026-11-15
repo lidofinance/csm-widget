@@ -3,7 +3,7 @@ import {
   TypographyColor,
 } from '@lidofinance/lido-app-ui';
 import { FC, ReactNode } from 'react';
-import { Tooltip } from '../tooltip/tooltip';
+import { Tooltip } from '@lidofinance/lido-app-ui';
 import { PubkeyContainerStyle } from './styles';
 
 export type PubkeyProps = {

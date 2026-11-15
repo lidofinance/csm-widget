@@ -1,4 +1,5 @@
 import {
+  Card,
   IconArrowRight,
   Skeleton,
   TextLink,
@@ -16,7 +17,6 @@ import {
   OperatorRef,
 } from 'modules/web3';
 import { FC, ReactNode, useMemo } from 'react';
-import { StretchCard } from 'shared/components';
 import { useDisplayOperatorType, useShowRule } from 'shared/hooks';
 import {
   OperatorAddresses,
@@ -166,7 +166,7 @@ const OperatorHeader: FC<HeaderProps> = ({ operator }) => {
   const groupLabel = group && formatGroupLabel(group);
 
   return (
-    <StretchCard dataTestId={{ root: 'dashboardHeaderCard' }}>
+    <Card align="stretch" dataTestId={{ root: 'dashboardHeaderCard' }}>
       <HeaderGrid
         $tight={isCM}
         $hasDesc={hasDescription}
@@ -244,7 +244,7 @@ const OperatorHeader: FC<HeaderProps> = ({ operator }) => {
           </DescriptionArea>
         )}
       </HeaderGrid>
-    </StretchCard>
+    </Card>
   );
 };
 

@@ -1,6 +1,5 @@
-import { Body, Button, H3, Stack } from '@lidofinance/lido-app-ui';
+import { Card, Body, Button, H3, Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import { StretchCard } from 'shared/components';
 import { DkgIllustration } from '../styles';
 
 type Props = {
@@ -8,7 +7,7 @@ type Props = {
 };
 
 export const DkgRequiredCard: FC<Props> = ({ onAction }) => (
-  <StretchCard dataTestId={{ root: 'dkgRequiredCard' }}>
+  <Card align="stretch" dataTestId={{ root: 'dkgRequiredCard' }}>
     <Stack align="center" gap={32} style={{ textAlign: 'center' }}>
       <DkgIllustration aria-hidden="true" />
       <H3>Upload DKG Files Required</H3>
@@ -21,5 +20,5 @@ export const DkgRequiredCard: FC<Props> = ({ onAction }) => (
         Upload files
       </Button>
     </Stack>
-  </StretchCard>
+  </Card>
 );
