@@ -15,7 +15,7 @@ export const ConfirmHighCostModalApp: FC<ConfirmHighCostModalAppProps> = ({
     onClose={onReject}
     title="High ejection cost detected"
     subtitle="The ejection cost per key is unusually high. You may want to wait for ejection fees to decrease."
-    data-testid="confirmHighCostModal"
+    dataTestId={{ root: 'confirmHighCostModal' }}
   >
     <Stack direction="column" gap={24}>
       <Typography variant="body" weight="semibold" as="p">

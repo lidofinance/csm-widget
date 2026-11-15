@@ -38,7 +38,7 @@ const ConfirmRotationModal: FC<ConfirmRotationModalProps> = ({
       onClose={onReject}
       title="You are submitting cluster member rotation"
       subtitle="Please review the changes below before confirming"
-      data-testid="confirmRotationModal"
+      dataTestId={{ root: 'confirmRotationModal' }}
     >
       <Stack gap={24}>
         <Stack gap={8} align="center">

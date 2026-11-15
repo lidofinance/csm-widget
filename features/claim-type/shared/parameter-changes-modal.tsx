@@ -21,7 +21,7 @@ export const ParameterChangesModal: FC<ParameterChangesModalProps> = ({
     open={open}
     onClose={onClose}
     title="Parameter changes"
-    data-testid="parameterChangesModal"
+    dataTestId={{ root: 'parameterChangesModal' }}
   >
     <CompareParametersList module={MODULE_NAME.CSM} items={items} />
   </FormModalShell>

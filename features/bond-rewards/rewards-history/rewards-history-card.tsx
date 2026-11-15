@@ -9,11 +9,10 @@ import { sortFunctions } from './sort';
 
 import RewardsIcon from 'assets/balance/rewards.svg?react';
 
-const CardStyled = styled(Card)`
+const CardStyled = styled(Card).attrs({ align: 'stretch' })`
   && {
     padding: 0;
     overflow: hidden;
-    align-items: stretch;
     gap: 0;
   }
 `;

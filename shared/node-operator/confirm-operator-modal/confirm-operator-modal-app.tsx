@@ -21,7 +21,7 @@ export const ConfirmOperatorModalApp: FC<ConfirmOperatorModalAppProps> = ({
     onClose={onReject}
     title="Confirm your Node Operator"
     subtitle="Check that the Node Operator below is the one you intend to use before proceeding"
-    data-testid="confirmOperatorModal"
+    dataTestId={{ root: 'confirmOperatorModal' }}
   >
     <Stack direction="column" gap={24}>
       <BodyLarge>

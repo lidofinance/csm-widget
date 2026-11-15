@@ -13,7 +13,7 @@ export const ConfirmDeleteKeyModalApp: FC<
     onClose={onReject}
     title="Are you sure you want to delete the key?"
     subtitle="You are deleting the key from the .json file"
-    data-testid="confirmDeleteKeyModal"
+    dataTestId={{ root: 'confirmDeleteKeyModal' }}
   >
     <Stack direction="column" gap={24} align="center">
       <IconWarning width={40} height={40} style={WARNING_ICON_STYLE} />

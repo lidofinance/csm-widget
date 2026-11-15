@@ -116,7 +116,7 @@ export const OperatorCard: FC<Props> = ({ operator }) => {
             dataTestId={{ root: 'operatorStats' }}
           >
             <StatItem
-              size="xsmall"
+              size="small"
               align="left"
               label="Active keys"
               info="Active keys out of all non-withdrawn keys of the Node Operator"
@@ -131,7 +131,7 @@ export const OperatorCard: FC<Props> = ({ operator }) => {
               dataTestId={{ ...INFO_TEST_ID, root: 'operatorActiveKeys' }}
             />
             <StatItem
-              size="xsmall"
+              size="small"
               align="left"
               label="Balance, stETH"
               info="Total bond currently held for the Node Operator"
@@ -150,7 +150,7 @@ export const OperatorCard: FC<Props> = ({ operator }) => {
               }}
             />
             <StatItem
-              size="xsmall"
+              size="small"
               align="left"
               label="Available, stETH"
               info="The amount you can claim now, including rewards and excess bond"

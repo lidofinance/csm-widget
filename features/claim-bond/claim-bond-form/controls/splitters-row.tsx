@@ -27,7 +27,14 @@ export const SplittersRow: FC<SplittersRowProps> = ({ feeSplits, amount }) => {
     <Disclosure
       dataTestId={{ root: 'splittersAccordion' }}
       label={
-        <Stack as="span" direction="row" align="center" gap={8}>
+        <Stack
+          as="span"
+          direction="row"
+          align="center"
+          justify="between"
+          gap={8}
+          style={{ flex: 1 }}
+        >
           <span data-testid="splittersSummary">
             To splitters ({feeSplits.length})
           </span>

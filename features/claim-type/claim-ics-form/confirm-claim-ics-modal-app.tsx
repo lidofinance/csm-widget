@@ -15,7 +15,7 @@ export const ConfirmClaimIcsModalApp: FC<ConfirmClaimIcsModalAppProps> = ({
     onClose={onReject}
     title="You are claiming the Identified Community Staker operator type"
     subtitle="This action is irreversible, you will not be able to claim your current operator type back"
-    data-testid="confirmClaimIcsModal"
+    dataTestId={{ root: 'confirmClaimIcsModal' }}
   >
     <Stack direction="column" gap={24}>
       <Button onClick={onConfirm}>Continue</Button>

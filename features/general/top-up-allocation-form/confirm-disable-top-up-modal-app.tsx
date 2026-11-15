@@ -14,7 +14,7 @@ export const ConfirmDisableTopUpModalApp: FC<
     open={open}
     onClose={onReject}
     title="Confirm disabling top-ups"
-    data-testid="confirmDisableTopUpModal"
+    dataTestId={{ root: 'confirmDisableTopUpModal' }}
   >
     <Stack direction="column" gap={24}>
       <Stack direction="column" gap={8}>

@@ -9,7 +9,10 @@ import {
 
 const LogoImage = styled.img`
   padding: 5px;
-  object-fit: contain;
+
+  && {
+    object-fit: contain;
+  }
 `;
 
 const PartnerLogo: FC<{ partner: LowCodePartner }> = ({

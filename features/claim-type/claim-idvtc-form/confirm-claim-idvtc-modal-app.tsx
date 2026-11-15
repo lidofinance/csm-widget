@@ -15,7 +15,7 @@ export const ConfirmClaimIdvtcModalApp: FC<ConfirmClaimIdvtcModalAppProps> = ({
     onClose={onReject}
     title="You are claiming the Identified DVT Cluster operator type"
     subtitle="This action is irreversible, you will not be able to claim your current operator type back."
-    data-testid="confirmClaimIdvtcModal"
+    dataTestId={{ root: 'confirmClaimIdvtcModal' }}
   >
     <Stack direction="column" gap={24}>
       <Button onClick={onConfirm}>Continue</Button>

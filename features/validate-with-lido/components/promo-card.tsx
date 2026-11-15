@@ -39,9 +39,10 @@ const FILL = css`
 
 const GRADIENTS = { border: GRADIENT, fill: FILL };
 
-export const PromoCard = styled(Card)<PromoCardProps>`
+export const PromoCard = styled(Card).attrs({
+  align: 'stretch',
+})<PromoCardProps>`
   && {
-    align-items: stretch;
     border-radius: ${({ $radius = 'lg' }) => ($radius === 'xl' ? 32 : 20)}px;
     ${({ $gradient }) => $gradient && GRADIENTS[$gradient]}
   }

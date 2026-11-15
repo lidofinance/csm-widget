@@ -13,7 +13,7 @@ export const ConfirmRemoveReferrerModalApp: FC<
     onClose={onReject}
     title="Are you sure?"
     subtitle="Do you really want to delete referrer address and make your Buddy cry?"
-    data-testid="confirmRemoveReferrerModal"
+    dataTestId={{ root: 'confirmRemoveReferrerModal' }}
   >
     <Stack direction="column" gap={24} align="stretch">
       <Stack justify="center">
