@@ -1,5 +1,4 @@
 import { createGlobalStyle } from 'styled-components';
-import { NAV_MOBILE_MEDIA } from './constants';
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -18,17 +17,11 @@ const GlobalStyle = createGlobalStyle`
     background: var(--lido-app-ui-color-background-page);
     color: var(--lido-app-ui-color-text-default);
     font-family: var(--lido-app-ui-font-family);
-    position: relative;
-    box-sizing: border-box;
     font-size: var(--lido-app-ui-font-size-label);
     line-height: 1.5em;
     font-weight: 500;
     text-size-adjust: none;
-
-    width: 100vw;
     min-height: 100vh;
-    overflow-x: hidden;
-    padding-right: 0 !important;
   }
   /* lib (CSS-module) anchors own their colors */
   a:not([class*='-module_']) {
@@ -51,12 +44,6 @@ const GlobalStyle = createGlobalStyle`
 
   ol {
     padding-inline-start: 18px;
-  }
-
-  ${NAV_MOBILE_MEDIA} {
-    body {
-     overflow-x: inherit;
-    }
   }
 `;
 
