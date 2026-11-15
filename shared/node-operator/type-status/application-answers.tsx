@@ -1,7 +1,6 @@
-import { Copy, Modal, SectionTitle } from '@lidofinance/lido-app-ui';
+import { Copy, Input, Modal, SectionTitle } from '@lidofinance/lido-app-ui';
 import { FC, PropsWithChildren, ReactNode } from 'react';
 import { StretchStack } from 'shared/components';
-import { TrailingInput } from 'shared/hook-form/fields/trailing-input';
 import styled from 'styled-components';
 
 export const WideModalStyle = styled(Modal)`
@@ -40,7 +39,7 @@ export const AnswerField: FC<AnswerFieldProps> = ({
   label,
   error,
 }) => (
-  <TrailingInput
+  <Input
     disabled
     name={name}
     label={label}

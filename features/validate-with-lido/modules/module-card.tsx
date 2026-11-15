@@ -1,4 +1,10 @@
-import { Button, IconLink, Stack, Typography } from '@lidofinance/lido-app-ui';
+import {
+  Button,
+  IconLink,
+  Stack,
+  Typography,
+  downQuery,
+} from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FC, ReactNode } from 'react';
 import styled from 'styled-components';
@@ -19,7 +25,7 @@ type ModuleCardProps = {
 const Content = styled(Stack)`
   min-height: 192px;
 
-  @media (max-width: 599px) {
+  @media ${downQuery('sm')} {
     min-height: auto;
   }
 `;
@@ -27,7 +33,7 @@ const Content = styled(Stack)`
 const ModuleIllustration = styled(Illustration)`
   flex: none;
 
-  @media (max-width: 599px) {
+  @media ${downQuery('sm')} {
     && {
       width: 100px;
       height: 100px;

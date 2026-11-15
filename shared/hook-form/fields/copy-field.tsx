@@ -1,6 +1,5 @@
-import { IconCopy, Stack, Tag, useCopy } from '@lidofinance/lido-app-ui';
-import { FC, MouseEvent, ReactNode } from 'react';
-import { TrailingInput } from './trailing-input';
+import { IconCopy, Input, Stack, Tag, useCopy } from '@lidofinance/lido-app-ui';
+import { FC, ReactNode } from 'react';
 
 export type CopyFieldProps = {
   id?: string;
@@ -15,14 +14,6 @@ export type CopyFieldProps = {
   extra?: ReactNode;
 };
 
-// tags sit inside the input's label: default click would focus the input
-export const stopFocus =
-  (action: () => void) =>
-  (event: MouseEvent<HTMLElement>): void => {
-    event.preventDefault();
-    action();
-  };
-
 export const CopyField: FC<CopyFieldProps> = ({
   id,
   name,
@@ -35,7 +26,7 @@ export const CopyField: FC<CopyFieldProps> = ({
   const { copy } = useCopy(text, { onCopy });
 
   return (
-    <TrailingInput
+    <Input
       id={id}
       name={name}
       aria-label={label}
@@ -48,7 +39,7 @@ export const CopyField: FC<CopyFieldProps> = ({
           <Tag
             variant="action"
             icon={<IconCopy />}
-            onClick={stopFocus(() => void copy())}
+            onClick={() => void copy()}
             dataTestId={{ root: 'copyBtn' }}
           >
             Copy

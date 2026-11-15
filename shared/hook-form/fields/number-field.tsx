@@ -1,4 +1,4 @@
-import { InputProps } from '@lidofinance/lido-app-ui';
+import { Input, InputProps } from '@lidofinance/lido-app-ui';
 import { ChangeEvent, FC, ReactNode, useState } from 'react';
 import { FIELD_ERROR_TEST_ID } from './field-error';
 import {
@@ -7,7 +7,6 @@ import {
   NumberRange,
   parseNumberInput,
 } from './number-input';
-import { TrailingInput } from './trailing-input';
 import { useFieldController } from './use-field-controller';
 
 export type NumberFieldProps = NumberRange &
@@ -74,7 +73,7 @@ export const NumberField: FC<NumberFieldProps> = ({
   const rangeMessage = getNumberRangeError(field.value, range);
 
   return (
-    <TrailingInput
+    <Input
       trailing={trailing}
       autoComplete="off"
       {...rest}

@@ -1,7 +1,6 @@
-import { InputProps } from '@lidofinance/lido-app-ui';
+import { Input, InputProps } from '@lidofinance/lido-app-ui';
 import { FC, ReactNode } from 'react';
 import { FIELD_ERROR_TEST_ID } from './field-error';
-import { TrailingInput } from './trailing-input';
 import { useFieldController } from './use-field-controller';
 
 export type TextFieldProps = Omit<
@@ -41,7 +40,7 @@ export const TextField: FC<TextFieldProps> = ({
   });
 
   return (
-    <TrailingInput
+    <Input
       trailing={trailing}
       spellCheck={false}
       {...rest}

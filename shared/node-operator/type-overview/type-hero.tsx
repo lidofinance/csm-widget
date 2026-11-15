@@ -1,5 +1,5 @@
 import { OPERATOR_TYPE, TOKENS } from '@lidofinance/lido-csm-sdk';
-import { Body, Card, H1, StatItem } from '@lidofinance/lido-app-ui';
+import { Body, Card, H1, StatItem, downQuery } from '@lidofinance/lido-app-ui';
 import { OPERATOR_TYPE_METADATA } from 'consts';
 import { FC, ReactNode } from 'react';
 import { formatPercentKeyIntervalRows } from 'shared/components/parameters-list/format';
@@ -34,14 +34,14 @@ const StatsStyle = styled.div`
   gap: 32px;
   justify-content: start;
 
-  @media (max-width: 899px) {
+  @media ${downQuery('md')} {
     grid-template-columns: repeat(2, 1fr);
     width: 100%;
   }
 `;
 
 const CtaStyle = styled.div`
-  @media (max-width: 599px) {
+  @media ${downQuery('sm')} {
     align-self: stretch;
 
     button {
@@ -53,7 +53,7 @@ const CtaStyle = styled.div`
 const BadgeStyle = styled.div`
   flex: none;
 
-  @media (max-width: 899px) {
+  @media ${downQuery('md')} {
     display: none;
   }
 `;

@@ -1,3 +1,4 @@
+import { downQuery } from '@lidofinance/lido-app-ui';
 import styled, { css } from 'styled-components';
 import type {
   OptionListOrientation,
@@ -23,7 +24,7 @@ export const ListStyle = styled.div<{
     css`
       flex-direction: row;
 
-      @media (max-width: 899px) {
+      @media ${downQuery('md')} {
         flex-direction: column;
       }
     `}
@@ -114,7 +115,7 @@ export const ItemStyle = styled.div<ItemStyleProps>`
       min-width: 0;
       padding-right: 43px;
 
-      @media (max-width: 899px) {
+      @media ${downQuery('md')} {
         flex: none;
         padding-right: 15px;
         flex-direction: row;
@@ -200,7 +201,7 @@ export const IndicatorStyle = styled.span<{
       top: 15px;
       right: 15px;
 
-      @media (max-width: 899px) {
+      @media ${downQuery('md')} {
         position: static;
       }
     `}

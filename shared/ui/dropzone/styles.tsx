@@ -1,3 +1,4 @@
+import { downQuery } from '@lidofinance/lido-app-ui';
 import styled, { css } from 'styled-components';
 
 type RootStyleProps = {
@@ -40,7 +41,7 @@ export const RootStyle = styled.div<RootStyleProps>`
       opacity: 0.6;
     `}
 
-  @media (max-width: 599px) {
+  @media ${downQuery('sm')} {
     padding: 12px;
   }
 `;

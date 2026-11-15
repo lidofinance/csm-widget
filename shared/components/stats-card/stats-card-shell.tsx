@@ -1,4 +1,4 @@
-import { Card, Stack } from '@lidofinance/lido-app-ui';
+import { Card, Stack, downQuery } from '@lidofinance/lido-app-ui';
 import { FC, ReactNode } from 'react';
 import styled from 'styled-components';
 
@@ -16,7 +16,7 @@ const BodyStyled = styled(Stack)<{ $compactOnMobile?: boolean }>`
   ${({ $compactOnMobile }) =>
     $compactOnMobile &&
     `
-    @media (max-width: 599px) {
+    @media ${downQuery('sm')} {
       padding: 20px;
     }
   `}

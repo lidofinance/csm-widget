@@ -1,30 +1,11 @@
-import { Input, Spinner } from '@lidofinance/lido-app-ui';
-import styled, { css } from 'styled-components';
+import { Spinner } from '@lidofinance/lido-app-ui';
+import styled from 'styled-components';
 
 // matches the 20px Identicon in the same slot
 export const AddressSpinnerStyle = styled(Spinner)`
   && {
     --spinner-size: 20px;
   }
-`;
-
-// app-ui Input has no suffix slot: with $trailing its icon slot moves after the input
-export const TrailingInputStyle = styled(Input)<{ $trailing: boolean }>`
-  ${({ $trailing }) =>
-    $trailing &&
-    css`
-      && label > span[aria-hidden='true'] {
-        order: 1;
-        width: auto;
-        height: auto;
-      }
-    `}
-`;
-
-export const PercentSuffixStyle = styled.span`
-  color: var(--lido-app-ui-color-text-secondary);
-  font-size: var(--lido-app-ui-font-size-body);
-  line-height: var(--lido-app-ui-line-height-body);
 `;
 
 export const ConnectedAddressButtonStyle = styled.button`

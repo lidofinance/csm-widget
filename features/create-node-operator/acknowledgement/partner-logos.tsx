@@ -1,3 +1,4 @@
+import { AvatarStack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import styled from 'styled-components';
 import { trackMatomoEvent } from 'utils';
@@ -6,80 +7,37 @@ import {
   LowCodePartner,
 } from 'features/validate-with-lido/community-staking/low-code-partners';
 
-const LogosStyle = styled.span`
-  display: flex;
-  margin-top: 8px;
+const LogoImage = styled.img`
+  padding: 5px;
+  object-fit: contain;
 `;
 
-const LogoStyle = styled.span`
-  position: relative;
-  display: block;
-  flex: none;
-  width: 32px;
-  height: 32px;
-  overflow: hidden;
-  border-radius: 50%;
-  background: var(--lido-app-ui-color-background-surface);
-
-  &:not(:last-child) {
-    margin-right: -8px;
-  }
-
-  img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    padding: 5px;
-    box-sizing: border-box;
-    object-fit: contain;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    border: 1px solid var(--lido-app-ui-color-border-default);
-  }
-`;
-
-const LogoLinkStyle = LogoStyle.withComponent('a');
-
-const PartnerLogo: FC<{ partner: LowCodePartner; zIndex: number }> = ({
+const PartnerLogo: FC<{ partner: LowCodePartner }> = ({
   partner: { name, src, href, matomoEvent },
-  zIndex,
 }) => {
-  const image = <img src={src} alt={name} />;
+  const image = <LogoImage src={src} alt={name} title={name} />;
 
   return href ? (
-    <LogoLinkStyle
+    <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      title={name}
-      style={{ zIndex }}
+      aria-label={name}
       onClick={() => matomoEvent && trackMatomoEvent(matomoEvent)}
     >
       {image}
-    </LogoLinkStyle>
+    </a>
   ) : (
-    <LogoStyle title={name} style={{ zIndex }}>
-      {image}
-    </LogoStyle>
+    image
   );
 };
 
 const STARTER_PACK_PARTNERS = LOW_CODE_PARTNERS.filter((p) => p.starterPack);
 
 export const PartnerLogos: FC = () => (
-  <LogosStyle>
-    {STARTER_PACK_PARTNERS.map((partner, index) => (
-      <PartnerLogo
-        key={partner.name}
-        partner={partner}
-        zIndex={STARTER_PACK_PARTNERS.length - index}
-      />
+  <AvatarStack style={{ marginTop: 8 }}>
+    {STARTER_PACK_PARTNERS.map((partner) => (
+      <PartnerLogo key={partner.name} partner={partner} />
     ))}
-  </LogosStyle>
+  </AvatarStack>
 );

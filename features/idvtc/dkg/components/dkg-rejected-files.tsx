@@ -13,6 +13,16 @@ export const DkgRejectedFiles: FC<{
       icon
       role="alert"
       headline={`${rejected.length} file(s) were not uploaded`}
+      action={
+        <Button
+          size="small"
+          variant="outline"
+          type="button"
+          onClick={onDismiss}
+        >
+          Dismiss
+        </Button>
+      }
     >
       <ul>
         {rejected.map((r, i) => (
@@ -23,9 +33,6 @@ export const DkgRejectedFiles: FC<{
           </li>
         ))}
       </ul>
-      <Button size="small" variant="outline" type="button" onClick={onDismiss}>
-        Dismiss
-      </Button>
     </MessageBox>
   );
 };

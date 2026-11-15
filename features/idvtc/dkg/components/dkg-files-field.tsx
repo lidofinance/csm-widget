@@ -20,7 +20,6 @@ import { DkgAddFileButton } from './dkg-add-file-button';
 import { DkgDropArea } from './dkg-drop-area';
 import { DkgStagedTable } from './dkg-files-table';
 import { DkgRejectedFiles } from './dkg-rejected-files';
-import { AddButtonRow } from '../styles';
 
 export const DkgFilesField: FC<{ name?: string }> = ({ name = 'dkgFiles' }) => {
   const { control } = useFormContext();
@@ -61,9 +60,9 @@ export const DkgFilesField: FC<{ name?: string }> = ({ name = 'dkgFiles' }) => {
             </Caption>
           )}
           {staged.length !== 1 && (
-            <AddButtonRow>
+            <Stack align="start">
               <DkgAddFileButton onClick={zone.open} />
-            </AddButtonRow>
+            </Stack>
           )}
           <FieldError>{fieldState.error?.message}</FieldError>
         </Stack>

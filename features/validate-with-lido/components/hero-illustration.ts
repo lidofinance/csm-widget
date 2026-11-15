@@ -1,3 +1,4 @@
+import { downQuery } from '@lidofinance/lido-app-ui';
 import styled from 'styled-components';
 import { Illustration } from './illustration';
 
@@ -11,7 +12,7 @@ export const HeroIllustrationSlot = styled.div<FluidProps>`
   flex: none;
   width: 270px;
 
-  @media (max-width: 899px) {
+  @media ${downQuery('md')} {
     order: -1;
     width: 100%;
     ${({ $fluid }) => !$fluid && 'height: 160px;'}
@@ -22,7 +23,7 @@ export const HeroIllustration = styled(Illustration)<FluidProps>`
   flex: none;
   margin: -20px;
 
-  @media (max-width: 899px) {
+  @media ${downQuery('md')} {
     && {
       ${({ $fluid }) =>
         $fluid

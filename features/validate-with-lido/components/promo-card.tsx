@@ -1,4 +1,4 @@
-import { Card } from '@lidofinance/lido-app-ui';
+import { Card, downQuery } from '@lidofinance/lido-app-ui';
 import styled, { css } from 'styled-components';
 
 type PromoCardProps = {
@@ -46,7 +46,7 @@ export const PromoCard = styled(Card)<PromoCardProps>`
     ${({ $gradient }) => $gradient && GRADIENTS[$gradient]}
   }
 
-  @media (max-width: 599px) {
+  @media ${downQuery('sm')} {
     && {
       padding: 20px;
     }

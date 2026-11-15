@@ -1,4 +1,5 @@
 import {
+  AvatarStack,
   Divider,
   Grid,
   GridItem,
@@ -11,7 +12,6 @@ import {
 import { CSM_NODE_SETUP_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FC } from 'react';
-import styled from 'styled-components';
 import { trackMatomoEvent } from 'utils';
 import allnodes from 'assets/partners/simple-staking/allnodes.svg';
 import beaconchain from 'assets/partners/simple-staking/beaconchain.svg';
@@ -68,48 +68,13 @@ const BLOCKS: Block[] = [
   },
 ];
 
-const Chips = styled.div`
-  display: flex;
-`;
-
-const Chip = styled.span`
-  position: relative;
-  overflow: hidden;
-  flex: none;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--lido-app-ui-color-background-surface);
-
-  &:not(:last-child) {
-    margin-right: -8px;
-  }
-
-  img {
-    position: absolute;
-    inset: 0;
-    width: 24px;
-    height: 24px;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    border: 1px solid var(--lido-app-ui-color-border-default);
-  }
-`;
-
 const BlockView: FC<{ block: Block }> = ({ block }) => (
   <Stack direction="column" gap={8} align="start">
-    <Chips>
-      {block.partners.map(({ name, src }, index) => (
-        <Chip key={name} title={name} style={{ zIndex: 100 - index }}>
-          <img src={src} alt={name} width={24} height={24} />
-        </Chip>
+    <AvatarStack size={24}>
+      {block.partners.map(({ name, src }) => (
+        <img key={name} src={src} alt={name} title={name} />
       ))}
-    </Chips>
+    </AvatarStack>
     <Stack direction="column" gap={0}>
       <Typography variant="bodyLarge" weight="semibold">
         {block.title}

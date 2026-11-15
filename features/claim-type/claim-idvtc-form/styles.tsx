@@ -1,3 +1,4 @@
+import { downQuery } from '@lidofinance/lido-app-ui';
 import styled from 'styled-components';
 
 export const NarrowStyle = styled.div`
@@ -17,7 +18,7 @@ export const CardsGridStyle = styled.div`
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 
-  @media (max-width: 899px) {
+  @media ${downQuery('md')} {
     grid-template-columns: minmax(0, 1fr);
   }
 `;

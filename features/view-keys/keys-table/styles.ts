@@ -1,4 +1,4 @@
-import { Card, Stack } from '@lidofinance/lido-app-ui';
+import { Card, Stack, downQuery } from '@lidofinance/lido-app-ui';
 import styled from 'styled-components';
 
 export const TableCardStyled = styled(Card)`
@@ -12,7 +12,7 @@ export const TableCardStyled = styled(Card)`
 export const ChipsAreaStyled = styled(Stack)`
   padding: 32px 32px 0;
 
-  @media (max-width: 599px) {
+  @media ${downQuery('sm')} {
     padding: 16px 16px 0;
   }
 `;

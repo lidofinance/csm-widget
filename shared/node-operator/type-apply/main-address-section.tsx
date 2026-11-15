@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react';
-import { TrailingInput } from 'shared/hook-form/fields/trailing-input';
+import { Input } from '@lidofinance/lido-app-ui';
 import { VerifiedTag } from 'shared/node-operator/type-status/verified-tag';
 import { ApplySection } from './apply-section';
 
@@ -14,7 +14,7 @@ export const MainAddressSection: FC<Props> = ({ address, subtitle }) => (
     subtitle={subtitle}
     data-testid="mainAddressSection"
   >
-    <TrailingInput
+    <Input
       name="mainAddress"
       aria-label="Main address"
       value={address}

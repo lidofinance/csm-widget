@@ -38,7 +38,7 @@ describe('PercentField', () => {
     expect(input(html)).toContain('inputMode="decimal"');
     expect(input(html)).toContain('placeholder="0.00"');
     expect(input(html)).toContain('data-testid="shareInput"');
-    expect(html).toContain('>%</span>');
+    expect(html).toContain('>%</p>');
     expect(html).toContain('>Share, %</label>');
   });
 

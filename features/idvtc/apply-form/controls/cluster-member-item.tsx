@@ -9,12 +9,7 @@ import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { FC, useCallback, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { MemberCardStyle } from '../../form-status/styles';
-import {
-  AddressField,
-  CopyField,
-  TextField,
-  stopFocus,
-} from 'shared/hook-form/fields';
+import { AddressField, CopyField, TextField } from 'shared/hook-form/fields';
 import { VALIDATION_MESSAGES } from 'shared/hook-form/validation';
 import { VerifiedTag } from 'shared/node-operator/type-status';
 import { trackMatomoEvent } from 'utils';
@@ -141,7 +136,7 @@ export const ClusterMemberItem: FC<ClusterMemberItemProps> = ({ index }) => {
             trailing={
               <Tag
                 variant="error"
-                onClick={stopFocus(onClear)}
+                onClick={onClear}
                 dataTestId={{ root: 'clearBtn' }}
               >
                 Clear
@@ -170,7 +165,7 @@ export const ClusterMemberItem: FC<ClusterMemberItemProps> = ({ index }) => {
                   <Tag
                     variant="action"
                     icon={<IconLink />}
-                    onClick={stopFocus(openEtherscan)}
+                    onClick={openEtherscan}
                     dataTestId={{ root: 'signBtn' }}
                   >
                     Sign
@@ -191,7 +186,7 @@ export const ClusterMemberItem: FC<ClusterMemberItemProps> = ({ index }) => {
                   <Tag
                     variant="action"
                     disabled={isVerifying}
-                    onClick={stopFocus(() => void onVerify())}
+                    onClick={() => void onVerify()}
                     dataTestId={{ root: 'verifySignatureBtn' }}
                   >
                     {isVerifying ? 'Verifying...' : 'Verify'}

@@ -19,11 +19,6 @@ export const DropArea = styled.div<{ $dragActive?: boolean }>`
     `}
 `;
 
-export const AddButtonRow = styled.div`
-  display: flex;
-  justify-content: flex-start;
-`;
-
 export const DkgTable = styled.div`
   display: flex;
   flex-direction: column;
@@ -64,12 +59,6 @@ export const FileName = styled(Body)<{ $inactive?: boolean }>`
   white-space: nowrap;
   color: ${({ $inactive }) =>
     $inactive ? 'var(--lido-app-ui-color-text-tertiary)' : 'inherit'};
-`;
-
-export const EmptyStateIllustration = styled.span`
-  display: block;
-  line-height: 0;
-  color: var(--lido-app-ui-color-text-tertiary);
 `;
 
 export const DkgIllustration = styled(DkgFileWarning)`

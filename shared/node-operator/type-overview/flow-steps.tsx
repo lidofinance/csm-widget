@@ -1,5 +1,11 @@
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
-import { Body, Card, SectionTitle, Stack } from '@lidofinance/lido-app-ui';
+import {
+  Body,
+  Card,
+  SectionTitle,
+  Stack,
+  downQuery,
+} from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES, PATH } from 'consts';
 import { FC, ReactNode } from 'react';
 import { MatomoLink } from 'shared/components';
@@ -20,7 +26,7 @@ const GridStyle = styled.ol`
   padding: 0;
   list-style: none;
 
-  @media (max-width: 899px) {
+  @media ${downQuery('md')} {
     grid-template-columns: minmax(0, 1fr);
   }
 `;
@@ -51,7 +57,7 @@ const StepStyle = styled.li`
     padding-bottom: 0;
   }
 
-  @media (max-width: 899px) {
+  @media ${downQuery('md')} {
     &:nth-child(odd),
     &:nth-child(even) {
       margin: 0;

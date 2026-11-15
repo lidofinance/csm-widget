@@ -1,4 +1,4 @@
-import { Skeleton, Stack } from '@lidofinance/lido-app-ui';
+import { Skeleton, Stack, downQuery } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import styled from 'styled-components';
 import { ChipsAreaStyled, TableCardStyled } from './styles';
@@ -6,7 +6,7 @@ import { ChipsAreaStyled, TableCardStyled } from './styles';
 const RowStyled = styled(Stack)`
   padding: 20px 32px;
 
-  @media (max-width: 599px) {
+  @media ${downQuery('sm')} {
     padding: 20px 16px;
   }
 `;

@@ -5,6 +5,7 @@ import {
   Stack,
   StatItem,
   Typography,
+  downQuery,
 } from '@lidofinance/lido-app-ui';
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { CSM_DOCS_LINK } from 'consts/external-links';
@@ -26,7 +27,7 @@ import { isStatVisible, StatBody } from './stat-body';
 import { Stat, useCsmStats } from './use-csm-stats';
 
 const Buttons = styled(Stack)`
-  @media (max-width: 599px) {
+  @media ${downQuery('sm')} {
     && a,
     && button {
       width: 100%;

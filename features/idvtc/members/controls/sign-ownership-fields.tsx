@@ -10,9 +10,8 @@ import {
   useCopy,
 } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
-import { FC, MouseEvent } from 'react';
+import { FC } from 'react';
 import { StretchStack } from 'shared/components';
-import { TrailingInput } from 'shared/hook-form/fields/trailing-input';
 import { isAddress } from 'viem';
 import { useOperatorKey } from 'modules/surveys-sdk';
 import { trackMatomoEvent } from 'utils';
@@ -43,14 +42,6 @@ const openEtherscan = () => {
   trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.idvtcEtherscanSignaturesLink);
   window.open(ETHERSCAN_SIGNATURES_URL, '_blank', 'noopener,noreferrer');
 };
-
-// tags sit inside the input's label: default click would focus the input
-const stop =
-  (action: () => void) =>
-  (event: MouseEvent<HTMLElement>): void => {
-    event.preventDefault();
-    action();
-  };
 
 export const SignOwnershipFields: FC<SignOwnershipFieldsProps> = ({
   title,
@@ -89,7 +80,7 @@ export const SignOwnershipFields: FC<SignOwnershipFieldsProps> = ({
       </Stack>
 
       {verified ? (
-        <TrailingInput
+        <Input
           aria-label={title}
           value={address}
           readOnly
@@ -97,7 +88,7 @@ export const SignOwnershipFields: FC<SignOwnershipFieldsProps> = ({
             onClear && (
               <Tag
                 variant="action"
-                onClick={stop(onClear)}
+                onClick={onClear}
                 dataTestId={{ root: 'clearMemberBtn' }}
               >
                 Clear
@@ -119,7 +110,7 @@ export const SignOwnershipFields: FC<SignOwnershipFieldsProps> = ({
               disabled={disableAddress}
               onChange={(e) => onAddressChange(e.currentTarget.value)}
             />
-            <TrailingInput
+            <Input
               aria-label="Message to sign"
               value={message}
               readOnly
@@ -129,14 +120,14 @@ export const SignOwnershipFields: FC<SignOwnershipFieldsProps> = ({
                   <Tag
                     variant="action"
                     icon={<IconCopy />}
-                    onClick={stop(() => void copy())}
+                    onClick={() => void copy()}
                   >
                     Copy
                   </Tag>
                   <Tag
                     variant="action"
                     icon={<IconLink />}
-                    onClick={stop(openEtherscan)}
+                    onClick={openEtherscan}
                     dataTestId={{ root: 'signBtn' }}
                   >
                     Sign
@@ -150,7 +141,7 @@ export const SignOwnershipFields: FC<SignOwnershipFieldsProps> = ({
             <Description color="secondary">
               Step 2. Copy the signature and paste in the field below
             </Description>
-            <TrailingInput
+            <Input
               aria-label="Signature"
               placeholder="Signature"
               value={signature}
@@ -160,7 +151,7 @@ export const SignOwnershipFields: FC<SignOwnershipFieldsProps> = ({
                 <Tag
                   variant="action"
                   disabled={isVerifying}
-                  onClick={stop(onVerify)}
+                  onClick={onVerify}
                   dataTestId={{ root: 'verifySignatureBtn' }}
                 >
                   {isVerifying ? 'Verifying...' : 'Verify'}

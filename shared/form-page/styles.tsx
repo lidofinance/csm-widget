@@ -1,4 +1,4 @@
-import { Card } from '@lidofinance/lido-app-ui';
+import { Card, downQuery } from '@lidofinance/lido-app-ui';
 import styled from 'styled-components';
 
 export const SuccessHeroStyle = styled(Card)`
@@ -7,7 +7,7 @@ export const SuccessHeroStyle = styled(Card)`
     text-align: center;
   }
 
-  @media (max-width: 899px) {
+  @media ${downQuery('md')} {
     && {
       padding: 52px 20px;
     }

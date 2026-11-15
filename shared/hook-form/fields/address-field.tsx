@@ -2,6 +2,7 @@ import {
   Address,
   IconCheck,
   Identicon,
+  Input,
   Stack,
   Tag,
 } from '@lidofinance/lido-app-ui';
@@ -10,7 +11,6 @@ import { useFormContext } from 'react-hook-form';
 import { useEnsInput } from 'shared/hooks/use-ens-input';
 import { FIELD_ERROR_TEST_ID } from './field-error';
 import { AddressSpinnerStyle, ConnectedAddressButtonStyle } from './styles';
-import { TrailingInput } from './trailing-input';
 import { useFieldController } from './use-field-controller';
 
 export type AddressFieldProps = {
@@ -67,7 +67,7 @@ export const AddressField: FC<AddressFieldProps> = ({
   );
 
   return (
-    <TrailingInput
+    <Input
       ref={field.ref}
       name={field.name}
       value={inputValue}

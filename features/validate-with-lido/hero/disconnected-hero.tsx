@@ -1,4 +1,4 @@
-import { Button } from '@lidofinance/lido-app-ui';
+import { Button, Stack } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FC } from 'react';
 import { useConnectWallet } from 'shared/wallet/connect/use-connect-wallet';
@@ -26,7 +26,7 @@ export const DisconnectedHero: FC = () => {
         </>
       }
       actions={
-        <div>
+        <Stack align="start">
           <Button
             variant="primary"
             size="big"
@@ -36,7 +36,7 @@ export const DisconnectedHero: FC = () => {
           >
             Connect wallet
           </Button>
-        </div>
+        </Stack>
       }
     />
   );

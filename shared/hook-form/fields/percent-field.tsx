@@ -1,3 +1,4 @@
+import { Body, Input } from '@lidofinance/lido-app-ui';
 import { PERCENT_BASIS } from '@lidofinance/lido-csm-sdk';
 import { ChangeEvent, FC, ReactNode, useState } from 'react';
 import { FIELD_ERROR_TEST_ID } from './field-error';
@@ -6,7 +7,6 @@ import {
   getShownPercent,
   parsePercentInput,
 } from './percent-input';
-import { PercentSuffixStyle, TrailingInputStyle } from './styles';
 import { useFieldController } from './use-field-controller';
 
 export type PercentFieldProps = {
@@ -51,8 +51,7 @@ export const PercentField: FC<PercentFieldProps> = ({
   };
 
   return (
-    <TrailingInputStyle
-      $trailing
+    <Input
       ref={field.ref}
       name={field.name}
       value={getShownPercent(text, field.value, maxValue)}
@@ -63,7 +62,7 @@ export const PercentField: FC<PercentFieldProps> = ({
       autoComplete="off"
       placeholder={placeholder}
       label={label}
-      icon={<PercentSuffixStyle>%</PercentSuffixStyle>}
+      trailing={<Body color="secondary">%</Body>}
       error={error ?? message ?? invalid}
       dataTestId={{ input: testId, error: FIELD_ERROR_TEST_ID }}
     />

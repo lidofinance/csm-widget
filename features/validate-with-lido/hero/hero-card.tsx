@@ -1,4 +1,9 @@
-import { BodyLarge, Stack, Typography } from '@lidofinance/lido-app-ui';
+import {
+  BodyLarge,
+  Stack,
+  Typography,
+  downQuery,
+} from '@lidofinance/lido-app-ui';
 import { FC, ReactNode } from 'react';
 import styled from 'styled-components';
 import validateNom from 'assets/illustrations/validate-nom.webp';
@@ -13,7 +18,7 @@ const HeroPromoCard = styled(PromoCard)`
     padding: 32px 40px 40px;
   }
 
-  @media (max-width: 599px) {
+  @media ${downQuery('sm')} {
     && {
       padding: 20px;
     }

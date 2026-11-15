@@ -5,10 +5,10 @@ import { FC } from 'react';
 import { trackMatomoEvent } from 'utils';
 
 export const NormalizeNotice: FC = () => (
-  <MessageBox variant="warning" headline="You have unqueued keys">
-    You have keys that were not included in the deposit queue. To include them
-    in the queue - upload new keys, or normalize the queue.
-    <div>
+  <MessageBox
+    variant="warning"
+    headline="You have unqueued keys"
+    action={
       <Button
         size="small"
         variant="outline"
@@ -19,6 +19,9 @@ export const NormalizeNotice: FC = () => (
       >
         Normalize queue
       </Button>
-    </div>
+    }
+  >
+    You have keys that were not included in the deposit queue. To include them
+    in the queue - upload new keys, or normalize the queue.
   </MessageBox>
 );

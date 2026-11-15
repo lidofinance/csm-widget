@@ -1,4 +1,4 @@
-import { Divider } from '@lidofinance/lido-app-ui';
+import { Divider, downQuery } from '@lidofinance/lido-app-ui';
 import {
   useModule,
   useNodeOperatorId,
@@ -23,7 +23,7 @@ import { ChipsAreaStyled, TableCardStyled } from './styles';
 const ChipsAreaSpacedStyled = styled(ChipsAreaStyled)`
   margin-bottom: 32px;
 
-  @media (max-width: 599px) {
+  @media ${downQuery('sm')} {
     margin-bottom: 16px;
   }
 `;

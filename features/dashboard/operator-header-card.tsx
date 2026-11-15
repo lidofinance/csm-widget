@@ -4,6 +4,7 @@ import {
   Skeleton,
   TextLink,
   Typography,
+  downQuery,
 } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES, PATH } from 'consts';
 import {
@@ -54,7 +55,7 @@ const HeaderGrid = styled.div<{
   row-gap: ${({ $tight }) => ($tight ? 8 : 12)}px;
   align-items: start;
 
-  @media (max-width: 900px) {
+  @media ${downQuery('md')} {
     grid-template-columns: 52px minmax(0, 1fr);
     grid-template-areas: ${({ $hasDesc, $hasSettings }) =>
       gridAreas(
@@ -73,7 +74,7 @@ const AvatarArea = styled.div`
   width: 72px;
   height: 72px;
 
-  @media (max-width: 900px) {
+  @media ${downQuery('md')} {
     width: 52px;
     height: 52px;
   }
@@ -84,7 +85,7 @@ const AvatarScale = styled.div`
   height: 72px;
   transform-origin: top left;
 
-  @media (max-width: 900px) {
+  @media ${downQuery('md')} {
     transform: scale(0.7222);
   }
 `;
@@ -97,7 +98,7 @@ const TitleArea = styled.div`
   gap: 8px;
   min-width: 0;
 
-  @media (max-width: 900px) {
+  @media ${downQuery('md')} {
     flex-direction: column;
     align-items: flex-start;
     align-self: center;
@@ -116,7 +117,7 @@ const MetaArea = styled.div`
   gap: 4px 20px;
   min-width: 0;
 
-  @media (max-width: 900px) {
+  @media ${downQuery('md')} {
     flex-direction: column;
     gap: 4px;
   }
