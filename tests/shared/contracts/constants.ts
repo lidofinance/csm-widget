@@ -22,7 +22,7 @@ export type Addresses = {
   gates: Partial<Record<GateSelector, Hex>>;
 };
 
-const CHAIN_ID = {
+export const CHAIN_ID = {
   mainnet: CHAINS.Mainnet,
   hoodi: CHAINS.Hoodi,
 } as const satisfies Record<ChainName, CHAINS>;
