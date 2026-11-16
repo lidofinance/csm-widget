@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { type GasEstimate } from '@lidofinance/lido-csm-sdk';
 import { type FieldValues } from 'react-hook-form';
 import { handleTxError } from 'shared/transaction-modal';
 import { type FormSubmitter } from './types';
@@ -7,6 +8,7 @@ import { type FormSubmitter } from './types';
 export type Executable = {
   confirm?: () => Promise<boolean>;
   submit: () => Promise<unknown>;
+  estimate?: () => Promise<GasEstimate>;
   onError?: () => void;
 };
 

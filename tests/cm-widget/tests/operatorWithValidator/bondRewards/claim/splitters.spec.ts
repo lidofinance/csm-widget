@@ -59,15 +59,15 @@ test.describe(
     });
 
     test(
-      qase(334, 'Should show "SPLITTERS ON" chip with tooltip'),
+      qase(334, 'Should show "Splitters ON" chip with tooltip'),
       async ({ widgetService, secretPhrase }) => {
         const { claim } = widgetService.bondRewardsPage;
 
-        await test.step('"SPLITTERS ON" chip is visible', async () => {
+        await test.step('"Splitters ON" chip is visible', async () => {
           await expect(claim.splittersChip).toBeVisible({
             timeout: PAGE_WAIT_TIMEOUT,
           });
-          await expect(claim.splittersChip).toContainText('SPLITTERS ON');
+          await expect(claim.splittersChip).toContainText('Splitters ON');
         });
 
         await test.step('Chip tooltip shows distribution text and correct addresses', async () => {
@@ -107,12 +107,12 @@ test.describe(
           ).toBeEnabled({ timeout: PAGE_WAIT_TIMEOUT });
           await expect(
             claim.getClaimOptionLabel(CLAIM_OPTION.ALL_TO_RA),
-          ).toHaveText(
-            'Rewards → Splitter addresses, Excess Bond → Rewards Address',
-          );
+          ).toHaveText('Cash out');
           await expect(
             claim.getClaimOptionDescription(CLAIM_OPTION.ALL_TO_RA),
-          ).toHaveText('Split rewards and claim Excess bond');
+          ).toHaveText(
+            'Split Rewards and claim Excess Bond to Rewards Address',
+          );
         });
 
         await test.step('"Excess Bond" option', async () => {
@@ -121,10 +121,12 @@ test.describe(
           ).toBeEnabled();
           await expect(
             claim.getClaimOptionLabel(CLAIM_OPTION.BOND_TO_RA),
-          ).toHaveText('Excess Bond → Rewards Address');
+          ).toHaveText('Excess bond only');
           await expect(
             claim.getClaimOptionDescription(CLAIM_OPTION.BOND_TO_RA),
-          ).toHaveText('Claim only Excess Bond. Rewards remain unclaimed.');
+          ).toHaveText(
+            'Claim only Excess Bond. Rewards remain unclaimed to Rewards Address.',
+          );
         });
 
         await test.step('"Rewards to Bond" option', async () => {
@@ -133,10 +135,10 @@ test.describe(
           ).toBeEnabled();
           await expect(
             claim.getClaimOptionLabel(CLAIM_OPTION.REWARDS_TO_BOND),
-          ).toHaveText('Rewards → Splitter addresses → Excess bond');
+          ).toHaveText('Compound');
           await expect(
             claim.getClaimOptionDescription(CLAIM_OPTION.REWARDS_TO_BOND),
-          ).toHaveText('Split rewards, send remaining to Excess bond');
+          ).toHaveText('Split Rewards and send the rest to Bond');
         });
       },
     );
@@ -160,7 +162,7 @@ test.describe(
             timeout: PAGE_WAIT_TIMEOUT,
           });
           await expect(claim.splittersSummary).toContainText(
-            'Splitter addresses (3) will receive',
+            'To splitters (3)',
           );
         });
 

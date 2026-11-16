@@ -16,10 +16,6 @@ export class SubmitApplicationForm extends BasePage {
   additionalAddressesSection: Locator;
   addNewAddressBtn: Locator;
 
-  // Socials section
-  socialProofSection: Locator;
-  socialProofTitile: Locator;
-
   // Twitter section
   twitterSection: Locator;
   twitterProofStep1: Locator;
@@ -63,12 +59,8 @@ export class SubmitApplicationForm extends BasePage {
     this.addNewAddressBtn =
       this.additionalAddressesSection.getByTestId('addNewAddressBtn');
 
-    // socialsSection
-    this.socialProofSection = this.form.getByTestId('socialProofSection');
-    this.socialProofTitile = this.socialProofSection.getByTestId('formTitle');
-
     // twitterSection
-    this.twitterSection = this.socialProofSection.getByTestId('twitterSection');
+    this.twitterSection = this.form.getByTestId('twitterSection');
     this.twitterProofStep1 =
       this.twitterSection.getByTestId('twitterProofStep1');
     this.twitterProofStep1Input =
@@ -79,7 +71,7 @@ export class SubmitApplicationForm extends BasePage {
       this.twitterSection.getByTestId('twitterProofStep2');
 
     // discordSection
-    this.discordSection = this.socialProofSection.getByTestId('discordSection');
+    this.discordSection = this.form.getByTestId('discordSection');
     this.discordProofStep1 =
       this.discordSection.getByTestId('discordProofStep1');
     this.discordProofStep1Input =
@@ -90,9 +82,7 @@ export class SubmitApplicationForm extends BasePage {
       this.discordSection.getByTestId('discordProofStep2');
 
     // btn
-    this.submitBtn = this.form.getByRole('button', {
-      name: 'Submit application',
-    });
+    this.submitBtn = this.form.getByTestId('submitBtn');
   }
 
   getAdditionalAddressFieldByIndex(index: number) {

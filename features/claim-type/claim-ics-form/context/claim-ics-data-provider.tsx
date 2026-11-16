@@ -14,7 +14,7 @@ import {
   useOperatorCurveId,
   useOperatorIsOwner,
 } from 'modules/web3';
-import { FC, PropsWithChildren, useCallback, useState } from 'react';
+import { FC, PropsWithChildren, useCallback } from 'react';
 import {
   FormDataContext,
   NetworkData,
@@ -24,8 +24,6 @@ import { useCanClaimICS, useInvalidate } from 'shared/hooks';
 import { type ClaimIcsFormNetworkData } from './types';
 
 const useClaimIcsFormNetworkData: NetworkData<ClaimIcsFormNetworkData> = () => {
-  const [justClaimed, setJustClaimed] = useState(false);
-
   const { address } = useDappStatus();
   const { nodeOperator } = useNodeOperator<true>();
   const { nodeOperatorId } = nodeOperator;
@@ -66,8 +64,6 @@ const useClaimIcsFormNetworkData: NetworkData<ClaimIcsFormNetworkData> = () => {
       KEY_OPERATOR_BALANCE,
       KEY_OPERATOR_KEYS,
     ]);
-
-    setJustClaimed(true);
   }, [invalidate]);
 
   const isPending =
@@ -90,7 +86,6 @@ const useClaimIcsFormNetworkData: NetworkData<ClaimIcsFormNetworkData> = () => {
       newParameters,
       proof,
       canClaimCurve,
-      justClaimed,
     } as ClaimIcsFormNetworkData,
     isPending,
     revalidate,

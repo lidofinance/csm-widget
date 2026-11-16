@@ -22,9 +22,9 @@ export const getPriorityName = (type: GraphPart, module?: MODULE_NAME) => {
     case 'limit':
       return 'CSM stake limit';
     case 'queue':
-      return 'Queued keys';
+      return 'Queued keys under limit';
     case 'queueOverLimit':
-      return 'Queued keys (over limit)';
+      return 'Queued keys over limit';
     case 'priority0':
       return 'Priority queue';
     case 'priority1':

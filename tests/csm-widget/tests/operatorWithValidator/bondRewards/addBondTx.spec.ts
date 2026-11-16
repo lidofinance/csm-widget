@@ -4,6 +4,7 @@ import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags } from 'tests/shared/consts/common.const';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { parseAmount } from 'tests/csm-widget/consts/delayedPenalty.const';
 import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
@@ -41,10 +42,10 @@ test.describe(
             const expectedBalance =
               parseFloat(bondSummary.excess) + parseFloat(bondAmount);
             const actualBalance =
-              await bondRewardsPage.addBond.titledAmountBalance.textContent();
+              await bondRewardsPage.addBond.bondStat.textContent();
 
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            expect(parseFloat(actualBalance!)).toBeCloseTo(expectedBalance);
+            const amount = actualBalance?.match(/\d[\d,]*\.?\d*/)?.[0] ?? null;
+            expect(parseAmount(amount)).toBeCloseTo(expectedBalance);
           });
         },
       );

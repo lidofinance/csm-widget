@@ -9,8 +9,3 @@ export const WarningIcon = styled.img.attrs({
   width: 58px;
   height: 51px;
 `;
-
-export const BannerWrapper = styled.div`
-  padding-block: ${({ theme }) => theme.spaceMap.sm}px
-    ${({ theme }) => theme.spaceMap.xxl}px;
-`;

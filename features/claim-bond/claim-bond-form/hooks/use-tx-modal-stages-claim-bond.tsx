@@ -14,7 +14,7 @@ import {
   ClaimBondFormInputType,
   ClaimBondFormNetworkData,
 } from '../context/types';
-import { computeClaimBreakdown } from './use-claim-breakdown';
+import { getClaimBreakdown } from './use-claim-breakdown';
 import { TxStageClaim } from './tx-stage-claim';
 import { OtherOperatorsClaimable } from './other-operators-claimable';
 
@@ -23,7 +23,7 @@ const { stakeWidget } = getExternalLinks();
 export const useTxModalStagesClaimBond = () =>
   useTxStages<ClaimBondFormInputType, ClaimBondFormNetworkData>(
     (transitStage, input, data) => {
-      const breakdown = computeClaimBreakdown(input, data);
+      const breakdown = getClaimBreakdown(input, data);
       const { toRA } = breakdown;
 
       return {

@@ -1,5 +1,6 @@
 export * from './handle-tx-error';
 export * from './is-closable-on-ledger';
+export * from './form-modal-shell';
 export * from './transaction-modal-content';
 export * from './transaction-modal';
 export * from './hooks';

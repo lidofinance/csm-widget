@@ -5,7 +5,6 @@ import type {
 
 export type MemberCardState =
   | { kind: 'idle' }
-  | { kind: 'editing' }
   | { kind: 'pending'; proposed: ProposedSlotDto }
   | {
       kind: 'rejected';
@@ -17,9 +16,7 @@ export type MemberCardState =
 export const deriveMemberCardState = (
   index: number,
   request: RotationRequestDto | null,
-  editingIndex: number | null,
 ): MemberCardState => {
-  if (editingIndex === index) return { kind: 'editing' };
   const proposed = request?.slots[index];
   if (!proposed?.newAddress) return { kind: 'idle' };
   if (request?.status === 'REVIEW') return { kind: 'pending', proposed };

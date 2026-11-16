@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Button, Text } from '@lidofinance/lido-ui';
+import { Body, Button, MessageBox } from '@lidofinance/lido-app-ui';
 import type { RejectedDkgFile } from '../types';
 
 export const DkgRejectedFiles: FC<{
@@ -8,22 +8,24 @@ export const DkgRejectedFiles: FC<{
 }> = ({ rejected, onDismiss }) => {
   if (rejected.length === 0) return null;
   return (
-    <div role="alert">
-      <Text size="xs" color="error">
-        {rejected.length} file(s) were not uploaded:
-      </Text>
+    <MessageBox
+      variant="error"
+      icon
+      role="alert"
+      headline={`${rejected.length} file(s) were not uploaded`}
+    >
       <ul>
         {rejected.map((r, i) => (
           <li key={`${r.name}-${i}`}>
-            <Text size="xs" color="error">
+            <Body color="error">
               {r.name} — {r.reason}
-            </Text>
+            </Body>
           </li>
         ))}
       </ul>
-      <Button size="xs" variant="text" onClick={onDismiss}>
+      <Button size="small" variant="outline" type="button" onClick={onDismiss}>
         Dismiss
       </Button>
-    </div>
+    </MessageBox>
   );
 };

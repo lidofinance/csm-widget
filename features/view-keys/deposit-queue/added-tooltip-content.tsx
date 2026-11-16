@@ -1,6 +1,5 @@
-import { Divider } from '@lidofinance/lido-ui';
+import { Divider, Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import { Stack } from 'shared/components';
 import { getPriorityName } from './get-priority-name';
 import { QueueAmount } from './queue-amount';
 import { TooltipContentStyle } from './style';
@@ -16,7 +15,7 @@ export const AddedTooltipContent: FC<AddedTooltipContentProps> = ({
   unit,
 }) => {
   return (
-    <Stack direction="column" gap="sm">
+    <Stack direction="column" gap={8}>
       {metadata.map((item, index) => (
         <>
           {index > 0 && <Divider />}

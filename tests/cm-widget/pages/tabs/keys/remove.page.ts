@@ -8,9 +8,9 @@ export class RemovePage extends BasePage {
   keyCheckbox: Locator;
   numberOfKeysToRemove: Locator;
   numberOfKeysToRemoveValue: Locator;
-  ejectionCostInput: Locator;
-  ejectionCostLabel: Locator;
-  ejectionCostInputSVG: Locator;
+  removalFee: Locator;
+  removalFeeValue: Locator;
+  removalFeeInfoIcon: Locator;
 
   removalFeeInfoTooltipText: Locator;
 
@@ -25,18 +25,16 @@ export class RemovePage extends BasePage {
     this.numberOfKeysToRemove = this.removeKeysForm.getByTestId(
       'numbersOfKeysToRemove',
     );
-    this.numberOfKeysToRemoveValue = this.numberOfKeysToRemove
-      .locator('div')
-      .nth(1);
-    this.ejectionCostInput = this.removeKeysForm.getByTestId(
-      'ejectionCostAmountInput',
+    this.numberOfKeysToRemoveValue = this.removeKeysForm.getByTestId(
+      'numbersOfKeysToRemoveValue',
     );
-    this.ejectionCostLabel = this.removeKeysForm.locator(
-      'xpath=//input[@data-testid="ejectionCostAmountInput"]/ancestor::label',
-    );
-    this.ejectionCostInputSVG = this.ejectionCostLabel.locator('svg');
+    this.removalFee = this.removeKeysForm.getByTestId('removalFee');
+    this.removalFeeValue = this.removeKeysForm.getByTestId('removalFeeValue');
+    this.removalFeeInfoIcon = this.removalFee.getByRole('img', {
+      name: 'More info',
+    });
 
-    this.removalFeeInfoTooltipText = this.page.locator('#lido-ui-modal-root');
+    this.removalFeeInfoTooltipText = this.page.getByRole('tooltip');
 
     this.excessBondAfterExecution = this.removeKeysForm.getByTestId(
       'excessBondAfterExecution',
@@ -48,15 +46,17 @@ export class RemovePage extends BasePage {
 
   async open() {
     await test.step('Open remove tab for Keys page', async () => {
-      await this.openWithRetry('/keys/remove', this.removeKeysForm);
+      await this.openWithRetry('/keys/delete?mode=remove', this.removeKeysForm);
     });
   }
 
   getCheckboxByAddress(key: string) {
     const trimmedPubkey = trimAddress(`0x${key}`, 16);
     return this.page
-      .locator('label', { hasText: trimmedPubkey })
-      .locator('svg');
+      .getByTestId('keyRow')
+      .filter({ hasText: trimmedPubkey })
+      .locator('label svg')
+      .first();
   }
 
   async getRandomKeys(count = 1) {

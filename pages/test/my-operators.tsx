@@ -1,63 +1,76 @@
-import { Block, Text } from '@lidofinance/lido-ui';
+import { Body, Card } from '@lidofinance/lido-app-ui';
 import { OtherOperatorsClaimable } from 'features/claim-bond/claim-bond-form/hooks/other-operators-claimable';
 import { MyOperators } from 'features/my-operators/my-operators';
 import { MockMyOperatorsProvider } from 'mock/my-operators/mock-providers';
+import { parseMyOperatorsVariant } from 'mock/my-operators/variants';
+import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { Layout } from 'shared/layout';
 import { TxStageSuccess } from 'shared/transaction-modal';
 import styled from 'styled-components';
 import { getTestProps } from 'utilsApi';
 
-const Container = styled.div`
+const NarrowBlock = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
+  width: 100%;
   max-width: 800px;
   margin: 0 auto;
 `;
 
-const PreviewBlock = styled(Block)`
+const PreviewCard = styled(Card)`
   max-width: 400px;
   padding: 24px;
   margin: 0 auto;
 `;
 
-// Expect: 3 cards, summary "23 / 26" active validators with "2 issues" chip.
-// #38 shows the pending-change icon on Manager, Insufficient bond, and 2 issues;
-// #37 is active (Go to dashboard); #38 and #40 show Switch.
-const MyOperatorsTestPage: FC = () => (
-  <Layout dummy title="My operators stand">
-    <Container>
-      <MockMyOperatorsProvider>
-        <MyOperators />
+const PreviewRoot = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+`;
 
-        {/* Active operator is #37; only #40 has a positive claimable balance, so
-            #38 (0 claimable after rewards cover its bond deficit) is excluded. */}
-        <Text size="sm" weight={700}>
-          Other operators claimable (bare)
-        </Text>
-        <Block>
-          <OtherOperatorsClaimable />
-        </Block>
+// ?variant=csm-one | csm-many (default) | cm-group+csm | cm-ungrouped | cm-two-groups
+const MyOperatorsTestPage: FC = () => {
+  const router = useRouter();
+  if (!router.isReady) return null;
 
-        <Text size="sm" weight={700}>
-          Other operators claimable (success-stage preview)
-        </Text>
-        <PreviewBlock>
-          <TxStageSuccess
-            title="Requested amount has been successfully claimed"
-            description={
-              <>
-                Transaction can be viewed on Etherscan.
-                <OtherOperatorsClaimable />
-              </>
-            }
-          />
-        </PreviewBlock>
+  const variant = parseMyOperatorsVariant(router.query.variant);
+
+  return (
+    <Layout dummy wide title="My operators stand">
+      <MockMyOperatorsProvider key={variant} variant={variant}>
+        <PreviewRoot>
+          <MyOperators />
+          <NarrowBlock>
+            {/* Active operator is #37; only #40 has a positive claimable balance, so
+                #38 (0 claimable after rewards cover its bond deficit) is excluded. */}
+            <Body weight="bold">Other operators claimable (bare)</Body>
+            <Card>
+              <OtherOperatorsClaimable />
+            </Card>
+
+            <Body weight="bold">
+              Other operators claimable (success-stage preview)
+            </Body>
+            <PreviewCard>
+              <TxStageSuccess
+                title="Requested amount has been successfully claimed"
+                description={
+                  <>
+                    Transaction can be viewed on Etherscan.
+                    <OtherOperatorsClaimable />
+                  </>
+                }
+              />
+            </PreviewCard>
+          </NarrowBlock>
+        </PreviewRoot>
       </MockMyOperatorsProvider>
-    </Container>
-  </Layout>
-);
+    </Layout>
+  );
+};
 
 export default MyOperatorsTestPage;
 

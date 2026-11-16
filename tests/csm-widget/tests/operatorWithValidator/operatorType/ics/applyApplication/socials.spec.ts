@@ -47,21 +47,17 @@ test.describe(
 
         await test.step('Verify main texts', async () => {
           await expect(
-            applicationForm.submitApplicationForm.socialProofSection,
+            applicationForm.submitApplicationForm.twitterSection,
           ).toContainText(
-            'You can add your social accounts. To prove you own an account, post a message. For more info see the guide',
+            'You can add your social accounts. To prove you own an account, post a message.',
           );
-
-          await expect(
-            applicationForm.submitApplicationForm.socialProofTitile,
-          ).toContainText('Optional');
         });
 
         await test.step('Verify link in socials section', async () => {
           const guideLink =
-            applicationForm.submitApplicationForm.socialProofSection.getByRole(
+            applicationForm.submitApplicationForm.twitterSection.getByRole(
               'link',
-              { name: 'the guide' },
+              { name: 'View the guide' },
             );
           await expect(guideLink).toHaveAttribute(
             'href',
@@ -78,7 +74,9 @@ test.describe(
 
         await test.step('Verify Twitter section texts', async () => {
           await expect(
-            applicationForm.submitApplicationForm.twitterSection.locator('h4'),
+            applicationForm.submitApplicationForm.twitterSection.getByTestId(
+              'formTitle',
+            ),
           ).toContainText('X (formerly Twitter)');
           await expect(
             applicationForm.submitApplicationForm.twitterProofStep1,
@@ -113,7 +111,9 @@ test.describe(
 
         await test.step('Verify Discord section texts', async () => {
           await expect(
-            applicationForm.submitApplicationForm.discordSection.locator('h4'),
+            applicationForm.submitApplicationForm.discordSection.getByTestId(
+              'formTitle',
+            ),
           ).toContainText('Discord');
           await expect(
             applicationForm.submitApplicationForm.discordProofStep1,
@@ -213,7 +213,7 @@ test.describe(
             applicationForm.submitApplicationForm.twitterProofStep2.locator(
               'input',
             ),
-          ).toHaveAttribute('placeholder', 'https://x.com/username/status/...');
+          ).toHaveAttribute('placeholder', 'X post link');
           await expect(
             applicationForm.submitApplicationForm.twitterProofStep2.getByText(
               'Must be a valid Twitter/X status URL',
@@ -244,7 +244,7 @@ test.describe(
             applicationForm.submitApplicationForm.discordProofStep2.locator(
               'input',
             ),
-          ).toHaveAttribute('placeholder', 'https://discord.com/channels/...');
+          ).toHaveAttribute('placeholder', 'Discord message link');
           await expect(
             applicationForm.submitApplicationForm.discordProofStep2.getByText(
               'Must be a valid Discord message URL',

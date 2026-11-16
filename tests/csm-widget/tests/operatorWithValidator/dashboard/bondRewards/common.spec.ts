@@ -28,8 +28,8 @@ test.describe(
             'e_n',
             'csm_widget_dashboard_bond_section',
           ),
-          widgetService.page.waitForURL('**/bond/claim'),
-          widgetService.dashboardPage.bondRewards.sectionHeaderLink.click(),
+          widgetService.page.waitForURL(/\/bond$/),
+          widgetService.dashboardPage.balanceCard.link.click(),
         ]);
       },
     );

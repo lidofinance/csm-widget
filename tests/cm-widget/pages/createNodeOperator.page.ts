@@ -9,6 +9,8 @@ import {
 
 export class CreateNodeOperatorPage extends BasePage {
   curatedOperatorForm: Locator;
+  stepHeader: Locator;
+  successScreen: Locator;
   step1: CreateOperatorStep1Page;
   step2: CreateOperatorStep2Page;
   step3: CreateOperatorStep3Page;
@@ -18,10 +20,29 @@ export class CreateNodeOperatorPage extends BasePage {
     super(page);
 
     this.curatedOperatorForm = this.page.getByTestId('curatedOperatorForm');
-    this.step1 = new CreateOperatorStep1Page(page, this.curatedOperatorForm);
-    this.step2 = new CreateOperatorStep2Page(page, this.curatedOperatorForm);
-    this.step3 = new CreateOperatorStep3Page(page, this.curatedOperatorForm);
-    this.step4 = new CreateOperatorStep4Page(page, this.curatedOperatorForm);
+    // Stepper and step heading sit above the form card
+    this.stepHeader = this.page.getByTestId('curatedOperatorHeader');
+    this.successScreen = this.page.getByTestId('successScreen');
+    this.step1 = new CreateOperatorStep1Page(
+      page,
+      this.curatedOperatorForm,
+      this.stepHeader,
+    );
+    this.step2 = new CreateOperatorStep2Page(
+      page,
+      this.curatedOperatorForm,
+      this.stepHeader,
+    );
+    this.step3 = new CreateOperatorStep3Page(
+      page,
+      this.curatedOperatorForm,
+      this.stepHeader,
+    );
+    this.step4 = new CreateOperatorStep4Page(
+      page,
+      this.curatedOperatorForm,
+      this.stepHeader,
+    );
   }
 
   async open() {

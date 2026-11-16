@@ -7,19 +7,16 @@ import {
 // https://nextjs.org/docs/pages/api-reference/next-config-js/basePath
 const basePath = process.env.BASE_PATH;
 
-const moduleMode = (process.env.MODULE || 'csm').toUpperCase();
-const moduleName = moduleMode.toLowerCase();
-
 // cache control
 export const CACHE_CONTROL_PAGES = [
   // documents — statically prerendered, same HTML for every visitor; uncovered
   // routes get Next's 1-year s-maxage, which outlives build chunk hashes
   '/',
+  '/csm',
   '/group',
   '/monitoring',
   '/operators',
   '/qa-config',
-  '/wrapped-2025/:path*',
   '/bond/:path*',
   '/create/:path*',
   '/delayed-penalty/:path*',
@@ -30,14 +27,11 @@ export const CACHE_CONTROL_PAGES = [
   '/surveys/:path*',
   '/type/:path*',
   '/test/:path*',
-  // assets — unhashed, so they share the document TTL; header sources match
-  // pre-rewrite paths, so module-variant files are listed too
+  // assets — unhashed, so they share the document TTL
   '/manifest.json',
-  '/manifest-:module(csm|cm).json',
   '/favicon:suffix([-.a-z0-9]+)',
   '/apple-touch-icon.png',
-  '/apple-touch-icon-:module(csm|cm).png',
-  '/:module(csm|cm)-preview.png',
+  '/operators-preview.png',
 ];
 
 // devDependency, absent from the production image where this config is re-evaluated on boot
@@ -48,10 +42,7 @@ const withBundleAnalyzer = process.env.ANALYZE_BUNDLE
 
 export default withBundleAnalyzer({
   basePath,
-  // re-evaluated on boot, so MODULE picks the matching build
-  distDir: `.next/${moduleName}`,
   env: {
-    MODULE: moduleMode,
     BASE_PATH: basePath ?? '',
   },
   generateBuildId,
@@ -82,7 +73,7 @@ export default withBundleAnalyzer({
     if (imageRule) imageRule.exclude = /\.svg$/i;
 
     config.module.rules.push(
-      // `issuer` keeps both off SVGs referenced from CSS (e.g. @lidofinance/lido-shared-ui)
+      // `issuer` keeps both off SVGs referenced from CSS (e.g. @lidofinance/lido-app-ui)
       {
         test: /\.svg$/i,
         issuer: /\.[jt]sx?$/,
@@ -185,29 +176,13 @@ export default withBundleAnalyzer({
       },
       {
         // required for gnosis save apps
-        source: '/manifest:suffix(-[a-z]+)?.json',
+        source: '/manifest.json',
         headers: [{ key: 'Access-Control-Allow-Origin', value: '*' }],
       },
       ...CACHE_CONTROL_PAGES.map((page) => ({
         source: page,
         headers: [{ key: CACHE_CONTROL_HEADER, value: CACHE_CONTROL_VALUE }],
       })),
-    ];
-  },
-  // serves the module-specific assets shipped in public/ under the canonical
-  // paths Gnosis Safe Apps and browsers expect (/manifest.json, /favicon.ico)
-  async rewrites() {
-    return [
-      { source: '/manifest.json', destination: `/manifest-${moduleName}.json` },
-      { source: '/favicon.ico', destination: `/favicon-${moduleName}.ico` },
-      {
-        source: '/favicon-:size(16x16|32x32|192x192|512x512).png',
-        destination: `/favicon-${moduleName}-:size.png`,
-      },
-      {
-        source: '/apple-touch-icon.png',
-        destination: `/apple-touch-icon-${moduleName}.png`,
-      },
     ];
   },
 });

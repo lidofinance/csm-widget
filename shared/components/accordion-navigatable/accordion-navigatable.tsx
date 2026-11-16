@@ -1,28 +1,38 @@
-import { Accordion } from '@lidofinance/lido-ui';
+import { Accordion } from '@lidofinance/lido-app-ui';
 import { useInpageNavigation } from 'providers/inpage-navigation';
-import { useCallback, useEffect } from 'react';
+import { ComponentProps, useCallback, useEffect } from 'react';
 import { trackMatomoFaqEvent } from 'utils';
 
-type AccordionNavigatableProps = React.ComponentProps<typeof Accordion> & {
+type AccordionNavigatableProps = Omit<
+  ComponentProps<typeof Accordion>,
+  'title'
+> & {
   id: string;
+  summary: ComponentProps<typeof Accordion>['title'];
   isFirst?: boolean;
 };
 
 export const AccordionNavigatable = ({
-  onCollapse,
+  onExpandedChange,
   id,
+  summary,
   isFirst,
   ...rest
 }: AccordionNavigatableProps) => {
   const { hashNav, scrollToAnchor, resetSpecificAnchor } =
     useInpageNavigation();
 
-  const handleCollapse = useCallback(() => {
-    id && resetSpecificAnchor(id);
-    onCollapse?.();
-  }, [resetSpecificAnchor, id, onCollapse]);
-
-  const handleExpand = useCallback(() => trackMatomoFaqEvent(id), [id]);
+  const handleExpandedChange = useCallback(
+    (expanded: boolean) => {
+      if (expanded) {
+        trackMatomoFaqEvent(id);
+      } else {
+        id && resetSpecificAnchor(id);
+      }
+      onExpandedChange?.(expanded);
+    },
+    [resetSpecificAnchor, id, onExpandedChange],
+  );
 
   useEffect(() => {
     if (id && hashNav === id) {
@@ -34,9 +44,9 @@ export const AccordionNavigatable = ({
     <Accordion
       {...rest}
       id={id}
-      defaultExpanded={(id && hashNav === id) || isFirst}
-      onCollapse={handleCollapse}
-      onExpand={handleExpand}
+      title={summary}
+      defaultExpanded={Boolean((id && hashNav === id) || isFirst)}
+      onExpandedChange={handleExpandedChange}
     />
   );
 };

@@ -4,7 +4,7 @@ import { RPC_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 export class FaqItemElement {
   root: Locator;
   title: Locator;
-  // lido-ui Accordion renders no testids: the summary is the element that
+  // app-ui Accordion renders no testids: the summary is the element that
   // controls the collapsible region, the region holds the answer
   toggle: Locator;
   content: Locator;

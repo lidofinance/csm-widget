@@ -1,5 +1,8 @@
 import { Locator, Page, test } from '@playwright/test';
-import { TokenSymbol } from 'tests/shared/consts/common.const';
+import {
+  BOND_TOKEN_OPTION_TEST_ID,
+  TokenSymbol,
+} from 'tests/shared/consts/common.const';
 import { BasePage } from '../../../../shared/pages/base.page';
 import { LOW_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { DepositKey } from 'tests/shared/services/keysGenerator.service';
@@ -14,7 +17,6 @@ export class SubmitPage {
   confirmKeysReadyInput: Locator;
   submitKeysButton: Locator;
   amountInput: Locator;
-  amountInputText: Locator;
   validationInputError: Locator;
   confirmOperatorModal: ConfirmOperatorModalElement;
 
@@ -32,17 +34,14 @@ export class SubmitPage {
     this.base = new BasePage(page);
     this.formBlock = this.page.getByTestId('submitKeysForm');
     this.rawDepositData = this.formBlock.locator('[name="rawDepositData"]');
-    this.confirmKeysReady = this.formBlock
-      .locator('label:has([name="confirmKeysReady"])')
-      .locator('svg');
+    this.confirmKeysReady = this.formBlock.locator(
+      'label:has([name="confirmKeysReady"])',
+    );
     this.confirmKeysReadyInput = this.formBlock.locator(
       '[name="confirmKeysReady"]',
     );
-    this.submitKeysButton = this.formBlock
-      .getByRole('button')
-      .getByText('Submit keys');
+    this.submitKeysButton = this.formBlock.getByTestId('submitKeysButton');
     this.amountInput = this.formBlock.getByTestId('amountInput');
-    this.amountInputText = this.amountInput.locator('..').locator('span');
     this.validationInputError = this.formBlock.getByTestId(
       'input-message-error',
     );
@@ -72,8 +71,13 @@ export class SubmitPage {
     });
   }
 
-  getBondTokenElement(tokenSymbol: TokenSymbol) {
-    return this.formBlock.locator(`label:has([value="${tokenSymbol}"])`);
+  async selectBondToken(tokenSymbol: TokenSymbol) {
+    await test.step(`Select "${tokenSymbol}" bond token`, async () => {
+      await this.formBlock.getByTestId('tokenSelectTrigger').click();
+      await this.formBlock
+        .getByTestId(BOND_TOKEN_OPTION_TEST_ID[tokenSymbol])
+        .click();
+    });
   }
 
   async fillKeys(keys: DepositKey[] | DepositKey) {
@@ -94,8 +98,7 @@ export class SubmitPage {
     tokenSymbol = TokenSymbol.STETH,
   ) {
     await test.step('Fill keys and click Submit', async () => {
-      const bondTokenElement = this.getBondTokenElement(tokenSymbol);
-      await bondTokenElement.click();
+      await this.selectBondToken(tokenSymbol);
       await this.fillKeys(keys);
       await this.page.waitForTimeout(LOW_TIMEOUT);
       await this.confirmKeysReady.click();

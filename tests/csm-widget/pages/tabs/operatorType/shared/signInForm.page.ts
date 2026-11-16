@@ -31,7 +31,7 @@ export class SignInForm extends BasePage {
 
       await this.walletPage.confirmTx();
 
-      await this.page.waitForSelector(`text=Submit application`, {
+      await this.page.waitForSelector(`text=Submit`, {
         timeout: STAGE_WAIT_TIMEOUT,
       });
     });

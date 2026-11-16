@@ -46,13 +46,10 @@ const AlertProviderRaw: FC<PropsWithChildren> = ({ children }) => {
     (component, props) => {
       setAlertsState((prev) => {
         const index = prev.findIndex((alert) => alert.component === component);
-        return index >= 0
-          ? prev.splice(index, 1, {
-              component,
-              props,
-              session: prev[index].session,
-            })
-          : [...prev, { component, props, session: uuid() }];
+        if (index < 0) return [...prev, { component, props, session: uuid() }];
+        const next = [...prev];
+        next[index] = { component, props, session: prev[index].session };
+        return next;
       });
     },
     [],

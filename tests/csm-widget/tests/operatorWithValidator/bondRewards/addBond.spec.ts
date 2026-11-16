@@ -29,14 +29,14 @@ test.describe(
           const nodeOperatorId = await widgetService.extractNodeOperatorId();
 
           await test.step('Verify bond balance', async () => {
-            await expect(
-              bondRewardsPage.addBond.titledAmount.locator('div').first(),
-            ).toContainText('Excess bond');
-            const bondSummary = await csmSDK.getBondSummary(nodeOperatorId);
+            await expect(bondRewardsPage.addBond.bondStat).toContainText(
+              /excess bond/i,
+            );
 
-            await expect(
-              bondRewardsPage.addBond.titledAmountBalance,
-            ).toHaveText(`${bondSummary.excess.toCut(4)} stETH`);
+            const bondSummary = await csmSDK.getBondSummary(nodeOperatorId);
+            await expect(bondRewardsPage.addBond.bondStat).toContainText(
+              bondSummary.excess.toCut(4),
+            );
           });
 
           await test.step('Verify text', async () => {
@@ -68,9 +68,7 @@ test.describe(
           const bondRewardsPage = widgetService.bondRewardsPage;
 
           await test.step(`Choose ${tokenName} symbol for bond`, async () => {
-            const bondToken =
-              bondRewardsPage.addBond.selectBondToken(tokenName);
-            await bondToken.click();
+            await bondRewardsPage.addBond.selectBondToken(tokenName);
           });
 
           const expectedBalance =
@@ -102,9 +100,7 @@ test.describe(
           const bondRewardsPage = widgetService.bondRewardsPage;
 
           await test.step(`Choose ${tokenName} symbol for bond`, async () => {
-            const bondToken =
-              bondRewardsPage.addBond.selectBondToken(tokenName);
-            await bondToken.click();
+            await bondRewardsPage.addBond.selectBondToken(tokenName);
           });
 
           await bondRewardsPage.addBond.amountInput.fill('1000');
@@ -129,9 +125,7 @@ test.describe(
           const bondRewardsPage = widgetService.bondRewardsPage;
 
           await test.step(`Choose ${tokenName} symbol for bond`, async () => {
-            const bondToken =
-              bondRewardsPage.addBond.selectBondToken(tokenName);
-            await bondToken.click();
+            await bondRewardsPage.addBond.selectBondToken(tokenName);
           });
 
           const tokenAmountToClaim = 1.123;
@@ -154,7 +148,7 @@ test.describe(
             ).toBeVisible();
             await expect(
               bondRewardsPage.addBond.balanceWillReceive,
-            ).toContainText('Bond balance will receive');
+            ).toContainText('Bond balance to increase');
 
             await expect(
               bondRewardsPage.addBond.balanceWillReceive.getByTestId(
@@ -172,7 +166,7 @@ test.describe(
                 'Exchange rate',
               );
               await expect(
-                bondRewardsPage.addBond.exchangeRate.locator('> div').nth(1),
+                bondRewardsPage.addBond.exchangeRateValue,
               ).toContainText(
                 `1.0 ${TOKEN_DISPLAY_NAMES[tokenName]} = ${rateToStETH.toString().toCut(4)} stETH`,
               );

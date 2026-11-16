@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
 import { useNodeOperator } from 'modules/web3';
 import { useConfirmModal } from 'shared/hooks';
-import { ConfirmOperatorModal } from './confirm-operator-modal';
+import { ConfirmOperatorModalApp } from './confirm-operator-modal-app';
 
 export const useConfirmOperatorModal = () => {
-  const confirm = useConfirmModal(ConfirmOperatorModal);
+  const confirm = useConfirmModal(ConfirmOperatorModalApp);
   const { nodeOperator } = useNodeOperator();
 
   return useCallback(async () => {

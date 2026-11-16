@@ -65,8 +65,6 @@ test.describe(
         });
 
         await test.step('Key is removed on chain', async () => {
-          // getKeys is cached for 10s, so read past the cache
-          csmSDK.core.invalidateCache();
           const keys = await csmSDK.getAllKeys(BigInt(noId));
           expect(keys).not.toContain(pubkey);
         });

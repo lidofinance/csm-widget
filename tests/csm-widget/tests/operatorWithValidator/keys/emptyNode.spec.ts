@@ -3,7 +3,6 @@ import { expect } from '@playwright/test';
 import { test } from '../../test.fixture';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { KeysPage } from 'tests/csm-widget/pages';
-import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 
 test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR.secretPhrase });
@@ -30,7 +29,7 @@ test.describe(
           'No keys available to remove',
         );
         await expect(keysPage.removePage.removeKeysForm).toContainText(
-          'note: Only keys that have not been deposited yet can be deleted. If a key has already been deposited, the only way to retrieve the bond is to exit the validator on the Consensus Layer (CL).',
+          'Note: Only keys that have not been deposited yet can be deleted. If a key has already been deposited, the only way to retrieve the bond is to exit the validator on the Consensus Layer (CL).',
         );
         await expect(
           keysPage.removePage.removeKeysButton,
@@ -43,12 +42,9 @@ test.describe(
       qase(178, 'View keys page. Should present empty view for empty wallet'),
       async () => {
         await keysPage.keysView.open();
-        await keysPage.keysView.page
-          .getByText('View keys list')
-          .waitFor({ state: 'visible', timeout: PAGE_WAIT_TIMEOUT });
         await keysPage.keysView.loader.waitFor({ state: 'hidden' });
         await expect(keysPage.keysView.viewKeysBlock).toContainText(
-          'There are no keys to display',
+          'No keys at the moment',
         );
         await expect(
           keysPage.keysView.table,

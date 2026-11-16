@@ -1,122 +1,60 @@
-import { Input, Text } from '@lidofinance/lido-ui';
+import { Description, Divider, Stack } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
-import { CategoryItemsWrapper } from 'features/ics/score-system/styles';
 import { FC } from 'react';
+import { CopyField, TextField } from 'shared/hook-form/fields';
 import {
-  Chip,
-  CopyButton,
-  FormTitle,
-  IconTooltip,
-  MatomoLink,
-  Stack,
-} from 'shared/components';
-import { TextInputHookForm } from 'shared/hook-form/controls';
+  ApplySection,
+  DiscordProofSteps,
+  GuideLink,
+} from 'shared/node-operator/type-apply';
 import { useSocialMessages } from '../context';
 
 export const SocialProof: FC = () => {
   const { twitterMessage, discordMessage } = useSocialMessages();
 
   return (
-    <Stack direction="column" gap="md" data-testid="socialProofSection">
-      <Stack direction="column" gap="xxs">
-        <FormTitle chip={<Chip>Optional</Chip>}>Socials</FormTitle>
-        <Text size="xs" color="secondary">
-          You can add your social accounts. To prove you own an account, post a
-          message. For more info see{' '}
-          <MatomoLink
-            $inline
-            href="https://www.youtube.com/watch?v=yUX34iCbCWE"
+    <>
+      <ApplySection
+        title="X (formerly Twitter)"
+        action={
+          <GuideLink
             matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsYoutubeGuideLink}
-          >
-            the guide
-          </MatomoLink>
-          .
-        </Text>
-      </Stack>
+          />
+        }
+        subtitle="You can add your social accounts. To prove you own an account, post a message."
+        data-testid="twitterSection"
+      >
+        <Stack gap={8} data-testid="twitterProofStep1">
+          <Description color="secondary">
+            Step 1. Prove the ownership of the X account by posting a tweet with
+            the following text
+          </Description>
+          <CopyField
+            id="twitter-message"
+            label="Tweet text"
+            text={twitterMessage}
+          />
+        </Stack>
+        <Stack gap={8} data-testid="twitterProofStep2">
+          <Description color="secondary">
+            Step 2. Paste the link to this post
+          </Description>
+          <TextField
+            name="twitterLink"
+            aria-label="X post link"
+            placeholder="X post link"
+          />
+        </Stack>
+      </ApplySection>
 
-      {/* Twitter Section */}
-      <Stack direction="column" gap="sm" data-testid="twitterSection">
-        <Text as="h4" size="xs" weight={700}>
-          X (formerly Twitter)
-        </Text>
+      <Divider />
 
-        <CategoryItemsWrapper $gap="md" $offset="md">
-          <Stack direction="column" gap="sm" data-testid="twitterProofStep1">
-            <Text size="xs">
-              Step 1. Prove the ownership of the X account by posting a tweet
-              with the following text.
-            </Text>
-
-            <Input
-              id="twitter-message"
-              readOnly
-              onFocus={(e) => e.target.select()}
-              onClick={(e) => (e.target as HTMLInputElement).select()}
-              value={twitterMessage}
-              fullwidth
-              rightDecorator={<CopyButton text={twitterMessage} size="xs" />}
-            />
-          </Stack>
-
-          <Stack direction="column" gap="sm" data-testid="twitterProofStep2">
-            <Text size="xs">Step 2. Paste the link to this post.</Text>
-
-            <TextInputHookForm
-              fieldName="twitterLink"
-              label="X post link"
-              placeholder="https://x.com/username/status/..."
-            />
-          </Stack>
-        </CategoryItemsWrapper>
-      </Stack>
-
-      {/* Discord Section */}
-      <Stack direction="column" gap="sm" data-testid="discordSection">
-        <Text as="h4" size="xs" weight={700}>
-          Discord
-        </Text>
-
-        <CategoryItemsWrapper $gap="md" $offset="md">
-          <Stack direction="column" gap="sm" data-testid="discordProofStep1">
-            <Text size="xs">
-              Step 1. Prove the ownership of the Discord account by posting the
-              following message to{' '}
-              <MatomoLink
-                $inline
-                href="https://discord.com/channels/761182643269795850/1404810479292907662"
-                matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsDiscordChannelLink}
-              >
-                the CSM channel
-              </MatomoLink>
-              .{' '}
-              <IconTooltip
-                inline
-                tooltip='If you cannot access the CSM channel, you may need to claim the "CSM Operator" role. To claim this role, follow the instructions in the "cs-get-started" channel.'
-              />
-            </Text>
-
-            <Input
-              id="discord-message"
-              readOnly
-              onFocus={(e) => e.target.select()}
-              onClick={(e) => (e.target as HTMLInputElement).select()}
-              value={discordMessage}
-              fullwidth
-              rightDecorator={<CopyButton text={discordMessage} size="xs" />}
-            />
-          </Stack>
-
-          <Stack direction="column" gap="sm" data-testid="discordProofStep2">
-            <Text size="xs">Step 2. Paste the link to this message.</Text>
-
-            <TextInputHookForm
-              fieldName="discordLink"
-              label="Discord message link"
-              placeholder="https://discord.com/channels/..."
-            />
-          </Stack>
-        </CategoryItemsWrapper>
-      </Stack>
-    </Stack>
+      <ApplySection title="Discord" data-testid="discordSection">
+        <DiscordProofSteps
+          message={discordMessage}
+          channelMatomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsDiscordChannelLink}
+        />
+      </ApplySection>
+    </>
   );
 };

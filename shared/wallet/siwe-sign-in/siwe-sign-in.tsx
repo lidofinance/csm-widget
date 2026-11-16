@@ -1,8 +1,14 @@
-import { Block, Button, Text } from '@lidofinance/lido-ui';
+import {
+  Body,
+  Button,
+  Card,
+  Description,
+  H3,
+  Stack,
+} from '@lidofinance/lido-app-ui';
 import { FC, PropsWithChildren, ReactNode } from 'react';
 import { useSiweAuth } from 'modules/siwe';
 import { useDappStatus } from 'modules/web3';
-import { Stack } from 'shared/components';
 import { Connect } from '../connect/connect';
 
 // Wallet-not-connected step of a SIWE gate. The description copy varies per
@@ -10,19 +16,20 @@ import { Connect } from '../connect/connect';
 export const SiweConnect: FC<{ description: ReactNode }> = ({
   description,
 }) => (
-  <Block>
-    <Stack direction="column" gap="lg">
-      <Stack direction="column" gap="md">
-        <Text as="h3" size="lg" weight="bold">
-          Connect your wallet
-        </Text>
-        <Text size="xs" color="secondary">
-          {description}
-        </Text>
+  <Card>
+    <Stack
+      direction="column"
+      gap={20}
+      align="stretch"
+      style={{ alignSelf: 'stretch' }}
+    >
+      <Stack direction="column" gap={16}>
+        <H3>Connect your wallet</H3>
+        <Description color="secondary">{description}</Description>
       </Stack>
-      <Connect size="sm" fullwidth />
+      <Connect size="small" fullWidth />
     </Stack>
-  </Block>
+  </Card>
 );
 
 // Connected-but-not-signed step: the surface-specific body plus the Sign in
@@ -31,19 +38,22 @@ export const SiweSignIn: FC<PropsWithChildren> = ({ children }) => {
   const { signIn } = useSiweAuth();
 
   return (
-    <Block>
-      <Stack direction="column" gap="lg">
-        <Text size="xs">{children}</Text>
-        <Button
-          size="sm"
-          onClick={signIn}
-          fullwidth
-          data-testid="siweSignInButton"
-        >
+    <Card>
+      <Stack
+        direction="column"
+        gap={20}
+        align="stretch"
+        style={{ alignSelf: 'stretch' }}
+      >
+        <Stack direction="column" gap={8}>
+          <H3>Sign in</H3>
+          <Body color="secondary">{children}</Body>
+        </Stack>
+        <Button fullWidth onClick={signIn} data-testid="siweSignInButton">
           Sign in
         </Button>
       </Stack>
-    </Block>
+    </Card>
   );
 };
 

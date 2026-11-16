@@ -1,22 +1,19 @@
-import { PausedButton, SubmitButtonHookForm } from 'shared/hook-form/controls';
-import { SubmitKeysFormInputType, useSubmitKeysFormData } from '../context';
+import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
+import { SubmitButton } from 'shared/form-page';
+import { SubmitKeysFormInputType } from '../context';
 
-export const SubmitButton = () => {
-  const { isPaused } = useSubmitKeysFormData();
+export const CreateSubmitButton: FC = () => {
   const depositData = useWatch<SubmitKeysFormInputType, 'depositData'>({
     name: 'depositData',
   });
 
-  if (isPaused) {
-    return <PausedButton type="Module" />;
-  }
-
-  const disabled = !depositData?.length;
-
   return (
-    <SubmitButtonHookForm disabled={disabled}>
-      Create Node Operator
-    </SubmitButtonHookForm>
+    <SubmitButton
+      disabled={!depositData?.length}
+      data-testid="submitKeysButton"
+    >
+      Submit
+    </SubmitButton>
   );
 };

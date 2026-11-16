@@ -14,7 +14,12 @@ type Props = {
   wstethBalance?: bigint;
 };
 
-type AvailableForToken = { count: number; amount: bigint };
+type AvailableForToken = {
+  count: number;
+  amount: bigint;
+  /** Keys the balance alone can fund, ignoring the keys limit and per-tx cap */
+  byBalance: number;
+};
 export type KeysAvailable = Record<TOKENS, AvailableForToken>;
 
 /**
@@ -54,7 +59,7 @@ export const useKeysAvailable = ({
       balance: bigint | undefined,
       rate: bigint,
     ): AvailableForToken => {
-      if (balance === undefined) return { count: 0, amount: 0n };
+      if (balance === undefined) return { count: 0, amount: 0n, byBalance: 0 };
 
       const balanceInSteth = convert(balance, rate);
       const fundable = maxKeysForBond(intervals, currentBond + balanceInSteth);
@@ -65,11 +70,12 @@ export const useKeysAvailable = ({
       );
 
       const count = Math.max(limited - nonWithdrawnKeys, 0);
+      const byBalance = Math.max(fundable - nonWithdrawnKeys, 0);
       const neededSteth = bondForKeys(intervals, limited) - currentBond;
       const amount =
         neededSteth > 0n ? convert(neededSteth, ONE_ETH, rate) : 0n;
 
-      return { count, amount };
+      return { count, amount, byBalance };
     };
 
     return {

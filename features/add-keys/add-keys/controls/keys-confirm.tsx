@@ -1,4 +1,3 @@
-import { Text } from '@lidofinance/lido-ui';
 import {
   SHARE_LIMIT_STATUS,
   useModule,
@@ -6,55 +5,34 @@ import {
 } from 'modules/web3';
 import { MODULE_METADATA } from 'consts/module';
 import { FC } from 'react';
-import { Stack } from 'shared/components';
-import { CheckboxHookForm } from 'shared/hook-form/controls';
 import { useDepositDataValid } from 'shared/hook-form/deposit-data';
+import { CheckboxField } from 'shared/hook-form/fields';
+import { KEYS_CONFIRM_CM } from '../add-keys-state';
+import { KeysConfirmLines } from './keys-confirm-lines';
+
+const ConfirmText: FC = () => {
+  const { isCsmFamily, module } = useModule();
+  const { data: status } = useShareLimitStatus();
+
+  if (!isCsmFamily || !module) return <>{KEYS_CONFIRM_CM}</>;
+
+  return (
+    <KeysConfirmLines
+      approaching={status === SHARE_LIMIT_STATUS.APPROACHING}
+      reached={status === SHARE_LIMIT_STATUS.REACHED}
+      name={MODULE_METADATA[module].variantName}
+    />
+  );
+};
 
 export const KeysConfirm: FC = () => {
-  const { isCsmFamily, module } = useModule();
-  const name = MODULE_METADATA[module].variantName;
-  const { data: status } = useShareLimitStatus();
   const isDepositDataValid = useDepositDataValid();
 
   return (
-    <Stack align={isCsmFamily ? 'start' : 'center'}>
-      <CheckboxHookForm
-        fieldName="confirmKeysReady"
-        disabled={!isDepositDataValid}
-      />
-      {isCsmFamily ? (
-        <Text size="xxs" color="secondary" as="div">
-          I confirm that:
-          <ul>
-            <li>
-              My nodes are synced, running, and ready for the validator
-              activation
-            </li>
-            {status === SHARE_LIMIT_STATUS.APPROACHING && (
-              <li>
-                I understand that the deposit time for my keys can be months or
-                longer because {name} is approaching its stake share limit
-              </li>
-            )}
-            {status === SHARE_LIMIT_STATUS.REACHED && (
-              <li>
-                I understand that my newly uploaded keys are very unlikely to
-                receive deposits in the near future because {name} has reached
-                its stake share limit
-              </li>
-            )}
-            <li>
-              I understand that deleting keys from the deposit queue will incur
-              a removal fee
-            </li>
-          </ul>
-        </Text>
-      ) : (
-        <Text size="xxs" color="secondary" as="div">
-          I confirm that my nodes are synced, running, and ready for the
-          validator activation
-        </Text>
-      )}
-    </Stack>
+    <CheckboxField
+      name="confirmKeysReady"
+      disabled={!isDepositDataValid}
+      label={<ConfirmText />}
+    />
   );
 };

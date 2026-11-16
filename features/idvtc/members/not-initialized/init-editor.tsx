@@ -1,12 +1,11 @@
-import { Button, Text } from '@lidofinance/lido-ui';
-import { FC, useState } from 'react';
-import { FormBlock, Stack } from 'shared/components';
 import {
-  ClusterMemberCard,
-  ProgressBar,
-  ProgressBarFill,
-  ProgressBarTrack,
-} from '../../shared';
+  Button,
+  Card,
+  Description,
+  SegmentedBar,
+  Stack,
+} from '@lidofinance/lido-app-ui';
+import { FC, useState } from 'react';
 import { SignOwnershipFields } from '../controls/sign-ownership-fields';
 import { useMemberVerification } from '../hooks/use-member-verification';
 import { useMembersModalStages } from '../hooks/use-members-modal-stages';
@@ -46,9 +45,10 @@ const InitMemberCard: FC<InitMemberCardProps> = ({
   };
 
   return (
-    <ClusterMemberCard data-testid={`initMemberCard${index}`}>
+    <Card data-testid={`initMemberCard${index}`}>
       <SignOwnershipFields
         title={`Cluster member #${index + 1}`}
+        memberNumber={index + 1}
         address={draft.newAddress}
         signature={draft.signature}
         verified={draft.verified}
@@ -72,7 +72,7 @@ const InitMemberCard: FC<InitMemberCardProps> = ({
         }}
         onVerify={() => void onVerify()}
       />
-    </ClusterMemberCard>
+    </Card>
   );
 };
 
@@ -109,25 +109,22 @@ export const InitEditor: FC<InitEditorProps> = ({ cancelable, onDone }) => {
   };
 
   return (
-    <FormBlock $gap="md" data-testid="initEditor">
-      <Stack direction="column" gap="xxs">
-        <Text as="h5" size="sm" weight="bold">
-          Cluster member addresses
-        </Text>
-        <Text size="xs" color="secondary">
-          Verify ownership of {MEMBERS_COUNT} additional Ethereum addresses in
-          your validator cluster.
-        </Text>
-      </Stack>
+    <Stack gap={8} data-testid="initEditor">
+      <Description color="secondary">
+        Verify ownership of {MEMBERS_COUNT} additional Ethereum addresses in
+        your validator cluster
+      </Description>
 
-      <ProgressBar data-testid="initProgress">
-        <ProgressBarTrack>
-          <ProgressBarFill $progress={verifiedCount / MEMBERS_COUNT} />
-        </ProgressBarTrack>
-        <Text size="xxs" color="secondary">
+      <Stack gap={4} data-testid="initProgress">
+        <SegmentedBar
+          steps={MEMBERS_COUNT}
+          value={verifiedCount}
+          aria-label="Verified cluster members"
+        />
+        <Description color="secondary">
           {verifiedCount} / {MEMBERS_COUNT} verified
-        </Text>
-      </ProgressBar>
+        </Description>
+      </Stack>
 
       {slots.map((draft, index) => (
         <InitMemberCard
@@ -142,26 +139,27 @@ export const InitEditor: FC<InitEditorProps> = ({ cancelable, onDone }) => {
         />
       ))}
 
-      <Stack direction="row" gap="md">
+      <Stack direction={{ base: 'row', sm: 'column' }} gap={12}>
+        <Button
+          fullWidth
+          disabled={!!validationError || submit.isPending}
+          loading={submit.isPending}
+          onClick={() => void onSubmit()}
+          dataTestId={{ root: 'submitInitButton' }}
+        >
+          Submit for review
+        </Button>
         {cancelable && (
           <Button
-            variant="translucent"
+            fullWidth
+            variant="outline"
             onClick={onDone}
-            data-testid="cancelInitEditorButton"
+            dataTestId={{ root: 'cancelInitEditorButton' }}
           >
             Cancel
           </Button>
         )}
-        <Button
-          fullwidth
-          disabled={!!validationError || submit.isPending}
-          loading={submit.isPending}
-          onClick={() => void onSubmit()}
-          data-testid="submitInitButton"
-        >
-          Submit for review
-        </Button>
       </Stack>
-    </FormBlock>
+    </Stack>
   );
 };

@@ -1,8 +1,6 @@
 import { FC } from 'react';
-import { SubmitButtonHookForm } from 'shared/hook-form/controls';
+import { SubmitButton as KitSubmitButton } from 'shared/form-page';
 
 export const SubmitButton: FC = () => (
-  <SubmitButtonHookForm data-testid="submitBtn">
-    Submit application
-  </SubmitButtonHookForm>
+  <KitSubmitButton data-testid="submitBtn">Submit</KitSubmitButton>
 );

@@ -1,62 +1,37 @@
-import { ThemeName } from '@lidofinance/lido-ui';
-import { StackStyle } from 'shared/components';
+import { CSSProperties } from 'react';
 import styled, { css } from 'styled-components';
 import { GraphPart } from './types';
 
-const COLOR_VARIANTS = {
-  active: css`
-    color: #53ba95;
-  `,
-  queue: css`
-    color: #00a3ff;
-  `,
-  priority0: css`
-    color: #00cfff;
-  `,
-  priority1: css`
-    color: #007fff;
-  `,
-  priority2: css`
-    color: #0046ff;
-  `,
-  priority3: css`
-    color: #002db3;
-  `,
-  priority4: css`
-    color: #6e0eff;
-  `,
-  priority5: css`
-    color: #c747ff;
-  `,
-  queueOverLimit: css`
-    color: #81d1ff;
-  `,
-  priority0OverLimit: css`
-    color: #66e7ff;
-  `,
-  priority1OverLimit: css`
-    color: #66bfff;
-  `,
-  priority2OverLimit: css`
-    color: #668aff;
-  `,
-  priority3OverLimit: css`
-    color: #6685cc;
-  `,
-  priority4OverLimit: css`
-    color: #9966ff;
-  `,
-  priority5OverLimit: css`
-    color: #da85ff;
-  `,
-  batch: css`
-    color: #ffa276;
-  `,
-  added: css`
-    color: #ff8d47ff;
-  `,
-  limit: css``,
-} as const;
+const PART_COLORS: Partial<Record<GraphPart, string>> = {
+  active: '#53ba95',
+  queue: '#00a3ff',
+  priority0: '#00cfff',
+  priority1: '#007fff',
+  priority2: '#0046ff',
+  priority3: '#002db3',
+  priority4: '#6e0eff',
+  priority5: '#c747ff',
+  queueOverLimit: '#81d1ff',
+  priority0OverLimit: '#66e7ff',
+  priority1OverLimit: '#66bfff',
+  priority2OverLimit: '#668aff',
+  priority3OverLimit: '#6685cc',
+  priority4OverLimit: '#9966ff',
+  priority5OverLimit: '#da85ff',
+  batch: '#ffa276',
+  added: '#ff8d47ff',
+};
+
+const getPartColor = (type: GraphPart) => PART_COLORS[type] ?? 'currentColor';
+
+export const getPartColors = (type: GraphPart) => {
+  const color = getPartColor(type);
+  return {
+    '--lido-app-ui-tag-color': color,
+    '--lido-app-ui-tag-background': `color-mix(in srgb, ${color} 15%, transparent)`,
+    '--lido-app-ui-tag-border-color': 'transparent',
+  } as CSSProperties;
+};
 
 export const WrapperStyle = styled.div`
   position: relative;
@@ -73,16 +48,16 @@ export const FarStyle = styled.div<{ hidden?: boolean }>`
   transition: opacity 0.25s ease-in-out;
   background: linear-gradient(
     90deg,
-    var(--lido-color-foreground) 15%,
+    var(--lido-app-ui-color-background-surface) 15%,
     rgba(255, 255, 255, 0) 80%
   );
 `;
 
 export const LineStyle = styled.div`
-  height: ${({ theme }) => theme.spaceMap.md}px;
+  height: 10px;
   width: 100%;
-  border-radius: ${({ theme }) => theme.borderRadiusesMap.xl}px;
-  background: var(--lido-color-backgroundSecondary);
+  border-radius: 10px;
+  background: var(--lido-app-ui-color-background-secondary);
   overflow: hidden;
   position: relative;
   white-space: nowrap;
@@ -134,7 +109,7 @@ const getPartVariant = (type: GraphPart) => {
         top: -40%;
         height: 180%;
 
-        --part-color-1: var(--lido-color-text);
+        --part-color-1: var(--lido-app-ui-color-text-default);
         --part-color-2: transparent;
         background: repeating-linear-gradient(
             0deg,
@@ -145,8 +120,11 @@ const getPartVariant = (type: GraphPart) => {
           )
           0px;
 
-        mix-blend-mode: ${({ theme }) =>
-          theme.name === ThemeName.light ? 'multiply' : 'plus-lighter'};
+        mix-blend-mode: multiply;
+
+        [data-lido-theme='dark'] & {
+          mix-blend-mode: plus-lighter;
+        }
       `;
     default:
       return css`
@@ -157,6 +135,7 @@ const getPartVariant = (type: GraphPart) => {
 
 export const PartStyle = styled.div<PartProps>`
   display: inline-block;
+  vertical-align: top;
   height: 100%;
   width: ${({ $width = 100 }) => $width}%;
   opacity: ${({ $fade }) => ($fade ? '0.2' : '1')};
@@ -166,62 +145,35 @@ export const PartStyle = styled.div<PartProps>`
     width 0.25s ease-in-out;
   position: relative;
 
-  ${({ $type }) => COLOR_VARIANTS[$type] ?? ''}
+  color: ${({ $type }) => getPartColor($type)};
   ${({ $type }) => getPartVariant($type)}
 `;
 
 export const CircleStyle = styled(LineStyle)`
-  width: ${({ theme }) => theme.spaceMap.md}px;
+  width: 10px;
 `;
 
 export const LegendStyle = styled.div`
   cursor: pointer;
 `;
 
-export const LegendsStyle = styled(StackStyle)`
+export const LegendsStyle = styled.div`
+  display: flex;
   flex-wrap: wrap;
   gap: 12px 24px;
 `;
 
-export const ChipStyle = styled.div<{
-  $type: GraphPart;
-  $loading?: boolean;
-}>`
-  width: fit-content;
-  padding: 0px 4px;
-  text-align: center;
-
-  border-radius: ${({ theme }) => theme.borderRadiusesMap.xs}px;
-  background: color-mix(in srgb, currentColor 15%, transparent);
-
-  font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
-  line-height: ${({ theme }) => theme.fontSizesMap.lg}px;
-  font-weight: 700;
-  ${({ $type }) => COLOR_VARIANTS[$type] ?? ''}
-
-  ${({ $loading }) =>
-    $loading
-      ? css`
-          --loader-color: color-mix(in srgb, currentColor 15%, transparent);
-          animation: cLMtGC 2s infinite;
-          background-size: 300% 100%;
-          background-position: 100% 0;
-          background-image: linear-gradient(
-            90deg,
-            var(--loader-color) 0,
-            var(--loader-color) 33.33%,
-            transparent 44.44%,
-            transparent 55.55%,
-            var(--loader-color) 66.66%,
-            var(--loader-color) 100%
-          );
-        `
-      : ''}
+export const GraphStyle = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 4px;
+  overflow-x: auto;
 `;
 
-export const TooltipContentStyle = styled(StackStyle).attrs({
-  $direction: 'column',
-  $gap: 'xs',
-})`
-  font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
+export const TooltipContentStyle = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
 `;

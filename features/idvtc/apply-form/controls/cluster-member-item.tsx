@@ -1,34 +1,37 @@
 import {
-  Button,
-  ButtonIcon,
-  External,
-  Input,
-  Text,
-} from '@lidofinance/lido-ui';
+  Body,
+  Description,
+  IconLink,
+  Stack,
+  Tag,
+} from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { FC, useCallback, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
+import { MemberCardStyle } from '../../form-status/styles';
 import {
-  Chip,
-  CopyButton,
-  FormTitle,
-  MatomoLink,
-  Stack,
-} from 'shared/components';
-import { VerifiedIcon } from 'shared/components/input-address/styles';
-import { SquaredChip } from 'shared/components/status-chip/status-chip';
-import {
-  AddressInputHookForm,
-  TextInputHookForm,
-} from 'shared/hook-form/controls';
+  AddressField,
+  CopyField,
+  TextField,
+  stopFocus,
+} from 'shared/hook-form/fields';
 import { VALIDATION_MESSAGES } from 'shared/hook-form/validation';
+import { VerifiedTag } from 'shared/node-operator/type-status';
+import { trackMatomoEvent } from 'utils';
 import { isAddress, isHex } from 'viem';
 import {
   useClusterMemberMessage,
   useVerifyMessage,
   type IdvtcApplyFormInputType,
 } from '../context';
-import { ClusterMemberCard } from '../../shared';
+import { OptionalHeading } from './optional-heading';
+
+const ETHERSCAN_SIGNATURES_URL = 'https://etherscan.io/verifiedSignatures#';
+
+const openEtherscan = () => {
+  trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.idvtcEtherscanSignaturesLink);
+  window.open(ETHERSCAN_SIGNATURES_URL, '_blank', 'noopener,noreferrer');
+};
 
 type ClusterMemberItemProps = {
   index: number;
@@ -55,8 +58,7 @@ export const ClusterMemberItem: FC<ClusterMemberItemProps> = ({ index }) => {
   const onVerify = useCallback(async () => {
     if (isVerifying || verified) return;
 
-    const currentMembers = getValues('clusterMembers');
-    const { address, signature } = currentMembers[index];
+    const { address, signature } = getValues(`clusterMembers.${index}`);
 
     if (!isAddress(address)) {
       setError(`clusterMembers.${index}.address`, {
@@ -118,148 +120,104 @@ export const ClusterMemberItem: FC<ClusterMemberItemProps> = ({ index }) => {
   }, [index, setValue]);
 
   return (
-    <ClusterMemberCard data-testid={`clusterMember-${index}`}>
-      <Stack direction="column" gap="sm">
-        <Stack align="center" gap="sm">
-          <Text as="h4" size="xs" weight="bold">
-            Cluster member #{index + 1}
-          </Text>
+    <MemberCardStyle data-testid={`clusterMember-${index}`}>
+      <Stack gap={16}>
+        <Stack direction="row" align="center" gap={8}>
+          <Body weight="semibold">Cluster member #{index + 1}</Body>
           {verified ? (
-            <SquaredChip variant="primary" data-testid="verifiedChip">
-              Verified
-              <VerifiedIcon color="primary" />
-            </SquaredChip>
+            <VerifiedTag />
           ) : (
-            <SquaredChip variant="secondary" data-testid="unverifiedChip">
+            <Tag variant="neutral" dataTestId={{ root: 'unverifiedChip' }}>
               Unverified
-            </SquaredChip>
+            </Tag>
           )}
         </Stack>
 
         {verified ? (
-          <Stack direction="column" gap="sm">
-            <AddressInputHookForm
-              fieldName={`clusterMembers.${index}.address`}
-              label={`Cluster member #${index + 1}`}
-              disabled
-              rightDecorator={
-                <Button
-                  size="xs"
-                  variant="translucent"
-                  color="error"
-                  onClick={onClear}
-                  data-testid="clearBtn"
-                >
-                  Clear
-                </Button>
-              }
-            />
-
-            <Stack direction="column" gap="xs">
-              <FormTitle chip={<Chip>Optional</Chip>}>Add contacts</FormTitle>
-              <Stack direction="row" gap="sm">
-                <TextInputHookForm
-                  fieldName={`clusterMembers.${index}.discordHandle`}
-                  label="Discord handle"
-                  fullwidth
-                />
-                <TextInputHookForm
-                  fieldName={`clusterMembers.${index}.telegramUsername`}
-                  label="Telegram username"
-                  fullwidth
-                />
-              </Stack>
-            </Stack>
-          </Stack>
+          <AddressField
+            name={`clusterMembers.${index}.address`}
+            disabled
+            simple
+            trailing={
+              <Tag
+                variant="error"
+                onClick={stopFocus(onClear)}
+                dataTestId={{ root: 'clearBtn' }}
+              >
+                Clear
+              </Tag>
+            }
+          />
         ) : (
-          <Stack direction="column">
-            <Stack direction="column" gap="sm" data-testid="clusterMemberStep1">
-              <Text size="xs">
+          <>
+            <Stack gap={8} data-testid="clusterMemberStep1">
+              <Description color="secondary">
                 Step 1. Insert cluster member #{index + 1} Ethereum address and
                 send the link to this member to sign the transaction on
-                Etherscan.
-              </Text>
-              <AddressInputHookForm
-                fieldName={`clusterMembers.${index}.address`}
-                label={`Cluster member #${index + 1}`}
-                placeholder="0x..."
+                Etherscan
+              </Description>
+              <AddressField
+                name={`clusterMembers.${index}.address`}
+                placeholder="Cluster member address"
+                simple
               />
-              <Input
+              <CopyField
                 name={`clusterMembers.${index}.messageToSign`}
-                value={message}
-                readOnly
                 label="Message to sign"
+                text={message}
                 placeholder="Enter address above to generate message..."
-                rightDecorator={
-                  <Stack gap="sm">
-                    <CopyButton
-                      text={message}
-                      size="xs"
-                      variant="translucent"
-                    />
-                    <MatomoLink
-                      href="https://etherscan.io/verifiedSignatures#"
-                      matomoEvent={
-                        MATOMO_CLICK_EVENTS_TYPES.idvtcEtherscanSignaturesLink
-                      }
-                    >
-                      <ButtonIcon
-                        data-testid="signBtn"
-                        icon={<External />}
-                        size="xs"
-                        variant="translucent"
-                      >
-                        Sign
-                      </ButtonIcon>
-                    </MatomoLink>
-                  </Stack>
+                extra={
+                  <Tag
+                    variant="action"
+                    icon={<IconLink />}
+                    onClick={stopFocus(openEtherscan)}
+                    dataTestId={{ root: 'signBtn' }}
+                  >
+                    Sign
+                  </Tag>
                 }
               />
             </Stack>
 
-            <Stack direction="column" gap="sm" data-testid="clusterMemberStep2">
-              <Text size="xs">
-                Step 2. Copy the signature and past in the field below
-              </Text>
-              <TextInputHookForm
-                fieldName={`clusterMembers.${index}.signature`}
-                label="Signature"
-                placeholder="0x123..."
-                rightDecorator={
-                  <Button
-                    size="xs"
-                    variant="translucent"
-                    onClick={() => void onVerify()}
+            <Stack gap={8} data-testid="clusterMemberStep2">
+              <Description color="secondary">
+                Step 2. Copy the signature and paste in the field below
+              </Description>
+              <TextField
+                name={`clusterMembers.${index}.signature`}
+                aria-label="Signature"
+                placeholder="Signature"
+                trailing={
+                  <Tag
+                    variant="action"
                     disabled={isVerifying}
-                    data-testid="verifySignatureBtn"
+                    onClick={stopFocus(() => void onVerify())}
+                    dataTestId={{ root: 'verifySignatureBtn' }}
                   >
                     {isVerifying ? 'Verifying...' : 'Verify'}
-                  </Button>
+                  </Tag>
                 }
               />
             </Stack>
-
-            <Stack direction="column" gap="xs">
-              <Stack center gap="sm">
-                <Text size="xs">Add contacts</Text>
-                <Chip>Optional</Chip>
-              </Stack>
-              <Stack direction="row" gap="sm">
-                <TextInputHookForm
-                  fieldName={`clusterMembers.${index}.discordHandle`}
-                  label="Discord handle"
-                  fullwidth
-                />
-                <TextInputHookForm
-                  fieldName={`clusterMembers.${index}.telegramUsername`}
-                  label="Telegram username"
-                  fullwidth
-                />
-              </Stack>
-            </Stack>
-          </Stack>
+          </>
         )}
+
+        <Stack gap={8}>
+          <OptionalHeading>Add contacts</OptionalHeading>
+          <Stack direction={{ base: 'row', sm: 'column' }} gap={12}>
+            <TextField
+              name={`clusterMembers.${index}.discordHandle`}
+              label="Discord handle"
+              placeholder="Discord handle"
+            />
+            <TextField
+              name={`clusterMembers.${index}.telegramUsername`}
+              label="Telegram username"
+              placeholder="Telegram username"
+            />
+          </Stack>
+        </Stack>
       </Stack>
-    </ClusterMemberCard>
+    </MemberCardStyle>
   );
 };

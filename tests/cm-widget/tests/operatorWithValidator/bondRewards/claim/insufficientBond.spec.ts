@@ -79,7 +79,7 @@ test.describe(
           ).toBeDisabled({ timeout: PAGE_WAIT_TIMEOUT });
           await expect(
             claim.getClaimOptionDescription(CLAIM_OPTION.ALL_TO_RA),
-          ).toHaveText('Claim both Excess Bond and Rewards');
+          ).toHaveText('Claim both Excess Bond and Rewards to Rewards Address');
         });
 
         await test.step('"Excess Bond" option is disabled (no excess to claim)', async () => {
@@ -88,19 +88,19 @@ test.describe(
           ).toBeDisabled();
           await expect(
             claim.getClaimOptionDescription(CLAIM_OPTION.BOND_TO_RA),
-          ).toHaveText('Claim only Excess Bond. Rewards remain unclaimed.');
+          ).toHaveText(
+            'Claim only Excess Bond. Rewards remain unclaimed to Rewards Address.',
+          );
         });
 
         await test.step('"Rewards to Bond" is enabled and selected by default', async () => {
           await expect(
             claim.getClaimOptionRadio(CLAIM_OPTION.REWARDS_TO_BOND),
           ).toBeEnabled();
-          await expect(
-            claim.getClaimOptionRadio(CLAIM_OPTION.REWARDS_TO_BOND),
-          ).toBeChecked();
+          await claim.expectClaimOptionSelected(CLAIM_OPTION.REWARDS_TO_BOND);
           await expect(
             claim.getClaimOptionDescription(CLAIM_OPTION.REWARDS_TO_BOND),
-          ).toHaveText('Compensate the Insufficient Bond');
+          ).toHaveText('Compensate the Insufficient Bond with Rewards');
         });
       },
     );
@@ -113,9 +113,9 @@ test.describe(
         const expected = parseFloat(rewards.available);
 
         await test.step('"Claim All" option is selected by default', async () => {
-          await expect(
-            claim.getClaimOptionRadio(CLAIM_OPTION.ALL_TO_RA),
-          ).toBeChecked({ timeout: PAGE_WAIT_TIMEOUT });
+          await claim.expectClaimOptionSelected(CLAIM_OPTION.ALL_TO_RA, true, {
+            timeout: PAGE_WAIT_TIMEOUT,
+          });
         });
 
         await test.step('Token selector and amount input are not visible', async () => {
@@ -130,7 +130,7 @@ test.describe(
 
         await test.step('"Compensation for the Insufficient Bond" row shows rewards amount', async () => {
           await expect(claim.claimBondFormInfo).toContainText(
-            'Compensation for the Insufficient Bond',
+            'Insufficient Bond compensation',
           );
           const infoText = await claim.claimBondFormInfo
             .getByTestId('tokenAmount')

@@ -59,7 +59,7 @@ test.describe(
           step3.form,
           'Form should display description hint text',
         ).toContainText(
-          'A short blurb about your operator. This description will be publicly visible on-chain and can be updated later.BackContinue',
+          'A short blurb about your operator. This description will be publicly visible on-chain and can be updated later.',
         );
       });
     });
@@ -171,7 +171,7 @@ test.describe(
           step3.form,
           'Form should display description hint text',
         ).toContainText(
-          'A short blurb about your operator. This description will be publicly visible on-chain and can be updated later.BackContinue',
+          'A short blurb about your operator. This description will be publicly visible on-chain and can be updated later.',
         );
       });
     });

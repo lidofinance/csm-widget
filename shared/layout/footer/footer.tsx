@@ -1,49 +1,66 @@
+import { Footer as LibFooter, TextLink } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
-import { getExternalLinks } from 'consts/external-links';
-import { LogoLidoLink, Stack } from 'shared/components';
-import { FooterLink, FooterStyle, LinkDivider } from './styles';
+import { useExternalLinks } from 'shared/hooks';
+import { trackMatomoEvent } from 'utils';
 import { Version } from './version';
 
-const { feedbackForm } = getExternalLinks();
+// bare pages (maintenance/qa-config/test, 500 fallback) render outside Web3Provider; useExternalLinks needs wagmi context
+const FeedbackFormLink: FC = () => {
+  const { feedbackForm } = useExternalLinks();
+  return (
+    <TextLink
+      variant="secondary"
+      external
+      href={feedbackForm}
+      onClick={() =>
+        trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.footerFeedbackForm)
+      }
+      data-testid="footerFeedbackFormLink"
+    >
+      Feedback form
+    </TextLink>
+  );
+};
 
-export const Footer: FC = () => (
-  <FooterStyle data-testid="appFooter">
-    <LogoLidoLink />
-    <Stack gap="none">
-      <FooterLink
-        href="https://lido.fi/terms-of-use"
-        matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerTermsOfUse}
-        data-testid="footerTermsOfUseLink"
-      >
-        Terms of Use
-      </FooterLink>
-      <LinkDivider />
-      <FooterLink
-        href="https://lido.fi/privacy-notice"
-        matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerPrivacyNotice}
-        data-testid="footerPrivacyNoticeLink"
-      >
-        Privacy Notice
-      </FooterLink>
-      <LinkDivider />
-      <FooterLink
-        href={feedbackForm}
-        matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerFeedbackForm}
-        data-testid="footerFeedbackFormLink"
-      >
-        Feedback form
-      </FooterLink>
-      <LinkDivider />
-      <FooterLink
-        href="https://discord.com/invite/lido"
-        matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerDiscord}
-        data-testid="footerDiscordLink"
-      >
-        Discord
-      </FooterLink>
-    </Stack>
-    <Version />
-  </FooterStyle>
+type Props = {
+  dummy?: boolean | 'semi';
+};
+
+export const Footer: FC<Props> = ({ dummy }) => (
+  <LibFooter aside={<Version />} data-testid="appFooter">
+    <TextLink
+      variant="secondary"
+      external
+      href="https://lido.fi/terms-of-use"
+      onClick={() =>
+        trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.footerTermsOfUse)
+      }
+      data-testid="footerTermsOfUseLink"
+    >
+      Terms of Use
+    </TextLink>
+    <TextLink
+      variant="secondary"
+      external
+      href="https://lido.fi/privacy-notice"
+      onClick={() =>
+        trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.footerPrivacyNotice)
+      }
+      data-testid="footerPrivacyNoticeLink"
+    >
+      Privacy Notice
+    </TextLink>
+    {dummy !== true && <FeedbackFormLink />}
+    <TextLink
+      variant="secondary"
+      external
+      href="https://discord.com/invite/lido"
+      onClick={() => trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.footerDiscord)}
+      data-testid="footerDiscordLink"
+    >
+      Discord
+    </TextLink>
+  </LibFooter>
 );

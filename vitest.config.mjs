@@ -14,7 +14,6 @@ export default defineConfig({
   resolve: { tsconfigPaths: true },
   test: {
     globals: true,
-    env: { MODULE: 'CSM' },
     include: ['**/*.{test,spec}.{ts,tsx}'],
     exclude: [...configDefaults.exclude, 'tests/**', '.next/**'],
   },

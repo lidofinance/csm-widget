@@ -53,7 +53,7 @@ test.describe(
         });
 
         await test.step('Choose ETH, fill amount and add bond', async () => {
-          await addBond.selectBondToken(TOKENS.eth).click();
+          await addBond.selectBondToken(TOKENS.eth);
           await addBond.amountInput.fill('0.0001');
           await expect(addBond.addBondButton).toBeEnabled();
           await addBond.addBondButton.click();

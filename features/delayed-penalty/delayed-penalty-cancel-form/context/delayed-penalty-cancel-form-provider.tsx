@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { FC, PropsWithChildren } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
@@ -9,9 +10,9 @@ import { type DelayedPenaltyCancelFormInputType } from './types';
 import { useDelayedPenaltyCancelFlowResolver } from './use-delayed-penalty-cancel-flow';
 import { useDelayedPenaltyCancelValidation } from './use-delayed-penalty-cancel-validation';
 
-export const DelayedPenaltyCancelFormProvider: FC<PropsWithChildren> = ({
-  children,
-}) => {
+export const DelayedPenaltyCancelFormProvider: FC<
+  PropsWithChildren<{ module?: MODULE_NAME }>
+> = ({ children, module }) => {
   const resolver = useDelayedPenaltyCancelValidation();
 
   const formObject = useForm<DelayedPenaltyCancelFormInputType>({
@@ -22,15 +23,17 @@ export const DelayedPenaltyCancelFormProvider: FC<PropsWithChildren> = ({
     mode: 'onChange',
   });
 
-  const submitter = useFlowSubmit(useDelayedPenaltyCancelFlowResolver());
+  const resolve = useDelayedPenaltyCancelFlowResolver(module);
+  const submitter = useFlowSubmit(resolve);
 
   return (
     <FormProvider {...formObject}>
       <FormControllerProvider
         submitter={submitter}
+        resolve={resolve}
         formName="delayedPenaltyCancel"
       >
-        <DelayedPenaltyCancelUpdater />
+        <DelayedPenaltyCancelUpdater module={module} />
         {children}
       </FormControllerProvider>
     </FormProvider>

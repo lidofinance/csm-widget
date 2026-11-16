@@ -9,9 +9,9 @@ test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 test.describe(
   ...suite({
     epic: EPIC.dashboard,
-    // a single spec on its own section, so no feature level
+    // a single spec on its own card, so no feature level
     feature: null,
-    story: 'Roles section',
+    story: 'Operator header',
   }),
   async () => {
     let matomoEventService: MatomoService;
@@ -22,15 +22,18 @@ test.describe(
     });
 
     test(
-      qase(140, 'Should open Roles page after click to section arrow'),
+      qase(
+        140,
+        'Should open Settings page after click to header Settings link',
+      ),
       async ({ widgetService }) => {
         await Promise.all([
           matomoEventService.waitForEvent(
             'e_n',
             'csm_widget_dashboard_roles_section',
           ),
-          widgetService.page.waitForURL(/\/settings\/roles$/),
-          widgetService.dashboardPage.rolesSection.sectionHeaderLink.click(),
+          widgetService.page.waitForURL(/\/settings$/),
+          widgetService.dashboardPage.operatorHeader.settingsLink.click(),
         ]);
       },
     );

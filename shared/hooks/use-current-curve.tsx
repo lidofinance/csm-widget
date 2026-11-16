@@ -10,13 +10,21 @@ import {
   useOperatorCurveId,
 } from 'modules/web3';
 import { useCreateType } from 'providers/create-type-provider';
+import invariant from 'tiny-invariant';
 import { useOperatorTypeCurve } from './use-operator-type-metadata';
 
 /** Module whose curve the page is about: the type being created, else the active module. */
 export const useCurrentCurveModule = (): MODULE_NAME => {
   const { module: activeModule } = useModule();
   const createType = useCreateType();
-  return createType ? OPERATOR_TYPE_INFO[createType].module : activeModule;
+  const targetModule = createType
+    ? OPERATOR_TYPE_INFO[createType].module
+    : activeModule;
+  invariant(
+    targetModule,
+    'useCurrentCurveModule needs a create type or an active operator',
+  );
+  return targetModule;
 };
 
 /** The curve the page is about: create-flow type curve, else the active operator's, else the module default. */

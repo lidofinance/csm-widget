@@ -1,19 +1,11 @@
 import { type FC } from 'react';
-import styled from 'styled-components';
 
-import { InlineLoader } from '@lidofinance/lido-ui';
 import { TxAmount } from '../tx-stages-parts/tx-amount';
 import { SuccessText } from '../tx-stages-parts/success-text';
+import { SkeletonBalance } from '../tx-stages-parts/skeleton-balance';
 import { TxStageSuccess } from '../tx-stages-basic';
 import type { ClosableOnLedgerStage } from '../is-closable-on-ledger';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-
-export const SkeletonBalance = styled(InlineLoader).attrs({
-  color: 'text',
-})`
-  margin-left: ${({ theme }) => theme.spaceMap.xs}px;
-  width: 100px;
-`;
 
 type TxStageOperationSucceedBalanceShownProps = {
   balance?: bigint;

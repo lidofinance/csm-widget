@@ -1,19 +1,39 @@
 # Form Architecture
 
-Forms follow a layered provider pattern documented in `shared/hook-form/README.md`:
+Forms use the flow pattern described in `shared/hook-form/README.md` and render on the app-ui kit.
 
+```text
+XDataProvider              network data: FormDataContext { data, isPending, revalidate }
+└─ XFormProvider           useForm + FormControllerProvider(useFlowSubmit(useXFlowResolver()))
+   └─ FormPage             notices (above) / below / faq / done
+      └─ FormReady         skeleton card while the form is loading
+         └─ XFormGate      no-access / paused / empty → notice; never renders a <form>
+            └─ Form data-testid="xForm"
+               └─ FormLayout aside={<XAside />}   archetype A (aside with rows + CTA)
+                  or FormCard                     archetype B (narrow card, CTA inline)
 ```
-DataProvider → FormProvider → FormControllerProvider → Form → FormLoader → Controls
-```
 
-Each form lives in `features/{feature}/{form-name}/` with a standard file structure:
+Each form lives in `features/{feature}/{form-name}/`:
 
-- `context/types.ts` — `*FormInputType` (form fields) and `*FormNetworkData` (blockchain data)
-- `context/{form}-data-provider.tsx` — Network data fetching via React Query
-- `context/{form}-provider.tsx` — React Hook Form setup with validation + submission
-- `context/use-{form}-default-values.ts` — Initial values from network data
-- `context/use-{form}-validation.ts` — Validation using `useFormValidation()` + `ValidationError`
-- `context/use-{form}-submit.ts` — Transaction submission (`FormSubmitterHook` pattern)
-- `context/{form}-updater.tsx` — Optional cross-field revalidation
-- `controls/` — Form input components
-- Custom `*FormLoader` — Permission-based rendering (show `<Info />` for read-only, full form for authorized users)
+- `context/types.ts`: `*FormInputType` (form fields) and `*FormNetworkData` (chain/API data)
+- `context/{form}-data-provider.tsx`: network data via React Query, exports `useXFormData`
+- `context/{form}-form-provider.tsx`: `useForm` + `useFlowSubmit(useXFlowResolver())` + `FormControllerProvider formName="x"`
+- `context/use-{form}-default-values.ts`: `useFormDefaultValues`
+- `context/use-{form}-validation.ts`: `useFormValidation` + `ValidationError`
+- `context/use-{form}-flow.ts`: `XFlow` union, `useXFlowResolver`, `useXFlow`
+- `context/{form}-updater.tsx`: optional cross-field revalidation
+- `hooks/use-tx-modal-stages-{form}.tsx`: `useTxStages` stage factory
+- `{form}-form.tsx`: the tree above
+- `{form}-form-gate.tsx`: reads `useXFlow()`, renders `NoAccessNotice` / `PausedNotice` from `shared/form-page`
+- `{form}-aside.tsx`: archetype A only, `SubmitAside rows confirm` + `SubmitButton`
+- `controls/`: feature compositions of kit fields
+
+Rules:
+
+- Fields come from `shared/hook-form/fields`. Page pieces come from `shared/form-page`, and layout ports from `shared/ui`.
+- `<Form>` sits inside the gate, so no `<form>` exists while loading or in a gate state. When e2e waits on the form testid in a gate state, put the same testid on the gate's wrapper too.
+- Archetype A pages pass `wide` to `Layout`. Archetype B pages keep the default narrow `PageContent` (600px).
+- `NoAccessNotice` and `PausedNotice` come from `shared/form-page`. The `shared/components` export of the same name is gone.
+- Success stays in the tx modal (`TxStageSuccess`) by default. Forms whose success is form state (create, claim ICS/IDVTC) render `SuccessScreen` in place of `FormReady` and pass `FormPage done`.
+- Confirm modals are app-only `*-modal-app.tsx` components on `FormModalShell`, registered directly via `getUseConfirmModal`.
+- Reference forms: `features/add-keys/add-keys/` (A) and `features/change-role/claimer-form/` (B).

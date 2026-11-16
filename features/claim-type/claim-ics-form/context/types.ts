@@ -20,5 +20,4 @@ export type ClaimIcsFormNetworkData = {
   newCurve: CurveRef;
   newParameters: CurveParameters;
   proof: AddressProof;
-  justClaimed?: boolean;
 };

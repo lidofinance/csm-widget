@@ -30,6 +30,7 @@ import {
   useKeysAvailable,
   useOperatorTypeCurve,
 } from 'shared/hooks';
+import { CreateSuccessProvider } from 'features/create-node-operator/create-success';
 import { type SubmitKeysFormNetworkData } from './types';
 
 type Props = { type: CreatableOperatorType };
@@ -156,7 +157,7 @@ export const SubmitKeysDataProvider: FC<PropsWithChildren<Props>> = ({
 
   return (
     <FormDataContext.Provider value={networkData}>
-      {children}
+      <CreateSuccessProvider>{children}</CreateSuccessProvider>
     </FormDataContext.Provider>
   );
 };

@@ -1,13 +1,6 @@
 import { PATH } from 'consts/urls';
-import { MonitoringPage } from 'features/monitoring';
-import { Gate, GateLoaded, Navigate } from 'shared/navigate';
+import { Navigate } from 'shared/navigate';
 
-const Page = () => (
-  <GateLoaded>
-    <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.HOME} />}>
-      <MonitoringPage />
-    </Gate>
-  </GateLoaded>
-);
+const Page = () => <Navigate replace path={PATH.HOME} />;
 
 export default Page;

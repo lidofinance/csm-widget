@@ -37,9 +37,12 @@ export class DelayedPenaltyReportPage extends BasePage {
   }
 
   fieldError(name: string) {
-    return this.form
-      .locator(`xpath=//input[@name="${name}"]/ancestor::label/..`)
-      .getByTestId('inputMessageError');
+    // amount is an app-ui RichInput: input → amountRow → card → root, error under root
+    const field =
+      name === 'amount'
+        ? `xpath=//input[@name="${name}"]/ancestor::div[3]`
+        : `xpath=//input[@name="${name}"]/ancestor::label/..`;
+    return this.form.locator(field).getByTestId('inputMessageError');
   }
 
   async fill({

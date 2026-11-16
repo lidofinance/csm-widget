@@ -15,7 +15,12 @@ export const Form: FC<PropsWithChildren<FormControllerProps>> = ({
 }) => {
   const { isAccountActive, address } = useDappStatus();
   const { validateAddress } = useAddressValidation();
-  const { handleSubmit, reset: resetDefault } = useFormContext();
+  const {
+    handleSubmit,
+    reset: resetDefault,
+    getValues,
+    setValue,
+  } = useFormContext();
   const { onSubmit, onReset, formName } = useFormControllerContext();
   const { revalidate } = useFormDataContext();
   const data = useFormData();
@@ -23,35 +28,44 @@ export const Form: FC<PropsWithChildren<FormControllerProps>> = ({
   const retryEvent = useMemo(() => new EventSubsciption(), []);
   const onRetry = useCallback(() => retryEvent.fire(), [retryEvent]);
 
-  const baseSubmit = useMemo(
-    () =>
-      handleSubmit(async (args) => {
-        // @note Validate address before submit - if address is not valid, don't submit
-        const result = await validateAddress(address);
-        if (!result) return;
+  const baseSubmit = useMemo(() => {
+    const submit = handleSubmit(async (args) => {
+      // @note Validate address before submit - if address is not valid, don't submit
+      const result = await validateAddress(address);
+      if (!result) return;
 
-        const success = await onSubmit(args, data, {
-          onConfirm: revalidate,
-          onRetry,
-        });
-        if (success) {
-          trackMatomoFormEvent(formName, 'success');
-          onReset ? onReset(args) : resetDefault();
-        }
-      }),
-    [
-      address,
-      data,
-      formName,
-      handleSubmit,
-      onReset,
-      onRetry,
-      onSubmit,
-      resetDefault,
-      revalidate,
-      validateAddress,
-    ],
-  );
+      const success = await onSubmit(args, data, {
+        onConfirm: revalidate,
+        onRetry,
+      });
+      if (success) {
+        trackMatomoFormEvent(formName, 'success');
+        onReset ? onReset(args) : resetDefault();
+      }
+    });
+
+    // A button intent must not outlive its submit, or a cancelled/failed run leaves it stuck
+    return async (...args: Parameters<typeof submit>) => {
+      try {
+        await submit(...args);
+      } finally {
+        if (getValues('intent') !== undefined) setValue('intent', undefined);
+      }
+    };
+  }, [
+    address,
+    data,
+    formName,
+    getValues,
+    handleSubmit,
+    onReset,
+    onRetry,
+    onSubmit,
+    resetDefault,
+    revalidate,
+    setValue,
+    validateAddress,
+  ]);
 
   const doSubmit = useCallback(
     (...args: Parameters<typeof baseSubmit>) => {

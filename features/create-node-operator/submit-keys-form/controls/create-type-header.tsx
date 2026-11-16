@@ -1,33 +1,24 @@
-import { PATH } from 'consts/urls';
+import { Description, H2, Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import { Latice, Stack, StepTrack, TitledValue } from 'shared/components';
-import { useCreateOptions } from 'shared/hooks';
+import { CreatableOperatorType, useOperatorTypeCurve } from 'shared/hooks';
 import { TypeBadgeButton } from 'shared/node-operator/operator-type';
-import { useSubmitKeysFormData } from '../context';
 
-export const CreateTypeHeader: FC = () => {
-  const { type, curve } = useSubmitKeysFormData(true);
-  const hasSteps = useCreateOptions().length > 1;
+export const CreateTypeHeader: FC<{ type: CreatableOperatorType }> = ({
+  type,
+}) => {
+  const curve = useOperatorTypeCurve(type);
 
   return (
-    <Stack direction="column" gap="sm">
-      {hasSteps && (
-        <>
-          <StepTrack current={2} length={2} back={PATH.CREATE} />
-        </>
-      )}
-      <Latice variant="secondary">
-        <TitledValue
-          title="Node operator type"
-          value={
-            <TypeBadgeButton
-              displayType={type}
-              curve={curve}
-              data-testid="createTypeBadge"
-            />
-          }
+    <Stack gap={8}>
+      <H2 as="h1">Submit validator keys</H2>
+      <Stack direction="row" align="center" gap={12}>
+        <Description as="span">Node Operator type</Description>
+        <TypeBadgeButton
+          displayType={type}
+          curve={curve}
+          data-testid="createTypeBadge"
         />
-      </Latice>
+      </Stack>
     </Stack>
   );
 };

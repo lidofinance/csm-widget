@@ -48,7 +48,7 @@ test.describe(
           await expect(cards.icsCard).toBeVisible();
           await expect(cards.idvtcCard).toBeVisible();
           await expect(cards.getCardButton('idvtc')).toContainText(
-            'Create IDVTC operator',
+            'Select IDVTC',
           );
         });
 
@@ -79,7 +79,7 @@ test.describe(
         await widgetService.keysPage.goto('idvtc');
 
         await test.step('Select ETH bond token and add one key', async () => {
-          await form.getBondTokenElement(TokenSymbol.ETH).click();
+          await form.selectBondToken(TokenSymbol.ETH);
           await form.fillKeys(keys);
         });
 

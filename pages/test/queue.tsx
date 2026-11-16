@@ -1,4 +1,4 @@
-import { Accordion, Block } from '@lidofinance/lido-ui';
+import { Accordion, Card } from '@lidofinance/lido-app-ui';
 import { DepositQueueGraph } from 'features/view-keys/deposit-queue/deposit-queue-graph';
 import { MockDepositQueueProvider } from 'mock/queue/mock-providers';
 import { testScenarios } from 'mock/queue/test-scenarios';
@@ -15,7 +15,7 @@ const TestContainer = styled.div`
   margin: 0 auto;
 `;
 
-const TestBlock = styled(Block)`
+const TestCard = styled(Card)`
   padding: 24px;
 `;
 
@@ -23,41 +23,30 @@ const TestTitle = styled.h3`
   margin: 0 0 16px 0;
   font-size: 18px;
   font-weight: 600;
-  color: var(--lido-color-text);
+  color: var(--lido-app-ui-color-text-default);
 `;
 
 const TestDescription = styled.p`
   margin: 0 0 16px 0;
   font-size: 14px;
-  color: var(--lido-color-textSecondary);
-`;
-
-const StyledAccordion = styled(Accordion)`
-  margin: 16px 0 0;
-  & > [type='button'] {
-    padding: 0;
-    min-height: 24px;
-  }
-  & > [type='button'] + div > div {
-    padding: 4px 0 0;
-  }
+  color: var(--lido-app-ui-color-text-secondary);
 `;
 
 const AccordionSummary = styled.span`
   font-size: 14px;
   font-weight: 500;
-  color: var(--lido-color-textSecondary);
+  color: var(--lido-app-ui-color-text-secondary);
 `;
 
 const QueueDataContainer = styled.pre`
-  background: var(--lido-color-backgroundSecondary);
+  background: var(--lido-app-ui-color-background-secondary);
   border-radius: 8px;
   padding: 16px;
   margin: 0;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 12px;
   line-height: 1.4;
-  color: var(--lido-color-text);
+  color: var(--lido-app-ui-color-text-default);
   white-space: pre-wrap;
   word-wrap: break-word;
   overflow-x: auto;
@@ -69,7 +58,7 @@ const QueueDataContainer = styled.pre`
   }
 
   .operator-batch {
-    color: var(--lido-color-warning);
+    color: var(--lido-app-ui-color-text-warning);
     padding: 1px 4px;
     border-radius: 3px;
     font-weight: 600;
@@ -95,14 +84,15 @@ const DepositQueueGraphTestPage: FC = () => {
     <Layout dummy title="Deposit Queue Graph Test">
       <TestContainer>
         {testScenarios.map((scenario, index) => (
-          <TestBlock key={index}>
+          <TestCard key={index}>
             <TestTitle>{scenario.title}</TestTitle>
             <TestDescription>{scenario.description}</TestDescription>
             <MockDepositQueueProvider scenario={scenario.data}>
               <DepositQueueGraph />
             </MockDepositQueueProvider>
-            <StyledAccordion
-              summary={<AccordionSummary>Raw queue data</AccordionSummary>}
+            <Accordion
+              border={false}
+              title={<AccordionSummary>Raw queue data</AccordionSummary>}
             >
               <QueueDataContainer>
                 {scenario.data.depositQueueBatches ? (
@@ -130,8 +120,8 @@ const DepositQueueGraphTestPage: FC = () => {
                   <div>undefined (fallback mode)</div>
                 )}
               </QueueDataContainer>
-            </StyledAccordion>
-          </TestBlock>
+            </Accordion>
+          </TestCard>
         ))}
       </TestContainer>
     </Layout>

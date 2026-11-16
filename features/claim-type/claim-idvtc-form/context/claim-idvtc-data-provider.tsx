@@ -15,7 +15,7 @@ import {
   useOperatorIsOwner,
   useOperatorType,
 } from 'modules/web3';
-import { FC, PropsWithChildren, useCallback, useState } from 'react';
+import { FC, PropsWithChildren, useCallback } from 'react';
 import {
   FormDataContext,
   NetworkData,
@@ -27,8 +27,6 @@ import { type ClaimIdvtcFormNetworkData } from './types';
 const useClaimIdvtcFormNetworkData: NetworkData<
   ClaimIdvtcFormNetworkData
 > = () => {
-  const [justClaimed, setJustClaimed] = useState(false);
-
   const { address } = useDappStatus();
   const { nodeOperator } = useNodeOperator();
   const nodeOperatorId = nodeOperator?.nodeOperatorId;
@@ -74,8 +72,6 @@ const useClaimIdvtcFormNetworkData: NetworkData<
       KEY_OPERATOR_BALANCE,
       KEY_OPERATOR_KEYS,
     ]);
-
-    setJustClaimed(true);
   }, [invalidate]);
 
   const isPending =
@@ -101,7 +97,6 @@ const useClaimIdvtcFormNetworkData: NetworkData<
       newParameters,
       proof,
       canClaimCurve,
-      justClaimed,
     } as ClaimIdvtcFormNetworkData,
     isPending,
     revalidate,

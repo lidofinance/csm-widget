@@ -9,6 +9,8 @@ const flags = (patch: Partial<ShowFlags>): ShowFlags =>
     CAN_CREATE_ICS: false,
     CAN_CREATE_IDVTC: false,
     CAN_CREATE_0X02: false,
+    CAN_CREATE_CM: false,
+    IS_CM: false,
     HAS_APPLY_OPTIONS: false,
     HAS_MANAGER_ROLE: false,
     HAS_REWARDS_ROLE: false,
@@ -23,25 +25,21 @@ describe('getCorrectPath(PATH.CREATE)', () => {
         PATH.CREATE,
         flags({ CAN_CREATE: false, HAS_MANAGER_ROLE: true }),
       ),
-    ).toBe(PATH.KEYS_VIEW);
+    ).toBe(PATH.KEYS);
   });
 
-  it('jumps straight to the only creatable type', () => {
-    expect(getCorrectPath(PATH.CREATE, flags({ CAN_CREATE_0X01: true }))).toBe(
-      PATH.CREATE_0x01,
-    );
-    expect(getCorrectPath(PATH.CREATE, flags({ CAN_CREATE_ICS: true }))).toBe(
-      PATH.CREATE_ICS,
-    );
-    expect(getCorrectPath(PATH.CREATE, flags({ CAN_CREATE_IDVTC: true }))).toBe(
-      PATH.CREATE_IDVTC,
-    );
-    expect(getCorrectPath(PATH.CREATE, flags({ CAN_CREATE_0X02: true }))).toBe(
-      PATH.CREATE_0x02,
+  it.each([
+    ['CAN_CREATE_0X01'],
+    ['CAN_CREATE_ICS'],
+    ['CAN_CREATE_IDVTC'],
+    ['CAN_CREATE_0X02'],
+  ] as const)('keeps /create when only %s is set', (flag) => {
+    expect(getCorrectPath(PATH.CREATE, flags({ [flag]: true }))).toBe(
+      PATH.CREATE,
     );
   });
 
-  it('keeps the selection page when several types are creatable', () => {
+  it('keeps /create when several types are creatable', () => {
     expect(
       getCorrectPath(
         PATH.CREATE,
@@ -50,17 +48,54 @@ describe('getCorrectPath(PATH.CREATE)', () => {
     ).toBe(PATH.CREATE);
   });
 
-  it('keeps the selection page when no per-type flag is set', () => {
-    expect(getCorrectPath(PATH.CREATE, flags({}))).toBe(PATH.CREATE);
+  it('keeps /create when nothing is creatable and there is no role', () => {
+    expect(getCorrectPath(PATH.CREATE, flags({ CAN_CREATE: false }))).toBe(
+      PATH.CREATE,
+    );
   });
 
-  it('keeps the selection page when an apply card makes it a real choice', () => {
+  it('keeps /create when an apply card is present', () => {
     expect(
       getCorrectPath(
         PATH.CREATE,
         flags({ CAN_CREATE_0X01: true, HAS_APPLY_OPTIONS: true }),
       ),
     ).toBe(PATH.CREATE);
+  });
+
+  it('keeps /create for apply plus CM', () => {
+    expect(
+      getCorrectPath(
+        PATH.CREATE,
+        flags({ CAN_CREATE_CM: true, HAS_APPLY_OPTIONS: true }),
+      ),
+    ).toBe(PATH.CREATE);
+  });
+
+  it('sends a CM-only wallet to /create/cm', () => {
+    expect(getCorrectPath(PATH.CREATE, flags({ CAN_CREATE_CM: true }))).toBe(
+      PATH.CREATE_CM,
+    );
+  });
+
+  it('keeps /create when CM and 0x01 are both creatable', () => {
+    expect(
+      getCorrectPath(
+        PATH.CREATE,
+        flags({ CAN_CREATE_CM: true, CAN_CREATE_0X01: true }),
+      ),
+    ).toBe(PATH.CREATE);
+  });
+});
+
+describe('getCorrectPath — settings metadata', () => {
+  it('metadata settings stay for CM operators only', () => {
+    expect(getCorrectPath(PATH.SETTINGS_METADATA, flags({ IS_CM: true }))).toBe(
+      PATH.SETTINGS_METADATA,
+    );
+    expect(
+      getCorrectPath(PATH.SETTINGS_METADATA, flags({ IS_CM: false })),
+    ).toBe(PATH.SETTINGS);
   });
 });
 
@@ -75,8 +110,17 @@ describe('getCorrectPath — bond pages', () => {
     expect(getCorrectPath(PATH.BOND_UNLOCK, claimer)).toBe(PATH.BOND_CLAIM);
   });
 
+  it('keeps a role holder on the hub', () => {
+    expect(getCorrectPath(PATH.BOND, operator)).toBe(PATH.BOND);
+    expect(
+      getCorrectPath(
+        PATH.BOND,
+        flags({ HAS_REWARDS_ROLE: true, HAS_ANY_ROLE: true }),
+      ),
+    ).toBe(PATH.BOND);
+  });
+
   it('leaves an operator on the requested bond page', () => {
-    expect(getCorrectPath(PATH.BOND, operator)).toBe(PATH.BOND_CLAIM);
     expect(getCorrectPath(PATH.BOND_ADD, operator)).toBe(PATH.BOND_ADD);
     expect(getCorrectPath(PATH.BOND_UNLOCK, operator)).toBe(PATH.BOND_UNLOCK);
   });
@@ -128,18 +172,95 @@ describe('getCorrectPath — type claim pages', () => {
     ).toBe(PATH.TYPE_IDVTC_DESCRIPTION);
   });
 
-  it('falls back to type parameters when apply is disabled', () => {
+  it('falls back to home when apply is disabled', () => {
     expect(
       getCorrectPath(
         PATH.TYPE_ICS_CLAIM,
         flags({ CAN_CLAIM_ICS: false, ICS_APPLY_ENABLED: false }),
       ),
-    ).toBe(PATH.TYPE_PARAMETERS);
+    ).toBe(PATH.HOME);
     expect(
       getCorrectPath(
         PATH.TYPE_IDVTC_CLAIM,
         flags({ CAN_CLAIM_IDVTC: false, ICS_APPLY_ENABLED: false }),
       ),
-    ).toBe(PATH.TYPE_PARAMETERS);
+    ).toBe(PATH.HOME);
+  });
+});
+
+describe('getCorrectPath — settings hub', () => {
+  it('keeps the hub for wallets with a manager or rewards role', () => {
+    expect(
+      getCorrectPath(PATH.SETTINGS, flags({ HAS_MANAGER_ROLE: true })),
+    ).toBe(PATH.SETTINGS);
+    expect(
+      getCorrectPath(PATH.SETTINGS, flags({ HAS_REWARDS_ROLE: true })),
+    ).toBe(PATH.SETTINGS);
+  });
+
+  it('sends claimer-only wallets and invitees to the inbox', () => {
+    expect(getCorrectPath(PATH.SETTINGS, flags({ HAS_ANY_ROLE: true }))).toBe(
+      PATH.SETTINGS_INBOX,
+    );
+    expect(getCorrectPath(PATH.SETTINGS, flags({}))).toBe(PATH.SETTINGS_INBOX);
+  });
+});
+
+describe('getCorrectPath(PATH.KEYS)', () => {
+  it('keeps the hub for a manager', () => {
+    expect(getCorrectPath(PATH.KEYS, flags({ HAS_MANAGER_ROLE: true }))).toBe(
+      PATH.KEYS,
+    );
+  });
+
+  it('keeps the hub for a rewards-only wallet', () => {
+    expect(getCorrectPath(PATH.KEYS, flags({ HAS_REWARDS_ROLE: true }))).toBe(
+      PATH.KEYS,
+    );
+  });
+
+  it('keeps the hub for a manager with zero keys', () => {
+    expect(
+      getCorrectPath(
+        PATH.KEYS,
+        flags({ HAS_MANAGER_ROLE: true, HAS_KEYS: false }),
+      ),
+    ).toBe(PATH.KEYS);
+  });
+
+  it('sends a wallet without a role to create', () => {
+    expect(getCorrectPath(PATH.KEYS, flags({}))).toBe(PATH.CREATE);
+  });
+});
+
+describe('getCorrectPath(PATH.KEYS_DELETE)', () => {
+  it('keeps delete for a manager', () => {
+    expect(
+      getCorrectPath(PATH.KEYS_DELETE, flags({ HAS_MANAGER_ROLE: true })),
+    ).toBe(PATH.KEYS_DELETE);
+  });
+
+  it('keeps delete for a rewards-only wallet', () => {
+    expect(
+      getCorrectPath(PATH.KEYS_DELETE, flags({ HAS_REWARDS_ROLE: true })),
+    ).toBe(PATH.KEYS_DELETE);
+  });
+
+  it('sends a wallet without a role to create', () => {
+    expect(getCorrectPath(PATH.KEYS_DELETE, flags({}))).toBe(PATH.CREATE);
+  });
+});
+
+describe('getCorrectPath(PATH.KEYS_SUBMIT)', () => {
+  it('sends a non-manager to the hub', () => {
+    expect(
+      getCorrectPath(PATH.KEYS_SUBMIT, flags({ HAS_REWARDS_ROLE: true })),
+    ).toBe(PATH.KEYS);
+  });
+
+  it('keeps submit for a manager', () => {
+    expect(
+      getCorrectPath(PATH.KEYS_SUBMIT, flags({ HAS_MANAGER_ROLE: true })),
+    ).toBe(PATH.KEYS_SUBMIT);
   });
 });

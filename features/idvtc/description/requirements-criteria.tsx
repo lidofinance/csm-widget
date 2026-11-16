@@ -1,32 +1,21 @@
-import { Text } from '@lidofinance/lido-ui';
+import { Body, Card, SectionTitle, Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import { Stack } from 'shared/components';
 import { CRITERIA } from './criteria-data';
-import { CriteriaAccordionStyle, CriteriaContent } from './styles';
+import { CriteriaContent, CriterionStyle } from './styles';
 
-export const RequirementsCriteria: FC = () => {
-  return (
-    <Stack direction="column" gap="md">
-      <Text as="h3" size="lg" weight="bold">
-        Requirements and Criteria
-      </Text>
-      <Text size="xs" color="secondary">
-        To be included in the list, applicants must meet all the criteria and be
-        approved by the CSM Committee.
-      </Text>
-      {CRITERIA.map((criterion) => (
-        <CriteriaAccordionStyle
-          key={criterion.id}
-          id={criterion.id}
-          summary={
-            <Text size="xs" weight={700}>
-              {criterion.title}
-            </Text>
-          }
-        >
-          <CriteriaContent>{criterion.content}</CriteriaContent>
-        </CriteriaAccordionStyle>
+export const RequirementsCriteria: FC = () => (
+  <Card dataTestId={{ root: 'idvtcRequirements' }}>
+    <Stack direction="column" gap={24}>
+      <SectionTitle
+        title="Requirements and Criteria"
+        subtitle="To be included in the list, applicants must meet all the criteria and be approved by the CSM Committee"
+      />
+      {CRITERIA.map(({ id, title, content }) => (
+        <CriterionStyle key={id}>
+          <Body weight="semibold">{title}</Body>
+          <CriteriaContent>{content}</CriteriaContent>
+        </CriterionStyle>
       ))}
     </Stack>
-  );
-};
+  </Card>
+);

@@ -1,11 +1,6 @@
 import { config } from 'config';
 
-import { BannerStyle, TestEnvBannerOffset } from './styles';
+import { BannerStyle } from './styles';
 
 export const TestEnvBanner = () =>
-  config.isTestEnv ? (
-    <>
-      <TestEnvBannerOffset />
-      <BannerStyle />
-    </>
-  ) : null;
+  config.isTestEnv ? <BannerStyle /> : null;

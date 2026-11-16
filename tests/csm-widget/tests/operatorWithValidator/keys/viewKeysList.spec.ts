@@ -8,7 +8,7 @@ import { Tags } from 'tests/shared/consts/common.const';
 
 const keysStatusesExpectedComments = [
   {
-    status: 'Invalid',
+    status: 'Invalid signature',
     defaultCommentText: 'Remove the key',
     commentTextWithStrikes: undefined,
   },
@@ -65,9 +65,9 @@ test.describe(
               'Expected that value of status cell wont be empty.',
             ).not.toBeEmpty();
             await expect(
-              key.strikesCountCell,
-              'Expected that strikes value  wont be empty.',
-            ).not.toBeEmpty();
+              key.strikesDots,
+              'Expected that strikes dots show the strikes count.',
+            ).toHaveAttribute('aria-label', /^\d+\/\d+ strikes$/);
           }
         });
       },
@@ -88,11 +88,11 @@ test.describe(
             `There is no key with ${statusExpectedCommentData.status} status`,
           );
 
-          const strikesCount = await keyRow?.strikesCountCell.textContent();
+          const strikesCount = await keyRow?.strikesCount();
           // @ts-expect-error keyRow is checked by test.skip
           const statusCommentCell = keyRow.statusCommentCell;
 
-          if (strikesCount === '0/3') {
+          if (strikesCount === 0) {
             await test.step('Check comment for key without strikes', async () => {
               if (statusExpectedCommentData.defaultCommentText) {
                 await expect(statusCommentCell).toContainText(

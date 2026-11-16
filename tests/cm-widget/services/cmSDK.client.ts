@@ -3,10 +3,14 @@ import { widgetFullConfig } from '../config';
 import { LidoSDKCm } from '@lidofinance/lido-csm-sdk';
 import { LidoSDKCore } from '@lidofinance/lido-ethereum-sdk';
 import { formatEther } from 'viem';
+import { calculateAvailableToClaim } from 'utils/calculate-available-to-claim';
 import { parseDevnetAddresses } from './devnet';
 
 export class LidoSDKClient extends LidoSDKCm {
-  constructor(rpcUrls: string[], devnetAddresses: Record<string, string>) {
+  constructor(
+    rpcUrls: string[],
+    devnetAddresses: Record<string, unknown> | null,
+  ) {
     const core = new LidoSDKCore({
       chainId: widgetFullConfig.standConfig.networkConfig.chainId,
       rpcUrls,
@@ -43,6 +47,20 @@ export class LidoSDKClient extends LidoSDKCm {
         ...data,
         available: formatEther(data.available),
       };
+    });
+  }
+
+  async getAvailableToClaim(nodeOperatorId: number) {
+    return test.step(`Get available to claim for #${nodeOperatorId} node`, async () => {
+      const id = BigInt(nodeOperatorId);
+      const [bond, rewards, feeSplits] = await Promise.all([
+        this.operator.getBondBalance(id),
+        this.rewards.getRewards(id),
+        this.operator.getFeeSplits(id),
+      ]);
+      return parseFloat(
+        formatEther(calculateAvailableToClaim({ bond, rewards, feeSplits })),
+      );
     });
   }
 

@@ -1,7 +1,6 @@
-import { useIsomorphicLayoutEffect } from '@lidofinance/lido-ui';
-import { FC, useMemo, useRef, useState } from 'react';
+import { Stack } from '@lidofinance/lido-app-ui';
+import { FC, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
-import { Stack } from 'shared/components';
 import { useFilterShowRules, useRouterPath } from 'shared/hooks';
 import { getIsActivePath } from 'utils';
 import { Handle, SwitchWrapper, Track } from './styles';
@@ -33,7 +32,7 @@ export const Switcher: FC<SwitchProps> = ({ routes }) => {
 
   // Items are variable-width on the mobile scroll track, so the handle geometry
   // has to be measured from the DOM.
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     const track = trackRef.current;
     if (!track || activePathIndex < 0) {
       setHandleRect(null);
@@ -63,7 +62,7 @@ export const Switcher: FC<SwitchProps> = ({ routes }) => {
   }, [activePathIndex]);
 
   // Re-centering belongs to tab changes, not to every resize.
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     const wrapper = wrapperRef.current;
     const track = trackRef.current;
     if (!wrapper || !track || activePathIndex < 0) return;
@@ -77,7 +76,7 @@ export const Switcher: FC<SwitchProps> = ({ routes }) => {
     }
   }, [activePathIndex]);
 
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     const wrapper = wrapperRef.current;
     if (!wrapper) return;
 
@@ -119,7 +118,7 @@ export const Switcher: FC<SwitchProps> = ({ routes }) => {
             warning={route.warning}
             active={activePathIndex === index}
           >
-            <Stack gap="sm" center>
+            <Stack direction="row" gap={8} align="center">
               {route.title}
               {route.suffix}
             </Stack>

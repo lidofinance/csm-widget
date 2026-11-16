@@ -263,6 +263,7 @@ test.describe(
           await expect(
             applicationForm.applicationFormStatus.totalScoreBreakdown,
           ).toBeVisible();
+          await applicationForm.applicationFormStatus.viewBreakdownBtn.click();
           await expect(
             applicationForm.applicationFormStatus.proofOfHumanityCollapse,
           ).toBeVisible();
@@ -276,7 +277,7 @@ test.describe(
 
         await test.step('Verify points of each proof section', async () => {
           await expect(
-            applicationForm.applicationFormStatus.totalScoreBreakdown,
+            applicationForm.applicationFormStatus.scoreBreakdownTotal,
           ).toContainText('4 points');
           await expect(
             applicationForm.applicationFormStatus.proofOfHumanityCollapse,
@@ -318,24 +319,12 @@ test.describe(
           state: 'visible',
         });
 
+        await applicationForm.applicationFormStatus.viewBreakdownBtn.click();
         const proofOfExperienceCollapse =
           applicationForm.applicationFormStatus.proofOfExperienceCollapse;
 
         await test.step('Verify max points for category', async () => {
           await expect(proofOfExperienceCollapse).toContainText('8 points');
-        });
-
-        await test.step('Expand proofOfExperience category', async () => {
-          await proofOfExperienceCollapse.click();
-          await proofOfExperienceCollapse
-            .getByTestId('categoryItemsWrapper')
-            .waitFor({ state: 'visible' });
-        });
-
-        await test.step('Verify min score tip is not visible', async () => {
-          await expect(
-            proofOfExperienceCollapse.getByTestId('minScoreTip'),
-          ).toBeHidden();
         });
 
         await test.step('Verify all score items', async () => {
@@ -388,24 +377,12 @@ test.describe(
           state: 'visible',
         });
 
+        await applicationForm.applicationFormStatus.viewBreakdownBtn.click();
         const proofOfHumanityCollapse =
           applicationForm.applicationFormStatus.proofOfHumanityCollapse;
 
         await test.step('Verify max points for category', async () => {
           await expect(proofOfHumanityCollapse).toContainText('8 points');
-        });
-
-        await test.step('Expand proofOfHumanity category', async () => {
-          await proofOfHumanityCollapse.click();
-          await proofOfHumanityCollapse
-            .getByTestId('categoryItemsWrapper')
-            .waitFor({ state: 'visible' });
-        });
-
-        await test.step('Verify min score tip is not visible', async () => {
-          await expect(
-            proofOfHumanityCollapse.getByTestId('minScoreTip'),
-          ).toBeHidden();
         });
 
         await test.step('Verify all score items', async () => {
@@ -456,24 +433,12 @@ test.describe(
           state: 'visible',
         });
 
+        await applicationForm.applicationFormStatus.viewBreakdownBtn.click();
         const proofOfEngagementCollapse =
           applicationForm.applicationFormStatus.proofOfEngagementCollapse;
 
         await test.step('Verify max points for category', async () => {
           await expect(proofOfEngagementCollapse).toContainText('7 points');
-        });
-
-        await test.step('Expand proofOfEngagement category', async () => {
-          await proofOfEngagementCollapse.click();
-          await proofOfEngagementCollapse
-            .getByTestId('categoryItemsWrapper')
-            .waitFor({ state: 'visible' });
-        });
-
-        await test.step('Verify min score tip is not visible', async () => {
-          await expect(
-            proofOfEngagementCollapse.getByTestId('minScoreTip'),
-          ).toBeHidden();
         });
 
         await test.step('Verify all score items', async () => {

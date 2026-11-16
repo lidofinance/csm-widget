@@ -1,21 +1,28 @@
 import {
-  Button,
-  ButtonIcon,
-  External,
+  Body,
+  Description,
+  IconCheck,
+  IconLink,
+  IconCopy,
   Input,
-  Text,
-} from '@lidofinance/lido-ui';
+  Stack,
+  Tag,
+  useCopy,
+} from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
-import { FC } from 'react';
-import { Chip, CopyButton, MatomoLink, Stack } from 'shared/components';
-import { SquaredChip } from 'shared/components/status-chip/status-chip';
-import { VerifiedIcon } from 'shared/components/input-address/styles';
+import { FC, MouseEvent } from 'react';
+import { StretchStack } from 'shared/components';
+import { TrailingInput } from 'shared/hook-form/fields/trailing-input';
 import { isAddress } from 'viem';
 import { useOperatorKey } from 'modules/surveys-sdk';
+import { trackMatomoEvent } from 'utils';
 import { generateMemberOwnershipMessage } from '../utils/ownership';
+
+const ETHERSCAN_SIGNATURES_URL = 'https://etherscan.io/verifiedSignatures#';
 
 type SignOwnershipFieldsProps = {
   title: string;
+  memberNumber: number;
   address: string;
   signature: string;
   verified?: boolean;
@@ -32,8 +39,22 @@ type SignOwnershipFieldsProps = {
   signatureError?: string;
 };
 
+const openEtherscan = () => {
+  trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.idvtcEtherscanSignaturesLink);
+  window.open(ETHERSCAN_SIGNATURES_URL, '_blank', 'noopener,noreferrer');
+};
+
+// tags sit inside the input's label: default click would focus the input
+const stop =
+  (action: () => void) =>
+  (event: MouseEvent<HTMLElement>): void => {
+    event.preventDefault();
+    action();
+  };
+
 export const SignOwnershipFields: FC<SignOwnershipFieldsProps> = ({
   title,
+  memberNumber,
   address,
   signature,
   verified,
@@ -52,130 +73,124 @@ export const SignOwnershipFields: FC<SignOwnershipFieldsProps> = ({
   const op = useOperatorKey();
   const message =
     op && isAddress(address) ? generateMemberOwnershipMessage(address, op) : '';
+  const { copy } = useCopy(message);
 
   return (
-    <Stack direction="column" gap="sm">
-      <Stack align="center" gap="sm">
-        <Text as="h4" size="xs" weight="bold">
-          {title}
-        </Text>
+    <StretchStack gap={16}>
+      <Stack direction="row" align="center" gap={8}>
+        <Body weight="semibold">{title}</Body>
         {verified ? (
-          <SquaredChip variant="primary">
+          <Tag variant="success" icon={<IconCheck />}>
             Verified
-            <VerifiedIcon color="primary" />
-          </SquaredChip>
+          </Tag>
         ) : (
-          <SquaredChip variant="secondary">Unverified</SquaredChip>
+          <Tag variant="neutral">Unverified</Tag>
         )}
       </Stack>
 
       {verified ? (
-        <Input
-          label={title}
+        <TrailingInput
+          aria-label={title}
           value={address}
           readOnly
-          rightDecorator={
+          trailing={
             onClear && (
-              <Button
-                size="xs"
-                variant="translucent"
-                color="error"
-                onClick={onClear}
-                data-testid="clearMemberBtn"
+              <Tag
+                variant="action"
+                onClick={stop(onClear)}
+                dataTestId={{ root: 'clearMemberBtn' }}
               >
                 Clear
-              </Button>
+              </Tag>
             )
           }
         />
       ) : (
         <>
-          <Stack direction="column" gap="sm" data-testid="signStep1">
-            <Text size="xs">
-              Step 1. Insert the member Ethereum address and send the link to
-              this member to sign the message on Etherscan.
-            </Text>
+          <Stack gap={8} data-testid="signStep1">
+            <Description color="secondary">
+              Step 1. Insert cluster member #{memberNumber} Ethereum address and
+              send the link to this member to sign the transaction on Etherscan
+            </Description>
             <Input
-              label={title}
-              placeholder="0x..."
+              aria-label="Cluster member address"
+              placeholder="Cluster member address"
               value={address}
               disabled={disableAddress}
               onChange={(e) => onAddressChange(e.currentTarget.value)}
             />
-            <Input
+            <TrailingInput
+              aria-label="Message to sign"
               value={message}
               readOnly
-              label="Message to sign"
-              placeholder="Enter address above to generate message..."
-              rightDecorator={
-                <Stack gap="sm">
-                  <CopyButton text={message} size="xs" variant="translucent" />
-                  <MatomoLink
-                    href="https://etherscan.io/verifiedSignatures#"
-                    matomoEvent={
-                      MATOMO_CLICK_EVENTS_TYPES.idvtcEtherscanSignaturesLink
-                    }
+              placeholder="Message to sign"
+              trailing={
+                <Stack direction="row" gap={8}>
+                  <Tag
+                    variant="action"
+                    icon={<IconCopy />}
+                    onClick={stop(() => void copy())}
                   >
-                    <ButtonIcon
-                      data-testid="signBtn"
-                      icon={<External />}
-                      size="xs"
-                      variant="translucent"
-                    >
-                      Sign
-                    </ButtonIcon>
-                  </MatomoLink>
+                    Copy
+                  </Tag>
+                  <Tag
+                    variant="action"
+                    icon={<IconLink />}
+                    onClick={stop(openEtherscan)}
+                    dataTestId={{ root: 'signBtn' }}
+                  >
+                    Sign
+                  </Tag>
                 </Stack>
               }
             />
           </Stack>
 
-          <Stack direction="column" gap="sm" data-testid="signStep2">
-            <Text size="xs">
-              Step 2. Copy the signature and paste it in the field below.
-            </Text>
-            <Input
-              label="Signature"
-              placeholder="0x123..."
+          <Stack gap={8} data-testid="signStep2">
+            <Description color="secondary">
+              Step 2. Copy the signature and paste in the field below
+            </Description>
+            <TrailingInput
+              aria-label="Signature"
+              placeholder="Signature"
               value={signature}
               error={signatureError}
               onChange={(e) => onSignatureChange(e.currentTarget.value)}
-              rightDecorator={
-                <Button
-                  size="xs"
-                  variant="translucent"
-                  onClick={onVerify}
+              trailing={
+                <Tag
+                  variant="action"
                   disabled={isVerifying}
-                  data-testid="verifySignatureBtn"
+                  onClick={stop(onVerify)}
+                  dataTestId={{ root: 'verifySignatureBtn' }}
                 >
                   {isVerifying ? 'Verifying...' : 'Verify'}
-                </Button>
+                </Tag>
               }
             />
           </Stack>
         </>
       )}
 
-      <Stack direction="column" gap="xs">
-        <Stack center gap="sm">
-          <Text size="xs">Add contacts</Text>
-          <Chip>Optional</Chip>
+      <Stack gap={8}>
+        <Stack direction="row" align="center" gap={8}>
+          <Body weight="semibold">Add contacts</Body>
+          <Tag variant="neutral">Optional</Tag>
         </Stack>
-        <Stack direction="row" gap="sm">
+        <Stack direction={{ base: 'row', sm: 'column' }} gap={12}>
           <Input
             label="Discord handle"
-            fullwidth
+            placeholder="Discord handle"
             value={discordHandle ?? ''}
             onChange={(e) => onDiscordChange(e.currentTarget.value)}
           />
           <Input
             label="Telegram username"
-            fullwidth
+            placeholder="Telegram username"
             value={telegramUsername ?? ''}
             onChange={(e) => onTelegramChange(e.currentTarget.value)}
           />
         </Stack>
       </Stack>
-    </Stack>
+    </StretchStack>
   );
 };

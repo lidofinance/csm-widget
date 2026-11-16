@@ -1,55 +1,49 @@
-import Link, { LinkProps } from 'next/link';
+import { AnchorHTMLAttributes, FC, MouseEvent, useCallback } from 'react';
 import { useRouter } from 'next/router';
-import React, { FC, PropsWithChildren, useCallback } from 'react';
+import { ParsedUrlQuery } from 'querystring';
 
 import { PATH } from 'consts/urls';
-import { useModalActions } from 'providers/modal-provider';
 import { trackMatomoEvent, WithMatomoEvent } from 'utils';
-import { useCorrectPath } from './use-correct-path';
+import { AppLink } from './app-link';
 
-type LocalLinkProps = Omit<LinkProps, 'href'> & {
+type LocalLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> & {
   href?: PATH;
   anchor?: `#${string}`;
   'data-testid'?: string;
   query?: Record<string, string>;
-  title?: string;
 };
 
-export const LocalLink: FC<
-  PropsWithChildren<WithMatomoEvent<LocalLinkProps>>
-> = ({ matomoEvent, href: path, query, anchor, onClick, ...restProps }) => {
-  const router = useRouter();
-  const { ref, embed, app, theme } = router.query;
+const currentQuery = (query: ParsedUrlQuery) => {
+  const entries = Object.entries(query).filter(
+    (entry): entry is [string, string] => typeof entry[1] === 'string',
+  );
+  return entries.length > 0 ? Object.fromEntries(entries) : undefined;
+};
 
-  const href = useCorrectPath(path ?? (router.pathname as PATH));
-  const { closeModal } = useModalActions();
+export const LocalLink: FC<WithMatomoEvent<LocalLinkProps>> = ({
+  matomoEvent,
+  href: path,
+  query,
+  anchor,
+  onClick,
+  ...restProps
+}) => {
+  const router = useRouter();
+
+  const target = path ?? router.pathname;
+  const sameRoute = target === router.pathname;
+  const params = query ?? (sameRoute ? currentQuery(router.query) : undefined);
+  const search = params ? `?${new URLSearchParams(params)}` : '';
+  const href = `${target}${search}${anchor ?? ''}`;
 
   const onClickHandler = useCallback(
-    (event: React.MouseEvent<HTMLAnchorElement>) => {
+    (event: MouseEvent<HTMLAnchorElement>) => {
       trackMatomoEvent(matomoEvent);
-      closeModal();
       event.stopPropagation();
       onClick?.(event);
     },
-    [closeModal, matomoEvent, onClick],
+    [matomoEvent, onClick],
   );
 
-  const extraQuery: Record<string, string> = query ?? {};
-  // Not support case: ?ref=01234&ref=56789
-  if (ref && typeof ref === 'string') extraQuery.ref = ref;
-  if (embed && typeof embed === 'string') extraQuery.embed = embed;
-  if (app && typeof app === 'string') extraQuery.app = app;
-  if (theme && typeof theme === 'string') extraQuery.theme = theme;
-
-  if (typeof href === 'string') {
-    return (
-      <Link
-        {...restProps}
-        href={{ pathname: href, query: extraQuery, hash: anchor }}
-        onClick={onClickHandler}
-      />
-    );
-  }
-
-  throw new Error('Prop href is not compatible');
+  return <AppLink {...restProps} href={href} onClick={onClickHandler} />;
 };

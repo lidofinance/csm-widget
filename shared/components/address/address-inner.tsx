@@ -1,11 +1,14 @@
 import {
   Address as AddressComponent,
-  AddressProps as BaseAddressProps,
+  Caption,
+  Description,
   Identicon,
-  Text,
-  Tooltip,
-} from '@lidofinance/lido-ui';
-import { ComponentProps, FC, ReactNode } from 'react';
+  Body,
+  TypographyColor,
+  TypographyWeight,
+} from '@lidofinance/lido-app-ui';
+import { FC, ReactNode } from 'react';
+import { Tooltip } from '../tooltip/tooltip';
 import { EtherscanAddressLink } from '../external-icon-link';
 import { AddressContainerStyle, Avatar } from './styles';
 
@@ -17,8 +20,22 @@ export type AddressProps = {
   name?: string;
   avatar?: string;
   noStyle?: boolean;
-} & Pick<ComponentProps<typeof Text>, 'weight' | 'size' | 'color'> &
-  Partial<BaseAddressProps>;
+  address?: string;
+  symbols?: number;
+  size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg';
+  weight?: TypographyWeight | number;
+  color?: TypographyColor;
+};
+
+const toWeight = (weight: TypographyWeight | number | undefined) => {
+  if (typeof weight !== 'number') return weight;
+  if (weight >= 700) return 'bold';
+  if (weight >= 600) return 'semibold';
+  if (weight >= 500) return 'medium';
+  return 'regular';
+};
+
+const TEXT = { xxs: Caption, xs: Description, sm: Body, md: Body, lg: Body };
 
 export const AddressInner: FC<AddressProps> = ({
   address = '',
@@ -38,17 +55,17 @@ export const AddressInner: FC<AddressProps> = ({
     <AddressComponent
       address={address}
       symbols={!symbols ? 90 : symbols}
-      as="span"
+      tooltip={false}
     />
   );
 
+  const Text = TEXT[size];
   const component = noStyle ? (
     <span data-testid="addressText">{content}</span>
   ) : (
     <Text
       as="span"
-      weight={weight}
-      size={size}
+      weight={toWeight(weight)}
       color={color}
       data-testid="addressText"
     >
@@ -74,7 +91,7 @@ export const AddressInner: FC<AddressProps> = ({
             ) : (
               <Identicon
                 address={address}
-                diameter={big ? 24 : 20}
+                size={big ? 24 : 20}
                 data-testid="identicon"
               />
             ))}
@@ -82,9 +99,9 @@ export const AddressInner: FC<AddressProps> = ({
             component
           ) : (
             <Tooltip
-              placement="top"
-              title={address}
-              style={{ wordWrap: 'break-word', maxWidth: '300px' }}
+              position="top"
+              content={address}
+              width={300}
               data-testid="addressTooltip"
             >
               {component}

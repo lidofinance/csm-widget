@@ -1,32 +1,15 @@
-import { KEYS_UPLOAD_TX_LIMIT } from 'consts';
+import { MessageBox } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import { WarningBlock } from '../warning-block/warning-block';
-import { pluralKeys } from 'utils';
+import { getKeysLimitState, KeysLimitInput } from './keys-limit-state';
 
-type Props = {
-  keysLimit?: number;
-  nonWithdrawnKeys?: number;
-};
+export const KeysLimitWarning: FC<KeysLimitInput> = (input) => {
+  const state = getKeysLimitState(input);
 
-export const KeysLimitWarning: FC<Props> = ({
-  keysLimit,
-  nonWithdrawnKeys,
-}) => {
-  if (keysLimit === undefined || nonWithdrawnKeys === undefined) {
-    return null;
-  }
-
-  const gap = keysLimit - nonWithdrawnKeys;
-
-  if (gap >= KEYS_UPLOAD_TX_LIMIT) {
-    return null;
-  }
+  if (!state) return null;
 
   return (
-    <WarningBlock type="warning" data-testid="keysLimitWarning">
-      {gap <= 0
-        ? "Keys limit reached. New keys can't be uploaded until some of the current keys are withdrawn."
-        : `Approaching the keys limit. Only ${gap} more ${pluralKeys({ value: gap })} can be uploaded.`}
-    </WarningBlock>
+    <MessageBox variant="warning" dataTestId={{ root: 'keysLimitWarning' }}>
+      {state.message}
+    </MessageBox>
   );
 };

@@ -20,11 +20,16 @@ export const AddBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
     mode: 'onChange',
   });
 
-  const submitter = useFlowSubmit(useAddBondFlowResolver());
+  const resolve = useAddBondFlowResolver();
+  const submitter = useFlowSubmit(resolve);
 
   return (
     <FormProvider {...formObject}>
-      <FormControllerProvider submitter={submitter} formName="addBond">
+      <FormControllerProvider
+        submitter={submitter}
+        resolve={resolve}
+        formName="addBond"
+      >
         <AddBondUpdater />
         {children}
       </FormControllerProvider>

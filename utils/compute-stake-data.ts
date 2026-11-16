@@ -14,7 +14,14 @@ export type StakeAndKeysData = {
   depositableKeys: number;
   potentialAdditionalStake: bigint;
   potentialAdditionalKeys: number;
+  targetStake: bigint;
+  targetKeys: number;
 };
+
+const toKeys = (stake: bigint): number =>
+  stake < MIN_EFFECTIVE_BALANCE
+    ? 0
+    : Number((stake + MAX_EFFECTIVE_BALANCE - 1n) / MAX_EFFECTIVE_BALANCE);
 
 export const sumKeysBalance = (keys: KeyWithStatus[]): bigint =>
   keys.reduce((acc, k) => acc + (k.effectiveBalance ?? 0n), 0n);
@@ -46,13 +53,11 @@ export const computeStakeData = (
     0n,
     targetStake - (activeStake + depositableStake),
   );
-  const potentialAdditionalKeys =
-    potentialAdditionalStake < MIN_EFFECTIVE_BALANCE
-      ? 0
-      : Number(
-          (potentialAdditionalStake + MAX_EFFECTIVE_BALANCE - 1n) /
-            MAX_EFFECTIVE_BALANCE,
-        );
+  const potentialAdditionalKeys = toKeys(potentialAdditionalStake);
+  const targetKeys =
+    targetStake <= activeStake
+      ? activeKeys
+      : activeKeys + toKeys(targetStake - activeStake);
 
   return {
     activeStake,
@@ -61,5 +66,7 @@ export const computeStakeData = (
     depositableKeys,
     potentialAdditionalStake,
     potentialAdditionalKeys,
+    targetStake,
+    targetKeys,
   };
 };

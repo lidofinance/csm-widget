@@ -1,20 +1,19 @@
 import { CONTRACT_NAMES, MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { Copy } from '@lidofinance/lido-app-ui';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
-import { config } from 'config';
 import { MODULE_METADATA } from 'consts/module';
 import { useDappStatus, useModule, useSmSDK } from 'modules/web3';
 import { FC, PropsWithChildren } from 'react';
-import { useChainName } from 'shared/hooks';
+import { notifyCopied, useChainName } from 'shared/hooks';
 import styled from 'styled-components';
 import { getEtherscanAddressLink } from 'utils';
-import { CopyLink } from '../copy-button';
 import { FaqLink } from './faq-link';
 
 const AddressCode = styled.code`
   word-break: break-all;
 `;
 
-const StyledCopy = styled(CopyLink)`
+const StyledCopy = styled(Copy)`
   margin: -8px 0 -4px;
   vertical-align: middle;
 `;
@@ -52,12 +51,12 @@ export const FaqIfModule: FC<PropsWithChildren<{ module: MODULE_NAME }>> = ({
 
 export const FaqModuleName: FC = () => {
   const { module } = useModule();
-  return <>{MODULE_METADATA[module].variantName}</>;
+  return <>{MODULE_METADATA[module ?? MODULE_NAME.CSM].variantName}</>;
 };
 
 const FaqContractAddress: FC<{ name: CONTRACT_NAMES }> = ({ name }) => {
   const { chainId } = useDappStatus();
-  const sm = useSmSDK(config.module);
+  const sm = useSmSDK(MODULE_NAME.CSM);
   const address = sm?.core.getContractAddress(name);
   if (!address) return null;
 
@@ -67,7 +66,7 @@ const FaqContractAddress: FC<{ name: CONTRACT_NAMES }> = ({ name }) => {
       <FaqLink href={url} $inline>
         <AddressCode>{address}</AddressCode>
       </FaqLink>
-      <StyledCopy text={address} />
+      <StyledCopy text={address} onCopy={notifyCopied} />
     </>
   );
 };

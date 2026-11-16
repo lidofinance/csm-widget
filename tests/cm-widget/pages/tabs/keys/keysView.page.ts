@@ -52,7 +52,7 @@ export class KeysViewPage extends BasePage {
 
   async open() {
     await test.step('Open keys view tab for Keys page', async () => {
-      await this.openWithRetry('/keys/view', this.viewKeysBlock);
+      await this.openWithRetry('/keys', this.viewKeysBlock);
     });
   }
 }

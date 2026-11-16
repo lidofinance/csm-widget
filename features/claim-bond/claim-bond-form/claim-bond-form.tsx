@@ -1,35 +1,37 @@
+import { Stack, FormLayout } from '@lidofinance/lido-app-ui';
+import { useFaq } from 'faq';
 import { FC, memo } from 'react';
-
-import { ClaimBondDataProvider, ClaimBondFormProvider } from './context';
-
-import { FormBlock, Stack } from 'shared/components';
+import { BondStatsCard, Faq } from 'shared/components';
+import { FormPage, FormReady } from 'shared/form-page';
 import { Form } from 'shared/hook-form/form-controller';
-import { ClaimBondFormInfo } from './claim-bond-form-info';
-import { ClaimBondFormLoader } from './claim-bond-form-loader';
+import { ClaimBondAside } from './claim-bond-aside';
+import { ClaimBondFormGate } from './claim-bond-form-gate';
+import { ClaimBondDataProvider, ClaimBondFormProvider } from './context';
 import { AmountInput } from './controls/amount-input';
 import { SourceSelect } from './controls/source-select';
-import { SourcesInfo } from './controls/sources-info';
-import { SubmitButton } from './controls/submit-button';
 import { TokenSelect } from './controls/token-select';
 
 export const ClaimBondForm: FC = memo(() => {
+  const faq = useFaq('BOND');
+
   return (
     <ClaimBondDataProvider>
       <ClaimBondFormProvider>
-        <Stack direction="column" gap="ms">
-          <SourcesInfo />
-          <FormBlock data-testid="claimBondForm">
-            <ClaimBondFormLoader>
-              <Form>
-                <SourceSelect />
-                <TokenSelect />
-                <AmountInput />
-                <SubmitButton />
+        <FormPage notices={<BondStatsCard />} faq={<Faq items={faq} />}>
+          <FormReady>
+            <ClaimBondFormGate>
+              <Form data-testid="claimBondForm">
+                <FormLayout aside={<ClaimBondAside />}>
+                  <Stack direction="column" gap={32}>
+                    <SourceSelect />
+                    <TokenSelect />
+                    <AmountInput />
+                  </Stack>
+                </FormLayout>
               </Form>
-              <ClaimBondFormInfo />
-            </ClaimBondFormLoader>
-          </FormBlock>
-        </Stack>
+            </ClaimBondFormGate>
+          </FormReady>
+        </FormPage>
       </ClaimBondFormProvider>
     </ClaimBondDataProvider>
   );

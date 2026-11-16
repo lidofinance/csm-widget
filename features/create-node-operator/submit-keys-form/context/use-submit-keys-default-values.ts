@@ -21,7 +21,6 @@ export const useSubmitKeysDefaultValues = () => {
     confirmKeysReady: false,
     extendedManagerPermissions: false,
     specifyCustomAddresses: false,
-    specifyReferrrer: false,
     referrer,
     dkgFiles: [],
   }));

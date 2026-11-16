@@ -1,5 +1,5 @@
 import { type MethodAccess } from '@lidofinance/lido-csm-sdk';
-import { useSmSDK } from 'modules/web3';
+import { useActiveOperatorSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -7,6 +7,7 @@ import {
 } from 'shared/hook-form/form-controller';
 import { useCanPerform } from 'shared/hooks';
 import { useTxModalStagesRemoveKeys } from '../hooks/use-tx-modal-stages-remove-keys';
+import { getRemoveKeysArgs } from '../remove-keys-state';
 import { useRemoveKeysFormData } from './remove-keys-data-provider';
 import { RemoveKeysFormInputType, RemoveKeysFormNetworkData } from './types';
 
@@ -20,7 +21,7 @@ export const useRemoveKeysFlowResolver = (): FlowResolver<
   RemoveKeysFormNetworkData,
   RemoveKeysFlow
 > => {
-  const { keys: keysSDK } = useSmSDK();
+  const { keys: keysSDK } = useActiveOperatorSDK();
   const [canRemoveKeys, access] = useCanPerform(keysSDK, 'removeKeys');
   const buildCallback = useTxModalStagesRemoveKeys();
 
@@ -29,22 +30,23 @@ export const useRemoveKeysFlowResolver = (): FlowResolver<
       if (!canRemoveKeys) return { action: 'no-access', access };
       if (!data.keys?.length) return { action: 'no-keys' };
 
+      const props = () => ({
+        nodeOperatorId: data.nodeOperatorId,
+        ...getRemoveKeysArgs(
+          data.keys,
+          data.info.totalDepositedKeys,
+          input.selection,
+        ),
+      });
+
       return {
         action: 'remove' as const,
-        submit: async () => {
-          const { start, count } = input.selection;
-          const pubkeys = data.keys
-            .map(({ pubkey }) => pubkey)
-            .slice(start, start + count);
-
-          return keysSDK.removeKeys({
-            nodeOperatorId: data.nodeOperatorId,
-            startIndex: BigInt(data.info.totalDepositedKeys + start),
-            keysCount: BigInt(count),
-            pubkeys,
+        submit: async () =>
+          keysSDK.removeKeys({
+            ...props(),
             callback: buildCallback(input, data),
-          });
-        },
+          }),
+        estimate: async () => keysSDK.estimateRemoveKeys(props()),
       };
     },
     [canRemoveKeys, access, keysSDK, buildCallback],

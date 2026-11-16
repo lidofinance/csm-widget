@@ -86,10 +86,18 @@ test.describe(
           ]);
         });
 
-        await test.step('Success message is shown', async () => {
+        await test.step('Success screen is shown', async () => {
+          const { successScreen } = widgetService.createNodeOperatorPage;
+
+          await expect(successScreen.getByText('Congratulations!')).toBeVisible(
+            { timeout: STAGE_WAIT_TIMEOUT },
+          );
           await expect(
-            widgetService.page.getByText('Node Operator has been created'),
-          ).toBeVisible({ timeout: STAGE_WAIT_TIMEOUT });
+            successScreen,
+            'Wallet without roles should see the custom addresses notice',
+          ).toContainText(
+            'You have created a Node Operator with custom addresses',
+          );
         });
       },
     );

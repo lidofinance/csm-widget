@@ -1,5 +1,6 @@
 import { Locator, Page, expect, test } from '@playwright/test';
 import {
+  BOND_TOKEN_OPTION_TEST_ID,
   EXTRA_PER_KEY,
   FIRST_BOND,
   TokenSymbol,
@@ -15,7 +16,6 @@ export class CreateNodeOperatorForm {
   confirmKeysReady: Locator;
   submitKeysButton: Locator;
   amountInput: Locator;
-  amountInputText: Locator;
   validationInputError: Locator;
   specifyCustomAdresses: Locator;
   extendedManagerPermissionsRadio: Locator;
@@ -30,20 +30,17 @@ export class CreateNodeOperatorForm {
     this.base = new BasePage(page);
     this.formBlock = this.page.getByTestId('submitKeysForm');
     this.rawDepositData = this.formBlock.locator('[name="rawDepositData"]');
-    this.confirmKeysReady = this.formBlock
-      .locator('label:has([name="confirmKeysReady"])')
-      .locator('svg');
-    this.submitKeysButton = this.formBlock
-      .getByRole('button')
-      .getByText('Create Node Operator');
+    this.confirmKeysReady = this.formBlock.locator(
+      'label:has([name="confirmKeysReady"])',
+    );
+    this.submitKeysButton = this.formBlock.getByTestId('submitKeysButton');
     this.amountInput = this.formBlock.getByTestId('amountInput');
-    this.amountInputText = this.amountInput.locator('..').locator('span');
     this.validationInputError = this.formBlock.getByTestId(
       'input-message-error',
     );
-    this.specifyCustomAdresses = this.formBlock.getByText(
-      'Specify custom addresses',
-    );
+    this.specifyCustomAdresses = this.formBlock
+      .getByText('Specify custom addresses', { exact: true })
+      .first();
     this.extendedManagerPermissionsRadio = this.formBlock
       .locator(
         'xpath=//input[@name="extendedManagerPermissions"]/ancestor::label',
@@ -51,25 +48,29 @@ export class CreateNodeOperatorForm {
       .getByText('Extended');
 
     this.customRewardAddressCurrentButton = this.formBlock
-      .locator('xpath=//input[@name="rewardsAddress"]/ancestor::label')
+      .locator('xpath=//input[@name="rewardsAddress"]/ancestor::label/..')
       .getByRole('button', { name: 'Connected address' });
 
     this.customManagerAddressCurrentButton = this.formBlock
-      .locator('xpath=//input[@name="managerAddress"]/ancestor::label')
+      .locator('xpath=//input[@name="managerAddress"]/ancestor::label/..')
       .getByRole('button', { name: 'Connected address' });
 
     // Parsed tab
     this.depositDataRow = this.formBlock.getByTestId('deposit-data-row');
   }
 
-  getBondTokenElement(tokenSymbol: TokenSymbol) {
-    return this.formBlock.locator(`label:has([value="${tokenSymbol}"])`);
+  async selectBondToken(tokenSymbol: TokenSymbol) {
+    await test.step(`Select "${tokenSymbol}" bond token`, async () => {
+      await this.formBlock.getByTestId('tokenSelectTrigger').click();
+      await this.formBlock
+        .getByTestId(BOND_TOKEN_OPTION_TEST_ID[tokenSymbol])
+        .click();
+    });
   }
 
   async selectTab(tabName: 'JSON' | 'Parsed' | 'Parameters') {
     return test.step(`Select "${tabName}" tab`, async () => {
-      const tab = this.formBlock.getByRole('button').getByText(tabName);
-      await tab.click();
+      await this.formBlock.getByTestId(`tab-button-${tabName}`).click();
     });
   }
 
@@ -82,8 +83,7 @@ export class CreateNodeOperatorForm {
 
   async addNewKeys(keys: DepositKey[], tokenSymbol: TokenSymbol) {
     await test.step('Add new keys', async () => {
-      const bondTokenElement = this.getBondTokenElement(tokenSymbol);
-      await bondTokenElement.click();
+      await this.selectBondToken(tokenSymbol);
       await this.fillKeys(keys);
       // This formula follows the Bond Curve model:
       // https://operatorportal.lido.fi/modules/community-staking-module#block-2d1c307d95fc4f8ab7c32b7584f795cf
@@ -101,7 +101,7 @@ export class CreateNodeOperatorForm {
 
   async submitNewKeys(keys: DepositKey[], tokenSymbol: TokenSymbol) {
     await test.step('Create operator with new key(s)', async () => {
-      await this.getBondTokenElement(tokenSymbol).click();
+      await this.selectBondToken(tokenSymbol);
       await this.fillKeys(keys);
       await this.confirmKeysReady.click();
       await this.submitKeysButton.click();

@@ -1,6 +1,7 @@
 import { KeyWithStatus } from '@lidofinance/lido-csm-sdk';
+import { Copy } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import { CopyLink } from '../copy-button';
+import { notifyCopied } from 'shared/hooks';
 import {
   BeaconchainPubkeyLink,
   MigalabsPubkeyLink,
@@ -11,7 +12,7 @@ export const PubkeyLinks: FC<
 > = (props) => {
   return (
     <>
-      <CopyLink text={props.pubkey} />
+      <Copy text={props.pubkey} onCopy={notifyCopied} />
       <BeaconchainPubkeyLink {...props} />
       <MigalabsPubkeyLink {...props} />
     </>

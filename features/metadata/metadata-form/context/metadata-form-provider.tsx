@@ -26,12 +26,14 @@ export const MetadataFormProvider: FC<PropsWithChildren> = ({ children }) => {
     mode: 'onChange',
   });
 
-  const submitter = useFlowSubmit(useMetadataFlowResolver());
+  const resolve = useMetadataFlowResolver();
+  const submitter = useFlowSubmit(resolve);
 
   return (
     <FormProvider {...formObject}>
       <FormControllerProvider
         submitter={submitter}
+        resolve={resolve}
         formName="metadata"
         onReset={formObject.reset}
       >

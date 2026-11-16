@@ -1,7 +1,13 @@
 import { FC, useCallback, useState } from 'react';
-import { ButtonIcon, Text } from '@lidofinance/lido-ui';
+import {
+  Body,
+  IconButton,
+  IconDownload,
+  IconTrash,
+  Stack,
+  Switch,
+} from '@lidofinance/lido-app-ui';
 import type { FileMetadataDto } from 'modules/surveys-sdk/generated';
-import { Stack, Toggle } from 'shared/components';
 import { useToggleDkgFile } from '../hooks/use-toggle-dkg-file';
 import { useDeleteDkgFile } from '../hooks/use-delete-dkg-file';
 import { useDownloadDkgFile } from '../hooks/use-download-dkg-file';
@@ -14,18 +20,16 @@ import {
   RowActions,
 } from '../styles';
 
-import DownloadIcon from 'assets/icons/download-2.svg?react';
-import Trash from 'assets/icons/trash.svg?react';
+const ERROR_ICON_STYLE = { color: 'var(--lido-app-ui-color-icons-error)' };
 
-const DkgDeleteButton: FC<{ onClick: () => void; disabled?: boolean }> = ({
-  onClick,
-  disabled,
-}) => (
-  <ButtonIcon
-    icon={<Trash />}
+const DkgDeleteButton: FC<{
+  onClick: () => void;
+  disabled?: boolean;
+  danger?: boolean;
+}> = ({ onClick, disabled, danger }) => (
+  <IconButton
+    icon={<IconTrash style={danger ? ERROR_ICON_STYLE : undefined} />}
     variant="ghost"
-    size="xxs"
-    color="error"
     type="button"
     disabled={disabled}
     onClick={onClick}
@@ -81,34 +85,25 @@ export const DkgFilesTable: FC<Props> = ({ files, canManage }) => {
     <>
       <DkgTable>
         <DkgTableHead>
-          <Stack gap="sm">
-            <Text size="xxs" color="secondary">
-              Status
-            </Text>
-            <Text size="xxs" color="secondary">
-              Filename
-            </Text>
-          </Stack>
-          <Text size="xxs" color="secondary">
-            Actions
-          </Text>
+          <Body color="tertiary">Status</Body>
+          <Body color="tertiary">Filename</Body>
+          <Body color="tertiary">Actions</Body>
         </DkgTableHead>
         {files.map((file) => {
           const busy = busyId === file.id;
           return (
-            <DkgRow key={file.id} $columns="auto 1fr auto">
-              <Toggle
+            <DkgRow key={file.id} $columns="64px 1fr auto">
+              <Switch
                 checked={file.active}
                 disabled={!canManage || busy}
-                onChange={(active) => void onToggle(file, active)}
+                aria-label={`Toggle ${file.name}`}
+                onChange={(e) => void onToggle(file, e.target.checked)}
               />
               <FileName $inactive={!file.active}>{file.name}</FileName>
               <RowActions>
-                <ButtonIcon
-                  icon={<DownloadIcon />}
+                <IconButton
+                  icon={<IconDownload />}
                   variant="ghost"
-                  size="xxs"
-                  color="primary"
                   type="button"
                   loading={downloadingId === file.id}
                   onClick={() => void download(file)}
@@ -126,11 +121,7 @@ export const DkgFilesTable: FC<Props> = ({ files, canManage }) => {
           );
         })}
       </DkgTable>
-      {actionError && (
-        <Text size="xs" color="error">
-          {actionError.message}
-        </Text>
-      )}
+      {actionError && <Body color="error">{actionError.message}</Body>}
     </>
   );
 };
@@ -140,17 +131,32 @@ type StagedProps = {
   onRemove: (index: number) => void;
 };
 
-// Staged variant: filename · delete only. No header, toggle or download —
-// these files exist only client-side until the parent flow uploads them.
-export const DkgStagedTable: FC<StagedProps> = ({ items, onRemove }) => (
-  <DkgTable>
-    {items.map((item, index) => (
-      <DkgRow key={`${item.name}-${index}`} $columns="1fr auto">
-        <FileName>{item.name}</FileName>
-        <RowActions>
-          <DkgDeleteButton onClick={() => onRemove(index)} />
-        </RowActions>
-      </DkgRow>
-    ))}
-  </DkgTable>
-);
+// Staged files exist only client-side until the parent flow uploads them.
+export const DkgStagedTable: FC<StagedProps> = ({ items, onRemove }) => {
+  if (items.length === 1) {
+    return (
+      <Stack direction="row" align="center" gap={8}>
+        <FileName>
+          <Body as="span" weight="semibold">
+            Attached file:
+          </Body>{' '}
+          {items[0].name}
+        </FileName>
+        <DkgDeleteButton danger onClick={() => onRemove(0)} />
+      </Stack>
+    );
+  }
+
+  return (
+    <DkgTable>
+      {items.map((item, index) => (
+        <DkgRow key={`${item.name}-${index}`} $columns="1fr auto">
+          <FileName>{item.name}</FileName>
+          <RowActions>
+            <DkgDeleteButton onClick={() => onRemove(index)} />
+          </RowActions>
+        </DkgRow>
+      ))}
+    </DkgTable>
+  );
+};

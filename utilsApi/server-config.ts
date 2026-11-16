@@ -1,5 +1,5 @@
 import { parseUrlList } from '../scripts/parse-url-list.mjs';
-import { loadDevnetAddresses } from '../scripts/load-devnet-addresses.mjs';
+import { loadDevnetArtifacts } from '../scripts/load-devnet-artifacts.mjs';
 
 // empty list still typed as the tuple; consumers throw on use
 const urlList = (value?: string) =>
@@ -17,7 +17,7 @@ export const readServerConfig = (
   rateLimit: Number(env.RATE_LIMIT) || 100,
   rateLimitTimeFrame: Number(env.RATE_LIMIT_TIME_FRAME) || 60,
   validationAPI: env.VALIDATION_SERVICE_BASE_PATH,
-  devnetAddresses: loadDevnetAddresses(env.DEVNET_ADDRESSES_FILE_PATH),
+  devnetArtifacts: loadDevnetArtifacts(env.DEVNET_ADDRESSES_FILE_PATH),
 });
 
 export type ServerConfig = ReturnType<typeof readServerConfig>;

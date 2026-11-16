@@ -1,20 +1,21 @@
 import 'utils/zod-jitless';
 
 import { config } from 'config';
-import { moduleMeta } from 'consts/module';
+import { WIDGET_TITLE } from 'consts/module';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import 'nprogress/nprogress.css';
-import '@lidofinance/lido-shared-ui/index.css';
+import '@lidofinance/lido-app-ui/index.css';
+import '@reef-knot/ui-lido/styles.css';
+import { ThemeName, Toaster, useThemeToggle } from '@lidofinance/lido-app-ui';
 import { Providers } from 'providers';
 import { memo } from 'react';
 import {
   AppShellLoader,
   BackgroundGradient,
+  ErrorBoundary,
   SecurityStatusBanner,
-  TestEnvBanner,
-  ToastContainer,
 } from 'shared/components';
 import { useIsClient } from 'shared/hooks';
 import { SVGGradientDefs } from 'shared/components/svg-gradient-defs/svg-gradient-defs';
@@ -32,6 +33,17 @@ const App = (props: AppProps) => {
 
 const MemoApp = memo(App);
 
+const ThemedBackgroundGradient = () => {
+  const { themeName } = useThemeToggle();
+  return (
+    <BackgroundGradient
+      width={1560}
+      height={784}
+      style={{ opacity: themeName === ThemeName.dark ? 1 : 0 }}
+    />
+  );
+};
+
 type AppParams = {
   isError?: boolean;
   dummy?: boolean;
@@ -41,9 +53,31 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
   const { pageProps } = props;
   const { isReady } = useRouter();
   const isClient = useIsClient();
+  const isError = !!pageProps?.isError;
   // Next never marks the router ready on /404
-  const isMounted = isClient && (isReady || !!pageProps?.isError);
+  const isMounted = isClient && (isReady || isError);
   const isMaintenance = config.maintenance;
+
+  const renderApp = (dummy?: boolean) => (
+    <Providers dummy={dummy} isError={isError}>
+      <ThemedBackgroundGradient />
+      <SVGGradientDefs />
+      <Toaster />
+      {isMaintenance ? <MaintenancePage /> : <MemoApp {...props} />}
+      <SecurityStatusBanner />
+    </Providers>
+  );
+
+  const renderContent = () => {
+    if (!isMounted) return <AppShellLoader />;
+    // error pages must still render if the wallet/SDK tree is what's failing
+    if (isError) {
+      return (
+        <ErrorBoundary fallback={renderApp(true)}>{renderApp()}</ErrorBoundary>
+      );
+    }
+    return renderApp(isMaintenance || pageProps?.dummy);
+  };
 
   return (
     <>
@@ -53,29 +87,9 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
           name="viewport"
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
-        <title>{`${moduleMeta.shortTitle} | Lido`}</title>
+        <title>{WIDGET_TITLE} | Lido</title>
       </Head>
-      {isMounted ? (
-        <Providers
-          dummy={isMaintenance || pageProps?.isError || pageProps?.dummy}
-          skipWatcher={pageProps?.isError}
-        >
-          <BackgroundGradient
-            width={1560}
-            height={784}
-            style={{
-              opacity: 'var(--lido-color-darkThemeOpacity)',
-            }}
-          />
-          <SVGGradientDefs />
-          <ToastContainer />
-          <TestEnvBanner />
-          {isMaintenance ? <MaintenancePage /> : <MemoApp {...props} />}
-          <SecurityStatusBanner />
-        </Providers>
-      ) : (
-        <AppShellLoader />
-      )}
+      {renderContent()}
     </>
   );
 };

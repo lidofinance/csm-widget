@@ -30,15 +30,15 @@ COPY . .
 ARG BUILD_VERSION
 ARG BUILD_BRANCH
 ARG BUILD_COMMIT
-# baked into both builds; the runner must boot with the same BASE_PATH
+# baked into the build; the runner must boot with the same BASE_PATH
 ARG BASE_PATH=""
-# .next/<module>/cache is a multi-hundred-MB webpack FS cache; it must not leak into COPY --from=build below
+# .next/cache is a multi-hundred-MB webpack FS cache; it must not leak into COPY --from=build below
 RUN if [ -n "$BUILD_COMMIT" ]; then \
       printf '{"version":"%s","branch":"%s","commit":"%s"}\n' \
         "$BUILD_VERSION" "$BUILD_BRANCH" "$BUILD_COMMIT" > build-info.json; \
     fi \
-    && yarn build:all \
-    && rm -rf .next/*/cache
+    && yarn build \
+    && rm -rf .next/cache
 
 # runtime image
 FROM node-base AS runner
@@ -59,7 +59,6 @@ ENV NODE_ENV=production \
 WORKDIR /app
 
 COPY --from=prod-deps /app/node_modules ./node_modules
-# both module builds; next.config.mjs is re-evaluated on boot and MODULE (default csm) picks .next/<module>
 COPY --from=build /app/.next ./.next
 COPY --from=build /app/public ./public
 COPY --from=build /app/package.json /app/next.config.mjs /app/next-logger.config.cjs /app/build-info.json /app/server.mjs ./

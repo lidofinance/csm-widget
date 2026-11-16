@@ -1,6 +1,6 @@
 import { forgetCachedOperator } from 'modules/web3';
 import { useCallback } from 'react';
-import { useDisconnect } from 'reef-knot/core-react';
+import { useDisconnect } from 'reef-knot';
 
 /** Disconnects and forgets the address' cached operator, so reconnecting re-prompts the selection */
 export const useDisconnectWallet = () => {

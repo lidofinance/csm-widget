@@ -412,7 +412,7 @@ If there are disputes regarding the penalty, node operators can start a public d
 export const FAQ_ROLES: FaqSection[] = [
   {
     qaseId: 634,
-    title: 'What are rewards and manager addresses?',
+    title: 'What are rewards and Manager Addresses?',
     text: `There are two addresses associated with your Node Operator that have different scope of responsibilities for managing your Node Operator.
 The Rewards Address is used for:
 Claiming bond and rewards
@@ -502,7 +502,7 @@ CSM 0x02 operator - the Node Operator type assigned to all Node Operators joinin
   },
 ];
 
-export const FAQ_MONITORING: FaqSection[] = [
+export const FAQ_DASHBOARD: FaqSection[] = [
   {
     qaseId: 625,
     title: 'What is the performance threshold?',

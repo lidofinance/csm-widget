@@ -41,7 +41,7 @@ export const Track = styled.div`
   width: max-content;
   margin-inline: auto;
   height: 44px;
-  background-color: var(--lido-color-backgroundDarken);
+  background-color: var(--lido-app-ui-color-background-secondary);
   border-radius: 22px;
   display: flex;
   align-items: center;
@@ -54,7 +54,7 @@ export const Track = styled.div`
 
 export const Handle = styled.div`
   height: 40px;
-  background-color: var(--lido-color-foreground);
+  background-color: var(--lido-app-ui-color-background-surface);
   border-radius: 20px;
   position: absolute;
   top: 2px;
@@ -79,7 +79,7 @@ export const SwitchItemStyled = styled(LocalLink)<{
   justify-content: center;
   height: 100%;
 
-  font-size: ${({ theme }) => theme.fontSizesMap.xxxs}px;
+  font-size: 10px;
   line-height: 2.4em;
   font-weight: 800;
   text-align: center;
@@ -87,20 +87,26 @@ export const SwitchItemStyled = styled(LocalLink)<{
   text-transform: uppercase;
 
   color: ${({ $warning }) =>
-    $warning ? `var(--lido-color-error)` : `var(--lido-color-text)`};
+    $warning
+      ? `var(--lido-app-ui-color-text-error)`
+      : `var(--lido-app-ui-color-text-default)`};
 
   &:hover {
     color: ${({ $warning }) =>
-      $warning ? `var(--lido-color-error)` : `var(--lido-color-text)`};
+      $warning
+        ? `var(--lido-app-ui-color-text-error)`
+        : `var(--lido-app-ui-color-text-default)`};
     opacity: 1;
   }
 
   &:visited {
     color: ${({ $warning }) =>
-      $warning ? `var(--lido-color-error)` : `var(--lido-color-text)`};
+      $warning
+        ? `var(--lido-app-ui-color-text-error)`
+        : `var(--lido-app-ui-color-text-default)`};
   }
 
-  ${({ theme }) => theme.mediaQueries.lg} {
+  @media screen and (max-width: 767px) {
     flex: 0 0 auto;
     padding-inline: 24px;
     white-space: nowrap;

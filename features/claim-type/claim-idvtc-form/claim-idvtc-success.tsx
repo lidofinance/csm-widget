@@ -1,64 +1,32 @@
-import { Text } from '@lidofinance/lido-ui';
-import { FC, useCallback, useRef } from 'react';
-import Confetti from 'react-canvas-confetti/dist/presets/realistic';
-import {
-  TConductorInstance,
-  TOnInitPresetFn,
-} from 'react-canvas-confetti/dist/types';
-import { Stack } from 'shared/components';
-import {
-  BadgeMain,
-  BadgeText,
-  BadgeWrapper,
-  canvasStyles,
-  StyledButton,
-  StyledContainer,
-} from './styles';
+import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { PATH } from 'consts/urls';
+import { DkgRequiredCard } from 'features/idvtc/dkg/components/dkg-required-card';
+import { useHasNonWithdrawnKeys, useNodeOperatorId } from 'modules/web3';
+import { FC } from 'react';
+import { useNavigate } from 'shared/navigate';
+import { ClaimTypeSuccess } from '../shared';
 
 export const ClaimIdvtcSuccess: FC = () => {
-  const controller = useRef<TConductorInstance>();
-
-  const onInitHandler: TOnInitPresetFn = ({ conductor }) => {
-    controller.current = conductor;
-  };
-
-  const fire = useCallback(() => {
-    controller.current?.shoot();
-  }, []);
+  const nodeOperatorId = useNodeOperatorId();
+  const { data: hasNonWithdrawnKeys } = useHasNonWithdrawnKeys(nodeOperatorId);
+  const navigate = useNavigate();
 
   return (
-    <StyledContainer>
-      <Confetti
-        onInit={onInitHandler}
-        style={canvasStyles}
-        autorun={{ speed: 1, duration: 1 }}
-        decorateOptions={(options) => ({
-          ...options,
-          origin: {
-            x: 0.3 + Math.random() * 0.4,
-            y: 0.4 + Math.random() * 0.3,
-          },
-        })}
-      />
-      <BadgeWrapper>
-        <BadgeMain>
-          <BadgeText>IDVTC</BadgeText>
-        </BadgeMain>
-      </BadgeWrapper>
-      <Stack direction="column">
-        <Text size="xl" weight={700}>
-          Congratulations!
-        </Text>
-        <Text size="xs">
-          You have claimed the Identified DVT Cluster operator type
+    <ClaimTypeSuccess
+      type={OPERATOR_TYPE.CSM_IDVTC}
+      description={
+        <>
+          You have claimed the Identified DVT Cluster operator type.
           <br />
-          You can see the new parameters for your Node Operator by clicking the
-          IDVTC badge at the top of the screen
-        </Text>
-      </Stack>
-      <StyledButton fullwidth onClick={fire}>
-        Amazing!
-      </StyledButton>
-    </StyledContainer>
+          You can see the new parameters for your Node Operator by opening the
+          operator switcher in the sidebar and clicking the IDVTC tag.
+        </>
+      }
+      notice={
+        hasNonWithdrawnKeys ? (
+          <DkgRequiredCard onAction={() => void navigate(PATH.IDVTC_DKG)} />
+        ) : undefined
+      }
+    />
   );
 };

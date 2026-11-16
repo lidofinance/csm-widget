@@ -5,26 +5,21 @@ import { OPERATOR_TYPE_METADATA } from '../../../../shared/consts/operatorTypes.
 
 export class GateCard {
   card: Locator;
-  input: Locator;
   title: Locator;
   description: Locator;
-  checkIcon: Locator;
 
   constructor(
     public form: Locator,
     public shortName: string,
   ) {
-    // Keep in sync with gate-card.tsx: testids replace '+' in
-    // metadata.short with 'Plus' (e.g. 'IODC+' -> 'gateCardIODCPlus')
-    this.input = this.form.getByTestId(
+    // Keep in sync with getGateCardTestId: '+' in metadata.short becomes
+    // 'Plus' (e.g. 'IODC+' -> 'gateCardIODCPlus'); the testid is on the role="radio" card
+    this.card = this.form.getByTestId(
       `gateCard${this.shortName.replace(/\+/g, 'Plus')}`,
     );
 
-    this.card = this.input.locator('..');
-
     this.title = this.card.getByTestId('gateCardTitle');
     this.description = this.card.getByTestId('gateCardDescription');
-    this.checkIcon = this.card.getByTestId('gateCardCheckIcon');
   }
 
   async click() {
@@ -41,11 +36,12 @@ export class CreateOperatorStep1Page extends BasePage {
   constructor(
     page: Page,
     public form: Locator,
+    public stepHeader: Locator,
   ) {
     super(page);
-    this.stepTrackText = this.form.getByTestId('stepTrackText');
-    this.stepTitle = this.form.getByTestId('stepTitle');
-    this.stepDescription = this.form.getByTestId('stepDescription');
+    this.stepTrackText = this.stepHeader.getByTestId('stepTrackText');
+    this.stepTitle = this.stepHeader.getByTestId('stepTitle');
+    this.stepDescription = this.stepHeader.getByTestId('stepDescription');
     this.continueButton = this.form.getByRole('button', { name: 'Continue' });
   }
 

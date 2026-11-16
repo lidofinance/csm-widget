@@ -1,44 +1,60 @@
-import { FC, memo } from 'react';
-
-import { AddKeysDataProvider, AddKeysFormProvider } from './context';
-
+import { Stack, FormLayout } from '@lidofinance/lido-app-ui';
+import { useFaq } from 'faq';
+import { ShareLimitBanner } from 'features/create-node-operator/share-limit-banner';
 import { DkgFilesField } from 'features/idvtc/dkg/components/dkg-files-field';
 import { DepositQueue } from 'features/view-keys/deposit-queue';
-import { FormBlock } from 'shared/components';
+import { FC, memo } from 'react';
+import { Faq } from 'shared/components';
+import { FormPage, FormReady, FormMainAsideSkeleton } from 'shared/form-page';
 import { Form } from 'shared/hook-form/form-controller';
 import { Gate } from 'shared/navigate';
-import { AddKeysFormInfo } from './add-keys-form-info';
-import { AddKeysFormLoader } from './add-keys-form-loader';
+import { AddKeysAside } from './add-keys-aside';
+import { AddKeysFormGate } from './add-keys-form-gate';
+import { AddKeysDataProvider, AddKeysFormProvider } from './context';
 import { AmountInput } from './controls/amount-input';
-import { KeysConfirm } from './controls/keys-confirm';
 import { KeysInput } from './controls/keys-input';
 import { KeysLimitWarning } from './controls/keys-limit-warning';
-import { SubmitButton } from './controls/submit-button';
 import { TokenSelect } from './controls/token-select';
 
 export const AddKeysForm: FC = memo(() => {
+  const faq = useFaq('KEYS');
+
   return (
     <AddKeysDataProvider>
       <AddKeysFormProvider>
-        <FormBlock data-testid="submitKeysForm">
-          <AddKeysFormLoader>
-            <Form>
-              <TokenSelect />
+        <FormPage
+          notices={
+            <>
+              <ShareLimitBanner />
               <KeysLimitWarning />
-              <KeysInput />
-              <AmountInput />
-              <Gate rule="IS_IDVTC">
-                <DkgFilesField />
-              </Gate>
-              <KeysConfirm />
-              <SubmitButton />
-            </Form>
-            <AddKeysFormInfo />
-          </AddKeysFormLoader>
-        </FormBlock>
-        <Gate rule="IS_CSM_FAMILY">
-          <DepositQueue />
-        </Gate>
+            </>
+          }
+          below={
+            <Gate rule="IS_CSM_FAMILY">
+              <DepositQueue />
+            </Gate>
+          }
+          faq={<Faq items={faq} />}
+        >
+          <FormReady skeleton={<FormMainAsideSkeleton />}>
+            <AddKeysFormGate>
+              <Form data-testid="submitKeysForm">
+                <FormLayout aside={<AddKeysAside />}>
+                  <Stack direction="column" gap={32}>
+                    <TokenSelect />
+                    <Stack direction="column" gap={16}>
+                      <KeysInput />
+                      <AmountInput />
+                    </Stack>
+                    <Gate rule="IS_IDVTC">
+                      <DkgFilesField />
+                    </Gate>
+                  </Stack>
+                </FormLayout>
+              </Form>
+            </AddKeysFormGate>
+          </FormReady>
+        </FormPage>
       </AddKeysFormProvider>
     </AddKeysDataProvider>
   );

@@ -1,7 +1,6 @@
-import { Button, ButtonProps } from '@lidofinance/lido-ui';
+import { Button, ButtonProps } from '@lidofinance/lido-app-ui';
 import { OperatorTypeStatus } from 'modules/web3';
 import { FC } from 'react';
-import { LocalLink } from 'shared/navigate';
 import { TYPE_PROGRAM, TypeProgram } from './consts';
 import { ApplicationStatus } from './types';
 
@@ -12,7 +11,7 @@ type Props = {
   hasOperator: boolean;
   isPending: boolean;
   size?: ButtonProps['size'];
-  'data-testid'?: string;
+  dataTestId?: string;
 };
 
 export const TypeApplyButton: FC<Props> = ({
@@ -22,30 +21,25 @@ export const TypeApplyButton: FC<Props> = ({
   hasOperator,
   isPending,
   size,
-  'data-testid': testId,
+  dataTestId,
 }) => {
   const { applyPath, claimPath, createPath } = TYPE_PROGRAM[program];
+  const testId = { root: dataTestId };
 
   if (isPending) {
     return (
-      <Button
-        fullwidth
-        size={size}
-        variant="translucent"
-        loading
-        data-testid={testId}
-      >
+      <Button size={size} loading dataTestId={testId}>
         Apply for {program}
       </Button>
     );
   }
 
   let text: string;
-  let variant: ButtonProps['variant'] = 'translucent';
+  let variant: ButtonProps['variant'] = 'outline';
   let href = applyPath;
 
   if (typeStatus === 'ISSUED') {
-    variant = undefined;
+    variant = 'primary';
     // Claiming writes onto an existing operator, so without one the only action is to create
     if (hasOperator) {
       text = `Claim ${program} type`;
@@ -59,14 +53,13 @@ export const TypeApplyButton: FC<Props> = ({
   } else if (formStatus) {
     text = 'View application';
   } else {
+    variant = 'primary';
     text = `Apply for ${program}`;
   }
 
   return (
-    <LocalLink href={href}>
-      <Button fullwidth size={size} variant={variant} data-testid={testId}>
-        {text}
-      </Button>
-    </LocalLink>
+    <Button size={size} variant={variant} href={href} dataTestId={testId}>
+      {text}
+    </Button>
   );
 };

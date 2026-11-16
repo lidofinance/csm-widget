@@ -4,10 +4,8 @@ import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 
 const Page = () => (
   <GateLoaded>
-    <Gate rule="IS_CSM_FAMILY" fallback={<Navigate path={PATH.HOME} />}>
-      <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.HOME} />}>
-        <MyOperatorsPage />
-      </Gate>
+    <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.HOME} />}>
+      <MyOperatorsPage />
     </Gate>
   </GateLoaded>
 );

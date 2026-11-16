@@ -1,28 +1,49 @@
+import { Stack } from '@lidofinance/lido-app-ui';
 import { FC, memo } from 'react';
-
-import { FormBlock, FormTitle } from 'shared/components';
+import {
+  FormCard,
+  FormPage,
+  FormReady,
+  GasCostList,
+  SubmitButton,
+} from 'shared/form-page';
+import { TextField } from 'shared/hook-form/fields';
 import { Form } from 'shared/hook-form/form-controller';
 import { MetadataDataProvider, MetadataFormProvider } from './context';
-import { DescriptionInput } from './controls/description-input';
-import { NameInput } from './controls/name-input';
-import { SubmitButton } from './controls/submit-button';
-import { MetadataFormLoader } from './metadata-form-loader';
+import {
+  METADATA_DESCRIPTION_MAX_LENGTH,
+  METADATA_NAME_MAX_LENGTH,
+} from './context/use-metadata-validation';
+import { DescriptionField } from './description-field';
+import { MetadataFormGate } from './metadata-form-gate';
 
-export const MetadataForm: FC = memo(() => {
-  return (
-    <MetadataDataProvider>
-      <MetadataFormProvider>
-        <FormBlock>
-          <MetadataFormLoader>
-            <Form>
-              <FormTitle>Node Operator name</FormTitle>
-              <NameInput />
-              <DescriptionInput />
-              <SubmitButton />
+export const MetadataForm: FC = memo(() => (
+  <MetadataDataProvider>
+    <MetadataFormProvider>
+      <FormPage>
+        <FormReady>
+          <MetadataFormGate>
+            <Form data-testid="metadataForm">
+              <FormCard>
+                <Stack direction="column" gap={32}>
+                  <TextField
+                    name="name"
+                    label="Name"
+                    placeholder={`Node Operator name (up to ${METADATA_NAME_MAX_LENGTH} characters)`}
+                  />
+                  <DescriptionField
+                    name="description"
+                    label="Description"
+                    placeholder={`Node Operator description (up to ${METADATA_DESCRIPTION_MAX_LENGTH} characters)`}
+                  />
+                  <GasCostList />
+                  <SubmitButton>Update</SubmitButton>
+                </Stack>
+              </FormCard>
             </Form>
-          </MetadataFormLoader>
-        </FormBlock>
-      </MetadataFormProvider>
-    </MetadataDataProvider>
-  );
-});
+          </MetadataFormGate>
+        </FormReady>
+      </FormPage>
+    </MetadataFormProvider>
+  </MetadataDataProvider>
+));

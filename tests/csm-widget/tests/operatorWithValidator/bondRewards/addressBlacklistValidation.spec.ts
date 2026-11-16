@@ -38,8 +38,7 @@ test.describe.skip(
 
         const tokenName = TOKENS.eth;
         await test.step(`Choose ${tokenName} symbol for bond`, async () => {
-          const bondToken = bondRewardsPage.addBond.selectBondToken(tokenName);
-          await bondToken.click();
+          await bondRewardsPage.addBond.selectBondToken(tokenName);
         });
 
         await test.step('Fill bond amount and submit', async () => {

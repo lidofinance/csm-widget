@@ -7,23 +7,26 @@ import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 
 import invariant from 'tiny-invariant';
-import { useActiveSmSDK } from '../web3-provider';
+import { useSmSDK } from '../web3-provider';
 
 export const KEY_OPERATOR_METADATA = ['operator-metadata'];
 
 export const useOperatorMetadata = <TData = OperatorMetadata>({
   nodeOperatorId,
+  module,
   select,
 }: {
   nodeOperatorId: NodeOperatorId | undefined;
+  module: MODULE_NAME | undefined;
   select?: (data: OperatorMetadata) => TData;
 }) => {
-  const sdk = useActiveSmSDK(MODULE_NAME.CM);
+  const sdk = useSmSDK(MODULE_NAME.CM);
 
   return useQuery({
     queryKey: [
       ...KEY_OPERATOR_METADATA,
-      { nodeOperatorId, module: MODULE_NAME.CM },
+      // keyed by the requested module: a disabled non-CM query must not read CM cache
+      { nodeOperatorId, module },
     ],
     ...STRATEGY_CONSTANT,
     queryFn: async () => {
@@ -31,7 +34,7 @@ export const useOperatorMetadata = <TData = OperatorMetadata>({
       invariant(sdk);
       return await sdk.metaRegistry.getOperatorInfo(nodeOperatorId);
     },
-    enabled: nodeOperatorId !== undefined && !!sdk,
+    enabled: module === MODULE_NAME.CM && nodeOperatorId !== undefined && !!sdk,
     select,
   });
 };

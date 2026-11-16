@@ -1,33 +1,50 @@
 import {
   Tooltip as TooltipBase,
-  type TooltipProps,
-} from '@lidofinance/lido-ui';
-import { forwardRef } from 'react';
+  type TooltipProps as BaseTooltipProps,
+} from '@lidofinance/lido-app-ui';
+import { FC, ReactNode } from 'react';
 
-export type { TooltipProps };
+type LegacyPlacement =
+  | 'top'
+  | 'topLeft'
+  | 'topRight'
+  | 'bottom'
+  | 'bottomLeft'
+  | 'bottomRight'
+  | 'left'
+  | 'right';
 
-/**
- * Tooltip that is safe to use inside a Modal.
- *
- * lido-ui renders the tooltip popover into a portal (a DOM sibling of the
- * modal), yet React events still bubble through the React tree. A click on the
- * popover therefore reaches the Modal's outside-click handler, whose DOM-based
- * `contains` check treats it as a click outside and closes the modal.
- *
- * Stopping click propagation on the popover keeps the modal open. `onClick`
- * lands on the popover's root element, so this covers its whole box.
- */
-export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
-  ({ onClick, ...rest }, ref) => (
-    <TooltipBase
-      ref={ref}
-      onClick={(event) => {
-        event.stopPropagation();
-        onClick?.(event);
-      }}
-      {...rest}
-    />
-  ),
+export type TooltipProps = Omit<
+  BaseTooltipProps,
+  'content' | 'position' | 'title'
+> & {
+  title?: ReactNode;
+  content?: ReactNode;
+  placement?: LegacyPlacement;
+  position?: BaseTooltipProps['position'];
+};
+
+const POSITIONS: Record<LegacyPlacement, BaseTooltipProps['position']> = {
+  top: 'top',
+  topLeft: 'top-left',
+  topRight: 'top-right',
+  bottom: 'bottom',
+  bottomLeft: 'bottom-left',
+  bottomRight: 'bottom-right',
+  left: 'left',
+  right: 'right',
+};
+
+export const Tooltip: FC<TooltipProps> = ({
+  title,
+  content,
+  placement,
+  position,
+  ...rest
+}) => (
+  <TooltipBase
+    content={content ?? title}
+    position={position ?? (placement && POSITIONS[placement])}
+    {...rest}
+  />
 );
-
-Tooltip.displayName = 'Tooltip';

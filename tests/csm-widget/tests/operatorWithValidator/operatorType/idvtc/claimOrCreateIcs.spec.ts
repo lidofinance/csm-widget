@@ -59,10 +59,10 @@ test.describe(
             );
 
             await widgetService.walletPage.confirmTx();
-            await widgetService.page.waitForSelector(
-              'text=Node Operator has been created',
-              { timeout: STAGE_WAIT_TIMEOUT },
-            );
+            await widgetService.keysPage.createSuccessScreen.waitForVisible();
+            await expect(widgetService.operatorType.txModal.modal).toBeHidden({
+              timeout: STAGE_WAIT_TIMEOUT,
+            });
           });
         });
 
@@ -114,15 +114,17 @@ test.describe(
         });
 
         await test.step('Claim transaction succeeds', async () => {
-          await expect(txModal.title).toContainText(
-            'ICS type has been successfully claimed',
-            { timeout: STAGE_WAIT_TIMEOUT },
+          await expect(claim.successScreen).toBeVisible({
+            timeout: STAGE_WAIT_TIMEOUT,
+          });
+          await expect(txModal.modal).toBeHidden({
+            timeout: STAGE_WAIT_TIMEOUT,
+          });
+          await expect(claim.successScreen).toContainText(
+            'You have claimed the Identified Community Staker operator type',
           );
-          await txModal.closeModal();
           await expect(
-            widgetService.page.getByText(
-              'You have claimed the Identified Community Staker operator type',
-            ),
+            claim.successScreen.getByRole('button', { name: 'Amazing!' }),
           ).toBeVisible();
         });
 
@@ -137,38 +139,29 @@ test.describe(
       qase(510, 'Should offer a switch to the new operator on success'),
       async ({ widgetService, keysGeneratorService }) => {
         const form = widgetService.keysPage.createNodeOperatorForm;
-        const txModal = widgetService.operatorType.txModal;
+        const successScreen = widgetService.keysPage.createSuccessScreen;
         const keys = keysGeneratorService.generateKeys(1);
         const idvtcOperatorId = await widgetService.extractNodeOperatorId();
 
         await test.step('Create a new ICS operator on the create page', async () => {
           await widgetService.keysPage.goto('ics');
-          await form.getBondTokenElement(TokenSymbol.ETH).click();
+          await form.selectBondToken(TokenSymbol.ETH);
           await form.fillKeys(keys);
           await form.confirmKeysReady.click();
           await form.submitKeysButton.click();
           await widgetService.walletPage.confirmTx();
-          await widgetService.page.waitForSelector(
-            'text=Node Operator has been created',
-            { timeout: STAGE_WAIT_TIMEOUT },
-          );
+          await successScreen.waitForVisible();
         });
 
-        const description = await txModal.description.innerText();
-        const idMatch = description.match(/Node Operator ID is (\d+)/);
-        expect(
-          idMatch,
-          `success description must name the new operator, got: ${description}`,
-        ).not.toBeNull();
-        const icsOperatorId = Number(idMatch?.[1]);
+        const icsOperatorId = await successScreen.getOperatorId();
 
         await test.step('The created operator is a new one', async () => {
           expect(icsOperatorId).not.toBe(idvtcOperatorId);
         });
 
         await test.step('Success screen offers a switch to it', async () => {
-          await expect(txModal.switchToOperatorBtn).toHaveText(
-            `Switch to Node Operator #${icsOperatorId}`,
+          await expect(successScreen.switchToOperatorBtn).toHaveText(
+            'Switch to this NO',
           );
         });
 
@@ -189,36 +182,31 @@ test.describe(
 
         await test.step('Create a new ICS operator on the create page', async () => {
           await widgetService.keysPage.goto('ics');
-          await form.getBondTokenElement(TokenSymbol.ETH).click();
+          await form.selectBondToken(TokenSymbol.ETH);
           await form.fillKeys(keys);
           await expect(form.amountInput).toHaveValue('1.5');
           await form.confirmKeysReady.click();
           await form.submitKeysButton.click();
           await widgetService.walletPage.confirmTx();
-          await widgetService.page.waitForSelector(
-            'text=Node Operator has been created',
-            { timeout: STAGE_WAIT_TIMEOUT },
-          );
+          await widgetService.keysPage.createSuccessScreen.waitForVisible();
         });
 
         await test.step('Switch to the created ICS operator', async () => {
-          await widgetService.operatorType.txModal.switchToOperatorBtn.click();
+          await widgetService.keysPage.createSuccessScreen.switchToOperatorBtn.click();
         });
 
-        await test.step('Header switch panel shows two operators', async () => {
+        await test.step('Header switch popup lists the other operator', async () => {
           await widgetService.operatorType.openTypePage();
           await expect(header.switchOperatorButton).toBeVisible();
           await header.switchOperatorButton.click();
           await expect(header.operatorSwitchModal).toBeVisible();
-          await expect(header.switchModalRows).toHaveCount(2);
+          await expect(header.switchModalRows).toHaveCount(1);
         });
 
-        await test.step('Both IDVTC and ICS operators are listed', async () => {
+        await test.step('Active ICS operator and other IDVTC operator are shown', async () => {
+          await expect(header.switchOperatorButton).toContainText('ICS');
           await expect(
             header.switchModalRows.filter({ hasText: 'IDVTC' }),
-          ).toBeVisible();
-          await expect(
-            header.switchModalRows.filter({ hasText: 'ICS' }),
           ).toBeVisible();
         });
       },

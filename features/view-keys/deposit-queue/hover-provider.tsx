@@ -28,6 +28,7 @@ export const GraphInteractionProvider: FC<
   const [hover, setHover] = useState<GraphPart>();
   const [fullView, setFullView] = useState(false);
   const resolvedModule = useDepositQueueModule(module);
+  invariant(resolvedModule, 'deposit queue graph needs a target module');
 
   return (
     <GraphInteractionContext.Provider

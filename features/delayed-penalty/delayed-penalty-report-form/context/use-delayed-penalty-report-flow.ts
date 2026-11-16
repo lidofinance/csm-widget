@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
@@ -14,34 +15,48 @@ import {
 
 export type DelayedPenaltyReportFlow = { action: 'report' } & Executable;
 
-export const useDelayedPenaltyReportFlowResolver = (): FlowResolver<
+export const useDelayedPenaltyReportFlowResolver = (
+  module: MODULE_NAME | undefined,
+): FlowResolver<
   DelayedPenaltyReportFormInputType,
   DelayedPenaltyReportFormNetworkData,
   DelayedPenaltyReportFlow
 > => {
-  const { delayedPenalty } = useSmSDK();
+  const sdk = useSmSDK(module);
   const buildCallback = useTxModalStagesDelayedPenaltyReport();
 
   return useCallback(
-    (input, data) => ({
-      action: 'report' as const,
-      submit: () => {
+    (input, data) => {
+      const props = () => {
         invariant(input.amount !== undefined, 'Amount is not defined');
         invariant(
           input.nodeOperatorId !== undefined,
           'NodeOperatorId is not defined',
         );
         invariant(input.penaltyType, 'PenaltyType is not defined');
-
-        return delayedPenalty.report({
+        return {
           nodeOperatorId: input.nodeOperatorId,
           amount: input.amount,
           penaltyType: pad(input.penaltyType, { size: 32 }),
           details: input.details || '',
-          callback: buildCallback(input, data),
-        });
-      },
-    }),
-    [delayedPenalty, buildCallback],
+        };
+      };
+
+      return {
+        action: 'report' as const,
+        submit: () => {
+          invariant(sdk, 'Delayed penalty module is not resolved');
+          return sdk.delayedPenalty.report({
+            ...props(),
+            callback: buildCallback(input, data),
+          });
+        },
+        estimate: async () => {
+          invariant(sdk, 'Delayed penalty module is not resolved');
+          return sdk.delayedPenalty.estimateReport(props());
+        },
+      };
+    },
+    [sdk, buildCallback],
   );
 };

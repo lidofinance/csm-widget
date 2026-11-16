@@ -1,7 +1,7 @@
+import { PATH } from 'consts/urls';
 import { FC } from 'react';
 import { useWeb3Key } from 'shared/hooks';
 import { Layout } from 'shared/layout';
-import { SettingsPageSwitcher } from 'shared/navigate';
 import { TopUpAllocationForm } from './top-up-allocation-form';
 
 export const GeneralPage: FC = () => {
@@ -9,11 +9,12 @@ export const GeneralPage: FC = () => {
 
   return (
     <Layout
-      title="Settings"
-      subtitle="Manage your operator"
       pageName="SettingsGeneral"
+      breadcrumbs={[
+        { label: 'Settings', href: PATH.SETTINGS },
+        { label: 'Top-ups' },
+      ]}
     >
-      <SettingsPageSwitcher />
       <TopUpAllocationForm key={key} />
     </Layout>
   );

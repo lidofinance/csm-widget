@@ -5,22 +5,21 @@ import {
   surveyRequest,
   usePublicSurvey,
 } from 'modules/surveys-sdk';
-import { useModule } from 'modules/web3';
+import { useTargetModule } from 'modules/web3';
 import { openIndex } from 'modules/surveys-sdk/generated';
 import type { FilledDto } from 'modules/surveys-sdk/generated';
 
 export const useSurveysFilled = ({
   nodeOperatorId,
-  module: moduleProp,
+  module,
 }: {
   nodeOperatorId: NodeOperatorId | undefined;
   module?: MODULE_NAME;
 }) => {
-  const { module: activeModule } = useModule();
-  const surveyModule = moduleProp ?? activeModule;
+  const targetModule = useTargetModule();
   // Built directly instead of via `useOperatorKey`, which falls back to the
   // connected operator on `undefined` — callers pass `undefined` to disable.
-  const operatorKey = buildOperatorKey(surveyModule, nodeOperatorId);
+  const operatorKey = buildOperatorKey(module ?? targetModule, nodeOperatorId);
   // Public cache key discriminator. Preserves the string the retired
   // `endpoints.publicSummary(operatorKey)` produced (`open/${operatorKey}`),
   // so the `surveysKeys.public(path)` cache identity is unchanged. The request

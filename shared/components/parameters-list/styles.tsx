@@ -1,103 +1,53 @@
-import { ArrowBottom, Link } from '@lidofinance/lido-ui';
+import { IconChevronDown } from '@lidofinance/lido-app-ui';
 import styled, { css } from 'styled-components';
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
-import { CURVE_VARIANTS } from '../../node-operator/curve-badge/styles';
 
-export const ArrowStyle = styled(ArrowBottom)<{ $expanded: boolean }>`
-  vertical-align: middle;
-  flex-shrink: 0;
-  transform: rotate(${(props) => (props.$expanded ? 180 : 0)}deg);
-  transition: transform ${({ theme }) => theme.duration.norm} ease;
+const MOBILE = '@media screen and (max-width: 479px)';
+const DIVIDER = css`
+  content: '';
+  position: absolute;
+  bottom: -12px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--lido-app-ui-color-border-default);
 `;
 
-export const MoreStyle = styled(Link)`
-  text-align: center;
-  font-weight: 700;
-  font-size: 14px;
+export const ArrowStyle = styled(IconChevronDown)<{ $expanded: boolean }>`
+  flex-shrink: 0;
+  transform: rotate(${(props) => (props.$expanded ? 180 : 0)}deg);
+  transition: transform 0.2s ease;
 `;
 
 export const ListStyle = styled.div`
   display: grid;
   grid-template-columns: 1fr minmax(auto, 300px);
-  column-gap: ${({ theme }) => theme.spaceMap.sm}px;
-  row-gap: ${({ theme }) => theme.spaceMap.xl}px;
+  column-gap: 8px;
+  row-gap: 24px;
 `;
 
 export const CompareListStyle = styled.div<{ $columns: number }>`
   --columns: ${({ $columns }) => $columns};
-  --title-fr: ${({ $columns }) => ($columns > 2 ? 3 : 4)};
-  --col-fr: 5;
-  --total-fr: calc(var(--title-fr) + var(--col-fr) * var(--columns));
   position: relative;
   display: grid;
   grid-template-columns: ${({ $columns }) => ($columns > 2 ? 3 : 4)}fr repeat(
       ${({ $columns }) => $columns},
       5fr
     );
-  column-gap: ${({ theme }) => theme.spaceMap.sm}px;
-  row-gap: ${({ theme }) => theme.spaceMap.xl}px;
+  column-gap: 8px;
+  row-gap: 24px;
 
-  ${({ theme }) => theme.mediaQueries.md} {
+  ${MOBILE} {
     grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
   }
-`;
-
-export const ColumnBackground = styled.div<{ $index: number }>`
-  --border-radius: 12px;
-  position: absolute;
-  top: -8px;
-  bottom: -8px;
-  left: calc(
-    100% * (var(--title-fr) + var(--col-fr) * ${({ $index }) => $index}) /
-      var(--total-fr) + 2px
-  );
-  width: calc(100% * var(--col-fr) / var(--total-fr) - 4px);
-  border-radius: var(--border-radius);
-  pointer-events: none;
-  opacity: 0.6;
-  z-index: 0;
-
-  ${({ theme }) => theme.mediaQueries.md} {
-    display: none;
-  }
-
-  &:before {
-    --offset: 2px;
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: -1;
-    margin: var(--offset);
-
-    border-radius: calc(var(--border-radius) - var(--offset));
-    background: var(--lido-color-foreground);
-    opacity: 0.9;
-  }
-`;
-
-export const IcsColumnBackground = styled(ColumnBackground)`
-  ${CURVE_VARIANTS[OPERATOR_TYPE.CSM_ICS]}
-`;
-
-export const IdvtcColumnBackground = styled(ColumnBackground)`
-  ${CURVE_VARIANTS[OPERATOR_TYPE.CSM_IDVTC]}
-`;
-
-export const DefColumnBackground = styled(ColumnBackground)`
-  ${CURVE_VARIANTS[OPERATOR_TYPE.CSM_DEF]}
 `;
 
 export const FoldableListStyle = styled(ListStyle)<{ $folded?: boolean }>`
   overflow: hidden;
   transition:
-    max-height ${({ theme }) => theme.duration.norm} ease,
-    height ${({ theme }) => theme.duration.norm} ease;
+    max-height 0.2s ease,
+    height 0.2s ease;
   max-height: ${({ $folded }) => ($folded ? '0' : '1000px')};
-  margin-top: ${({ $folded, theme }) =>
-    $folded ? `-${theme.spaceMap.xl}px` : '0'};
+  margin-top: ${({ $folded }) => ($folded ? '-24px' : '0')};
 `;
 
 export const RowStyle = styled.div<{ $bordered?: boolean }>`
@@ -108,43 +58,26 @@ export const RowStyle = styled.div<{ $bordered?: boolean }>`
   align-items: start;
 
   &:not(:last-child):after {
-    content: '';
-    position: absolute;
-    bottom: calc(-${({ theme }) => theme.spaceMap.xl}px / 2);
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background: var(--lido-color-popupMenuItemBgActiveHover);
-    opacity: 0.12;
+    ${DIVIDER}
   }
 
   ${({ $bordered }) =>
-    $bordered
-      ? css`
-          &:is(:last-child):after {
-            content: '';
-            position: absolute;
-            bottom: calc(-${({ theme }) => theme.spaceMap.xl}px / 2);
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: var(--lido-color-popupMenuItemBgActiveHover);
-            opacity: 0.12;
-          }
-        `
-      : ''}
+    $bordered &&
+    css`
+      &:is(:last-child):after {
+        ${DIVIDER}
+      }
+    `}
 `;
 
 export const CompareRowStyle = styled(RowStyle)`
-  z-index: 1;
-
   & > :not(:first-child) {
     padding-right: 10px;
   }
 
-  ${({ theme }) => theme.mediaQueries.md} {
-    row-gap: ${({ theme }) => theme.spaceMap.xs}px;
-    column-gap: ${({ theme }) => theme.spaceMap.sm}px;
+  ${MOBILE} {
+    row-gap: 4px;
+    column-gap: 8px;
 
     & > * {
       min-width: 0;
@@ -171,7 +104,7 @@ export const CompareTitleStyle = styled(CompareRowStyle)`
     padding-left: 1em;
   }
 
-  ${({ theme }) => theme.mediaQueries.md} {
+  ${MOBILE} {
     & > p:first-child {
       display: none;
     }

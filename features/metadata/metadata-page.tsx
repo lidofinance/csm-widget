@@ -1,7 +1,7 @@
+import { PATH } from 'consts/urls';
 import { FC } from 'react';
 import { useWeb3Key } from 'shared/hooks';
 import { Layout } from 'shared/layout';
-import { SettingsPageSwitcher } from 'shared/navigate';
 import { MetadataForm } from './metadata-form';
 
 export const MetadataPage: FC = () => {
@@ -9,11 +9,12 @@ export const MetadataPage: FC = () => {
 
   return (
     <Layout
-      title="Settings"
-      subtitle="Manage your operator"
       pageName="SettingsMetadata"
+      breadcrumbs={[
+        { label: 'Settings', href: PATH.SETTINGS },
+        { label: 'Meta data' },
+      ]}
     >
-      <SettingsPageSwitcher />
       <MetadataForm key={key} />
     </Layout>
   );

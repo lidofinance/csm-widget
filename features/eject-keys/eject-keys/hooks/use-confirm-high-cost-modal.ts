@@ -1,4 +1,6 @@
 import { getUseConfirmModal } from 'shared/hooks';
-import { ConfirmHighCostModal } from '../confirm-high-cost-modal';
+import { ConfirmHighCostModalApp } from '../confirm-high-cost-modal-app';
 
-export const useConfirmHighCostModal = getUseConfirmModal(ConfirmHighCostModal);
+export const useConfirmHighCostModal = getUseConfirmModal(
+  ConfirmHighCostModalApp,
+);

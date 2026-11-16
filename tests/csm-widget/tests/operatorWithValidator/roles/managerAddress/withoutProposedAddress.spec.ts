@@ -1,4 +1,4 @@
-import { trimAddress } from '@lidofinance/address';
+import { trimHex } from 'tests/shared/helpers/trimHex';
 import { test } from '../../../test.fixture';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { expect } from '@playwright/test';
@@ -41,7 +41,7 @@ test.describe(
           );
 
           await expect(managerAddressPage.currentAddress).toContainText(
-            trimAddress(address, 6),
+            trimHex(address, 6),
           );
         });
 

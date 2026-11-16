@@ -15,7 +15,6 @@ export type OperatorTypeMetadata = {
   short: string;
   title: string;
   description: string;
-  descriptionNote?: { lead: string; rest: string };
   capitalMultiplier?: string;
 };
 
@@ -37,10 +36,6 @@ export const OPERATOR_TYPE_METADATA: Record<
     title: 'CSM 0x02',
     description:
       'Unlock the power of 0x02 withdrawal credentials to run validators with balances of up to 2048 ETH.',
-    descriptionNote: {
-      lead: 'Run 0x02 alongside any other type ',
-      rest: '(0x01, ICS, or IDVTC) to stack their benefits.',
-    },
     capitalMultiplier: 'up to 2.26x',
   },
   [OPERATOR_TYPE.CSM_LEA]: {

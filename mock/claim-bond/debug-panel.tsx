@@ -1,4 +1,4 @@
-import { Accordion, Block, Text } from '@lidofinance/lido-ui';
+import { Accordion, Card, Description } from '@lidofinance/lido-app-ui';
 import { useClaimBondFormData } from 'features/claim-bond/claim-bond-form/context';
 import { type CLAIM_OPTION } from 'features/claim-bond/claim-bond-form/context/types';
 import { FC } from 'react';
@@ -36,13 +36,14 @@ export const ClaimBondDebugPanel: FC<{
   const match = !hasExpectation || actual === expected;
 
   return (
-    <TestBlock>
-      <StyledAccordion
-        summary={
-          <Text size="xs" color="secondary">
+    <TestCard>
+      <Accordion
+        border={false}
+        title={
+          <Description color="secondary">
             Raw inputs &amp; derived calculation{' '}
             {match ? '✓' : '✗ options mismatch'}
-          </Text>
+          </Description>
         }
       >
         <DataPre>
@@ -71,27 +72,17 @@ export const ClaimBondDebugPanel: FC<{
             `isPaused: ${isPaused}   isContract: ${isContract}`,
           ].join('\n')}
         </DataPre>
-      </StyledAccordion>
-    </TestBlock>
+      </Accordion>
+    </TestCard>
   );
 };
 
-const TestBlock = styled(Block)`
+const TestCard = styled(Card)`
   padding: 16px;
 `;
 
-const StyledAccordion = styled(Accordion)`
-  & > [type='button'] {
-    padding: 0;
-    min-height: 24px;
-  }
-  & > [type='button'] + div > div {
-    padding: 8px 0 0;
-  }
-`;
-
 const DataPre = styled.pre`
-  background: var(--lido-color-backgroundSecondary);
+  background: var(--lido-app-ui-color-background-secondary);
   border-radius: 8px;
   padding: 16px;
   margin: 0;

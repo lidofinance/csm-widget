@@ -19,7 +19,6 @@ import {
   DelayedPenaltyPage,
   KeysPage,
   MainPage,
-  MonitoringPage,
   MyOperatorsPage,
   SettingsPage,
   SurveysPage,
@@ -42,7 +41,6 @@ export class WidgetService {
   public delayedPenaltyPage: DelayedPenaltyPage;
   public myOperatorsPage: MyOperatorsPage;
   public settingsPage: SettingsPage;
-  public monitoringPage: MonitoringPage;
   public bondRewardsPage: BondRewardsPage;
   public operatorType: OperatorTypePage;
   public surveysPage: SurveysPage;
@@ -66,7 +64,6 @@ export class WidgetService {
     this.delayedPenaltyPage = new DelayedPenaltyPage(this.page);
     this.myOperatorsPage = new MyOperatorsPage(this.page);
     this.settingsPage = new SettingsPage(this.page, this.walletPage);
-    this.monitoringPage = new MonitoringPage(this.page);
     this.bondRewardsPage = new BondRewardsPage(this.page);
     this.operatorType = new OperatorTypePage(this.page, this.walletPage);
     this.surveysPage = new SurveysPage(this.page);
@@ -149,9 +146,7 @@ export class WidgetService {
     await this.walletPage.confirmTx();
 
     if (isNewOperator) {
-      await this.page.waitForSelector(`text=Node Operator has been created`, {
-        timeout: STAGE_WAIT_TIMEOUT,
-      });
+      await this.keysPage.createSuccessScreen.waitForVisible();
     } else {
       await this.page.waitForSelector(
         `text=Uploading operation was successful.`,
@@ -179,11 +174,7 @@ export class WidgetService {
 
   async addBond(tokenName: TOKENS, amount: string) {
     await test.step(`Add ${amount} ${tokenName} as bond`, async () => {
-      await test.step(`Choose ${tokenName} symbol for bond`, async () => {
-        const bondToken =
-          this.bondRewardsPage.addBond.selectBondToken(tokenName);
-        await bondToken.click();
-      });
+      await this.bondRewardsPage.addBond.selectBondToken(tokenName);
       await this.bondRewardsPage.addBond.amountInput.fill(amount);
       await this.bondRewardsPage.addBond.addBondButton.click();
       await this.confirmOperatorModal.confirm();

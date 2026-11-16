@@ -1,14 +1,18 @@
 import { FC } from 'react';
+import { PATH } from 'consts/urls';
 import { IdvtcSiwePage } from '../idvtc-siwe-page';
-import { MembersContent } from './members-content';
+import { ClusterMembersSection } from './members-content';
 import { MembersSignInPage } from './members-signin-page';
 
 export const MembersPage: FC = () => (
   <IdvtcSiwePage
-    title="Cluster members"
+    breadcrumbs={[
+      { label: 'Settings', href: PATH.SETTINGS },
+      { label: 'Cluster members' },
+    ]}
     pageName="ClusterMembers"
     fallback={<MembersSignInPage />}
   >
-    <MembersContent />
+    <ClusterMembersSection />
   </IdvtcSiwePage>
 );

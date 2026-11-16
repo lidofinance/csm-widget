@@ -15,13 +15,15 @@ import {
 import * as wagmiChains from 'wagmi/chains';
 
 import {
-  ReefKnotWalletsModal,
+  ReefKnotProvider,
+  WalletIdsEthereum,
+  WalletsListEthereum,
+  getDefaultConfig,
   getDefaultWalletsModalConfig,
-} from 'reef-knot/connect-wallet-modal';
-import { ReefKnotProvider, getDefaultConfig } from 'reef-knot/core-react';
-import { WalletIdsEthereum, WalletsListEthereum } from 'reef-knot/wallets';
+} from 'reef-knot';
+import { ReefKnotWalletsModal } from '@reef-knot/ui-lido';
 
-import { useThemeToggle } from '@lidofinance/lido-ui';
+import { useThemeToggle } from '@lidofinance/lido-app-ui';
 
 import { config } from 'config';
 import { useGetRpcUrlByChainId } from 'config/rpc';
@@ -167,7 +169,7 @@ export const Web3Provider: FC<PropsWithChildren> = ({ children }) => {
         <ReefKnotProvider config={reefKnotConfig}>
           <ReefKnotWalletsModal
             config={walletsModalConfig}
-            darkThemeEnabled={themeName === 'dark'}
+            theme={themeName === 'dark' ? 'dark' : 'light'}
           />
 
           <LidoSDKProvider>{children}</LidoSDKProvider>
