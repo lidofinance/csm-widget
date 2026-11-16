@@ -105,16 +105,6 @@ export const LayoutSubTitleStyle = styled.p`
   }
 `;
 
-export const IPFSInfoBoxOnlyMobileAndPortableWrapper = styled.div`
-  display: none;
-
-  ${NAV_MOBILE_MEDIA} {
-    display: block;
-    margin-top: -6px;
-    margin-bottom: 40px;
-  }
-`;
-
 export const Content = styled.div`
   display: flex;
   flex-direction: column;

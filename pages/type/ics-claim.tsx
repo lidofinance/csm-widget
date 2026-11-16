@@ -1,5 +1,4 @@
 import { PATH } from 'consts/urls';
-import { getProps } from 'utilsApi';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 import { ClaimIcsPage } from 'features/claim-type';
 
@@ -14,5 +13,3 @@ const Page = () => (
 );
 
 export default Page;
-
-export const getServerSideProps = getProps();

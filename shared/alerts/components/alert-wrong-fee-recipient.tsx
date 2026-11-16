@@ -1,4 +1,4 @@
-import { ReactComponent as Arrow } from 'assets/icons/arrow-right.svg';
+import Arrow from 'assets/icons/arrow-right.svg?react';
 import { FEE_RECIPIENT_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FC, useCallback } from 'react';

@@ -52,7 +52,6 @@ describe('VALIDATION_MESSAGES static strings', () => {
 
     for (const key of singleSentenceKeys) {
       const msg = VALIDATION_MESSAGES[key];
-      // eslint-disable-next-line jest/no-conditional-expect
       expect(msg.endsWith('.')).toBe(false);
     }
   });

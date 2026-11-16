@@ -6,12 +6,7 @@ const ROOT = path.resolve(__dirname, '..');
 const LOGGER = path.join(__dirname, 'log-environment-variables.mjs');
 const ENV_KEYS = path.join(__dirname, 'env-keys.cjs');
 
-const ROOT_FILES = [
-  'next.config.mjs',
-  'server.mjs',
-  'env-dynamics.mjs',
-  'next-logger.config.cjs',
-];
+const ROOT_FILES = ['next.config.mjs', 'server.mjs', 'next-logger.config.cjs'];
 const SCAN_DIRS = [
   'scripts',
   'config',
@@ -24,13 +19,12 @@ const SCAN_DIRS = [
   'consts',
 ];
 const EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.mjs', '.cjs']);
-const EXCLUDED_DIRS = new Set(['node_modules', '__mocks__']);
+const EXCLUDED_DIRS = new Set(['node_modules']);
 
 const NOT_LOGGED = new Set([
   'NODE_ENV',
   'PORT',
   'ANALYZE_BUNDLE',
-  'NODE_NO_BUILD_DYNAMICS',
   'RUN_SECRET_ENV_LOGGING',
   'SURVEYS_OPENAPI_URL',
 ]);
@@ -65,9 +59,7 @@ const scanEnvReads = (): EnvRead[] => {
     const lines = fs.readFileSync(file, 'utf8').split('\n');
     return lines.flatMap((line, index) =>
       Array.from(
-        line.matchAll(
-          /process\.env(?:\.([A-Z0-9_]+)|\[['"]([A-Z0-9_]+)['"]\])/g,
-        ),
+        line.matchAll(/\benv(?:\.([A-Z0-9_]+)|\[['"]([A-Z0-9_]+)['"]\])/g),
         (match) => ({
           key: match[1] ?? match[2],
           location: `${path.relative(ROOT, file)}:${index + 1}`,
@@ -117,7 +109,10 @@ describe('logging missing env vars', () => {
         '-e',
         `import { ${fn} } from ${JSON.stringify(LOGGER)}; ${fn}();`,
       ],
-      { env: { PATH: process.env.PATH, ...env }, encoding: 'utf8' },
+      {
+        env: { PATH: process.env.PATH, ...env } as unknown as NodeJS.ProcessEnv,
+        encoding: 'utf8',
+      },
     );
     return stdout + stderr;
   };

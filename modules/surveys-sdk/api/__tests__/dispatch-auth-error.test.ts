@@ -20,7 +20,7 @@ const makeError = (status: number, body?: unknown): SurveysApiError =>
 
 describe('dispatchAuthError', () => {
   it('fires handleAuthError("logout") on a codeless 401 when a token was sent', () => {
-    const handleAuthError = jest.fn();
+    const handleAuthError = vi.fn();
     dispatchAuthError(
       makeError(401, { message: 'nope' }),
       TOKEN,
@@ -31,7 +31,7 @@ describe('dispatchAuthError', () => {
   });
 
   it('fires handleAuthError("reauth") on AUTH_JWT_EXPIRED when a token was sent', () => {
-    const handleAuthError = jest.fn();
+    const handleAuthError = vi.fn();
     dispatchAuthError(
       makeError(401, { code: 'AUTH_JWT_EXPIRED', message: 'expired' }),
       TOKEN,
@@ -41,7 +41,7 @@ describe('dispatchAuthError', () => {
   });
 
   it('forwards the interactive option to handleAuthError', () => {
-    const handleAuthError = jest.fn();
+    const handleAuthError = vi.fn();
     dispatchAuthError(
       makeError(401, { code: 'AUTH_JWT_EXPIRED', message: 'expired' }),
       TOKEN,
@@ -54,7 +54,7 @@ describe('dispatchAuthError', () => {
   });
 
   it('does not fire on a 401 when no token was sent', () => {
-    const handleAuthError = jest.fn();
+    const handleAuthError = vi.fn();
     dispatchAuthError(
       makeError(401, { message: 'nope' }),
       undefined,
@@ -64,7 +64,7 @@ describe('dispatchAuthError', () => {
   });
 
   it('does not fire on a domain 403 carrying a non-JWT code', () => {
-    const handleAuthError = jest.fn();
+    const handleAuthError = vi.fn();
     dispatchAuthError(
       makeError(403, { code: 'OPERATOR_ACCESS_DENIED', message: 'denied' }),
       TOKEN,
@@ -74,7 +74,7 @@ describe('dispatchAuthError', () => {
   });
 
   it('does not fire on a non-auth error (500)', () => {
-    const handleAuthError = jest.fn();
+    const handleAuthError = vi.fn();
     dispatchAuthError(
       makeError(500, { code: 'INTERNAL', message: 'boom' }),
       TOKEN,

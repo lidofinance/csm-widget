@@ -8,7 +8,7 @@ import { DescriptorId, formatGroupTitle } from 'shared/node-operator';
 import styled from 'styled-components';
 import { TextLocalLink } from 'shared/navigate';
 
-import { ReactComponent as ArrowRight } from 'assets/icons/arrow-forward.svg';
+import ArrowRight from 'assets/icons/arrow-forward.svg?react';
 
 export const DashboardSubtitle: FC = () => {
   const { isCM } = useModule();

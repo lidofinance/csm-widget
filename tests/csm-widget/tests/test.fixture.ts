@@ -141,12 +141,16 @@ export const test = base.extend<
         browserService.getBrowserContextPage().context(),
       );
 
-      // We abort this request because we need to reduce the request count to the Elliptic api
+      // fulfilled locally so tests never hit the external validation API
       await browserService
         .getBrowserContextPage()
         .context()
         .route(new RegExp('.*/api/validation\\?.*'), async (route) => {
-          await route.abort();
+          await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            json: { isValid: true },
+          });
         });
 
       await use(browserService);

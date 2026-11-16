@@ -18,7 +18,6 @@ module.exports = [
 
   { key: 'MAINTENANCE', optional: true },
   { key: 'IS_PROD', optional: true },
-  { key: 'IPFS_MODE', optional: true },
 
   { key: 'CSP_TRUSTED_HOSTS' },
   { key: 'CSP_REPORT_ONLY', optional: true },
@@ -34,9 +33,6 @@ module.exports = [
   { key: 'FEES_MONITORING_API_URL', optional: true },
   { key: 'IPFS_GATEWAYS', optional: true },
   { key: 'SURVEYS_API_URL', optional: true },
-
-  { key: 'PREFILL_UNSAFE_EL_RPC_URLS_1', optional: true },
-  { key: 'PREFILL_UNSAFE_EL_RPC_URLS_560048', optional: true },
 
   { key: 'VALIDATION_FILE_PATH', optional: true },
   { key: 'DEVNET_ADDRESSES_FILE_PATH', optional: true },

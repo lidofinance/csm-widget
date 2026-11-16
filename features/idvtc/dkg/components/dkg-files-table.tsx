@@ -14,8 +14,8 @@ import {
   RowActions,
 } from '../styles';
 
-import { ReactComponent as DownloadIcon } from 'assets/icons/download-2.svg';
-import { ReactComponent as Trash } from 'assets/icons/trash.svg';
+import DownloadIcon from 'assets/icons/download-2.svg?react';
+import Trash from 'assets/icons/trash.svg?react';
 
 const DkgDeleteButton: FC<{ onClick: () => void; disabled?: boolean }> = ({
   onClick,

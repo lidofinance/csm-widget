@@ -55,7 +55,7 @@ test.describe(
     test(
       qase(573, 'Should serve security headers on widget pages'),
       {
-        ...skipIf(!expected, 'Local stand runs in dev mode with its own CSP'),
+        ...skipIf(!expected, 'Local stand runs in dev mode without CSP'),
       },
       async ({ request }) => {
         for (const route of WIDGET_PAGES) {

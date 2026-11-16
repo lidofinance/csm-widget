@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Text } from '@lidofinance/lido-ui';
 import { EmptyStateBox, EmptyStateIcon } from '../styles';
 
-import { ReactComponent as FileTextIcon } from 'assets/icons/file-text.svg';
+import FileTextIcon from 'assets/icons/file-text.svg?react';
 
 export const DkgEmptyState: FC = () => (
   <EmptyStateBox>

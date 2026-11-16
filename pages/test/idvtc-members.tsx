@@ -86,4 +86,4 @@ const IdvtcMembersTestPage: FC = () => {
 
 export default IdvtcMembersTestPage;
 
-export const getServerSideProps = getTestProps;
+export const getStaticProps = getTestProps;

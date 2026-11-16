@@ -4,16 +4,16 @@ import { ReactNode } from 'react';
 
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { Eth as EthIcon, Plus as PlusIcon } from '@lidofinance/lido-ui';
-import { ReactComponent as DashboardIcon } from 'assets/icons/dashboard.svg';
-import { ReactComponent as DvtIcon } from 'assets/icons/file-2.svg';
-import { ReactComponent as FileIcon } from 'assets/icons/file.svg';
-import { ReactComponent as GearIcon } from 'assets/icons/gear.svg';
-import { ReactComponent as HomeIcon } from 'assets/icons/home.svg';
-import { ReactComponent as KeyIcon } from 'assets/icons/key.svg';
-import { ReactComponent as MeterIcon } from 'assets/icons/meter.svg';
-import { ReactComponent as UserIcon } from 'assets/icons/user.svg';
-import { ReactComponent as UsersIcon } from 'assets/icons/users-round.svg';
-import { ReactComponent as WalletIcon } from 'assets/icons/wallet.svg';
+import DashboardIcon from 'assets/icons/dashboard.svg?react';
+import DvtIcon from 'assets/icons/file-2.svg?react';
+import FileIcon from 'assets/icons/file.svg?react';
+import GearIcon from 'assets/icons/gear.svg?react';
+import HomeIcon from 'assets/icons/home.svg?react';
+import KeyIcon from 'assets/icons/key.svg?react';
+import MeterIcon from 'assets/icons/meter.svg?react';
+import UserIcon from 'assets/icons/user.svg?react';
+import UsersIcon from 'assets/icons/users-round.svg?react';
+import WalletIcon from 'assets/icons/wallet.svg?react';
 import {
   CounterClaimType,
   CounterInvalidKeys,

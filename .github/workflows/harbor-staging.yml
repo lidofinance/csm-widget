@@ -2,7 +2,7 @@ name: Harbor image (staging)
 
 run-name: Build and push csm-widget:staging to staging
 
-# main => staging cluster. Pushes registry.staging.k8s-staging.org/team-csm/csm-widget:staging.
+# main => staging cluster. Registry and credentials are chosen by the SHA-pinned reusable workflow per target.
 on:
   workflow_dispatch:
   push:
@@ -16,12 +16,9 @@ permissions:
 
 jobs:
   build-and-push:
-    uses: lidofinance/actions/.github/workflows/k8s-build-push-harbor.yml@c7b5b6c5d8013046347d728d748fa741eb214e28
+    uses: lidofinance/actions/.github/workflows/k8s-build-push-harbor.yml@8d22c57b310ff5ebc27b8883bb4d0048e39c6430
     with:
-      tag: staging
-      registry: registry.staging.k8s-staging.org
-      registry_username: ${{ vars.REGISTRY_USERNAME }}
-      image: team-csm/csm-widget
-      environment: harbor_stage_release
-    secrets:
-      registry_token: ${{ secrets.HARBOR_STAGE_TOKEN }}
+      target: staging
+      harbor_project: team-csm
+      image: csm-widget
+    secrets: inherit

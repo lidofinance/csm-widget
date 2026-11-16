@@ -123,16 +123,24 @@ const fullInstall = () => {
 const moduleKeys = (role) =>
   role === 'rewards' ? 'rewardsAddress' : role === 'owner' ? 'ownerAddress' : 'managerAddress';
 
-// Detect which module (csm/cm) and chain the target app is serving, straight from its SSR HTML
-// (__NEXT_DATA__ carries publicRuntimeConfig.module + defaultChain). This lets a single command
-// target any instance — localhost:3000 (CSM), localhost:3001 (CM), csm.testnet.fi, cm.testnet.fi —
-// without the caller having to know/match the module or chain, which would otherwise show the wrong
-// operators or an "unsupported chain". Explicit overrides win; this only fills the gaps.
+// Detect which module (csm/cm) and chain the target app is serving: module from the per-build
+// /manifest.json, chain from /runtime/window-env.js. Falls back to the old SSR __NEXT_DATA__
+// (publicRuntimeConfig) for deployments that predate the static shell. Explicit overrides win.
+const fetchText = async (url) => {
+  const res = await fetch(url);
+  return res.ok ? res.text() : '';
+};
 export const detectAppConfig = async (origin) => {
   try {
-    const html = await (await fetch(origin)).text();
-    const module = (html.match(/"module":"(CSM|CM)"/i)?.[1] || 'CSM').toLowerCase();
-    const chainId = Number(html.match(/"defaultChain":(\d+)/)?.[1]) || HOODI;
+    const [html, manifest, windowEnv] = await Promise.all([
+      fetchText(origin),
+      fetchText(`${origin}/manifest.json`),
+      fetchText(`${origin}/runtime/window-env.js`),
+    ]);
+    // legacy deploys bake the csm manifest into every build, so their HTML wins
+    const legacyModule = html.match(/"module":"(CSM|CM)"/i)?.[1];
+    const module = legacyModule ? legacyModule.toLowerCase() : /Curated Module/.test(manifest) ? 'cm' : 'csm';
+    const chainId = Number(`${windowEnv}${html}`.match(/"defaultChain":(\d+)/)?.[1]) || HOODI;
     return { module, chainId };
   } catch (e) {
     log(`could not detect app config from ${origin} (${e.message}); assuming csm/${HOODI}`);

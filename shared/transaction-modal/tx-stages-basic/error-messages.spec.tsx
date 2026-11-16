@@ -1,10 +1,4 @@
 // shared/transaction-modal/tx-stages-basic/error-messages.spec.tsx
-// get-error-code → contract-errors → track-matomo-event → consts → config →
-// next.js runtime unavailable in Jest; stub before importing.
-jest.mock('utils/track-matomo-event', () => ({
-  trackMatomoError: jest.fn(),
-}));
-
 import { ErrorCode } from 'utils/get-error-code';
 import { ERROR_META } from './error-messages';
 

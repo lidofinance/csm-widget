@@ -1,10 +1,10 @@
 import { ComponentProps, useMemo } from 'react';
 import { type ExternalButtonLink } from 'shared/components';
 
-import { ReactComponent as BeaconchaIcon } from 'assets/icons/beaconcha.svg';
-import { ReactComponent as MigaLabsIcon } from 'assets/icons/migalabs.svg';
-import { ReactComponent as LidoIcon } from 'assets/icons/lido.svg';
-import { ReactComponent as RatedIcon } from 'assets/icons/rated.svg';
+import BeaconchaIcon from 'assets/icons/beaconcha.svg?react';
+import MigaLabsIcon from 'assets/icons/migalabs.svg?react';
+import LidoIcon from 'assets/icons/lido.svg?react';
+import RatedIcon from 'assets/icons/rated.svg?react';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import {
   useBeaconchainDashboardLink,

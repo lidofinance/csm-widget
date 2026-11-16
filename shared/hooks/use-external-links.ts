@@ -1,5 +1,6 @@
 import {
   useDappStatus,
+  useModule,
   useNodeOperatorId,
   useOperatorKeysWithStatus,
   useSmSDK,
@@ -8,7 +9,6 @@ import { mainnet } from 'viem/chains';
 import { useChainName } from './use-chain-name';
 import { useExternalLinks } from './use-csm-constants';
 import { useSortedKeys } from './use-sorted-keys';
-import { isModuleCSM } from 'consts';
 
 const DASHBOARD_KEYS_LIMIT = 20;
 
@@ -31,10 +31,11 @@ export const useBeaconchainDashboardLink = (directKeys?: string[]) => {
 
 export const useBeaconchainEntityLink = () => {
   const nodeOperatorId = useNodeOperatorId();
+  const { isCSM } = useModule();
   const { beaconchain } = useExternalLinks();
   const { chainId } = useDappStatus();
 
-  if (!beaconchain || chainId !== mainnet.id || !isModuleCSM) return null;
+  if (!beaconchain || chainId !== mainnet.id || !isCSM) return null;
 
   return `${beaconchain}/entity/Lido%20CSM/CSM%20Operator%20${nodeOperatorId}`;
 };
@@ -61,16 +62,18 @@ export const useOperatorPortalLink = () => {
 
 export const useRatedLink = () => {
   const nodeOperatorId = useNodeOperatorId();
+  const { isCSM } = useModule();
   const { ratedExplorer } = useExternalLinks();
   const chaiName = useChainName();
-  if (!ratedExplorer || !isModuleCSM) return null;
+  if (!ratedExplorer || !isCSM) return null;
   return `${ratedExplorer}/o/CSM%20Operator%20${nodeOperatorId}%20-%20Lido%20Community%20Staking%20Module?network=${chaiName}`;
 };
 
 export const useMigaLabsLink = () => {
   const nodeOperatorId = useNodeOperatorId();
+  const { isCSM } = useModule();
   const chaiName = useChainName();
   const { migalabsDashboard } = useExternalLinks();
-  if (!migalabsDashboard || !isModuleCSM) return null;
+  if (!migalabsDashboard || !isCSM) return null;
   return `${migalabsDashboard}/csm_operator${nodeOperatorId}_lido?network=${chaiName}`;
 };

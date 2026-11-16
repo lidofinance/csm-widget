@@ -1,7 +1,6 @@
 import { PATH } from 'consts/urls';
 import { MyOperatorsPage } from 'features/my-operators';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
-import { getProps } from 'utilsApi';
 
 const Page = () => (
   <GateLoaded>
@@ -14,5 +13,3 @@ const Page = () => (
 );
 
 export default Page;
-
-export const getServerSideProps = getProps();

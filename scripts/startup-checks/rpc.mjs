@@ -1,15 +1,10 @@
 import { createClient, http } from 'viem';
 import { getChainId } from 'viem/actions';
+import { parseUrlList } from '../parse-url-list.mjs';
 
 export const BROKEN_URL = 'BROKEN_URL';
 export const RPC_TIMEOUT_MS = 10_000;
 export const MAX_RETRY_COUNT = 3;
-
-const parseUrlList = (val) =>
-  val
-    ?.split(',')
-    .map((s) => s.trim().replace(/\/+$/, ''))
-    .filter(Boolean) ?? [];
 
 const getRPCUrls = (chainId) => {
   return parseUrlList(process.env[`EL_RPC_URLS_${chainId}`]);

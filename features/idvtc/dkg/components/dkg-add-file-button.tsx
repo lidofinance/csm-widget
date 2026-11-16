@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { ButtonIcon } from '@lidofinance/lido-ui';
-import { ReactComponent as Plus } from 'assets/icons/plus.svg';
+import Plus from 'assets/icons/plus.svg?react';
 
 type Props = {
   onClick: () => void;

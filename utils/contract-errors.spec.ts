@@ -6,10 +6,9 @@ import {
 } from './contract-errors';
 import { trackMatomoError } from './track-matomo-event';
 
-// track-matomo-event imports consts/matomo-click-events → config → next.js
-// runtime which is unavailable in Jest. Stub the whole module.
-jest.mock('./track-matomo-event', () => ({
-  trackMatomoError: jest.fn(),
+// keeps tracking out of unit tests
+vi.mock('./track-matomo-event', () => ({
+  trackMatomoError: vi.fn(),
 }));
 
 describe('getDecodedRevert', () => {
@@ -60,7 +59,7 @@ describe('getContractErrorCopy', () => {
 
 describe('trackUnmappedContractError', () => {
   beforeEach(() => {
-    (trackMatomoError as jest.Mock).mockClear();
+    vi.mocked(trackMatomoError).mockClear();
   });
 
   it('fires telemetry when the decoded name has no friendly copy', () => {

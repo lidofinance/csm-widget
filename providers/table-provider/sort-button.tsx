@@ -1,8 +1,8 @@
 import { FC, PropsWithChildren, useCallback } from 'react';
 import { useTable } from './context';
 
-import { ReactComponent as ArrowDown } from 'assets/icons/arrow-down.svg';
-import { ReactComponent as ArrowUp } from 'assets/icons/arrow-up.svg';
+import ArrowDown from 'assets/icons/arrow-down.svg?react';
+import ArrowUp from 'assets/icons/arrow-up.svg?react';
 import { SortButtonStyled } from './styles';
 import { ArrowBottom, ArrowTop } from '@lidofinance/lido-ui';
 

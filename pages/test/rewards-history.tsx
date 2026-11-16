@@ -110,4 +110,4 @@ const RewardsHistoryTestPage: FC = () => {
 
 export default RewardsHistoryTestPage;
 
-export const getServerSideProps = getTestProps;
+export const getStaticProps = getTestProps;

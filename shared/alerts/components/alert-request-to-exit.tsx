@@ -4,7 +4,7 @@ import { FC } from 'react';
 import { MatomoLink } from 'shared/components';
 import { Alert } from './alert';
 
-import { ReactComponent as Arrow } from 'assets/icons/arrow-right.svg';
+import Arrow from 'assets/icons/arrow-right.svg?react';
 
 export const AlertRequestToExit: FC = () => (
   <Alert title="You have an Exit Request">

@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren, ReactNode } from 'react';
 import { ChipStyle, Variants } from './style';
 import { Check, Close } from '@lidofinance/lido-ui';
-import { ReactComponent as Clock } from 'assets/icons/clock.svg';
+import Clock from 'assets/icons/clock.svg?react';
 
 type Props = {
   type?: Variants;

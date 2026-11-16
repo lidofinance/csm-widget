@@ -1,7 +1,7 @@
 import { Check as CheckIcon } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
 
-import { ReactComponent as AlertIcon } from 'assets/icons/alert.svg';
+import AlertIcon from 'assets/icons/alert.svg?react';
 
 export const Alert = styled(AlertIcon)`
   width: 12px;

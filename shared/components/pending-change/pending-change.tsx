@@ -1,4 +1,4 @@
-import { ReactComponent as AlertIcon } from 'assets/icons/alert.svg';
+import AlertIcon from 'assets/icons/alert.svg?react';
 import { FC } from 'react';
 import { Address } from 'shared/components/address';
 import { PendingChangeStyle } from './style';

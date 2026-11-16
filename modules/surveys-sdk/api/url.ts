@@ -6,7 +6,6 @@ type OperatorKeyFn = {
   (module: MODULE_NAME, id: bigint | undefined): OperatorKey | undefined;
 };
 
-// Keyed by enum value (not `MODULE_NAME.X`) so jest need not load the SDK.
 const API_PREFIX: Record<`${MODULE_NAME}`, OperatorKeyPrefix> = {
   CSM: 'csm',
   CSM_02: 'csm02',

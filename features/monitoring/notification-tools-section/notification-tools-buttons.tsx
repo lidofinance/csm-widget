@@ -1,7 +1,7 @@
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { ComponentProps } from 'react';
 import { ExternalButtonLink } from 'shared/components';
-import { ReactComponent as CsmIcon } from 'assets/icons/csm.svg';
+import CsmIcon from 'assets/icons/csm.svg?react';
 
 export const NOTIFICATION_TOOLS_BUTTONS: ComponentProps<
   typeof ExternalButtonLink

@@ -7,7 +7,7 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "issue a single-use SIWE nonce to embed in the sign-in message",
+            "description": "issue a server-signed SIWE nonce to embed in the sign-in message",
             "content": {
               "application/json": {
                 "schema": {
@@ -174,7 +174,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           }
@@ -248,7 +250,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           }
@@ -325,7 +329,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           }
@@ -387,7 +393,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           }
@@ -454,7 +462,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           }
@@ -539,7 +549,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           },
@@ -669,7 +681,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           }
@@ -743,7 +757,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           }
@@ -822,7 +838,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           }
@@ -911,7 +929,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           }
@@ -983,7 +1003,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           },
@@ -1061,7 +1083,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           },
@@ -1153,7 +1177,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           },
@@ -1226,7 +1252,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           }
@@ -1300,7 +1328,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           }
@@ -1659,7 +1689,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           }
@@ -1735,7 +1767,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           }
@@ -1809,7 +1843,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           }
@@ -1898,7 +1934,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           }
@@ -1970,7 +2008,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           }
@@ -2040,7 +2080,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           }
@@ -2119,7 +2161,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           },
@@ -2197,7 +2241,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           },
@@ -2282,7 +2328,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           },
@@ -2352,7 +2400,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           }
@@ -2421,7 +2471,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           }
@@ -2488,7 +2540,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           }
@@ -2557,7 +2611,9 @@
             "name": "nodeOperatorId",
             "required": true,
             "in": "path",
+            "description": "Module-prefixed operator id: csm-<n> | csm02-<n>",
             "schema": {
+              "example": "csm-1",
               "type": "string"
             }
           }
@@ -2660,7 +2716,7 @@
   "info": {
     "title": "CSM Survey API",
     "description": "",
-    "version": "0.7.2",
+    "version": "1.0.0",
     "contact": {}
   },
   "tags": [
@@ -2983,7 +3039,7 @@
             "description": "List of node operator IDs the user is a delegate for",
             "example": [
               "csm-1",
-              "csm-42"
+              "csm02-5"
             ],
             "type": "array",
             "items": {
@@ -4281,12 +4337,24 @@
             "type": "number",
             "description": "Ethereum chain ID the application is connected to",
             "example": 1
+          },
+          "commit": {
+            "type": "string",
+            "description": "Git commit SHA the running build was produced from",
+            "example": "1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b"
+          },
+          "branch": {
+            "type": "string",
+            "description": "Git branch the running build was produced from",
+            "example": "develop"
           }
         },
         "required": [
           "appName",
           "version",
-          "chainId"
+          "chainId",
+          "commit",
+          "branch"
         ]
       }
     }

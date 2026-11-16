@@ -47,7 +47,12 @@
     "import/no-extraneous-dependencies": [
       "error",
       {
-        "devDependencies": ["tests/**", "openapi-ts.config.ts"]
+        "devDependencies": [
+          "tests/**",
+          "openapi-ts.config.ts",
+          "vitest.config.mjs",
+          "**/*.{spec,test}.{ts,tsx}"
+        ]
       }
     ]
   },
@@ -67,6 +72,16 @@
             "message": "A top-level test.describe must declare its place in the suite tree: test.describe(...suite({ epic, feature, story }), () => { ... }). A plain title is only for grouping inside it."
           }
         ]
+      }
+    },
+    {
+      "files": ["**/*.{spec,test}.{ts,tsx}"],
+      "rules": {
+        "unicorn/consistent-function-scoping": "off",
+        "unicorn/error-message": "off",
+        "sonarjs/no-identical-conditions": "off",
+        "sonarjs/no-identical-expressions": "off",
+        "sonarjs/no-identical-functions": "off"
       }
     }
   ]

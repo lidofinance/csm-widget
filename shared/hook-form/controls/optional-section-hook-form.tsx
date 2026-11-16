@@ -5,8 +5,8 @@ import { Stack } from 'shared/components';
 import { StackStyle } from 'shared/components/stack/style';
 import styled from 'styled-components';
 
-import { ReactComponent as MinusIcon } from 'assets/icons/circle-minus.svg';
-import { ReactComponent as PlusIcon } from 'assets/icons/circle-plus.svg';
+import MinusIcon from 'assets/icons/circle-minus.svg?react';
+import PlusIcon from 'assets/icons/circle-plus.svg?react';
 
 type FormInput = { [fieldName: string]: boolean };
 

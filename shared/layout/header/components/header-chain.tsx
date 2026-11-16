@@ -1,6 +1,5 @@
 import { useDappStatus } from 'modules/web3';
 import { FC } from 'react';
-import { NoSSRWrapper } from 'shared/components';
 import { useChainColor, useChainName } from 'shared/hooks';
 import {
   DotStyle,
@@ -17,7 +16,7 @@ const HeaderChain: FC = () => {
   const showNet = chainId !== CHAINS.Mainnet;
 
   return (
-    <NoSSRWrapper>
+    <>
       {showNet && (
         <HeaderWalletChainWrapper>
           <DotStyle />
@@ -26,7 +25,7 @@ const HeaderChain: FC = () => {
           </HeaderWalletChainStyle>
         </HeaderWalletChainWrapper>
       )}
-    </NoSSRWrapper>
+    </>
   );
 };
 

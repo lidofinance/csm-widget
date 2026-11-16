@@ -1,4 +1,3 @@
-export { default as NoSSRWrapper } from './no-ssr-wrapper';
 export { BackgroundGradient } from './background-gradient/background-gradient';
 export { Section } from './section/section';
 export { SectionBlock } from './section-block/section-block';
@@ -63,3 +62,4 @@ export * from './role-actions';
 export * from './toast-container';
 export * from './issues-chip';
 export * from './toggle';
+export { AppShellLoader } from './app-shell-loader/app-shell-loader';

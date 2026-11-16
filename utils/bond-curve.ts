@@ -7,8 +7,7 @@
  * where `value` is the per-key bond (trend) within that interval. The last
  * interval is unbounded.
  *
- * Intentionally SDK-free so it stays unit-testable (the SDK barrel pulls ESM
- * that Jest cannot load); the structural `Interval` type matches `bondConfig`.
+ * The structural `Interval` type matches `bondConfig`.
  */
 type Interval = { minKeyNumber: number; value: bigint };
 

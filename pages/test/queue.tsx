@@ -140,4 +140,4 @@ const DepositQueueGraphTestPage: FC = () => {
 
 export default DepositQueueGraphTestPage;
 
-export const getServerSideProps = getTestProps;
+export const getStaticProps = getTestProps;

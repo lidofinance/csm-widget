@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren } from 'react';
-import { ReactComponent as AlertIcon } from 'assets/icons/alert.svg';
+import AlertIcon from 'assets/icons/alert.svg?react';
 import styled from 'styled-components';
 
 export const Warning: FC<PropsWithChildren> = ({ children }) => {

@@ -1,11 +1,7 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { operatorKey, parseOperatorKey } from '../url';
 
-// Inline MODULE_NAME values to avoid pulling the full csm-sdk into the jest
-// environment (which transitively resolves lido-ethereum-sdk ipfs deps).
-// Keep these in sync with `@lidofinance/lido-csm-sdk`'s MODULE_NAME enum.
-const CSM = 'CSM' as never;
-const CSM_02 = 'CSM_02' as never;
-const CM = 'CM' as never;
+const { CSM, CSM_02, CM } = MODULE_NAME;
 
 describe('operatorKey', () => {
   it('produces lowercase prefix with bigint', () => {

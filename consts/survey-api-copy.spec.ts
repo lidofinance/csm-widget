@@ -15,6 +15,11 @@ describe('survey api copy', () => {
   it('returns mapped copy for a known code', () => {
     expect(getSurveyApiCopy('ICS_NOT_REJECTED', 'raw')).toMatch(/rejected/i);
   });
+  it('returns mapped copy for an expired SIWE nonce', () => {
+    expect(getSurveyApiCopy('AUTH_SIWE_NONCE_EXPIRED', 'raw')).toMatch(
+      /expired/i,
+    );
+  });
 
   it('every entry in the catalog has a non-empty string value', () => {
     Object.entries(SURVEY_API_COPY).forEach(([_key, value]) => {

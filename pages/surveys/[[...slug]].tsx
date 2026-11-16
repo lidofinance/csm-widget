@@ -2,7 +2,6 @@ import { PATH } from 'consts/urls';
 import { SurveysPage } from 'features/surveys';
 import { useRouter } from 'next/router';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
-import { getProps } from 'utilsApi';
 
 const Page = () => {
   const router = useRouter();
@@ -18,5 +17,3 @@ const Page = () => {
 };
 
 export default Page;
-
-export const getServerSideProps = getProps();

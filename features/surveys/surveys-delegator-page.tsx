@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { NoSSRWrapper } from 'shared/components';
 import {
   DelegatorHome,
   DelegatorSetupForm,
@@ -18,11 +17,7 @@ export const SurveysDelegatorPage: FC<SurveysDelegatorPageProps> = ({
 }) => {
   // No operatorId means we're at the delegator home page (accessible to all)
   if (!operatorId) {
-    return (
-      <NoSSRWrapper>
-        <DelegatorHome />
-      </NoSSRWrapper>
-    );
+    return <DelegatorHome />;
   }
 
   // operatorId but no setupId means we're viewing setups for an operator

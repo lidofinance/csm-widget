@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { Stack } from 'shared/components';
 import styled from 'styled-components';
 
-import { ReactComponent as RewardsIcon } from 'assets/balance/empty.svg';
+import RewardsIcon from 'assets/balance/empty.svg?react';
 
 export const EmptyState: FC = () => (
   <Wrapper data-testid="claimEmptyState" direction="column" center gap="sm">

@@ -9,9 +9,9 @@ import {
 } from 'utils';
 import { SymbolStyle, TokenAmountStyle } from './style';
 
-import { ReactComponent as EthIcon } from 'assets/icons/eth.svg';
-import { ReactComponent as StethIcon } from 'assets/icons/steth.svg';
-import { ReactComponent as WstethIcon } from 'assets/icons/wsteth.svg';
+import EthIcon from 'assets/icons/eth.svg?react';
+import StethIcon from 'assets/icons/steth.svg?react';
+import WstethIcon from 'assets/icons/wsteth.svg?react';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 const iconsMap = {

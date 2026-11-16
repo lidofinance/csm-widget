@@ -1,6 +1,6 @@
 import { Box } from '@lidofinance/lido-ui';
-import { ReactComponent as MinusIcon } from 'assets/icons/minus.svg';
-import { ReactComponent as PlusIcon } from 'assets/icons/plus.svg';
+import MinusIcon from 'assets/icons/minus.svg?react';
+import PlusIcon from 'assets/icons/plus.svg?react';
 import { FC } from 'react';
 import { SignStyle } from './style';
 

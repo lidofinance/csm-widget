@@ -5,7 +5,7 @@ import { trackMatomoEvent } from 'utils';
 import { SectionWrapper } from './styles';
 import { useRewardsHistoryExport } from './use-rewards-history-export';
 
-import { ReactComponent as DownloadIcon } from 'assets/icons/download.svg';
+import DownloadIcon from 'assets/icons/download.svg?react';
 
 export const FiltersAndExport: FC = () => {
   const { exportToCsv, isExporting } = useRewardsHistoryExport();

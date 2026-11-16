@@ -1,6 +1,5 @@
 import { PATH } from 'consts/urls';
 import { EjectKeysPage } from 'features/eject-keys';
-import { getProps } from 'utilsApi';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 
 const Page = () => (
@@ -12,5 +11,3 @@ const Page = () => (
 );
 
 export default Page;
-
-export const getServerSideProps = getProps();

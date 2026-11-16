@@ -1,38 +1,19 @@
-import fs from 'fs';
-import path from 'path';
-import buildDynamics from './scripts/build-dynamics.mjs';
 import generateBuildId from './scripts/generate-build-id.mjs';
-import { toBoolean } from './scripts/to-boolean.mjs';
-import { logEnvironmentVariables } from './scripts/log-environment-variables.mjs';
-
-logEnvironmentVariables();
-buildDynamics();
+import {
+  CACHE_CONTROL_HEADER,
+  CACHE_CONTROL_VALUE,
+} from './scripts/cache-control.mjs';
 
 // https://nextjs.org/docs/pages/api-reference/next-config-js/basePath
 const basePath = process.env.BASE_PATH;
 
-const developmentMode = process.env.NODE_ENV === 'development';
 const moduleMode = (process.env.MODULE || 'csm').toUpperCase();
 const moduleName = moduleMode.toLowerCase();
-const isIPFSMode = toBoolean(process.env.IPFS_MODE);
-const maintenance = toBoolean(process.env.MAINTENANCE); // TODO: load from runtime config
-
-// Load devnet contract addresses from JSON file if specified
-let devnetAddresses = null;
-if (process.env.DEVNET_ADDRESSES_FILE_PATH) {
-  try {
-    const filePath = path.resolve(process.env.DEVNET_ADDRESSES_FILE_PATH);
-    devnetAddresses = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-  } catch (e) {
-    console.warn('Failed to load devnet addresses:', e.message);
-  }
-}
 
 // cache control
-export const CACHE_CONTROL_HEADER = 'x-cache-control';
 export const CACHE_CONTROL_PAGES = [
-  // documents — same HTML for every visitor; uncovered, gSSP pages get the
-  // default no-store and gSP pages a 1-year s-maxage that outlives build chunk hashes
+  // documents — statically prerendered, same HTML for every visitor; uncovered
+  // routes get Next's 1-year s-maxage, which outlives build chunk hashes
   '/',
   '/group',
   '/monitoring',
@@ -48,18 +29,16 @@ export const CACHE_CONTROL_PAGES = [
   '/top-up-allocation',
   '/surveys/:path*',
   '/type/:path*',
+  '/test/:path*',
   // assets — unhashed, so they share the document TTL; header sources match
   // pre-rewrite paths, so module-variant files are listed too
   '/manifest.json',
   '/manifest-:module(csm|cm).json',
-  '/favicon:size*',
+  '/favicon:suffix([-.a-z0-9]+)',
   '/apple-touch-icon.png',
   '/apple-touch-icon-:module(csm|cm).png',
   '/:module(csm|cm)-preview.png',
-  '/runtime/window-env.js',
 ];
-export const CACHE_CONTROL_VALUE =
-  'public, max-age=15, s-maxage=30, stale-if-error=86400, stale-while-revalidate=60';
 
 // devDependency, absent from the production image where this config is re-evaluated on boot
 const withBundleAnalyzer = process.env.ANALYZE_BUNDLE
@@ -69,7 +48,14 @@ const withBundleAnalyzer = process.env.ANALYZE_BUNDLE
 
 export default withBundleAnalyzer({
   basePath,
+  // re-evaluated on boot, so MODULE picks the matching build
+  distDir: `.next/${moduleName}`,
+  env: {
+    MODULE: moduleMode,
+    BASE_PATH: basePath ?? '',
+  },
   generateBuildId,
+  devIndicators: false,
 
   typescript: {
     // !! WARN !!
@@ -79,41 +65,28 @@ export default withBundleAnalyzer({
     ignoreBuildErrors: true,
   },
 
-  // IPFS next.js configuration reference:
-  // https://github.com/Velenir/nextjs-ipfs-example
-  trailingSlash: isIPFSMode,
-  assetPrefix: isIPFSMode ? './' : undefined,
-
-  // IPFS version has hash-based routing,
-  // so we provide only index.html in ipfs version
-  exportPathMap: isIPFSMode ? () => ({ '/': { page: '/' } }) : undefined,
-
   eslint: {
     ignoreDuringBuilds: true,
   },
   compiler: {
-    styledComponents: true,
+    // SWC omits displayName in prod by default
+    styledComponents: { displayName: true, ssr: true },
   },
   images: {
     unoptimized: true,
-    loader: 'custom',
-  },
-  experimental: {
-    // Fixes a build error with importing Pure ESM modules, e.g. reef-knot
-    // Some docs are here:
-    // https://github.com/vercel/next.js/pull/27069
-    // You can see how it is actually used in v12.3.4 here:
-    // https://github.com/vercel/next.js/blob/v12.3.4/packages/next/build/webpack-config.ts#L417
-    // Presumably, it is true by default in next v13 and won't be needed
-    esmExternals: true,
   },
   webpack(config) {
+    const imageRule = config.module.rules.find(
+      (rule) => rule?.loader === 'next-image-loader',
+    );
+    if (imageRule) imageRule.exclude = /\.svg$/i;
+
     config.module.rules.push(
-      // Teach webpack to import svg and md files
-      // `issuer` keeps svgr off SVGs referenced from CSS (e.g. @lidofinance/lido-shared-ui)
+      // `issuer` keeps both off SVGs referenced from CSS (e.g. @lidofinance/lido-shared-ui)
       {
-        test: /\.svg$/,
+        test: /\.svg$/i,
         issuer: /\.[jt]sx?$/,
+        resourceQuery: /react/,
         use: [
           {
             loader: '@svgr/webpack',
@@ -122,53 +95,20 @@ export default withBundleAnalyzer({
                 plugins: [
                   {
                     name: 'preset-default',
-                    params: {
-                      overrides: {
-                        removeViewBox: false,
-                      },
-                    },
+                    params: { overrides: { removeViewBox: false } },
                   },
                 ],
               },
             },
           },
-          'url-loader',
         ],
       },
       {
-        test: /\.md$/,
-        use: 'raw-loader',
-      },
-
-      // Needs for `Conditional Compilation`,
-      // because we have differences in source code of IPFS widget and NOT IPFS widget
-      {
-        test: /\.(t|j)sx?$/,
-        use: [
-          {
-            loader: 'webpack-preprocessor-loader',
-            options: {
-              params: {
-                IPFS_MODE: isIPFSMode,
-              },
-            },
-          },
-        ],
-      },
-
-      // Handle JSON imports with 'with' assertions syntax from node_modules
-      // by removing the assertions, because next v12 does not support them, which causes build error.
-      // Specifically targeting affected modules here
-      {
-        test: /node_modules\/@base-org\/account.*\.js$/,
-        use: {
-          loader: 'string-replace-loader',
-          options: {
-            search: 'with\\s*\\{\\s*type:\\s*[\'"]json[\'"]\\s*\\}',
-            replace: '',
-            flags: 'g',
-          },
-        },
+        test: /\.svg$/i,
+        issuer: /\.[jt]sx?$/,
+        resourceQuery: { not: [/react/] },
+        type: 'asset/resource',
+        generator: { filename: 'static/media/[name].[hash:8][ext]' },
       },
     );
 
@@ -176,9 +116,10 @@ export default withBundleAnalyzer({
     // which comes from @metamask/connect-multichain and @walletconnect/keyvaluestorage
     // See https://github.com/MetaMask/metamask-sdk/issues/1376
     config.resolve.fallback = {
+      ...config.resolve.fallback,
       '@react-native-async-storage/async-storage': false,
       // Tempo Accounts SDK, optional peer dep of @wagmi/connectors v8 reachable only via
-      // @wagmi/core's unused `tempo` export; not installed, Next 12 webpack resolves it eagerly
+      // @wagmi/core's unused `tempo` export; not installed, webpack still resolves it
       accounts: false,
     };
 
@@ -268,40 +209,5 @@ export default withBundleAnalyzer({
         destination: `/apple-touch-icon-${moduleName}.png`,
       },
     ];
-  },
-
-  // ATTENTION: If you add a new variable you should declare it in `global.d.ts`
-  serverRuntimeConfig: {
-    // https://nextjs.org/docs/pages/api-reference/next-config-js/basePath
-    basePath,
-    developmentMode,
-    maintenance,
-
-    defaultChain: process.env.DEFAULT_CHAIN,
-
-    rpcUrls_1: process.env.EL_RPC_URLS_1,
-    rpcUrls_560048: process.env.EL_RPC_URLS_560048,
-
-    clApiUrls_1: process.env.CL_API_URLS_1,
-    clApiUrls_560048: process.env.CL_API_URLS_560048,
-
-    migalabsApiUrl: process.env.ETHSEER_API_URL,
-    migalabsApiToken: process.env.ETHSEER_API_TOKEN,
-
-    cspTrustedHosts: process.env.CSP_TRUSTED_HOSTS,
-    cspReportUri: process.env.CSP_REPORT_URI,
-    cspReportOnly: process.env.CSP_REPORT_ONLY,
-
-    rateLimit: process.env.RATE_LIMIT,
-    rateLimitTimeFrame: process.env.RATE_LIMIT_TIME_FRAME,
-    validationAPI: process.env.VALIDATION_SERVICE_BASE_PATH,
-  },
-
-  // ATTENTION: If you add a new variable you should declare it in `global.d.ts`
-  publicRuntimeConfig: {
-    basePath,
-    developmentMode,
-    module: moduleMode,
-    devnetAddresses,
   },
 });

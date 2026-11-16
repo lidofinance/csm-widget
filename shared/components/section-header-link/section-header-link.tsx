@@ -1,4 +1,4 @@
-import { ReactComponent as RoundedArrowIcon } from 'assets/icons/rounded-arrow.svg';
+import RoundedArrowIcon from 'assets/icons/rounded-arrow.svg?react';
 import { ComponentProps, FC } from 'react';
 import { LocalLink } from 'shared/navigate/local-link';
 import { SectionHeaderLinkStyle } from './styles';

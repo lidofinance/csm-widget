@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
 import type { DecodedRevert } from '@lidofinance/lido-csm-sdk';
 import { getSurveyApiCopy } from 'consts/survey-api-copy';
+import { SurveysApiError } from 'modules/surveys-sdk/api/errors';
 import { getContractErrorCopy, getDecodedRevert } from './contract-errors';
 import { extractErrorMessage } from './extract-error-message';
 import { ErrorCode, getErrorCode } from './get-error-code';
-import { isSurveysApiError } from './surveys-api-guard';
 
 // Validation envelope → message + a bullet list of per-field messages.
 // Returns undefined for auth-family errors (covered by static ERROR_META map).
@@ -12,7 +12,7 @@ const getApiDescription = (
   error: unknown,
   code: ErrorCode,
 ): ReactNode | undefined => {
-  if (!isSurveysApiError(error) || !error.apiError) return undefined;
+  if (!(error instanceof SurveysApiError) || !error.apiError) return undefined;
   // Let the static ERROR_META handle auth errors (SESSION_EXPIRED bucket). Every
   // auth code classifies to SESSION_EXPIRED, so this single guard covers them.
   if (code === ErrorCode.SESSION_EXPIRED) return undefined;

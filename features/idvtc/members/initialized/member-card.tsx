@@ -1,5 +1,5 @@
 import { Button, ButtonIcon } from '@lidofinance/lido-ui';
-import { ReactComponent as RotateIcon } from 'assets/icons/rotate.svg';
+import RotateIcon from 'assets/icons/rotate.svg?react';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import type { MemberDto } from 'modules/surveys-sdk/generated';

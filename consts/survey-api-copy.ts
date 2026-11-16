@@ -8,6 +8,8 @@ export const SURVEY_API_COPY: Record<string, string> = {
   // here or getApiDescription would override the polished static copy).
   AUTH_SIWE_VERIFICATION_FAILED:
     'We could not verify your signature. Please try signing in again.',
+  AUTH_SIWE_NONCE_EXPIRED:
+    'Signing took too long and the sign-in request expired. Please try again.',
   AUTH_CHAIN_ID_MISMATCH:
     'Your wallet is connected to the wrong network for this app',
   AUTH_NOT_AUTHORIZED: 'This address is not authorized',

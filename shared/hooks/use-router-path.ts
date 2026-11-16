@@ -1,15 +1,7 @@
 import { useRouter } from 'next/router';
 
-import { config } from 'config';
-import { PATH } from 'consts/urls';
-
 export const useRouterPath = () => {
   const router = useRouter();
-
-  if (config.ipfsMode) {
-    if (!config.isClientSide) return PATH.HOME;
-    return location.hash.replace('#', '') || PATH.HOME;
-  }
 
   // We can't' use `router.pathname` and `router.route` 'cause it's a mapping with file structure
   // example:

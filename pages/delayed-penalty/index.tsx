@@ -1,5 +1,4 @@
 import { PATH } from 'consts/urls';
-import { getProps } from 'utilsApi';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 import { useHasProtocolRole } from 'modules/web3';
 
@@ -25,5 +24,3 @@ const Page = () => {
 };
 
 export default Page;
-
-export const getServerSideProps = getProps();

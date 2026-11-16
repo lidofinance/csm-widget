@@ -1,7 +1,7 @@
 import { External, Link } from '@lidofinance/lido-ui';
 import styled, { css } from 'styled-components';
 
-import { ReactComponent as Arrow } from 'assets/icons/arrow-right.svg';
+import Arrow from 'assets/icons/arrow-right.svg?react';
 
 export const ExternalIcon = styled(External)`
   margin-top: -1px;

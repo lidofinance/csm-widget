@@ -3,8 +3,8 @@ import { RateStatus } from 'types';
 import { formatPercent } from 'utils';
 import { BadgeStyle } from './styles';
 
-import { ReactComponent as DownIcon } from 'assets/icons/triangle-down.svg';
-import { ReactComponent as UpIcon } from 'assets/icons/triangle-up.svg';
+import DownIcon from 'assets/icons/triangle-down.svg?react';
+import UpIcon from 'assets/icons/triangle-up.svg?react';
 
 export const DiffBadge: FC<{
   values: [number, number];

@@ -3,7 +3,7 @@ import { isValidEns, resolveEnsAddress } from './ens';
 const ADDRESS = '0x1111111111111111111111111111111111111111';
 
 const makeClient = (impl?: () => Promise<string | null>) => ({
-  getEnsAddress: jest.fn(impl ?? (async () => ADDRESS)),
+  getEnsAddress: vi.fn(impl ?? (async () => ADDRESS)),
 });
 
 describe('isValidEns', () => {

@@ -5,58 +5,44 @@ import { Address } from 'viem';
 import { API_ROUTES } from 'consts/api';
 import { config } from 'config';
 import { FetcherError, standardFetcher } from 'utils';
-
-const getApiUrl = (route: string, params?: Record<string, string>) => {
-  // Simple: always use full URL with current origin
-  const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
-  let url = `${baseUrl}/${route}`;
-
-  // Add query parameters
-  if (params && Object.keys(params).length > 0) {
-    const searchParams = new URLSearchParams(params);
-    url += `?${searchParams.toString()}`;
-  }
-
-  return url;
-};
+import { getApiUrl } from 'utils/get-api-url';
 
 export const useApiAddressValidation = () => {
   const queryClient = useQueryClient();
 
   const validateAddressAPI = useCallback(
-    async (addressToValidate: Address) => {
-      if (!config.addressApiValidationEnabled || config.ipfsMode) {
-        return { isValid: true };
+    async (addressToValidate: Address): Promise<boolean> => {
+      if (!config.addressValidationEnabled) {
+        return true;
       }
 
-      const result = await queryClient.fetchQuery<{ isValid: boolean } | null>({
-        queryKey: ['address-validation-api', addressToValidate],
-        queryFn: async () => {
-          try {
+      try {
+        return await queryClient.fetchQuery<boolean>({
+          queryKey: ['address-validation-api', addressToValidate],
+          queryFn: async () => {
             const url = getApiUrl(API_ROUTES.VALIDATION, {
               address: addressToValidate,
             });
-            return await standardFetcher(url, {
+            const data = await standardFetcher<{ isValid?: unknown }>(url, {
               method: 'GET',
               headers: {
                 'Content-type': 'application/json',
                 source: 'csm',
               },
             });
-          } catch (error) {
-            // any 429 means this client is over a rate limit (Cloudflare,
-            // widget or validation API): block instead of falling back
-            if (error instanceof FetcherError && error.status === 429) {
-              return { isValid: false };
+            if (typeof data?.isValid !== 'boolean') {
+              throw new Error('Malformed address validation response');
             }
-            return null;
-          }
-        },
-        staleTime: 1 * 60 * 1000, // 1 minute
-        retry: 1,
-      });
-
-      return result;
+            return data.isValid;
+          },
+          staleTime: 1 * 60 * 1000, // 1 minute
+          retry: (failureCount, error) =>
+            failureCount < 1 &&
+            !(error instanceof FetcherError && error.status === 429),
+        });
+      } catch {
+        return false;
+      }
     },
     [queryClient],
   );

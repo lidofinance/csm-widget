@@ -10,7 +10,7 @@ import { NodeOperatorProvider, Web3Provider } from 'modules/web3';
 import { AlertProvider, AlertsWatcherProvider } from 'shared/alerts';
 import { GateSupported } from 'shared/navigate';
 import { SelectOperatorWatcher } from 'shared/node-operator/switch-modal';
-import { AddressValidationFile, hashKey } from 'utils';
+import { hashKey } from 'utils';
 import { AddressValidationProvider } from './address-validation-provider';
 import { AppFlagProvider } from './app-flag';
 import { InpageNavigationProvider } from './inpage-navigation';
@@ -20,7 +20,6 @@ import { ModifyProvider } from './modify-provider';
 type Props = {
   dummy?: boolean;
   skipWatcher?: boolean;
-  validationFile?: AddressValidationFile;
 };
 
 const queryClient = new QueryClient({
@@ -36,7 +35,6 @@ export const Providers: FC<PropsWithChildren<Props>> = ({
   children,
   dummy,
   skipWatcher,
-  validationFile,
 }) => (
   <QueryClientProvider client={queryClient}>
     <ConfigProvider>
@@ -50,7 +48,7 @@ export const Providers: FC<PropsWithChildren<Props>> = ({
                   <ModalProvider>{children}</ModalProvider>
                 ) : (
                   <Web3Provider>
-                    <AddressValidationProvider validationFile={validationFile}>
+                    <AddressValidationProvider>
                       <GateSupported>
                         <NodeOperatorProvider>
                           <ModalProvider>

@@ -1,7 +1,8 @@
 import { wrapRequest as wrapNextRequest } from '@lidofinance/next-api-wrapper';
 
 import { trackedFetchRpcFactory } from '@lidofinance/api-rpc';
-import { config, secretConfig } from 'config';
+import { config } from 'config';
+import { getServerConfig } from 'utilsApi/server-config';
 import { API_ROUTES } from 'consts/api';
 import { METRICS_PREFIX } from 'consts/metrics';
 import {
@@ -19,6 +20,8 @@ import {
 } from 'utilsApi';
 import Metrics from 'utilsApi/metrics';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
+
+const serverConfig = getServerConfig();
 
 const allowedRPCMethods = [
   'test',
@@ -51,8 +54,8 @@ const rpc = rpcFactory({
   },
   defaultChain: `${config.defaultChain}`,
   providers: {
-    [CHAINS.Mainnet]: secretConfig.rpcUrls_1,
-    [CHAINS.Hoodi]: secretConfig.rpcUrls_560048,
+    [CHAINS.Mainnet]: serverConfig.rpcUrls_1,
+    [CHAINS.Hoodi]: serverConfig.rpcUrls_560048,
   },
   validation: {
     allowedRPCMethods,

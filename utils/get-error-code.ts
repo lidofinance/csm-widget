@@ -1,5 +1,6 @@
 import { SDKError, ERROR_CODE, classifyError } from '@lidofinance/lido-csm-sdk';
 import { resolveAuthErrorKind } from 'modules/surveys-sdk/api/auth-error-kind';
+import { SurveysApiError } from 'modules/surveys-sdk/api/errors';
 import {
   getDecodedRevert,
   trackUnmappedContractError,
@@ -11,7 +12,6 @@ import {
   findInErrorTree,
 } from './error-tree';
 import { FetcherError } from './fetcher-error';
-import { isSurveysApiError } from './surveys-api-guard';
 import { trackMatomoError } from './track-matomo-event';
 
 // Widget UX taxonomy: what affordance/copy to show. Derived from the SDK's
@@ -181,7 +181,7 @@ const detectVendor = (error: unknown): ErrorCode | undefined => {
 // API/session classification. Branches on the typed envelope code (SurveysApiError)
 // before falling back to HTTP status (FetcherError).
 const classifyApiError = (error: unknown): ErrorCode | undefined => {
-  if (isSurveysApiError(error)) {
+  if (error instanceof SurveysApiError) {
     // Code-first auth resolution (shared with siwe/surveys-sdk): a CODELESS
     // 401/403 is a session failure; a coded domain 401/403 (e.g.
     // OPERATOR_ACCESS_DENIED) is NOT — it falls through to its domain copy.

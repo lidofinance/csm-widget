@@ -1,4 +1,5 @@
 import { Text } from '@lidofinance/lido-ui';
+import { MODULE_METADATA } from 'consts/module';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { CheckboxHookForm } from 'shared/hook-form/controls';
@@ -7,7 +8,8 @@ import { useSubmitKeysFormData } from '../context';
 import { SHARE_LIMIT_STATUS } from 'modules/web3';
 
 export const KeysConfirm: FC = () => {
-  const { shareLimitStatus } = useSubmitKeysFormData();
+  const { shareLimitStatus, targetModule } = useSubmitKeysFormData(true);
+  const name = MODULE_METADATA[targetModule].variantName;
   const isDepositDataValid = useDepositDataValid();
 
   return (
@@ -25,13 +27,13 @@ export const KeysConfirm: FC = () => {
           {shareLimitStatus === SHARE_LIMIT_STATUS.APPROACHING && (
             <li>
               I understand that the deposit time for my keys can be months or
-              longer because CSM is approaching its stake share limit
+              longer because {name} is approaching its stake share limit
             </li>
           )}
           {shareLimitStatus === SHARE_LIMIT_STATUS.REACHED && (
             <li>
               I understand that my newly uploaded keys are very unlikely to
-              receive deposits in the near future because CSM has reached its
+              receive deposits in the near future because {name} has reached its
               stake share limit
             </li>
           )}

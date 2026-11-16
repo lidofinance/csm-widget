@@ -32,16 +32,33 @@ yarn install
 Step 4. Start the development server
 
 ```bash
-yarn dev
+yarn dev               # CSM on :3000
+PORT=3001 yarn dev:cm  # CM, can run next to CSM
 ```
+
+`yarn dev` runs `server.mjs` in dev mode, so `/runtime/window-env.js` and `/api/*` behave as in production (there is no CSP header in dev).
 
 Step 5. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ### Environment variables
 
-This project uses `publicRuntimeConfig` in the [next.config.mjs](./next.config.mjs) and `getServerSideProps` on the pages (function may be empty, but it forces Next.js to switch to Server-Side Rendering mode). This is necessary to quickly start the docker container without rebuilding the application.
+Every page is a static shell prerendered at build time; the app renders in the browser and only `/api/*` runs per request. Env vars come in three groups:
 
-Read more about [runtime configuration](https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration) and [automatic static optimization](https://nextjs.org/docs/advanced-features/automatic-static-optimization)
+- **Client, runtime.** `server.mjs` reads them on start (`config/client-env.mjs`) and serves them as `window.__env__` at `{BASE_PATH}/runtime/window-env.js`, loaded before the app bundle. Restart to apply, no rebuild: `DEFAULT_CHAIN`, `MAINTENANCE`, `IS_PROD`, `MATOMO_URL`, `WALLETCONNECT_PROJECT_ID`, `KEYS_API_URL`, `FEES_MONITORING_API_URL`, `SURVEYS_API_URL`, `IPFS_GATEWAYS`, `VALIDATION_SERVICE_BASE_PATH` and `VALIDATION_FILE_PATH` (only whether they are set), `DEVNET_ADDRESSES_FILE_PATH` (also read server-side for the `/api/rpc` allowlist).
+- **Server, runtime.** `EL_RPC_URLS_*`, `CL_API_URLS_*`, `ETHSEER_*`, `CSP_*`, `RATE_LIMIT*`, `VALIDATION_SERVICE_BASE_PATH`, `VALIDATION_FILE_PATH`, `DEVNET_ADDRESSES_FILE_PATH`: read from `process.env` by `server.mjs` and the API routes only, never sent to the browser. `server.mjs` builds the `Content-Security-Policy` header from `CSP_*`.
+- **Build time.** `MODULE` and `BASE_PATH` are inlined into the bundle (see below).
+
+### Modules
+
+`MODULE` (`csm` | `cm`, default `csm`) selects the module at build time. Each build goes to `.next/<module>` with its own title, meta tags, favicon and `manifest.json`.
+
+- `yarn build` builds the current `MODULE`; `yarn build:all` builds both. The Docker image ships both.
+- On start, `MODULE` picks which build `server.mjs` serves, so one image runs either module. Starting a module that was not built fails.
+- `BASE_PATH` is build time as well (Next.js requirement): use the same value for build and start.
+
+### Maintenance
+
+`MAINTENANCE=true` (runtime, restart to apply) shows the maintenance screen on every route. Pages still answer `200`; `/api/*` keeps working.
 
 ### Automatic versioning
 
@@ -57,10 +74,13 @@ git commit -m "feat: dark theme"
 ## Production
 
 ```bash
-yarn build && yarn start
+yarn build:all
+MODULE=cm yarn start   # MODULE=csm is the default
 ```
 
 ## Running Tests
+
+Unit tests need no env: `yarn test:unit` (vitest, `*.test.ts(x)` / `*.spec.ts(x)` outside `tests/`). The rest of this section is about the Playwright e2e suites.
 
 Before running the test suite, create a file named `.env.local` in the project root and populate it with the following variables:
 
