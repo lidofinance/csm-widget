@@ -1,6 +1,7 @@
 import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
+import { Tags } from 'tests/shared/consts/common.const';
 import { skipIf, test } from './test.fixture';
 
 const WIDGET_PAGES = [
@@ -50,6 +51,7 @@ test.describe(
   ...suite({
     epic: EPIC.common,
     story: 'Security headers',
+    tag: [Tags.smoke, Tags.webSecurity],
   }),
   () => {
     test(

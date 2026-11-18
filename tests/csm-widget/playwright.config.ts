@@ -42,14 +42,19 @@ const config: PlaywrightTestConfig = {
       name: 'csm-widget',
       testDir: './tests',
       grep: prepareGrep(process.env.TEST_TAGS),
+      testMatch: process.env.API_ONLY
+        ? /(\/bff\/.+|securityHeaders)\.spec\.ts$/
+        : undefined,
       use: {
         // @ts-expect-error because pw doesnt have custom types
         useFork: true,
       },
     },
   ],
-  globalSetup: './config/globalSetup.ts',
-  globalTeardown: './config/globalTeardown.ts',
+  globalSetup: process.env.API_ONLY ? undefined : './config/globalSetup.ts',
+  globalTeardown: process.env.API_ONLY
+    ? undefined
+    : './config/globalTeardown.ts',
 };
 
 export default config;

@@ -46,7 +46,13 @@ const tunnelUrls = new Map<string, string>();
 
 const readTunnelUrl = async (startedAt: string) => {
   if (!tunnelUrls.has(startedAt)) {
-    const url = await exec('docker', ['logs', CONTAINERS.tunnel])
+    // a restart keeps the old logs, and with them the old URL
+    const url = await exec('docker', [
+      'logs',
+      '--since',
+      startedAt,
+      CONTAINERS.tunnel,
+    ])
       .then(({ stdout, stderr }) =>
         `${stdout}${stderr}`
           .match(/https:\/\/[a-z0-9-]+\.trycloudflare\.com/g)
