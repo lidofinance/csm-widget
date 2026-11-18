@@ -47,6 +47,10 @@ export const EPIC = {
     name: 'Common',
     features: [],
   },
+  security: {
+    name: 'Security',
+    features: [],
+  },
   surveys: {
     name: 'Surveys',
     features: [],

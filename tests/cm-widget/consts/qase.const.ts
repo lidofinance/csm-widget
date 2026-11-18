@@ -41,6 +41,10 @@ export const EPIC = {
     name: 'Common',
     features: [],
   },
+  security: {
+    name: 'Security',
+    features: [],
+  },
 } as const;
 
 export const suite = createSuite<typeof EPIC>();

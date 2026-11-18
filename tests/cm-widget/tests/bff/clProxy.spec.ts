@@ -13,7 +13,7 @@ const CL_CACHE_CONTROL =
 
 test.describe(
   ...suite({
-    epic: EPIC.common,
+    epic: EPIC.security,
     story: 'BFF CL API proxy',
     tag: [Tags.smoke, Tags.webSecurity],
   }),
