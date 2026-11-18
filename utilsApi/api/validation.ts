@@ -13,6 +13,15 @@ import {
 import type { NextApiRequest } from 'next';
 import { RpcRequest, ValidationContext } from './types';
 
+const HEX_BLOCK_NUMBER = /^0x[0-9a-fA-F]+$/;
+// Tags that resolve within a few blocks of head, far below any sane maxGetLogsRange
+const NEAR_HEAD_BLOCK_TAGS = new Set([
+  'latest',
+  'safe',
+  'finalized',
+  'pending',
+]);
+
 // validation factories
 
 const zeroBN = BigInt(0);
@@ -71,6 +80,7 @@ export const ethCallValidationFactory = (
   ) => {
     const { params } = request;
     if (Array.isArray(params) && params[0] && typeof params[0] === 'object') {
+      // no `to` + `data` is viem's deployless eth_call (publicClient.verifyMessage)
       if ('to' in params[0] && typeof params[0].to === 'string') {
         if (!allowedCallAddressMap[chainId]?.has(params[0].to.toLowerCase())) {
           rpcRequestBlocked.inc({ reason: 'address not allowed for eth_call' });
@@ -134,15 +144,21 @@ export const ethGetLogsValidationFactory = (
           rpcRequestBlocked.inc({
             reason: 'address not allowed for eth_getLogs',
           });
-          throw new InvalidRequestError(
-            `Address ${params[0].to} is not allowed for eth_getLogs`,
-          );
+          throw new InvalidRequestError(`Address not allowed for eth_getLogs`);
         }
       }
 
       // block range validation
       if (maxBlockRange) {
         if (fromBlock === 'earliest')
+          throw new InvalidRequestError(
+            `RPC method eth_getLogs fromBlock is invalid`,
+          );
+
+        if (
+          !HEX_BLOCK_NUMBER.test(fromBlock) &&
+          !NEAR_HEAD_BLOCK_TAGS.has(fromBlock)
+        )
           throw new InvalidRequestError(
             `RPC method eth_getLogs fromBlock is invalid`,
           );

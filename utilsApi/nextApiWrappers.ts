@@ -1,6 +1,5 @@
-import type { Histogram, Counter } from 'prom-client';
+import type { Counter } from 'prom-client';
 
-import { getStatusLabel } from '@lidofinance/api-metrics';
 import {
   RequestWrapper,
   DefaultErrorHandlerArgs,
@@ -87,23 +86,7 @@ export const httpMethodGuard =
     await next?.(req, res, next);
   };
 
-export const responseTimeMetric =
-  (metrics: Histogram<string>, route: string): RequestWrapper =>
-  async (req, res, next) => {
-    let status = '2xx';
-    const endMetric = metrics.startTimer({ route });
-
-    try {
-      await next?.(req, res, next);
-      status = getStatusLabel(res.statusCode);
-    } catch (error) {
-      status = getStatusLabel(res.statusCode);
-      // throw error up the stack
-      throw error;
-    } finally {
-      endMetric({ status });
-    }
-  };
+export { responseTimeMetric } from '@lidofinance/next-api-wrapper';
 
 export const requestAddressMetric =
   (metrics: Counter<string>): RequestWrapper =>
