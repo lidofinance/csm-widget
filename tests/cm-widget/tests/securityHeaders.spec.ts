@@ -1,3 +1,4 @@
+import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { Tags } from 'tests/shared/consts/common.const';
@@ -55,7 +56,7 @@ test.describe(
   }),
   () => {
     test(
-      'Should serve security headers on widget pages',
+      qase(514, 'Should serve security headers on widget pages'),
       {
         ...skipIf(!expected, 'Local stand runs in dev mode without CSP'),
       },
