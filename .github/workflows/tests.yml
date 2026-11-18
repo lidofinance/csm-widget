@@ -25,6 +25,7 @@ on:
         options:
           - "-"
           - smoke
+          - webSecurity
       preview_stand_url:
         description: 'Preview stand url (only if "Stand type" is "preview")'
         required: false
@@ -82,3 +83,4 @@ jobs:
       preview_stand_env: ${{ github.event.inputs.preview_stand_env || '' }}
       report_enabled: ${{ inputs.report_enabled || false }}
       job_custom_name: ${{ inputs.job_custom_name || 'CSM widget' }}
+      api_only: ${{ inputs.tags == 'webSecurity' }}
