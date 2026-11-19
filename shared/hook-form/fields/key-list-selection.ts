@@ -1,4 +1,4 @@
-import { trimAddress } from '@lidofinance/address';
+import { trimAddress } from 'utils/trim-address';
 
 export type KeyListFieldMode = 'range' | 'multi';
 

@@ -144,6 +144,7 @@ Used in navigation items (`use-nav-items.tsx`), page guards, and conditional UI.
 - Prefix unused variables with `_` (e.g., `_unused`)
 - TypeScript `satisfies` is fine — the app compiles with SWC, there is no Babel
 - Respect `.editorconfig` (2-space indent) and `.prettierrc` (single quotes, trailing commas)
+- Styling: co-located CSS Modules (`import s from './x.module.css'`) + app-ui props; doubled class on app-ui roots; styled-components is banned — see docs/component-rules.md
 - Run `yarn lint:fix` after changes
 
 ## Commit Conventions

@@ -11,6 +11,7 @@
     "start": "NODE_ENV=production node -r next-logger --no-warnings=ExperimentalWarning server.mjs",
     "lint": "eslint --ext ts,tsx,js,mjs .",
     "lint:fix": "yarn lint --fix",
+    "lint:css": "stylelint '**/*.css' --ignore-path .gitignore --allow-empty-input",
     "types": "next typegen && tsc --noEmit && tsc --noEmit -p tests",
     "postinstall": "husky || true",
     "test:unit": "vitest run",
@@ -30,7 +31,6 @@
     "@base-org/account": "^2.5.1",
     "@coinbase/wallet-sdk": "^4.3.6",
     "@inline-svg-unique-id/react": "^1.2.3",
-    "@lidofinance/address": "^1.4.0",
     "@lidofinance/analytics-matomo": "^0.65.0",
     "@lidofinance/api-logger": "^0.64.0",
     "@lidofinance/api-metrics": "^0.64.0",
@@ -51,6 +51,7 @@
     "@safe-global/safe-apps-sdk": "^9.1.0",
     "@tanstack/react-query": "^5.85.6",
     "@walletconnect/ethereum-provider": "^2.23.8",
+    "classnames": "2.5.1",
     "copy-to-clipboard": "^3.3.1",
     "cors": "^2.8.5",
     "date-fns": "2.29.2",
@@ -81,6 +82,7 @@
     "@commitlint/cli": "^21",
     "@commitlint/config-conventional": "^21",
     "@commitlint/prompt": "^21",
+    "@csstools/postcss-global-data": "3.0.0",
     "@hey-api/openapi-ts": "0.98.2",
     "@lidofinance/bochqa-reporter": "1.1.0",
     "@lidofinance/browser-service": "1.12.0",
@@ -130,9 +132,13 @@
     "lint-staged": "^17",
     "path-to-regexp": "6.3.0",
     "playwright-qase-reporter": "^2.8.1",
+    "postcss-custom-media": "11.0.5",
+    "postcss-nested": "7.0.2",
     "prettier": "^3.3.3",
     "qase-javascript-commons": "^2.9.12",
     "qaseio": "^2.4.3",
+    "stylelint": "15.11.0",
+    "stylelint-config-standard": "34.0.0",
     "typechain": "^8.1.1",
     "typescript": "^5.7.3",
     "vitest": "4.1.12"
@@ -173,7 +179,11 @@
     "./**/*.{ts,tsx}": [
       "eslint --ignore-path .gitignore --max-warnings=0"
     ],
-    "./**/*.{ts,tsx,css,md,json}": [
+    "./**/*.{ts,tsx,md,json}": [
+      "prettier --write"
+    ],
+    "./**/*.css": [
+      "stylelint",
       "prettier --write"
     ]
   },

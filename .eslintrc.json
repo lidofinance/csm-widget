@@ -22,7 +22,12 @@
     "jsx-a11y/no-autofocus": "off",
     "jsx-a11y/anchor-is-valid": "off",
     "@next/next/no-img-element": "off",
-    "no-console": ["warn", { "allow": ["warn", "error", "info", "debug"] }],
+    "no-console": [
+      "warn",
+      {
+        "allow": ["warn", "error", "info", "debug"]
+      }
+    ],
     "@typescript-eslint/no-unused-vars": [
       "warn",
       {
@@ -54,6 +59,22 @@
           "**/*.{spec,test}.{ts,tsx}"
         ]
       }
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "styled-components",
+            "message": "Use CSS Modules + app-ui props (docs/component-rules.md)"
+          },
+          {
+            "name": "@lidofinance/address",
+            "message": "Use utils/trim-address"
+          }
+        ],
+        "patterns": ["styled-components/*"]
+      }
     ]
   },
   "settings": {
@@ -82,6 +103,130 @@
         "sonarjs/no-identical-conditions": "off",
         "sonarjs/no-identical-expressions": "off",
         "sonarjs/no-identical-functions": "off"
+      }
+    },
+    {
+      "files": [
+        "features/accept-invite/accept-invite-form/styles.tsx",
+        "features/add-keys/add-keys/styles.tsx",
+        "features/bond-rewards/new-validator-header.tsx",
+        "features/bond-rewards/rewards-history/rewards-history-card.tsx",
+        "features/bond-rewards/rewards-history/rewards-history-header.tsx",
+        "features/change-role/shared/styles.tsx",
+        "features/change-role/splits-form/controls/split-row-view.tsx",
+        "features/change-role/splits-form/styles.tsx",
+        "features/claim-bond/claim-bond-form/hooks/other-operators-claimable.tsx",
+        "features/claim-bond/claim-bond-form/hooks/tx-stage-claim.tsx",
+        "features/claim-bond/claim-bond-form/styles.tsx",
+        "features/claim-type/claim-idvtc-form/styles.tsx",
+        "features/claim-type/shared/styles.tsx",
+        "features/create-node-operator/acknowledgement/partner-logos.tsx",
+        "features/create-node-operator/acknowledgement/starter-pack-card.tsx",
+        "features/create-node-operator/acknowledgement/starter-pack-icon.tsx",
+        "features/create-node-operator/curated-operator-form/controls/styles.tsx",
+        "features/create-node-operator/curated-operator-form/success/styles.tsx",
+        "features/create-node-operator/operator-type-cards/type-card.tsx",
+        "features/create-node-operator/submit-keys-form/confirm-custom-addresses-modal-app.tsx",
+        "features/create-node-operator/submit-keys-form/success/csm-create-success.tsx",
+        "features/create-node-operator/submit-keys-form/success/styles.tsx",
+        "features/dashboard/cards/active-keys-card.tsx",
+        "features/dashboard/cards/claim-card.tsx",
+        "features/dashboard/cards/stake-card.tsx",
+        "features/dashboard/cards/stat-card-meta.tsx",
+        "features/dashboard/cards/stat-card.tsx",
+        "features/dashboard/operator-header-card.tsx",
+        "features/delete-keys/delete-keys-layout.tsx",
+        "features/ics/apply-form/controls/address-item.tsx",
+        "features/ics/form-status/components/score-breakdown-modal.tsx",
+        "features/ics/form-status/styles.ts",
+        "features/ics/score-system/criteria-modal.tsx",
+        "features/ics/score-system/score-table.tsx",
+        "features/ics/shared/score-data.tsx",
+        "features/idvtc/apply-form/controls/main-address-tooltip-content.tsx",
+        "features/idvtc/description/styles.ts",
+        "features/idvtc/dkg/styles.tsx",
+        "features/idvtc/dkg/tx-stages/tx-stage-dkg-upload-failed.tsx",
+        "features/idvtc/form-status/styles.ts",
+        "features/idvtc/members/tx-stages/tx-stage-members-init-failed.tsx",
+        "features/idvtc/shared/styles.ts",
+        "features/my-operators/group-section/group-member-card.tsx",
+        "features/my-operators/parts/active-keys-value.tsx",
+        "features/my-operators/parts/card-header.ts",
+        "features/surveys/components/survey-cards.tsx",
+        "features/unlock-bond/penalty-history/penalty-history.tsx",
+        "features/unlock-bond/unlock-bond-form/styles.tsx",
+        "features/validate-with-lido/community-staking/csm-hero.tsx",
+        "features/validate-with-lido/community-staking/options-card.tsx",
+        "features/validate-with-lido/components/hero-illustration.ts",
+        "features/validate-with-lido/components/promo-card.tsx",
+        "features/validate-with-lido/hero/hero-card.tsx",
+        "features/validate-with-lido/modules/module-card.tsx",
+        "features/view-keys/deposit-queue/style.ts",
+        "features/view-keys/keys-table/key-cell.tsx",
+        "features/view-keys/keys-table/keys-empty.tsx",
+        "features/view-keys/keys-table/keys-skeleton.tsx",
+        "features/view-keys/keys-table/keys-table-card.tsx",
+        "features/view-keys/keys-table/strike-dots-view.tsx",
+        "features/view-keys/keys-table/styles.ts",
+        "mock/claim-bond/debug-panel.tsx",
+        "mock/claimer/claimer-debug-panel.tsx",
+        "pages/_document.tsx",
+        "pages/test/claim-bond.tsx",
+        "pages/test/claimer.tsx",
+        "pages/test/idvtc-members.tsx",
+        "pages/test/my-operators.tsx",
+        "pages/test/queue.tsx",
+        "pages/test/rewards-history.tsx",
+        "shared/alerts/components/styles.tsx",
+        "shared/components/address/styles.tsx",
+        "shared/components/avatar-stack/avatar-stack.tsx",
+        "shared/components/background-gradient/styles.tsx",
+        "shared/components/date/styles.ts",
+        "shared/components/faq/faq-chain-name.tsx",
+        "shared/components/faq/styles.tsx",
+        "shared/components/hub-list/hub-row.tsx",
+        "shared/components/hub-list/hub-section.tsx",
+        "shared/components/hub-list/styles.tsx",
+        "shared/components/matomo-link/styles.ts",
+        "shared/components/message-box-link/message-box-link.tsx",
+        "shared/components/parameters-list/styles.tsx",
+        "shared/components/security-status-banner/styles.tsx",
+        "shared/components/stake-allocation/keys-needed-tag.tsx",
+        "shared/components/stake-allocation/stake-allocation-rows.tsx",
+        "shared/components/stake-allocation/styles.ts",
+        "shared/components/stats-card/stats-card-shell.tsx",
+        "shared/components/status-comment/styles.ts",
+        "shared/components/stretch-stack/stretch-stack.tsx",
+        "shared/components/test-env-banner/styles.tsx",
+        "shared/components/when-loaded/when-loaded.tsx",
+        "shared/form-page/styles.tsx",
+        "shared/formatters/format-price.tsx",
+        "shared/hook-form/deposit-data/styles.tsx",
+        "shared/hook-form/fields/styles.tsx",
+        "shared/layout/crumbs/crumbs.tsx",
+        "shared/layout/navigation/operator-switcher/styles.tsx",
+        "shared/layout/styles.tsx",
+        "shared/navigate/switcher/styles.tsx",
+        "shared/node-operator/choose-operator-modal/styles.tsx",
+        "shared/node-operator/curve-badge/styles.tsx",
+        "shared/node-operator/descriptor/styles.tsx",
+        "shared/node-operator/module-menu-icon.tsx",
+        "shared/node-operator/operator-addresses.tsx",
+        "shared/node-operator/operator-rows/styles.tsx",
+        "shared/node-operator/operator-type-tag.tsx",
+        "shared/node-operator/type-badge/type-badge.tsx",
+        "shared/node-operator/type-overview/flow-steps.tsx",
+        "shared/node-operator/type-overview/type-hero.tsx",
+        "shared/node-operator/type-overview/type-parameters-card.tsx",
+        "shared/transaction-modal/transaction-modal-content.tsx",
+        "shared/transaction-modal/tx-stages-parts/skeleton-balance.tsx",
+        "shared/transaction-modal/tx-stages-parts/whats-next-block.tsx",
+        "shared/ui/dropzone/styles.tsx",
+        "shared/ui/option-list/styles.tsx",
+        "shared/wallet/wallet-popover/styles.tsx"
+      ],
+      "rules": {
+        "no-restricted-imports": "off"
       }
     }
   ]
