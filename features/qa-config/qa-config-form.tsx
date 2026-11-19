@@ -153,7 +153,7 @@ export const QaConfigForm = () => {
           <Input
             fullwidth
             label="Surveys API URL"
-            placeholder="https://csm-surveys-api-mainnet.up.railway.app"
+            placeholder="https://csm-survey-api.lido.fi"
             error={formState.errors[SURVEY_API_URL_KEY]?.message}
             {...register(SURVEY_API_URL_KEY, { validate: validateUrl })}
           />
