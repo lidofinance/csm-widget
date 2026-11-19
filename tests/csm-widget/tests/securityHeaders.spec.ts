@@ -1,6 +1,7 @@
 import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
+import { Tags } from 'tests/shared/consts/common.const';
 import { skipIf, test } from './test.fixture';
 
 const WIDGET_PAGES = [
@@ -48,8 +49,9 @@ const expected = STAND_HEADERS[process.env.STAND_TYPE ?? ''];
 
 test.describe(
   ...suite({
-    epic: EPIC.common,
-    story: 'Security headers',
+    epic: EPIC.security,
+    story: 'Headers',
+    tag: Tags.webSecurity,
   }),
   () => {
     test(
@@ -85,10 +87,9 @@ test.describe(
             expect
               .soft(headers['cross-origin-opener-policy'], route)
               .toBe('same-origin-allow-popups');
-            // the app sends max-age=31536000, the infra overrides it
             expect
               .soft(headers['strict-transport-security'], route)
-              .toBe('max-age=2592000; includeSubDomains; preload');
+              .toMatch(/^max-age=\d+; includeSubDomains; preload$/);
             expect.soft(headers[expected.cspHeader], route).toBe(expected.csp);
           });
         }

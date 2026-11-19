@@ -9,6 +9,7 @@ export const EXTRA_PER_KEY = 1.3;
 
 export enum Tags {
   smoke = '@smoke',
+  webSecurity = '@webSecurity',
   matomo = '@matomo',
   noProd = '@noProd',
   noStaging = '@noStaging',
