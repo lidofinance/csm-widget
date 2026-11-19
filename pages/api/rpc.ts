@@ -68,10 +68,11 @@ const rpc = rpcFactory({
   },
 });
 
+// first item is innermost: metrics run after method guard and rate limit
 export default wrapNextRequest([
+  requestAddressMetric(Metrics.request.ethCallToAddress),
   httpMethodGuard([HttpMethod.POST]),
   rateLimit,
   responseTimeMetric(Metrics.request.apiTimings, API_ROUTES.RPC),
-  requestAddressMetric(Metrics.request.ethCallToAddress),
   defaultErrorHandler,
 ])(rpc);

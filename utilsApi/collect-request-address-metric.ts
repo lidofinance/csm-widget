@@ -23,28 +23,15 @@ const shortError = (error: unknown) => {
     : text;
 };
 
-const parseRefererUrl = (referer: string) => {
-  if (!referer) return null;
-  try {
-    const url = new URL(referer);
-    return `${url.origin}${url.pathname}`;
-  } catch (error) {
-    return null;
-  }
-};
-
 export const collectRequestAddressMetric = ({
   calls,
-  referer,
   chainId,
   metrics,
 }: {
   calls: any[];
-  referer: string;
   chainId: SUPPORTED_CHAINS;
   metrics: Counter<string>;
 }) => {
-  const refererUrlParsed = parseRefererUrl(referer);
   let invalidSelectors = 0;
   let malformedCalls = 0;
   let lastMalformedError = '';
@@ -70,24 +57,28 @@ export const collectRequestAddressMetric = ({
       const contractName = METRIC_CONTRACT_ADDRESSES?.[chainId]?.[address];
 
       const selector = typeof data === 'string' ? data.slice(0, 10) : '';
-      const methodEncoded = METHOD_SELECTOR.test(selector)
-        ? selector
-        : undefined;
-      if (!methodEncoded) invalidSelectors++;
+      const validSelector = METHOD_SELECTOR.test(selector);
+      if (!validSelector) invalidSelectors++;
 
+      // Raw selector is a label only when it decodes against a known ABI,
+      // otherwise callers could mint unbounded label sets.
+      let methodEncoded = 'N/A';
       let methodDecoded = 'N/A';
-      if (methodEncoded && contractName) {
+      if (contractName && validSelector) {
         try {
           const abi = getMetricContractAbi(contractName);
           if (!abi) {
             console.warn(`ABI not found for contract: ${contractName}`);
           } else {
-            const functionName = getFunctionNameFromAbi(abi, methodEncoded);
-            methodDecoded = functionName || 'Unknown Function';
+            const functionName = getFunctionNameFromAbi(abi, selector);
+            if (functionName) {
+              methodEncoded = selector;
+              methodDecoded = functionName;
+            }
           }
         } catch (error) {
           console.warn(
-            `[collectRequestAddressMetric] failed to decode ${methodEncoded} method for ${contractName}: ${shortError(
+            `[collectRequestAddressMetric] failed to decode ${selector} method for ${contractName}: ${shortError(
               error,
             )}`,
           );
@@ -97,9 +88,8 @@ export const collectRequestAddressMetric = ({
       metrics
         .labels({
           address: contractName ? address : 'N/A',
-          referer: refererUrlParsed || 'N/A',
           contractName: contractName || 'N/A',
-          methodEncoded: methodEncoded || 'N/A',
+          methodEncoded,
           methodDecoded,
         })
         .inc(1);
