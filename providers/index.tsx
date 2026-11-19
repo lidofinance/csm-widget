@@ -3,7 +3,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { FC, PropsWithChildren } from 'react';
 
 import { ConfigProvider } from 'config';
-import { GlobalStyle } from 'styles';
 
 import { SurveysAuthProvider } from 'modules/surveys-sdk';
 import { NodeOperatorProvider, Web3Provider } from 'modules/web3';
@@ -42,7 +41,6 @@ export const Providers: FC<PropsWithChildren<Props>> = ({
       <AppFlagProvider>
         <ModifyProvider>
           <ThemeProvider>
-            <GlobalStyle />
             <InpageNavigationProvider>
               <AlertProvider>
                 {dummy ? (

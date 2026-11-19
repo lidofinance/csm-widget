@@ -1,13 +1,14 @@
 import 'utils/zod-jitless';
+import 'nprogress/nprogress.css';
+import '@lidofinance/lido-app-ui/index.css';
+import '@reef-knot/ui-lido/styles.css';
+import 'styles/global.css';
 
 import { config } from 'config';
 import { WIDGET_TITLE } from 'consts/module';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import 'nprogress/nprogress.css';
-import '@lidofinance/lido-app-ui/index.css';
-import '@reef-knot/ui-lido/styles.css';
 import { ThemeName, Toaster, useThemeToggle } from '@lidofinance/lido-app-ui';
 import { Providers } from 'providers';
 import { memo } from 'react';
