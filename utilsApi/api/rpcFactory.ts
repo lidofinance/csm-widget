@@ -54,11 +54,20 @@ export const rpcFactory = ({
 
   const validateRpcMethod = rpcMethodsValidationFactory(allowedRPCMethods);
 
-  const validateEthCall =
-    allowedCallAddresses &&
-    shouldValidateRpcMethod('eth_call', allowedRPCMethods)
-      ? ethCallValidationFactory(allowedCallAddresses)
-      : undefined;
+  const callValidators: Record<
+    string,
+    ReturnType<typeof ethCallValidationFactory>
+  > = {};
+  if (allowedCallAddresses) {
+    for (const method of ['eth_call', 'eth_estimateGas']) {
+      if (shouldValidateRpcMethod(method, allowedRPCMethods)) {
+        callValidators[method] = ethCallValidationFactory(
+          allowedCallAddresses,
+          method,
+        );
+      }
+    }
+  }
 
   const validateEthGetLogs =
     (allowedLogsAddresses || blockEmptyAddressGetLogs) &&
@@ -100,9 +109,7 @@ export const rpcFactory = ({
 
         const method = request.method;
 
-        if (method === 'eth_call' && validateEthCall) {
-          validateEthCall(request, validationContext);
-        }
+        callValidators[method]?.(request, validationContext);
         if (method === 'eth_getLogs' && validateEthGetLogs) {
           await validateEthGetLogs(request, validationContext);
         }

@@ -1,6 +1,7 @@
 import { Transform } from 'node:stream';
 
 import { Cache } from 'memory-cache';
+import { erc6492SignatureValidatorByteCode } from 'viem';
 
 import {
   ClientError,
@@ -60,8 +61,17 @@ export const rpcMethodsValidationFactory = (allowedMethods?: string[]) => {
   };
 };
 
+const ERC6492_VALIDATOR_BYTECODE =
+  erc6492SignatureValidatorByteCode.toLowerCase();
+
+// To-less calls are allowed only for viem's deployless ERC-6492 signature verification
+const isErc6492DeploylessCall = (data: unknown) =>
+  typeof data === 'string' &&
+  data.toLowerCase().startsWith(ERC6492_VALIDATOR_BYTECODE);
+
 export const ethCallValidationFactory = (
   allowedAddress: Record<number, string[]>,
+  method = 'eth_call',
 ) => {
   const allowedCallAddressMap = createAllowedAddressMap(allowedAddress);
 
@@ -70,18 +80,29 @@ export const ethCallValidationFactory = (
     { chainId, rpcRequestBlocked }: ValidationContext,
   ) => {
     const { params } = request;
-    if (Array.isArray(params) && params[0] && typeof params[0] === 'object') {
-      if ('to' in params[0] && typeof params[0].to === 'string') {
-        if (!allowedCallAddressMap[chainId]?.has(params[0].to.toLowerCase())) {
-          rpcRequestBlocked.inc({ reason: 'address not allowed for eth_call' });
-          throw new InvalidRequestError(
-            `Address ${params[0].to} is not allowed for eth_call`,
-          );
-        }
-      } else if (!('data' in params[0])) {
-        throw new InvalidRequestError(`RPC method eth_call is invalid`);
+    if (!Array.isArray(params) || !params[0] || typeof params[0] !== 'object') {
+      throw new InvalidRequestError(`RPC method ${method} is invalid`);
+    }
+    const { to, data } = params[0] as { to?: unknown; data?: unknown };
+
+    if (typeof to === 'string') {
+      if (!allowedCallAddressMap[chainId]?.has(to.toLowerCase())) {
+        rpcRequestBlocked.inc({ reason: `address not allowed for ${method}` });
+        throw new InvalidRequestError(
+          `Address ${to} is not allowed for ${method}`,
+        );
       }
-    } else throw new InvalidRequestError(`RPC method eth_call is invalid`);
+    } else if (to == null) {
+      if (!isErc6492DeploylessCall(data)) {
+        rpcRequestBlocked.inc({ reason: `${method} without address` });
+        throw new InvalidRequestError(
+          `Calls without address are not allowed for ${method}`,
+        );
+      }
+    } else {
+      rpcRequestBlocked.inc({ reason: `${method} invalid address` });
+      throw new InvalidRequestError(`RPC method ${method} is invalid`);
+    }
   };
 };
 
@@ -187,28 +208,32 @@ export const ethGetLogsValidationFactory = (
   };
 };
 
+export const maxSizeTransformFactory = (
+  MAX_SIZE: number,
+  onExceed: () => void,
+) => {
+  let bytesWritten = 0;
+  return new Transform({
+    transform(chunk, _encoding, callback) {
+      bytesWritten += chunk.length;
+      if (bytesWritten > MAX_SIZE) {
+        onExceed();
+        return callback(
+          new SizeTooLargeError(
+            `Stream size exceeds the maximum limit of ${MAX_SIZE} bytes`,
+          ),
+        );
+      }
+      return callback(null, chunk);
+    },
+  });
+};
+
 export const streamMaxSizeValidationFactory =
-  (MAX_SIZE: number) => (context: ValidationContext) => {
-    let bytesWritten = 0;
-    return new Transform({
-      transform(chunk, _encoding, callback) {
-        bytesWritten += chunk.length;
-        if (bytesWritten > MAX_SIZE) {
-          // Emit an error if size exceeds MAX_SIZE
-          context.rpcRequestBlocked.inc({ reason: 'response too large' });
-          return callback(
-            new SizeTooLargeError(
-              `Stream size exceeds the maximum limit of ${MAX_SIZE} bytes`,
-            ),
-          );
-        }
-        return callback(null, chunk); // Pass the chunk through
-      },
-      flush(callback) {
-        callback();
-      },
-    });
-  };
+  (MAX_SIZE: number) => (context: ValidationContext) =>
+    maxSizeTransformFactory(MAX_SIZE, () =>
+      context.rpcRequestBlocked.inc({ reason: 'response too large' }),
+    );
 
 // utils
 
