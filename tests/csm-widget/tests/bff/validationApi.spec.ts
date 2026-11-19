@@ -11,7 +11,7 @@ test.describe(
   ...suite({
     epic: EPIC.security,
     story: 'BFF Validation API',
-    tag: [Tags.smoke, Tags.webSecurity],
+    tag: Tags.webSecurity,
   }),
   () => {
     test(

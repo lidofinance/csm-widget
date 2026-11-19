@@ -15,7 +15,7 @@ test.describe(
   ...suite({
     epic: EPIC.security,
     story: 'BFF CL API proxy',
-    tag: [Tags.smoke, Tags.webSecurity],
+    tag: Tags.webSecurity,
   }),
   () => {
     test(qase(515, 'Should proxy validators lookup'), async ({ request }) => {

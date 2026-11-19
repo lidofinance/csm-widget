@@ -81,7 +81,7 @@ test.describe(
   ...suite({
     epic: EPIC.security,
     story: 'BFF RPC proxy',
-    tag: [Tags.smoke, Tags.webSecurity],
+    tag: Tags.webSecurity,
   }),
   () => {
     ALLOWED_CALLS.forEach(({ qaseId, method, params, result }) => {

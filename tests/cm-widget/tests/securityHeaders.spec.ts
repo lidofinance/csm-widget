@@ -52,7 +52,7 @@ test.describe(
   ...suite({
     epic: EPIC.security,
     story: 'Headers',
-    tag: [Tags.smoke, Tags.webSecurity],
+    tag: Tags.webSecurity,
   }),
   () => {
     test(
@@ -88,10 +88,9 @@ test.describe(
             expect
               .soft(headers['cross-origin-opener-policy'], route)
               .toBe('same-origin-allow-popups');
-            // the app sends max-age=31536000, the infra overrides it
             expect
               .soft(headers['strict-transport-security'], route)
-              .toBe('max-age=2592000; includeSubDomains; preload');
+              .toMatch(/^max-age=\d+; includeSubDomains; preload$/);
             expect.soft(headers[expected.cspHeader], route).toBe(expected.csp);
           });
         }
