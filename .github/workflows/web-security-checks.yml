@@ -1,0 +1,34 @@
+name: Web security checks
+run-name: Web security checks. Env [prod]
+
+on:
+  schedule:
+    - cron: "0 */6 * * *" # Every 6 hours: prod + webSecurity
+  workflow_dispatch:
+
+jobs:
+  csm:
+    name: CSM widget
+    uses: ./.github/workflows/e2e-tests.yml
+    secrets: inherit
+    with:
+      module: csm
+      stand_type: prod
+      test_tags: webSecurity
+      qase_project_id: CSM
+      api_only: true
+      timeout_minutes: 15
+      job_custom_name: ${{ github.event_name == 'schedule' && '⏰ Scheduled · CSM web security' || 'CSM web security' }}
+
+  cm:
+    name: CM widget
+    uses: ./.github/workflows/e2e-tests.yml
+    secrets: inherit
+    with:
+      module: cm
+      stand_type: prod
+      test_tags: webSecurity
+      qase_project_id: CM
+      api_only: true
+      timeout_minutes: 15
+      job_custom_name: ${{ github.event_name == 'schedule' && '⏰ Scheduled · CM web security' || 'CM web security' }}

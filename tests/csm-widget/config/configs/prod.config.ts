@@ -29,7 +29,7 @@ export class ProdConfig extends BaseConfig {
       },
       mockConfig: {
         urls: {
-          csmSurveysApi: 'https://csm-survey-api.lido.tools',
+          csmSurveysApi: 'https://csm-survey-api.lido.fi',
         },
       },
       monitoringConfig: {

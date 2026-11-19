@@ -24,6 +24,7 @@ on:
         options:
           - "-"
           - smoke
+          - webSecurity
           - contractSecurityCheck
       preview_stand_url:
         description: 'Preview stand url (only if "Stand type" is "preview")'
@@ -77,4 +78,5 @@ jobs:
       preview_stand_url: ${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url || '' }}
       preview_stand_env: ${{ github.event.inputs.preview_stand_env || '' }}
       report_enabled: ${{ inputs.report_enabled || false }}
-      job_custom_name: ${{ inputs.job_custom_name || 'CM widget' }}
+      job_custom_name: ${{ inputs.job_custom_name || (github.event.schedule == '0 5 * * *' && '⏰ Scheduled · CM smoke') || (github.event.schedule == '0 6 * * *' && '⏰ Scheduled · CM regression') || 'CM widget' }}
+      api_only: ${{ inputs.tags == 'webSecurity' }}

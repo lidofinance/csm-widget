@@ -3,15 +3,18 @@ import { RpcProviders } from '@lidofinance/next-pages';
 import { iterateUrls } from '@lidofinance/rpc';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Readable } from 'node:stream';
+import { pipeline } from 'node:stream/promises';
 import { ReadableStream } from 'node:stream/web';
 import { Counter, Registry } from 'prom-client';
 import type { TrackedFetchApi } from './trackedFetchApiFactory';
-import {
-  MissingRequestBodyError,
-  UnsupportedChainIdError,
-  UnsupportedHTTPMethodError,
-} from './errors';
+import { UnsupportedChainIdError, UnsupportedHTTPMethodError } from './errors';
+import { maxSizeTransformFactory } from './validation';
 import { DEFAULT_API_ERROR_MESSAGE } from '@lidofinance/next-api-wrapper';
+
+export type ApiProxyRequest = {
+  params: Record<string, string>;
+  body?: string;
+};
 
 export type ApiFactoryParams = {
   metrics: {
@@ -30,6 +33,8 @@ export type ApiFactoryParams = {
   //  fetchRPC with prometheus, otherwise it will blow up, if someone will send arbitrary
   //  methods
   allowedMethods: string[];
+  parseRequest: (req: NextApiRequest) => ApiProxyRequest;
+  maxResponseSize?: number;
 };
 
 export const apiFactory = ({
@@ -38,6 +43,8 @@ export const apiFactory = ({
   fetchApi,
   serverLogger = console,
   allowedMethods,
+  parseRequest,
+  maxResponseSize = 5_000_000,
 }: ApiFactoryParams) => {
   const apiRequestBlocked = new Counter({
     name: prefix + 'api_service_request_blocked',
@@ -55,8 +62,7 @@ export const apiFactory = ({
         throw new UnsupportedHTTPMethodError();
       }
 
-      const { method: [chainString, ...methodParts] = [], ...params } =
-        req.query;
+      const { method: [chainString, ...methodParts] = [] } = req.query;
       const method = methodParts.join('/');
 
       const chainId = Number(chainString);
@@ -73,22 +79,7 @@ export const apiFactory = ({
         throw new Error(`Api method ${method} isn't allowed`);
       }
 
-      // Serialize once so the same payload is replayed across every provider url
-      let body: string | undefined;
-      if (req.method === 'POST') {
-        if (typeof req.body === 'string') {
-          body = req.body;
-        } else if (Buffer.isBuffer(req.body)) {
-          body = req.body.toString();
-        } else if (req.body != null && typeof req.body === 'object') {
-          body = JSON.stringify(req.body);
-        }
-
-        // an empty body would fetch the full, uncapped upstream collection (e.g. all validators)
-        if (!body) {
-          throw new MissingRequestBodyError();
-        }
-      }
+      const { params, body } = parseRequest(req);
 
       const requested = await iterateUrls(
         providers[chainId],
@@ -115,7 +106,22 @@ export const apiFactory = ({
       );
       res.status(requested.status);
       if (requested.body) {
-        Readable.fromWeb(requested.body as ReadableStream).pipe(res);
+        try {
+          // destroys both the upstream body and res on error
+          await pipeline(
+            Readable.fromWeb(requested.body as ReadableStream),
+            maxSizeTransformFactory(maxResponseSize, () =>
+              apiRequestBlocked.inc(),
+            ),
+            res,
+          );
+        } catch (error) {
+          // too late to send a status once the body has started
+          if (!res.headersSent) throw error;
+          serverLogger.error(
+            error instanceof Error ? error.message : DEFAULT_API_ERROR_MESSAGE,
+          );
+        }
       } else {
         res.json('There are a problems with Api provider');
       }
