@@ -23,7 +23,8 @@ const OPERATOR_TYPES: { type: OperatorTypeCard; gate: string; name: string }[] =
 test.describe(
   ...suite({
     epic: EPIC.security,
-    story: 'Contract address. Create gated operator',
+    feature: 'Contract address',
+    story: 'Create gated operator',
     tag: Tags.contractSecurityCheck,
   }),
   () => {

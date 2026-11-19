@@ -43,7 +43,8 @@ const OPERATOR_TYPES: {
 test.describe(
   ...suite({
     epic: EPIC.security,
-    story: 'Contract address. Create operator',
+    feature: 'Contract address',
+    story: 'Create operator',
     tag: Tags.contractSecurityCheck,
   }),
   () => {

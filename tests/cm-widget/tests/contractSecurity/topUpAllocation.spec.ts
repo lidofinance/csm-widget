@@ -9,7 +9,8 @@ test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 test.describe(
   ...suite({
     epic: EPIC.security,
-    story: 'Contract address. Top-up allocation',
+    feature: 'Contract address',
+    story: 'Top-up allocation',
     tag: Tags.contractSecurityCheck,
   }),
   () => {

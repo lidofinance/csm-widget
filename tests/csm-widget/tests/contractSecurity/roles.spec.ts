@@ -14,7 +14,8 @@ const INVITER_NO_ID = PRESETS.EMPTY_OPERATOR.noId as number;
 test.describe(
   ...suite({
     epic: EPIC.security,
-    story: 'Contract address. Roles',
+    feature: 'Contract address',
+    story: 'Roles',
     tag: Tags.contractSecurityCheck,
   }),
   () => {

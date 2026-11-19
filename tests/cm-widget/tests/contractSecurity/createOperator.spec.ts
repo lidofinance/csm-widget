@@ -12,7 +12,8 @@ const ADDRESS = PRESETS.EMPTY_OPERATOR_WITH_ALL_GATES.address;
 test.describe(
   ...suite({
     epic: EPIC.security,
-    story: 'Contract address. Create operator',
+    feature: 'Contract address',
+    story: 'Create operator',
     tag: Tags.contractSecurityCheck,
   }),
   () => {

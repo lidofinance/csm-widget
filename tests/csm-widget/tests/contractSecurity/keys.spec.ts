@@ -16,7 +16,8 @@ const PERMIT_TOKEN = {
 test.describe(
   ...suite({
     epic: EPIC.security,
-    story: 'Contract address. Keys',
+    feature: 'Contract address',
+    story: 'Keys',
     tag: Tags.contractSecurityCheck,
   }),
   () => {

@@ -10,7 +10,8 @@ test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 test.describe(
   ...suite({
     epic: EPIC.security,
-    story: 'Contract address. Delayed penalty',
+    feature: 'Contract address',
+    story: 'Delayed penalty',
     tag: Tags.contractSecurityCheck,
   }),
   () => {

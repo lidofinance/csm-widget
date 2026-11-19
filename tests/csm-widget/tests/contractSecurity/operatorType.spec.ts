@@ -10,7 +10,8 @@ test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR.secretPhrase });
 test.describe(
   ...suite({
     epic: EPIC.security,
-    story: 'Contract address. Operator type',
+    feature: 'Contract address',
+    story: 'Operator type',
     tag: Tags.contractSecurityCheck,
   }),
   () => {
