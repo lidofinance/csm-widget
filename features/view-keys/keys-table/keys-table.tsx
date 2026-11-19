@@ -12,17 +12,12 @@ import {
 import { TablePagination, useTable } from 'providers/table-provider';
 import { FC, useMemo } from 'react';
 import { useMaxPriorityKeyIndex } from 'shared/hooks';
-import styled from 'styled-components';
 import { BalanceCell } from './balance-cell';
 import { KeyCell } from './key-cell';
 import { StatusCell } from './status-cell';
 import { StrikeDots } from './strike-dots';
 
 type Row = KeyWithStatus;
-
-const FooterStyled = styled.div`
-  width: 100%;
-`;
 
 const selectTopUpPositions = ({ total, keys }: OperatorTopUpQueue) => ({
   total,
@@ -112,11 +107,7 @@ export const KeysTable: FC = () => {
         setSort({ column: key as keyof Row, direction })
       }
       emptyState={<EmptyState title="No keys at the moment" />}
-      footer={
-        <FooterStyled>
-          <TablePagination />
-        </FooterStyled>
-      }
+      footer={<TablePagination />}
     />
   );
 };

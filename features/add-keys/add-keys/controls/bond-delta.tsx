@@ -5,8 +5,6 @@ import { FormatToken } from 'shared/formatters';
 import { getBondDeltaRow } from '../add-keys-state';
 import { useAddKeysFormData } from '../context';
 
-const INHERIT_FONT = { font: 'inherit' };
-
 export const BondDeltaAsideRow: FC = () => {
   const row = getBondDeltaRow(useAddKeysFormData(true).bond);
 
@@ -20,7 +18,7 @@ export const BondDeltaAsideRow: FC = () => {
       description={row.hint}
       value={
         row.insufficient ? (
-          <Typography as="span" color="error" style={INHERIT_FONT}>
+          <Typography variant="inherit" color="error">
             {amount}
           </Typography>
         ) : (

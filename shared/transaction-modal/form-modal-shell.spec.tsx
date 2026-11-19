@@ -2,20 +2,18 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { FormModalShell, getModalCloseProps } from './form-modal-shell';
 
 describe('getModalCloseProps', () => {
-  it('passes onClose and enables Escape and overlay close when closable', () => {
+  it('passes onClose and sets dismissible when closable', () => {
     const onClose = vi.fn();
     expect(getModalCloseProps(true, onClose)).toEqual({
       onClose,
-      closeOnEscape: true,
-      closeOnOverlayClick: true,
+      dismissible: true,
     });
   });
 
-  it('drops onClose and disables Escape and overlay close when locked', () => {
+  it('drops onClose and sets dismissible false when locked', () => {
     expect(getModalCloseProps(false, vi.fn())).toEqual({
       onClose: undefined,
-      closeOnEscape: false,
-      closeOnOverlayClick: false,
+      dismissible: false,
     });
   });
 });

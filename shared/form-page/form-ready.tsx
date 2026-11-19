@@ -1,11 +1,8 @@
 import { Card, FormLayout, Skeleton, Stack } from '@lidofinance/lido-app-ui';
-import { CSSProperties, FC, PropsWithChildren, ReactNode } from 'react';
+import { FC, PropsWithChildren, ReactNode } from 'react';
 import { useFormState } from 'react-hook-form';
 import { useFormDataPending } from 'shared/hook-form/form-controller/form-data-context';
 
-const LABEL: CSSProperties = { width: '40%' };
-const FIELD: CSSProperties = { height: 52 };
-const AREA: CSSProperties = { height: 240 };
 export const FORM_SKELETON_PROPS = {
   role: 'status',
   'aria-busy': 'true',
@@ -15,10 +12,10 @@ export const FORM_SKELETON_PROPS = {
 
 export const FormMainSkeletonContent: FC = () => (
   <Stack gap={16}>
-    <Skeleton variant="text" style={LABEL} />
-    <Skeleton variant="block" style={FIELD} />
-    <Skeleton variant="text" style={LABEL} />
-    <Skeleton variant="block" style={AREA} />
+    <Skeleton variant="text" width="40%" />
+    <Skeleton variant="block" height={52} />
+    <Skeleton variant="text" width="40%" />
+    <Skeleton variant="block" height={240} />
   </Stack>
 );
 
@@ -27,7 +24,7 @@ export const FormAsideSkeletonContent: FC = () => (
     <Skeleton variant="text" />
     <Skeleton variant="text" />
     <Skeleton variant="text" />
-    <Skeleton variant="block" style={FIELD} />
+    <Skeleton variant="block" height={52} />
   </Stack>
 );
 

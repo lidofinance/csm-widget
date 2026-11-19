@@ -1,6 +1,7 @@
-import { StatCardMetaItem, Typography } from '@lidofinance/lido-app-ui';
+import { Typography } from '@lidofinance/lido-app-ui';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { FormatToken } from 'shared/formatters';
+import type { StatCardMetaItem } from './stat-card-meta';
 import type { BalanceMetaItem } from '../utils/get-balance-meta-items';
 
 export const toBalanceMetaItems = (

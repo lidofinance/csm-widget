@@ -11,13 +11,12 @@ const TestContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 32px;
+  width: 100%;
   max-width: 800px;
   margin: 0 auto;
 `;
 
-const TestCard = styled(Card)`
-  padding: 24px;
-`;
+const TestCard = styled(Card).attrs({ padding: 24 })``;
 
 const TestTitle = styled.h3`
   margin: 0 0 16px 0;

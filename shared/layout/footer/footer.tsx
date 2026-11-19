@@ -12,7 +12,6 @@ const FeedbackFormLink: FC = () => {
   return (
     <TextLink
       variant="secondary"
-      external
       href={feedbackForm}
       onClick={() =>
         trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.footerFeedbackForm)
@@ -32,7 +31,6 @@ export const Footer: FC<Props> = ({ dummy }) => (
   <LibFooter aside={<Version />} data-testid="appFooter">
     <TextLink
       variant="secondary"
-      external
       href="https://lido.fi/terms-of-use"
       onClick={() =>
         trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.footerTermsOfUse)
@@ -43,7 +41,6 @@ export const Footer: FC<Props> = ({ dummy }) => (
     </TextLink>
     <TextLink
       variant="secondary"
-      external
       href="https://lido.fi/privacy-notice"
       onClick={() =>
         trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.footerPrivacyNotice)
@@ -55,7 +52,6 @@ export const Footer: FC<Props> = ({ dummy }) => (
     {dummy !== true && <FeedbackFormLink />}
     <TextLink
       variant="secondary"
-      external
       href="https://discord.com/invite/lido"
       onClick={() => trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.footerDiscord)}
       data-testid="footerDiscordLink"

@@ -9,10 +9,9 @@ import { PenaltyHistoryTable } from './penalty-history-table';
 import { sortFunctions } from './sort';
 import { EnrichedPenalty } from './types';
 
-const CardStyled = styled(Card)`
-  && {
+const CardStyled = styled(Card).attrs({ gap: 0 })`
+  && > div {
     padding: 0 24px;
-    gap: 0;
   }
 `;
 

@@ -25,3 +25,5 @@ export * from './stats-card';
 export * from './hub-list';
 export * from './stretch-stack';
 export * from './stake-allocation';
+export * from './avatar-stack';
+export * from './message-box-link';

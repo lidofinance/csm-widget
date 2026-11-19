@@ -2,7 +2,7 @@ import {
   Button,
   Card,
   Description,
-  SegmentedBar,
+  ProgressBar,
   Stack,
 } from '@lidofinance/lido-app-ui';
 import { FC, useState } from 'react';
@@ -116,9 +116,9 @@ export const InitEditor: FC<InitEditorProps> = ({ cancelable, onDone }) => {
       </Description>
 
       <Stack gap={4} data-testid="initProgress">
-        <SegmentedBar
-          steps={MEMBERS_COUNT}
+        <ProgressBar
           value={verifiedCount}
+          max={MEMBERS_COUNT}
           aria-label="Verified cluster members"
         />
         <Description color="secondary">
@@ -139,7 +139,7 @@ export const InitEditor: FC<InitEditorProps> = ({ cancelable, onDone }) => {
         />
       ))}
 
-      <Stack direction={{ base: 'row', sm: 'column' }} gap={12}>
+      <Stack direction={{ base: 'row', smDown: 'column' }} gap={12}>
         <Button
           fullWidth
           disabled={!!validationError || submit.isPending}

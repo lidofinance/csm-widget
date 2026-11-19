@@ -31,10 +31,9 @@ type Row = {
 };
 
 const getRowKey = ({ id }: Row) => id;
-const getRowProps = ({ id }: Row) =>
-  ({
-    'data-testid': id === 'total' ? 'totalScoreBreakdown' : undefined,
-  }) as object;
+const getRowProps = ({ id }: Row) => ({
+  dataTestId: { root: id === 'total' ? 'totalScoreBreakdown' : undefined },
+});
 
 const COLUMNS: TableColumn<Row>[] = [
   {

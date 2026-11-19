@@ -1,6 +1,5 @@
-import { InfoTooltip, Stack, Typography } from '@lidofinance/lido-app-ui';
+import { Card, InfoTooltip, Stack, Typography } from '@lidofinance/lido-app-ui';
 import { FC, PropsWithChildren, ReactNode } from 'react';
-import { RoleCardStyle } from './styles';
 
 export type RoleCardProps = PropsWithChildren<{
   title: string;
@@ -19,7 +18,7 @@ export const RoleCard: FC<RoleCardProps> = ({
   children,
   'data-testid': dataTestId,
 }) => (
-  <RoleCardStyle align="stretch" dataTestId={{ root: dataTestId }}>
+  <Card align="stretch" gap={16} dataTestId={{ root: dataTestId }}>
     <Stack direction="row" wrap align="center" justify="between" gap={16}>
       <Stack direction="row" align="center" gap={8}>
         {icon}
@@ -36,5 +35,5 @@ export const RoleCard: FC<RoleCardProps> = ({
       {action}
     </Stack>
     {children}
-  </RoleCardStyle>
+  </Card>
 );

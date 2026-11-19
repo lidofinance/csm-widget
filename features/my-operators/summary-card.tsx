@@ -1,7 +1,6 @@
 import {
   Card,
   Grid,
-  Skeleton,
   Stack,
   StatItem,
   Typography,
@@ -30,7 +29,6 @@ export const MyOperatorsSummaryCard: FC = () => {
     isPending,
   } = useMyOperatorsOverview({ modules: CSM_FAMILY_MODULES });
   const titleId = useId();
-  const loading = <Skeleton variant="text" />;
 
   return (
     <Card
@@ -53,16 +51,13 @@ export const MyOperatorsSummaryCard: FC = () => {
           label="Active keys"
           info="Active keys out of all non-withdrawn keys across your operators"
           dataTestId={{ ...INFO_TEST_ID, root: 'summaryActiveValidators' }}
+          loading={isPending}
           value={
-            isPending ? (
-              loading
-            ) : (
-              <ActiveKeysValue
-                active={activeValidators}
-                total={liveKeys}
-                spaced
-              />
-            )
+            <ActiveKeysValue
+              active={activeValidators}
+              total={liveKeys}
+              spaced
+            />
           }
           subValue={
             isPending ? undefined : (
@@ -85,13 +80,8 @@ export const MyOperatorsSummaryCard: FC = () => {
             root: 'summaryBondBalance',
             value: 'textContent',
           }}
-          value={
-            isPending ? (
-              loading
-            ) : (
-              <FormatToken amount={bondBalance} maxDecimalDigits={4} />
-            )
-          }
+          loading={isPending}
+          value={<FormatToken amount={bondBalance} maxDecimalDigits={4} />}
           subValue={
             isPending ? undefined : (
               <UsdValue amount={bondBalance} approx={false} />
@@ -103,13 +93,8 @@ export const MyOperatorsSummaryCard: FC = () => {
           label="Available to claim, stETH"
           info="The amount you can claim now, including rewards and excess bond across your operators"
           dataTestId={{ ...INFO_TEST_ID, root: 'summaryAvailableToClaim' }}
-          value={
-            isPending ? (
-              loading
-            ) : (
-              <FormatToken amount={availableToClaim} maxDecimalDigits={4} />
-            )
-          }
+          loading={isPending}
+          value={<FormatToken amount={availableToClaim} maxDecimalDigits={4} />}
           subValue={
             isPending ? undefined : (
               <UsdValue amount={availableToClaim} approx={false} />

@@ -1,4 +1,5 @@
-import { Typography, type StatCardMetaItem } from '@lidofinance/lido-app-ui';
+import { Typography } from '@lidofinance/lido-app-ui';
+import type { StatCardMetaItem } from './stat-card-meta';
 import type { KeysStatusItem } from '../utils/get-keys-status-items';
 
 export const toKeysMetaItems = (items: KeysStatusItem[]): StatCardMetaItem[] =>

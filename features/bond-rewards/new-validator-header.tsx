@@ -1,5 +1,4 @@
 import {
-  Callout,
   InfoTooltip,
   ProgressBar,
   Stack,
@@ -14,6 +13,7 @@ import {
   useOperatorRewards,
 } from 'modules/web3';
 import { FC } from 'react';
+import { MessageBoxLink } from 'shared/components';
 import { useModuleMeta, useShowRule } from 'shared/hooks';
 import styled from 'styled-components';
 import { getNewValidatorProgress } from './new-validator-progress';
@@ -21,6 +21,10 @@ import { getNewValidatorProgress } from './new-validator-progress';
 const BandStyled = styled(Stack)`
   padding: 12px 24px;
   background: var(--lido-app-ui-color-tint-active);
+`;
+
+const ReadyBand = styled.div`
+  padding: 12px 24px;
 `;
 
 const BarStyled = styled.div`
@@ -49,14 +53,16 @@ const NewValidatorStrip: FC = () => {
 
   if (progress >= 100) {
     return (
-      <Callout
-        tone="active"
-        href={PATH.KEYS_SUBMIT}
-        dataTestId={{ root: 'newValidatorReady' }}
-      >
-        You&apos;re ready to submit a new {moduleMeta?.shortName} validator with
-        your Rewards &amp; Excess bond
-      </Callout>
+      <ReadyBand>
+        <MessageBoxLink
+          variant="info"
+          href={PATH.KEYS_SUBMIT}
+          dataTestId={{ root: 'newValidatorReady' }}
+        >
+          You&apos;re ready to submit a new {moduleMeta?.shortName} validator
+          with your Rewards &amp; Excess bond
+        </MessageBoxLink>
+      </ReadyBand>
     );
   }
 

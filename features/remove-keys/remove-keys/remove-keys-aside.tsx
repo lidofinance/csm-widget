@@ -1,6 +1,6 @@
 import { DataListRow, Skeleton, Typography } from '@lidofinance/lido-app-ui';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { CSSProperties, FC } from 'react';
+import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
 import { GasCostRow, SubmitAside, SubmitButton } from 'shared/form-page';
 import { FormatToken } from 'shared/formatters';
@@ -11,9 +11,6 @@ import {
   getRemovalFeeTotal,
   REMOVAL_FEE_TOOLTIP,
 } from './remove-keys-state';
-
-const INHERIT_FONT: CSSProperties = { font: 'inherit' };
-const VALUE_SKELETON: CSSProperties = { width: 80 };
 
 const useSelectedCount = () =>
   useWatch<RemoveKeysFormInputType, 'selection'>({ name: 'selection' }).count;
@@ -57,9 +54,9 @@ const BondAfterRow: FC = () => {
       label={row.label}
       value={
         isPending ? (
-          <Skeleton variant="text" style={VALUE_SKELETON} />
+          <Skeleton variant="text" width={80} />
         ) : row.insufficient ? (
-          <Typography as="span" color="error" style={INHERIT_FONT}>
+          <Typography variant="inherit" color="error">
             {amount}
           </Typography>
         ) : (

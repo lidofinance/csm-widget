@@ -9,14 +9,6 @@ import { sortFunctions } from './sort';
 
 import RewardsIcon from 'assets/balance/rewards.svg?react';
 
-const CardStyled = styled(Card).attrs({ align: 'stretch' })`
-  && {
-    padding: 0;
-    overflow: hidden;
-    gap: 0;
-  }
-`;
-
 const RewardsIconStyled = styled(RewardsIcon)`
   width: 48px;
   height: 48px;
@@ -40,7 +32,13 @@ export const RewardsHistoryCard: FC = () => {
       sort={sortFunctions}
       defaultSort={{ column: 'startTimestamp', direction: 'desc' }}
     >
-      <CardStyled dataTestId={{ root: 'rewardsHistoryCard' }}>
+      <Card
+        align="stretch"
+        padding={0}
+        gap={0}
+        clip
+        dataTestId={{ root: 'rewardsHistoryCard' }}
+      >
         <RewardsHistoryHeader showExport={hasData} />
         {isPending ? (
           <LoaderStyled align="center" justify="center">
@@ -58,7 +56,7 @@ export const RewardsHistoryCard: FC = () => {
             dataTestId={{ root: 'rewardsHistoryEmpty' }}
           />
         )}
-      </CardStyled>
+      </Card>
     </TableProvider>
   );
 };

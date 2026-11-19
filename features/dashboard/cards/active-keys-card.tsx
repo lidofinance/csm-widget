@@ -1,11 +1,21 @@
-import { Skeleton, StatCard, StatCardMeta } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES, PATH } from 'consts';
 import { useNodeOperatorId } from 'modules/web3';
 import { FC } from 'react';
+import styled from 'styled-components';
 import { useKeysBreakdown, useShowFlags } from 'shared/hooks';
 import { trackMatomoEvent } from 'utils';
 import { getKeysStatusItems } from '../utils/get-keys-status-items';
 import { toKeysMetaItems } from './keys-status-meta';
+import { StatCard } from './stat-card';
+import { StatCardMeta } from './stat-card-meta';
+
+const ValueSuffix = styled.span`
+  color: var(--lido-app-ui-color-text-secondary);
+  font-size: var(--lido-app-ui-font-size-body);
+  font-weight: var(--lido-app-ui-font-weight-semibold);
+  letter-spacing: var(--lido-app-ui-letter-spacing-body);
+  line-height: var(--lido-app-ui-line-height-body);
+`;
 
 export const ActiveKeysCard: FC<{ className?: string }> = ({ className }) => {
   const nodeOperatorId = useNodeOperatorId();
@@ -37,13 +47,14 @@ export const ActiveKeysCard: FC<{ className?: string }> = ({ className }) => {
             }
           : undefined
       }
-      value={
-        isPending ? <Skeleton variant="text" /> : isError ? '—' : counts?.active
-      }
-      valueSuffix={
-        counts
-          ? `/${counts.depositable + counts.activationPending + counts.active}`
-          : undefined
+      loading={isPending}
+      value={isError ? '—' : counts?.active}
+      subValue={
+        counts ? (
+          <ValueSuffix data-testid="keysLiveCount">
+            /{counts.depositable + counts.activationPending + counts.active}
+          </ValueSuffix>
+        ) : undefined
       }
       description={
         items.length > 0 ? <StatCardMeta items={items} /> : undefined
@@ -52,7 +63,6 @@ export const ActiveKeysCard: FC<{ className?: string }> = ({ className }) => {
         root: 'dashboardKeysSection',
         link: 'sectionHeaderLink',
         value: 'keysActiveCount',
-        valueSuffix: 'keysLiveCount',
       }}
     />
   );

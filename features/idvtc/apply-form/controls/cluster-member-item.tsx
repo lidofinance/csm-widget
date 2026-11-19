@@ -199,7 +199,7 @@ export const ClusterMemberItem: FC<ClusterMemberItemProps> = ({ index }) => {
 
         <Stack gap={8}>
           <OptionalHeading>Add contacts</OptionalHeading>
-          <Stack direction={{ base: 'row', sm: 'column' }} gap={12}>
+          <Stack direction={{ base: 'row', smDown: 'column' }} gap={12}>
             <TextField
               name={`clusterMembers.${index}.discordHandle`}
               label="Discord handle"

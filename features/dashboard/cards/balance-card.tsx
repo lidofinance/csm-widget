@@ -1,4 +1,4 @@
-import { Skeleton, StatCard, StatCardMeta } from '@lidofinance/lido-app-ui';
+import { Skeleton } from '@lidofinance/lido-app-ui';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
@@ -9,6 +9,8 @@ import { FormatToken } from 'shared/formatters';
 import { trackMatomoEvent } from 'utils';
 import { getBalanceMetaItems } from '../utils/get-balance-meta-items';
 import { toBalanceMetaItems } from './balance-meta';
+import { StatCard } from './stat-card';
+import { StatCardMeta } from './stat-card-meta';
 
 const onBondLinkClick = () =>
   trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.dashboardBondLink);
@@ -25,20 +27,17 @@ export const BalanceCard: FC = () => {
         href: PATH.BOND,
         onClick: onBondLinkClick,
       }}
+      loading={isPending}
       value={
-        isPending ? (
-          <Skeleton variant="text" />
-        ) : (
-          <FormatToken
-            amount={bond?.current}
-            token={TOKENS.steth}
-            symbol=""
-            fallback="—"
-            trimTrailingZeros
-          />
-        )
+        <FormatToken
+          amount={bond?.current}
+          token={TOKENS.steth}
+          symbol=""
+          fallback="—"
+          trimTrailingZeros
+        />
       }
-      secondary={
+      subValue={
         !isPending && bond ? (
           <UsdValue amount={bond.current} approx={false} />
         ) : undefined

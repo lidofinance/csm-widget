@@ -9,7 +9,7 @@ import {
 import { FC, ReactNode } from 'react';
 import { StretchStack } from 'shared/components';
 import type { ProposedSlotDto } from 'modules/surveys-sdk/generated';
-import { MemberAddress, MemberContacts } from './member-summary';
+import { MemberContacts } from './member-summary';
 
 type PendingRotationProps = {
   title: string;
@@ -42,7 +42,7 @@ export const PendingRotation: FC<PendingRotationProps> = ({
       </Stack>
     </Stack>
 
-    <MemberAddress>{proposed.newAddress ?? ''}</MemberAddress>
+    <BodyLarge truncate>{proposed.newAddress ?? ''}</BodyLarge>
 
     <MemberContacts
       discordHandle={proposed.discordHandle}

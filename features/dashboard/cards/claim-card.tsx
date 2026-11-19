@@ -1,9 +1,7 @@
 import {
   Divider,
   Grid,
-  Skeleton,
   Stack,
-  StatCard,
   StatItem,
   TextLink,
 } from '@lidofinance/lido-app-ui';
@@ -12,7 +10,7 @@ import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
 import { useFeeSplits, useModule, useNodeOperatorId } from 'modules/web3';
 import { useModal } from 'providers/modal-provider';
-import { FC, MouseEvent, ReactNode } from 'react';
+import { FC, ReactNode } from 'react';
 import styled from 'styled-components';
 import { EtherscanTxLink } from 'shared/components/external-icon-link';
 import { UsdValue } from 'shared/components/bond-stats-card/usd-value';
@@ -26,6 +24,7 @@ import {
 } from 'utils';
 import { useLatestDistribution } from '../hooks/use-latest-distribution';
 import { getNextDistributionLabel } from '../utils/get-next-distribution-label';
+import { StatCard } from './stat-card';
 import { WhyModal } from './why-modal';
 
 const DistributionStatItem = styled(StatItem)`
@@ -97,21 +96,14 @@ const LatestDistribution: FC = () => {
   ) : undefined;
 
   let value: ReactNode;
-  if (isPending) {
-    value = <Skeleton variant="text" />;
-  } else if (!hasReport || lastRewards == null) {
+  if (!hasReport || lastRewards == null) {
     value = '—';
   } else if (lastRewards.distributed === 0n) {
     value = (
       <Stack direction="row" gap={8} align="center">
         0
         <TextLink
-          href="#"
-          role="button"
-          onClick={(event: MouseEvent) => {
-            event.preventDefault();
-            openModal({});
-          }}
+          onClick={() => openModal({})}
           dataTestId={{ root: 'whyLink' }}
         >
           Why?
@@ -133,6 +125,7 @@ const LatestDistribution: FC = () => {
     <DistributionStatItem
       align="left"
       label="Latest distribution"
+      loading={isPending}
       info={info}
       value={value}
       description={
@@ -168,20 +161,18 @@ const LatestDistribution: FC = () => {
 const NextDistribution: FC = () => {
   const { frame, isFramePending, isFrameError } = useLatestDistribution();
 
-  let value: ReactNode = '—';
-  if (frame) {
-    value = getNextDistributionLabel({
-      nextReport: frame.nextReport,
-      now: new Date(),
-    });
-  } else if (isFramePending) {
-    value = <Skeleton variant="text" />;
-  }
+  const value = frame
+    ? getNextDistributionLabel({
+        nextReport: frame.nextReport,
+        now: new Date(),
+      })
+    : '—';
 
   return (
     <DistributionStatItem
       align="left"
       label="Next distribution"
+      loading={!frame && isFramePending}
       value={value}
       description={
         frame && !isFrameError
@@ -218,20 +209,17 @@ export const ClaimCard: FC = () => {
         onClick: () =>
           trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.dashboardClaimLink),
       }}
+      loading={isPending}
       value={
-        isPending ? (
-          <Skeleton variant="text" />
-        ) : (
-          <FormatToken
-            amount={bond ? availableToClaim : undefined}
-            token={TOKENS.steth}
-            symbol=""
-            fallback="—"
-            trimTrailingZeros
-          />
-        )
+        <FormatToken
+          amount={bond ? availableToClaim : undefined}
+          token={TOKENS.steth}
+          symbol=""
+          fallback="—"
+          trimTrailingZeros
+        />
       }
-      secondary={
+      subValue={
         !isPending && bond ? (
           <UsdValue amount={availableToClaim} approx={false} />
         ) : undefined

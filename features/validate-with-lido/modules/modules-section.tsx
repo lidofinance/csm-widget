@@ -22,7 +22,7 @@ export const ModulesSection: FC = () => {
   return (
     <Stack direction="column" gap={16} align="stretch">
       <H2>Modules</H2>
-      <Grid columns={{ base: 2, md: 1 }} gap={8}>
+      <Grid columns={{ base: 2, mdDown: 1 }} gap={8}>
         <ModuleCard
           id="csm"
           tag={<ModuleStatusTag variant="csm" />}

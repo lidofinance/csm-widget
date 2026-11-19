@@ -13,7 +13,7 @@ import { useFocusableRef } from './use-focusable-ref';
 export const TOKEN_SELECT_TEST_ID: TokenSelectorDataTestId = {
   root: 'tokenSelect',
   trigger: 'tokenSelectTrigger',
-  panel: 'tokenSelectPanel',
+  listbox: 'tokenSelectPanel',
 };
 
 export const TOKEN_SELECT_TRIGGER_SELECTOR = `[data-testid="${TOKEN_SELECT_TEST_ID.trigger}"]`;

@@ -48,7 +48,7 @@ export const PromoCard = styled(Card).attrs({
   }
 
   @media ${downQuery('sm')} {
-    && {
+    && > div {
       padding: 20px;
     }
   }

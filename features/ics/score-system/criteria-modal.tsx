@@ -1,8 +1,7 @@
-import { Body } from '@lidofinance/lido-app-ui';
+import { Body, Modal } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import styled from 'styled-components';
 import { ScoreSource } from '../shared';
-import { WideModalStyle } from 'shared/node-operator/type-status';
 import { Points } from './points';
 
 type Props = {
@@ -52,7 +51,8 @@ const DescriptionStyle = styled.div`
 `;
 
 export const CriteriaModal: FC<Props> = ({ category, onClose }) => (
-  <WideModalStyle
+  <Modal
+    size="large"
     withOverlay
     title={category.title}
     onClose={onClose}
@@ -77,5 +77,5 @@ export const CriteriaModal: FC<Props> = ({ category, onClose }) => (
         </ItemStyle>
       ))}
     </ItemsStyle>
-  </WideModalStyle>
+  </Modal>
 );

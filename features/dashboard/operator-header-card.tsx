@@ -30,8 +30,6 @@ import styled from 'styled-components';
 import { trackMatomoEvent } from 'utils';
 import { useHeaderFlags } from './hooks/use-header-flags';
 
-const TITLE_SKELETON_STYLE = { width: 160 };
-
 const gridAreas = (...rows: (string | false)[]) =>
   rows
     .filter(Boolean)
@@ -180,7 +178,7 @@ const OperatorHeader: FC<HeaderProps> = ({ operator }) => {
         </AvatarArea>
         <TitleArea>
           {isLoading ? (
-            <Skeleton variant="text" style={TITLE_SKELETON_STYLE} />
+            <Skeleton variant="text" width={160} />
           ) : (
             <Typography
               variant="h2"

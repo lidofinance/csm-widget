@@ -30,8 +30,7 @@ describe('Ledger closability', () => {
       getModalCloseProps(isClosableOnLedgerStage(<Pending />), vi.fn()),
     ).toEqual({
       onClose: undefined,
-      closeOnEscape: false,
-      closeOnOverlayClick: false,
+      dismissible: false,
     });
   });
 });

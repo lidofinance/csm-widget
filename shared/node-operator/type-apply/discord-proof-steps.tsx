@@ -28,7 +28,6 @@ export const DiscordProofSteps: FC<Props> = ({
         Step 1. Prove the ownership of the Discord account by posting the
         following message to{' '}
         <TextLink
-          external
           size="inherit"
           href={DISCORD_CHANNEL_URL}
           onClick={() => trackMatomoEvent(channelMatomoEvent)}

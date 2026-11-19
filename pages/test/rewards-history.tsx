@@ -19,13 +19,12 @@ const TestContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
+  width: 100%;
   max-width: 800px;
   margin: 0 auto;
 `;
 
-const TestBlock = styled(Card)`
-  padding: 16px;
-`;
+const TestBlock = styled(Card).attrs({ padding: 16 })``;
 
 const TestTitle = styled.h3`
   margin: 0 0 8px 0;

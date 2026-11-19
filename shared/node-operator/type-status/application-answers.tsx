@@ -1,12 +1,6 @@
-import { Copy, Input, Modal, SectionTitle } from '@lidofinance/lido-app-ui';
+import { Copy, Input, SectionTitle } from '@lidofinance/lido-app-ui';
 import { FC, PropsWithChildren, ReactNode } from 'react';
 import { StretchStack } from 'shared/components';
-import styled from 'styled-components';
-
-export const WideModalStyle = styled(Modal)`
-  width: 680px;
-  max-width: 100%;
-`;
 
 type AnswerSectionProps = PropsWithChildren<{
   title: string;

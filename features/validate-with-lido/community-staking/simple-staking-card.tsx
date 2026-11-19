@@ -1,5 +1,4 @@
 import {
-  AvatarStack,
   Divider,
   Grid,
   GridItem,
@@ -12,6 +11,7 @@ import {
 import { CSM_NODE_SETUP_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FC } from 'react';
+import { AvatarStack } from 'shared/components';
 import { trackMatomoEvent } from 'utils';
 import allnodes from 'assets/partners/simple-staking/allnodes.svg';
 import beaconchain from 'assets/partners/simple-staking/beaconchain.svg';

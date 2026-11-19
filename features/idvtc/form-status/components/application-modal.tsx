@@ -1,4 +1,4 @@
-import { SectionTitle, Stack } from '@lidofinance/lido-app-ui';
+import { Modal, SectionTitle, Stack } from '@lidofinance/lido-app-ui';
 import { IdvtcResponseDto } from 'features/idvtc/shared';
 import { FC } from 'react';
 import { StretchStack } from 'shared/components';
@@ -6,7 +6,6 @@ import {
   AnswerField,
   AnswerSection,
   VerifiedTag,
-  WideModalStyle,
   formatSentOn,
 } from 'shared/node-operator/type-status';
 import { MemberCardStyle } from '../styles';
@@ -21,7 +20,8 @@ export const ApplicationModal: FC<Props> = ({
   createdAt,
   onClose,
 }) => (
-  <WideModalStyle
+  <Modal
+    size="large"
     withOverlay
     title="Your application"
     subtitle={formatSentOn(createdAt)}
@@ -74,7 +74,7 @@ export const ApplicationModal: FC<Props> = ({
             error={comments.clusterMembers?.[index]}
           />
           {(member.discordHandle || member.telegramUsername) && (
-            <Stack direction={{ base: 'row', sm: 'column' }} gap={12}>
+            <Stack direction={{ base: 'row', smDown: 'column' }} gap={12}>
               {member.discordHandle && (
                 <AnswerField
                   name={`clusterMembers.${index}.discordHandle`}
@@ -94,5 +94,5 @@ export const ApplicationModal: FC<Props> = ({
         </MemberCardStyle>
       ))}
     </StretchStack>
-  </WideModalStyle>
+  </Modal>
 );

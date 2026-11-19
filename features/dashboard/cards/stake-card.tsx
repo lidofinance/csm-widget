@@ -3,7 +3,6 @@ import {
   IconArrowRight,
   ProgressBar,
   Stack,
-  StatCardMeta,
   TextLink,
   Typography,
 } from '@lidofinance/lido-app-ui';
@@ -27,6 +26,7 @@ import styled from 'styled-components';
 import { computeStakeData, trackMatomoEvent } from 'utils';
 import { getKeysStatusItems } from '../utils/get-keys-status-items';
 import { toKeysMetaItems } from './keys-status-meta';
+import { StatCardMeta } from './stat-card-meta';
 
 const StakeMeta = styled(StatCardMeta)`
   &&,

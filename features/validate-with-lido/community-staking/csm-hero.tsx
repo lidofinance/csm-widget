@@ -51,7 +51,8 @@ const HeroStat = <T,>({ label, stat, format }: HeroStatProps<T>) => {
         <StatBody
           stat={stat}
           format={format}
-          skeletonStyle={{ width: 120, height: 36 }}
+          skeletonWidth={120}
+          skeletonHeight={36}
         />
       }
     />

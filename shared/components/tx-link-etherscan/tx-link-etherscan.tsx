@@ -21,7 +21,6 @@ export const TxLinkEtherscan: FC<TxLinkEtherscanProps> = ({
 
   return (
     <TextLink
-      external
       href={href}
       icon={<IconLink />}
       onClick={() =>

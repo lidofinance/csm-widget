@@ -19,11 +19,11 @@ export const KeysSkeleton: FC = () => (
     <div data-testid="loader">
       <ChipsAreaStyled direction="row" gap={8}>
         {CHIP_WIDTHS.map((width) => (
-          <Skeleton key={width} variant="block" style={{ width, height: 32 }} />
+          <Skeleton key={width} variant="block" width={width} height={32} />
         ))}
       </ChipsAreaStyled>
       <RowStyled direction="column" gap={20}>
-        <Skeleton variant="text" style={{ width: 120 }} />
+        <Skeleton variant="text" width={120} />
         {ROWS.map((row) => (
           <Skeleton key={row} variant="text" />
         ))}

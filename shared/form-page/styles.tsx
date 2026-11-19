@@ -3,12 +3,15 @@ import styled from 'styled-components';
 
 export const SuccessHeroStyle = styled(Card)`
   && {
-    padding: 52px 32px;
     text-align: center;
   }
 
+  && > div {
+    padding: 52px 32px;
+  }
+
   @media ${downQuery('md')} {
-    && {
+    && > div {
       padding: 52px 20px;
     }
   }

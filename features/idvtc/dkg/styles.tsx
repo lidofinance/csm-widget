@@ -1,4 +1,3 @@
-import { Body } from '@lidofinance/lido-app-ui';
 import DkgFileWarning from 'assets/illustrations/dkg-file-warning.svg?react';
 import styled, { css } from 'styled-components';
 
@@ -43,16 +42,6 @@ export const RowActions = styled.div`
   justify-content: flex-end;
   gap: var(--lido-app-ui-space-4);
 `;
-
-export const FileName = styled(Body)<{ $inactive?: boolean }>`
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: ${({ $inactive }) =>
-    $inactive ? 'var(--lido-app-ui-color-text-tertiary)' : 'inherit'};
-`;
-
 export const DkgIllustration = styled(DkgFileWarning)`
   flex-shrink: 0;
   width: 200px;

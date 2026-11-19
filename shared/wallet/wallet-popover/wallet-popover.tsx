@@ -98,7 +98,7 @@ export const WalletPopover: FC<WalletPopoverProps> = ({
           <CopyStyle
             text={address}
             onCopy={notifyCopied}
-            aria-label="Copy address"
+            labels={{ copy: 'Copy address', copied: 'Address copied' }}
             data-testid="copyAddressBtn"
           />
           <EtherscanLinkStyle

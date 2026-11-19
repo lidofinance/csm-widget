@@ -167,7 +167,7 @@ export const SignOwnershipFields: FC<SignOwnershipFieldsProps> = ({
           <Body weight="semibold">Add contacts</Body>
           <Tag variant="neutral">Optional</Tag>
         </Stack>
-        <Stack direction={{ base: 'row', sm: 'column' }} gap={12}>
+        <Stack direction={{ base: 'row', smDown: 'column' }} gap={12}>
           <Input
             label="Discord handle"
             placeholder="Discord handle"

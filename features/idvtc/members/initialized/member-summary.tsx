@@ -1,14 +1,6 @@
 import { BodyLarge, Description, Grid, Stack } from '@lidofinance/lido-app-ui';
 import { FC, ReactNode } from 'react';
 import type { MemberDto } from 'modules/surveys-sdk/generated';
-import styled from 'styled-components';
-
-export const MemberAddress = styled(BodyLarge)`
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
 
 const ContactItem: FC<{ label: string; value: string }> = ({
   label,
@@ -66,7 +58,7 @@ export const MemberSummary: FC<MemberSummaryProps> = ({
       </Stack>
       {action}
     </Stack>
-    <MemberAddress>{member.address}</MemberAddress>
+    <BodyLarge truncate>{member.address}</BodyLarge>
     <MemberContacts
       discordHandle={member.discordHandle}
       telegramUsername={member.telegramUsername}

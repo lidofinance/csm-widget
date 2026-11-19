@@ -82,7 +82,7 @@ const ConfirmRotationModal: FC<ConfirmRotationModalProps> = ({
           dataTestId={{ input: 'confirmRotationCheckbox' }}
         />
 
-        <Stack direction={{ base: 'row', sm: 'column' }} gap={12}>
+        <Stack direction={{ base: 'row', smDown: 'column' }} gap={12}>
           <Button
             fullWidth
             disabled={!confirmed}

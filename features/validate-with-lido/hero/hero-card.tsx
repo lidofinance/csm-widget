@@ -14,12 +14,12 @@ import {
 } from '../components';
 
 const HeroPromoCard = styled(PromoCard)`
-  && {
+  && > div {
     padding: 32px 40px 40px;
   }
 
   @media ${downQuery('sm')} {
-    && {
+    && > div {
       padding: 20px;
     }
   }

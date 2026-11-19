@@ -31,7 +31,6 @@ export const WhyModal: ModalComponentType = ({ open, onClose }) => {
           {/* TODO: temporary CSM Performance Oracle link; replace with a CM
               operator portal link (LIDO_OPERATOR_PORTAL_CM) once CM has one. */}
           <TextLink
-            external
             size="inherit"
             href={LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE}
           >

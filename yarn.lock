@@ -2280,12 +2280,12 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/github-summary-reporter/-/github-summary-reporter-1.0.0.tgz#12351a4bb3be8f2f189620e41fe579e5f98c2548"
   integrity sha512-i+OKGONoS8CH9SGAVlz/zmB/VLddldaCE9f8UH7KA5pzVtDQ++8LCHxac1HKwguqPzF5dllq3pTuXkbIH+spiw==
 
-"@lidofinance/lido-app-ui@npm:@exromany/lido-app-ui@0.0.1-pre.8":
-  version "0.0.1-pre.8"
-  resolved "https://registry.yarnpkg.com/@exromany/lido-app-ui/-/lido-app-ui-0.0.1-pre.8.tgz#c2a3212e62a195128408b5f7c56db8cbde9f5671"
-  integrity sha512-o1edFvBSPRmov3BxFUb2YgD7eg4pUgblWph/PaPhlNrg2trIZTdA4xhniwc7Y9FhzCSXeO0Zu/S0vGEcszsz5A==
+"@lidofinance/lido-app-ui@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/lido-app-ui/-/lido-app-ui-2.0.0.tgz#24ae4fe2c9d1f20c7ed16e44bc045206b10639f1"
+  integrity sha512-x/QzhCvN6gfFUWGyB5Jr0VBE3eKTjjoMasBDY+lMtbnx+iTO+VjAK7OHYRW97Yug9Q97SZv5Jr8wOx2gGZDyig==
   dependencies:
-    "@lidofinance/lido-shared-ui" "^1.1.5"
+    "@lidofinance/lido-shared-ui" "^1.1.6"
     classnames "2.5.1"
     react-jazzicon "1.0.4"
 
@@ -2313,10 +2313,10 @@
     ipfs-unixfs-importer "^15.4.0"
     multiformats "^13.4.0"
 
-"@lidofinance/lido-shared-ui@^1.1.5":
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/@lidofinance/lido-shared-ui/-/lido-shared-ui-1.1.5.tgz#1565c31b412af253cb560c533d283a621877fed1"
-  integrity sha512-OcHBVMwQR5qP10nz+eiGdDXpSPV7vD/tPHxM+kCh7FFMFOtLxp2G4v8UsIVOcqnHtVkkJfIX0MoXJFipz5mN2w==
+"@lidofinance/lido-shared-ui@^1.1.6":
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/@lidofinance/lido-shared-ui/-/lido-shared-ui-1.1.6.tgz#07ca5ca6a4758681b67817b813e1f68db2725fe8"
+  integrity sha512-H2ahrJn5QLzIp4IVPxc2dA4SqPBHOAkYA/zUaV272c2dQzKOj1oxTPUPwUs4WWREw1fXoTAy/LsKDSirR+K03w==
   dependencies:
     classnames "2.5.1"
     ua-parser-js "2.0.10"

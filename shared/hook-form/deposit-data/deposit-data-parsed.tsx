@@ -22,7 +22,7 @@ type ParsedRow = {
 };
 
 const getRowKey = ({ pubkey }: ParsedRow) => pubkey;
-const getRowProps = () => ({ 'data-testid': 'deposit-data-row' }) as object;
+const getRowProps = () => ({ dataTestId: { root: 'deposit-data-row' } });
 
 const TRASH_STYLE = { color: 'var(--lido-app-ui-color-icons-error)' };
 

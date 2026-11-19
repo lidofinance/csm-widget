@@ -1,5 +1,5 @@
 import { Skeleton } from '@lidofinance/lido-app-ui';
-import type { ComponentProps, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import type { Stat } from './use-csm-stats';
 
 export const isStatVisible = <T,>({ isLoading, value }: Stat<T>) =>
@@ -8,16 +8,18 @@ export const isStatVisible = <T,>({ isLoading, value }: Stat<T>) =>
 type StatBodyProps<T> = {
   stat: Stat<T>;
   format: (value: T) => ReactNode;
-  skeletonStyle?: ComponentProps<typeof Skeleton>['style'];
+  skeletonWidth?: number;
+  skeletonHeight?: number;
 };
 
 export const StatBody = <T,>({
   stat,
   format,
-  skeletonStyle,
+  skeletonWidth,
+  skeletonHeight,
 }: StatBodyProps<T>) =>
   stat.isLoading || stat.value === undefined ? (
-    <Skeleton variant="text" style={skeletonStyle} />
+    <Skeleton variant="text" width={skeletonWidth} height={skeletonHeight} />
   ) : (
     <>{format(stat.value)}</>
   );

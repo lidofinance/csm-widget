@@ -117,7 +117,7 @@ export const OperatorAddresses: FC<Props> = ({
       direction="row"
       wrap
       gap={20}
-      style={{ rowGap: 4 }}
+      rowGap={4}
       dataTestId={{ root: 'operatorAddresses' }}
     >
       <AddressItem

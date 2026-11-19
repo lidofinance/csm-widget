@@ -35,7 +35,6 @@ export const AdditionalAddresses: FC = () => {
           achievements are stored. To prove you own each address, sign a message
           via the{' '}
           <TextLink
-            external
             size="inherit"
             href={ETHERSCAN_SIGNATURES_URL}
             onClick={() =>

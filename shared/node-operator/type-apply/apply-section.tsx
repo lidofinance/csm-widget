@@ -16,7 +16,6 @@ type GuideLinkProps = {
 
 export const GuideLink: FC<GuideLinkProps> = ({ matomoEvent }) => (
   <TextLink
-    external
     href={GUIDE_URL}
     icon={<IconLink />}
     onClick={() => trackMatomoEvent(matomoEvent)}

@@ -5,8 +5,7 @@ import { FC } from 'react';
 import { useInvalidKeysCount } from 'shared/counters';
 import { useShowRule } from 'shared/hooks';
 
-const PILL_SMALL = { width: 120, height: 48, borderRadius: 50 };
-const PILL_LARGE = { width: 160, height: 48, borderRadius: 50 };
+const PILL = { borderRadius: 50 };
 
 export const KeysActions: FC = () => {
   const check = useShowRule();
@@ -17,8 +16,8 @@ export const KeysActions: FC = () => {
   if (isPending) {
     return (
       <Stack direction="row" wrap gap={12}>
-        <Skeleton variant="block" style={PILL_LARGE} />
-        <Skeleton variant="block" style={PILL_SMALL} />
+        <Skeleton variant="block" width={160} height={48} style={PILL} />
+        <Skeleton variant="block" width={120} height={48} style={PILL} />
       </Stack>
     );
   }

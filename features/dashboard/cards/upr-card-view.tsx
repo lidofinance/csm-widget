@@ -2,9 +2,7 @@ import {
   IconPriceDown,
   IconPriceUp,
   InfoTooltip,
-  Skeleton,
   Stack,
-  StatCard,
   Tag,
   TextLink,
   Typography,
@@ -15,6 +13,7 @@ import { FC } from 'react';
 import { Performance } from 'types';
 import { formatDate, formatPercent, trackMatomoEvent } from 'utils';
 import { getUprDelta } from '../utils/get-upr-delta';
+import { StatCard } from './stat-card';
 
 type UprCardViewProps = {
   data?: Performance;
@@ -33,11 +32,19 @@ const UprTag: FC<{ data: Performance }> = ({ data }) => {
   const { direction, diff } = getUprDelta(data);
 
   return direction === 'above' ? (
-    <Tag variant="success" icon={<IconPriceUp />}>
+    <Tag
+      variant="success"
+      icon={<IconPriceUp />}
+      dataTestId={{ root: 'uprDeltaTag' }}
+    >
       {formatPercent(diff)} above threshold
     </Tag>
   ) : (
-    <Tag variant="error" icon={<IconPriceDown />}>
+    <Tag
+      variant="error"
+      icon={<IconPriceDown />}
+      dataTestId={{ root: 'uprDeltaTag' }}
+    >
       {formatPercent(diff)} below threshold
     </Tag>
   );
@@ -49,20 +56,18 @@ export const UprCardView: FC<UprCardViewProps> = ({
   isError,
   sourceHref,
 }) => {
-  const value = isPending ? (
-    <Skeleton variant="text" />
-  ) : isError || !data ? (
-    DATA_UNAVAILABLE
-  ) : (
-    formatPercent(data.operatorAttestationRate)
-  );
+  const value =
+    isError || !data
+      ? DATA_UNAVAILABLE
+      : formatPercent(data.operatorAttestationRate);
 
   return (
     <StatCard
       title="Unified Performance Rating"
       info={UPR_INFO}
+      loading={isPending}
       value={value}
-      tag={data ? <UprTag data={data} /> : undefined}
+      subValue={data ? <UprTag data={data} /> : undefined}
       description={
         <Stack direction="row" justify="between" wrap>
           {data ? (
@@ -79,7 +84,6 @@ export const UprCardView: FC<UprCardViewProps> = ({
             </Typography>
             <TextLink
               href={sourceHref}
-              external
               onClick={() =>
                 trackMatomoEvent(
                   MATOMO_CLICK_EVENTS_TYPES.monitoringMigalabsLink,
@@ -92,7 +96,7 @@ export const UprCardView: FC<UprCardViewProps> = ({
           </Stack>
         </Stack>
       }
-      dataTestId={{ root: 'uprCard', value: 'uprValue', tag: 'uprDeltaTag' }}
+      dataTestId={{ root: 'uprCard', value: 'uprValue' }}
     />
   );
 };

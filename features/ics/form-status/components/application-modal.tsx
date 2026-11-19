@@ -1,11 +1,10 @@
-import { Stack } from '@lidofinance/lido-app-ui';
+import { Modal, Stack } from '@lidofinance/lido-app-ui';
 import { IcsResponseDto } from 'features/ics/shared';
 import { FC } from 'react';
 import { StretchStack } from 'shared/components';
 import {
   AnswerField,
   AnswerSection,
-  WideModalStyle,
   formatSentOn,
 } from 'shared/node-operator/type-status';
 
@@ -19,7 +18,8 @@ export const ApplicationModal: FC<Props> = ({
   createdAt,
   onClose,
 }) => (
-  <WideModalStyle
+  <Modal
+    size="large"
     withOverlay
     title="Your application"
     subtitle={
@@ -73,5 +73,5 @@ export const ApplicationModal: FC<Props> = ({
         </AnswerSection>
       )}
     </StretchStack>
-  </WideModalStyle>
+  </Modal>
 );

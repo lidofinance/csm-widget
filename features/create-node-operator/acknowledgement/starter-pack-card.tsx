@@ -26,11 +26,11 @@ const StarterPackListStyle = styled.div`
     padding-bottom: 24px;
   }
 
-  && > div > div > div:first-child > [data-wrap] {
+  && > div > div > div > div:first-child > [data-wrap] {
     padding-top: 0;
   }
 
-  && > div > div > div:last-child:not(:has([data-wrap])) {
+  && > div > div > div > div:last-child:not(:has([data-wrap])) {
     padding-top: 28px;
   }
 `;

@@ -1,4 +1,4 @@
-import { AvatarStack } from '@lidofinance/lido-app-ui';
+import { AvatarStack } from 'shared/components';
 import { FC } from 'react';
 import styled from 'styled-components';
 import { trackMatomoEvent } from 'utils';

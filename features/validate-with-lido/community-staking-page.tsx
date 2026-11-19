@@ -16,7 +16,7 @@ export const CommunityStakingPage: FC = () => {
     <Layout wide title="Community Staking" pageName="CommunityStaking">
       <Stack direction="column" gap={8} align="stretch">
         <CsmHero maxApr={maxApr} capital={capital} operators={operators} />
-        <Grid columns={{ base: 2, md: 1 }} gap={8}>
+        <Grid columns={{ base: 2, mdDown: 1 }} gap={8}>
           <OptionsCard aprs={aprs} />
           <SimpleStakingCard />
         </Grid>

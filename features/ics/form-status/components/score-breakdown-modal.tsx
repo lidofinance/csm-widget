@@ -1,3 +1,4 @@
+import { Modal } from '@lidofinance/lido-app-ui';
 import {
   IcsResponseDto,
   SCORE_SOURCES,
@@ -7,7 +8,6 @@ import { Points } from 'features/ics/score-system/points';
 import { FC } from 'react';
 import { StretchStack } from 'shared/components';
 import styled from 'styled-components';
-import { WideModalStyle } from 'shared/node-operator/type-status';
 import { calculateScores } from '../utils';
 
 type Props = Pick<IcsResponseDto, 'scores'> & {
@@ -74,7 +74,8 @@ const CategoryItems: FC<{
 );
 
 export const ScoreBreakdownModal: FC<Props> = ({ scores, onClose }) => (
-  <WideModalStyle
+  <Modal
+    size="large"
     withOverlay
     title="Score breakdown"
     onClose={onClose}
@@ -95,5 +96,5 @@ export const ScoreBreakdownModal: FC<Props> = ({ scores, onClose }) => (
         </section>
       ))}
     </StretchStack>
-  </WideModalStyle>
+  </Modal>
 );

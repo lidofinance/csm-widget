@@ -7,9 +7,6 @@ import {
 import { FC, useId } from 'react';
 import { FieldError } from './field-error';
 import { useFieldController } from './use-field-controller';
-import { useFocusableRef } from './use-focusable-ref';
-
-const SEGMENT_TAB_STOP_SELECTOR = '[role="tab"]:not([disabled])';
 
 export type SegmentCardsFieldOption = SegmentCardItem;
 
@@ -35,12 +32,12 @@ export const SegmentCardsField: FC<SegmentCardsFieldProps> = ({
     rules: { required },
     showUntouched,
   });
-  const ref = useFocusableRef(field.ref, SEGMENT_TAB_STOP_SELECTOR);
   const errorId = useId();
 
   return (
-    <Stack direction="column" gap={12} ref={ref}>
+    <Stack direction="column" gap={12}>
       <SegmentedControlCard
+        ref={field.ref}
         stackAt={490}
         items={options}
         value={field.value ?? ''}

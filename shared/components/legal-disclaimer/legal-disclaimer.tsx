@@ -10,7 +10,6 @@ export const LegalDisclaimer: FC = () => (
     For more info read{' '}
     <TextLink
       href="https://lido.fi/privacy-notice"
-      external
       onClick={() =>
         trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.legalPrivacyNoticeLink)
       }

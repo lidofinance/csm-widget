@@ -11,14 +11,9 @@ import { Date, Pubkey } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
 import { notifyCopied } from 'shared/hooks';
 import { formatPercent } from 'utils';
-import styled from 'styled-components';
 import { Performance } from './performance';
 
 type Row = ValidatorRewardsEntity;
-
-const FooterStyled = styled.div`
-  width: 100%;
-`;
 
 const NOWRAP = { whiteSpace: 'nowrap' } as const;
 
@@ -106,7 +101,7 @@ const getColumns = (showBalance: boolean): TableColumn<Row>[] => [
 
 const getRowKey = (r: Row) =>
   `${r.refSlot}-${r.indexInReport}-${r.validatorIndex}`;
-const getRowProps = () => ({ 'data-testid': 'rewardsHistoryRow' }) as object;
+const getRowProps = () => ({ dataTestId: { root: 'rewardsHistoryRow' } });
 
 export const RewardsHistoryTable: FC = () => {
   const { module } = useModule();
@@ -126,11 +121,7 @@ export const RewardsHistoryTable: FC = () => {
       onSortChange={({ key, direction }) =>
         setSort({ column: key as keyof Row, direction })
       }
-      footer={
-        <FooterStyled>
-          <TablePagination />
-        </FooterStyled>
-      }
+      footer={<TablePagination />}
       dataTestId={{ root: 'rewardsHistoryTable' }}
     />
   );

@@ -113,7 +113,7 @@ export const RotationModal: FC<RotationModalProps> = ({
           }}
           onVerify={() => void onVerify()}
         />
-        <Stack direction={{ base: 'row', sm: 'column' }} gap={12}>
+        <Stack direction={{ base: 'row', smDown: 'column' }} gap={12}>
           <Button
             fullWidth
             disabled={!!validationError || submit.isPending}

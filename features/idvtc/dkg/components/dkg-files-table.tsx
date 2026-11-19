@@ -14,7 +14,7 @@ import { useToggleDkgFile } from '../hooks/use-toggle-dkg-file';
 import { useDeleteDkgFile } from '../hooks/use-delete-dkg-file';
 import { useDownloadDkgFile } from '../hooks/use-download-dkg-file';
 import { useDkgDeleteConfirm } from './dkg-delete-confirm-modal';
-import { DkgRow, DkgTable, FileName, RowActions } from '../styles';
+import { DkgRow, DkgTable, RowActions } from '../styles';
 
 const ERROR_ICON_STYLE = { color: 'var(--lido-app-ui-color-icons-error)' };
 
@@ -98,7 +98,9 @@ export const DkgFilesTable: FC<Props> = ({ files, canManage }) => {
         key: 'name',
         header: 'Filename',
         render: (file) => (
-          <FileName $inactive={!file.active}>{file.name}</FileName>
+          <Body truncate color={file.active ? undefined : 'tertiary'}>
+            {file.name}
+          </Body>
         ),
       },
       {
@@ -153,12 +155,12 @@ export const DkgStagedTable: FC<StagedProps> = ({ items, onRemove }) => {
   if (items.length === 1) {
     return (
       <Stack direction="row" align="center" gap={8}>
-        <FileName>
+        <Body truncate>
           <Body as="span" weight="semibold">
             Attached file:
           </Body>{' '}
           {items[0].name}
-        </FileName>
+        </Body>
         <DkgDeleteButton danger onClick={() => onRemove(0)} />
       </Stack>
     );
@@ -168,7 +170,7 @@ export const DkgStagedTable: FC<StagedProps> = ({ items, onRemove }) => {
     <DkgTable>
       {items.map((item, index) => (
         <DkgRow key={`${item.name}-${index}`} $columns="1fr auto">
-          <FileName>{item.name}</FileName>
+          <Body truncate>{item.name}</Body>
           <RowActions>
             <DkgDeleteButton onClick={() => onRemove(index)} />
           </RowActions>

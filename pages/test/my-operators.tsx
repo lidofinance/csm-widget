@@ -19,9 +19,8 @@ const NarrowBlock = styled.div`
   margin: 0 auto;
 `;
 
-const PreviewCard = styled(Card)`
+const PreviewCard = styled(Card).attrs({ padding: 24 })`
   max-width: 400px;
-  padding: 24px;
   margin: 0 auto;
 `;
 

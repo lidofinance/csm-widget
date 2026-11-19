@@ -2,14 +2,13 @@ import {
   Card,
   Divider,
   Grid,
-  Skeleton,
   Stack,
   StatItem,
   Typography,
 } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { ModuleNodeOperator } from 'modules/web3/operator-provider/types';
-import { FC, ReactNode, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { INFO_TEST_ID } from 'shared/components/bond-stats-card/bond-stats-card';
 import { FormatToken } from 'shared/formatters';
 import { useDisplayOperatorType, useOperatorOverview } from 'shared/hooks';
@@ -57,9 +56,6 @@ export const OperatorCard: FC<Props> = ({ operator }) => {
   const liveKeys = counts
     ? counts.depositable + counts.activationPending + counts.active
     : 0;
-
-  const value = (pending: boolean, node: ReactNode): ReactNode =>
-    pending ? <Skeleton variant="text" /> : node;
 
   return (
     <Card
@@ -120,14 +116,14 @@ export const OperatorCard: FC<Props> = ({ operator }) => {
               align="left"
               label="Active keys"
               info="Active keys out of all non-withdrawn keys of the Node Operator"
-              value={value(
-                isKeysPending,
+              loading={isKeysPending}
+              value={
                 counts ? (
                   <ActiveKeysValue active={counts.active} total={liveKeys} />
                 ) : (
                   '—'
-                ),
-              )}
+                )
+              }
               dataTestId={{ ...INFO_TEST_ID, root: 'operatorActiveKeys' }}
             />
             <StatItem
@@ -135,14 +131,14 @@ export const OperatorCard: FC<Props> = ({ operator }) => {
               align="left"
               label="Balance, stETH"
               info="Total bond currently held for the Node Operator"
-              value={value(
-                isBondPending,
+              loading={isBondPending}
+              value={
                 <FormatToken
                   amount={bond?.current}
                   trimTrailingZeros
                   fallback="—"
-                />,
-              )}
+                />
+              }
               dataTestId={{
                 ...INFO_TEST_ID,
                 root: 'operatorBondBalance',
@@ -154,14 +150,14 @@ export const OperatorCard: FC<Props> = ({ operator }) => {
               align="left"
               label="Available, stETH"
               info="The amount you can claim now, including rewards and excess bond"
-              value={value(
-                isBondPending || isRewardsPending,
+              loading={isBondPending || isRewardsPending}
+              value={
                 <FormatToken
                   amount={availableToClaim}
                   trimTrailingZeros
                   fallback="—"
-                />,
-              )}
+                />
+              }
               dataTestId={{ ...INFO_TEST_ID, root: 'operatorAvailableToClaim' }}
             />
           </Grid>

@@ -46,7 +46,7 @@ const COLUMNS: TableColumn<Row>[] = [
 ];
 
 const getRowKey = ({ nodeOperatorId }: Row) => nodeOperatorId.toString();
-const getRowProps = () => ({ 'data-testid': 'lockedRow' }) as object;
+const getRowProps = () => ({ dataTestId: { root: 'lockedRow' } });
 
 export const LockedTable: FC = () => {
   const { data, sort, setSort, pages } = useTable<Row>();

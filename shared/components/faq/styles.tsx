@@ -1,19 +1,7 @@
-import { Card, Skeleton } from '@lidofinance/lido-app-ui';
+import { Skeleton } from '@lidofinance/lido-app-ui';
 import styled from 'styled-components';
 
-const ShortSkeleton = styled(Skeleton)`
-  && {
-    width: 50px;
-  }
-`;
-
-export const ShortInlineLoader = () => <ShortSkeleton variant="text" />;
-
-export const FaqCardStyle = styled(Card)`
-  && {
-    gap: 0;
-  }
-`;
+export const ShortInlineLoader = () => <Skeleton variant="text" width={50} />;
 
 export const FaqSection = styled.section`
   display: flex;

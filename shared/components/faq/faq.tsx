@@ -1,9 +1,9 @@
-import { SectionTitle } from '@lidofinance/lido-app-ui';
+import { Card, SectionTitle } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { useFilterShowRules } from 'shared/hooks';
 import { Faq as FaqItem } from 'types';
 import { AccordionNavigatable } from '../accordion-navigatable';
-import { FaqCardStyle, FaqSection } from './styles';
+import { FaqSection } from './styles';
 
 export const Faq: FC<{ items: FaqItem[] }> = ({ items: _items }) => {
   const items = useFilterShowRules(_items);
@@ -13,7 +13,7 @@ export const Faq: FC<{ items: FaqItem[] }> = ({ items: _items }) => {
   return (
     <FaqSection data-testid="faqSection">
       <SectionTitle size="large" title="FAQ" />
-      <FaqCardStyle align="stretch">
+      <Card align="stretch" gap={0}>
         {items.map(({ title, anchor, content }, index) => {
           return (
             <AccordionNavigatable
@@ -27,7 +27,7 @@ export const Faq: FC<{ items: FaqItem[] }> = ({ items: _items }) => {
             </AccordionNavigatable>
           );
         })}
-      </FaqCardStyle>
+      </Card>
     </FaqSection>
   );
 };

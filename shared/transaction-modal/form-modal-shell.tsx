@@ -3,8 +3,7 @@ import type { FC, ReactNode } from 'react';
 
 export type ModalCloseProps = {
   onClose?: () => void;
-  closeOnEscape: boolean;
-  closeOnOverlayClick: boolean;
+  dismissible: boolean;
 };
 
 export const getModalCloseProps = (
@@ -12,8 +11,7 @@ export const getModalCloseProps = (
   onClose?: () => void,
 ): ModalCloseProps => ({
   onClose: isClosable ? onClose : undefined,
-  closeOnEscape: isClosable,
-  closeOnOverlayClick: isClosable,
+  dismissible: isClosable,
 });
 
 export type FormModalShellProps = {

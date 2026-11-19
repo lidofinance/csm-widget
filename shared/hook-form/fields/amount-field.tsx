@@ -68,6 +68,7 @@ export const AmountField: FC<AmountFieldProps> = ({
     <div ref={ref}>
       <RichInput
         locked={locked}
+        decimals={18}
         name={field.name}
         value={
           locked

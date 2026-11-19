@@ -3,14 +3,15 @@ import {
   IconCheck,
   Identicon,
   Input,
+  Spinner,
   Stack,
   Tag,
+  TextLink,
 } from '@lidofinance/lido-app-ui';
 import { FC, ReactNode, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useEnsInput } from 'shared/hooks/use-ens-input';
 import { FIELD_ERROR_TEST_ID } from './field-error';
-import { AddressSpinnerStyle, ConnectedAddressButtonStyle } from './styles';
 import { useFieldController } from './use-field-controller';
 
 export type AddressFieldProps = {
@@ -61,7 +62,7 @@ export const AddressField: FC<AddressFieldProps> = ({
   );
 
   const icon = isLoading ? (
-    <AddressSpinnerStyle decorative data-testid="loader" />
+    <Spinner size={20} decorative data-testid="loader" />
   ) : (
     !simple && address && <Identicon address={address} size={20} />
   );
@@ -105,13 +106,9 @@ export const AddressField: FC<AddressFieldProps> = ({
               </Tag>
             )}
             {currentAddress && !locked && (
-              <ConnectedAddressButtonStyle
-                type="button"
-                onClick={fillConnected}
-                disabled={isDisabled}
-              >
+              <TextLink onClick={fillConnected} disabled={isDisabled}>
                 Connected address
-              </ConnectedAddressButtonStyle>
+              </TextLink>
             )}
           </Stack>
         )

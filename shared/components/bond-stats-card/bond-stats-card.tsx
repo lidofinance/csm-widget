@@ -3,7 +3,6 @@ import {
   DataListRow,
   Grid,
   IconLockKeyhole,
-  Skeleton,
   Stack,
   StatItem,
   Typography,
@@ -29,7 +28,6 @@ export const INFO_TEST_ID = {
   info: 'iconTooltip',
   infoContent: 'tooltipWrapper',
 };
-const INHERIT_FONT = { font: 'inherit' };
 const STATS_COLUMNS = { base: 3, mdDown: 1 };
 
 type Props = {
@@ -45,7 +43,7 @@ const Amount: FC<AmountProps> = ({ amount, error, symbol = '' }) => {
     <FormatToken amount={amount} token={TOKENS.steth} symbol={symbol} />
   );
   return error ? (
-    <Typography as="span" color="error" style={INHERIT_FONT}>
+    <Typography variant="inherit" color="error">
       {value}
     </Typography>
   ) : (
@@ -58,7 +56,6 @@ export const BondStatsCard: FC<Props> = ({ header, actions }) => {
   const { data: nextDistribution } = useFrameInfo(getNextDistribution);
   const negativeMetadata = useNegativeMetadata();
 
-  const loading = <Skeleton variant="text" />;
   const negative = bond ? NEGATIVE_FIELDS.filter((field) => bond[field]) : [];
   const isInsufficient = !!bond?.isInsufficient;
   const bondAmount = bond ? (isInsufficient ? -bond.delta : bond.delta) : 0n;
@@ -77,13 +74,8 @@ export const BondStatsCard: FC<Props> = ({ header, actions }) => {
             titleIcon={<RewardsIcon />}
             info={`The rewards amount available to claim, obtained from all active validators of the Node Operator. Next rewards distribution is expected ${nextDistribution}.`}
             dataTestId={{ ...INFO_TEST_ID, root: 'rewardsStat' }}
-            value={
-              isPending || !rewards ? (
-                loading
-              ) : (
-                <Amount amount={rewards.available} />
-              )
-            }
+            loading={isPending || !rewards}
+            value={rewards && <Amount amount={rewards.available} />}
             subValue={rewards && <UsdValue amount={rewards.available} />}
           />
           {splittable > 0n && (
@@ -110,12 +102,9 @@ export const BondStatsCard: FC<Props> = ({ header, actions }) => {
                   : 'The bond amount available to claim without having to exit validators. Increases daily.'
             }
             dataTestId={{ ...INFO_TEST_ID, root: 'excessBondStat' }}
+            loading={isPending || !bond}
             value={
-              isPending || !bond ? (
-                loading
-              ) : (
-                <Amount amount={bondAmount} error={isInsufficient} />
-              )
+              bond && <Amount amount={bondAmount} error={isInsufficient} />
             }
             subValue={bond && <UsdValue amount={bondAmount} />}
           />
@@ -145,9 +134,8 @@ export const BondStatsCard: FC<Props> = ({ header, actions }) => {
           titleIcon={<IconLockKeyhole />}
           info="The amount of bond required for all submitted keys of the Node Operator"
           dataTestId={{ ...INFO_TEST_ID, root: 'requiredBondStat' }}
-          value={
-            isPending || !bond ? loading : <Amount amount={bond.required} />
-          }
+          loading={isPending || !bond}
+          value={bond && <Amount amount={bond.required} />}
           subValue={bond && <UsdValue amount={bond.required} />}
         />
       </Grid>

@@ -1,7 +1,7 @@
-import { Callout } from '@lidofinance/lido-app-ui';
 import { PATH } from 'consts/urls';
 import { useInvites } from 'modules/web3';
 import { FC } from 'react';
+import { MessageBoxLink } from 'shared/components';
 import { getIncomingRequestsCopy } from './incoming-requests-copy';
 
 export const IncomingRequestsBanner: FC = () => {
@@ -11,13 +11,12 @@ export const IncomingRequestsBanner: FC = () => {
   if (!copy) return null;
 
   return (
-    <Callout
-      tone="info"
-      rounded
+    <MessageBoxLink
+      variant="info"
       href={PATH.SETTINGS_INBOX}
       dataTestId={{ root: 'incomingRequestsBanner' }}
     >
       {copy}
-    </Callout>
+    </MessageBoxLink>
   );
 };

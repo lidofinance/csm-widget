@@ -1,4 +1,4 @@
-import { Grid, Skeleton, Stack, StatItem } from '@lidofinance/lido-app-ui';
+import { Grid, Stack, StatItem } from '@lidofinance/lido-app-ui';
 import { INFO_TEST_ID } from 'shared/components/bond-stats-card/bond-stats-card';
 import { FormatToken } from 'shared/formatters';
 import { FC, ReactNode } from 'react';
@@ -24,9 +24,10 @@ export const StakeAllocationStats: FC<Props> = ({ data, size, error }) => {
   const legendSize = size === 'summary' ? 24 : 20;
   const Item = size === 'summary' ? StatItem : CompactStatItem;
 
+  const loading = !data && !error;
+
   const value = (amount: bigint | undefined): ReactNode => {
     if (error) return '—';
-    if (!data) return <Skeleton variant="text" />;
     return (
       <FormatToken amount={amount} maxDecimalDigits={2} trimTrailingZeros />
     );
@@ -41,6 +42,7 @@ export const StakeAllocationStats: FC<Props> = ({ data, size, error }) => {
         label={STAKE_LABELS.active}
         titleIcon={<LegendDot color="success" size={legendSize} />}
         info={STAKE_TOOLTIPS.active}
+        loading={loading}
         value={value(data?.activeStake)}
         subValue={keys(data?.activeKeys)}
         dataTestId={{
@@ -54,6 +56,7 @@ export const StakeAllocationStats: FC<Props> = ({ data, size, error }) => {
         label={STAKE_LABELS.depositable}
         titleIcon={<LegendDot color="active" size={legendSize} />}
         info={STAKE_TOOLTIPS.depositable}
+        loading={loading}
         value={value(data?.depositableStake)}
         subValue={keys(data?.depositableKeys)}
         dataTestId={{
@@ -71,6 +74,7 @@ export const StakeAllocationStats: FC<Props> = ({ data, size, error }) => {
             ? 'Sum of the Target Stake Allocations of all Node Operators in the group'
             : STAKE_TOOLTIPS.tsa
         }
+        loading={loading}
         value={value(data?.targetStake)}
         subValue={keys(data?.targetKeys)}
         dataTestId={{

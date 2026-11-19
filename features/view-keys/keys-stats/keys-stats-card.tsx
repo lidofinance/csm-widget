@@ -46,7 +46,6 @@ export const KeysStatsCard: FC = () => {
     token: TOKENS.eth,
   });
 
-  const loading = <Skeleton variant="text" />;
   const ready = !isPending && !!stats;
 
   return (
@@ -61,7 +60,8 @@ export const KeysStatsCard: FC = () => {
           label="Active keys"
           info="Keys that are active on the Beacon Chain"
           dataTestId={{ ...INFO_TEST_ID, root: 'activeKeysStat' }}
-          value={ready ? stats.activeKeys : loading}
+          loading={!ready}
+          value={stats?.activeKeys}
           subValue={
             ready && (
               <BondLine amount={activeBond} keysCount={stats.activeKeys} />
@@ -79,7 +79,8 @@ export const KeysStatsCard: FC = () => {
           label="Total keys"
           info="All non-withdrawn keys of the Node Operator"
           dataTestId={{ ...INFO_TEST_ID, root: 'totalKeysStat' }}
-          value={ready ? stats.totalKeys : loading}
+          loading={!ready}
+          value={stats?.totalKeys}
           subValue={
             ready && <BondLine amount={totalBond} keysCount={stats.totalKeys} />
           }
@@ -89,7 +90,8 @@ export const KeysStatsCard: FC = () => {
           label="Keys limit"
           info="A maximum number of non-withdrawn keys a Node Operator can upload"
           dataTestId={{ ...INFO_TEST_ID, root: 'keysLimitStat' }}
-          value={ready ? (stats.keysLimit ?? '—') : loading}
+          loading={!ready}
+          value={stats?.keysLimit ?? '—'}
         />
       </Grid>
     </StatsCardShell>

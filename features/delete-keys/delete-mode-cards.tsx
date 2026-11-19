@@ -44,27 +44,24 @@ type DeleteModeCardsProps = { focusOnMount?: boolean };
 export const DeleteModeCards: FC<DeleteModeCardsProps> = ({ focusOnMount }) => {
   const { mode, modes, setMode, userSwitched } = useDeleteMode();
   const invalid = useInvalidKeysCount();
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (focusOnMount && userSwitched.current) {
-      ref.current
-        ?.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]')
-        ?.focus();
+      ref.current?.focus();
       userSwitched.current = false;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div ref={ref}>
-      <SegmentedControlCard
-        stackAt={490}
-        aria-label="Deletion option"
-        items={modes.map((m) => ITEMS[m](invalid))}
-        value={mode ?? ''}
-        onChange={(v) => isDeleteMode(v) && setMode(v)}
-      />
-    </div>
+    <SegmentedControlCard
+      ref={ref}
+      stackAt={490}
+      aria-label="Deletion option"
+      items={modes.map((m) => ITEMS[m](invalid))}
+      value={mode ?? ''}
+      onChange={(v) => isDeleteMode(v) && setMode(v)}
+    />
   );
 };

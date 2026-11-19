@@ -70,7 +70,7 @@ export const GroupSummaryCard: FC<Props> = ({
           {totals ? (
             <StakeAllocationBar data={totals} weightZero={weightZero} />
           ) : (
-            <Skeleton variant="block" style={{ height: 8 }} />
+            <Skeleton variant="block" height={8} />
           )}
         </Stack>
       )}

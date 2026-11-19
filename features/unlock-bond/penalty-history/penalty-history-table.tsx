@@ -14,8 +14,6 @@ import { FormatToken } from 'shared/formatters';
 import { formatDate } from 'utils';
 import { EnrichedPenalty } from './types';
 
-const INHERIT_FONT = { font: 'inherit' };
-
 const COLUMNS: TableColumn<EnrichedPenalty>[] = [
   {
     key: 'timestamp',
@@ -41,7 +39,7 @@ const COLUMNS: TableColumn<EnrichedPenalty>[] = [
     align: 'right',
     render: ({ additionalFine }) =>
       additionalFine !== undefined ? (
-        <Typography as="span" color="error" style={INHERIT_FONT}>
+        <Typography variant="inherit" color="error">
           <FormatToken amount={additionalFine} token={TOKENS.steth} />
         </Typography>
       ) : (
@@ -55,7 +53,7 @@ const COLUMNS: TableColumn<EnrichedPenalty>[] = [
     align: 'right',
     render: ({ type, amount }) => (
       <Typography
-        as="span"
+        variant="inherit"
         color={
           type === 'compensated'
             ? 'success'
@@ -63,7 +61,6 @@ const COLUMNS: TableColumn<EnrichedPenalty>[] = [
               ? 'error'
               : 'warning'
         }
-        style={INHERIT_FONT}
         dataTestId={{ root: 'amountCell' }}
       >
         <FormatToken amount={amount} token={TOKENS.steth} />
@@ -76,9 +73,8 @@ const COLUMNS: TableColumn<EnrichedPenalty>[] = [
     render: ({ details }) =>
       details ? (
         <Typography
-          as="span"
+          variant="inherit"
           color="secondary"
-          style={INHERIT_FONT}
           dataTestId={{ root: 'detailsCell' }}
         >
           {details}
@@ -89,7 +85,7 @@ const COLUMNS: TableColumn<EnrichedPenalty>[] = [
 
 const getRowKey = ({ transactionHash, type }: EnrichedPenalty) =>
   `${transactionHash}-${type}`;
-const getRowProps = () => ({ 'data-testid': 'penaltyHistoryRow' }) as object;
+const getRowProps = () => ({ dataTestId: { root: 'penaltyHistoryRow' } });
 
 export const PenaltyHistoryTable: FC = () => {
   const { data, sort, setSort, pages } = useTable<EnrichedPenalty>();
