@@ -3,7 +3,7 @@ run-name: Contract security checks. Env [prod]
 
 on:
   schedule:
-    - cron: '30 */6 * * *' # Every 6 hours: prod + contractSecurityCheck
+    - cron: "30 */6 * * *" # Every 6 hours: prod + contractSecurityCheck
   workflow_dispatch:
 
 jobs:
@@ -16,7 +16,7 @@ jobs:
       stand_type: prod
       test_tags: contractSecurityCheck
       qase_project_id: CSM
-      job_custom_name: CSM widget contract security checks
+      job_custom_name: ${{ github.event_name == 'schedule' && '⏰ Scheduled · CSM contract security' || 'CSM contract security' }}
 
   cm:
     name: CM widget
@@ -27,4 +27,4 @@ jobs:
       stand_type: prod
       test_tags: contractSecurityCheck
       qase_project_id: CM
-      job_custom_name: CM widget contract security checks
+      job_custom_name: ${{ github.event_name == 'schedule' && '⏰ Scheduled · CM contract security' || 'CM contract security' }}
