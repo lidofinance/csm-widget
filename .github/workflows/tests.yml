@@ -82,5 +82,5 @@ jobs:
       preview_stand_url: ${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url || '' }}
       preview_stand_env: ${{ github.event.inputs.preview_stand_env || '' }}
       report_enabled: ${{ inputs.report_enabled || false }}
-      job_custom_name: ${{ inputs.job_custom_name || 'CSM widget' }}
+      job_custom_name: ${{ inputs.job_custom_name || (github.event.schedule == '0 5 * * *' && '⏰ Scheduled · CSM smoke') || (github.event.schedule == '0 6 * * *' && '⏰ Scheduled · CSM regression') || 'CSM widget' }}
       api_only: ${{ inputs.tags == 'webSecurity' }}

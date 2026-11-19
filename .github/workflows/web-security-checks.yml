@@ -18,7 +18,7 @@ jobs:
       qase_project_id: CSM
       api_only: true
       timeout_minutes: 15
-      job_custom_name: CSM widget web security checks
+      job_custom_name: ${{ github.event_name == 'schedule' && '⏰ Scheduled · CSM web security' || 'CSM web security' }}
 
   cm:
     name: CM widget
@@ -31,4 +31,4 @@ jobs:
       qase_project_id: CM
       api_only: true
       timeout_minutes: 15
-      job_custom_name: CM widget web security checks
+      job_custom_name: ${{ github.event_name == 'schedule' && '⏰ Scheduled · CM web security' || 'CM web security' }}

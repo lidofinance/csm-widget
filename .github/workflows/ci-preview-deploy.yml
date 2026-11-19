@@ -77,7 +77,7 @@ jobs:
       stand_type: "preview"
       tags: "smoke"
       qase_plan_id: 5 # Smoke Preview Plan
-      job_custom_name: "Preview CSM smoke"
+      job_custom_name: "Preview · CSM smoke"
 
   web-security-tests:
     needs: deploy
@@ -92,4 +92,4 @@ jobs:
       qase_project_id: CSM
       api_only: true
       timeout_minutes: 15
-      job_custom_name: Preview CSM web security checks
+      job_custom_name: "Preview · CSM web security"
