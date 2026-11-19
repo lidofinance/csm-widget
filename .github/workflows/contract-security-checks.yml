@@ -1,0 +1,30 @@
+name: Contract security checks
+run-name: Contract security checks. Env [prod]
+
+on:
+  schedule:
+    - cron: '30 */6 * * *' # Every 6 hours: prod + contractSecurityCheck
+  workflow_dispatch:
+
+jobs:
+  csm:
+    name: CSM widget
+    uses: ./.github/workflows/e2e-tests.yml
+    secrets: inherit
+    with:
+      module: csm
+      stand_type: prod
+      test_tags: contractSecurityCheck
+      qase_project_id: CSM
+      job_custom_name: CSM widget contract security checks
+
+  cm:
+    name: CM widget
+    uses: ./.github/workflows/e2e-tests.yml
+    secrets: inherit
+    with:
+      module: cm
+      stand_type: prod
+      test_tags: contractSecurityCheck
+      qase_project_id: CM
+      job_custom_name: CM widget contract security checks

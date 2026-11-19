@@ -78,3 +78,14 @@ jobs:
       tags: "smoke"
       qase_plan_id: 5 # Smoke Preview Plan
       job_custom_name: "Preview CSM smoke"
+
+  contract-security-tests:
+    needs: deploy
+    if: ${{ github.event.pull_request.draft == false && (!inputs.inventory || inputs.inventory == 'testnet') }}
+    uses: ./.github/workflows/tests.yml
+    secrets: inherit
+    with:
+      preview_stand_url: ${{ needs.deploy.outputs.stand_url }}
+      stand_type: "preview"
+      tags: "contractSecurityCheck"
+      job_custom_name: "Preview CSM contract security checks"

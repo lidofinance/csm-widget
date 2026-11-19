@@ -1,3 +1,4 @@
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { Locator, Page, expect, test } from '@playwright/test';
 import {
   EXTRA_PER_KEY,
@@ -62,7 +63,7 @@ export class CreateNodeOperatorForm {
     this.depositDataRow = this.formBlock.getByTestId('deposit-data-row');
   }
 
-  getBondTokenElement(tokenSymbol: TokenSymbol) {
+  getBondTokenElement(tokenSymbol: TokenSymbol | TOKENS) {
     return this.formBlock.locator(`label:has([value="${tokenSymbol}"])`);
   }
 

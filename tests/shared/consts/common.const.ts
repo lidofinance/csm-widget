@@ -14,4 +14,5 @@ export enum Tags {
   noStaging = '@noStaging',
   noTestnet = '@noTestnet',
   noPreview = '@noPreview',
+  contractSecurityCheck = '@contractSecurityCheck',
 }

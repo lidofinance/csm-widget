@@ -1,8 +1,8 @@
 import { Page } from '@playwright/test';
 import { BasePage } from '../../shared/pages/base.page';
 import { TxModal } from './elements/common/element.txProgressModal';
-import { DelayedPenaltyCancelPage } from './tabs/delayedPenalty/cancel.page';
-import { DelayedPenaltyReportPage } from './tabs/delayedPenalty/report.page';
+import { DelayedPenaltyCancelPage } from 'tests/shared/pages/delayedPenalty/cancel.page';
+import { DelayedPenaltyReportPage } from 'tests/shared/pages/delayedPenalty/report.page';
 
 export class DelayedPenaltyPage extends BasePage {
   report: DelayedPenaltyReportPage;
