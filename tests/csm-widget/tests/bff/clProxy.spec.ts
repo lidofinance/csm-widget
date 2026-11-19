@@ -82,12 +82,17 @@ test.describe(
       },
     );
 
-    test('Should reject validators lookup without ids', async ({ request }) => {
-      await test.step('GET without id is refused', async () => {
-        const resp = await request.get(CL_VALIDATORS_URL, { timeout: 10_000 });
-        expect(resp.status()).toBe(400);
-      });
-    });
+    test(
+      qase(698, 'Should reject validators lookup without ids'),
+      async ({ request }) => {
+        await test.step('GET without id is refused', async () => {
+          const resp = await request.get(CL_VALIDATORS_URL, {
+            timeout: 10_000,
+          });
+          expect(resp.status()).toBe(400);
+        });
+      },
+    );
 
     test(qase(664, 'Should reject empty POST body'), async ({ request }) => {
       await test.step('Empty body is refused', async () => {

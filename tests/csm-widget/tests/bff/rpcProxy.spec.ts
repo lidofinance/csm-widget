@@ -174,25 +174,26 @@ test.describe(
       },
     );
 
-    test('Should proxy signature check without "to" (ERC-6492)', async ({
-      request,
-    }) => {
-      const data = await test.step('Sign a message with a new wallet', () =>
-        buildSignatureCheckData('contract security check'));
+    test(
+      qase(697, 'Should proxy signature check without "to" (ERC-6492)'),
+      async ({ request }) => {
+        const data = await test.step('Sign a message with a new wallet', () =>
+          buildSignatureCheckData('contract security check'));
 
-      const resp =
-        await test.step('Proxy passes the call without "to"', async () => {
-          const resp = await request.post(RPC_URL, {
-            data: rpcCall('eth_call', [{ data }, 'latest']),
+        const resp =
+          await test.step('Proxy passes the call without "to"', async () => {
+            const resp = await request.post(RPC_URL, {
+              data: rpcCall('eth_call', [{ data }, 'latest']),
+            });
+            expect(resp.status()).toBe(200);
+            return resp;
           });
-          expect(resp.status()).toBe(200);
-          return resp;
-        });
 
-      await test.step('Node confirms the signature is valid', async () => {
-        expect((await resp.json()).result).toBe(VALID_SIGNATURE);
-      });
-    });
+        await test.step('Node confirms the signature is valid', async () => {
+          expect((await resp.json()).result).toBe(VALID_SIGNATURE);
+        });
+      },
+    );
 
     [
       {
@@ -201,7 +202,10 @@ test.describe(
       },
       {
         method: 'eth_estimateGas',
-        title: 'Should reject eth_estimateGas outside address allowlist',
+        title: qase(
+          699,
+          'Should reject eth_estimateGas outside address allowlist',
+        ),
       },
     ].forEach(({ method, title }) => {
       test(title, async ({ request }) => {
