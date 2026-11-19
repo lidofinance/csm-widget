@@ -2,7 +2,7 @@ import { expect } from '@playwright/test';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { widgetFullConfig } from 'tests/csm-widget/config';
 import { Tags } from 'tests/shared/consts/common.const';
-import { test } from '../test.fixture';
+import { skipIf, test } from '../test.fixture';
 
 const { chainId } = widgetFullConfig.standConfig.networkConfig;
 const FOREIGN_ORIGIN = 'https://evil.example';
@@ -25,12 +25,21 @@ test.describe(
   }),
   () => {
     HIDDEN_PATHS.forEach((path) => {
-      test(`Should not expose ${path}`, async ({ request }) => {
-        await test.step(`GET ${path} returns 404`, async () => {
-          const resp = await request.get(path);
-          expect(resp.status()).toBe(404);
-        });
-      });
+      test(
+        `Should not expose ${path}`,
+        {
+          ...skipIf(
+            path === '/api/metrics' && process.env.STAND_TYPE === 'preview',
+            'Preview ingress does not hide /api/metrics, the stand is behind basic auth',
+          ),
+        },
+        async ({ request }) => {
+          await test.step(`GET ${path} returns 404`, async () => {
+            const resp = await request.get(path);
+            expect(resp.status()).toBe(404);
+          });
+        },
+      );
     });
 
     test('Should not leak server config into runtime env', async ({

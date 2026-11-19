@@ -8,6 +8,10 @@ import {
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { widgetFullConfig } from 'tests/csm-widget/config';
 import { Tags } from 'tests/shared/consts/common.const';
+import {
+  buildSignatureCheckData,
+  VALID_SIGNATURE,
+} from 'tests/shared/helpers/signatureCheck';
 import { test } from '../test.fixture';
 
 const { chainId } = widgetFullConfig.standConfig.networkConfig;
@@ -61,7 +65,9 @@ const ALLOWED_CALLS: {
   {
     qaseId: 675,
     method: 'eth_estimateGas',
-    params: [{ from: FOREIGN_ADDRESS, to: FOREIGN_ADDRESS, value: '0x0' }],
+    params: [
+      { from: FOREIGN_ADDRESS, to: LOGS_ADDRESS, data: SYMBOL_SELECTOR },
+    ],
   },
   { qaseId: 676, method: 'eth_getTransactionByHash', params: [ZERO_HASH] },
   { qaseId: 677, method: 'eth_getTransactionReceipt', params: [ZERO_HASH] },
@@ -168,31 +174,69 @@ test.describe(
       },
     );
 
-    test(
-      qase(683, 'Should reject eth_call outside address allowlist'),
-      async ({ request }) => {
+    test('Should proxy signature check without "to" (ERC-6492)', async ({
+      request,
+    }) => {
+      const data = await test.step('Sign a message with a new wallet', () =>
+        buildSignatureCheckData('contract security check'));
+
+      const resp =
+        await test.step('Proxy passes the call without "to"', async () => {
+          const resp = await request.post(RPC_URL, {
+            data: rpcCall('eth_call', [{ data }, 'latest']),
+          });
+          expect(resp.status()).toBe(200);
+          return resp;
+        });
+
+      await test.step('Node confirms the signature is valid', async () => {
+        expect((await resp.json()).result).toBe(VALID_SIGNATURE);
+      });
+    });
+
+    [
+      {
+        method: 'eth_call',
+        title: qase(683, 'Should reject eth_call outside address allowlist'),
+      },
+      {
+        method: 'eth_estimateGas',
+        title: 'Should reject eth_estimateGas outside address allowlist',
+      },
+    ].forEach(({ method, title }) => {
+      test(title, async ({ request }) => {
         await test.step('Foreign contract is refused', async () => {
           const resp = await request.post(RPC_URL, {
-            data: rpcCall('eth_call', [
+            data: rpcCall(method, [
               { to: FOREIGN_ADDRESS, data: '0x' },
               'latest',
             ]),
           });
           expect(resp.status()).toBe(400);
           expect(await resp.json()).toBe(
-            `Address ${FOREIGN_ADDRESS} is not allowed for eth_call`,
+            `Address ${FOREIGN_ADDRESS} is not allowed for ${method}`,
           );
         });
 
-        await test.step('Call without "to" and "data" is refused', async () => {
+        await test.step('Arbitrary bytecode without "to" is refused', async () => {
           const resp = await request.post(RPC_URL, {
-            data: rpcCall('eth_call', [{}, 'latest']),
+            data: rpcCall(method, [{ data: '0x00' }, 'latest']),
           });
           expect(resp.status()).toBe(400);
-          expect(await resp.json()).toBe('RPC method eth_call is invalid');
+          expect(await resp.json()).toBe(
+            `Calls without address are not allowed for ${method}`,
+          );
         });
-      },
-    );
+
+        await test.step('Non-string "to" is refused', async () => {
+          const resp = await request.post(RPC_URL, {
+            data: rpcCall(method, [{ to: 1, data: '0x' }, 'latest']),
+          });
+          expect(resp.status()).toBe(400);
+          expect(await resp.json()).toBe(`RPC method ${method} is invalid`);
+        });
+      });
+    });
 
     test(
       qase(684, 'Should reject eth_getLogs outside address and range limits'),
