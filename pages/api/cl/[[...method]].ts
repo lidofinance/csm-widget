@@ -15,6 +15,10 @@ import {
   responseTimeMetric,
 } from 'utilsApi';
 import { apiFactory, trackedFetchApiFactory } from 'utilsApi/api';
+import {
+  CL_VALIDATORS_METHOD,
+  parseClValidatorsRequest,
+} from 'utilsApi/api/cl-validators-request';
 import { clApiUrls } from 'utilsApi/clApiUrls';
 import Metrics from 'utilsApi/metrics';
 
@@ -30,7 +34,8 @@ const api = apiFactory({
     prefix: METRICS_PREFIX,
     registry: Metrics.registry,
   },
-  allowedMethods: ['eth/v1/beacon/states/head/validators'],
+  allowedMethods: [CL_VALIDATORS_METHOD],
+  parseRequest: parseClValidatorsRequest,
   defaultChain: `${appConfig.defaultChain}`,
   providers: clApiUrls,
 });
