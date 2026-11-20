@@ -20,8 +20,16 @@ const feeHistoryToMaxFee = ({
   return lastBaseFeePerGas * 2n + maxPriorityFeePerGas;
 };
 
+type UseMaxGasPriceArgs = {
+  chainId?: number;
+  enabled?: boolean;
+};
+
 // TODO: rework
-export const useMaxGasPrice = (chainId?: number) => {
+export const useMaxGasPrice = ({
+  chainId,
+  enabled = true,
+}: UseMaxGasPriceArgs = {}) => {
   const { chainId: dappChainId } = useDappStatus();
 
   const { data, isLoading, error, isFetching, refetch } = useFeeHistory({
@@ -30,6 +38,7 @@ export const useMaxGasPrice = (chainId?: number) => {
     chainId: chainId || dappChainId,
     rewardPercentiles: REWARD_PERCENTILES,
     query: {
+      enabled,
       select: feeHistoryToMaxFee,
     },
   });
