@@ -4,7 +4,6 @@ import { ReadableStream } from 'node:stream/web';
 
 import { DEFAULT_API_ERROR_MESSAGE } from '@lidofinance/next-api-wrapper';
 import type { FetchRpcInitBody } from '@lidofinance/rpc';
-import { iterateUrls } from '@lidofinance/rpc';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Counter } from 'prom-client';
 import {
@@ -12,6 +11,7 @@ import {
   readMethod,
   canonicalizeParams,
 } from './canonical-request';
+import { requestRpcFactory, redactUrls } from './request-rpc';
 import { ClientError, HEALTHY_RPC_SERVICES_ARE_OVER } from './errors';
 import {
   baseRequestValidationFactory,
@@ -89,14 +89,7 @@ export const rpcFactory = ({
 
   const validateMaxSteamSize = streamMaxSizeValidationFactory(maxResponseSize);
 
-  const requestRPC = (chainId: number, body: FetchRpcInitBody) =>
-    iterateUrls(
-      providers[chainId],
-      // TODO: consider adding verification that body is actually matches FetchRpcInitBody
-      (url) => fetchRPC(url, { body }, { chainId }),
-      // eslint-disable-next-line @typescript-eslint/unbound-method
-      console.error,
-    );
+  const requestRPC = requestRpcFactory({ providers, fetchRPC });
 
   return async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     const abortController = new AbortController();
@@ -153,11 +146,9 @@ export const rpcFactory = ({
       if (error instanceof ClientError) {
         res.status(400).json(error.message ?? DEFAULT_API_ERROR_MESSAGE);
       } else if (error instanceof Error) {
-        console.error(
-          '[rpcFactory]' + (error.message ?? DEFAULT_API_ERROR_MESSAGE),
-        );
+        console.error('[rpcFactory] ' + redactUrls(error.message));
         if (!res.headersSent) {
-          res.status(500).json(error.message ?? DEFAULT_API_ERROR_MESSAGE);
+          res.status(500).json(DEFAULT_API_ERROR_MESSAGE);
         }
       } else {
         res.status(500).json(HEALTHY_RPC_SERVICES_ARE_OVER);

@@ -1,5 +1,7 @@
 import { PassThrough } from 'node:stream';
 
+import { DEFAULT_API_ERROR_MESSAGE } from '@lidofinance/next-api-wrapper';
+
 import { rpcFactory } from './rpcFactory';
 
 const ALLOWED = '0x' + 'ab'.repeat(20);
@@ -136,5 +138,16 @@ describe('rpcFactory canonical forwarding', () => {
     });
     expect(res.status).toHaveBeenCalledWith(400);
     expect(fetchRPC).not.toHaveBeenCalled();
+  });
+
+  it('hides provider error details in 500', async () => {
+    const { run, fetchRPC } = setup();
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    fetchRPC.mockRejectedValue(new Error('fail https://user:secret@x'));
+    const res = await run({ id: 1, method: 'eth_chainId' });
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith(DEFAULT_API_ERROR_MESSAGE);
+    expect(JSON.stringify(errorSpy.mock.calls)).not.toContain('secret');
+    errorSpy.mockRestore();
   });
 });

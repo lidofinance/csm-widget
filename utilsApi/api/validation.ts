@@ -12,6 +12,8 @@ import {
 } from './errors';
 
 import type { NextApiRequest } from 'next';
+import { readJsonCapped } from './read-json-capped';
+import { redactUrls } from './request-rpc';
 import { RpcRequest, ValidationContext } from './types';
 
 // validation factories
@@ -154,11 +156,27 @@ export const ethGetLogsValidationFactory = (
         jsonrpc: '2.0',
         method: 'eth_blockNumber',
       })
-        .then((res) => res.json())
-        .then((res) => {
-          const head = BigInt(res.result);
+        .then(async (res) => {
+          if (!res.ok) {
+            void res.body?.cancel().catch(() => undefined);
+            throw new Error('eth_blockNumber failed');
+          }
+          const json = (await readJsonCapped(res)) as { result?: unknown };
+          if (
+            typeof json?.result !== 'string' ||
+            !HEX_BLOCK_RE.test(json.result)
+          ) {
+            throw new Error('eth_blockNumber result is invalid');
+          }
+          const head = BigInt(json.result);
           currentBlock.put(chainId, head, currentBlockTTL);
           return head;
+        })
+        .catch((error) => {
+          console.warn(
+            `[rpcFactory] head lookup failed: ${redactUrls(String(error)).slice(0, 200)}`,
+          );
+          throw new InvalidRequestError(`RPC method eth_getLogs is invalid`);
         })
         .finally(() => inflightHead.delete(chainId));
       inflightHead.set(chainId, pending);

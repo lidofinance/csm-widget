@@ -229,6 +229,30 @@ describe('eth_getLogs validation', () => {
     expect(requestRPC).toHaveBeenCalledTimes(2);
   });
 
+  it.each([
+    ['garbage result', () => rpcResult('garbage')],
+    [
+      'numeric result',
+      () =>
+        new Response(JSON.stringify({ jsonrpc: '2.0', id: 1, result: 256 })),
+    ],
+    ['oversized body', () => new Response('x'.repeat(20_000))],
+    ['non-ok status', () => new Response('{}', { status: 503 })],
+  ])('maps head lookup %s to invalid and does not cache', async (_n, bad) => {
+    const requestRPC = vi
+      .fn()
+      .mockResolvedValueOnce(bad())
+      .mockResolvedValue(rpcResult('0x100'));
+    const { run } = setupLogs({ requestRPC });
+    await expect(
+      run({ address: LOGS_ADDR, fromBlock: '0xf6' }),
+    ).rejects.toThrow(/^RPC method eth_getLogs is invalid$/);
+    await expect(
+      run({ address: LOGS_ADDR, fromBlock: '0xf6' }),
+    ).resolves.toBeUndefined();
+    expect(requestRPC).toHaveBeenCalledTimes(2);
+  });
+
   it('rejects missing address', async () => {
     const { run } = setupLogs();
     await expect(run({ fromBlock: 'latest' })).rejects.toThrow(
