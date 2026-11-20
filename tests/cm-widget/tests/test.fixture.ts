@@ -19,6 +19,7 @@ import { LidoSDKClient } from '../services/cmSDK.client';
 import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.service';
 import { reportTagsToQase } from 'tests/shared/helpers/qaseTags';
 import { IpfsGatewayProxyService } from 'tests/shared/services/ipfsGatewayProxy.service';
+import { ClMockService } from 'tests/shared/services/clMock.service';
 
 import path from 'path';
 
@@ -36,6 +37,7 @@ type WorkerFixtures = {
   forkActionService: ForkActionsService;
   httpMockerService: HttpMockerService;
   ipfsGatewayProxy: IpfsGatewayProxyService;
+  clMock: ClMockService;
 };
 
 export const test = base.extend<
@@ -94,7 +96,7 @@ export const test = base.extend<
 
   // fixture-methods
   browserWithWallet: [
-    async ({ secretPhrase, useFork, cmSDK, ipfsGatewayProxy }, use) => {
+    async ({ secretPhrase, useFork, cmSDK, ipfsGatewayProxy, clMock }, use) => {
       const forkRpcURL = `http://${widgetFullConfig.standConfig.nodeConfig.host}:${widgetFullConfig.standConfig.nodeConfig.port}`;
       const rpcUrl = useFork
         ? forkRpcURL
@@ -143,6 +145,7 @@ export const test = base.extend<
       await ipfsGatewayProxy.install(
         browserService.getBrowserContextPage().context(),
       );
+      await clMock.install(browserService.getBrowserContextPage().context());
 
       // fulfilled locally so tests never hit the external validation API
       await browserService
@@ -240,6 +243,12 @@ export const test = base.extend<
           widgetFullConfig.standConfig.ipfsConfig.gateway,
         ),
       );
+    },
+    { scope: 'worker' },
+  ],
+  clMock: [
+    async ({}, use) => {
+      await use(new ClMockService());
     },
     { scope: 'worker' },
   ],

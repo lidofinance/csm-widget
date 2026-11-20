@@ -14,8 +14,10 @@ export const httpCredentials =
     : undefined;
 
 const config: PlaywrightTestConfig = {
-  globalSetup: './config/globalSetup.ts',
-  globalTeardown: './config/globalTeardown.ts',
+  globalSetup: process.env.API_ONLY ? undefined : './config/globalSetup.ts',
+  globalTeardown: process.env.API_ONLY
+    ? undefined
+    : './config/globalTeardown.ts',
   testDir: './tests',
   globalTimeout: process.env.CI ? 60 * 60 * 1000 : undefined, // 1h cap in CI
   timeout: 180 * 1000,
@@ -44,6 +46,9 @@ const config: PlaywrightTestConfig = {
       name: 'cm-widget',
       testDir: './tests',
       grep: prepareGrep(process.env.TEST_TAGS),
+      testMatch: process.env.API_ONLY
+        ? /(\/bff\/.+|securityHeaders)\.spec\.ts$/
+        : undefined,
       use: {
         // @ts-expect-error because pw doesnt have custom types
         useFork: true,

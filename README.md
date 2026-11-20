@@ -112,12 +112,47 @@ Append `:ui` (`yarn test:csm:ui` / `yarn test:cm:ui`) to run Playwright in inter
 
 ### Local fork
 
+For manual checks, one command starts everything in docker — the hoodi fork,
+IPFS, the CL mock, one public tunnel in front of them and the QA panel on
+http://localhost:5050:
+
+```sh
+docker compose --env-file fork.env --profile stack up -d --wait
+docker compose --env-file fork.env run --rm tunnel-url   # the URLs for /qa-config
+docker compose --env-file fork.env --profile stack down
+```
+
+A deployed widget (https) may not call localhost, so `/qa-config` takes the
+tunnel's URLs, one per path: `https://<tunnel>/hoodi` (also the wallet network),
+`/mainnet`, `/cl` and `/ipfs/{cid}`. The tunnel is a container of its own, so a
+fork restart keeps the URL; restarting the tunnel gets a new one.
+
+#### QA panel
+
+http://localhost:5050 — one page for manual checks on the fork, against a
+deployed widget:
+
+1. **Setup.** Copy the URLs into the widget's `/qa-config` and the RPC into the
+   wallet network, then warm the fork up for your address — the first load of a
+   cold fork is slow. The panel shows whether the fork is warm and controls the
+   containers.
+2. **Operator.** Open an operator by id: its keys, and a CL status for each
+   deposited key (Active, Exiting, Slashed…). Reload the widget page after a
+   change — the SDK caches CL answers.
+3. **Commands.** The `yarn fork` commands for the module picked in the sidebar:
+   create operators, add keys and bond, set gates and roles, snapshot and revert.
+4. **Presets.** The e2e wallets with their operators and mnemonics, and whether
+   they still exist on the fork.
+
+After a fork restart the wallet's pending transactions hang: MetaMask → Settings →
+Developer tools → Clear activity and nonce data. The panel answers on localhost
+only; the same is available from the terminal as `yarn fork` and `yarn cl-mock`.
+
 Forked tests run against a local anvil fork started by `compose.yaml`. There is one
 profile per network — `mainnet`, `hoodi` — so both forks can run side by side:
 
 ```sh
 docker compose --env-file fork.env --profile hoodi up -d --wait   # start, waits until the fork answers
-docker compose --env-file fork.env run --rm hoodi-url             # print the local and public URLs
 docker compose --env-file fork.env --profile hoodi logs -f        # follow logs
 docker compose --env-file fork.env --profile hoodi down           # stop and remove
 docker compose --env-file fork.env ps                             # every running fork
@@ -130,25 +165,23 @@ decides which contract addresses the calls go to.
 `export COMPOSE_ENV_FILES=fork.env` once in your shell and the flag can be dropped.
 
 The compose project is named `csm-widget-forks` and the containers are named
-`hoodi-fork`, `mainnet-fork`, `ipfs` (each with its `-tunnel`), so they read the
+`hoodi-fork`, `mainnet-fork`, `ipfs`, `cl-mock`, `tunnel`, so they read the
 same in `docker ps` and stay the same from any checkout of the repo — a second
 worktree talks to the running forks instead of starting its own.
 
 The fork is made from `EL_RPC_URLS_1` / `EL_RPC_URLS_560048` and funds the
-`WALLET_SECRET_PHRASE` accounts, both taken from `.env.local`. Every fork also
-gets a cloudflared quick tunnel, so it can be reached from outside — the `-url`
-service prints that address.
+`WALLET_SECRET_PHRASE` accounts, both taken from `.env.local`. To reach it from
+outside, start the `tunnel` profile; `tunnel-url` prints the addresses.
 
 The tests also need an IPFS node to pin merkle trees to. It has its own profile
 and can be started once and left running next to any fork:
 
 ```sh
 docker compose --env-file fork.env --profile ipfs up -d --wait
-docker compose --env-file fork.env run --rm ipfs-url   # gateway URLs, local and public
 ```
 
-It gets a tunnel of its own, so the gateway is reachable from outside. Only the
-gateway — the API on 5001 is unauthenticated admin access to the node.
+Only the gateway is behind the tunnel — the API on 5001 is unauthenticated admin
+access to the node.
 
 The ports live in [fork.env](./fork.env) — the only place they are written down.
 The tests and the contract commands read the same file, so nothing has to be

@@ -59,6 +59,11 @@ on:
         description: "Human-readable name of the calling job, used as the Slack report title. Job names are not exposed to called workflows, so every caller has to pass it explicitly."
         required: true
         type: string
+      api_only:
+        description: "Request-only specs: skip the fork, IPFS, wallet and browser setup."
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   test:
@@ -72,6 +77,7 @@ jobs:
       WC_PROJECT_ID: ${{ secrets.WC_PROJECT_ID }}
       MODULE: ${{ inputs.module }}
       STAND_TYPE: ${{ inputs.stand_type }}
+      API_ONLY: ${{ inputs.api_only && 'true' || '' }}
 
       # Common envs
       QASE_API_TOKEN: ${{ secrets.QASE_API_TOKEN }}
@@ -118,6 +124,7 @@ jobs:
 
       # anvil, which globalSetup starts the fork with
       - name: Install Foundry
+        if: ${{ !inputs.api_only }}
         uses: foundry-rs/foundry-toolchain@v1
         with:
           version: v1.8.6
@@ -133,9 +140,11 @@ jobs:
         run: yarn install --immutable
 
       - name: Install Playwright Browsers
+        if: ${{ !inputs.api_only }}
         run: yarn playwright install chromium --with-deps
 
       - name: Setup IPFS
+        if: ${{ !inputs.api_only }}
         uses: ./.github/actions/setup-ipfs
 
       - name: Set up preview-stand credentials

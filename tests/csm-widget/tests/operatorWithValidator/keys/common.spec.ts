@@ -6,6 +6,7 @@ import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.service';
 import { PRESETS } from 'tests/csm-widget/config/walletSetup';
+import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 
 test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR.secretPhrase });
 
@@ -55,8 +56,10 @@ test.describe(
       async () => {
         const overTheLimitKeys = keysGeneratorService.generateKeys(76);
         await keysPage.submitPage.fillKeys(overTheLimitKeys);
+        // the error comes after the SDK checks the signatures of the first 75 keys
         await expect(keysPage.submitPage.validationInputError).toContainText(
           'Too many keys in one transaction, maximum allowed: 75',
+          { timeout: PAGE_WAIT_TIMEOUT },
         );
       },
     );
