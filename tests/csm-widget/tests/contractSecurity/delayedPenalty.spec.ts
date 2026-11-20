@@ -1,3 +1,4 @@
+import { qase } from 'playwright-qase-reporter/playwright';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 import { contracts } from 'tests/csm-widget/consts/contracts.const';
@@ -36,43 +37,45 @@ test.describe(
       if (snapshotId) await csmSDK.evmRevert(snapshotId);
     });
 
-    test('Should send Report penalty to CSModule', async ({
-      widgetService,
-    }) => {
-      const { report } = widgetService.delayedPenaltyPage;
-      const { walletPage } = widgetService;
+    test(
+      qase(742, 'Should send Report penalty to CSModule'),
+      async ({ widgetService }) => {
+        const { report } = widgetService.delayedPenaltyPage;
+        const { walletPage } = widgetService;
 
-      await test.step('Submit the report', async () => {
-        await report.open();
-        await report.submit({
-          nodeOperatorId: noId,
-          amount: '0.1',
-          penaltyType: `0x${'ab'.repeat(32)}`,
-          details: 'contract address check',
+        await test.step('Submit the report', async () => {
+          await report.open();
+          await report.submit({
+            nodeOperatorId: noId,
+            amount: '0.1',
+            penaltyType: `0x${'ab'.repeat(32)}`,
+            details: 'contract address check',
+          });
         });
-      });
 
-      await test.step('Transaction goes to CSModule', async () => {
-        await walletPage.assertReceiptAddress(contracts.csm.module);
-        await walletPage.cancelTx();
-      });
-    });
+        await test.step('Transaction goes to CSModule', async () => {
+          await walletPage.assertReceiptAddress(contracts.csm.module);
+          await walletPage.cancelTx();
+        });
+      },
+    );
 
-    test('Should send Cancel penalty to CSModule', async ({
-      widgetService,
-    }) => {
-      const { cancel } = widgetService.delayedPenaltyPage;
-      const { walletPage } = widgetService;
+    test(
+      qase(743, 'Should send Cancel penalty to CSModule'),
+      async ({ widgetService }) => {
+        const { cancel } = widgetService.delayedPenaltyPage;
+        const { walletPage } = widgetService;
 
-      await test.step('Submit the cancellation', async () => {
-        await cancel.open();
-        await cancel.submit(noId, '0.1');
-      });
+        await test.step('Submit the cancellation', async () => {
+          await cancel.open();
+          await cancel.submit(noId, '0.1');
+        });
 
-      await test.step('Transaction goes to CSModule', async () => {
-        await walletPage.assertReceiptAddress(contracts.csm.module);
-        await walletPage.cancelTx();
-      });
-    });
+        await test.step('Transaction goes to CSModule', async () => {
+          await walletPage.assertReceiptAddress(contracts.csm.module);
+          await walletPage.cancelTx();
+        });
+      },
+    );
   },
 );

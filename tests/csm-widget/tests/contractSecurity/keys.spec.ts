@@ -1,3 +1,4 @@
+import { qase } from 'playwright-qase-reporter/playwright';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 import { contracts } from 'tests/csm-widget/consts/contracts.const';
@@ -48,72 +49,82 @@ test.describe(
       if (snapshotId) await csmSDK.evmRevert(snapshotId);
     });
 
-    [TOKENS.eth, TOKENS.steth, TOKENS.wsteth].forEach((token) => {
-      test(`Should send Add keys with ${token} to CSModule`, async ({
-        widgetService,
-        keysGeneratorService,
-      }) => {
-        const { submitPage } = widgetService.keysPage;
+    [
+      { token: TOKENS.eth, qaseId: 744 },
+      { token: TOKENS.steth, qaseId: 745 },
+      { token: TOKENS.wsteth, qaseId: 746 },
+    ].forEach(({ token, qaseId }) => {
+      test(
+        qase(qaseId, `Should send Add keys with ${token} to CSModule`),
+        async ({ widgetService, keysGeneratorService }) => {
+          const { submitPage } = widgetService.keysPage;
+          const { walletPage } = widgetService;
+
+          await test.step(`Submit 1 key with ${token} bond`, async () => {
+            await submitPage.open();
+            await submitPage.submitKeys(
+              keysGeneratorService.generateKeys(),
+              token,
+            );
+          });
+
+          if (token !== TOKENS.eth) {
+            await test.step(`Permit is signed for ${token}`, async () => {
+              await walletPage.assertReceiptAddress(PERMIT_TOKEN[token]);
+              await walletPage.confirmTx();
+            });
+          }
+
+          await test.step('Transaction goes to CSModule', async () => {
+            await walletPage.assertReceiptAddress(contracts.csm.module);
+            await walletPage.cancelTx();
+          });
+        },
+      );
+    });
+
+    test(
+      qase(747, 'Should send Remove keys to CSModule'),
+      async ({ widgetService }) => {
+        const { removePage } = widgetService.keysPage;
         const { walletPage } = widgetService;
 
-        await test.step(`Submit 1 key with ${token} bond`, async () => {
-          await submitPage.open();
-          await submitPage.submitKeys(
-            keysGeneratorService.generateKeys(),
-            token,
-          );
+        await test.step('Select 1 key and remove', async () => {
+          await removePage.open();
+          await removePage.getCheckboxByAddress(pubkey.slice(2)).click();
+          await removePage.removeKeysButton.click();
         });
-
-        if (token !== TOKENS.eth) {
-          await test.step(`Permit is signed for ${token}`, async () => {
-            await walletPage.assertReceiptAddress(PERMIT_TOKEN[token]);
-            await walletPage.confirmTx();
-          });
-        }
 
         await test.step('Transaction goes to CSModule', async () => {
           await walletPage.assertReceiptAddress(contracts.csm.module);
           await walletPage.cancelTx();
         });
-      });
-    });
+      },
+    );
 
-    test('Should send Remove keys to CSModule', async ({ widgetService }) => {
-      const { removePage } = widgetService.keysPage;
-      const { walletPage } = widgetService;
+    test(
+      qase(748, 'Should send Eject keys to Ejector'),
+      async ({ widgetService }) => {
+        const { page, walletPage } = widgetService;
 
-      await test.step('Select 1 key and remove', async () => {
-        await removePage.open();
-        await removePage.getCheckboxByAddress(pubkey.slice(2)).click();
-        await removePage.removeKeysButton.click();
-      });
+        await test.step('Select the active key and eject', async () => {
+          await page.goto('/keys/eject');
+          await page
+            .locator('label', { hasText: depositedPubkey.slice(0, 14) })
+            .locator('svg')
+            .click();
+          await page.getByRole('button', { name: 'Eject Keys' }).click();
+          await page
+            .getByRole('dialog')
+            .getByRole('button', { name: 'Continue', exact: true })
+            .click({ timeout: STAGE_WAIT_TIMEOUT });
+        });
 
-      await test.step('Transaction goes to CSModule', async () => {
-        await walletPage.assertReceiptAddress(contracts.csm.module);
-        await walletPage.cancelTx();
-      });
-    });
-
-    test('Should send Eject keys to Ejector', async ({ widgetService }) => {
-      const { page, walletPage } = widgetService;
-
-      await test.step('Select the active key and eject', async () => {
-        await page.goto('/keys/eject');
-        await page
-          .locator('label', { hasText: depositedPubkey.slice(0, 14) })
-          .locator('svg')
-          .click();
-        await page.getByRole('button', { name: 'Eject Keys' }).click();
-        await page
-          .getByRole('dialog')
-          .getByRole('button', { name: 'Continue', exact: true })
-          .click({ timeout: STAGE_WAIT_TIMEOUT });
-      });
-
-      await test.step('Transaction goes to Ejector', async () => {
-        await walletPage.assertReceiptAddress(contracts.csm.ejector);
-        await walletPage.cancelTx();
-      });
-    });
+        await test.step('Transaction goes to Ejector', async () => {
+          await walletPage.assertReceiptAddress(contracts.csm.ejector);
+          await walletPage.cancelTx();
+        });
+      },
+    );
   },
 );

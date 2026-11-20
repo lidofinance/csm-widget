@@ -1,3 +1,4 @@
+import { qase } from 'playwright-qase-reporter/playwright';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup';
@@ -38,81 +39,91 @@ test.describe(
       if (snapshotId) await cmSDK.evmRevert(snapshotId);
     });
 
-    [TOKENS.eth, TOKENS.steth, TOKENS.wsteth].forEach((token) => {
-      test(`Should send Add bond ${token} to Accounting`, async ({
-        widgetService,
-      }) => {
-        const { addBond } = widgetService.bondRewardsPage;
-        const { walletPage } = widgetService;
+    [
+      { token: TOKENS.eth, qaseId: 585 },
+      { token: TOKENS.steth, qaseId: 586 },
+      { token: TOKENS.wsteth, qaseId: 587 },
+    ].forEach(({ token, qaseId }) => {
+      test(
+        qase(qaseId, `Should send Add bond ${token} to Accounting`),
+        async ({ widgetService }) => {
+          const { addBond } = widgetService.bondRewardsPage;
+          const { walletPage } = widgetService;
 
-        await test.step(`Submit ${token} bond`, async () => {
-          await addBond.open();
-          await addBond.selectBondToken(token).click();
-          await addBond.amountInput.fill('0.0003');
-          await addBond.addBondButton.click();
-          await widgetService.confirmOperatorModal.confirm();
-        });
-
-        if (token !== TOKENS.eth) {
-          await test.step(`Permit is signed for ${token}`, async () => {
-            await walletPage.assertReceiptAddress(PERMIT_TOKEN[token]);
-            await walletPage.confirmTx();
+          await test.step(`Submit ${token} bond`, async () => {
+            await addBond.open();
+            await addBond.selectBondToken(token).click();
+            await addBond.amountInput.fill('0.0003');
+            await addBond.addBondButton.click();
+            await widgetService.confirmOperatorModal.confirm();
           });
-        }
 
-        await test.step('Transaction goes to Accounting', async () => {
-          await walletPage.assertReceiptAddress(contracts.accounting);
+          if (token !== TOKENS.eth) {
+            await test.step(`Permit is signed for ${token}`, async () => {
+              await walletPage.assertReceiptAddress(PERMIT_TOKEN[token]);
+              await walletPage.confirmTx();
+            });
+          }
+
+          await test.step('Transaction goes to Accounting', async () => {
+            await walletPage.assertReceiptAddress(contracts.accounting);
+            await walletPage.cancelTx();
+          });
+        },
+      );
+    });
+
+    [
+      { token: TOKENS.eth, qaseId: 588 },
+      { token: TOKENS.steth, qaseId: 589 },
+      { token: TOKENS.wsteth, qaseId: 590 },
+    ].forEach(({ token, qaseId }) => {
+      test(
+        qase(qaseId, `Should send Claim ${token} to Accounting`),
+        async ({ widgetService }) => {
+          const { claim } = widgetService.bondRewardsPage;
+          const { walletPage } = widgetService;
+
+          await test.step(`Submit ${token} claim`, async () => {
+            await claim.open();
+            await claim.selectBondToken(token);
+            await claim.amountInput.fill('0.0003');
+            await (
+              token === TOKENS.eth
+                ? claim.requestWithdrawalButton
+                : claim.claimButton
+            ).click();
+          });
+
+          await test.step('Transaction goes to Accounting', async () => {
+            await walletPage.assertReceiptAddress(contracts.accounting);
+            await walletPage.cancelTx();
+          });
+        },
+      );
+    });
+
+    test(
+      qase(591, 'Should send Compensate locked bond to CuratedModule'),
+      async ({ widgetService, forkActionService }) => {
+        const { page, walletPage } = widgetService;
+
+        await test.step('Set up: lock bond with a penalty', async () => {
+          await forkActionService.reportPenalty(noId, '0.1');
+        });
+
+        await test.step('Submit compensation', async () => {
+          await page.goto('/bond/unlock');
+          await page
+            .getByRole('button', { name: 'Compensate locked bond' })
+            .click();
+        });
+
+        await test.step('Transaction goes to CuratedModule', async () => {
+          await walletPage.assertReceiptAddress(contracts.module);
           await walletPage.cancelTx();
         });
-      });
-    });
-
-    [TOKENS.eth, TOKENS.steth, TOKENS.wsteth].forEach((token) => {
-      test(`Should send Claim ${token} to Accounting`, async ({
-        widgetService,
-      }) => {
-        const { claim } = widgetService.bondRewardsPage;
-        const { walletPage } = widgetService;
-
-        await test.step(`Submit ${token} claim`, async () => {
-          await claim.open();
-          await claim.selectBondToken(token);
-          await claim.amountInput.fill('0.0003');
-          await (
-            token === TOKENS.eth
-              ? claim.requestWithdrawalButton
-              : claim.claimButton
-          ).click();
-        });
-
-        await test.step('Transaction goes to Accounting', async () => {
-          await walletPage.assertReceiptAddress(contracts.accounting);
-          await walletPage.cancelTx();
-        });
-      });
-    });
-
-    test('Should send Compensate locked bond to CuratedModule', async ({
-      widgetService,
-      forkActionService,
-    }) => {
-      const { page, walletPage } = widgetService;
-
-      await test.step('Set up: lock bond with a penalty', async () => {
-        await forkActionService.reportPenalty(noId, '0.1');
-      });
-
-      await test.step('Submit compensation', async () => {
-        await page.goto('/bond/unlock');
-        await page
-          .getByRole('button', { name: 'Compensate locked bond' })
-          .click();
-      });
-
-      await test.step('Transaction goes to CuratedModule', async () => {
-        await walletPage.assertReceiptAddress(contracts.module);
-        await walletPage.cancelTx();
-      });
-    });
+      },
+    );
   },
 );

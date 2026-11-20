@@ -1,3 +1,4 @@
+import { qase } from 'playwright-qase-reporter/playwright';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 import { contracts } from 'tests/cm-widget/consts/contracts.const';
@@ -34,47 +35,48 @@ test.describe(
       if (snapshotId) await cmSDK.evmRevert(snapshotId);
     });
 
-    test('Should send Enable top-up allocation to CuratedModule', async ({
-      widgetService,
-    }) => {
-      const { page, walletPage } = widgetService;
+    test(
+      qase(606, 'Should send Enable top-up allocation to CuratedModule'),
+      async ({ widgetService }) => {
+        const { page, walletPage } = widgetService;
 
-      await test.step('Submit the operator to enable', async () => {
-        await page.goto('/top-up-allocation');
-        await page.locator('input[name="nodeOperatorId"]').fill(String(noId));
-        await page
-          .getByRole('button', { name: 'Enable top-up allocation' })
-          .click();
-      });
+        await test.step('Submit the operator to enable', async () => {
+          await page.goto('/top-up-allocation');
+          await page.locator('input[name="nodeOperatorId"]').fill(String(noId));
+          await page
+            .getByRole('button', { name: 'Enable top-up allocation' })
+            .click();
+        });
 
-      await test.step('Transaction goes to CuratedModule', async () => {
-        await walletPage.assertReceiptAddress(contracts.module);
-        await walletPage.cancelTx();
-      });
-    });
+        await test.step('Transaction goes to CuratedModule', async () => {
+          await walletPage.assertReceiptAddress(contracts.module);
+          await walletPage.cancelTx();
+        });
+      },
+    );
 
-    test('Should send Disable top-ups to CuratedModule', async ({
-      widgetService,
-      forkActionService,
-    }) => {
-      const { page, walletPage } = widgetService;
+    test(
+      qase(607, 'Should send Disable top-ups to CuratedModule'),
+      async ({ widgetService, forkActionService }) => {
+        const { page, walletPage } = widgetService;
 
-      await test.step('Set up: enable top-ups for the operator', async () => {
-        await forkActionService.enableTopUpAllocation(noId);
-      });
+        await test.step('Set up: enable top-ups for the operator', async () => {
+          await forkActionService.enableTopUpAllocation(noId);
+        });
 
-      await test.step('Switch top-ups off', async () => {
-        await page.goto('/settings/general');
-        await page.getByRole('switch').click();
-        await page
-          .getByRole('button', { name: 'Confirm', exact: true })
-          .click();
-      });
+        await test.step('Switch top-ups off', async () => {
+          await page.goto('/settings/general');
+          await page.getByRole('switch').click();
+          await page
+            .getByRole('button', { name: 'Confirm', exact: true })
+            .click();
+        });
 
-      await test.step('Transaction goes to CuratedModule', async () => {
-        await walletPage.assertReceiptAddress(contracts.module);
-        await walletPage.cancelTx();
-      });
-    });
+        await test.step('Transaction goes to CuratedModule', async () => {
+          await walletPage.assertReceiptAddress(contracts.module);
+          await walletPage.cancelTx();
+        });
+      },
+    );
   },
 );

@@ -1,3 +1,4 @@
+import { qase } from 'playwright-qase-reporter/playwright';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 import { contracts } from 'tests/cm-widget/consts/contracts.const';
@@ -37,43 +38,45 @@ test.describe(
       if (snapshotId) await cmSDK.evmRevert(snapshotId);
     });
 
-    test('Should send Report penalty to CuratedModule', async ({
-      widgetService,
-    }) => {
-      const report = new DelayedPenaltyReportPage(widgetService.page);
-      const { walletPage } = widgetService;
+    test(
+      qase(592, 'Should send Report penalty to CuratedModule'),
+      async ({ widgetService }) => {
+        const report = new DelayedPenaltyReportPage(widgetService.page);
+        const { walletPage } = widgetService;
 
-      await test.step('Submit the report', async () => {
-        await report.open();
-        await report.submit({
-          nodeOperatorId: noId,
-          amount: '0.1',
-          penaltyType: `0x${'ab'.repeat(32)}`,
-          details: 'contract address check',
+        await test.step('Submit the report', async () => {
+          await report.open();
+          await report.submit({
+            nodeOperatorId: noId,
+            amount: '0.1',
+            penaltyType: `0x${'ab'.repeat(32)}`,
+            details: 'contract address check',
+          });
         });
-      });
 
-      await test.step('Transaction goes to CuratedModule', async () => {
-        await walletPage.assertReceiptAddress(contracts.module);
-        await walletPage.cancelTx();
-      });
-    });
+        await test.step('Transaction goes to CuratedModule', async () => {
+          await walletPage.assertReceiptAddress(contracts.module);
+          await walletPage.cancelTx();
+        });
+      },
+    );
 
-    test('Should send Cancel penalty to CuratedModule', async ({
-      widgetService,
-    }) => {
-      const cancel = new DelayedPenaltyCancelPage(widgetService.page);
-      const { walletPage } = widgetService;
+    test(
+      qase(593, 'Should send Cancel penalty to CuratedModule'),
+      async ({ widgetService }) => {
+        const cancel = new DelayedPenaltyCancelPage(widgetService.page);
+        const { walletPage } = widgetService;
 
-      await test.step('Submit the cancellation', async () => {
-        await cancel.open();
-        await cancel.submit(noId, '0.1');
-      });
+        await test.step('Submit the cancellation', async () => {
+          await cancel.open();
+          await cancel.submit(noId, '0.1');
+        });
 
-      await test.step('Transaction goes to CuratedModule', async () => {
-        await walletPage.assertReceiptAddress(contracts.module);
-        await walletPage.cancelTx();
-      });
-    });
+        await test.step('Transaction goes to CuratedModule', async () => {
+          await walletPage.assertReceiptAddress(contracts.module);
+          await walletPage.cancelTx();
+        });
+      },
+    );
   },
 );

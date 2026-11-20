@@ -2,7 +2,7 @@ import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { Address } from 'viem';
 import { widgetFullConfig } from 'tests/cm-widget/config';
 
-type CuratedGateType =
+export type CuratedGateType =
   | OPERATOR_TYPE.CM_PO
   | OPERATOR_TYPE.CM_PTO
   | OPERATOR_TYPE.CM_PGO

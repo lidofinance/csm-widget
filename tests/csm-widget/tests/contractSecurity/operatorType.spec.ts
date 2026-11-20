@@ -1,3 +1,4 @@
+import { qase } from 'playwright-qase-reporter/playwright';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 import { contracts } from 'tests/csm-widget/consts/contracts.const';
@@ -32,46 +33,48 @@ test.describe(
       if (snapshotId) await csmSDK.evmRevert(snapshotId);
     });
 
-    test('Should send Claim ICS type to ICS gate', async ({
-      widgetService,
-    }) => {
-      const { claimIcs } = widgetService.operatorType;
-      const { walletPage } = widgetService;
+    test(
+      qase(768, 'Should send Claim ICS type to ICS gate'),
+      async ({ widgetService }) => {
+        const { claimIcs } = widgetService.operatorType;
+        const { walletPage } = widgetService;
 
-      await test.step('Submit the claim', async () => {
-        await claimIcs.open();
-        await claimIcs.claimButton.click();
-        await claimIcs.confirmContinueButton.click();
-      });
+        await test.step('Submit the claim', async () => {
+          await claimIcs.open();
+          await claimIcs.claimButton.click();
+          await claimIcs.confirmContinueButton.click();
+        });
 
-      await test.step('Transaction goes to ICS gate', async () => {
-        await walletPage.assertReceiptAddress(contracts.csm.icsGate);
-        await walletPage.cancelTx();
-      });
-    });
+        await test.step('Transaction goes to ICS gate', async () => {
+          await walletPage.assertReceiptAddress(contracts.csm.icsGate);
+          await walletPage.cancelTx();
+        });
+      },
+    );
 
-    test('Should send Claim IDVTC type to IDVTC gate', async ({
-      widgetService,
-    }) => {
-      const { claimIdvtc } = widgetService.operatorType;
-      const { walletPage } = widgetService;
+    test(
+      qase(769, 'Should send Claim IDVTC type to IDVTC gate'),
+      async ({ widgetService }) => {
+        const { claimIdvtc } = widgetService.operatorType;
+        const { walletPage } = widgetService;
 
-      await test.step('Submit the claim', async () => {
-        await claimIdvtc.open();
-        await claimIdvtc.claimButton.click();
-        await claimIdvtc.confirmContinueButton.click();
-      });
+        await test.step('Submit the claim', async () => {
+          await claimIdvtc.open();
+          await claimIdvtc.claimButton.click();
+          await claimIdvtc.confirmContinueButton.click();
+        });
 
-      await test.step('Sign the cluster setup message if asked', async () => {
-        if ((await getPendingRequestMethod(walletPage)) === 'personal_sign') {
-          await walletPage.confirmTx();
-        }
-      });
+        await test.step('Sign the cluster setup message if asked', async () => {
+          if ((await getPendingRequestMethod(walletPage)) === 'personal_sign') {
+            await walletPage.confirmTx();
+          }
+        });
 
-      await test.step('Transaction goes to IDVTC gate', async () => {
-        await walletPage.assertReceiptAddress(contracts.csm.idvtcGate);
-        await walletPage.cancelTx();
-      });
-    });
+        await test.step('Transaction goes to IDVTC gate', async () => {
+          await walletPage.assertReceiptAddress(contracts.csm.idvtcGate);
+          await walletPage.cancelTx();
+        });
+      },
+    );
   },
 );
