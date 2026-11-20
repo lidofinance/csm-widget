@@ -6,6 +6,7 @@ import { getClientRequestHeaders } from 'utilsApi/client-request-headers';
 
 const validateEthereumAddress = (address: unknown): string | null => {
   if (typeof address !== 'string') return null;
+  if (address.length !== 42) return null;
   if (!isAddress(address)) return null;
 
   return address.toLowerCase();
