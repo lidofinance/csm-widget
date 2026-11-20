@@ -116,6 +116,12 @@ export const HELP: Record<
     example:
       'yarn fork csm hoodi setRewardsClaimer 12 0x1111111111111111111111111111111111111111',
   },
+  enableTopUpAllocation: {
+    needs: 'metaRegistry',
+    about: 'Enable top-up allocation for the operator (CuratedModule v2)',
+    args: '<noId>',
+    example: 'yarn fork cm hoodi enableTopUpAllocation 12',
+  },
   setShareLimit: {
     about: 'Push the module share limit to reached, exhausted or approaching',
     args: '<REACHED|EXHAUSTED|APPROACHING>',
@@ -167,7 +173,7 @@ export const CATEGORIES: Record<string, Command[]> = {
   Keys: ['addKeys', 'removeKeys', 'depositKeys'],
   'Bond & rewards': ['addBond', 'reportRewards'],
   Penalties: ['reportPenalty', 'settlePenalty'],
-  Module: ['setGateAddrs', 'setShareLimit'],
+  Module: ['setGateAddrs', 'setShareLimit', 'enableTopUpAllocation'],
 };
 
 const categorized = new Set(Object.values(CATEGORIES).flat());

@@ -51,6 +51,7 @@ const expected = STAND_HEADERS[process.env.STAND_TYPE ?? ''];
 test.describe(
   ...suite({
     epic: EPIC.security,
+    feature: 'Web',
     story: 'Headers',
     tag: Tags.webSecurity,
   }),

@@ -21,6 +21,7 @@ const HIDDEN_PATHS = [
 test.describe(
   ...suite({
     epic: EPIC.security,
+    feature: 'Web',
     story: 'Exposure',
     tag: Tags.webSecurity,
   }),
