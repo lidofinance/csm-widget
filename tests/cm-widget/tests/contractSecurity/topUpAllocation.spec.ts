@@ -11,7 +11,7 @@ test.describe(
     epic: EPIC.security,
     feature: 'Contract address',
     story: 'Top-up allocation',
-    tag: Tags.contractSecurityCheck,
+    tag: [Tags.contractSecurityCheck, Tags.noProd, Tags.noStaging],
   }),
   () => {
     let snapshotId: string;
