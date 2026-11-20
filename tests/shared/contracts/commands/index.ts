@@ -7,6 +7,7 @@ export * from './createCuratedOperator.ts';
 export * from './createOperatorGroup.ts';
 export * from './createPermissionlessOperator.ts';
 export * from './depositKeys.ts';
+export * from './enableTopUpAllocation.ts';
 export * from './fundTokens.ts';
 export * from './grantRole.ts';
 export * from './proposeManager.ts';

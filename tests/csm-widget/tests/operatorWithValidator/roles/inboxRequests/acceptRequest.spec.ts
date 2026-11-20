@@ -8,6 +8,7 @@ import { InboxRequestsPage } from 'tests/csm-widget/pages/tabs/roles';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 import { Tags } from 'tests/shared/consts/common.const';
+import { RPC_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
@@ -61,7 +62,7 @@ test.describe(
         await expect(expectedRequest).toBeChecked();
 
         await inboxRequestsPage.acceptRequest(randomId, ROLES.REWARDS);
-        await expectedRequest.waitFor({ state: 'hidden' });
+        await expect(expectedRequest).toBeHidden({ timeout: RPC_WAIT_TIMEOUT });
       },
     );
 
@@ -83,8 +84,8 @@ test.describe(
         await expectedRequest.click();
         await expect(expectedRequest).toBeChecked();
 
-        await inboxRequestsPage.acceptRequest(randomId, ROLES.REWARDS);
-        await expectedRequest.waitFor({ state: 'hidden' });
+        await inboxRequestsPage.acceptRequest(randomId, ROLES.MANAGER);
+        await expect(expectedRequest).toBeHidden({ timeout: RPC_WAIT_TIMEOUT });
       },
     );
   },

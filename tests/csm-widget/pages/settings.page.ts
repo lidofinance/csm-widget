@@ -9,12 +9,14 @@ import {
 import { WalletPage } from '@lidofinance/wallets-testing-wallets';
 import { RolesModal } from './elements/roles/rolesModal.element';
 import { TxModal } from './elements/common/element.txProgressModal';
+import { SplitsPage } from 'tests/shared/pages/splits.page';
 
 export class SettingsPage extends BasePage {
   rewardsAddressPage: RewardsAddressPage;
   managerAddressPage: ManagerAddressPage;
   inboxRequestsPage: InboxRequestsPage;
   claimerPage: ClaimerPage;
+  splitsPage: SplitsPage;
   modalRoot: RolesModal;
   txModal: TxModal;
 
@@ -24,6 +26,7 @@ export class SettingsPage extends BasePage {
     this.managerAddressPage = new ManagerAddressPage(this.page, walletPage);
     this.inboxRequestsPage = new InboxRequestsPage(this.page, walletPage);
     this.claimerPage = new ClaimerPage(this.page);
+    this.splitsPage = new SplitsPage(this.page, walletPage);
     this.modalRoot = new RolesModal(this.page);
     this.txModal = new TxModal(this.page);
   }

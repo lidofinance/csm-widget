@@ -10,7 +10,8 @@ const ADDRESS = '0x000000000000000000000000000000000000dEaD';
 test.describe(
   ...suite({
     epic: EPIC.security,
-    story: 'BFF Validation API',
+    feature: 'Web',
+    story: 'Validation API',
     tag: Tags.webSecurity,
   }),
   () => {
