@@ -7,10 +7,11 @@ import {
   TypographyColor,
   TypographyWeight,
 } from '@lidofinance/lido-app-ui';
-import { FC, ReactNode } from 'react';
+import { CSSProperties, FC, ReactNode } from 'react';
 import { Tooltip } from '@lidofinance/lido-app-ui';
 import { EtherscanAddressLink } from '../external-icon-link';
-import { AddressContainerStyle, Avatar } from './styles';
+import cn from 'classnames';
+import s from './styles.module.css';
 
 export type AddressProps = {
   showIcon?: boolean;
@@ -45,7 +46,6 @@ export const AddressInner: FC<AddressProps> = ({
   weight,
   size = 'xs',
   color,
-  monospace = false,
   noStyle = false,
   link,
   avatar,
@@ -76,16 +76,19 @@ export const AddressInner: FC<AddressProps> = ({
   return (
     <>
       {address && (
-        <AddressContainerStyle
-          $big={big}
-          $monospace={monospace}
+        <span
+          className={cn(s.container, !big && s.small)}
           data-testid="addressContainer"
         >
           {showIcon &&
             (avatar ? (
-              <Avatar
+              <img
+                className={s.avatar}
+                style={
+                  { '--avatar-size': `${big ? 24 : 20}px` } as CSSProperties
+                }
                 src={avatar}
-                diameter={big ? 24 : 20}
+                alt=""
                 data-testid="avatar"
               />
             ) : (
@@ -114,7 +117,7 @@ export const AddressInner: FC<AddressProps> = ({
               data-testid="etherscanLink"
             />
           )}
-        </AddressContainerStyle>
+        </span>
       )}
     </>
   );

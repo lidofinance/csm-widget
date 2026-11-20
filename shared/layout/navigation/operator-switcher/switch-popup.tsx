@@ -1,4 +1,4 @@
-import { Divider } from '@lidofinance/lido-app-ui';
+import { Divider, Popover, Stack, Typography } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import {
   OperatorRef,
@@ -21,16 +21,7 @@ import {
   useOperatorTypeModalTrigger,
   useSwitchOperator,
 } from 'shared/node-operator';
-import {
-  BodyContentStyle,
-  BodyStyle,
-  HeaderStyle,
-  HeaderTagsStyle,
-  HeaderTextStyle,
-  PopupStyle,
-  SubLineStyle,
-  TitleStyle,
-} from './styles';
+import s from './styles.module.css';
 
 const CREATE_EVENTS = {
   cm: MATOMO_CLICK_EVENTS_TYPES.switchOperatorCreateCm,
@@ -62,18 +53,31 @@ const ActiveHeader: FC<ActiveHeaderProps> = ({ operator, onClose }) => {
   }, [onClose, handleClick]);
 
   return (
-    <HeaderStyle>
+    <Stack align="center" gap={12} className={s.header}>
       <OperatorAvatar operator={operator} size={64} />
-      <HeaderTextStyle>
-        <TitleStyle data-testid="switchPopupOperatorName">{title}</TitleStyle>
+      <Stack align="center" gap={0} className={s.headerText}>
+        <Typography
+          variant="h3"
+          weight="semibold"
+          as="span"
+          className={s.title}
+          data-testid="switchPopupOperatorName"
+        >
+          {title}
+        </Typography>
         {(metadataName || groupLabel) && (
-          <SubLineStyle>
+          <Typography
+            variant="body"
+            color="tertiary"
+            as="span"
+            className={s.subLine}
+          >
             {metadataName && <span>{name}</span>}
             {groupLabel && <span>{groupLabel}</span>}
-          </SubLineStyle>
+          </Typography>
         )}
-      </HeaderTextStyle>
-      <HeaderTagsStyle>
+      </Stack>
+      <Stack align="center" gap={8} className={s.headerTags}>
         {type && (
           <OperatorTypeTag
             type={type}
@@ -83,8 +87,8 @@ const ActiveHeader: FC<ActiveHeaderProps> = ({ operator, onClose }) => {
           />
         )}
         <OperatorRolesTag operator={operator} full />
-      </HeaderTagsStyle>
-    </HeaderStyle>
+      </Stack>
+    </Stack>
   );
 };
 
@@ -112,7 +116,8 @@ export const SwitchPopup: FC<SwitchPopupProps> = ({
   );
 
   return (
-    <PopupStyle
+    <Popover
+      className={s.popup}
       open
       onClose={onClose}
       anchorRef={anchorRef}
@@ -126,9 +131,9 @@ export const SwitchPopup: FC<SwitchPopupProps> = ({
     >
       <ActiveHeader operator={active} onClose={onClose} />
       {(others.length > 0 || createRows.hasRows) && (
-        <BodyStyle>
+        <Stack gap={0} className={s.body}>
           <Divider />
-          <BodyContentStyle>
+          <Stack gap={20} className={s.bodyContent}>
             {others.length > 0 && (
               <div>
                 <CaptionStyle $size="compact">Other operators</CaptionStyle>
@@ -151,9 +156,9 @@ export const SwitchPopup: FC<SwitchPopupProps> = ({
               events={CREATE_EVENTS}
               testIdPrefix="switchPopupCreate"
             />
-          </BodyContentStyle>
-        </BodyStyle>
+          </Stack>
+        </Stack>
       )}
-    </PopupStyle>
+    </Popover>
   );
 };

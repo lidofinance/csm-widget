@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import {
   Children,
   cloneElement,
@@ -20,7 +21,7 @@ import {
   getNextOptionIndex,
   getTabStopIndex,
 } from './option-navigation';
-import { ListStyle } from './styles';
+import s from './styles.module.css';
 
 export type OptionListProps = Omit<
   ComponentPropsWithoutRef<'div'>,
@@ -39,6 +40,7 @@ export const OptionList: FC<OptionListProps> = ({
   variant = 'list',
   orientation = 'vertical',
   children,
+  className,
   ...rest
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -69,14 +71,15 @@ export const OptionList: FC<OptionListProps> = ({
   };
 
   return (
-    <ListStyle
+    <div
       {...rest}
       ref={containerRef}
       role="radiogroup"
       aria-orientation={orientation === 'horizontal' ? orientation : undefined}
       tabIndex={-1}
-      $variant={variant}
-      $orientation={orientation}
+      className={cn(s.list, className)}
+      data-variant={variant}
+      data-orientation={orientation}
       onKeyDown={handleKeyDown}
     >
       {items.map((item, index) =>
@@ -90,6 +93,6 @@ export const OptionList: FC<OptionListProps> = ({
           onSelect: () => onChange(item.props.value),
         }),
       )}
-    </ListStyle>
+    </div>
   );
 };

@@ -1,15 +1,36 @@
+import { IconLink, TextLink, TextLinkProps } from '@lidofinance/lido-app-ui';
+import cn from 'classnames';
 import { useInpageNavigation } from 'providers/inpage-navigation';
-import { ComponentProps, FC, MouseEvent, useCallback } from 'react';
+import { FC, MouseEvent, ReactNode, useCallback } from 'react';
 import { trackMatomoEvent, WithMatomoEvent } from 'utils';
-import { ArrowIcon, ExternalIcon, LinkStyled } from './styles';
+
+import Arrow from 'assets/icons/arrow-right.svg?react';
+
+import s from './styles.module.css';
+
+type AnchorLinkProps = Omit<
+  Extract<TextLinkProps, { href: string }>,
+  'href' | 'icon'
+> & { href?: string };
 
 type LinkIconProps = {
-  icon?: 'arrow' | 'external';
+  icon?: ReactNode;
+  $inline?: boolean;
+  $secondary?: boolean;
 };
 
 export const MatomoLink: FC<
-  WithMatomoEvent<ComponentProps<typeof LinkStyled> & LinkIconProps>
-> = ({ matomoEvent, onClick, icon, href, ...props }) => {
+  WithMatomoEvent<AnchorLinkProps & LinkIconProps>
+> = ({
+  matomoEvent,
+  onClick,
+  icon,
+  href,
+  className,
+  $inline,
+  $secondary,
+  ...props
+}) => {
   const { navigateInpageAnchor } = useInpageNavigation();
 
   const onClickHandler = useCallback(
@@ -23,15 +44,19 @@ export const MatomoLink: FC<
   );
 
   return (
-    <LinkStyled
+    <TextLink
       {...props}
-      href={href}
+      className={cn(s.link, className)}
+      data-inline={$inline || undefined}
+      href={href as string}
       onClick={onClickHandler}
+      size="inherit"
+      variant={$secondary ? 'secondary' : 'primary'}
       icon={
         icon === 'arrow' ? (
-          <ArrowIcon />
+          <Arrow className={s.arrowIcon} />
         ) : icon === 'external' ? (
-          <ExternalIcon />
+          <IconLink className={s.externalIcon} />
         ) : undefined
       }
     />

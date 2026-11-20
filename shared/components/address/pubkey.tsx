@@ -2,9 +2,10 @@ import {
   Address as AddressComponent,
   TypographyColor,
 } from '@lidofinance/lido-app-ui';
+import cn from 'classnames';
 import { FC, ReactNode } from 'react';
 import { Tooltip } from '@lidofinance/lido-app-ui';
-import { PubkeyContainerStyle } from './styles';
+import s from './styles.module.css';
 
 export type PubkeyProps = {
   link?: ReactNode;
@@ -32,7 +33,11 @@ export const Pubkey: FC<PubkeyProps> = ({
   return (
     <>
       {pubkey && (
-        <PubkeyContainerStyle $color={color} $monospace={monospace}>
+        <span
+          className={cn(s.container, s.small, s.pubkey)}
+          data-color={color ?? 'default'}
+          data-monospace={monospace || undefined}
+        >
           {symbols === 0 ? (
             component
           ) : (
@@ -41,7 +46,7 @@ export const Pubkey: FC<PubkeyProps> = ({
             </Tooltip>
           )}
           {link}
-        </PubkeyContainerStyle>
+        </span>
       )}
     </>
   );

@@ -1,12 +1,12 @@
-import { Divider, downQuery } from '@lidofinance/lido-app-ui';
+import { Card, Divider, Stack } from '@lidofinance/lido-app-ui';
 import {
   useModule,
   useNodeOperatorId,
   useOperatorKeysWithStatus,
 } from 'modules/web3';
 import { TableProvider, useTable } from 'providers/table-provider';
+import cn from 'classnames';
 import { FC, useLayoutEffect, useMemo } from 'react';
-import styled from 'styled-components';
 import { hasStatus, selectKeysBreakdown, STATUS_GROUPS } from 'utils';
 import {
   getStatusChips,
@@ -18,15 +18,7 @@ import { KeysEmpty } from './keys-empty';
 import { KeysSkeleton } from './keys-skeleton';
 import { KeysTable } from './keys-table';
 import { sortFunctions } from './sort';
-import { ChipsAreaStyled, TableCardStyled } from './styles';
-
-const ChipsAreaSpacedStyled = styled(ChipsAreaStyled)`
-  margin-bottom: 32px;
-
-  @media ${downQuery('sm')} {
-    margin-bottom: 16px;
-  }
-`;
+import s from './styles.module.css';
 
 const PageReset: FC<{ status: StatusChipId | undefined }> = ({ status }) => {
   const { setPage } = useTable();
@@ -63,17 +55,23 @@ export const KeysTableCard: FC = () => {
       defaultSort={{ column: 'statuses', direction: 'asc' }}
     >
       <PageReset status={status} />
-      <TableCardStyled align="stretch" dataTestId={{ root: 'viewKeysBlock' }}>
-        <ChipsAreaSpacedStyled>
+      <Card
+        align="stretch"
+        padding={0}
+        gap={0}
+        clip
+        dataTestId={{ root: 'viewKeysBlock' }}
+      >
+        <Stack className={cn(s.chipsArea, s.chipsAreaSpaced)}>
           <StatusFilterChips
             chips={chips}
             status={status}
             onChange={setStatus}
           />
-        </ChipsAreaSpacedStyled>
+        </Stack>
         <Divider />
         <KeysTable />
-      </TableCardStyled>
+      </Card>
     </TableProvider>
   );
 };

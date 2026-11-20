@@ -1,15 +1,7 @@
 import { IconCheck } from '@lidofinance/lido-app-ui';
+import cn from 'classnames';
 import type { FC, KeyboardEvent, ReactNode } from 'react';
-import {
-  ActionStyle,
-  BodyStyle,
-  DescriptionStyle,
-  IconSlotStyle,
-  IndicatorStyle,
-  ItemStyle,
-  TagsStyle,
-  TitleStyle,
-} from './styles';
+import s from './styles.module.css';
 
 export type OptionListVariant = 'list' | 'cards';
 export type OptionListOrientation = 'vertical' | 'horizontal';
@@ -61,46 +53,50 @@ export const OptionListItem: FC<OptionListItemProps> = ({
   };
 
   return (
-    <ItemStyle
+    <div
       role="radio"
       aria-checked={selected}
       aria-disabled={disabled || undefined}
       data-value={value}
       data-testid={dataTestId}
+      data-variant={variant}
+      data-orientation={orientation}
       tabIndex={disabled ? -1 : tabIndex}
-      className={className}
-      $variant={variant}
-      $orientation={orientation}
-      $selected={selected}
-      $disabled={disabled}
+      className={cn(s.item, className)}
       onClick={disabled ? undefined : onSelect}
       onKeyDown={handleKeyDown}
     >
       {icon != null ? (
-        <IconSlotStyle aria-hidden="true">{icon}</IconSlotStyle>
+        <span className={s.iconSlot} aria-hidden="true">
+          {icon}
+        </span>
       ) : null}
-      <BodyStyle>
-        <TitleStyle $wrap={wrap}>{title}</TitleStyle>
+      <span className={s.body}>
+        <span className={cn(s.title, !wrap && s.ellipsis)}>{title}</span>
         {description != null ? (
-          <DescriptionStyle $wrap={wrap}>{description}</DescriptionStyle>
+          <span className={cn(s.description, !wrap && s.ellipsis)}>
+            {description}
+          </span>
         ) : null}
         {children}
-      </BodyStyle>
-      {tags != null ? <TagsStyle>{tags}</TagsStyle> : null}
+      </span>
+      {tags != null ? <span className={s.tags}>{tags}</span> : null}
       {action != null ? (
-        <ActionStyle onClick={(event) => event.stopPropagation()}>
+        // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+        <span className={s.action} onClick={(event) => event.stopPropagation()}>
           {action}
-        </ActionStyle>
+        </span>
       ) : null}
       {isCards ? (
-        <IndicatorStyle
+        <span
+          className={s.indicator}
           aria-hidden="true"
-          $selected={selected}
-          $orientation={orientation}
+          data-selected={selected || undefined}
+          data-orientation={orientation}
         >
           {selected ? <IconCheck /> : null}
-        </IndicatorStyle>
+        </span>
       ) : null}
-    </ItemStyle>
+    </div>
   );
 };

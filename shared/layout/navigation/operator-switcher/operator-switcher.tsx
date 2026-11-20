@@ -1,4 +1,8 @@
-import { IconChevronsUpDown } from '@lidofinance/lido-app-ui';
+import {
+  IconChevronsUpDown,
+  Stack,
+  Typography,
+} from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import {
   useAvailableOperators,
@@ -15,7 +19,7 @@ import {
 } from 'shared/node-operator';
 import { trackMatomoEvent } from 'utils';
 import { SwitchPopup } from './switch-popup';
-import { ChevronStyle, NameStyle, TagsStyle, TriggerStyle } from './styles';
+import s from './styles.module.css';
 
 export const OperatorSwitcher: FC = () => {
   const { nodeOperator, requestSelection } = useNodeOperator();
@@ -39,7 +43,8 @@ export const OperatorSwitcher: FC = () => {
 
   return (
     <>
-      <TriggerStyle
+      <button
+        className={s.trigger}
         ref={triggerRef}
         type="button"
         data-testid="nodeOperatorHeader"
@@ -49,24 +54,35 @@ export const OperatorSwitcher: FC = () => {
       >
         {nodeOperator ? (
           <>
-            <NameStyle>
+            <Typography
+              variant="body"
+              weight="bold"
+              as="span"
+              className={s.name}
+            >
               <OperatorAvatar operator={nodeOperator} size={24} />
               <span>{getOperatorName(nodeOperator)}</span>
-            </NameStyle>
-            <TagsStyle>
+            </Typography>
+            <Stack
+              direction="row"
+              align="center"
+              gap={4}
+              as="span"
+              className={s.tags}
+            >
               {type && <OperatorTypeTag type={type} />}
               <OperatorRolesTag operator={nodeOperator} />
-            </TagsStyle>
+            </Stack>
           </>
         ) : (
-          <NameStyle>
+          <Typography variant="body" weight="bold" as="span" className={s.name}>
             <span>Choose a Node Operator</span>
-          </NameStyle>
+          </Typography>
         )}
-        <ChevronStyle>
+        <span className={s.chevron}>
           <IconChevronsUpDown width={20} height={20} />
-        </ChevronStyle>
-      </TriggerStyle>
+        </span>
+      </button>
       {nodeOperator && open && (
         <SwitchPopup
           onClose={handleClose}

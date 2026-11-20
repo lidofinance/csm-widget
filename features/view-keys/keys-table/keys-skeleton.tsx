@@ -1,33 +1,30 @@
-import { Skeleton, Stack, downQuery } from '@lidofinance/lido-app-ui';
+import { Card, Skeleton, Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import styled from 'styled-components';
-import { ChipsAreaStyled, TableCardStyled } from './styles';
-
-const RowStyled = styled(Stack)`
-  padding: 20px 32px;
-
-  @media ${downQuery('sm')} {
-    padding: 20px 16px;
-  }
-`;
+import s from './styles.module.css';
 
 const CHIP_WIDTHS = [90, 110, 130];
 const ROWS = [0, 1, 2, 3];
 
 export const KeysSkeleton: FC = () => (
-  <TableCardStyled align="stretch" dataTestId={{ root: 'viewKeysBlock' }}>
+  <Card
+    align="stretch"
+    padding={0}
+    gap={0}
+    clip
+    dataTestId={{ root: 'viewKeysBlock' }}
+  >
     <div data-testid="loader">
-      <ChipsAreaStyled direction="row" gap={8}>
+      <Stack direction="row" gap={8} className={s.chipsArea}>
         {CHIP_WIDTHS.map((width) => (
           <Skeleton key={width} variant="block" width={width} height={32} />
         ))}
-      </ChipsAreaStyled>
-      <RowStyled direction="column" gap={20}>
+      </Stack>
+      <Stack direction="column" gap={20} className={s.row}>
         <Skeleton variant="text" width={120} />
         {ROWS.map((row) => (
           <Skeleton key={row} variant="text" />
         ))}
-      </RowStyled>
+      </Stack>
     </div>
-  </TableCardStyled>
+  </Card>
 );
