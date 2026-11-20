@@ -7,12 +7,7 @@ import {
   Stack,
 } from '@lidofinance/lido-app-ui';
 import { FC, ReactNode, useEffect } from 'react';
-import {
-  SuccessActionsStyle,
-  SuccessHeroStyle,
-  SuccessIconStyle,
-  SuccessIllustrationStyle,
-} from './styles';
+import s from './styles.module.css';
 
 export type SuccessScreenProps = {
   title: ReactNode;
@@ -43,21 +38,21 @@ export const SuccessScreen: FC<SuccessScreenProps> = ({
 
   return (
     <Stack gap={8} data-testid={dataTestId}>
-      <SuccessHeroStyle>
+      <Card className={s.hero}>
         <Stack gap={16} align="center">
           {icon != null ? (
-            <SuccessIllustrationStyle aria-hidden="true">
+            <span className={s.illustration} aria-hidden="true">
               {icon}
-            </SuccessIllustrationStyle>
+            </span>
           ) : (
-            <SuccessIconStyle>
+            <span className={s.icon}>
               <IconCheck aria-hidden="true" />
-            </SuccessIconStyle>
+            </span>
           )}
           <H1>{title}</H1>
           <Body as="div">{description}</Body>
         </Stack>
-      </SuccessHeroStyle>
+      </Card>
       {notice}
       {stats && (
         <Card>
@@ -71,9 +66,16 @@ export const SuccessScreen: FC<SuccessScreenProps> = ({
           <Stack gap={24} align="stretch">
             {next}
             {actions && (
-              <SuccessActionsStyle data-testid="successActions">
+              <Stack
+                direction="row"
+                wrap
+                align="center"
+                rowGap={16}
+                columnGap={40}
+                data-testid="successActions"
+              >
                 {actions}
-              </SuccessActionsStyle>
+              </Stack>
             )}
           </Stack>
         </Card>

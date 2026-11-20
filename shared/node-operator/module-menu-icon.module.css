@@ -1,0 +1,25 @@
+.box {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  overflow: hidden;
+}
+
+.layer {
+  position: absolute;
+  display: block;
+  inset: var(--layer-inset);
+  mix-blend-mode: normal;
+}
+
+.layer[data-blend] {
+  mix-blend-mode: multiply;
+}
+
+.layer img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

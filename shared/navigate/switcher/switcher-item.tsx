@@ -1,6 +1,7 @@
 import { PATH } from 'consts/urls';
 import { FC, PropsWithChildren } from 'react';
-import { SwitchItemStyled } from './styles';
+import { LocalLink } from '../local-link';
+import s from './styles.module.css';
 
 type Props = {
   href: PATH;
@@ -15,10 +16,11 @@ export const SwitcherItem: FC<PropsWithChildren<Props>> = ({
   ...rest
 }) => {
   return (
-    <SwitchItemStyled
+    <LocalLink
       href={href}
-      $active={active}
-      $warning={warning}
+      className={s.item}
+      data-active={active || undefined}
+      data-warning={warning || undefined}
       data-testid="switcherTab"
       {...rest}
     />

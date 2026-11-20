@@ -24,19 +24,13 @@ import {
   useOperatorTypeCurve,
   useOperatorTypeParameters,
 } from 'shared/hooks';
-import styled from 'styled-components';
+import s from './type-parameters-card.module.css';
 
 type Props = {
   type: OPERATOR_TYPE.CSM_ICS | OPERATOR_TYPE.CSM_IDVTC;
 };
 
 type ParameterRow = ReturnType<typeof useParameters>[number];
-
-const ValuesStyle = styled(Stack).attrs({ gap: 8 })`
-  margin: 0;
-  padding: 0;
-  list-style: none;
-`;
 
 const HIDDEN_PARAMETERS = ['Penalty fee'];
 
@@ -45,7 +39,7 @@ const Values: FC<{ values?: ReactNode[]; strong?: boolean }> = ({
   strong,
 }) =>
   values ? (
-    <ValuesStyle forwardedAs="ul">
+    <Stack as="ul" gap={8} className={s.values}>
       {values.map((value, index) => (
         <li key={index}>
           <Body as="span" color="default" weight={strong ? 'bold' : undefined}>
@@ -53,7 +47,7 @@ const Values: FC<{ values?: ReactNode[]; strong?: boolean }> = ({
           </Body>
         </li>
       ))}
-    </ValuesStyle>
+    </Stack>
   ) : (
     <Skeleton variant="text" />
   );

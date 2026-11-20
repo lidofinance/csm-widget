@@ -3,7 +3,7 @@ import { FC, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import { useFilterShowRules, useRouterPath } from 'shared/hooks';
 import { getIsActivePath } from 'utils';
-import { Handle, SwitchWrapper, Track } from './styles';
+import s from './styles.module.css';
 import { SwitcherItem } from './switcher-item';
 import { SwitcherRoutes } from './types';
 
@@ -104,13 +104,14 @@ export const Switcher: FC<SwitchProps> = ({ routes }) => {
   if (filteredRoutes.length <= 1) return null;
 
   return (
-    <SwitchWrapper
+    <div
       ref={wrapperRef}
+      className={s.wrapper}
       data-testid="pageSwitcher"
-      $fadeStart={fade.start}
-      $fadeEnd={fade.end}
+      data-fade-start={fade.start || undefined}
+      data-fade-end={fade.end || undefined}
     >
-      <Track ref={trackRef}>
+      <div ref={trackRef} className={s.track}>
         {filteredRoutes.map((route, index) => (
           <SwitcherItem
             key={route.title}
@@ -125,9 +126,12 @@ export const Switcher: FC<SwitchProps> = ({ routes }) => {
           </SwitcherItem>
         ))}
         {handleRect && (
-          <Handle style={{ left: handleRect.left, width: handleRect.width }} />
+          <div
+            className={s.handle}
+            style={{ left: handleRect.left, width: handleRect.width }}
+          />
         )}
-      </Track>
-    </SwitchWrapper>
+      </div>
+    </div>
   );
 };

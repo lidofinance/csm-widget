@@ -6,7 +6,7 @@ import { pluralKeys } from 'utils';
 import type { StakeAndKeysData } from 'utils/compute-stake-data';
 import { LegendDot, LegendMarker } from './legend';
 import { STAKE_LABELS, STAKE_TOOLTIPS } from './labels';
-import { CompactStatItem } from './styles';
+import s from './styles.module.css';
 
 type Props = {
   data: StakeAndKeysData | undefined;
@@ -22,7 +22,10 @@ export const SUMMARY_GAP = { base: 8, mdDown: 16 } as const;
 
 export const StakeAllocationStats: FC<Props> = ({ data, size, error }) => {
   const legendSize = size === 'summary' ? 24 : 20;
-  const Item = size === 'summary' ? StatItem : CompactStatItem;
+  const itemProps =
+    size === 'summary'
+      ? {}
+      : { size: 'xsmall' as const, className: s.compactStatItem };
 
   const loading = !data && !error;
 
@@ -37,7 +40,8 @@ export const StakeAllocationStats: FC<Props> = ({ data, size, error }) => {
 
   const items = (
     <>
-      <Item
+      <StatItem
+        {...itemProps}
         align="left"
         label={STAKE_LABELS.active}
         titleIcon={<LegendDot color="success" size={legendSize} />}
@@ -51,7 +55,8 @@ export const StakeAllocationStats: FC<Props> = ({ data, size, error }) => {
           subValue: 'stakeColumnActiveKeys',
         }}
       />
-      <Item
+      <StatItem
+        {...itemProps}
         align="left"
         label={STAKE_LABELS.depositable}
         titleIcon={<LegendDot color="active" size={legendSize} />}
@@ -65,7 +70,8 @@ export const StakeAllocationStats: FC<Props> = ({ data, size, error }) => {
           subValue: 'stakeColumnDepositableKeys',
         }}
       />
-      <Item
+      <StatItem
+        {...itemProps}
         align="left"
         label={size === 'summary' ? 'Total Stake Allocation' : STAKE_LABELS.tsa}
         titleIcon={<LegendMarker size={legendSize} />}

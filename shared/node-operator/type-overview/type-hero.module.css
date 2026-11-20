@@ -1,0 +1,29 @@
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  gap: 32px;
+  justify-content: start;
+
+  @media (--lido-app-ui-breakpoint-md-down) {
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+  }
+}
+
+.cta {
+  @media (--lido-app-ui-breakpoint-sm-down) {
+    align-self: stretch;
+
+    & button {
+      width: 100%;
+    }
+  }
+}
+
+.badge {
+  flex: none;
+
+  @media (--lido-app-ui-breakpoint-md-down) {
+    display: none;
+  }
+}

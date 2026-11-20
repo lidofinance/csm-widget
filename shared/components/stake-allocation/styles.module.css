@@ -1,0 +1,26 @@
+.legendSlot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--legend-size);
+  height: var(--legend-size);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--dot-color);
+}
+
+.marker {
+  width: 3px;
+  height: 12px;
+  background: var(--lido-app-ui-color-border-black);
+}
+
+.compactStatItem.compactStatItem {
+  flex: 0 0 auto;
+  min-width: 0;
+}

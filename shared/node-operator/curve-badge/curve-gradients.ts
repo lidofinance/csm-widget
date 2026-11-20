@@ -1,19 +1,5 @@
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { CUSTOM_CURVE, DisplayOperatorType } from 'consts';
-import styled, { css } from 'styled-components';
-
-const BadgeStyle = styled.span`
-  border-radius: var(--lido-app-ui-border-radius-sm);
-  min-width: 28px;
-  height: 28px;
-  font-size: var(--lido-app-ui-font-size-label);
-
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-
-  text-transform: capitalize;
-`;
 
 export const CURVE_GRADIENTS: Record<DisplayOperatorType, string> = {
   [OPERATOR_TYPE.CSM_DEF]: `linear-gradient(78deg, #304352 -49.42%, #d7d2cc 157.87%),
@@ -45,24 +31,3 @@ export const CURVE_GRADIENTS: Record<DisplayOperatorType, string> = {
   [OPERATOR_TYPE.CM_EEO]: '#273852',
   [OPERATOR_TYPE.CM_PGO]: '#273852',
 };
-
-export const CURVE_VARIANTS = Object.fromEntries(
-  Object.entries(CURVE_GRADIENTS).map(([type, gradient]) => [
-    type,
-    css`
-      background: ${gradient};
-    `,
-  ]),
-) as Record<DisplayOperatorType, ReturnType<typeof css>>;
-
-export const DescriptorCurveStyle = styled(BadgeStyle)<{
-  $variant?: DisplayOperatorType;
-  $inline?: boolean;
-}>`
-  font-weight: 700;
-  color: #fff;
-  padding-inline: ${({ $inline }) => ($inline ? '6px' : '0px')};
-  width: max-content;
-
-  ${({ $variant }) => ($variant ? (CURVE_VARIANTS[$variant] ?? '') : '')}
-`;

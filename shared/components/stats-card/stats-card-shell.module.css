@@ -1,0 +1,9 @@
+.body.body {
+  padding: 24px;
+}
+
+.body.body[data-compact] {
+  @media (--lido-app-ui-breakpoint-sm-down) {
+    padding: 20px;
+  }
+}

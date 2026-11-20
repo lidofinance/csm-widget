@@ -9,55 +9,9 @@ import {
 import { NodeOperatorInfo } from '@lidofinance/lido-csm-sdk';
 import { FC } from 'react';
 import { EtherscanAddressLink } from 'shared/components/external-icon-link/etherscan-address-link';
-import styled from 'styled-components';
+import s from './operator-addresses.module.css';
 
 type Size = 'description' | 'body';
-type SizeProps = { $size: Size };
-
-const fontSize = ({ $size }: SizeProps) =>
-  $size === 'body'
-    ? 'var(--lido-app-ui-font-size-label)'
-    : 'var(--lido-app-ui-font-size-tooltip)';
-const lineHeight = ({ $size }: SizeProps) =>
-  $size === 'body'
-    ? 'var(--lido-app-ui-line-height-label)'
-    : 'var(--lido-app-ui-line-height-description)';
-
-const AddressStyle = styled(Address)<SizeProps>`
-  && {
-    color: var(--lido-app-ui-color-text-tertiary);
-    font-size: ${fontSize};
-    line-height: ${lineHeight};
-  }
-`;
-
-const LabelStyle = styled(Typography)<SizeProps>`
-  && {
-    font-size: ${fontSize};
-    line-height: ${lineHeight};
-  }
-`;
-
-const EtherscanLinkStyle = styled(EtherscanAddressLink)`
-  && {
-    --local-color: var(--lido-app-ui-color-icons-tertiary);
-  }
-
-  && svg {
-    width: 16px;
-    height: 16px;
-  }
-`;
-
-const PendingIconStyle = styled.span`
-  display: inline-flex;
-  color: var(--lido-app-ui-color-icons-warning);
-
-  svg {
-    width: 16px;
-    height: 16px;
-  }
-`;
 
 type AddressItemProps = {
   label: string;
@@ -88,16 +42,27 @@ const AddressItem: FC<AddressItemProps> = ({
           </Stack>
         }
       >
-        <PendingIconStyle data-testid="pendingChangeIcon">
+        <span className={s.pendingIcon} data-testid="pendingChangeIcon">
           <IconWarning />
-        </PendingIconStyle>
+        </span>
       </Tooltip>
     )}
-    <LabelStyle variant="description" color="tertiary" $size={size}>
+    <Typography
+      variant="description"
+      color="tertiary"
+      className={s.label}
+      data-size={size}
+    >
       {label}
-    </LabelStyle>
-    <AddressStyle address={address} symbols={4} copy $size={size} />
-    <EtherscanLinkStyle address={address} />
+    </Typography>
+    <Address
+      address={address}
+      symbols={4}
+      copy
+      className={s.address}
+      data-size={size}
+    />
+    <EtherscanAddressLink address={address} className={s.etherscanLink} />
   </Stack>
 );
 

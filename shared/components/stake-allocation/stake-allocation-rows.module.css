@@ -1,0 +1,8 @@
+.amount {
+  min-width: 64px;
+  text-align: right;
+  font-size: var(--lido-app-ui-font-size-body);
+  line-height: var(--lido-app-ui-line-height-body);
+  font-weight: var(--lido-app-ui-font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+}

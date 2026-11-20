@@ -4,9 +4,9 @@ import badge0x02 from 'assets/illustrations/operator-type/0x02.svg';
 import badgeIcs from 'assets/illustrations/operator-type/ics.svg';
 import badgeIdvtc from 'assets/illustrations/operator-type/idvtc.svg';
 import type { DisplayOperatorType } from 'consts';
-import { FC } from 'react';
-import styled from 'styled-components';
+import { CSSProperties, FC } from 'react';
 import { OperatorTypeTag } from '../operator-type-tag';
+import s from './type-badge.module.css';
 
 const BADGES: Partial<Record<DisplayOperatorType, string>> = {
   [OPERATOR_TYPE.CSM_DEF]: badge0x01,
@@ -32,19 +32,21 @@ export const getOperatorTypeBadge = (
   type?: DisplayOperatorType,
 ): string | undefined => (type ? BADGES[type] : undefined);
 
-const ImgStyle = styled.img<{ $size: TypeBadgeSize }>`
-  flex: none;
-  width: ${({ $size }) => $size}px;
-  height: ${({ $size }) => $size}px;
-
-  @media (max-width: 439px) {
-    width: ${({ $size }) => MOBILE_SIZE[$size]}px;
-    height: ${({ $size }) => MOBILE_SIZE[$size]}px;
-  }
-`;
-
 export const TypeBadge: FC<TypeBadgeProps> = ({ type, size = 52 }) => {
   const src = getOperatorTypeBadge(type);
-  if (src) return <ImgStyle src={src} alt="" $size={size} />;
+  if (src)
+    return (
+      <img
+        className={s.img}
+        src={src}
+        alt=""
+        style={
+          {
+            '--badge-size': `${size}px`,
+            '--badge-size-mobile': `${MOBILE_SIZE[size]}px`,
+          } as CSSProperties
+        }
+      />
+    );
   return type ? <OperatorTypeTag type={type} /> : null;
 };

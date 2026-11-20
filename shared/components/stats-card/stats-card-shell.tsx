@@ -1,18 +1,6 @@
-import { Card, Stack, downQuery } from '@lidofinance/lido-app-ui';
+import { Card, Stack } from '@lidofinance/lido-app-ui';
 import { FC, ReactNode } from 'react';
-import styled from 'styled-components';
-
-const BodyStyled = styled(Stack)<{ $compactOnMobile?: boolean }>`
-  padding: 24px;
-
-  ${({ $compactOnMobile }) =>
-    $compactOnMobile &&
-    `
-    @media ${downQuery('sm')} {
-      padding: 20px;
-    }
-  `}
-`;
+import s from './stats-card-shell.module.css';
 
 type StatsCardShellProps = {
   header?: ReactNode;
@@ -37,9 +25,13 @@ export const StatsCardShell: FC<StatsCardShellProps> = ({
     dataTestId={{ root: dataTestId }}
   >
     {header}
-    <BodyStyled gap={24} $compactOnMobile={compactOnMobile}>
+    <Stack
+      gap={24}
+      className={s.body}
+      data-compact={compactOnMobile || undefined}
+    >
       {children}
       {actions}
-    </BodyStyled>
+    </Stack>
   </Card>
 );

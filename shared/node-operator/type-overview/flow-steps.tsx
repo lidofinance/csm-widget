@@ -1,101 +1,16 @@
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
-import {
-  Body,
-  Card,
-  SectionTitle,
-  Stack,
-  downQuery,
-} from '@lidofinance/lido-app-ui';
+import { Body, Card, SectionTitle, Stack } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES, PATH } from 'consts';
 import { FC, ReactNode } from 'react';
 import { MatomoLink } from 'shared/components';
 import { LocalLink } from 'shared/navigate';
-import styled from 'styled-components';
+import s from './flow-steps.module.css';
 
 type Props = {
   type: OPERATOR_TYPE.CSM_ICS | OPERATOR_TYPE.CSM_IDVTC;
 };
 
 type Step = { title: string; description: ReactNode };
-
-const GridStyle = styled.ol`
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 48px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-
-  @media ${downQuery('md')} {
-    grid-template-columns: minmax(0, 1fr);
-  }
-`;
-
-const StepStyle = styled.li`
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 24px 0;
-  border-top: 1px solid var(--lido-app-ui-color-border-default);
-
-  &:nth-child(odd) {
-    margin-right: -24px;
-    padding-right: 24px;
-  }
-
-  &:nth-child(even) {
-    margin-left: -24px;
-    padding-left: 24px;
-  }
-
-  &:nth-child(-n + 2) {
-    border-top: 0;
-    padding-top: 0;
-  }
-
-  &:nth-last-child(-n + 2) {
-    padding-bottom: 0;
-  }
-
-  @media ${downQuery('md')} {
-    &:nth-child(odd),
-    &:nth-child(even) {
-      margin: 0;
-      padding-right: 0;
-      padding-left: 0;
-    }
-
-    &:nth-child(2) {
-      border-top: 1px solid var(--lido-app-ui-color-border-default);
-      padding-top: 24px;
-    }
-
-    &:nth-last-child(2) {
-      padding-bottom: 24px;
-    }
-  }
-`;
-
-const NumberStyle = styled.span`
-  flex: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: var(--lido-app-ui-color-tint-active);
-  color: var(--lido-app-ui-color-text-active);
-  font-size: 24px;
-  font-weight: 500;
-`;
-
-const TextStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-`;
 
 const SHARED_STEPS: Step[] = [
   {
@@ -166,17 +81,19 @@ export const FlowSteps: FC<Props> = ({ type }) => (
   <Card dataTestId={{ root: 'typeFlowSteps' }}>
     <Stack direction="column" gap={24}>
       <SectionTitle title="Application Flow" />
-      <GridStyle>
+      <ol className={s.grid}>
         {STEPS[type].map(({ title, description }, index) => (
-          <StepStyle key={title}>
-            <NumberStyle aria-hidden>{index + 1}</NumberStyle>
-            <TextStyle>
+          <li key={title} className={s.step}>
+            <span className={s.number} aria-hidden>
+              {index + 1}
+            </span>
+            <Stack gap={4} className={s.text}>
               <Body weight="semibold">{title}</Body>
               <Body color="secondary">{description}</Body>
-            </TextStyle>
-          </StepStyle>
+            </Stack>
+          </li>
         ))}
-      </GridStyle>
+      </ol>
     </Stack>
   </Card>
 );

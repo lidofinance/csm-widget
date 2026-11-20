@@ -1,5 +1,4 @@
-import { FC } from 'react';
-import styled from 'styled-components';
+import { CSSProperties, FC, ReactNode } from 'react';
 import csm2Base from 'assets/icons/module-menu/csm2-base.svg';
 import csm2V0 from 'assets/icons/module-menu/csm2-v0.svg';
 import csm2V1 from 'assets/icons/module-menu/csm2-v1.svg';
@@ -10,41 +9,26 @@ import csm2V5 from 'assets/icons/module-menu/csm2-v5.svg';
 import csm2V6 from 'assets/icons/module-menu/csm2-v6.svg';
 import curated2Group from 'assets/icons/module-menu/curated2-group.svg';
 
+import s from './module-menu-icon.module.css';
+
 export type ModuleMenuIconProps = {
   variant: 'curated2' | 'csm2';
   size?: 60 | 40;
 };
 
-const BoxStyle = styled.span<{ $size: number }>`
-  position: relative;
-  display: block;
-  flex-shrink: 0;
-  width: ${({ $size }) => $size}px;
-  height: ${({ $size }) => $size}px;
-  overflow: hidden;
-`;
-
-const LayerStyle = styled.span<{ $inset: string; $blend?: boolean }>`
-  position: absolute;
-  display: block;
-  inset: ${({ $inset }) => $inset};
-  mix-blend-mode: ${({ $blend }) => ($blend ? 'multiply' : 'normal')};
-
-  img {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-`;
-
-const Layer: FC<{ src: string; inset: string; blend?: boolean }> = ({
-  src,
-  inset,
-  blend,
-}) => (
-  <LayerStyle $inset={inset} $blend={blend}>
-    <img src={src} alt="" />
-  </LayerStyle>
+const Layer: FC<{
+  src?: string;
+  inset: string;
+  blend?: boolean;
+  children?: ReactNode;
+}> = ({ src, inset, blend, children }) => (
+  <span
+    className={s.layer}
+    data-blend={blend || undefined}
+    style={{ '--layer-inset': inset } as CSSProperties}
+  >
+    {src ? <img src={src} alt="" /> : children}
+  </span>
 );
 
 const CSM2_VECTORS = [
@@ -61,18 +45,22 @@ export const ModuleMenuIcon: FC<ModuleMenuIconProps> = ({
   variant,
   size = 60,
 }) => (
-  <BoxStyle $size={size} aria-hidden>
+  <span
+    className={s.box}
+    style={{ '--icon-size': `${size}px` } as CSSProperties}
+    aria-hidden
+  >
     {variant === 'curated2' ? (
       <Layer src={curated2Group} inset="15% 22.5% 13.86% 22.5%" />
     ) : (
       <>
-        <LayerStyle $inset="37.5% 18.75% 11.4% 19.52%">
+        <Layer inset="37.5% 18.75% 11.4% 19.52%">
           <Layer src={csm2Base} inset="0 -27% -32.62% -27%" />
-        </LayerStyle>
+        </Layer>
         {CSM2_VECTORS.map(({ src, inset, blend }) => (
           <Layer key={src} src={src} inset={inset} blend={blend} />
         ))}
       </>
     )}
-  </BoxStyle>
+  </span>
 );

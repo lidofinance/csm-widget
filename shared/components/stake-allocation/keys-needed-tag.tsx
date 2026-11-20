@@ -5,16 +5,8 @@ import {
   Tag,
 } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import styled from 'styled-components';
 import { pluralKeys } from 'utils/plural';
-
-const TagInfoTooltip = styled(InfoTooltip)`
-  && {
-    margin-left: 4px;
-    vertical-align: middle;
-    color: inherit;
-  }
-`;
+import s from './keys-needed-tag.module.css';
 
 type Props = {
   potentialAdditionalKeys: number | undefined;
@@ -60,7 +52,8 @@ export const KeysNeededTag: FC<Props> = ({
       dataTestId={{ root: dataTestId }}
     >
       Add {count} more {pluralKeys({ value: count })}
-      <TagInfoTooltip
+      <InfoTooltip
+        className={s.tooltip}
         size={16}
         content="Each node operator is expected to pre-upload 10 additional keys on top of the Total Stake Allocation for the case of the protocol growth"
       />

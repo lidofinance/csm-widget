@@ -1,54 +1,17 @@
 import { OPERATOR_TYPE, TOKENS } from '@lidofinance/lido-csm-sdk';
-import {
-  Body,
-  Card,
-  H1,
-  Stack,
-  StatItem,
-  downQuery,
-} from '@lidofinance/lido-app-ui';
+import { Body, Card, H1, Stack, StatItem } from '@lidofinance/lido-app-ui';
 import { OPERATOR_TYPE_METADATA } from 'consts';
 import { FC, ReactNode } from 'react';
 import { formatPercentKeyIntervalRows } from 'shared/components/parameters-list/format';
 import { FormatToken } from 'shared/formatters';
 import { useOperatorTypeParameters } from 'shared/hooks';
-import styled from 'styled-components';
 import { TypeBadge } from '../type-badge';
+import s from './type-hero.module.css';
 
 type Props = {
   type: OPERATOR_TYPE.CSM_ICS | OPERATOR_TYPE.CSM_IDVTC;
   cta?: ReactNode;
 };
-
-const StatsStyle = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, auto);
-  gap: 32px;
-  justify-content: start;
-
-  @media ${downQuery('md')} {
-    grid-template-columns: repeat(2, 1fr);
-    width: 100%;
-  }
-`;
-
-const CtaStyle = styled.div`
-  @media ${downQuery('sm')} {
-    align-self: stretch;
-
-    button {
-      width: 100%;
-    }
-  }
-`;
-
-const BadgeStyle = styled.div`
-  flex: none;
-
-  @media ${downQuery('md')} {
-    display: none;
-  }
-`;
 
 export const TypeHero: FC<Props> = ({ type, cta }) => {
   const { name, description, capitalMultiplier } = OPERATOR_TYPE_METADATA[type];
@@ -64,7 +27,7 @@ export const TypeHero: FC<Props> = ({ type, cta }) => {
         <Stack grow align="start" gap={16}>
           <H1>{name}</H1>
           <Body color="secondary">{description}</Body>
-          <StatsStyle>
+          <div className={s.stats}>
             <StatItem
               align="left"
               label="Node Operator reward"
@@ -88,12 +51,12 @@ export const TypeHero: FC<Props> = ({ type, cta }) => {
               }
             />
             <StatItem align="left" label="Credential type" value="0x01" />
-          </StatsStyle>
-          {cta && <CtaStyle>{cta}</CtaStyle>}
+          </div>
+          {cta && <div className={s.cta}>{cta}</div>}
         </Stack>
-        <BadgeStyle>
+        <div className={s.badge}>
           <TypeBadge type={type} size={240} />
-        </BadgeStyle>
+        </div>
       </Stack>
     </Card>
   );

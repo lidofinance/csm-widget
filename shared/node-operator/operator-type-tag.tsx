@@ -10,8 +10,8 @@ import {
   OPERATOR_TYPE_METADATA,
 } from 'consts';
 import { CSSProperties, FC, MouseEventHandler } from 'react';
-import styled from 'styled-components';
-import { CURVE_GRADIENTS } from './curve-badge/styles';
+import { CURVE_GRADIENTS } from './curve-badge/curve-gradients';
+import s from './operator-type-tag.module.css';
 
 export type OperatorTypeTagProps = {
   type: DisplayOperatorType;
@@ -48,14 +48,6 @@ const getGradients = (
   }
 };
 
-const TagStyle = styled(Tag)`
-  && {
-    justify-content: center;
-    flex-shrink: 0;
-    max-width: 100%;
-  }
-`;
-
 export const OperatorTypeTag: FC<OperatorTypeTagProps> = ({
   type,
   full = false,
@@ -74,7 +66,8 @@ export const OperatorTypeTag: FC<OperatorTypeTagProps> = ({
   };
 
   const tag = (
-    <TagStyle
+    <Tag
+      className={s.tag}
       variant={gradients ? 'custom' : 'action'}
       style={style as CSSProperties | undefined}
       disabled={disabled}
@@ -82,7 +75,7 @@ export const OperatorTypeTag: FC<OperatorTypeTagProps> = ({
       dataTestId={{ root: testId }}
     >
       {full ? name : short}
-    </TagStyle>
+    </Tag>
   );
 
   return tooltip && !full ? <Tooltip content={name}>{tag}</Tooltip> : tag;

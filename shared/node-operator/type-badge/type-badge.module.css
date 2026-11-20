@@ -1,0 +1,10 @@
+.img {
+  flex: none;
+  width: var(--badge-size);
+  height: var(--badge-size);
+
+  @media (max-width: 439px) {
+    width: var(--badge-size-mobile);
+    height: var(--badge-size-mobile);
+  }
+}

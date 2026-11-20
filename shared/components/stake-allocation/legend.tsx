@@ -1,5 +1,5 @@
-import { FC } from 'react';
-import { Dot, LegendSlot, Marker } from './styles';
+import { CSSProperties, FC } from 'react';
+import s from './styles.module.css';
 
 type LegendSize = 20 | 24;
 
@@ -12,13 +12,24 @@ export const LegendDot: FC<{
   color: keyof typeof DOT_COLORS;
   size: LegendSize;
 }> = ({ color, size }) => (
-  <LegendSlot $size={size} aria-hidden="true">
-    <Dot $color={DOT_COLORS[color]} />
-  </LegendSlot>
+  <span
+    className={s.legendSlot}
+    style={{ '--legend-size': `${size}px` } as CSSProperties}
+    aria-hidden="true"
+  >
+    <span
+      className={s.dot}
+      style={{ '--dot-color': `var(${DOT_COLORS[color]})` } as CSSProperties}
+    />
+  </span>
 );
 
 export const LegendMarker: FC<{ size: LegendSize }> = ({ size }) => (
-  <LegendSlot $size={size} aria-hidden="true">
-    <Marker />
-  </LegendSlot>
+  <span
+    className={s.legendSlot}
+    style={{ '--legend-size': `${size}px` } as CSSProperties}
+    aria-hidden="true"
+  >
+    <span className={s.marker} />
+  </span>
 );
