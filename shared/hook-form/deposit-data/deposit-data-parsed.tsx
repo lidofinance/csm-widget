@@ -12,7 +12,7 @@ import { FC, useCallback, useMemo } from 'react';
 import { useFormContext, useFormState, useWatch } from 'react-hook-form';
 import invariant from 'tiny-invariant';
 import { useConfirmDeleteKeyModal } from './confirm-delete-key-modal-app';
-import { ErrorList } from './styles';
+import s from './styles.module.css';
 import { DepositDataInputType } from './use-parse-deposit-data';
 
 type ParsedRow = {
@@ -101,13 +101,13 @@ export const DepositDataParsed: FC = () => {
             )}
           </Typography>
           {!!errors?.length && (
-            <ErrorList data-testid="deposit-data-error">
+            <div className={s.errorList} data-testid="deposit-data-error">
               {errors.map((error) => (
                 <Typography key={error} variant="caption" color="secondary">
                   {error}
                 </Typography>
               ))}
-            </ErrorList>
+            </div>
           )}
         </>
       ),

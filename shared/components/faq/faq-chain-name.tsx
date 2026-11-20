@@ -5,18 +5,9 @@ import { MODULE_METADATA } from 'consts/module';
 import { useDappStatus, useModule, useSmSDK } from 'modules/web3';
 import { FC, PropsWithChildren } from 'react';
 import { notifyCopied, useChainName } from 'shared/hooks';
-import styled from 'styled-components';
 import { getEtherscanAddressLink } from 'utils';
 import { FaqLink } from './faq-link';
-
-const AddressCode = styled.code`
-  word-break: break-all;
-`;
-
-const StyledCopy = styled(Copy)`
-  margin: -8px 0 -4px;
-  vertical-align: middle;
-`;
+import s from './faq-chain-name.module.css';
 
 export const FaqChainName: FC = () => {
   const chainName = useChainName(false);
@@ -64,9 +55,9 @@ const FaqContractAddress: FC<{ name: CONTRACT_NAMES }> = ({ name }) => {
   return (
     <>
       <FaqLink href={url} $inline>
-        <AddressCode>{address}</AddressCode>
+        <code className={s.address}>{address}</code>
       </FaqLink>
-      <StyledCopy text={address} onCopy={notifyCopied} />
+      <Copy className={s.copy} text={address} onCopy={notifyCopied} />
     </>
   );
 };

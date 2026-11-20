@@ -2,7 +2,9 @@ import { EmptyState, Modal } from '@lidofinance/lido-app-ui';
 
 import { useAddressValidation } from 'providers/address-validation-provider';
 
-import { WarningIcon } from './styles';
+import WarningIconSrc from 'assets/icons/attention-triangle.svg';
+
+import s from './styles.module.css';
 
 export const SecurityStatusBanner = () => {
   const { isValidAddress, resetIsValidAddress } = useAddressValidation();
@@ -10,7 +12,9 @@ export const SecurityStatusBanner = () => {
   return (
     <Modal withOverlay open={!isValidAddress} onClose={resetIsValidAddress}>
       <EmptyState
-        illustration={<WarningIcon />}
+        illustration={
+          <img className={s.warningIcon} src={WarningIconSrc} alt="warning" />
+        }
         title="Sorry, access is currently unavailable"
       />
     </Modal>

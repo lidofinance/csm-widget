@@ -20,7 +20,7 @@ import {
   trimPubkey,
 } from './key-list-selection';
 import { KeyStatusTag } from './key-status-tag';
-import { KeyPubkeyStyle } from './styles';
+import s from './styles.module.css';
 import { useFocusableRef } from './use-focusable-ref';
 
 export type KeyListFieldProps = {
@@ -104,10 +104,10 @@ export const KeyListField: FC<KeyListFieldProps> = ({
               onChange={() => toggle(key, position)}
               onBlur={field.onBlur}
               label={
-                <KeyPubkeyStyle title={key.pubkey}>
+                <span className={s.keyPubkey} title={key.pubkey}>
                   <span>{trimPubkey(key.pubkey, 16)}</span>
                   <span>{trimPubkey(key.pubkey, 6)}</span>
-                </KeyPubkeyStyle>
+                </span>
               }
               trailing={
                 <Stack

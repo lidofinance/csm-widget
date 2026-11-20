@@ -1,0 +1,7 @@
+.number {
+  font-weight: inherit;
+}
+
+.number[data-bold] {
+  font-weight: bold;
+}

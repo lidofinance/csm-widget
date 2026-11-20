@@ -1,0 +1,5 @@
+/* lib Modal bodies align children to flex-start; this fills their width */
+.root.root {
+  align-self: stretch;
+  min-width: 0;
+}

@@ -1,0 +1,9 @@
+/* TxStatus centers its message; the steps read as a left-aligned list */
+.root.root {
+  text-align: left;
+}
+
+.root ol {
+  margin: 0;
+  padding-left: 20px;
+}

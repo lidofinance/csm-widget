@@ -1,6 +1,6 @@
 import { EmptyState, Spinner } from '@lidofinance/lido-app-ui';
 import { FC, PropsWithChildren, ReactNode } from 'react';
-import styled from 'styled-components';
+import s from './when-loaded.module.css';
 
 export type WhenLoaded = {
   loading: boolean;
@@ -9,13 +9,6 @@ export type WhenLoaded = {
   error?: any;
   morePadding?: boolean;
 };
-
-const CenterStyle = styled.div<{ $morePadding?: boolean }>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: ${({ $morePadding }) => ($morePadding ? 48 : 16)}px 0;
-`;
 
 export const WhenLoaded: FC<PropsWithChildren<WhenLoaded>> = ({
   loading,
@@ -27,21 +20,21 @@ export const WhenLoaded: FC<PropsWithChildren<WhenLoaded>> = ({
 }) => {
   if (error) {
     return (
-      <CenterStyle $morePadding={morePadding}>
+      <div className={s.center} data-more-padding={morePadding || undefined}>
         <EmptyState description="Error" />
-      </CenterStyle>
+      </div>
     );
   }
   if (loading) {
     return (
-      <CenterStyle $morePadding={morePadding}>
+      <div className={s.center} data-more-padding={morePadding || undefined}>
         <Spinner data-testid="loader" />
-      </CenterStyle>
+      </div>
     );
   }
   if (empty) {
     return (
-      <CenterStyle $morePadding={morePadding}>
+      <div className={s.center} data-more-padding={morePadding || undefined}>
         {typeof empty === 'string' ? (
           <EmptyState title={empty} description={emptyNote} />
         ) : (
@@ -50,7 +43,7 @@ export const WhenLoaded: FC<PropsWithChildren<WhenLoaded>> = ({
             {emptyNote && <EmptyState description={emptyNote} />}
           </>
         )}
-      </CenterStyle>
+      </div>
     );
   }
   return <>{children}</>;

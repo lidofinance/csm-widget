@@ -1,0 +1,18 @@
+.root {
+  position: fixed;
+  z-index: -1;
+  top: 50%;
+  left: 50%;
+  margin: calc(var(--gradient-height) / -2) 0 0 calc(var(--gradient-width) / -2);
+  width: var(--gradient-width);
+  height: var(--gradient-height);
+  pointer-events: none;
+}
+
+.start {
+  stop-color: var(--lido-app-ui-color-text-active);
+}
+
+.stop {
+  stop-color: var(--lido-app-ui-color-background-page);
+}

@@ -1,19 +1,6 @@
 import { memo, ReactNode } from 'react';
-import styled from 'styled-components';
 import { Body, Stack, TxStatus } from '@lidofinance/lido-app-ui';
-
-const AppFooterStyle = styled(Stack)`
-  && {
-    width: 100%;
-    text-align: center;
-  }
-`;
-
-const AppFooterHintStyle = styled(Body)`
-  && {
-    word-break: break-word;
-  }
-`;
+import s from './transaction-modal-content.module.css';
 
 export type TxStageStatus = 'loading' | 'success' | 'error' | 'warning';
 
@@ -42,21 +29,22 @@ const AppContent = ({
     dataTestId={{ root: 'txStage', title: 'title', message: 'description' }}
     footer={
       (footer || footerHint) && (
-        <AppFooterStyle gap={16}>
+        <Stack gap={16} className={s.footer}>
           {footer && (
             <Stack gap={12} dataTestId={{ root: 'footer' }}>
               {footer}
             </Stack>
           )}
           {footerHint && (
-            <AppFooterHintStyle
+            <Body
+              className={s.footerHint}
               color="tertiary"
               dataTestId={{ root: 'footerHint' }}
             >
               {footerHint}
-            </AppFooterHintStyle>
+            </Body>
           )}
-        </AppFooterStyle>
+        </Stack>
       )
     }
   />

@@ -1,0 +1,8 @@
+.main.main {
+  position: relative;
+}
+
+/* app-ui Disclaimer pins itself via `margin-top: auto`, which only works on a direct PageContent child, so the wrapper carries it */
+.disclaimers.disclaimers {
+  margin-top: auto;
+}

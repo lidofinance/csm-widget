@@ -1,8 +1,8 @@
-import { Stack } from '@lidofinance/lido-app-ui';
-import styled from 'styled-components';
+import { Stack, StackProps } from '@lidofinance/lido-app-ui';
+import cn from 'classnames';
+import { FC } from 'react';
+import s from './stretch-stack.module.css';
 
-// lib Modal bodies align children to flex-start; this fills their width
-export const StretchStack = styled(Stack)`
-  align-self: stretch;
-  min-width: 0;
-`;
+export const StretchStack: FC<StackProps> = ({ className, ...props }) => (
+  <Stack {...props} className={cn(s.root, className)} />
+);

@@ -2,6 +2,7 @@ import {
   Description,
   Hidden,
   Layout as LibLayout,
+  Main,
   PageContent,
   SidebarInset,
   SidebarLayout,
@@ -23,7 +24,7 @@ import { Footer } from './footer';
 import { Crumb, Crumbs, useCrumbs } from './crumbs';
 import { Header } from './header';
 import { Navigation } from './navigation';
-import { DisclaimersStyled, MainStyled } from './styles';
+import s from './layout.module.css';
 
 type Props = {
   title?: ReactNode;
@@ -63,7 +64,7 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
           <Navigation />
           <SidebarInset>
             <Header dummy={mode} crumbs={crumbs} />
-            <MainStyled>
+            <Main className={s.main}>
               {!mode && !fullwidth && <AlertContainer wide={wide} />}
               <PageContent variant={fullwidth || wide ? 'default' : 'narrow'}>
                 <AppStack direction="column" gap={24} align="stretch">
@@ -83,17 +84,18 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
                   {children}
                 </AppStack>
                 {!mode && (
-                  <DisclaimersStyled
+                  <AppStack
                     direction="column"
                     gap={12}
                     align="stretch"
+                    className={s.disclaimers}
                   >
                     <PageDisclaimers />
                     <LegalDisclaimer />
-                  </DisclaimersStyled>
+                  </AppStack>
                 )}
               </PageContent>
-            </MainStyled>
+            </Main>
             <Footer dummy={mode} />
           </SidebarInset>
         </SidebarLayout>

@@ -1,6 +1,5 @@
 export * from './deposit-data-parameters';
 export * from './deposit-data-parsed';
-export * from './styles';
 export * from './use-deposit-data-valid';
 export * from './use-parse-deposit-data';
 export * from './wc-type-warning';

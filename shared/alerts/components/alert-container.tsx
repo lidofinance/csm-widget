@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useAlertActions } from '../alert-provider';
-import { AlertContainerStyled } from './styles';
+import s from './alert-container.module.css';
 
 type AlertContainerProps = {
   wide?: boolean;
@@ -10,10 +10,10 @@ export const AlertContainer: FC<AlertContainerProps> = ({ wide }) => {
   const { alerts } = useAlertActions();
 
   return (
-    <AlertContainerStyled $wide={wide}>
+    <div className={s.root} data-wide={wide || undefined}>
       {alerts.map((alert) => (
         <alert.component {...alert.props} key={alert.session} />
       ))}
-    </AlertContainerStyled>
+    </div>
   );
 };
