@@ -3,11 +3,15 @@ import { pipeline } from 'node:stream/promises';
 import { ReadableStream } from 'node:stream/web';
 
 import { DEFAULT_API_ERROR_MESSAGE } from '@lidofinance/next-api-wrapper';
-import { RPCFactoryParams } from '@lidofinance/next-pages';
 import type { FetchRpcInitBody } from '@lidofinance/rpc';
 import { iterateUrls } from '@lidofinance/rpc';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Counter } from 'prom-client';
+import {
+  canonicalizeEnvelope,
+  readMethod,
+  canonicalizeParams,
+} from './canonical-request';
 import { ClientError, HEALTHY_RPC_SERVICES_ARE_OVER } from './errors';
 import {
   baseRequestValidationFactory,
@@ -17,6 +21,7 @@ import {
   shouldValidateRpcMethod,
   streamMaxSizeValidationFactory,
 } from './validation';
+import type { RPCFactoryParams, RpcRequest } from './types';
 
 export const rpcFactory = ({
   metrics,
@@ -28,6 +33,7 @@ export const rpcFactory = ({
   const {
     allowedRPCMethods,
     allowedCallAddresses,
+    allowedOverrideAddresses,
     allowedLogsAddresses,
     maxResponseSize = 1_000_000,
     maxBatchCount = 20,
@@ -64,6 +70,7 @@ export const rpcFactory = ({
         callValidators[method] = ethCallValidationFactory(
           allowedCallAddresses,
           method,
+          allowedOverrideAddresses,
         );
       }
     }
@@ -94,7 +101,7 @@ export const rpcFactory = ({
   return async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     const abortController = new AbortController();
     try {
-      const { chainId, requests } = validateBaseRequest(req);
+      const { chainId, requests, isBatch } = validateBaseRequest(req);
 
       const validationContext = {
         chainId,
@@ -104,20 +111,25 @@ export const rpcFactory = ({
 
       // We throw HTTP error for ANY invalid RPC request out of batch
       // because we assume that frontend must not send invalid requests at all
-      for (const request of requests) {
-        validateRpcMethod(request, validationContext);
+      const canonical: RpcRequest[] = [];
+      for (const raw of requests) {
+        validateRpcMethod({ method: readMethod(raw) }, validationContext);
+        const envelope = canonicalizeEnvelope(raw);
 
-        const method = request.method;
+        const item = canonicalizeParams(envelope, {
+          allowOverrides: !!allowedOverrideAddresses && !!allowedCallAddresses,
+        });
 
-        callValidators[method]?.(request, validationContext);
-        if (method === 'eth_getLogs' && validateEthGetLogs) {
-          await validateEthGetLogs(request, validationContext);
+        callValidators[item.method]?.(item, validationContext);
+        if (item.method === 'eth_getLogs' && validateEthGetLogs) {
+          await validateEthGetLogs(item, validationContext);
         }
+        canonical.push(item);
       }
 
       const proxyedRPC = await requestRPC(
         chainId,
-        req.body as FetchRpcInitBody,
+        (isBatch ? canonical : canonical[0]) as FetchRpcInitBody,
       );
 
       res.setHeader(
