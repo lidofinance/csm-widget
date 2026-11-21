@@ -11,7 +11,7 @@ shared/components/
 ├── [component-name]/           # kebab-case directory names
 │   ├── index.ts               # barrel exports
 │   ├── [component-name].tsx   # main component file
-│   ├── styles.ts              # styling (or style.ts for simple components)
+│   ├── styles.module.css      # co-located CSS Module (or [component-name].module.css)
 │   └── types.ts               # optional type definitions
 ```
 
@@ -124,7 +124,7 @@ Styled-components is banned (eslint `no-restricted-imports`). Style with co-loca
 }
 ```
 
-- Public props of exported components keep their names, destructured so they never reach the DOM.
+- Public props of exported components keep their names (including legacy `$`-prefixed ones on existing components), destructured so they never reach the DOM.
 
 **Wrappers**
 

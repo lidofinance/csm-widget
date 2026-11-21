@@ -3,15 +3,30 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: var(--legend-size);
-  height: var(--legend-size);
+}
+
+.legendSlot[data-size='20'] {
+  width: 20px;
+  height: 20px;
+}
+
+.legendSlot[data-size='24'] {
+  width: 24px;
+  height: 24px;
 }
 
 .dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--dot-color);
+}
+
+.dot[data-color='success'] {
+  background: var(--lido-app-ui-color-icons-success);
+}
+
+.dot[data-color='active'] {
+  background: var(--lido-app-ui-color-background-surface-selected);
 }
 
 .marker {

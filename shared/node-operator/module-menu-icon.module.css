@@ -9,9 +9,7 @@
 
 .layer {
   position: absolute;
-  display: block;
   inset: var(--layer-inset);
-  mix-blend-mode: normal;
 }
 
 .layer[data-blend] {

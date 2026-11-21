@@ -1,8 +1,8 @@
 import { Tooltip } from '@lidofinance/lido-app-ui';
 import { CSSProperties, FC, useCallback } from 'react';
 import { useGraphInteraction } from './hover-provider';
-import { getPartStyle } from './style';
-import s from './style.module.css';
+import { getPartStyle } from './part-style';
+import s from './styles.module.css';
 import { BatchMetadata, GraphPart, QueueUnit } from './types';
 import { BatchTooltipContent } from './batch-tooltip-content';
 import { AddedTooltipContent } from './added-tooltip-content';

@@ -10,7 +10,6 @@
     grid-template-columns: 52px minmax(0, 1fr);
     grid-template-areas: var(--grid-areas-md);
     column-gap: 16px;
-    row-gap: 12px;
   }
 }
 

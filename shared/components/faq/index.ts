@@ -9,4 +9,4 @@ export * from './faq-share-limit';
 export * from './faq-strike-lifetime';
 export * from './faq-strike-threshold';
 export * from './faq';
-export * from './styles';
+export * from './short-inline-loader';

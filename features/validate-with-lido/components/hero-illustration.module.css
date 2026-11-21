@@ -23,14 +23,14 @@
   margin: -20px;
 }
 
-.fluid.fluid {
+.fluid {
   @media (--lido-app-ui-breakpoint-md-down) {
     max-width: 100%;
     height: auto;
   }
 }
 
-.fixed.fixed {
+.fixed {
   @media (--lido-app-ui-breakpoint-md-down) {
     width: 160px;
     height: 160px;

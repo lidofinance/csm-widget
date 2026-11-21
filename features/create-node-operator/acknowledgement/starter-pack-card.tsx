@@ -18,7 +18,6 @@ import { HubList, HubRow } from 'shared/components/hub-list';
 import { trackMatomoEvent } from 'utils';
 import { PartnerLogos } from './partner-logos';
 import s from './starter-pack-card.module.css';
-import { StarterPackIcon } from './starter-pack-icon';
 
 type StarterPackStep = {
   icon: ReactNode;
@@ -93,7 +92,7 @@ export const StarterPackCard: FC<{ onGetStarted: () => void }> = ({
         {STEPS.map((step) => (
           <HubRow
             key={step.title}
-            media={<StarterPackIcon>{step.icon}</StarterPackIcon>}
+            media={<span className={s.stepIcon}>{step.icon}</span>}
             title={step.title}
             description={step.description}
             trailing={

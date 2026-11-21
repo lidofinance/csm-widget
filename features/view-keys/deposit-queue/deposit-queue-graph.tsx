@@ -9,7 +9,7 @@ import {
 import { Legend } from './legend';
 import { LineWrapper } from './line-wrapper';
 import { Part } from './part';
-import s from './style.module.css';
+import s from './styles.module.css';
 
 const Graph: FC = () => {
   const { fullView, module } = useGraphInteraction();

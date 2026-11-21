@@ -1,4 +1,4 @@
-import { Caption, Card } from '@lidofinance/lido-app-ui';
+import { Caption, Card, Divider } from '@lidofinance/lido-app-ui';
 import { Children, FC, PropsWithChildren, ReactNode } from 'react';
 import s from './styles.module.css';
 
@@ -26,7 +26,7 @@ export const HubList: FC<HubListProps> = ({
         )}
         {rows.map((row, index) => (
           <div key={index}>
-            {index > 0 && <div className={s.divider} role="separator" />}
+            {index > 0 && <Divider role="separator" />}
             {row}
           </div>
         ))}

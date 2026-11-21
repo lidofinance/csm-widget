@@ -9,7 +9,6 @@
   text-transform: capitalize;
   font-weight: 700;
   color: #fff;
-  padding-inline: 0px;
   width: max-content;
   background: var(--curve-gradient);
 }

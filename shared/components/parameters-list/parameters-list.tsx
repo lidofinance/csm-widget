@@ -66,7 +66,10 @@ export const ParametersList: FC<{
         size="small"
         onClick={toggleMore}
         iconRight={
-          <IconChevronDown className={cn(s.arrow, more && s.expanded)} />
+          <IconChevronDown
+            className={s.arrow}
+            data-expanded={more || undefined}
+          />
         }
         dataTestId={{ root: 'parametersShowMore' }}
       >

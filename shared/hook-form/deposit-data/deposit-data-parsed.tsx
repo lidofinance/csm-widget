@@ -2,6 +2,7 @@ import {
   Address,
   IconButton,
   IconTrash,
+  Stack,
   Table,
   TableColumn,
   Typography,
@@ -101,13 +102,17 @@ export const DepositDataParsed: FC = () => {
             )}
           </Typography>
           {!!errors?.length && (
-            <div className={s.errorList} data-testid="deposit-data-error">
+            <Stack
+              gap={4}
+              className={s.errorList}
+              data-testid="deposit-data-error"
+            >
               {errors.map((error) => (
                 <Typography key={error} variant="caption" color="secondary">
                   {error}
                 </Typography>
               ))}
-            </div>
+            </Stack>
           )}
         </>
       ),

@@ -50,7 +50,7 @@ const AddressItem: FC<AddressItemProps> = ({
     <Typography
       variant="description"
       color="tertiary"
-      className={s.label}
+      className={s.text}
       data-size={size}
     >
       {label}
@@ -59,7 +59,7 @@ const AddressItem: FC<AddressItemProps> = ({
       address={address}
       symbols={4}
       copy
-      className={s.address}
+      className={s.text}
       data-size={size}
     />
     <EtherscanAddressLink address={address} className={s.etherscanLink} />

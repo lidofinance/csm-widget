@@ -2,6 +2,7 @@ import {
   Address as AppAddress,
   DataList,
   DataListRow,
+  Stack,
 } from '@lidofinance/lido-app-ui';
 import { STETH_ROUNDING_THRESHOLD, TOKENS } from '@lidofinance/lido-csm-sdk';
 import { FC } from 'react';
@@ -68,7 +69,7 @@ const ClaimReceipt: FC<ReceiptProps> = ({
   const parts = getReceiptParts(breakdown);
 
   return (
-    <div className={s.receipt}>
+    <Stack gap={16} className={s.receipt}>
       {parts.hasPrimary && (
         <DataList>
           {parts.showSplitters && (
@@ -134,7 +135,7 @@ const ClaimReceipt: FC<ReceiptProps> = ({
           )}
         </DataList>
       )}
-    </div>
+    </Stack>
   );
 };
 

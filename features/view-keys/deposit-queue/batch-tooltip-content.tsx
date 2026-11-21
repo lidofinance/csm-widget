@@ -2,7 +2,7 @@ import { Divider, Stack } from '@lidofinance/lido-app-ui';
 import { FC, Fragment } from 'react';
 import { getPriorityName } from './get-priority-name';
 import { QueueAmount } from './queue-amount';
-import s from './style.module.css';
+import s from './styles.module.css';
 import { BatchMetadata, GraphPart, QueueUnit } from './types';
 
 type BatchTooltipContentProps = {

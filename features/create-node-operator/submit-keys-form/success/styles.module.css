@@ -1,7 +1,4 @@
-.whatsNext {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.whatsNext.whatsNext {
   width: 100%;
 
   & ol {

@@ -38,7 +38,7 @@ export type ScoreItem = {
 };
 
 const ScoreIcon = ({ src }: { src: string }) => (
-  // eslint-disable-next-line jsx-a11y/alt-text -- keeps the original alt-less <img> markup
+  // eslint-disable-next-line jsx-a11y/alt-text
   <img className={s.icon} src={src} />
 );
 

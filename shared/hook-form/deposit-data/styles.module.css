@@ -1,6 +1,3 @@
-.errorList {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.errorList.errorList {
   margin-top: 4px;
 }

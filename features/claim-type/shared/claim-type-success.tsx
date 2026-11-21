@@ -1,6 +1,6 @@
 import { Button } from '@lidofinance/lido-app-ui';
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
-import { FC, ReactNode, useCallback, useRef } from 'react';
+import { CSSProperties, FC, ReactNode, useCallback, useRef } from 'react';
 import Confetti from 'react-canvas-confetti/dist/presets/realistic';
 import {
   TConductorInstance,
@@ -11,7 +11,16 @@ import {
   getOperatorTypeBadge,
   TypeBadge,
 } from 'shared/node-operator/type-badge';
-import { confettiCanvasStyles } from './styles';
+
+const confettiCanvasStyles: CSSProperties = {
+  position: 'fixed',
+  pointerEvents: 'none',
+  width: '100%',
+  height: '100%',
+  top: 0,
+  left: 0,
+  zIndex: 9999,
+};
 
 export type ClaimTypeSuccessProps = {
   type: OPERATOR_TYPE;

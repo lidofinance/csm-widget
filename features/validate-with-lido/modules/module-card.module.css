@@ -8,9 +8,7 @@
 
 .illustration {
   flex: none;
-}
 
-.illustration.illustration {
   @media (--lido-app-ui-breakpoint-sm-down) {
     width: 100px;
     height: 100px;

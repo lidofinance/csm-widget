@@ -3,6 +3,7 @@ import {
   DataList,
   DataListRow,
   SectionTitle,
+  Stack,
   TableBody,
   TableCell,
   TableHead,
@@ -43,7 +44,7 @@ export const ClaimChanges: FC<ClaimChangesProps> = ({
   const toSummary = getClaimTypeSummary(to);
 
   return (
-    <div className={s.changesBox} data-testid={dataTestId}>
+    <Stack gap={16} className={s.changesBox} dataTestId={{ root: dataTestId }}>
       <SectionTitle
         title={title}
         action={
@@ -95,6 +96,6 @@ export const ClaimChanges: FC<ClaimChangesProps> = ({
           { parameters: to, title: toLabel },
         ]}
       />
-    </div>
+    </Stack>
   );
 };

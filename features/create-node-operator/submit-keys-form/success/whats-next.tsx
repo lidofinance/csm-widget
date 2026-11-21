@@ -1,4 +1,4 @@
-import { BodyLarge } from '@lidofinance/lido-app-ui';
+import { BodyLarge, Stack } from '@lidofinance/lido-app-ui';
 import { getExternalLinks, SUBSCRIBE_EVENTS_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
@@ -26,7 +26,7 @@ export const WhatsNext: FC<WhatsNextProps> = ({ created }) => {
       : null;
 
   return (
-    <div className={s.whatsNext}>
+    <Stack gap={12} className={s.whatsNext}>
       <BodyLarge as="h2" weight="semibold">
         What’s next
       </BodyLarge>
@@ -88,6 +88,6 @@ export const WhatsNext: FC<WhatsNextProps> = ({ created }) => {
           )}
         </li>
       </ol>
-    </div>
+    </Stack>
   );
 };

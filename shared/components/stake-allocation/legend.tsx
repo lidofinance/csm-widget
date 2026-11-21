@@ -1,35 +1,29 @@
-import { CSSProperties, FC } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import s from './styles.module.css';
 
 type LegendSize = 20 | 24;
+type DotColor = 'success' | 'active';
 
-const DOT_COLORS = {
-  success: '--lido-app-ui-color-icons-success',
-  active: '--lido-app-ui-color-background-surface-selected',
-};
-
-export const LegendDot: FC<{
-  color: keyof typeof DOT_COLORS;
-  size: LegendSize;
-}> = ({ color, size }) => (
-  <span
-    className={s.legendSlot}
-    style={{ '--legend-size': `${size}px` } as CSSProperties}
-    aria-hidden="true"
-  >
-    <span
-      className={s.dot}
-      style={{ '--dot-color': `var(${DOT_COLORS[color]})` } as CSSProperties}
-    />
+const LegendSlot: FC<PropsWithChildren<{ size: LegendSize }>> = ({
+  size,
+  children,
+}) => (
+  <span className={s.legendSlot} data-size={size} aria-hidden="true">
+    {children}
   </span>
 );
 
+export const LegendDot: FC<{
+  color: DotColor;
+  size: LegendSize;
+}> = ({ color, size }) => (
+  <LegendSlot size={size}>
+    <span className={s.dot} data-color={color} />
+  </LegendSlot>
+);
+
 export const LegendMarker: FC<{ size: LegendSize }> = ({ size }) => (
-  <span
-    className={s.legendSlot}
-    style={{ '--legend-size': `${size}px` } as CSSProperties}
-    aria-hidden="true"
-  >
+  <LegendSlot size={size}>
     <span className={s.marker} />
-  </span>
+  </LegendSlot>
 );

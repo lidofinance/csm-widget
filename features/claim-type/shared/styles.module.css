@@ -22,10 +22,7 @@
   }
 }
 
-.changesBox {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.changesBox.changesBox {
   box-sizing: border-box;
   width: 100%;
   padding: 24px;

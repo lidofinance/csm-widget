@@ -2,7 +2,7 @@ import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { useDappStatus, useFrameInfo } from 'modules/web3';
 import { FC } from 'react';
 import { formatPercent } from 'utils';
-import { ShortInlineLoader } from './styles';
+import { ShortInlineLoader } from './short-inline-loader';
 import { formatSecondsDuration } from '../parameters-list/format';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 

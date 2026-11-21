@@ -1,20 +1,10 @@
-.address.address {
+.text.text {
   color: var(--lido-app-ui-color-text-tertiary);
   font-size: var(--lido-app-ui-font-size-tooltip);
   line-height: var(--lido-app-ui-line-height-description);
 }
 
-.address.address[data-size='body'] {
-  font-size: var(--lido-app-ui-font-size-label);
-  line-height: var(--lido-app-ui-line-height-label);
-}
-
-.label.label {
-  font-size: var(--lido-app-ui-font-size-tooltip);
-  line-height: var(--lido-app-ui-line-height-description);
-}
-
-.label.label[data-size='body'] {
+.text.text[data-size='body'] {
   font-size: var(--lido-app-ui-font-size-label);
   line-height: var(--lido-app-ui-line-height-label);
 }

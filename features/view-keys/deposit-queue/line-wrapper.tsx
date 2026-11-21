@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren } from 'react';
 import { useGraphInteraction } from './hover-provider';
-import s from './style.module.css';
+import s from './styles.module.css';
 
 type Props = { farAway: boolean };
 
