@@ -2,8 +2,8 @@ import { Accordion, Card, Description } from '@lidofinance/lido-app-ui';
 import { useClaimBondFormData } from 'features/claim-bond/claim-bond-form/context';
 import { type CLAIM_OPTION } from 'features/claim-bond/claim-bond-form/context/types';
 import { FC } from 'react';
-import styled from 'styled-components';
 import { formatEther } from 'viem';
+import s from './debug-panel.module.css';
 
 const f = (v?: bigint) => formatEther(v ?? 0n);
 
@@ -36,7 +36,7 @@ export const ClaimBondDebugPanel: FC<{
   const match = !hasExpectation || actual === expected;
 
   return (
-    <TestCard>
+    <Card className={s.card}>
       <Accordion
         border={false}
         title={
@@ -46,7 +46,7 @@ export const ClaimBondDebugPanel: FC<{
           </Description>
         }
       >
-        <DataPre>
+        <pre className={s.data}>
           {[
             `current:                 ${f(bond.current)}`,
             `required (forKeys):      ${f(bond.required)}`,
@@ -56,7 +56,7 @@ export const ClaimBondDebugPanel: FC<{
             `delta:                   ${f(bond.delta)}  (isInsufficient: ${bond.isInsufficient})`,
             `rewards.available:       ${f(rewards?.available)}`,
             `feeSplits:               ${
-              feeSplits.map((s) => `${Number(s.share) / 100}%`).join(', ') ||
+              feeSplits.map((fs) => `${Number(fs.share) / 100}%`).join(', ') ||
               '—'
             }`,
             '—',
@@ -71,25 +71,8 @@ export const ClaimBondDebugPanel: FC<{
             `expectedOptions:         [${expected}]  ${match ? '✓' : '✗ MISMATCH'}`,
             `isPaused: ${isPaused}   isContract: ${isContract}`,
           ].join('\n')}
-        </DataPre>
+        </pre>
       </Accordion>
-    </TestCard>
+    </Card>
   );
 };
-
-const TestCard = styled(Card)`
-  padding: 16px;
-`;
-
-const DataPre = styled.pre`
-  background: var(--lido-app-ui-color-background-secondary);
-  border-radius: 8px;
-  padding: 16px;
-  margin: 0;
-  font-family: 'Monaco', 'Menlo', monospace;
-  font-size: 12px;
-  line-height: 1.5;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  overflow-x: auto;
-`;

@@ -1,0 +1,18 @@
+.container.container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.title {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--lido-app-ui-color-text-default);
+}
+
+.description {
+  margin: 0;
+  font-size: 14px;
+  color: var(--lido-app-ui-color-text-secondary);
+}

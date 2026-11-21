@@ -1,0 +1,10 @@
+.narrowBlock.narrowBlock {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.previewCard.previewCard {
+  max-width: 400px;
+  margin: 0 auto;
+}

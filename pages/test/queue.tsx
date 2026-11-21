@@ -1,70 +1,11 @@
-import { Accordion, Card } from '@lidofinance/lido-app-ui';
+import { Accordion, Card, Stack } from '@lidofinance/lido-app-ui';
 import { DepositQueueGraph } from 'features/view-keys/deposit-queue/deposit-queue-graph';
 import { MockDepositQueueProvider } from 'mock/queue/mock-providers';
 import { testScenarios } from 'mock/queue/test-scenarios';
 import { FC } from 'react';
 import { Layout } from 'shared/layout';
-import styled from 'styled-components';
 import { getTestProps } from 'utilsApi';
-
-const TestContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-`;
-
-const TestCard = styled(Card).attrs({ padding: 24 })``;
-
-const TestTitle = styled.h3`
-  margin: 0 0 16px 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--lido-app-ui-color-text-default);
-`;
-
-const TestDescription = styled.p`
-  margin: 0 0 16px 0;
-  font-size: 14px;
-  color: var(--lido-app-ui-color-text-secondary);
-`;
-
-const AccordionSummary = styled.span`
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--lido-app-ui-color-text-secondary);
-`;
-
-const QueueDataContainer = styled.pre`
-  background: var(--lido-app-ui-color-background-secondary);
-  border-radius: 8px;
-  padding: 16px;
-  margin: 0;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  font-size: 12px;
-  line-height: 1.4;
-  color: var(--lido-app-ui-color-text-default);
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  overflow-x: auto;
-  max-height: 400px;
-  overflow-y: auto;
-
-  .queue {
-    margin-left: 12px;
-  }
-
-  .operator-batch {
-    color: var(--lido-app-ui-color-text-warning);
-    padding: 1px 4px;
-    border-radius: 3px;
-    font-weight: 600;
-    border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
-    background: color-mix(in srgb, currentColor 15%, transparent);
-  }
-`;
+import s from './queue.module.css';
 
 const highlightOperatorBatches = (
   jsonString: string,
@@ -73,7 +14,7 @@ const highlightOperatorBatches = (
   // Replace operator batches with wrapped spans
   const highlighted = jsonString.replace(
     new RegExp(`\\[${operatorId},(\\s*\\d+)\\]`, 'g'),
-    '<span class="operator-batch">$&</span>',
+    `<span class="${s.operatorBatch}">$&</span>`,
   );
   return highlighted;
 };
@@ -81,28 +22,28 @@ const highlightOperatorBatches = (
 const DepositQueueGraphTestPage: FC = () => {
   return (
     <Layout dummy title="Deposit Queue Graph Test">
-      <TestContainer>
+      <Stack gap={32} className={s.container}>
         {testScenarios.map((scenario, index) => (
-          <TestCard key={index}>
-            <TestTitle>{scenario.title}</TestTitle>
-            <TestDescription>{scenario.description}</TestDescription>
+          <Card key={index} padding={24}>
+            <h3 className={s.title}>{scenario.title}</h3>
+            <p className={s.description}>{scenario.description}</p>
             <MockDepositQueueProvider scenario={scenario.data}>
               <DepositQueueGraph />
             </MockDepositQueueProvider>
             <Accordion
               border={false}
-              title={<AccordionSummary>Raw queue data</AccordionSummary>}
+              title={<span className={s.accordionSummary}>Raw queue data</span>}
             >
-              <QueueDataContainer>
+              <pre className={s.queueData}>
                 {scenario.data.depositQueueBatches ? (
                   <>
                     <div>[</div>
                     {scenario.data.depositQueueBatches.priorities.map(
                       (priority, index) => (
-                        <div key={index} className="queue">
+                        <div key={index} className={s.queue}>
                           <div>Priority {index}:</div>
                           <div
-                            className="queue"
+                            className={s.queue}
                             dangerouslySetInnerHTML={{
                               __html: highlightOperatorBatches(
                                 JSON.stringify(priority),
@@ -118,11 +59,11 @@ const DepositQueueGraphTestPage: FC = () => {
                 ) : (
                   <div>undefined (fallback mode)</div>
                 )}
-              </QueueDataContainer>
+              </pre>
             </Accordion>
-          </TestCard>
+          </Card>
         ))}
-      </TestContainer>
+      </Stack>
     </Layout>
   );
 };

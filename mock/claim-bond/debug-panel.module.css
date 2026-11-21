@@ -1,0 +1,16 @@
+.card.card {
+  padding: 16px;
+}
+
+.data {
+  background: var(--lido-app-ui-color-background-secondary);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 0;
+  font-family: 'Monaco', 'Menlo', monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-x: auto;
+}

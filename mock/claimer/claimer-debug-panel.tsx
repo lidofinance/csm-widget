@@ -4,19 +4,7 @@ import { Card, Description, Stack } from '@lidofinance/lido-app-ui';
 import { ShowRule, useShowFlags } from 'shared/hooks';
 import { useNavItems } from 'shared/layout/navigation/use-nav-items';
 import { getCorrectPath } from 'shared/navigate/get-correct-path';
-import styled from 'styled-components';
-
-const Row = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  font-family: monospace;
-  font-size: 12px;
-`;
-
-const Ok = styled.span<{ $ok: boolean }>`
-  color: ${({ $ok }) => ($ok ? 'var(--lido-app-ui-color-text-success)' : 'var(--lido-app-ui-color-text-error)')};
-`;
+import s from './claimer-debug-panel.module.css';
 
 const FLAGS: ShowRule[] = [
   'IS_CONNECTED_WALLET',
@@ -50,10 +38,10 @@ export const ClaimerDebugPanel: FC = () => {
       <Stack direction="column" gap={16}>
         <Description color="secondary">Show flags</Description>
         {FLAGS.map((f) => (
-          <Row key={f}>
+          <div className={s.row} key={f}>
             <span>{f}</span>
             <span>{String(flags[f])}</span>
-          </Row>
+          </div>
         ))}
         <Description color="secondary">
           getCorrectPath (expected for claimer-only)
@@ -61,23 +49,26 @@ export const ClaimerDebugPanel: FC = () => {
         {PATHS.map(([from, expected]) => {
           const actual = getCorrectPath(from, flags);
           return (
-            <Row key={from}>
+            <div className={s.row} key={from}>
               <span>{from}</span>
-              <Ok $ok={actual === expected}>
+              <span className={s.ok} data-ok={actual === expected}>
                 {actual} {actual === expected ? '✓' : `✗ expected ${expected}`}
-              </Ok>
-            </Row>
+              </span>
+            </div>
           );
         })}
         <Description color="secondary">Nav items</Description>
-        <Row>
+        <div className={s.row}>
           <span>{nav.join(', ') || '—'}</span>
-          <Ok $ok={nav.every((n) => EXPECTED_NAV.includes(n))}>
+          <span
+            className={s.ok}
+            data-ok={nav.every((n) => EXPECTED_NAV.includes(n))}
+          >
             {nav.every((n) => EXPECTED_NAV.includes(n))
               ? '✓ subset of expected'
               : '✗ unexpected item'}
-          </Ok>
-        </Row>
+          </span>
+        </div>
       </Stack>
     </Card>
   );

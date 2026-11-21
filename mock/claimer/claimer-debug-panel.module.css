@@ -1,0 +1,15 @@
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  font-family: monospace;
+  font-size: 12px;
+}
+
+.ok {
+  color: var(--lido-app-ui-color-text-error);
+}
+
+.ok[data-ok='true'] {
+  color: var(--lido-app-ui-color-text-success);
+}

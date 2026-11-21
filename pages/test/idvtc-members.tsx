@@ -5,33 +5,9 @@ import { FC } from 'react';
 import { Accordion, Card, Description, Stack } from '@lidofinance/lido-app-ui';
 import { Layout } from 'shared/layout';
 import { LocalLink } from 'shared/navigate';
-import styled from 'styled-components';
 import { getFirstParam } from 'utils';
 import { getTestProps } from 'utilsApi';
-
-const TestContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-`;
-
-const TestBlock = styled(Card).attrs({ padding: 16 })``;
-
-const TestTitle = styled.h3`
-  margin: 0 0 8px 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--lido-app-ui-color-text-default);
-`;
-
-const TestDescription = styled.p`
-  margin: 0;
-  font-size: 14px;
-  color: var(--lido-app-ui-color-text-secondary);
-`;
+import s from './idvtc-members.module.css';
 
 const IdvtcMembersTestPage: FC = () => {
   const { query } = useRouter();
@@ -40,12 +16,12 @@ const IdvtcMembersTestPage: FC = () => {
 
   return (
     <Layout dummy title="IDVTC Members Test">
-      <TestContainer>
-        <TestBlock>
-          <TestTitle>
+      <Stack gap={24} className={s.container}>
+        <Card padding={16}>
+          <h3 className={s.title}>
             [{scenario.group}] {scenario.title}
-          </TestTitle>
-          <TestDescription>{scenario.description}</TestDescription>
+          </h3>
+          <p className={s.description}>{scenario.description}</p>
           <Accordion
             border={false}
             title={
@@ -55,19 +31,19 @@ const IdvtcMembersTestPage: FC = () => {
             }
           >
             <Stack direction="column" gap={2}>
-              {testScenarios.map((s, i) => (
+              {testScenarios.map((sc, i) => (
                 <LocalLink key={i} query={{ case: `${i}` }}>
-                  {i}: [{s.group}] {s.title}
+                  {i}: [{sc.group}] {sc.title}
                 </LocalLink>
               ))}
             </Stack>
           </Accordion>
-        </TestBlock>
+        </Card>
 
         <MockMembersProvider key={_case}>
           {scenario.render()}
         </MockMembersProvider>
-      </TestContainer>
+      </Stack>
     </Layout>
   );
 };

@@ -1,0 +1,53 @@
+.container.container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.title {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--lido-app-ui-color-text-default);
+}
+
+.description {
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  color: var(--lido-app-ui-color-text-secondary);
+}
+
+.accordionSummary {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--lido-app-ui-color-text-secondary);
+}
+
+.queueData {
+  background: var(--lido-app-ui-color-background-secondary);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 0;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--lido-app-ui-color-text-default);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-x: auto;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.queueData .queue {
+  margin-left: 12px;
+}
+
+.queueData .operatorBatch {
+  color: var(--lido-app-ui-color-text-warning);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-weight: 600;
+  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+  background: color-mix(in srgb, currentColor 15%, transparent);
+}

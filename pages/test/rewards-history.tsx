@@ -8,36 +8,12 @@ import { FC } from 'react';
 import { Accordion, Card, Description, Stack } from '@lidofinance/lido-app-ui';
 import { Layout } from 'shared/layout';
 import { LocalLink } from 'shared/navigate';
-import styled from 'styled-components';
 import { getFirstParam } from 'utils';
 import { getTestProps } from 'utilsApi';
+import s from './rewards-history.module.css';
 
 // only deployments where the SDK actually constructs — undeployed modules crash useSmSDK
 const MODULES = deployedModules;
-
-const TestContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-`;
-
-const TestBlock = styled(Card).attrs({ padding: 16 })``;
-
-const TestTitle = styled.h3`
-  margin: 0 0 8px 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--lido-app-ui-color-text-default);
-`;
-
-const TestDescription = styled.p`
-  margin: 0;
-  font-size: 14px;
-  color: var(--lido-app-ui-color-text-secondary);
-`;
 
 const RewardsHistoryTestPage: FC = () => {
   const { query } = useRouter();
@@ -50,10 +26,10 @@ const RewardsHistoryTestPage: FC = () => {
 
   return (
     <Layout dummy title="Rewards History Test">
-      <TestContainer>
-        <TestBlock>
-          <TestTitle>{scenario.title}</TestTitle>
-          <TestDescription>{scenario.description}</TestDescription>
+      <Stack gap={24} className={s.container}>
+        <Card padding={16}>
+          <h3 className={s.title}>{scenario.title}</h3>
+          <p className={s.description}>{scenario.description}</p>
           <Stack direction="row" gap={4} align="center">
             <Description color="secondary">Module:</Description>
             {MODULES.map((m) => (
@@ -71,17 +47,17 @@ const RewardsHistoryTestPage: FC = () => {
             }
           >
             <Stack direction="column" gap={2}>
-              {testScenarios.map((s, i) => (
+              {testScenarios.map((item, i) => (
                 <LocalLink
                   key={i}
                   query={{ case: `${i}`, module: selectedModule }}
                 >
-                  {i}: {s.title}
+                  {i}: {item.title}
                 </LocalLink>
               ))}
             </Stack>
           </Accordion>
-        </TestBlock>
+        </Card>
         <MockRewardsHistoryProvider
           key={`${_case}-${selectedModule}`}
           scenario={scenario.data}
@@ -89,7 +65,7 @@ const RewardsHistoryTestPage: FC = () => {
         >
           <RewardsHistoryCard />
         </MockRewardsHistoryProvider>
-      </TestContainer>
+      </Stack>
     </Layout>
   );
 };
