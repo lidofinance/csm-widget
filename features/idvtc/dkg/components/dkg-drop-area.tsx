@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren } from 'react';
 import type { useDkgUploadZone } from '../hooks/use-dkg-upload-zone';
-import { DropArea } from '../styles';
+import s from '../styles.module.css';
 
 type Zone = ReturnType<typeof useDkgUploadZone>;
 
@@ -12,8 +12,12 @@ export const DkgDropArea: FC<PropsWithChildren<Props>> = ({
   zone,
   children,
 }) => (
-  <DropArea {...zone.getRootProps()} $dragActive={zone.isDragAccept}>
+  <div
+    {...zone.getRootProps()}
+    className={s.dropArea}
+    data-drag-active={zone.isDragAccept || undefined}
+  >
     <input {...zone.getInputProps()} />
     {children}
-  </DropArea>
+  </div>
 );

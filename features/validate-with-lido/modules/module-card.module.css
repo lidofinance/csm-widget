@@ -1,0 +1,18 @@
+.content.content {
+  min-height: 192px;
+
+  @media (--lido-app-ui-breakpoint-sm-down) {
+    min-height: auto;
+  }
+}
+
+.illustration {
+  flex: none;
+}
+
+.illustration.illustration {
+  @media (--lido-app-ui-breakpoint-sm-down) {
+    width: 100px;
+    height: 100px;
+  }
+}

@@ -5,13 +5,11 @@ import {
   Stack,
   StatItem,
   Typography,
-  downQuery,
 } from '@lidofinance/lido-app-ui';
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { CSM_DOCS_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FC, ReactNode } from 'react';
-import styled from 'styled-components';
 import { DisclaimerMark } from 'shared/components';
 import { useExternalLinks } from 'shared/hooks';
 import { trackMatomoEvent } from 'utils';
@@ -24,16 +22,8 @@ import {
 } from '../components';
 import { CreateOperatorButton } from './create-operator-button';
 import { isStatVisible, StatBody } from './stat-body';
+import s from './csm-hero.module.css';
 import { Stat, useCsmStats } from './use-csm-stats';
-
-const Buttons = styled(Stack)`
-  @media ${downQuery('sm')} {
-    && a,
-    && button {
-      width: 100%;
-    }
-  }
-`;
 
 type HeroStatProps<T> = {
   label: string;
@@ -108,7 +98,12 @@ export const CsmHero: FC<
               />
             </Grid>
           </Stack>
-          <Buttons direction={{ base: 'row', smDown: 'column' }} gap={16} wrap>
+          <Stack
+            className={s.buttons}
+            direction={{ base: 'row', smDown: 'column' }}
+            gap={16}
+            wrap
+          >
             <CreateOperatorButton />
             <Button
               href={landing}
@@ -132,7 +127,7 @@ export const CsmHero: FC<
             >
               How it works
             </Button>
-          </Buttons>
+          </Stack>
         </Stack>
         <HeroIllustrationSlot $fluid>
           <HeroIllustration $fluid src={moduleCsm} width={331} />

@@ -1,11 +1,11 @@
 import { Divider, H3, Stack, Typography } from '@lidofinance/lido-app-ui';
 import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { FC, Fragment } from 'react';
-import styled from 'styled-components';
 import { DisclaimerMark } from 'shared/components';
 import { TypeBadge } from 'shared/node-operator/type-badge';
 import { useModuleOpen } from 'shared/hooks/can-create/use-module-open';
 import { ModuleStatusTag, PromoCard } from '../components';
+import s from './options-card.module.css';
 import { isStatVisible, StatBody } from './stat-body';
 import { AprType, Stat } from './use-csm-stats';
 
@@ -38,12 +38,6 @@ const OPTIONS: Option[] = [
   },
 ];
 
-const AprColumn = styled.div`
-  flex: none;
-  width: 60px;
-  text-align: right;
-`;
-
 const ComingSoonTag: FC = () => {
   const { isOpen, isPending } = useModuleOpen(MODULE_NAME.CSM_02);
   return isOpen || isPending ? null : <ModuleStatusTag variant="coming-soon" />;
@@ -66,7 +60,7 @@ const OptionRow: FC<OptionRowProps> = ({ option, apr }) => (
       </Typography>
     </Stack>
     {isStatVisible(apr) && (
-      <AprColumn>
+      <div className={s.aprColumn}>
         <Typography variant="description" color="secondary">
           APY up to
         </Typography>
@@ -78,7 +72,7 @@ const OptionRow: FC<OptionRowProps> = ({ option, apr }) => (
             </Typography>
           )}
         />
-      </AprColumn>
+      </div>
     )}
   </Stack>
 );

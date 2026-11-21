@@ -7,70 +7,38 @@ import {
 import { Points } from 'features/ics/score-system/points';
 import { FC } from 'react';
 import { StretchStack } from 'shared/components';
-import styled from 'styled-components';
 import { calculateScores } from '../utils';
+import s from './score-breakdown-modal.module.css';
 
 type Props = Pick<IcsResponseDto, 'scores'> & {
   onClose: () => void;
 };
 
-const HeadingStyle = styled.div`
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  font-size: var(--lido-app-ui-font-size-body);
-  line-height: var(--lido-app-ui-line-height-body);
-  font-weight: 600;
-  color: var(--lido-app-ui-color-text-default);
-`;
-
-const ItemsStyle = styled.ul`
-  margin: 8px 0 0;
-  padding: 0;
-  list-style: none;
-`;
-
-const ItemStyle = styled.li<{ $dimmed: boolean }>`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 0;
-  font-size: var(--lido-app-ui-font-size-body);
-  line-height: var(--lido-app-ui-line-height-body);
-  color: ${({ $dimmed }) =>
-    $dimmed
-      ? 'var(--lido-app-ui-color-text-tertiary)'
-      : 'var(--lido-app-ui-color-text-default)'};
-  opacity: ${({ $dimmed }) => ($dimmed ? 0.6 : 1)};
-
-  & + & {
-    border-top: 1px solid var(--lido-app-ui-color-border-default);
-  }
-`;
-
-const ItemNameStyle = styled.span`
-  flex: 1;
-  min-width: 0;
-`;
-
 const CategoryItems: FC<{
   source: ScoreSource;
   scores: IcsResponseDto['scores'];
 }> = ({ source, scores }) => (
-  <ItemsStyle>
+  <ul className={s.items}>
     {source.items.map(({ id, name, icon }) => {
       const value = scores[id] ?? 0;
       return (
-        <ItemStyle key={id} $dimmed={value === 0} data-testid="scoreItem">
+        <li
+          key={id}
+          className={s.item}
+          data-dimmed={value === 0 || undefined}
+          data-testid="scoreItem"
+        >
           {icon}
-          <ItemNameStyle data-testid="scoreLabel">{name}</ItemNameStyle>
+          <span className={s.itemName} data-testid="scoreLabel">
+            {name}
+          </span>
           <span data-testid="scoreValue">
             <Points value={value} />
           </span>
-        </ItemStyle>
+        </li>
       );
     })}
-  </ItemsStyle>
+  </ul>
 );
 
 export const ScoreBreakdownModal: FC<Props> = ({ scores, onClose }) => (
@@ -82,16 +50,16 @@ export const ScoreBreakdownModal: FC<Props> = ({ scores, onClose }) => (
     dataTestId={{ root: 'scoreBreakdownModal' }}
   >
     <StretchStack gap={24}>
-      <HeadingStyle data-testid="scoreBreakdownTotal">
+      <div className={s.heading} data-testid="scoreBreakdownTotal">
         <span>Total score</span>
         <Points value={calculateScores(scores)} />
-      </HeadingStyle>
+      </div>
       {SCORE_SOURCES.map((source) => (
         <section key={source.id} id={source.id}>
-          <HeadingStyle>
+          <div className={s.heading}>
             <span>{source.title}</span>
             <Points value={calculateScores(scores, source.id)} />
-          </HeadingStyle>
+          </div>
           <CategoryItems source={source} scores={scores} />
         </section>
       ))}

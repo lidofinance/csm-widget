@@ -15,7 +15,7 @@ import { DkgSignInPage } from './dkg-signin-page';
 import { useDkgFiles } from './hooks/use-dkg-files';
 import { useDkgUploadZone } from './hooks/use-dkg-upload-zone';
 import { useUploadDkgFiles } from './hooks/use-upload-dkg-files';
-import { DropArea } from './styles';
+import s from './styles.module.css';
 import type { DkgFileUploadItem } from './types';
 import { validateDkgBatch } from './utils/validate-dkg-batch';
 
@@ -110,7 +110,7 @@ const DkgFilesContent: FC = () => {
         {canManage ? (
           <DkgDropArea zone={zone}>{content}</DkgDropArea>
         ) : (
-          <DropArea>{content}</DropArea>
+          <div className={s.dropArea}>{content}</div>
         )}
       </WhenLoaded>
     </Card>

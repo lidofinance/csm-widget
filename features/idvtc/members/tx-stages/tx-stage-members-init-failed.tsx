@@ -1,13 +1,9 @@
 import { Button, TextLink } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import styled from 'styled-components';
 import { PATH } from 'consts/urls';
 import { TransactionModalContent } from 'shared/transaction-modal/transaction-modal-content';
 import type { ClosableOnLedgerStage } from 'shared/transaction-modal/is-closable-on-ledger';
-
-const CenteredTextLink = styled(TextLink)`
-  align-self: center;
-`;
+import s from './tx-stage-members-init-failed.module.css';
 
 type Props = {
   title: string;
@@ -29,9 +25,9 @@ export const TxStageMembersInitFailed: FC<Props> & ClosableOnLedgerStage = ({
       footer={
         <>
           <Button onClick={onRetry}>Retry</Button>
-          <CenteredTextLink href={PATH.IDVTC_MEMBERS}>
+          <TextLink className={s.centered} href={PATH.IDVTC_MEMBERS}>
             Manage cluster members
-          </CenteredTextLink>
+          </TextLink>
         </>
       }
     />

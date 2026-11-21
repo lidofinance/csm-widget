@@ -1,13 +1,9 @@
 import { Button, TextLink } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import styled from 'styled-components';
 import { PATH } from 'consts/urls';
 import { TransactionModalContent } from 'shared/transaction-modal/transaction-modal-content';
 import type { ClosableOnLedgerStage } from 'shared/transaction-modal/is-closable-on-ledger';
-
-const CenteredTextLink = styled(TextLink)`
-  align-self: center;
-`;
+import s from './tx-stage-dkg-upload-failed.module.css';
 
 type Props = {
   nodeOperatorId: bigint;
@@ -31,9 +27,9 @@ export const TxStageDkgUploadFailed: FC<Props> & ClosableOnLedgerStage = ({
       footer={
         <>
           <Button onClick={onRetry}>Retry upload</Button>
-          <CenteredTextLink href={PATH.IDVTC_DKG}>
+          <TextLink className={s.centered} href={PATH.IDVTC_DKG}>
             Manage DKG files
-          </CenteredTextLink>
+          </TextLink>
         </>
       }
     />

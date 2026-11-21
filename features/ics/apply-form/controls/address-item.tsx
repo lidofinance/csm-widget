@@ -8,7 +8,6 @@ import {
 } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { FC, useCallback, useState } from 'react';
-import styled from 'styled-components';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { AddressField, CopyField, TextField } from 'shared/hook-form/fields';
 import { VALIDATION_MESSAGES } from 'shared/hook-form/validation';
@@ -21,11 +20,7 @@ import {
   type ApplyFormInputType,
 } from '../context';
 import { ETHERSCAN_SIGNATURES_URL } from './consts';
-
-const StepsStyle = styled(Stack)`
-  padding-left: 16px;
-  border-left: 1px solid var(--lido-app-ui-color-border-default);
-`;
+import s from './address-item.module.css';
 
 const openEtherscan = () => {
   trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.icsEtherscanSignaturesLink);
@@ -134,7 +129,7 @@ export const AddressItem: FC<AddressItemProps> = ({ index, onRemove }) => {
           trailing={<VerifiedTag />}
         />
       ) : (
-        <StepsStyle gap={16}>
+        <Stack gap={16} className={s.steps}>
           <Stack gap={8} data-testid="additionalAddressStep1">
             <Description color="secondary">
               Step 1. Insert your Ethereum address
@@ -185,7 +180,7 @@ export const AddressItem: FC<AddressItemProps> = ({ index, onRemove }) => {
               }
             />
           </Stack>
-        </StepsStyle>
+        </Stack>
       )}
     </Stack>
   );

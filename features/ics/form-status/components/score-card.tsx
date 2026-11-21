@@ -16,7 +16,7 @@ import {
 import { FC } from 'react';
 import { StretchStack } from 'shared/components';
 import { calculateScores, isMinScoresReached } from '../utils';
-import { ScoreIconStyle } from '../styles';
+import s from '../styles.module.css';
 
 type Props = Pick<IcsResponseDto, 'scores'> & {
   onView: () => void;
@@ -41,9 +41,9 @@ const COLUMNS: TableColumn<Row>[] = [
     header: 'Category',
     render: ({ title, passed }) => (
       <Stack direction="row" align="center" gap={8}>
-        <ScoreIconStyle $passed={passed}>
+        <span className={s.scoreIcon} data-passed={passed || undefined}>
           {passed ? <IconCheck /> : <IconCross />}
-        </ScoreIconStyle>
+        </span>
         {title}
       </Stack>
     ),

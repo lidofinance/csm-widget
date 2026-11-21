@@ -1,7 +1,7 @@
 import { Body, Card, SectionTitle, Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { CRITERIA } from './criteria-data';
-import { CriteriaContent, CriterionStyle } from './styles';
+import s from './styles.module.css';
 
 export const RequirementsCriteria: FC = () => (
   <Card dataTestId={{ root: 'idvtcRequirements' }}>
@@ -11,10 +11,10 @@ export const RequirementsCriteria: FC = () => (
         subtitle="To be included in the list, applicants must meet all the criteria and be approved by the CSM Committee"
       />
       {CRITERIA.map(({ id, title, content }) => (
-        <CriterionStyle key={id}>
+        <section key={id} className={s.criterion}>
           <Body weight="semibold">{title}</Body>
-          <CriteriaContent>{content}</CriteriaContent>
-        </CriterionStyle>
+          <div className={s.content}>{content}</div>
+        </section>
       ))}
     </Stack>
   </Card>

@@ -1,15 +1,9 @@
-import {
-  Button,
-  IconLink,
-  Stack,
-  Typography,
-  downQuery,
-} from '@lidofinance/lido-app-ui';
+import { Button, IconLink, Stack, Typography } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FC, ReactNode } from 'react';
-import styled from 'styled-components';
 import { trackMatomoEvent } from 'utils';
 import { Illustration, PromoCard } from '../components';
+import s from './module-card.module.css';
 
 type ModuleCardProps = {
   id: string;
@@ -21,25 +15,6 @@ type ModuleCardProps = {
   learnMoreEvent?: MATOMO_CLICK_EVENTS_TYPES;
   illustration: { src: string };
 };
-
-const Content = styled(Stack)`
-  min-height: 192px;
-
-  @media ${downQuery('sm')} {
-    min-height: auto;
-  }
-`;
-
-const ModuleIllustration = styled(Illustration)`
-  flex: none;
-
-  @media ${downQuery('sm')} {
-    && {
-      width: 100px;
-      height: 100px;
-    }
-  }
-`;
 
 export const ModuleCard: FC<ModuleCardProps> = ({
   id,
@@ -53,7 +28,8 @@ export const ModuleCard: FC<ModuleCardProps> = ({
 }) => (
   <PromoCard data-testid={`moduleCard-${id}`}>
     <Stack direction="row" align="center" gap={16}>
-      <Content
+      <Stack
+        className={s.content}
         grow
         direction="column"
         justify="between"
@@ -82,8 +58,8 @@ export const ModuleCard: FC<ModuleCardProps> = ({
             </Button>
           )}
         </Stack>
-      </Content>
-      <ModuleIllustration src={illustration} width={160} />
+      </Stack>
+      <Illustration className={s.illustration} src={illustration} width={160} />
     </Stack>
   </PromoCard>
 );

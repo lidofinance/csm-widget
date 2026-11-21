@@ -1,29 +1,12 @@
-import {
-  BodyLarge,
-  Stack,
-  Typography,
-  downQuery,
-} from '@lidofinance/lido-app-ui';
+import { BodyLarge, Stack, Typography } from '@lidofinance/lido-app-ui';
 import { FC, ReactNode } from 'react';
-import styled from 'styled-components';
 import validateNom from 'assets/illustrations/validate-nom.webp';
 import {
   HeroIllustration,
   HeroIllustrationSlot,
   PromoCard,
 } from '../components';
-
-const HeroPromoCard = styled(PromoCard)`
-  && > div {
-    padding: 32px 40px 40px;
-  }
-
-  @media ${downQuery('sm')} {
-    && > div {
-      padding: 20px;
-    }
-  }
-`;
+import s from './hero-card.module.css';
 
 type HeroCardProps = {
   variant: 'border' | 'fill';
@@ -38,7 +21,7 @@ export const HeroCard: FC<HeroCardProps> = ({
   text,
   actions,
 }) => (
-  <HeroPromoCard $gradient={variant} $radius="xl">
+  <PromoCard $gradient={variant} $radius="xl" className={s.card}>
     <Stack
       direction={{ base: 'row', mdDown: 'column' }}
       gap={{ base: 40, mdDown: 24 }}
@@ -57,7 +40,7 @@ export const HeroCard: FC<HeroCardProps> = ({
         <HeroIllustration src={validateNom} width={297} />
       </HeroIllustrationSlot>
     </Stack>
-  </HeroPromoCard>
+  </PromoCard>
 );
 
 export const HeroText: FC<{ children: ReactNode }> = ({ children }) => (

@@ -1,0 +1,6 @@
+@media (--lido-app-ui-breakpoint-sm-down) {
+  .buttons.buttons a,
+  .buttons.buttons button {
+    width: 100%;
+  }
+}

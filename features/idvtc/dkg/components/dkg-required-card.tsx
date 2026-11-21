@@ -1,6 +1,7 @@
 import { Card, Body, Button, H3, Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import { DkgIllustration } from '../styles';
+import DkgFileWarning from 'assets/illustrations/dkg-file-warning.svg?react';
+import s from '../styles.module.css';
 
 type Props = {
   onAction: () => void;
@@ -9,7 +10,7 @@ type Props = {
 export const DkgRequiredCard: FC<Props> = ({ onAction }) => (
   <Card align="stretch" dataTestId={{ root: 'dkgRequiredCard' }}>
     <Stack align="center" gap={32} style={{ textAlign: 'center' }}>
-      <DkgIllustration aria-hidden="true" />
+      <DkgFileWarning className={s.illustration} aria-hidden="true" />
       <H3>Upload DKG Files Required</H3>
       <Body color="secondary">
         This Node Operator is configured as IDVTC. To keep the IDVTC status,

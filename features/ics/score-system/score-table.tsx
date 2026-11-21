@@ -1,8 +1,8 @@
 import { IconChevronRight, Table } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import styled from 'styled-components';
 import { SCORE_SOURCES, ScoreSource, TOTAL_SCORE_REQUIRED } from '../shared';
 import { Points } from './points';
+import s from './score-table.module.css';
 
 type Props = {
   onViewCriteria: (category: ScoreSource) => void;
@@ -15,44 +15,6 @@ type Row = {
   max: number;
   category?: ScoreSource;
 };
-
-const MaxStyle = styled.span`
-  color: var(--lido-app-ui-color-text-secondary);
-`;
-
-const CategoryStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
-`;
-
-const CriteriaButtonStyle = styled.button`
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: var(--lido-app-ui-color-text-active);
-  font: inherit;
-  font-size: 12px;
-  line-height: 20px;
-  cursor: pointer;
-
-  &:hover {
-    color: var(--lido-app-ui-color-text-active-hover);
-  }
-
-  svg {
-    width: 12px;
-    height: 12px;
-  }
-`;
-
-const StrongStyle = styled.span`
-  font-weight: 600;
-`;
 
 const ROWS: Row[] = [
   ...SCORE_SOURCES.map((category) => ({
@@ -80,18 +42,19 @@ export const ScoreTable: FC<Props> = ({ onViewCriteria }) => (
         key: 'category',
         header: 'Category',
         render: ({ title, category }) => (
-          <CategoryStyle>
-            <StrongStyle>{title}</StrongStyle>
+          <div className={s.category}>
+            <span className={s.strong}>{title}</span>
             {category && (
-              <CriteriaButtonStyle
+              <button
+                className={s.criteriaButton}
                 type="button"
                 onClick={() => onViewCriteria(category)}
               >
                 View criteria
                 <IconChevronRight aria-hidden />
-              </CriteriaButtonStyle>
+              </button>
             )}
-          </CategoryStyle>
+          </div>
         ),
       },
       {
@@ -99,9 +62,9 @@ export const ScoreTable: FC<Props> = ({ onViewCriteria }) => (
         header: 'Maximum',
         align: 'right',
         render: ({ max }) => (
-          <MaxStyle>
+          <span className={s.max}>
             <Points value={max} />
-          </MaxStyle>
+          </span>
         ),
       },
       {
@@ -109,9 +72,9 @@ export const ScoreTable: FC<Props> = ({ onViewCriteria }) => (
         header: 'Minimum',
         align: 'right',
         render: ({ min }) => (
-          <StrongStyle>
+          <span className={s.strong}>
             <Points value={min} />
-          </StrongStyle>
+          </span>
         ),
       },
     ]}
