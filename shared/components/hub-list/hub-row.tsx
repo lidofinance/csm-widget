@@ -7,30 +7,8 @@ import { PATH } from 'consts/urls';
 import { FC, ReactNode } from 'react';
 import { ExternalLink } from 'shared/navigate/external-link';
 import { LocalLink } from 'shared/navigate/local-link';
-import styled from 'styled-components';
-import {
-  HubAsideStyle,
-  HubChevronStyle,
-  HubMainStyle,
-  HubMediaStyle,
-  HubRowStyle,
-  HubTrailingStyle,
-  HubValueStyle,
-  HubTitleRowStyle,
-  HubTitleTextStyle,
-  hubRowCss,
-  hubRowLinkCss,
-} from './styles';
-
-const RowLocalLinkStyle = styled(LocalLink)`
-  ${hubRowCss}
-  ${hubRowLinkCss}
-`;
-
-const RowExternalLinkStyle = styled(ExternalLink)`
-  ${hubRowCss}
-  ${hubRowLinkCss}
-`;
+import cn from 'classnames';
+import s from './styles.module.css';
 
 type LinkProps =
   { href?: PATH; external?: false } | { href: string; external: true };
@@ -66,61 +44,63 @@ export const HubRow: FC<HubRowProps> = ({
 }) => {
   const content = (
     <>
-      {media && <HubMediaStyle>{media}</HubMediaStyle>}
-      <HubMainStyle>
-        <HubTitleRowStyle>
+      {media && <div className={s.media}>{media}</div>}
+      <div className={s.main}>
+        <div className={s.titleRow}>
           <BodyLarge weight="semibold" as="span" color="default">
-            <HubTitleTextStyle>{title}</HubTitleTextStyle>
+            <span className={s.titleText}>{title}</span>
           </BodyLarge>
           {tag}
-        </HubTitleRowStyle>
+        </div>
         {description && (
           <Description color="secondary" as="span">
             {description}
           </Description>
         )}
-      </HubMainStyle>
+      </div>
       {value && (
-        <HubAsideStyle>
-          <HubValueStyle>
+        <div className={s.aside}>
+          <span className={s.value}>
             <BodyLarge as="span" color="default">
               {value}
             </BodyLarge>
-          </HubValueStyle>
-        </HubAsideStyle>
+          </span>
+        </div>
       )}
-      {trailing && <HubTrailingStyle>{trailing}</HubTrailingStyle>}
+      {trailing && <div className={s.trailing}>{trailing}</div>}
       {href && (
-        <HubChevronStyle aria-hidden="true">
+        <span className={s.chevron} aria-hidden="true">
           <IconChevronRight />
-        </HubChevronStyle>
+        </span>
       )}
     </>
   );
 
   if (!href) {
     return (
-      <HubRowStyle data-testid={dataTestId} data-wrap={!!trailing}>
+      <div className={s.hubRow} data-testid={dataTestId} data-wrap={!!trailing}>
         {content}
-      </HubRowStyle>
+      </div>
     );
   }
 
   return external ? (
-    <RowExternalLinkStyle
+    <ExternalLink
+      className={cn(s.hubRow, s.hubRowLink)}
       href={href}
       data-testid={dataTestId}
       data-wrap={!!trailing}
     >
       {content}
-    </RowExternalLinkStyle>
+    </ExternalLink>
   ) : (
-    <RowLocalLinkStyle
+    <LocalLink
+      className={cn(s.hubRow, s.hubRowLink)}
       href={href as PATH}
       data-testid={dataTestId}
       data-wrap={!!trailing}
     >
       {content}
-    </RowLocalLinkStyle>
+    </LocalLink>
   );
 };

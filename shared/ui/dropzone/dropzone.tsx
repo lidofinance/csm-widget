@@ -10,14 +10,8 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from 'react';
-import {
-  BodyStyle,
-  ErrorTextStyle,
-  FileInputStyle,
-  PlaceholderStyle,
-  RootStyle,
-  TextareaStyle,
-} from './styles';
+import cn from 'classnames';
+import s from './styles.module.css';
 
 export type DropzoneTabs = {
   items: SegmentItem[];
@@ -114,12 +108,12 @@ export const Dropzone: FC<DropzoneProps> = ({
   };
 
   return (
-    <RootStyle
-      className={className}
+    <div
+      className={cn(s.root, className)}
       data-testid={dataTestId}
-      $dragging={dragging}
-      $error={hasError}
-      $disabled={disabled}
+      data-dragging={dragging || undefined}
+      data-error={hasError || undefined}
+      data-disabled={disabled || undefined}
     >
       {tabs != null ? (
         <SegmentedControl
@@ -128,7 +122,8 @@ export const Dropzone: FC<DropzoneProps> = ({
           onChange={tabs.onChange}
         />
       ) : null}
-      <BodyStyle
+      <div
+        className={s.body}
         role="button"
         aria-disabled={disabled || undefined}
         tabIndex={disabled ? -1 : 0}
@@ -144,9 +139,10 @@ export const Dropzone: FC<DropzoneProps> = ({
         ) : (
           <>
             {!hasValue && placeholder != null ? (
-              <PlaceholderStyle>{placeholder}</PlaceholderStyle>
+              <div className={s.placeholder}>{placeholder}</div>
             ) : null}
-            <TextareaStyle
+            <textarea
+              className={s.textarea}
               name={name}
               aria-label={ariaLabel}
               aria-invalid={hasError || undefined}
@@ -154,14 +150,15 @@ export const Dropzone: FC<DropzoneProps> = ({
               value={value ?? ''}
               disabled={disabled}
               spellCheck={false}
-              $filled={hasValue}
+              data-filled={hasValue || undefined}
               onChange={(event) => onChange?.(event.target.value)}
               onBlur={onBlur}
               onClick={(event) => event.stopPropagation()}
             />
           </>
         )}
-        <FileInputStyle
+        <input
+          className={s.fileInput}
           ref={fileInputRef}
           type="file"
           accept={accept}
@@ -169,12 +166,12 @@ export const Dropzone: FC<DropzoneProps> = ({
           tabIndex={-1}
           onChange={handleFileInputChange}
         />
-      </BodyStyle>
+      </div>
       {showErrorText ? (
-        <ErrorTextStyle id={errorId} role="alert">
+        <p className={s.errorText} id={errorId} role="alert">
           {error}
-        </ErrorTextStyle>
+        </p>
       ) : null}
-    </RootStyle>
+    </div>
   );
 };

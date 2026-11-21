@@ -19,7 +19,7 @@ import {
   RowSubStyle,
   RowTextStyle,
   SectionStyle,
-} from './styles';
+} from './row-kit';
 
 type CreateRowProps = {
   variant: ModuleMenuIconProps['variant'];

@@ -1,8 +1,12 @@
 import {
   Address,
+  Copy,
   IconEtherscan,
   Identicon,
+  Popover,
+  Stack,
   ThemeName,
+  Typography,
   useThemeToggle,
 } from '@lidofinance/lido-app-ui';
 import { FC, RefObject } from 'react';
@@ -14,18 +18,10 @@ import {
 } from 'reef-knot';
 import { useConnection } from 'wagmi';
 
+import { EtherscanAddressLink } from 'shared/components/external-icon-link/etherscan-address-link';
 import { notifyCopied } from 'shared/hooks';
 import { Disconnect } from '../disconnect/disconnect';
-import {
-  AccountStyle,
-  AddressRowStyle,
-  AddressStyle,
-  AvatarStyle,
-  BadgeStyle,
-  CopyStyle,
-  EtherscanLinkStyle,
-  PopupStyle,
-} from './styles';
+import s from './wallet-popover.module.css';
 
 type WalletPopoverProps = {
   address: string;
@@ -53,7 +49,12 @@ const WalletBadge: FC = () => {
   const label = connectorName ?? connector?.name;
 
   return (
-    <BadgeStyle data-testid="providerName" title={label} aria-label={label}>
+    <span
+      className={s.badge}
+      data-testid="providerName"
+      title={label}
+      aria-label={label}
+    >
       {Icon ? (
         <Icon />
       ) : (
@@ -63,7 +64,7 @@ const WalletBadge: FC = () => {
           alt=""
         />
       )}
-    </BadgeStyle>
+    </span>
   );
 };
 
@@ -74,7 +75,8 @@ export const WalletPopover: FC<WalletPopoverProps> = ({
   anchorRef,
 }) => {
   return (
-    <PopupStyle
+    <Popover
+      className={s.popup}
       open={open}
       onClose={onClose}
       anchorRef={anchorRef}
@@ -86,32 +88,47 @@ export const WalletPopover: FC<WalletPopoverProps> = ({
       aria-label="Account"
       data-testid="walletModal"
     >
-      <AccountStyle>
-        <AvatarStyle>
+      <Stack align="center" gap={24} className={s.account}>
+        <div className={s.avatar}>
           <Identicon address={address} size={64} />
           <WalletBadge />
-        </AvatarStyle>
-        <AddressRowStyle>
-          <AddressStyle data-testid="connectedAddress">
+        </div>
+        <Stack
+          direction="row"
+          align="center"
+          justify="center"
+          gap={8}
+          className={s.addressRow}
+        >
+          <Typography
+            variant="h3"
+            weight="medium"
+            color="default"
+            as="span"
+            className={s.address}
+            data-testid="connectedAddress"
+          >
             <Address address={address} symbols={4} />
-          </AddressStyle>
-          <CopyStyle
+          </Typography>
+          <Copy
+            className={s.copy}
             text={address}
             onCopy={notifyCopied}
             labels={{ copy: 'Copy address', copied: 'Address copied' }}
             data-testid="copyAddressBtn"
           />
-          <EtherscanLinkStyle
+          <EtherscanAddressLink
+            className={s.etherscan}
             address={address}
             icon={<IconEtherscan />}
             aria-label="View on Etherscan"
             data-testid="etherscanBtn"
           />
-        </AddressRowStyle>
-      </AccountStyle>
+        </Stack>
+      </Stack>
       <Disconnect fullWidth variant="outline" onClick={onClose}>
         Disconnect wallet
       </Disconnect>
-    </PopupStyle>
+    </Popover>
   );
 };

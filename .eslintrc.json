@@ -173,15 +173,7 @@
         "pages/test/idvtc-members.tsx",
         "pages/test/my-operators.tsx",
         "pages/test/queue.tsx",
-        "pages/test/rewards-history.tsx",
-        "shared/components/hub-list/hub-row.tsx",
-        "shared/components/hub-list/hub-section.tsx",
-        "shared/components/hub-list/styles.tsx",
-        "shared/components/parameters-list/styles.tsx",
-        "shared/node-operator/choose-operator-modal/styles.tsx",
-        "shared/node-operator/operator-rows/styles.tsx",
-        "shared/ui/dropzone/styles.tsx",
-        "shared/wallet/wallet-popover/styles.tsx"
+        "pages/test/rewards-history.tsx"
       ],
       "rules": {
         "no-restricted-imports": "off"

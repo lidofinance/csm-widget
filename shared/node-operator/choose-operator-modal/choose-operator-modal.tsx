@@ -10,7 +10,7 @@ import {
   SectionStyle,
   useCreateRows,
 } from '../operator-rows';
-import { LoadingStyle } from './styles';
+import s from './styles.module.css';
 
 const CREATE_EVENTS = {
   cm: MATOMO_CLICK_EVENTS_TYPES.chooseOperatorCreateCm,
@@ -35,13 +35,13 @@ export const ChooseOperatorModal: ModalComponentType = ({ onClose }) => {
         title="Choose a Node Operator"
         data-testid="selectOperatorModal"
       >
-        <LoadingStyle>
+        <div className={s.loading}>
           <Spinner
             size="lg"
             label="Loading operators"
             data-testid="selectOperatorModalLoader"
           />
-        </LoadingStyle>
+        </div>
       </Modal>
     );
   }

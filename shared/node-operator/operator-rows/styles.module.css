@@ -1,0 +1,47 @@
+.row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: transparent;
+  font: inherit;
+  color: var(--lido-app-ui-color-text-default);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.row:hover,
+.row:focus-visible {
+  background: var(--lido-app-ui-color-background-surface-hover);
+}
+
+.row[data-size='compact'] {
+  gap: 8px;
+  height: 48px;
+  padding: 12px 12px 12px 0;
+  border: 0;
+  border-radius: 8px;
+}
+
+.row:not([data-size='compact']) {
+  gap: 12px;
+
+  /* Figma strokes sit inside the box: padding minus the 1px border */
+  padding: 11px 19px 11px 11px;
+  border: 1px solid var(--lido-app-ui-color-border-default);
+  border-radius: 16px;
+}
+
+.avatarSlot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+}
+
+.avatarSlot[data-size='compact'] {
+  width: 40px;
+  height: 40px;
+}

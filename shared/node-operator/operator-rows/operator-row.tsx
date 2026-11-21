@@ -15,7 +15,7 @@ import {
   RowSubStyle,
   RowTagsStyle,
   RowTextStyle,
-} from './styles';
+} from './row-kit';
 
 type OperatorRowProps = {
   operator: ModuleNodeOperator;

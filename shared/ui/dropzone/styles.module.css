@@ -1,13 +1,4 @@
-import { downQuery } from '@lidofinance/lido-app-ui';
-import styled, { css } from 'styled-components';
-
-type RootStyleProps = {
-  $dragging: boolean;
-  $error: boolean;
-  $disabled: boolean;
-};
-
-export const RootStyle = styled.div<RootStyleProps>`
+.root {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -20,47 +11,41 @@ export const RootStyle = styled.div<RootStyleProps>`
     border-color 0.2s ease,
     background-color 0.2s ease;
 
-  ${({ $dragging }) =>
-    $dragging &&
-    css`
-      border-style: dashed;
-      border-color: var(--lido-app-ui-color-border-active);
-      background-color: var(--lido-app-ui-color-tint-active);
-    `}
-
-  ${({ $error }) =>
-    $error &&
-    css`
-      border-color: var(--lido-app-ui-color-border-error);
-    `}
-
-  ${({ $disabled }) =>
-    $disabled &&
-    css`
-      cursor: not-allowed;
-      opacity: 0.6;
-    `}
-
-  @media ${downQuery('sm')} {
+  @media (--lido-app-ui-breakpoint-sm-down) {
     padding: 12px;
   }
-`;
+}
 
-export const BodyStyle = styled.div`
+.root[data-dragging] {
+  border-style: dashed;
+  border-color: var(--lido-app-ui-color-border-active);
+  background-color: var(--lido-app-ui-color-tint-active);
+}
+
+.root[data-error] {
+  border-color: var(--lido-app-ui-color-border-error);
+}
+
+.root[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.body {
   position: relative;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   min-height: 200px;
   cursor: pointer;
+}
 
-  &:focus-visible {
-    outline: 2px solid var(--lido-app-ui-color-border-active);
-    outline-offset: -2px;
-  }
-`;
+.body:focus-visible {
+  outline: 2px solid var(--lido-app-ui-color-border-active);
+  outline-offset: -2px;
+}
 
-export const PlaceholderStyle = styled.div`
+.placeholder {
   position: absolute;
   inset: 0;
   display: flex;
@@ -77,9 +62,9 @@ export const PlaceholderStyle = styled.div`
   letter-spacing: var(--lido-app-ui-letter-spacing-label);
   text-align: center;
   pointer-events: none;
-`;
+}
 
-export const TextareaStyle = styled.textarea<{ $filled: boolean }>`
+.textarea {
   display: block;
   box-sizing: border-box;
   width: 100%;
@@ -93,27 +78,25 @@ export const TextareaStyle = styled.textarea<{ $filled: boolean }>`
   pointer-events: none;
   cursor: text;
   resize: none;
+}
 
-  ${({ $filled }) =>
-    $filled &&
-    css`
-      color: var(--lido-app-ui-color-text-default);
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 12px;
-      line-height: var(--lido-app-ui-line-height-description);
-      pointer-events: auto;
-    `}
+.textarea[data-filled] {
+  color: var(--lido-app-ui-color-text-default);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  line-height: var(--lido-app-ui-line-height-description);
+  pointer-events: auto;
+}
 
-  &:disabled {
-    cursor: not-allowed;
-  }
-`;
+.textarea:disabled {
+  cursor: not-allowed;
+}
 
-export const FileInputStyle = styled.input`
+.fileInput {
   display: none;
-`;
+}
 
-export const ErrorTextStyle = styled.p`
+.errorText {
   margin: 0;
   color: var(--lido-app-ui-color-text-error);
   font-family: var(--lido-app-ui-font-family);
@@ -121,4 +104,4 @@ export const ErrorTextStyle = styled.p`
   font-weight: var(--lido-app-ui-font-weight-regular);
   line-height: var(--lido-app-ui-line-height-description);
   letter-spacing: var(--lido-app-ui-letter-spacing-tooltip);
-`;
+}

@@ -1,18 +1,17 @@
-import { Body, Button, InfoTooltip, Stack } from '@lidofinance/lido-app-ui';
+import {
+  Body,
+  Button,
+  IconChevronDown,
+  InfoTooltip,
+  Stack,
+} from '@lidofinance/lido-app-ui';
 import { ICON_TOOLTIP_TEST_ID } from 'shared/components/icon-tooltip/test-ids';
 import { CurveParameters, MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { FC, PropsWithChildren, useState } from 'react';
+import cn from 'classnames';
+import { CSSProperties, FC, PropsWithChildren, useState } from 'react';
 import { useParameters } from './parameters';
 import { ParametersValue } from './parameters-value';
-import {
-  ArrowStyle,
-  CompareListStyle,
-  CompareRowStyle,
-  CompareTitleStyle,
-  FoldableListStyle,
-  ListStyle,
-  RowStyle,
-} from './styles';
+import s from './styles.module.css';
 
 const Title: FC<{ title: string; help?: string }> = ({ title, help }) => (
   <Body weight="bold" dataTestId={{ root: 'parameterTitle' }}>
@@ -36,33 +35,39 @@ export const ParametersList: FC<{
 
   return (
     <Stack direction="column" gap={24}>
-      <ListStyle>
+      <div className={s.list}>
         {PARAMETERS.slice(0, 3).map(({ title, help, render }) => (
-          <RowStyle key={title} $bordered={more}>
+          <div key={title} className={s.row} data-bordered={more || undefined}>
             <Title title={title} help={help} />
             <ParametersValue
               loading={!parameters}
               values={render(parameters)}
             />
-          </RowStyle>
+          </div>
         ))}
-      </ListStyle>
-      <FoldableListStyle $folded={!more} data-testid="foldableParameters">
+      </div>
+      <div
+        className={cn(s.list, s.foldableList)}
+        data-folded={!more || undefined}
+        data-testid="foldableParameters"
+      >
         {PARAMETERS.slice(3).map(({ title, help, render }) => (
-          <RowStyle key={title}>
+          <div key={title} className={s.row}>
             <Title title={title} help={help} />
             <ParametersValue
               loading={!parameters}
               values={render(parameters)}
             />
-          </RowStyle>
+          </div>
         ))}
-      </FoldableListStyle>
+      </div>
       <Button
         variant="ghost"
         size="small"
         onClick={toggleMore}
-        iconRight={<ArrowStyle $expanded={more} />}
+        iconRight={
+          <IconChevronDown className={cn(s.arrow, more && s.expanded)} />
+        }
         dataTestId={{ root: 'parametersShowMore' }}
       >
         {more ? 'Show less' : 'Show more'}
@@ -87,18 +92,22 @@ export const CompareParametersList: FC<
   const PARAMETERS = useParameters(module);
 
   return (
-    <CompareListStyle $columns={items.length}>
+    <div
+      className={s.compareList}
+      data-many={items.length > 2 || undefined}
+      style={{ '--columns': items.length } as CSSProperties}
+    >
       {children}
-      <CompareTitleStyle>
+      <div className={cn(s.row, s.compareRow, s.compareTitle)}>
         <p></p>
         {items.map((item, index) => (
           <Body key={index} weight="bold">
             {item.title}
           </Body>
         ))}
-      </CompareTitleStyle>
+      </div>
       {PARAMETERS.map(({ title, help, render }) => (
-        <CompareRowStyle key={title}>
+        <div key={title} className={cn(s.row, s.compareRow)}>
           <Title title={title} help={help} />
           {items.map((item, index) => (
             <ParametersValue
@@ -107,8 +116,8 @@ export const CompareParametersList: FC<
               values={render(item.parameters)}
             />
           ))}
-        </CompareRowStyle>
+        </div>
       ))}
-    </CompareListStyle>
+    </div>
   );
 };

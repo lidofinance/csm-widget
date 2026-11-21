@@ -1,6 +1,6 @@
 import { Caption, Stack, Typography } from '@lidofinance/lido-app-ui';
-import { FC, ReactNode } from 'react';
-import styled, { css } from 'styled-components';
+import { ButtonHTMLAttributes, FC, ReactNode } from 'react';
+import s from './styles.module.css';
 
 export type RowSize = 'regular' | 'compact';
 
@@ -22,48 +22,20 @@ export const CaptionStyle: FC<{ $size: RowSize; children: ReactNode }> = ({
   </Caption>
 );
 
-export const RowStyle = styled.button<SizeProps>`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  background: transparent;
-  font: inherit;
-  color: var(--lido-app-ui-color-text-default);
-  text-align: left;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+type RowStyleProps = SizeProps & ButtonHTMLAttributes<HTMLButtonElement>;
 
-  &:hover,
-  &:focus-visible {
-    background: var(--lido-app-ui-color-background-surface-hover);
-  }
+export const RowStyle: FC<RowStyleProps> = ({ $size, ...props }) => (
+  <button {...props} className={s.row} data-size={$size} />
+);
 
-  ${({ $size }) =>
-    $size === 'compact'
-      ? css`
-          gap: 8px;
-          height: 48px;
-          padding: 12px 12px 12px 0;
-          border: 0;
-          border-radius: 8px;
-        `
-      : css`
-          gap: 12px;
-          /* Figma strokes sit inside the box: padding minus the 1px border */
-          padding: 11px 19px 11px 11px;
-          border: 1px solid var(--lido-app-ui-color-border-default);
-          border-radius: 16px;
-        `}
-`;
-
-export const AvatarSlotStyle = styled.span<SizeProps>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: ${({ $size }) => ($size === 'compact' ? 40 : 60)}px;
-  height: ${({ $size }) => ($size === 'compact' ? 40 : 60)}px;
-`;
+export const AvatarSlotStyle: FC<SizeProps & { children: ReactNode }> = ({
+  $size,
+  children,
+}) => (
+  <span className={s.avatarSlot} data-size={$size}>
+    {children}
+  </span>
+);
 
 type RowTextProps = { $gap?: number; children: ReactNode };
 

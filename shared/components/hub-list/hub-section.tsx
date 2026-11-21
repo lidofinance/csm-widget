@@ -1,12 +1,5 @@
-import { SectionTitle } from '@lidofinance/lido-app-ui';
+import { SectionTitle, Stack } from '@lidofinance/lido-app-ui';
 import { FC, PropsWithChildren, ReactNode } from 'react';
-import styled from 'styled-components';
-
-const SectionStyle = styled.section`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-`;
 
 export type HubSectionProps = PropsWithChildren<{
   title: string;
@@ -24,7 +17,7 @@ export const HubSection: FC<HubSectionProps> = ({
   dataTestId,
   children,
 }) => (
-  <SectionStyle data-testid={dataTestId}>
+  <Stack as="section" gap={16} dataTestId={{ root: dataTestId }}>
     <SectionTitle
       size="large"
       title={title}
@@ -33,5 +26,5 @@ export const HubSection: FC<HubSectionProps> = ({
       action={action}
     />
     {children}
-  </SectionStyle>
+  </Stack>
 );
