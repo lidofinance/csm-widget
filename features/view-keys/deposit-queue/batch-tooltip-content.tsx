@@ -2,7 +2,7 @@ import { Divider, Stack } from '@lidofinance/lido-app-ui';
 import { FC, Fragment } from 'react';
 import { getPriorityName } from './get-priority-name';
 import { QueueAmount } from './queue-amount';
-import { TooltipContentStyle } from './style';
+import s from './style.module.css';
 import { BatchMetadata, GraphPart, QueueUnit } from './types';
 
 type BatchTooltipContentProps = {
@@ -19,7 +19,7 @@ export const BatchTooltipContent: FC<BatchTooltipContentProps> = ({
       {metadata.map((batch, index) => (
         <Fragment key={index}>
           {index > 0 && <Divider orientation="vertical" />}
-          <TooltipContentStyle>
+          <div className={s.tooltipContent}>
             <strong>
               {batch.combined
                 ? 'Multiple batches'
@@ -33,7 +33,7 @@ export const BatchTooltipContent: FC<BatchTooltipContentProps> = ({
               {unit === 'eth' ? 'Stake ahead:' : 'Keys ahead:'}{' '}
               <QueueAmount amount={batch.position} unit={unit} />
             </span>
-          </TooltipContentStyle>
+          </div>
         </Fragment>
       ))}
     </Stack>

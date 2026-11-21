@@ -1,0 +1,7 @@
+.valueSuffix {
+  color: var(--lido-app-ui-color-text-secondary);
+  font-size: var(--lido-app-ui-font-size-body);
+  font-weight: var(--lido-app-ui-font-weight-semibold);
+  letter-spacing: var(--lido-app-ui-letter-spacing-body);
+  line-height: var(--lido-app-ui-line-height-body);
+}

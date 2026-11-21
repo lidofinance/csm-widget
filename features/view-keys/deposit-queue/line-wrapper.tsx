@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren } from 'react';
 import { useGraphInteraction } from './hover-provider';
-import { FarStyle, WrapperStyle } from './style';
+import s from './style.module.css';
 
 type Props = { farAway: boolean };
 
@@ -10,9 +10,13 @@ export const LineWrapper: FC<PropsWithChildren<Props>> = ({
 }) => {
   const { setFullView } = useGraphInteraction();
   return (
-    <WrapperStyle onMouseLeave={() => setFullView(false)}>
-      <FarStyle hidden={!farAway} onMouseEnter={() => setFullView(true)} />
+    <div className={s.wrapper} onMouseLeave={() => setFullView(false)}>
+      <div
+        className={s.far}
+        hidden={!farAway}
+        onMouseEnter={() => setFullView(true)}
+      />
       {children}
-    </WrapperStyle>
+    </div>
   );
 };

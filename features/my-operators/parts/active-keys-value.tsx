@@ -1,10 +1,6 @@
 import { VisuallyHidden } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import styled from 'styled-components';
-
-const Muted = styled.span`
-  color: var(--lido-app-ui-color-text-tertiary);
-`;
+import s from './active-keys-value.module.css';
 
 type Props = {
   active: number;
@@ -16,10 +12,10 @@ export const ActiveKeysValue: FC<Props> = ({ active, total, spaced }) => (
   <>
     <span aria-hidden="true">
       {active}
-      <Muted>
+      <span className={s.muted}>
         {spaced ? ' / ' : '/'}
         {total}
-      </Muted>
+      </span>
     </span>
     <VisuallyHidden>
       {active} of {total}

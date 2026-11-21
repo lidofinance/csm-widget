@@ -1,0 +1,129 @@
+.wrapper {
+  position: relative;
+}
+
+.far {
+  position: absolute;
+  display: block;
+  z-index: 1;
+  width: 10%;
+  top: 0%;
+  bottom: 0%;
+  opacity: 1;
+  transition: opacity 0.25s ease-in-out;
+  background: linear-gradient(
+    90deg,
+    var(--lido-app-ui-color-background-surface) 15%,
+    rgba(255, 255, 255, 0) 80%
+  );
+}
+
+.far[hidden] {
+  opacity: 0;
+}
+
+.line {
+  height: 10px;
+  width: 100%;
+  border-radius: 10px;
+  background: var(--lido-app-ui-color-background-secondary);
+  overflow: hidden;
+  position: relative;
+  white-space: nowrap;
+}
+
+.part {
+  display: inline-block;
+  vertical-align: top;
+  height: 100%;
+  width: var(--part-width);
+  opacity: 1;
+  transition:
+    opacity 0.25s ease-in-out,
+    left 0.25s ease-in-out,
+    width 0.25s ease-in-out;
+  position: relative;
+  color: var(--part-color);
+
+  --part-color-1: currentcolor;
+  --part-color-2: color-mix(in srgb, var(--part-color-1) 85%, white 15%);
+
+  background: repeating-linear-gradient(
+      120deg,
+      var(--part-color-1),
+      var(--part-color-1) 4px,
+      var(--part-color-2) 4px,
+      var(--part-color-2) 8px
+    )
+    0px fixed;
+}
+
+.part[data-fade] {
+  opacity: 0.2;
+}
+
+.part[data-type='active'],
+.part[data-type='added'] {
+  background: currentcolor;
+}
+
+.part[data-type='batch'] {
+  position: absolute;
+  left: var(--part-offset);
+}
+
+.part[data-type='limit'] {
+  position: absolute;
+  z-index: 1;
+  width: 2px;
+  left: var(--part-offset);
+  top: -40%;
+  height: 180%;
+
+  --part-color-1: var(--lido-app-ui-color-text-default);
+  --part-color-2: transparent;
+
+  background: repeating-linear-gradient(
+      0deg,
+      var(--part-color-1),
+      var(--part-color-1) 5px,
+      var(--part-color-2) 5px,
+      var(--part-color-2) 8px
+    )
+    0px;
+  mix-blend-mode: multiply;
+}
+
+/* every part, not only the limit marker: the bar and legend colours rely on it in dark theme */
+:global([data-lido-theme='dark']) .part {
+  mix-blend-mode: plus-lighter;
+}
+
+.circle {
+  width: 10px;
+}
+
+.legend {
+  cursor: pointer;
+}
+
+.legends {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+}
+
+.graph {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 4px;
+  overflow-x: auto;
+}
+
+.tooltipContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+}

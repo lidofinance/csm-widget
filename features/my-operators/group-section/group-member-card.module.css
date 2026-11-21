@@ -1,0 +1,14 @@
+.nameRow.nameRow {
+  min-width: 0;
+}
+
+.nameRow.nameRow > :first-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nameRow.nameRow > :not(:first-child) {
+  flex-shrink: 0;
+}

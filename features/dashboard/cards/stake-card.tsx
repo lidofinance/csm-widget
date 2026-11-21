@@ -22,19 +22,11 @@ import {
   StakeAllocationRows,
 } from 'shared/components/stake-allocation';
 import { useKeysBreakdown } from 'shared/hooks';
-import styled from 'styled-components';
 import { computeStakeData, trackMatomoEvent } from 'utils';
 import { getKeysStatusItems } from '../utils/get-keys-status-items';
 import { toKeysMetaItems } from './keys-status-meta';
+import s from './stake-card.module.css';
 import { StatCardMeta } from './stat-card-meta';
-
-const StakeMeta = styled(StatCardMeta)`
-  &&,
-  && * {
-    font-size: var(--lido-app-ui-font-size-tooltip);
-    line-height: var(--lido-app-ui-line-height-description);
-  }
-`;
 
 export const StakeCard: FC = () => {
   const { module } = useModule();
@@ -102,7 +94,9 @@ export const StakeCard: FC = () => {
           !isError && <ProgressBar aria-label="Stake allocation" />
         )}
         <KeyLimitNote info={info} />
-        {metaItems.length > 0 && <StakeMeta items={metaItems} />}
+        {metaItems.length > 0 && (
+          <StatCardMeta items={metaItems} className={s.stakeMeta} />
+        )}
       </Stack>
     </Card>
   );

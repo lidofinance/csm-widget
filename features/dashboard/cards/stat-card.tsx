@@ -8,7 +8,8 @@ import {
   TextLink,
 } from '@lidofinance/lido-app-ui';
 import { FC, ReactNode } from 'react';
-import styled from 'styled-components';
+import cn from 'classnames';
+import s from './stat-card.module.css';
 
 export type StatCardProps = {
   title: ReactNode;
@@ -23,12 +24,6 @@ export type StatCardProps = {
   dataTestId?: { root?: string; link?: string; value?: string };
 };
 
-const CardStyled = styled(Card)`
-  && {
-    height: 100%;
-  }
-`;
-
 export const StatCard: FC<StatCardProps> = ({
   title,
   info,
@@ -41,10 +36,10 @@ export const StatCard: FC<StatCardProps> = ({
   className,
   dataTestId,
 }) => (
-  <CardStyled
+  <Card
     align="stretch"
     gap={24}
-    className={className}
+    className={cn(s.root, className)}
     dataTestId={{ root: dataTestId?.root }}
   >
     <Stack direction="column" gap={8}>
@@ -81,5 +76,5 @@ export const StatCard: FC<StatCardProps> = ({
         {footer}
       </>
     )}
-  </CardStyled>
+  </Card>
 );

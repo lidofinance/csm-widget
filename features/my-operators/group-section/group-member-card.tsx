@@ -23,27 +23,10 @@ import {
   OperatorAddresses,
   useOperatorTitle,
 } from 'shared/node-operator';
-import styled from 'styled-components';
 import { formatBP, formatPercent } from 'utils';
 import { CardHeader, OperatorCardAction } from '../parts';
+import s from './group-member-card.module.css';
 import type { GroupMemberStake } from './use-group-stake';
-
-const NameRowStyle = styled(Stack)`
-  && {
-    min-width: 0;
-  }
-
-  && > :first-child {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  && > :not(:first-child) {
-    flex-shrink: 0;
-  }
-`;
 
 type Props = {
   member: GroupMemberStake;
@@ -85,7 +68,12 @@ export const GroupMemberCard: FC<Props> = ({ member, isCurrent }) => {
               <Stack direction="row" gap={12} align="start" grow>
                 <OperatorAvatar operator={ref} size={36} />
                 <Stack direction="column" grow>
-                  <NameRowStyle direction="row" gap={8} align="center">
+                  <Stack
+                    direction="row"
+                    gap={8}
+                    align="center"
+                    className={s.nameRow}
+                  >
                     <Typography
                       id={titleId}
                       title={title}
@@ -104,7 +92,7 @@ export const GroupMemberCard: FC<Props> = ({ member, isCurrent }) => {
                         Current
                       </Tag>
                     )}
-                  </NameRowStyle>
+                  </Stack>
                   <Stack direction="row" gap={{ base: 24, smDown: 16 }}>
                     <Typography
                       variant="body"

@@ -1,0 +1,27 @@
+.distribution.distribution [class*='StatItem-module_label'] {
+  font-size: var(--lido-app-ui-font-size-label);
+  line-height: var(--lido-app-ui-line-height-label);
+  color: var(--lido-app-ui-color-text-tertiary);
+}
+
+.distribution.distribution [class*='StatItem-module_value'] {
+  font-size: var(--lido-app-ui-font-size-label);
+  line-height: var(--lido-app-ui-line-height-label);
+  font-weight: var(--lido-app-ui-font-weight-semibold);
+  color: var(--lido-app-ui-color-text-secondary);
+}
+
+.distribution.distribution [class*='StatItem-module_description'] {
+  font-size: var(--lido-app-ui-font-size-tooltip);
+  line-height: var(--lido-app-ui-line-height-description);
+  color: var(--lido-app-ui-color-text-tertiary);
+}
+
+.txLinkSlot {
+  display: inline-flex;
+
+  & svg {
+    width: 16px;
+    height: 16px;
+  }
+}

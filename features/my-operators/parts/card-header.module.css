@@ -1,0 +1,11 @@
+.header.header > :first-child {
+  align-self: stretch;
+}
+
+.header.header > :not(:first-child) {
+  flex-shrink: 0;
+}
+
+.line.line {
+  min-height: 36px;
+}

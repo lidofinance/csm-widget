@@ -1,7 +1,8 @@
 import { Tooltip } from '@lidofinance/lido-app-ui';
 import { CSSProperties, FC, useCallback } from 'react';
 import { useGraphInteraction } from './hover-provider';
-import { PartStyle } from './style';
+import { getPartStyle } from './style';
+import s from './style.module.css';
 import { BatchMetadata, GraphPart, QueueUnit } from './types';
 import { BatchTooltipContent } from './batch-tooltip-content';
 import { AddedTooltipContent } from './added-tooltip-content';
@@ -32,11 +33,11 @@ export const Part: FC<PartProps> = ({
   }
 
   const renderPart = (inner?: boolean) => (
-    <PartStyle
-      $type={type}
-      $width={inner ? 100 : width}
-      $offset={inner ? 0 : offset}
-      $fade={hover && hover !== type}
+    <div
+      className={s.part}
+      data-type={type}
+      data-fade={(hover && hover !== type) || undefined}
+      style={getPartStyle(type, inner ? 100 : width, inner ? 0 : offset)}
       onMouseEnter={type === 'active' ? onMouseEnter : undefined}
     />
   );

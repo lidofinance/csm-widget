@@ -1,0 +1,5 @@
+.stakeMeta.stakeMeta,
+.stakeMeta.stakeMeta * {
+  font-size: var(--lido-app-ui-font-size-tooltip);
+  line-height: var(--lido-app-ui-line-height-description);
+}

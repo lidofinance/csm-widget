@@ -11,7 +11,6 @@ import { PATH } from 'consts/urls';
 import { useFeeSplits, useModule, useNodeOperatorId } from 'modules/web3';
 import { useModal } from 'providers/modal-provider';
 import { FC, ReactNode } from 'react';
-import styled from 'styled-components';
 import { EtherscanTxLink } from 'shared/components/external-icon-link';
 import { UsdValue } from 'shared/components/bond-stats-card/usd-value';
 import { useBondStats } from 'shared/components/bond-stats-card/use-bond-stats';
@@ -25,37 +24,8 @@ import {
 import { useLatestDistribution } from '../hooks/use-latest-distribution';
 import { getNextDistributionLabel } from '../utils/get-next-distribution-label';
 import { StatCard } from './stat-card';
+import s from './claim-card.module.css';
 import { WhyModal } from './why-modal';
-
-const DistributionStatItem = styled(StatItem)`
-  && [class*='StatItem-module_label'] {
-    font-size: var(--lido-app-ui-font-size-label);
-    line-height: var(--lido-app-ui-line-height-label);
-    color: var(--lido-app-ui-color-text-tertiary);
-  }
-
-  && [class*='StatItem-module_value'] {
-    font-size: var(--lido-app-ui-font-size-label);
-    line-height: var(--lido-app-ui-line-height-label);
-    font-weight: var(--lido-app-ui-font-weight-semibold);
-    color: var(--lido-app-ui-color-text-secondary);
-  }
-
-  && [class*='StatItem-module_description'] {
-    font-size: var(--lido-app-ui-font-size-tooltip);
-    line-height: var(--lido-app-ui-line-height-description);
-    color: var(--lido-app-ui-color-text-tertiary);
-  }
-`;
-
-const TxLinkSlot = styled.span`
-  display: inline-flex;
-
-  svg {
-    width: 16px;
-    height: 16px;
-  }
-`;
 
 const FRAME_DIVIDER_STYLE = { height: 12, alignSelf: 'center' } as const;
 
@@ -122,7 +92,8 @@ const LatestDistribution: FC = () => {
     !isPending && !isFrameError && !!lastRewards && !!reportFrame;
 
   return (
-    <DistributionStatItem
+    <StatItem
+      className={s.distribution}
       align="left"
       label="Latest distribution"
       loading={isPending}
@@ -137,12 +108,12 @@ const LatestDistribution: FC = () => {
             {txHash && (
               <>
                 <Divider orientation="vertical" style={FRAME_DIVIDER_STYLE} />
-                <TxLinkSlot>
+                <span className={s.txLinkSlot}>
                   <EtherscanTxLink
                     txHash={txHash}
                     data-testid="distributionTxLink"
                   />
-                </TxLinkSlot>
+                </span>
               </>
             )}
           </SubRow>
@@ -169,7 +140,8 @@ const NextDistribution: FC = () => {
     : '—';
 
   return (
-    <DistributionStatItem
+    <StatItem
+      className={s.distribution}
       align="left"
       label="Next distribution"
       loading={!frame && isFramePending}

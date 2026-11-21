@@ -1,0 +1,15 @@
+.item {
+  font-family: var(--lido-app-ui-font-family);
+  font-size: var(--lido-app-ui-font-size-label);
+  font-weight: var(--lido-app-ui-font-weight-regular);
+  letter-spacing: var(--lido-app-ui-letter-spacing-label);
+  line-height: var(--lido-app-ui-line-height-label);
+}
+
+.label {
+  color: var(--lido-app-ui-color-text-tertiary);
+}
+
+.value {
+  color: var(--lido-app-ui-color-text-secondary);
+}

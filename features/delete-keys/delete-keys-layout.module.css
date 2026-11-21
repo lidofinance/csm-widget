@@ -1,0 +1,4 @@
+.root aside:has([data-testid='emptyAside']) {
+  padding: 0;
+  border-top: none;
+}

@@ -4,7 +4,6 @@ import {
   Skeleton,
   TextLink,
   Typography,
-  downQuery,
 } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES, PATH } from 'consts';
 import {
@@ -17,7 +16,7 @@ import {
   useOperatorMetadata,
   OperatorRef,
 } from 'modules/web3';
-import { FC, ReactNode, useMemo } from 'react';
+import { CSSProperties, FC, ReactNode, useMemo } from 'react';
 import { useDisplayOperatorType, useShowRule } from 'shared/hooks';
 import {
   OperatorAddresses,
@@ -26,104 +25,15 @@ import {
   formatGroupLabel,
   useOperatorTitle,
 } from 'shared/node-operator';
-import styled from 'styled-components';
 import { trackMatomoEvent } from 'utils';
 import { useHeaderFlags } from './hooks/use-header-flags';
+import s from './operator-header-card.module.css';
 
 const gridAreas = (...rows: (string | false)[]) =>
   rows
     .filter(Boolean)
     .map((row) => `'${row}'`)
     .join(' ');
-
-const HeaderGrid = styled.div<{
-  $tight: boolean;
-  $hasDesc: boolean;
-  $hasSettings: boolean;
-}>`
-  display: grid;
-  grid-template-columns: 72px minmax(0, 1fr) auto;
-  grid-template-areas: ${({ $hasDesc }) =>
-    gridAreas(
-      'avatar title settings',
-      'avatar meta meta',
-      $hasDesc && 'desc desc desc',
-    )};
-  column-gap: 24px;
-  row-gap: ${({ $tight }) => ($tight ? 8 : 12)}px;
-  align-items: start;
-
-  @media ${downQuery('md')} {
-    grid-template-columns: 52px minmax(0, 1fr);
-    grid-template-areas: ${({ $hasDesc, $hasSettings }) =>
-      gridAreas(
-        'avatar title',
-        $hasSettings && 'settings settings',
-        'meta meta',
-        $hasDesc && 'desc desc',
-      )};
-    column-gap: 16px;
-    row-gap: 12px;
-  }
-`;
-
-const AvatarArea = styled.div`
-  grid-area: avatar;
-  width: 72px;
-  height: 72px;
-
-  @media ${downQuery('md')} {
-    width: 52px;
-    height: 52px;
-  }
-`;
-
-const AvatarScale = styled.div`
-  width: 72px;
-  height: 72px;
-  transform-origin: top left;
-
-  @media ${downQuery('md')} {
-    transform: scale(0.7222);
-  }
-`;
-
-const TitleArea = styled.div`
-  grid-area: title;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-
-  @media ${downQuery('md')} {
-    flex-direction: column;
-    align-items: flex-start;
-    align-self: center;
-  }
-`;
-
-const SettingsArea = styled.div`
-  grid-area: settings;
-  align-self: center;
-`;
-
-const MetaArea = styled.div`
-  grid-area: meta;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 20px;
-  min-width: 0;
-
-  @media ${downQuery('md')} {
-    flex-direction: column;
-    gap: 4px;
-  }
-`;
-
-const DescriptionArea = styled.div`
-  grid-area: desc;
-`;
 
 const MetaText: FC<{ testId: string; children: ReactNode }> = ({
   testId,
@@ -166,17 +76,31 @@ const OperatorHeader: FC<HeaderProps> = ({ operator }) => {
 
   return (
     <Card align="stretch" dataTestId={{ root: 'dashboardHeaderCard' }}>
-      <HeaderGrid
-        $tight={isCM}
-        $hasDesc={hasDescription}
-        $hasSettings={isOperator}
+      <div
+        className={s.grid}
+        data-tight={isCM || undefined}
+        style={
+          {
+            '--grid-areas': gridAreas(
+              'avatar title settings',
+              'avatar meta meta',
+              hasDescription && 'desc desc desc',
+            ),
+            '--grid-areas-md': gridAreas(
+              'avatar title',
+              isOperator && 'settings settings',
+              'meta meta',
+              hasDescription && 'desc desc',
+            ),
+          } as CSSProperties
+        }
       >
-        <AvatarArea>
-          <AvatarScale>
+        <div className={s.avatarArea}>
+          <div className={s.avatarScale}>
             <OperatorAvatar operator={ref} size={72} />
-          </AvatarScale>
-        </AvatarArea>
-        <TitleArea>
+          </div>
+        </div>
+        <div className={s.titleArea}>
           {isLoading ? (
             <Skeleton variant="text" width={160} />
           ) : (
@@ -196,9 +120,9 @@ const OperatorHeader: FC<HeaderProps> = ({ operator }) => {
               data-testid="operatorTypeTag"
             />
           )}
-        </TitleArea>
+        </div>
         {isOperator && (
-          <SettingsArea>
+          <div className={s.settingsArea}>
             <TextLink
               href={PATH.SETTINGS}
               icon={<IconArrowRight />}
@@ -209,9 +133,9 @@ const OperatorHeader: FC<HeaderProps> = ({ operator }) => {
             >
               Settings
             </TextLink>
-          </SettingsArea>
+          </div>
         )}
-        <MetaArea>
+        <div className={s.metaArea}>
           {isCM && metadataName && (
             <MetaText testId="descriptorId">{name}</MetaText>
           )}
@@ -236,13 +160,13 @@ const OperatorHeader: FC<HeaderProps> = ({ operator }) => {
           {splittersOn && (
             <MetaText testId="splittersFlag">Splitters ON</MetaText>
           )}
-        </MetaArea>
+        </div>
         {hasDescription && (
-          <DescriptionArea>
+          <div className={s.descriptionArea}>
             <MetaText testId="operatorDescription">{description}</MetaText>
-          </DescriptionArea>
+          </div>
         )}
-      </HeaderGrid>
+      </div>
     </Card>
   );
 };

@@ -2,7 +2,7 @@ import { Divider, Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { getPriorityName } from './get-priority-name';
 import { QueueAmount } from './queue-amount';
-import { TooltipContentStyle } from './style';
+import s from './style.module.css';
 import { BatchMetadata, GraphPart, QueueUnit } from './types';
 
 type AddedTooltipContentProps = {
@@ -19,7 +19,7 @@ export const AddedTooltipContent: FC<AddedTooltipContentProps> = ({
       {metadata.map((item, index) => (
         <>
           {index > 0 && <Divider />}
-          <TooltipContentStyle>
+          <div className={s.tooltipContent}>
             <strong>
               {getPriorityName(`priority${item.priority}` as GraphPart)}
             </strong>
@@ -31,7 +31,7 @@ export const AddedTooltipContent: FC<AddedTooltipContentProps> = ({
               {unit === 'eth' ? 'Stake ahead:' : 'Keys ahead:'}{' '}
               <QueueAmount amount={item.position} unit={unit} />
             </span>
-          </TooltipContentStyle>
+          </div>
         </>
       ))}
     </Stack>
