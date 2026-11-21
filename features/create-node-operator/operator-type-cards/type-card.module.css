@@ -1,0 +1,5 @@
+@media (--lido-app-ui-breakpoint-md-up) {
+  .tagline {
+    min-height: 48px;
+  }
+}

@@ -3,23 +3,11 @@ import type { CreateSuccess } from 'features/create-node-operator/create-success
 import { FC } from 'react';
 import { SuccessScreen } from 'shared/form-page';
 import { OperatorAvatar, TypeBadge } from 'shared/node-operator';
-import styled from 'styled-components';
 import { CsmCreateActions } from './csm-create-actions';
 import { getCsmCreateStats } from './csm-create-stats';
 import { CustomAddressesNotice } from './custom-addresses-notice';
+import s from './csm-create-success.module.css';
 import { WhatsNext } from './whats-next';
-
-const TypeBadgeBox = styled.span`
-  display: flex;
-  flex: none;
-  width: 24px;
-  height: 24px;
-
-  && img {
-    width: 100%;
-    height: 100%;
-  }
-`;
 
 export const CsmCreateSuccess: FC<{ created: CreateSuccess }> = ({
   created,
@@ -47,9 +35,9 @@ export const CsmCreateSuccess: FC<{ created: CreateSuccess }> = ({
             label="Node Operator type"
             value={stats.typeShort}
             icon={
-              <TypeBadgeBox>
+              <span className={s.typeBadgeBox}>
                 <TypeBadge type={created.type} />
-              </TypeBadgeBox>
+              </span>
             }
             dataTestId={{ value: 'createdOperatorType' }}
           />

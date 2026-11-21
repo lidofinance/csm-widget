@@ -10,8 +10,8 @@ import { FC, Fragment, useCallback, useState } from 'react';
 import { EtherscanAddressLink } from 'shared/components';
 import { ConfirmModalProps } from 'shared/hooks';
 import { FormModalShell } from 'shared/transaction-modal/form-modal-shell';
-import styled from 'styled-components';
 import invariant from 'tiny-invariant';
+import s from './confirm-custom-addresses-modal-app.module.css';
 import { getAddressesConfirmState } from './confirm-custom-addresses-steps';
 
 type ConfirmCustomAddressesModalAppProps = ConfirmModalProps & {
@@ -20,30 +20,6 @@ type ConfirmCustomAddressesModalAppProps = ConfirmModalProps & {
   managerAddress?: string;
   extendedManagerPermissions: boolean;
 };
-
-const PermissionsListStyle = styled.ol`
-  margin: 0;
-  padding-left: 20px;
-`;
-
-const DotStyle = styled.span<{ $done: boolean }>`
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: ${({ $done }) =>
-    $done
-      ? 'var(--lido-app-ui-color-text-default)'
-      : 'var(--lido-app-ui-color-border-default)'};
-`;
-
-const DotLineStyle = styled.span<{ $done: boolean }>`
-  width: 24px;
-  height: 2px;
-  background: ${({ $done }) =>
-    $done
-      ? 'var(--lido-app-ui-color-text-default)'
-      : 'var(--lido-app-ui-color-border-default)'};
-`;
 
 const StepDots: FC<{ count: number; current: number }> = ({
   count,
@@ -58,8 +34,13 @@ const StepDots: FC<{ count: number; current: number }> = ({
   >
     {Array.from({ length: count }, (_, index) => (
       <Fragment key={index}>
-        {index > 0 && <DotLineStyle $done={index <= current} />}
-        <DotStyle $done={index <= current} />
+        {index > 0 && (
+          <span
+            className={s.dotLine}
+            data-done={index <= current || undefined}
+          />
+        )}
+        <span className={s.dot} data-done={index <= current || undefined} />
       </Fragment>
     ))}
   </Stack>
@@ -137,14 +118,14 @@ export const ConfirmCustomAddressesModalApp: FC<
           </Stack>
         ) : (
           <MessageBox icon={false}>
-            <PermissionsListStyle>
+            <ol className={s.permissionsList}>
               <li>
                 Rewards Address <b>cannot</b> reset the Manager Address
               </li>
               <li>
                 Manager Address <b>can</b> reset the Rewards Address
               </li>
-            </PermissionsListStyle>
+            </ol>
           </MessageBox>
         )}
 

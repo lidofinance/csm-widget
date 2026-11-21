@@ -15,25 +15,10 @@ import {
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FC, ReactNode } from 'react';
 import { HubList, HubRow } from 'shared/components/hub-list';
-import styled from 'styled-components';
 import { trackMatomoEvent } from 'utils';
 import { PartnerLogos } from './partner-logos';
+import s from './starter-pack-card.module.css';
 import { StarterPackIcon } from './starter-pack-icon';
-
-const StarterPackListStyle = styled.div`
-  && [data-wrap] {
-    padding-top: 24px;
-    padding-bottom: 24px;
-  }
-
-  && > div > div > div > div:first-child > [data-wrap] {
-    padding-top: 0;
-  }
-
-  && > div > div > div > div:last-child:not(:has([data-wrap])) {
-    padding-top: 28px;
-  }
-`;
 
 type StarterPackStep = {
   icon: ReactNode;
@@ -94,7 +79,7 @@ export const StarterPackCard: FC<{ onGetStarted: () => void }> = ({
   };
 
   return (
-    <StarterPackListStyle>
+    <div className={s.root}>
       <HubList
         footer={
           <Button
@@ -125,6 +110,6 @@ export const StarterPackCard: FC<{ onGetStarted: () => void }> = ({
           />
         ))}
       </HubList>
-    </StarterPackListStyle>
+    </div>
   );
 };

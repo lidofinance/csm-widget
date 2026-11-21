@@ -1,11 +1,11 @@
-import { IconChevronRight, IconPlus } from '@lidofinance/lido-app-ui';
+import { IconChevronRight, IconPlus, Stack } from '@lidofinance/lido-app-ui';
 import type { DisplayOperatorType } from 'consts';
 import { FC } from 'react';
 import {
   TypeBadge,
   getOperatorTypeBadge,
 } from 'shared/node-operator/type-badge';
-import { BadgeJoinStyle, BadgesStyle } from './styles';
+import s from './styles.module.css';
 
 export type ClaimTypeBadgesProps = {
   from?: DisplayOperatorType;
@@ -18,15 +18,22 @@ export const ClaimTypeBadges: FC<ClaimTypeBadgesProps> = ({
   to,
   join = 'arrow',
 }) => (
-  <BadgesStyle aria-hidden="true">
+  <Stack
+    direction="row"
+    align="center"
+    justify="center"
+    gap={12}
+    className={s.badges}
+    aria-hidden="true"
+  >
     {from && getOperatorTypeBadge(from) && (
       <>
         <TypeBadge type={from} size={120} />
-        <BadgeJoinStyle>
+        <span className={s.badgeJoin}>
           {join === 'plus' ? <IconPlus /> : <IconChevronRight />}
-        </BadgeJoinStyle>
+        </span>
       </>
     )}
     <TypeBadge type={to} size={120} />
-  </BadgesStyle>
+  </Stack>
 );

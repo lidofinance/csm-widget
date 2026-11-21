@@ -1,12 +1,10 @@
-import styled from 'styled-components';
-
-export const WhatsNextStyle = styled.div`
+.whatsNext {
   display: flex;
   flex-direction: column;
   gap: 12px;
   width: 100%;
 
-  ol {
+  & ol {
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -15,4 +13,4 @@ export const WhatsNextStyle = styled.div`
     color: var(--lido-app-ui-color-text-default);
     line-height: 28px;
   }
-`;
+}

@@ -1,12 +1,4 @@
-import styled from 'styled-components';
-
-export const NextStepsStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
-
-export const NextStepRowStyle = styled.div`
+.nextStepRow {
   display: grid;
   grid-template-columns: 48px minmax(0, 1fr) auto;
   align-items: center;
@@ -25,9 +17,9 @@ export const NextStepRowStyle = styled.div`
       justify-self: start;
     }
   }
-`;
+}
 
-export const NextStepIconStyle = styled.span`
+.nextStepIcon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -36,11 +28,8 @@ export const NextStepIconStyle = styled.span`
   border-radius: var(--lido-app-ui-border-radius-pill);
   background: var(--lido-app-ui-color-tint-info);
   color: var(--lido-app-ui-color-icons-info);
-`;
+}
 
-export const NextStepTextStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.nextStepText.nextStepText {
   min-width: 0;
-`;
+}

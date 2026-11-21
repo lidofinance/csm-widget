@@ -7,6 +7,7 @@ import {
   IconDashboard,
   IconKeyRound,
   MessageBox,
+  Stack,
 } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
@@ -26,12 +27,7 @@ import {
   getCuratedNextSteps,
   getCustomAddressesNotice,
 } from './success-content';
-import {
-  NextStepIconStyle,
-  NextStepRowStyle,
-  NextStepsStyle,
-  NextStepTextStyle,
-} from './styles';
+import s from './styles.module.css';
 
 const NEXT_STEP_ICONS: Record<CuratedNextStepId, typeof IconKeyRound> = {
   keys: IconKeyRound,
@@ -50,16 +46,16 @@ const NextStepRow: FC<NextStepRowProps> = ({ step, operator, primary }) => {
   const Icon = NEXT_STEP_ICONS[step.id];
 
   return (
-    <NextStepRowStyle data-testid={`nextStep-${step.id}`}>
-      <NextStepIconStyle aria-hidden="true">
+    <div className={s.nextStepRow} data-testid={`nextStep-${step.id}`}>
+      <span className={s.nextStepIcon} aria-hidden="true">
         <Icon />
-      </NextStepIconStyle>
-      <NextStepTextStyle>
+      </span>
+      <Stack gap={4} className={s.nextStepText}>
         <Body as="p" weight="semibold">
           {step.title}
         </Body>
         <Description as="p">{step.description}</Description>
-      </NextStepTextStyle>
+      </Stack>
       <Button
         size="small"
         variant={primary ? 'primary' : 'outline'}
@@ -67,7 +63,7 @@ const NextStepRow: FC<NextStepRowProps> = ({ step, operator, primary }) => {
       >
         {step.action}
       </Button>
-    </NextStepRowStyle>
+    </div>
   );
 };
 
@@ -75,7 +71,7 @@ const CuratedNextSteps: FC<{
   operator: OperatorRef;
   hasManagerRole: boolean;
 }> = ({ operator, hasManagerRole }) => (
-  <NextStepsStyle>
+  <Stack gap={8}>
     <H3 as="h2">Next Steps</H3>
     {getCuratedNextSteps(hasManagerRole).map((step, index) => (
       <NextStepRow
@@ -85,7 +81,7 @@ const CuratedNextSteps: FC<{
         primary={index === 0}
       />
     ))}
-  </NextStepsStyle>
+  </Stack>
 );
 
 const CreateAnotherButton: FC = () => {

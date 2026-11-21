@@ -15,7 +15,7 @@ import { FC, useState } from 'react';
 import { CLAIM_SUMMARY_ROWS } from './claim-summary-rows';
 import { getClaimTypeSummary } from './claim-type-summary';
 import { ParameterChangesModal } from './parameter-changes-modal';
-import { ChangesBoxStyle } from './styles';
+import s from './styles.module.css';
 
 export type ClaimChangesVariant = 'change' | 'compare';
 
@@ -43,7 +43,7 @@ export const ClaimChanges: FC<ClaimChangesProps> = ({
   const toSummary = getClaimTypeSummary(to);
 
   return (
-    <ChangesBoxStyle data-testid={dataTestId}>
+    <div className={s.changesBox} data-testid={dataTestId}>
       <SectionTitle
         title={title}
         action={
@@ -95,6 +95,6 @@ export const ClaimChanges: FC<ClaimChangesProps> = ({
           { parameters: to, title: toLabel },
         ]}
       />
-    </ChangesBoxStyle>
+    </div>
   );
 };

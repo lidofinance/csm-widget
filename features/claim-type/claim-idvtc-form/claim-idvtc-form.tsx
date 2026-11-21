@@ -8,7 +8,7 @@ import { ClaimIdvtcCards, ClaimIdvtcSubmitButton } from './claim-idvtc-cards';
 import { ClaimIdvtcFormGate } from './claim-idvtc-form-gate';
 import { ClaimIdvtcSuccess } from './claim-idvtc-success';
 import { ClaimIdvtcDataProvider, ClaimIdvtcFormProvider } from './context';
-import { NarrowStyle } from './styles';
+import s from './styles.module.css';
 
 const ClaimIdvtcContent: FC = () => {
   const { justClaimed } = useClaimTypeSuccess();
@@ -18,17 +18,17 @@ const ClaimIdvtcContent: FC = () => {
     <FormPage
       faq={
         justClaimed ? undefined : (
-          <NarrowStyle>
+          <div className={s.narrow}>
             <Faq items={faq} />
-          </NarrowStyle>
+          </div>
         )
       }
       done={justClaimed}
     >
       {justClaimed ? (
-        <NarrowStyle>
+        <div className={s.narrow}>
           <ClaimIdvtcSuccess />
-        </NarrowStyle>
+        </div>
       ) : (
         <FormReady>
           <ClaimIdvtcFormGate>

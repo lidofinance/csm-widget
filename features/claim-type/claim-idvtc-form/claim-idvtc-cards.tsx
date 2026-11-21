@@ -1,4 +1,4 @@
-import { Button, SectionTitle } from '@lidofinance/lido-app-ui';
+import { Button, SectionTitle, Stack } from '@lidofinance/lido-app-ui';
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { PATH } from 'consts/urls';
 import { FC, ReactNode } from 'react';
@@ -8,7 +8,7 @@ import { useNavigate } from 'shared/navigate';
 import { ClaimChanges, ClaimTypeBadges, ClaimTypeCard } from '../shared';
 import { getClaimIdvtcCopy } from './claim-idvtc-copy';
 import { useClaimIdvtcFormData } from './context';
-import { CardsGridStyle, NarrowStyle, TwoCardsStyle } from './styles';
+import s from './styles.module.css';
 
 const useClaimCurves = () => {
   const { currentCurve, newCurve, currentParameters, newParameters } =
@@ -132,26 +132,26 @@ export const ClaimIdvtcCards: FC<{ cta: ReactNode }> = ({ cta }) => {
 
   if (!isCurrentIcs) {
     return (
-      <NarrowStyle>
+      <div className={s.narrow}>
         <ClaimCard cta={cta} />
-      </NarrowStyle>
+      </div>
     );
   }
 
   const copy = getClaimIdvtcCopy(true);
 
   return (
-    <TwoCardsStyle>
+    <Stack gap={24}>
       <SectionTitle
         size="large"
         title={copy.title}
         subtitle={copy.description}
         dataTestId={{ root: 'formTitle' }}
       />
-      <CardsGridStyle>
+      <div className={s.cardsGrid}>
         <UpgradeCard cta={cta} />
         <CreateCard />
-      </CardsGridStyle>
-    </TwoCardsStyle>
+      </div>
+    </Stack>
   );
 };

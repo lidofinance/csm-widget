@@ -3,7 +3,7 @@ import { FC, PropsWithChildren } from 'react';
 import { FormCard, NoAccessNotice, PausedNotice } from 'shared/form-page';
 import { ClaimIdvtcCards, CreateIdvtcButton } from './claim-idvtc-cards';
 import { useClaimIdvtcFlow } from './context';
-import { NarrowStyle } from './styles';
+import s from './styles.module.css';
 
 const EMPTY_STATE = {
   'wrong-module':
@@ -22,30 +22,30 @@ export const ClaimIdvtcFormGate: FC<PropsWithChildren> = ({ children }) => {
       return <ClaimIdvtcCards cta={<NoAccessNotice access={flow.access} />} />;
     case 'paused':
       return (
-        <NarrowStyle>
+        <div className={s.narrow}>
           <PausedNotice headline="IDVTC is paused">
             IDVTC claiming is currently paused
           </PausedNotice>
-        </NarrowStyle>
+        </div>
       );
     case 'claimed-with-proof':
       return (
-        <NarrowStyle>
+        <div className={s.narrow}>
           <FormCard
             title="You already have IDVTC operator type"
             description="Your current Node Operator is already an Identified DVT Cluster, but your address still has an unclaimed IDVTC proof. You can create a separate Node Operator with the Identified DVT Cluster type using this proof."
           >
             <CreateIdvtcButton />
           </FormCard>
-        </NarrowStyle>
+        </div>
       );
     default:
       return (
-        <NarrowStyle>
+        <div className={s.narrow}>
           <MessageBox dataTestId={{ root: 'claimTypeEmpty' }}>
             {EMPTY_STATE[flow.action]}
           </MessageBox>
-        </NarrowStyle>
+        </div>
       );
   }
 };

@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 import { FormatToken } from 'shared/formatters';
 import { formatPercent, pluralKeys } from 'utils';
 import type { ClaimTypeSummary } from './claim-type-summary';
-import { FaintStyle } from './styles';
+import s from './styles.module.css';
 
 export type ClaimSummaryRow = {
   label: string;
@@ -18,9 +18,9 @@ const renderReward = (summary?: ClaimTypeSummary): ReactNode => {
     <>
       {formatPercent(summary.reward)}
       {summary.rewardKeys !== undefined && (
-        <FaintStyle>
+        <span className={s.faint}>
           for {pluralKeys({ value: summary.rewardKeys, showValue: true })}
-        </FaintStyle>
+        </span>
       )}
     </>
   );

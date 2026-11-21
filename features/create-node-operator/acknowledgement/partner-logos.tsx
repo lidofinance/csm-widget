@@ -1,24 +1,16 @@
 import { AvatarStack } from 'shared/components';
 import { FC } from 'react';
-import styled from 'styled-components';
+import s from './partner-logos.module.css';
 import { trackMatomoEvent } from 'utils';
 import {
   LOW_CODE_PARTNERS,
   LowCodePartner,
 } from 'features/validate-with-lido/community-staking/low-code-partners';
 
-const LogoImage = styled.img`
-  padding: 5px;
-
-  && {
-    object-fit: contain;
-  }
-`;
-
 const PartnerLogo: FC<{ partner: LowCodePartner }> = ({
   partner: { name, src, href, matomoEvent },
 }) => {
-  const image = <LogoImage src={src} alt={name} title={name} />;
+  const image = <img className={s.logo} src={src} alt={name} title={name} />;
 
   return href ? (
     <a

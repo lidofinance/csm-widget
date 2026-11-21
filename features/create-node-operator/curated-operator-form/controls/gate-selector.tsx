@@ -3,6 +3,7 @@ import {
   Body,
   DataList,
   DataListRow,
+  Grid,
   Skeleton,
   Stack,
 } from '@lidofinance/lido-app-ui';
@@ -22,7 +23,7 @@ import { useCurveMetadataGetter } from 'shared/hooks';
 import { CurveBadge } from 'shared/node-operator';
 import { useCuratedOperatorFormData } from '../context';
 import { getGateCardTestId } from '../curated-operator-wizard';
-import { GateParamsStyle } from './styles';
+import s from './styles.module.css';
 
 type ParamGroupProps = {
   title: string;
@@ -55,7 +56,12 @@ const GateCardParams: FC<{ curve: CurveRef }> = ({ curve }) => {
   const { data: parameters } = useCurveParameters(curve);
 
   return (
-    <GateParamsStyle minItemWidth={200} rowGap={16} columnGap={24}>
+    <Grid
+      className={s.gateParams}
+      minItemWidth={200}
+      rowGap={16}
+      columnGap={24}
+    >
       <ParamGroup
         title="Node Operator reward:"
         rows={
@@ -68,7 +74,7 @@ const GateCardParams: FC<{ curve: CurveRef }> = ({ curve }) => {
         rows={parameters && formatEthKeyIntervalRows(parameters.bondConfig)}
         data-testid="gateCardBondParams"
       />
-    </GateParamsStyle>
+    </Grid>
   );
 };
 

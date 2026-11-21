@@ -1,0 +1,12 @@
+.root.root [data-wrap] {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.root.root > div > div > div > div:first-child > [data-wrap] {
+  padding-top: 0;
+}
+
+.root.root > div > div > div > div:last-child:not(:has([data-wrap])) {
+  padding-top: 28px;
+}

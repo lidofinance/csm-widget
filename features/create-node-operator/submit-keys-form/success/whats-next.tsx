@@ -11,7 +11,7 @@ import {
   useNeedsOperatorSwitch,
   useSwitchOperator,
 } from 'shared/node-operator';
-import { WhatsNextStyle } from './styles';
+import s from './styles.module.css';
 
 type WhatsNextProps = { created: CreateSuccess };
 
@@ -26,7 +26,7 @@ export const WhatsNext: FC<WhatsNextProps> = ({ created }) => {
       : null;
 
   return (
-    <WhatsNextStyle>
+    <div className={s.whatsNext}>
       <BodyLarge as="h2" weight="semibold">
         What’s next
       </BodyLarge>
@@ -88,6 +88,6 @@ export const WhatsNext: FC<WhatsNextProps> = ({ created }) => {
           )}
         </li>
       </ol>
-    </WhatsNextStyle>
+    </div>
   );
 };

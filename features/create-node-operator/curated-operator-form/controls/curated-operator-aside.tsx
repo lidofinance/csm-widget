@@ -15,7 +15,7 @@ import {
   isRepeatClick,
 } from '../curated-operator-wizard';
 import { useStepComplete } from '../hooks/use-step-complete';
-import { SubmitGuardStyle } from './styles';
+import s from './styles.module.css';
 
 const NO_FIELDS: FieldPath<CuratedOperatorFormInputType>[] = [];
 
@@ -29,9 +29,9 @@ const LastStepAside: FC<{ back: () => void }> = ({ back }) => {
 
   return (
     <SubmitAside rows={<GasCostRow />}>
-      <SubmitGuardStyle onClickCapture={guardRepeatClick}>
+      <div className={s.submitGuard} onClickCapture={guardRepeatClick}>
         <SubmitButton>Create Node Operator</SubmitButton>
-      </SubmitGuardStyle>
+      </div>
       <Button
         fullWidth
         variant="outline"
