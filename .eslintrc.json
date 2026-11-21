@@ -104,12 +104,6 @@
         "sonarjs/no-identical-expressions": "off",
         "sonarjs/no-identical-functions": "off"
       }
-    },
-    {
-      "files": ["pages/_document.tsx"],
-      "rules": {
-        "no-restricted-imports": "off"
-      }
     }
   ]
 }

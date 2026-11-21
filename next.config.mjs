@@ -59,10 +59,6 @@ export default withBundleAnalyzer({
   eslint: {
     ignoreDuringBuilds: true,
   },
-  compiler: {
-    // SWC omits displayName in prod by default
-    styledComponents: { displayName: true, ssr: true },
-  },
   images: {
     unoptimized: true,
   },
