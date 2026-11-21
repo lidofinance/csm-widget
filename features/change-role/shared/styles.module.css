@@ -1,0 +1,11 @@
+.formCardStack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.stepsList {
+  margin: 0;
+  padding-left: 20px;
+}

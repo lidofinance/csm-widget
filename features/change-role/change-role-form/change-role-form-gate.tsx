@@ -1,6 +1,7 @@
 import { Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import { FormCardStackStyle } from '../shared/styles';
+import { Form } from 'shared/hook-form/form-controller';
+import s from '../shared/styles.module.css';
 import { shouldRenderChangeRoleForm } from './change-role-state';
 import { useChangeRoleFlow, useChangeRoleFormData } from './context';
 import { AddressFormCard } from './controls/address-form-card';
@@ -25,7 +26,7 @@ export const ChangeRoleFormGate: FC = () => {
         action: flow.action,
         hasInvite: !!invite,
       }) ? (
-        <FormCardStackStyle>{cards}</FormCardStackStyle>
+        <Form className={s.formCardStack}>{cards}</Form>
       ) : (
         cards
       )}

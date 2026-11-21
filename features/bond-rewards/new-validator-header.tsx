@@ -15,22 +15,8 @@ import {
 import { FC } from 'react';
 import { MessageBoxLink } from 'shared/components';
 import { useModuleMeta, useShowRule } from 'shared/hooks';
-import styled from 'styled-components';
+import s from './new-validator-header.module.css';
 import { getNewValidatorProgress } from './new-validator-progress';
-
-const BandStyled = styled(Stack)`
-  padding: 12px 24px;
-  background: var(--lido-app-ui-color-tint-active);
-`;
-
-const ReadyBand = styled.div`
-  padding: 12px 24px;
-`;
-
-const BarStyled = styled.div`
-  flex: 1;
-  min-width: 0;
-`;
 
 const NewValidatorStrip: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
@@ -53,7 +39,7 @@ const NewValidatorStrip: FC = () => {
 
   if (progress >= 100) {
     return (
-      <ReadyBand>
+      <div className={s.readyBand}>
         <MessageBoxLink
           variant="info"
           href={PATH.KEYS_SUBMIT}
@@ -62,12 +48,13 @@ const NewValidatorStrip: FC = () => {
           You&apos;re ready to submit a new {moduleMeta?.shortName} validator
           with your Rewards &amp; Excess bond
         </MessageBoxLink>
-      </ReadyBand>
+      </div>
     );
   }
 
   return (
-    <BandStyled
+    <Stack
+      className={s.band}
       direction="row"
       align="center"
       gap={16}
@@ -84,14 +71,14 @@ const NewValidatorStrip: FC = () => {
         </Typography>
         <InfoTooltip content="Share of the bond required for one more validator that is covered by your Rewards and Excess bond" />
       </Stack>
-      <BarStyled>
+      <div className={s.bar}>
         <ProgressBar
           value={progress}
           max={100}
           size="small"
           aria-label="New Validator progress"
         />
-      </BarStyled>
+      </div>
       <Typography
         as="span"
         weight="semibold"
@@ -100,7 +87,7 @@ const NewValidatorStrip: FC = () => {
       >
         {progress}%
       </Typography>
-    </BandStyled>
+    </Stack>
   );
 };
 

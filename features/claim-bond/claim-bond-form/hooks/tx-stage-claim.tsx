@@ -5,13 +5,13 @@ import {
 } from '@lidofinance/lido-app-ui';
 import { STETH_ROUNDING_THRESHOLD, TOKENS } from '@lidofinance/lido-csm-sdk';
 import { FC } from 'react';
-import styled from 'styled-components';
 import {
   TxAmount,
   TxStagePending,
   TxStageSign,
 } from 'shared/transaction-modal';
 import { ClaimBreakdown } from '../claim-breakdown';
+import s from './tx-stage-claim.module.css';
 
 type ReceiptProps = {
   breakdown: ClaimBreakdown;
@@ -68,7 +68,7 @@ const ClaimReceipt: FC<ReceiptProps> = ({
   const parts = getReceiptParts(breakdown);
 
   return (
-    <ReceiptAppStyle>
+    <div className={s.receipt}>
       {parts.hasPrimary && (
         <DataList>
           {parts.showSplitters && (
@@ -134,7 +134,7 @@ const ClaimReceipt: FC<ReceiptProps> = ({
           )}
         </DataList>
       )}
-    </ReceiptAppStyle>
+    </div>
   );
 };
 
@@ -179,11 +179,3 @@ export const TxStageClaim = ({
     />
   );
 };
-
-const ReceiptAppStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-top: 16px;
-  text-align: left;
-`;

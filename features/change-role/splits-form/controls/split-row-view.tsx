@@ -1,19 +1,7 @@
 import { Body, Grid, Input } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { formatPercentInput } from 'shared/hook-form/fields/percent-input';
-import styled from 'styled-components';
-
-const ShareInputStyle = styled(Input)`
-  && input {
-    text-align: right;
-  }
-`;
-
-const AddressInputStyle = styled(Input)`
-  && input {
-    text-overflow: ellipsis;
-  }
-`;
+import s from './split-row-view.module.css';
 
 type ShareRowViewProps = {
   label: string;
@@ -29,8 +17,14 @@ export const ShareRowView: FC<ShareRowViewProps> = ({
   'data-testid': dataTestId,
 }) => (
   <Grid columns="minmax(0, 1fr) 120px" gap={12} data-testid={dataTestId}>
-    <AddressInputStyle readOnly aria-label={label} value={value} />
-    <ShareInputStyle
+    <Input
+      className={s.addressInput}
+      readOnly
+      aria-label={label}
+      value={value}
+    />
+    <Input
+      className={s.shareInput}
       readOnly
       aria-label={`${label} share, %`}
       value={formatPercentInput(share)}

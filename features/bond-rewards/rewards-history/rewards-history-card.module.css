@@ -1,0 +1,9 @@
+.rewardsIcon {
+  width: 48px;
+  height: 48px;
+  color: var(--lido-app-ui-color-text-secondary);
+}
+
+.loader.loader {
+  min-height: 200px;
+}

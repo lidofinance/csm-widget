@@ -1,7 +1,7 @@
 import { MessageBox } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { useUnlockBondFormData } from '../context';
-import { ActionsStyle } from '../styles';
+import s from '../styles.module.css';
 
 export const LockedBondNotice: FC = () => {
   const { bond, isExpired } = useUnlockBondFormData(true);
@@ -22,7 +22,7 @@ export const LockedBondNotice: FC = () => {
       Penalties have been applied to your Node Operator. If they aren&apos;t
       covered, the corresponding amount of your bond may be burned. See details
       in the table below.
-      <ActionsStyle>
+      <div className={s.actions}>
         <b>Actions required:</b>
         <ul>
           <li>
@@ -34,7 +34,7 @@ export const LockedBondNotice: FC = () => {
             additional penalties
           </li>
         </ul>
-      </ActionsStyle>
+      </div>
     </MessageBox>
   );
 };

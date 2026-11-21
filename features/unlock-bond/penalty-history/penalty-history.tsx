@@ -3,17 +3,11 @@ import { Accordion, Card } from '@lidofinance/lido-app-ui';
 import { useNodeOperatorId, useOperatorPenalties } from 'modules/web3';
 import { TableProvider } from 'providers/table-provider';
 import { FC } from 'react';
-import styled from 'styled-components';
 import { WhenLoaded } from 'shared/components';
 import { PenaltyHistoryTable } from './penalty-history-table';
 import { sortFunctions } from './sort';
+import s from './penalty-history.module.css';
 import { EnrichedPenalty } from './types';
-
-const CardStyled = styled(Card).attrs({ gap: 0 })`
-  && > div {
-    padding: 0 24px;
-  }
-`;
 
 const getPenaltyTypeLabel = (record: PenaltyRecord): string => {
   if (record.type === 'compensated') return 'Compensation';
@@ -39,7 +33,7 @@ export const PenaltyHistory: FC = () => {
   });
 
   return (
-    <CardStyled>
+    <Card gap={0} className={s.card}>
       <Accordion
         title="History"
         border={false}
@@ -56,6 +50,6 @@ export const PenaltyHistory: FC = () => {
           </WhenLoaded>
         </TableProvider>
       </Accordion>
-    </CardStyled>
+    </Card>
   );
 };

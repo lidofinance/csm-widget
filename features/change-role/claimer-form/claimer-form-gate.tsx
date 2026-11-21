@@ -1,6 +1,7 @@
 import { Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import { FormCardStackStyle } from '../shared/styles';
+import { Form } from 'shared/hook-form/form-controller';
+import s from '../shared/styles.module.css';
 import { useClaimerFlow } from './context';
 import { ClaimerFormCard } from './controls/claimer-form-card';
 import { CurrentClaimerCard } from './controls/current-claimer-card';
@@ -13,10 +14,10 @@ export const ClaimerFormGate: FC = () => {
       {flow.action === 'view' ? (
         <CurrentClaimerCard />
       ) : (
-        <FormCardStackStyle>
+        <Form className={s.formCardStack}>
           <CurrentClaimerCard />
           <ClaimerFormCard />
-        </FormCardStackStyle>
+        </Form>
       )}
     </Stack>
   );

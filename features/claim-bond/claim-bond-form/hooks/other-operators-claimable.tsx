@@ -9,18 +9,9 @@ import {
   useOtherOperatorsClaimable,
 } from 'shared/hooks';
 import { TxAmount } from 'shared/transaction-modal';
-import styled from 'styled-components';
+import s from './other-operators-claimable.module.css';
 
 const TEST_ID = 'otherOperatorsClaimable';
-
-const BoxStyle = styled.div`
-  margin-top: 16px;
-  text-align: left;
-`;
-
-const Line = styled.span`
-  display: block;
-`;
 
 type ClaimableLineProps = { operator: ModuleNodeOperator; amount: bigint };
 
@@ -31,11 +22,11 @@ const ClaimableLine: FC<ClaimableLineProps> = ({ operator, amount }) => {
   if (!type) return null;
 
   return (
-    <Line>
+    <span className={s.line}>
       You have <TxAmount amount={amount} token={TOKENS.steth} /> on your{' '}
       {OPERATOR_TYPE_METADATA[type].short} Node Operator #
       {operator.nodeOperatorId.toString()}
-    </Line>
+    </span>
   );
 };
 
@@ -53,10 +44,10 @@ export const OtherOperatorsClaimable: FC = () => {
   ));
 
   return (
-    <BoxStyle>
+    <div className={s.box}>
       <MessageBox variant="info" icon={false} dataTestId={{ root: TEST_ID }}>
         {lines}
       </MessageBox>
-    </BoxStyle>
+    </div>
   );
 };

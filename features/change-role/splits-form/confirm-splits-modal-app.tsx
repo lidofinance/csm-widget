@@ -13,7 +13,7 @@ import { EtherscanAddressLink } from 'shared/components';
 import { ConfirmModalProps } from 'shared/hooks';
 import { FormModalShell } from 'shared/transaction-modal/form-modal-shell';
 import { formatPercent } from 'utils';
-import { BulletsStyle, RecipientStyle } from './styles';
+import s from './styles.module.css';
 
 type ConfirmSplitsModalAppProps = ConfirmModalProps & {
   open?: boolean;
@@ -23,11 +23,11 @@ type ConfirmSplitsModalAppProps = ConfirmModalProps & {
 const formatShare = (share: bigint) => `${formatPercent(share, false, 2)} %`;
 
 const RecipientCell: FC<{ address: string }> = ({ address }) => (
-  <RecipientStyle>
+  <span className={s.recipient}>
     <Address address={address} symbols={0}>
       <EtherscanAddressLink address={address} aria-label="View on Etherscan" />
     </Address>
-  </RecipientStyle>
+  </span>
 );
 
 export const ConfirmSplitsModalApp: FC<ConfirmSplitsModalAppProps> = ({
@@ -59,14 +59,14 @@ export const ConfirmSplitsModalApp: FC<ConfirmSplitsModalAppProps> = ({
           ) : (
             <Typography color="secondary" variant="body" as="div">
               Please note:
-              <BulletsStyle>
+              <ul className={s.bullets}>
                 <li>Editing is disabled while you have unclaimed rewards</li>
                 <li>Additional addresses receive rewards in stETH only</li>
                 <li>
                   Claiming is permissionless: anyone can execute the claim, but
                   rewards go to the configured addresses
                 </li>
-              </BulletsStyle>
+              </ul>
             </Typography>
           )}
         </Stack>

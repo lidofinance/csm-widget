@@ -1,7 +1,8 @@
 import { Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
-import { FormCardStackStyle } from '../shared/styles';
+import { Form } from 'shared/hook-form/form-controller';
+import s from '../shared/styles.module.css';
 import { SplitsFormInputType } from './context';
 import { EditSplits } from './controls/edit-splits';
 import { ViewSplits } from './controls/view-splits';
@@ -14,9 +15,9 @@ export const SplitsFormGate: FC = () => {
   return (
     <Stack gap={24} data-testid="splitsForm">
       {isEditing ? (
-        <FormCardStackStyle>
+        <Form className={s.formCardStack}>
           <EditSplits />
-        </FormCardStackStyle>
+        </Form>
       ) : (
         <ViewSplits />
       )}

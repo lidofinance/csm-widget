@@ -1,0 +1,13 @@
+.band.band {
+  padding: 12px 24px;
+  background: var(--lido-app-ui-color-tint-active);
+}
+
+.readyBand {
+  padding: 12px 24px;
+}
+
+.bar {
+  flex: 1;
+  min-width: 0;
+}

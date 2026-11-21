@@ -10,7 +10,7 @@ import {
   OperatorTypeTag,
 } from 'shared/node-operator';
 import { getProposedRoleText } from '../accept-invite-state';
-import { InviteNameStyle } from '../styles';
+import s from '../styles.module.css';
 
 export const InviteCard: FC<{ invite: ModuleInvite }> = ({ invite }) => {
   const inviteId = getInviteId(invite);
@@ -21,7 +21,7 @@ export const InviteCard: FC<{ invite: ModuleInvite }> = ({ invite }) => {
       <Stack direction="column" align="start" gap={16}>
         <Stack direction="row" align="center" gap={12} style={{ minWidth: 0 }}>
           <OperatorAvatar operator={invite} size={40} />
-          <InviteNameStyle>{getOperatorName(invite)}</InviteNameStyle>
+          <span className={s.inviteName}>{getOperatorName(invite)}</span>
           {type && <OperatorTypeTag type={type} />}
         </Stack>
         <Typography variant="body" as="p">

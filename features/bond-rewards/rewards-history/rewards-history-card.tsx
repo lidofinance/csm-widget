@@ -2,22 +2,12 @@ import { Card, EmptyState, Spinner, Stack } from '@lidofinance/lido-app-ui';
 import { useNodeOperatorId, useOperatorRewardsHistory } from 'modules/web3';
 import { TableProvider } from 'providers/table-provider';
 import { FC } from 'react';
-import styled from 'styled-components';
 import { RewardsHistoryHeader } from './rewards-history-header';
 import { RewardsHistoryTable } from './rewards-history-table';
 import { sortFunctions } from './sort';
+import s from './rewards-history-card.module.css';
 
 import RewardsIcon from 'assets/balance/rewards.svg?react';
-
-const RewardsIconStyled = styled(RewardsIcon)`
-  width: 48px;
-  height: 48px;
-  color: var(--lido-app-ui-color-text-secondary);
-`;
-
-const LoaderStyled = styled(Stack)`
-  min-height: 200px;
-`;
 
 export const RewardsHistoryCard: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
@@ -41,16 +31,16 @@ export const RewardsHistoryCard: FC = () => {
       >
         <RewardsHistoryHeader showExport={hasData} />
         {isPending ? (
-          <LoaderStyled align="center" justify="center">
+          <Stack className={s.loader} align="center" justify="center">
             <Spinner label="Loading rewards history" />
-          </LoaderStyled>
+          </Stack>
         ) : hasData ? (
           <RewardsHistoryTable />
         ) : isError ? (
           <EmptyState title="Failed to load rewards history" />
         ) : (
           <EmptyState
-            illustration={<RewardsIconStyled />}
+            illustration={<RewardsIcon className={s.rewardsIcon} />}
             title="No rewards at the moment"
             description="Once your rewards are distributed, you'll be able to see them there"
             dataTestId={{ root: 'rewardsHistoryEmpty' }}

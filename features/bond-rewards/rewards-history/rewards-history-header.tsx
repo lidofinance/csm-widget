@@ -2,14 +2,10 @@ import { Button, Divider, Stack, Typography } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { useFrameInfo } from 'modules/web3';
 import { FC, useCallback } from 'react';
-import styled from 'styled-components';
 import { trackMatomoEvent } from 'utils';
 import { getDistributionLabel, getFrameRange } from './distribution-label';
 import { useRewardsHistoryExport } from './use-rewards-history-export';
-
-const HeaderStyled = styled(Stack)`
-  padding: 16px 24px;
-`;
+import s from './rewards-history-header.module.css';
 
 type Props = { showExport: boolean };
 
@@ -26,7 +22,8 @@ export const RewardsHistoryHeader: FC<Props> = ({ showExport }) => {
 
   return (
     <>
-      <HeaderStyled
+      <Stack
+        className={s.header}
         direction={{ base: 'row', mdDown: 'column' }}
         justify="between"
         align={{ base: 'center', mdDown: 'start' }}
@@ -53,7 +50,7 @@ export const RewardsHistoryHeader: FC<Props> = ({ showExport }) => {
             Export all to CSV
           </Button>
         )}
-      </HeaderStyled>
+      </Stack>
       <Divider />
     </>
   );

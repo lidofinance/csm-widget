@@ -6,7 +6,7 @@ import { useModuleMeta } from 'shared/hooks';
 import { isAddressEqual } from 'viem';
 import { RoleAddress } from '../../shared/role-address';
 import { RoleCard } from '../../shared/role-card';
-import { StepsListStyle } from '../../shared/styles';
+import s from '../../shared/styles.module.css';
 import { getPendingChangeIntent } from '../change-role-state';
 import { useChangeRoleFlow, useChangeRoleFormData } from '../context';
 import { useRole } from '../hooks/use-role';
@@ -63,13 +63,13 @@ export const PendingChangeCard: FC = () => {
         as="div"
         dataTestId={{ root: 'pendingActionRequired' }}
       >
-        <StepsListStyle>
+        <ol className={s.stepsList}>
           <li>
             Connect to {meta?.shortTitle ?? WIDGET_TITLE} UI with the proposed
             address
           </li>
           <li>Go to Settings tab → Inbox requests to confirm the change</li>
-        </StepsListStyle>
+        </ol>
       </Typography>
       {intent && <GasCostList intent={intent} />}
     </RoleCard>
