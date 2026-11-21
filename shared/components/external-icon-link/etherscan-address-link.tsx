@@ -5,7 +5,7 @@ import { ComponentProps, FC, ReactNode } from 'react';
 import { MatomoLink } from '../matomo-link/matomo-link';
 import { getEtherscanAddressLink } from 'utils';
 
-type Props = ComponentProps<typeof MatomoLink> & {
+type Props = Omit<ComponentProps<typeof MatomoLink>, 'icon'> & {
   address?: string;
   icon?: ReactNode;
 };

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import { ReactNode } from 'react';
 
 import EthStakerIcon from 'assets/icons/ics-scores/ethstaker.png';
@@ -37,11 +38,6 @@ export type ScoreItem = {
   description: ReactNode;
 };
 
-const ScoreIcon = ({ src }: { src: string }) => (
-  // eslint-disable-next-line jsx-a11y/alt-text
-  <img className={s.icon} src={src} />
-);
-
 export const TOTAL_SCORE_REQUIRED = 15;
 
 export const SCORE_SOURCES: ScoreSource[] = [
@@ -56,7 +52,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
       {
         id: 'ethStaker',
         name: 'EthStaker solo-stakers list',
-        icon: <ScoreIcon src={EthStakerIcon.src} />,
+        icon: <img className={s.icon} src={EthStakerIcon.src} />,
         points: 6,
         description:
           'Submitted address is present in the latest EthStaker Solo Stakers list as a deposit address, and not excluded following the a Sybil analysis of the list',
@@ -64,7 +60,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
       {
         id: 'stakeCat',
         name: 'StakeCat solo-stakers list',
-        icon: <ScoreIcon src={StakeCatIcon.src} />,
+        icon: <img className={s.icon} src={StakeCatIcon.src} />,
         points: 6,
         description:
           'Submitted address is present in the latest StakeCat Solo Stakers list (Gnosischain-Solo-Stakers or Solo-Stakers-B), and not excluded following a Sybil analysis of the list',
@@ -72,7 +68,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
       {
         id: 'obolTechne',
         name: 'Obol Techne',
-        icon: <ScoreIcon src={ObolIcon.src} />,
+        icon: <img className={s.icon} src={ObolIcon.src} />,
         points: '4-6',
         description: (
           <>
@@ -86,7 +82,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
       {
         id: 'ssvVerified',
         name: 'SSV Verified operators',
-        icon: <ScoreIcon src={SSVIcon.src} />,
+        icon: <img className={s.icon} src={SSVIcon.src} />,
         points: 7,
         description:
           'Submitted address is present in the SSV Verified Operators list and does not belong to a professional operator',
@@ -94,7 +90,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
       {
         id: 'csmTestnet',
         name: 'CSM testnet participation',
-        icon: <ScoreIcon src={CSMIcon.src} />,
+        icon: <img className={s.icon} src={CSMIcon.src} />,
         points: '4-5',
         description: (
           <>
@@ -112,7 +108,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
       {
         id: 'csmMainnet',
         name: 'CSM mainnet participation',
-        icon: <ScoreIcon src={CSMIcon.src} />,
+        icon: <img className={s.icon} src={CSMIcon.src} />,
         points: 6,
         description: (
           <>
@@ -126,7 +122,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
       {
         id: 'sdvtTestnet',
         name: 'SDVTM testnet participation',
-        icon: <ScoreIcon src={SDVTIcon.src} />,
+        icon: <img className={s.icon} src={SDVTIcon.src} />,
         points: 5,
         description:
           'Submitted address participated in and completed the entire duration of a Simple DVT testnet with Obol, SSV, or Safestake as a home or community staker',
@@ -134,7 +130,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
       {
         id: 'sdvtMainnet',
         name: 'SDVTM mainnet participation',
-        icon: <ScoreIcon src={SDVTIcon.src} />,
+        icon: <img className={s.icon} src={SDVTIcon.src} />,
         points: 7,
         description:
           'Submitted address is actively participating as a home or community staker in the Lido Simple DVT Module on mainnet at the time of application submission',
@@ -152,7 +148,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
       {
         id: 'humanPassport',
         name: 'Human passport',
-        icon: <ScoreIcon src={HumanPassportIcon.src} />,
+        icon: <img className={s.icon} src={HumanPassportIcon.src} />,
         points: '3-8',
         description: (
           <>
@@ -179,7 +175,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
       {
         id: 'circles',
         name: 'Circles',
-        icon: <ScoreIcon src={CirclesIcon.src} />,
+        icon: <img className={s.icon} src={CirclesIcon.src} />,
         points: 4,
         description: (
           <>
@@ -207,7 +203,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
       {
         id: 'ssvHumanity',
         name: 'SSV Verified operators',
-        icon: <ScoreIcon src={SSVIcon.src} />,
+        icon: <img className={s.icon} src={SSVIcon.src} />,
         points: 3,
         description:
           'Submitted address is present in the SSV Verified Operators list and does not belong to a professional operator',
@@ -215,7 +211,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
       {
         id: 'discord',
         name: 'Discord',
-        icon: <ScoreIcon src={DiscordIcon.src} />,
+        icon: <img className={s.icon} src={DiscordIcon.src} />,
         points: 2,
         description: (
           <>
@@ -228,7 +224,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
       {
         id: 'twitter',
         name: 'X',
-        icon: <ScoreIcon src={XTwitterIcon.src} />,
+        icon: <img className={s.icon} src={XTwitterIcon.src} />,
         points: 1,
         description: (
           <>
@@ -251,7 +247,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
       {
         id: 'aragonVotes',
         name: 'Participation in Aragon Votes',
-        icon: <ScoreIcon src={AragonIcon.src} />,
+        icon: <img className={s.icon} src={AragonIcon.src} />,
         points: 2,
         description: (
           <>
@@ -263,7 +259,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
       {
         id: 'snapshotVotes',
         name: 'Participation in Snapshot Votes',
-        icon: <ScoreIcon src={SnapshotIcon.src} />,
+        icon: <img className={s.icon} src={SnapshotIcon.src} />,
         points: 1,
         description: (
           <>
@@ -275,7 +271,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
       {
         id: 'lidoGalxe',
         name: 'Lido Galxe score',
-        icon: <ScoreIcon src={GalxeIcon.src} />,
+        icon: <img className={s.icon} src={GalxeIcon.src} />,
         points: '4-5',
         description: (
           <>
@@ -296,7 +292,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
       {
         id: 'highSignal',
         name: 'High Signal score',
-        icon: <ScoreIcon src={HighSignalIcon.src} />,
+        icon: <img className={s.icon} src={HighSignalIcon.src} />,
         points: '2-5',
         description: (
           <>
@@ -339,7 +335,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
       {
         id: 'gitPoaps',
         name: 'GitPOAPs',
-        icon: <ScoreIcon src={GitPOAPsIcon.src} />,
+        icon: <img className={s.icon} src={GitPOAPsIcon.src} />,
         points: 2,
         description:
           'Submitted address has at least one GitPOAP for contribution to the staking-related public good applications selected by CSM Committee',

@@ -1,7 +1,7 @@
 import { IconLink, TextLink, TextLinkProps } from '@lidofinance/lido-app-ui';
 import cn from 'classnames';
 import { useInpageNavigation } from 'providers/inpage-navigation';
-import { FC, MouseEvent, ReactNode, useCallback } from 'react';
+import { FC, MouseEvent, useCallback } from 'react';
 import { trackMatomoEvent, WithMatomoEvent } from 'utils';
 
 import Arrow from 'assets/icons/arrow-right.svg?react';
@@ -14,7 +14,7 @@ type AnchorLinkProps = Omit<
 > & { href?: string };
 
 type LinkIconProps = {
-  icon?: ReactNode;
+  icon?: 'arrow' | 'external';
   $inline?: boolean;
   $secondary?: boolean;
 };

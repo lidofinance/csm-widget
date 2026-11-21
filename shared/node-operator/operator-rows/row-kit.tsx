@@ -1,4 +1,5 @@
 import { Caption, Stack, Typography } from '@lidofinance/lido-app-ui';
+import cn from 'classnames';
 import { ButtonHTMLAttributes, FC, ReactNode } from 'react';
 import s from './styles.module.css';
 
@@ -24,8 +25,8 @@ export const CaptionStyle: FC<{ $size: RowSize; children: ReactNode }> = ({
 
 type RowStyleProps = SizeProps & ButtonHTMLAttributes<HTMLButtonElement>;
 
-export const RowStyle: FC<RowStyleProps> = ({ $size, ...props }) => (
-  <button {...props} className={s.row} data-size={$size} />
+export const RowStyle: FC<RowStyleProps> = ({ $size, className, ...props }) => (
+  <button {...props} className={cn(s.row, className)} data-size={$size} />
 );
 
 export const AvatarSlotStyle: FC<SizeProps & { children: ReactNode }> = ({

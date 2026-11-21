@@ -21,7 +21,7 @@ import { useConnection } from 'wagmi';
 import { EtherscanAddressLink } from 'shared/components/external-icon-link/etherscan-address-link';
 import { notifyCopied } from 'shared/hooks';
 import { Disconnect } from '../disconnect/disconnect';
-import s from './wallet-popover.module.css';
+import s from './styles.module.css';
 
 type WalletPopoverProps = {
   address: string;
