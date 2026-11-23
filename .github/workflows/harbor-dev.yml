@@ -2,7 +2,7 @@ name: Harbor image (dev)
 
 run-name: Build and push csm-widget:dev to dev
 
-# develop => dev cluster. Registry and credentials are chosen by the SHA-pinned reusable workflow per target.
+# develop => dev cluster. Registry and credentials are chosen by the reusable workflow per target.
 on:
   workflow_dispatch:
   push:
@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   build-and-push:
-    uses: lidofinance/actions/.github/workflows/k8s-build-push-harbor.yml@8d22c57b310ff5ebc27b8883bb4d0048e39c6430
+    uses: lidofinance/actions/.github/workflows/k8s-build-push-harbor.yml@main
     with:
       target: dev
       harbor_project: team-csm

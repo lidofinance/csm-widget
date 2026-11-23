@@ -77,3 +77,29 @@ jobs:
       timeout_minutes: 15
       report_enabled: true
       job_custom_name: "🚀 Post-deploy · CM web security"
+
+  csm-contract-security-tests:
+    name: Post-deploy CSM contract security checks
+    needs: deploy
+    secrets: inherit
+    uses: ./.github/workflows/e2e-tests.yml
+    with:
+      module: csm
+      stand_type: testnet
+      test_tags: contractSecurityCheck
+      qase_project_id: CSM
+      report_enabled: true
+      job_custom_name: "🚀 Post-deploy · CSM contract security"
+
+  cm-contract-security-tests:
+    name: Post-deploy CM contract security checks
+    needs: deploy
+    secrets: inherit
+    uses: ./.github/workflows/e2e-tests.yml
+    with:
+      module: cm
+      stand_type: testnet
+      test_tags: contractSecurityCheck
+      qase_project_id: CM
+      report_enabled: true
+      job_custom_name: "🚀 Post-deploy · CM contract security"

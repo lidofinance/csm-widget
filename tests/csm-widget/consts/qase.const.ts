@@ -49,7 +49,7 @@ export const EPIC = {
   },
   security: {
     name: 'Security',
-    features: [],
+    features: ['Contract address', 'Web'],
   },
   surveys: {
     name: 'Surveys',

@@ -86,7 +86,8 @@ const ALLOWED_CALLS: {
 test.describe(
   ...suite({
     epic: EPIC.security,
-    story: 'BFF RPC proxy',
+    feature: 'Web',
+    story: 'RPC proxy',
     tag: Tags.webSecurity,
   }),
   () => {

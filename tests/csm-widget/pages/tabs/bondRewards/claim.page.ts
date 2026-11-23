@@ -59,10 +59,12 @@ export class ClaimPage extends BasePage {
 
     // Button
     this.claimButton = this.form.getByRole('button', {
-      name: 'Claim to the Rewards Address',
+      name: 'Claim',
+      exact: true,
     });
     this.requestWithdrawalButton = this.form.getByRole('button', {
-      name: 'Request withdrawal to the Rewards Address',
+      name: 'Request withdrawal',
+      exact: true,
     });
 
     // Claim info
@@ -75,7 +77,7 @@ export class ClaimPage extends BasePage {
 
   async open() {
     await test.step('Open the Bond & Rewards page', async () => {
-      await this.openWithRetry('/bond/claim', this.titledTokenBalance);
+      await this.openWithRetry('/bond/claim', this.tokenButtons);
     });
   }
 

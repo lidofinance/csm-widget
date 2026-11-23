@@ -26,6 +26,7 @@ on:
           - "-"
           - smoke
           - webSecurity
+          - contractSecurityCheck
       preview_stand_url:
         description: 'Preview stand url (only if "Stand type" is "preview")'
         required: false

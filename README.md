@@ -198,12 +198,13 @@ setup. Run them one after another.
 
 ## Release flow
 
-To create a new release:
+1. Merge `develop` → `main` (builds `:staging`; updates the draft GitHub Release with the next version and notes from conventional commits)
+2. **Repo → Releases**: review the draft, then Publish. This creates the tag `X.Y.Z`
+3. Publishing runs `Run_on_release` (must exist in the tagged commit), which dispatches "Harbor image (prod)" from `main` (must exist on `main` and `develop`) to push `registry.prod.k8s-prod.org/team-csm/csm-widget:X.Y.Z`
+4. Deploy: PR in `helm-charts-csm` bumping the tag in both `csm-widget/values-k8s-prod.yaml` and `cm-widget/values-k8s-prod.yaml` (one image serves both modules)
 
-1. Merge all changes to the `main` branch.
-1. After the merge, the `Prepare release draft` action will run automatically. When the action is complete, a release draft is created.
-1. When you need to release, go to Repo → Releases.
-1. Publish the desired release draft manually by clicking the edit button - this release is now the `Latest Published`.
-1. After publication, the action to create a release bump will be triggered automatically.
+Retry a failed prod build by re-running it, or by running "Harbor image (prod)" manually from `main` with the release tag. Harbor tags are immutable, so a pushed tag can only be fixed forward.
+
+Publishing also starts the legacy infra-mainnet build (`CI Build prod image`), independent of the Harbor one.
 
 Learn more about [App Release Flow](https://www.notion.so/App-Release-Flow-f8a3484deecb40cb9d8da4d82c1afe96).

@@ -5,7 +5,7 @@ import {
   PAGE_WAIT_TIMEOUT,
   STAGE_WAIT_TIMEOUT,
 } from 'tests/shared/consts/timeouts';
-import { BasePage } from '../../../../shared/pages/base.page';
+import { BasePage } from './base.page';
 
 type SplitEntry = { address: string; share: string };
 

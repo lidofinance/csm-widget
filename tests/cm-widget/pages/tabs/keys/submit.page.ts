@@ -1,3 +1,4 @@
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { Locator, Page, test } from '@playwright/test';
 import { TokenSymbol } from 'tests/shared/consts/common.const';
 import { BasePage } from '../../../../shared/pages/base.page';
@@ -74,7 +75,7 @@ export class SubmitPage extends BasePage {
     });
   }
 
-  getBondTokenElement(tokenSymbol: TokenSymbol) {
+  getBondTokenElement(tokenSymbol: TokenSymbol | TOKENS) {
     return this.formBlock.locator(`label:has([value="${tokenSymbol}"])`);
   }
 
@@ -93,7 +94,7 @@ export class SubmitPage extends BasePage {
 
   async fillAndClickSubmit(
     keys: DepositKey[] | DepositKey,
-    tokenSymbol = TokenSymbol.STETH,
+    tokenSymbol: TokenSymbol | TOKENS = TokenSymbol.STETH,
   ) {
     await test.step('Fill keys and click Submit', async () => {
       const bondTokenElement = this.getBondTokenElement(tokenSymbol);
@@ -107,7 +108,7 @@ export class SubmitPage extends BasePage {
 
   async submitKeys(
     keys: DepositKey[] | DepositKey,
-    tokenSymbol = TokenSymbol.STETH,
+    tokenSymbol: TokenSymbol | TOKENS = TokenSymbol.STETH,
   ) {
     await this.fillAndClickSubmit(keys, tokenSymbol);
     await this.confirmOperatorModal.confirm();
