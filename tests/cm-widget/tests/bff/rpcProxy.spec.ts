@@ -1,10 +1,6 @@
 import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
-import {
-  COMMON_ADDRESSES,
-  CONTRACT_NAMES,
-  SUPPORTED_CHAINS,
-} from '@lidofinance/lido-csm-sdk';
+import { zeroHash } from 'viem';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { widgetFullConfig } from 'tests/cm-widget/config';
 import { Tags } from 'tests/shared/consts/common.const';
@@ -18,68 +14,22 @@ import {
   symbolCall,
   SYMBOL_SELECTOR,
 } from 'tests/shared/helpers/rpcRequest';
+import {
+  FOREIGN_ADDRESS,
+  getMalformedRequests,
+  getRefusedOverrides,
+  getTokens,
+  MAX_BATCH,
+  MAX_GET_LOGS_RANGE,
+} from 'tests/shared/consts/rpcProxy.const';
 import { test } from '../test.fixture';
 
 const { chainId } = widgetFullConfig.standConfig.networkConfig;
 const UNSUPPORTED_CHAIN_ID = 1337;
 const RPC_URL = `/api/rpc?chainId=${chainId}`;
 
-const FOREIGN_ADDRESS = '0x000000000000000000000000000000000000dEaD';
-const LOGS_ADDRESS = COMMON_ADDRESSES[chainId as SUPPORTED_CHAINS][
-  CONTRACT_NAMES.stETH
-] as string;
-const MAX_GET_LOGS_RANGE = 1_000_000;
-const MAX_BATCH = 20;
-const ZERO_HASH = `0x${'0'.repeat(64)}`;
-const WSTETH_ADDRESS = COMMON_ADDRESSES[chainId as SUPPORTED_CHAINS][
-  CONTRACT_NAMES.wstETH
-] as string;
-// Holds the code a proxy runs: overriding it swaps the contract
-const PROXY_IMPLEMENTATION_SLOT =
-  '0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc';
-const INVALID_CALL = 'RPC method eth_call is invalid';
-const INVALID_REQUEST = 'Invalid Request';
-
-const TOKEN_OVERRIDES = { stETH: LOGS_ADDRESS, wstETH: WSTETH_ADDRESS };
-
-const REFUSED_OVERRIDES = [
-  {
-    name: 'Code override',
-    override: { [LOGS_ADDRESS]: { code: '0x00' } },
-    error: INVALID_CALL,
-  },
-  {
-    name: 'Override of a foreign address',
-    override: slotOverride(FOREIGN_ADDRESS),
-    error: 'State override address is not allowed for eth_call',
-  },
-  {
-    name: 'Proxy implementation slot override',
-    override: slotOverride(LOGS_ADDRESS, PROXY_IMPLEMENTATION_SLOT),
-    error: INVALID_CALL,
-  },
-];
-
-const MALFORMED_REQUESTS = [
-  {
-    name: 'Unknown call field "To"',
-    data: rpcCall('eth_call', [
-      { to: LOGS_ADDRESS, To: FOREIGN_ADDRESS, data: SYMBOL_SELECTOR },
-      'latest',
-    ]),
-    error: INVALID_CALL,
-  },
-  {
-    name: 'Object id',
-    data: { ...rpcCall('eth_chainId'), id: {} },
-    error: INVALID_REQUEST,
-  },
-  {
-    name: 'Object params',
-    data: { ...rpcCall('eth_chainId'), params: {} },
-    error: INVALID_REQUEST,
-  },
-];
+const TOKENS = getTokens(chainId);
+const LOGS_ADDRESS = TOKENS.stETH;
 
 const ALLOWED_CALLS: {
   qaseId: number;
@@ -117,8 +67,8 @@ const ALLOWED_CALLS: {
       { from: FOREIGN_ADDRESS, to: LOGS_ADDRESS, data: SYMBOL_SELECTOR },
     ],
   },
-  { qaseId: 530, method: 'eth_getTransactionByHash', params: [ZERO_HASH] },
-  { qaseId: 531, method: 'eth_getTransactionReceipt', params: [ZERO_HASH] },
+  { qaseId: 530, method: 'eth_getTransactionByHash', params: [zeroHash] },
+  { qaseId: 531, method: 'eth_getTransactionReceipt', params: [zeroHash] },
   {
     qaseId: 532,
     method: 'eth_call',
@@ -292,7 +242,7 @@ test.describe(
     });
 
     test('Should proxy token storage overrides', async ({ request }) => {
-      for (const [name, token] of Object.entries(TOKEN_OVERRIDES)) {
+      for (const [name, token] of Object.entries(TOKENS)) {
         await test.step(`${name} storage override passes`, async () => {
           const resp = await request.post(RPC_URL, {
             data: symbolCall(token, slotOverride(token)),
@@ -306,7 +256,9 @@ test.describe(
     test('Should reject state overrides outside token storage', async ({
       request,
     }) => {
-      for (const { name, override, error } of REFUSED_OVERRIDES) {
+      for (const { name, override, error } of getRefusedOverrides(
+        LOGS_ADDRESS,
+      )) {
         await test.step(`${name} is refused`, async () => {
           const resp = await request.post(RPC_URL, {
             data: symbolCall(LOGS_ADDRESS, override),
@@ -327,7 +279,7 @@ test.describe(
     });
 
     test('Should reject malformed requests', async ({ request }) => {
-      for (const { name, data, error } of MALFORMED_REQUESTS) {
+      for (const { name, data, error } of getMalformedRequests(LOGS_ADDRESS)) {
         await test.step(`${name} is refused`, async () => {
           const resp = await request.post(RPC_URL, { data });
           expect(resp.status()).toBe(400);
