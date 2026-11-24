@@ -9,17 +9,16 @@ export const readJsonCapped = async (
   const reader = res.body.getReader();
   const chunks: Uint8Array[] = [];
   let total = 0;
-  for (;;) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    total += value.byteLength;
+  let chunk = await reader.read();
+  while (!chunk.done) {
+    total += chunk.value.byteLength;
     if (total > maxBytes) {
       await reader.cancel().catch(() => undefined);
       throw new SizeTooLargeError();
     }
-    chunks.push(value);
+    chunks.push(chunk.value);
+    chunk = await reader.read();
   }
 
-  const text = new TextDecoder().decode(Buffer.concat(chunks));
-  return JSON.parse(text);
+  return JSON.parse(Buffer.concat(chunks).toString('utf8'));
 };
