@@ -9,6 +9,7 @@ export type RPCFactoryValidationParams = {
   maxResponseSize?: number;
   allowedRPCMethods?: string[];
   allowedCallAddresses?: Record<number, string[]>;
+  allowedOverrideAddresses?: Record<number, string[]>;
   allowedLogsAddresses?: Record<number, string[]>;
   blockEmptyAddressGetLogs?: boolean;
   maxGetLogsRange?: number;
@@ -27,8 +28,10 @@ export type RPCFactoryParams = {
 };
 
 export type RpcRequest = {
+  jsonrpc?: '2.0';
+  id?: number | string | null;
   method: string;
-  params: unknown[];
+  params?: unknown[];
 };
 
 export type ValidationContext = {

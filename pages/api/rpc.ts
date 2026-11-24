@@ -15,6 +15,7 @@ import {
   requestAddressMetric,
   responseTimeMetric,
   allowedCallAddresses,
+  allowedOverrideAddresses,
   allowedLogsAddresses,
   rpcFactory,
 } from 'utilsApi';
@@ -60,6 +61,7 @@ const rpc = rpcFactory({
   validation: {
     allowedRPCMethods,
     allowedCallAddresses,
+    allowedOverrideAddresses,
     allowedLogsAddresses,
     maxBatchCount: config.PROVIDER_MAX_BATCH,
     blockEmptyAddressGetLogs: true,
