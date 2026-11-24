@@ -22,6 +22,7 @@
     "fork": "node tests/scripts/fork.ts",
     "cl-mock": "node tests/scripts/cl-mock/cli.ts",
     "qa-panel": "node tests/scripts/qa-panel/server.ts",
+    "docker:up": "node tests/scripts/docker-up.ts",
     "keys:generate": "node tests/scripts/generateKeys.ts",
     "test:cm:e2e": "playwright test --config=./tests/cm-widget/playwright.config.ts",
     "test:csm:e2e": "playwright test --config=./tests/csm-widget/playwright.config.ts",

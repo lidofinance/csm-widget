@@ -1,8 +1,8 @@
 import { execFile, spawn } from 'node:child_process';
 import { promisify } from 'node:util';
 
-// The services from compose.yaml, one profile each, and the one cloudflared
-// quick tunnel in front of them, routed by path
+// The services from compose.yaml, and the one cloudflared quick tunnel in
+// front of them, routed by path
 
 const exec = promisify(execFile);
 
@@ -26,6 +26,7 @@ const CONTAINERS: Record<Profile, string> = {
 export const TUNNEL_PATHS = {
   hoodi: '/hoodi',
   mainnet: '/mainnet',
+  // then the network: /cl/hoodi, /cl/mainnet
   cl: '/cl',
   ipfs: '/ipfs/{cid}',
 } as const;
@@ -123,12 +124,16 @@ export const DOCKER_ACTIONS = {
 } as const;
 export type DockerAction = keyof typeof DOCKER_ACTIONS;
 
+// Both network profiles: the action names its one service, so the other
+// network's services are left alone
 export const composeArgs = (profile: Profile, action: DockerAction) => [
   'compose',
   '--env-file',
   'fork.env',
   '--profile',
-  profile,
+  'hoodi',
+  '--profile',
+  'mainnet',
   ...DOCKER_ACTIONS[action](profile),
 ];
 

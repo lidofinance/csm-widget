@@ -12,6 +12,12 @@ import {
   buildSignatureCheckData,
   VALID_SIGNATURE,
 } from 'tests/shared/helpers/signatureCheck';
+import {
+  rpcCall,
+  slotOverride,
+  symbolCall,
+  SYMBOL_SELECTOR,
+} from 'tests/shared/helpers/rpcRequest';
 import { test } from '../test.fixture';
 
 const { chainId } = widgetFullConfig.standConfig.networkConfig;
@@ -19,19 +25,61 @@ const UNSUPPORTED_CHAIN_ID = 1337;
 const RPC_URL = `/api/rpc?chainId=${chainId}`;
 
 const FOREIGN_ADDRESS = '0x000000000000000000000000000000000000dEaD';
-const LOGS_ADDRESS =
-  COMMON_ADDRESSES[chainId as SUPPORTED_CHAINS][CONTRACT_NAMES.stETH];
+const LOGS_ADDRESS = COMMON_ADDRESSES[chainId as SUPPORTED_CHAINS][
+  CONTRACT_NAMES.stETH
+] as string;
 const MAX_GET_LOGS_RANGE = 1_000_000;
 const MAX_BATCH = 20;
 const ZERO_HASH = `0x${'0'.repeat(64)}`;
-const SYMBOL_SELECTOR = '0x95d89b41';
+const WSTETH_ADDRESS = COMMON_ADDRESSES[chainId as SUPPORTED_CHAINS][
+  CONTRACT_NAMES.wstETH
+] as string;
+// Holds the code a proxy runs: overriding it swaps the contract
+const PROXY_IMPLEMENTATION_SLOT =
+  '0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc';
+const INVALID_CALL = 'RPC method eth_call is invalid';
+const INVALID_REQUEST = 'Invalid Request';
 
-const rpcCall = (method: unknown, params: unknown[] = [], id = 1) => ({
-  jsonrpc: '2.0',
-  id,
-  method,
-  params,
-});
+const TOKEN_OVERRIDES = { stETH: LOGS_ADDRESS, wstETH: WSTETH_ADDRESS };
+
+const REFUSED_OVERRIDES = [
+  {
+    name: 'Code override',
+    override: { [LOGS_ADDRESS]: { code: '0x00' } },
+    error: INVALID_CALL,
+  },
+  {
+    name: 'Override of a foreign address',
+    override: slotOverride(FOREIGN_ADDRESS),
+    error: 'State override address is not allowed for eth_call',
+  },
+  {
+    name: 'Proxy implementation slot override',
+    override: slotOverride(LOGS_ADDRESS, PROXY_IMPLEMENTATION_SLOT),
+    error: INVALID_CALL,
+  },
+];
+
+const MALFORMED_REQUESTS = [
+  {
+    name: 'Unknown call field "To"',
+    data: rpcCall('eth_call', [
+      { to: LOGS_ADDRESS, To: FOREIGN_ADDRESS, data: SYMBOL_SELECTOR },
+      'latest',
+    ]),
+    error: INVALID_CALL,
+  },
+  {
+    name: 'Object id',
+    data: { ...rpcCall('eth_chainId'), id: {} },
+    error: INVALID_REQUEST,
+  },
+  {
+    name: 'Object params',
+    data: { ...rpcCall('eth_chainId'), params: {} },
+    error: INVALID_REQUEST,
+  },
+];
 
 const ALLOWED_CALLS: {
   qaseId: number;
@@ -243,6 +291,51 @@ test.describe(
       });
     });
 
+    test('Should proxy token storage overrides', async ({ request }) => {
+      for (const [name, token] of Object.entries(TOKEN_OVERRIDES)) {
+        await test.step(`${name} storage override passes`, async () => {
+          const resp = await request.post(RPC_URL, {
+            data: symbolCall(token, slotOverride(token)),
+          });
+          expect(resp.status()).toBe(200);
+          expect((await resp.json()).error).toBeUndefined();
+        });
+      }
+    });
+
+    test('Should reject state overrides outside token storage', async ({
+      request,
+    }) => {
+      for (const { name, override, error } of REFUSED_OVERRIDES) {
+        await test.step(`${name} is refused`, async () => {
+          const resp = await request.post(RPC_URL, {
+            data: symbolCall(LOGS_ADDRESS, override),
+          });
+          expect(resp.status()).toBe(400);
+          expect(await resp.json()).toBe(error);
+        });
+      }
+    });
+
+    test('Should not forward keys it did not validate', async ({ request }) => {
+      await test.step('Second "Method" key does not reach the node', async () => {
+        const resp = await request.post(RPC_URL, {
+          data: { ...rpcCall('eth_chainId'), Method: 'debug_traceTransaction' },
+        });
+        expect((await resp.json()).result).toBe(`0x${chainId.toString(16)}`);
+      });
+    });
+
+    test('Should reject malformed requests', async ({ request }) => {
+      for (const { name, data, error } of MALFORMED_REQUESTS) {
+        await test.step(`${name} is refused`, async () => {
+          const resp = await request.post(RPC_URL, { data });
+          expect(resp.status()).toBe(400);
+          expect(await resp.json()).toBe(error);
+        });
+      }
+    });
+
     test(
       qase(684, 'Should reject eth_getLogs outside address and range limits'),
       async ({ request }) => {
@@ -292,6 +385,32 @@ test.describe(
           expect(resp.status()).toBe(400);
           expect(await resp.json()).toBe(
             'RPC method eth_getLogs fromBlock is invalid',
+          );
+        });
+
+        for (const tag of ['safe', 'finalized', 'pending']) {
+          await test.step(`"${tag}" fromBlock is refused`, async () => {
+            const resp = await request.post(RPC_URL, {
+              data: rpcCall('eth_getLogs', [
+                { address: LOGS_ADDRESS, fromBlock: tag, toBlock: 'latest' },
+              ]),
+            });
+            expect(resp.status()).toBe(400);
+            expect(await resp.json()).toBe(
+              'RPC method eth_getLogs fromBlock is invalid',
+            );
+          });
+        }
+
+        await test.step('"earliest" toBlock is refused', async () => {
+          const resp = await request.post(RPC_URL, {
+            data: rpcCall('eth_getLogs', [
+              { address: LOGS_ADDRESS, fromBlock: '0x1', toBlock: 'earliest' },
+            ]),
+          });
+          expect(resp.status()).toBe(400);
+          expect(await resp.json()).toBe(
+            'RPC method eth_getLogs toBlock is invalid',
           );
         });
       },
