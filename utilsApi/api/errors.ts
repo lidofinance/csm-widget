@@ -30,3 +30,5 @@ export class SizeTooLargeError extends ClientError {
     super(message || 'Response size too large');
   }
 }
+
+export class UpstreamError extends Error {}

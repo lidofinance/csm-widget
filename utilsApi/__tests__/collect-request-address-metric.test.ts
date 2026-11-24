@@ -3,6 +3,11 @@ const CHAIN_ID = 1;
 const KNOWN_ADDRESS = '0x1234567890123456789012345678901234567890';
 const UNKNOWN_ADDRESS = '0xaBcDEF1234567890abcdEF1234567890AbCdEf12';
 
+vi.mock('viem', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('viem')>();
+  return { ...actual, isAddress: vi.fn(actual.isAddress) };
+});
+
 vi.mock('../contractAddressesMetricsMap', () => ({
   METRIC_CONTRACT_ADDRESSES: {
     1: { '0x1234567890123456789012345678901234567890': 'csModule' },
@@ -13,6 +18,8 @@ vi.mock('../contractAddressesMetricsMap', () => ({
 vi.mock('../get-function-name-from-abi', () => ({
   getFunctionNameFromAbi: vi.fn(() => 'submit'),
 }));
+
+import { isAddress } from 'viem';
 
 import { collectRequestAddressMetric } from '../collect-request-address-metric';
 import { getMetricContractAbi } from '../contractAddressesMetricsMap';
@@ -43,6 +50,14 @@ const collect = (calls: any[], counter: any) =>
   });
 
 describe('collectRequestAddressMetric', () => {
+  it('never passes an oversized `to` to isAddress', () => {
+    const { counter, recorded } = makeCounterMock();
+    vi.mocked(isAddress).mockClear();
+    collect([makeEthCall('0x' + 'a'.repeat(1024 * 1024))], counter);
+    expect(isAddress).not.toHaveBeenCalled();
+    expect(recorded).toHaveLength(0);
+  });
+
   let warnSpy: MockInstance<typeof console.warn>;
 
   beforeEach(() => {

@@ -1,8 +1,13 @@
+import { isAddress } from 'viem';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { resolveAddressValidity } from 'utilsApi/address-validity';
 import { validationHandler } from '../validation-handler';
 
+vi.mock('viem', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('viem')>();
+  return { ...actual, isAddress: vi.fn(actual.isAddress) };
+});
 vi.mock('utilsApi/client-request-headers', () => ({
   getClientRequestHeaders: () => ({}),
 }));
@@ -64,4 +69,30 @@ describe('GET /api/validation handler', () => {
     await run(ADDRESS);
     expect(resolve).toHaveBeenCalledWith(ADDRESS.toLowerCase(), {});
   });
+
+  it.each([
+    ['43 chars', ADDRESS + '0'],
+    ['1 MB', '0x' + 'a'.repeat(1 << 20)],
+  ])('rejects %s address with 400 before isAddress', async (_name, address) => {
+    vi.mocked(isAddress).mockClear();
+    const res = await run(address);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(isAddress).not.toHaveBeenCalled();
+    expect(resolve).not.toHaveBeenCalled();
+  });
+
+  it('rejects 42-char address with bad checksum', async () => {
+    const bad = ADDRESS.slice(0, -1) + 'a';
+    const res = await run(bad);
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  it.each([[ADDRESS], [ADDRESS.toLowerCase()]])(
+    'accepts valid address %s',
+    async (address) => {
+      resolve.mockResolvedValue({ status: 'ok', isValid: true });
+      const res = await run(address);
+      expect(res.status).toHaveBeenCalledWith(200);
+    },
+  );
 });

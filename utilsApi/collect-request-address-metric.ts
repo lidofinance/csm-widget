@@ -48,7 +48,11 @@ export const collectRequestAddressMetric = ({
 
       const { to, data } = call.params[0];
 
-      if (typeof to !== 'string' || !isAddress(to, { strict: false })) {
+      if (
+        typeof to !== 'string' ||
+        to.length !== 42 ||
+        !isAddress(to, { strict: false })
+      ) {
         malformedCalls++;
         return;
       }
