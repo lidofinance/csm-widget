@@ -7,6 +7,7 @@ import {
   ClientError,
   InvalidRequestError,
   SizeTooLargeError,
+  UpstreamError,
   UnsupportedChainIdError,
   UnsupportedHTTPMethodError,
 } from './errors';
@@ -176,7 +177,7 @@ export const ethGetLogsValidationFactory = (
           console.warn(
             `[rpcFactory] head lookup failed: ${redactUrls(String(error)).slice(0, 200)}`,
           );
-          throw new InvalidRequestError(`RPC method eth_getLogs is invalid`);
+          throw new UpstreamError('eth_blockNumber lookup failed');
         })
         .finally(() => inflightHead.delete(chainId));
       inflightHead.set(chainId, pending);
@@ -270,7 +271,9 @@ export const ethGetLogsValidationFactory = (
         }
       }
     } catch (error) {
-      if (error instanceof ClientError) throw error;
+      if (error instanceof ClientError || error instanceof UpstreamError) {
+        throw error;
+      }
       throw new InvalidRequestError(`RPC method eth_getLogs is invalid`);
     }
   };

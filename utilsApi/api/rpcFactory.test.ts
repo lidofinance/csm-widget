@@ -80,7 +80,7 @@ describe('rpcFactory canonical forwarding', () => {
     expect(fetchRPC).not.toHaveBeenCalled();
   });
 
-  it('strips input and keeps allowlisted override', async () => {
+  it('keeps allowlisted override', async () => {
     const { run, sent } = setup({
       allowedCallAddresses: { 1: [ALLOWED] },
       allowedOverrideAddresses: { 1: [ALLOWED] },
@@ -89,11 +89,7 @@ describe('rpcFactory canonical forwarding', () => {
     await run({
       id: 1,
       method: 'eth_call',
-      params: [
-        { to: ALLOWED, data: '0x', input: '0xdead' },
-        'latest',
-        override,
-      ],
+      params: [{ to: ALLOWED, data: '0x' }, 'latest', override],
     });
     expect(sent().params).toEqual([
       { to: ALLOWED, data: '0x' },
@@ -138,6 +134,26 @@ describe('rpcFactory canonical forwarding', () => {
     });
     expect(res.status).toHaveBeenCalledWith(400);
     expect(fetchRPC).not.toHaveBeenCalled();
+  });
+
+  it('answers 500 when head lookup fails upstream', async () => {
+    const { run, fetchRPC } = setup({
+      allowedRPCMethods: ['eth_getLogs'],
+      blockEmptyAddressGetLogs: true,
+      maxGetLogsRange: 10,
+    });
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    fetchRPC.mockRejectedValue(new Error('down'));
+    const res = await run({
+      id: 1,
+      method: 'eth_getLogs',
+      params: [{ address: ALLOWED, fromBlock: '0x1' }],
+    });
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith(DEFAULT_API_ERROR_MESSAGE);
+    errorSpy.mockRestore();
+    warnSpy.mockRestore();
   });
 
   it('hides provider error details in 500', async () => {

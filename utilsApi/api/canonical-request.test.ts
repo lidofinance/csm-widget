@@ -98,11 +98,23 @@ describe('canonicalizeParams eth_call', () => {
     expect(() => call([[]])).toThrow(InvalidRequestError);
   });
 
-  it('drops input, To and unknown keys', () => {
-    const out = call([
-      { to: ADDR, data: '0x', input: '0x1', To: ADDR, foo: 1 },
-    ]);
-    expect(out.params).toEqual([{ to: ADDR, data: '0x' }]);
+  it.each([
+    ['input', { input: '0x1' }],
+    ['authorizationList', { authorizationList: [] }],
+    ['blobVersionedHashes', { blobVersionedHashes: [] }],
+    ['unknown key', { foo: 1 }],
+    ['wrong-case key', { To: ADDR }],
+  ])('rejects %s', (_n, extra) => {
+    expect(() => call([{ to: ADDR, data: '0x', ...extra }])).toThrow(
+      InvalidRequestError,
+    );
+  });
+
+  it('forwards chainId and maxFeePerBlobGas', () => {
+    expect(
+      call([{ to: ADDR, chainId: '0x1', maxFeePerBlobGas: '0x2' }]).params,
+    ).toEqual([{ to: ADDR, chainId: '0x1', maxFeePerBlobGas: '0x2' }]);
+    expect(() => call([{ chainId: 1 }])).toThrow(InvalidRequestError);
   });
 
   it('lets non-string to reach the validator', () => {

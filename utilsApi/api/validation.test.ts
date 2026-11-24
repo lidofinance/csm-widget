@@ -8,7 +8,11 @@ import {
 } from 'viem';
 
 import type { ValidationContext } from './types';
-import { InvalidRequestError, SizeTooLargeError } from './errors';
+import {
+  InvalidRequestError,
+  SizeTooLargeError,
+  UpstreamError,
+} from './errors';
 import {
   ethCallValidationFactory,
   ethGetLogsValidationFactory,
@@ -222,7 +226,7 @@ describe('eth_getLogs validation', () => {
     const { run } = setupLogs({ requestRPC });
     await expect(
       run({ address: LOGS_ADDR, fromBlock: '0xf6' }),
-    ).rejects.toThrow('RPC method eth_getLogs is invalid');
+    ).rejects.toBeInstanceOf(UpstreamError);
     await expect(
       run({ address: LOGS_ADDR, fromBlock: '0xf6' }),
     ).resolves.toBeUndefined();
@@ -238,20 +242,23 @@ describe('eth_getLogs validation', () => {
     ],
     ['oversized body', () => new Response('x'.repeat(20_000))],
     ['non-ok status', () => new Response('{}', { status: 503 })],
-  ])('maps head lookup %s to invalid and does not cache', async (_n, bad) => {
-    const requestRPC = vi
-      .fn()
-      .mockResolvedValueOnce(bad())
-      .mockResolvedValue(rpcResult('0x100'));
-    const { run } = setupLogs({ requestRPC });
-    await expect(
-      run({ address: LOGS_ADDR, fromBlock: '0xf6' }),
-    ).rejects.toThrow(/^RPC method eth_getLogs is invalid$/);
-    await expect(
-      run({ address: LOGS_ADDR, fromBlock: '0xf6' }),
-    ).resolves.toBeUndefined();
-    expect(requestRPC).toHaveBeenCalledTimes(2);
-  });
+  ])(
+    'maps head lookup %s to upstream error and does not cache',
+    async (_n, bad) => {
+      const requestRPC = vi
+        .fn()
+        .mockResolvedValueOnce(bad())
+        .mockResolvedValue(rpcResult('0x100'));
+      const { run } = setupLogs({ requestRPC });
+      await expect(
+        run({ address: LOGS_ADDR, fromBlock: '0xf6' }),
+      ).rejects.toBeInstanceOf(UpstreamError);
+      await expect(
+        run({ address: LOGS_ADDR, fromBlock: '0xf6' }),
+      ).resolves.toBeUndefined();
+      expect(requestRPC).toHaveBeenCalledTimes(2);
+    },
+  );
 
   it('rejects missing address', async () => {
     const { run } = setupLogs();

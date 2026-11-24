@@ -106,8 +106,9 @@ export const rpcFactory = ({
       // because we assume that frontend must not send invalid requests at all
       const canonical: RpcRequest[] = [];
       for (const raw of requests) {
-        validateRpcMethod({ method: readMethod(raw) }, validationContext);
-        const envelope = canonicalizeEnvelope(raw);
+        const method = readMethod(raw);
+        validateRpcMethod({ method }, validationContext);
+        const envelope = canonicalizeEnvelope(raw, method);
 
         const item = canonicalizeParams(envelope, {
           allowOverrides: !!allowedOverrideAddresses && !!allowedCallAddresses,

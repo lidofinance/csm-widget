@@ -8,6 +8,7 @@ const BLOCK_TAG_RE =
   /^(latest|earliest|pending|safe|finalized|0x[0-9a-fA-F]{1,16})$/;
 const BLOCK_NUMBER_RE = /^0x[0-9a-fA-F]{1,16}$/;
 const HASH32_RE = /^0x[0-9a-fA-F]{64}$/;
+// Override only plain token contracts: overriding a slot holding an address the contract calls would redirect calls and bypass the call allowlist
 // ERC-1967 implementation, beacon, admin; Aragon kernel, appId
 const PROXY_CONTROL_SLOTS = new Set([
   '0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc',
@@ -28,7 +29,14 @@ const CALL_KEYS_SCALAR = [
   'maxPriorityFeePerGas',
   'nonce',
   'type',
+  'chainId',
+  'maxFeePerBlobGas',
 ] as const;
+const CALL_KEYS_KNOWN = new Set<string>([
+  ...CALL_KEYS_PASSTHROUGH,
+  ...CALL_KEYS_SCALAR,
+  'accessList',
+]);
 
 const MAX_ACCESS_LIST = 64;
 const MAX_STORAGE_KEYS = 256;
@@ -51,8 +59,10 @@ export const readMethod = (raw: unknown): string => {
   return method;
 };
 
-export const canonicalizeEnvelope = (raw: unknown): RpcRequest => {
-  const method = readMethod(raw);
+export const canonicalizeEnvelope = (
+  raw: unknown,
+  method: string = readMethod(raw),
+): RpcRequest => {
   if (!isPlainObject(raw)) throw new InvalidRequestError();
 
   const hasId = has(raw, 'id');
@@ -97,6 +107,7 @@ const canonicalizeAccessList = (list: unknown, fail: () => never) => {
 
 const canonicalizeCallObject = (obj: unknown, fail: () => never) => {
   if (!isPlainObject(obj)) return fail();
+  if (Object.keys(obj).some((key) => !CALL_KEYS_KNOWN.has(key))) return fail();
   const out: PlainObject = {};
   for (const key of CALL_KEYS_PASSTHROUGH) {
     if (has(obj, key)) out[key] = obj[key];
