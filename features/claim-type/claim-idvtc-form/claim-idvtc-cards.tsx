@@ -41,8 +41,8 @@ export const ClaimIdvtcSubmitButton: FC = () => {
 
   return (
     <>
-      <GasCostList />
       <SubmitButton>{getClaimIdvtcCopy(isCurrentIcs).cta}</SubmitButton>
+      <GasCostList />
     </>
   );
 };

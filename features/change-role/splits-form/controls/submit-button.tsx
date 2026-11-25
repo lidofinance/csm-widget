@@ -19,13 +19,13 @@ export const SplitsCtas: FC = () => {
 
   return (
     <Stack gap={12}>
-      <GasCostList />
       <SubmitButton disabled={splitsEqual(feeSplits ?? [], currentFeeSplits)}>
         {getSplitsSubmitLabel(currentFeeSplits.length > 0)}
       </SubmitButton>
       <Button fullWidth variant="outline" onClick={handleCancel}>
         Cancel
       </Button>
+      <GasCostList />
     </Stack>
   );
 };

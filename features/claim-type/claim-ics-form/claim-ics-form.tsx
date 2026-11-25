@@ -32,8 +32,8 @@ const ClaimIcsContent: FC = () => {
               <ClaimIcsCard
                 cta={
                   <>
-                    <GasCostList />
                     <SubmitButton>Claim operator type</SubmitButton>
+                    <GasCostList />
                   </>
                 }
               />

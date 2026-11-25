@@ -9,7 +9,7 @@ export const ClaimerFormCard: FC = () => (
     tooltip={CLAIMER_TOOLTIP}
   >
     <AddressField name="address" label="New Rewards claimer address" />
-    <GasCostList />
     <SubmitButton disableIfClean>Set new Rewards claimer address</SubmitButton>
+    <GasCostList />
   </FormCard>
 );

@@ -27,10 +27,10 @@ export const InviteCard: FC<{ invite: ModuleInvite }> = ({ invite }) => {
         <Typography variant="body" as="p">
           {getProposedRoleText(invite.role)}
         </Typography>
-        <GasCostList intent={inviteId} />
         <SubmitButton intent={inviteId} size="small" fullWidth={false}>
           Accept request
         </SubmitButton>
+        <GasCostList intent={inviteId} />
       </Stack>
     </Card>
   );

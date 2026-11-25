@@ -36,8 +36,8 @@ export const MetadataForm: FC = memo(() => (
                     label="Description"
                     placeholder={`Node Operator description (up to ${METADATA_DESCRIPTION_MAX_LENGTH} characters)`}
                   />
-                  <GasCostList />
                   <SubmitButton>Update</SubmitButton>
+                  <GasCostList />
                 </Stack>
               </FormCard>
             </Form>

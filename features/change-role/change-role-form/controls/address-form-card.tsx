@@ -72,10 +72,10 @@ export const AddressFormCard: FC = () => {
           affect the operators shown in the interface.
         </MessageBox>
       )}
-      <GasCostList />
       <SubmitButton disableIfClean={!isReset}>
         {getChangeRoleSubmitLabel(flow.action, roleTitle)}
       </SubmitButton>
+      <GasCostList />
     </FormCard>
   );
 };

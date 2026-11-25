@@ -22,7 +22,7 @@ export const GasCostRow: FC<GasCostProps> = ({ intent }) => {
 };
 
 export const GasCostList: FC<GasCostProps> = ({ intent }) => (
-  <DataList divided>
+  <DataList divided flush>
     <GasCostRow intent={intent} />
   </DataList>
 );

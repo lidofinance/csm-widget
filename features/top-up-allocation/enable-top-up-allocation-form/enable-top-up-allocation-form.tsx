@@ -21,8 +21,8 @@ export const EnableTopUpAllocationForm: FC = memo(() => (
           <Form data-testid="enableTopUpAllocationForm">
             <FormCard title="Specify Node Operator">
               <TextField name="nodeOperatorId" label="Node Operator ID" />
-              <GasCostList />
               <SubmitButton>Enable top-up allocation</SubmitButton>
+              <GasCostList />
             </FormCard>
           </Form>
         </FormReady>
