@@ -11,6 +11,7 @@ export const IncomingRequestsBanner: FC = () => {
 
   if (!copy) return null;
 
+  // TODO: use info variant (like MessageBox variant="info") once app-ui Banner supports color/variant
   return (
     <Banner
       icon={
