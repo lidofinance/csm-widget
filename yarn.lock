@@ -2295,10 +2295,10 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/github-summary-reporter/-/github-summary-reporter-1.0.0.tgz#12351a4bb3be8f2f189620e41fe579e5f98c2548"
   integrity sha512-i+OKGONoS8CH9SGAVlz/zmB/VLddldaCE9f8UH7KA5pzVtDQ++8LCHxac1HKwguqPzF5dllq3pTuXkbIH+spiw==
 
-"@lidofinance/lido-app-ui@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/lido-app-ui/-/lido-app-ui-2.0.0.tgz#24ae4fe2c9d1f20c7ed16e44bc045206b10639f1"
-  integrity sha512-x/QzhCvN6gfFUWGyB5Jr0VBE3eKTjjoMasBDY+lMtbnx+iTO+VjAK7OHYRW97Yug9Q97SZv5Jr8wOx2gGZDyig==
+"@lidofinance/lido-app-ui@2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@lidofinance/lido-app-ui/-/lido-app-ui-2.0.1.tgz#62b3ef651e03326c426c40b32a21336ef9f8ab8e"
+  integrity sha512-FLaxKgGB3FGTdJxh6mZ5EVhhco/wlCP6gVFEsqhZkgJtmg5WUMF1Y5roW67lnvlsblDPpvpolVcaTJm7s6mQOA==
   dependencies:
     "@lidofinance/lido-shared-ui" "^1.1.6"
     classnames "2.5.1"

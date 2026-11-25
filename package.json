@@ -35,7 +35,7 @@
     "@lidofinance/api-logger": "^0.64.0",
     "@lidofinance/api-metrics": "^0.64.0",
     "@lidofinance/api-rpc": "^0.64.0",
-    "@lidofinance/lido-app-ui": "2.0.0",
+    "@lidofinance/lido-app-ui": "2.0.1",
     "@lidofinance/lido-csm-sdk": "4.0.0-alpha.3",
     "@lidofinance/lido-ethereum-sdk": "^4.8.0",
     "@lidofinance/next-api-wrapper": "^0.64.0",
