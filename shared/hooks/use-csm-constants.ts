@@ -9,7 +9,6 @@ export const useExternalLinks = (module?: MODULE_NAME) => {
   const links = getExternalLinks(chainId);
   return {
     ...links,
-    feedbackForm: links.feedbackForm[resolved],
     landing: links.landing[resolved],
   };
 };
