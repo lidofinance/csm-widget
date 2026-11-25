@@ -28,8 +28,4 @@ export class SizeTooLargeError extends ClientError {
   }
 }
 
-export class MissingRequestBodyError extends ClientError {
-  constructor(message?: string) {
-    super(message || 'Request body is required');
-  }
-}
+export class UpstreamError extends Error {}

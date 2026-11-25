@@ -1,4 +1,3 @@
-import type { ServerLogger } from '@lidofinance/api-logger';
 import type { TrackedFetchRPC } from '@lidofinance/api-rpc';
 import type { FetchRpcInitBody } from '@lidofinance/rpc';
 import type { Counter, Registry } from 'prom-client';
@@ -8,9 +7,10 @@ export type RpcProviders = Record<string | number, [string, ...string[]]>;
 export type RPCFactoryValidationParams = {
   maxBatchCount?: number;
   maxResponseSize?: number;
-  allowedRPCMethods: string[];
-  allowedCallAddresses: Record<number, string[]>;
-  allowedLogsAddresses: Record<number, string[]>;
+  allowedRPCMethods?: string[];
+  allowedCallAddresses?: Record<number, string[]>;
+  allowedOverrideAddresses?: Record<number, string[]>;
+  allowedLogsAddresses?: Record<number, string[]>;
   blockEmptyAddressGetLogs?: boolean;
   maxGetLogsRange?: number;
   currentBlockTTLms?: number;
@@ -25,14 +25,15 @@ export type RPCFactoryParams = {
   fetchRPC: TrackedFetchRPC;
   defaultChain: string | number;
   validation: RPCFactoryValidationParams;
-  serverLogger?: ServerLogger;
   // 0 turns the per-provider time-to-first-byte limit off
   upstreamTimeoutMs?: number;
 };
 
 export type RpcRequest = {
+  jsonrpc?: '2.0';
+  id?: number | string | null;
   method: string;
-  params: unknown[];
+  params?: unknown[];
 };
 
 export type ValidationContext = {

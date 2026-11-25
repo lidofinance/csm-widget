@@ -1,30 +1,28 @@
 import { Transform } from 'node:stream';
 
 import { Cache } from 'memory-cache';
+import { erc6492SignatureValidatorByteCode } from 'viem';
 
 import {
   ClientError,
   InvalidRequestError,
   SizeTooLargeError,
+  UpstreamError,
   UnsupportedChainIdError,
   UnsupportedHTTPMethodError,
 } from './errors';
 
 import type { NextApiRequest } from 'next';
+import { readJsonCapped } from './read-json-capped';
+import { redactUrls } from './request-rpc';
 import { RpcRequest, ValidationContext } from './types';
-
-const HEX_BLOCK_NUMBER = /^0x[0-9a-fA-F]+$/;
-// Tags that resolve within a few blocks of head, far below any sane maxGetLogsRange
-const NEAR_HEAD_BLOCK_TAGS = new Set([
-  'latest',
-  'safe',
-  'finalized',
-  'pending',
-]);
 
 // validation factories
 
 const zeroBN = BigInt(0);
+
+const HEX_BLOCK_RE = /^0x[0-9a-fA-F]{1,16}$/;
+const TO_BLOCK_TAGS = new Set(['latest', 'safe', 'finalized', 'pending']);
 
 export const baseRequestValidationFactory = (
   defaultChain: number | string,
@@ -45,12 +43,13 @@ export const baseRequestValidationFactory = (
       throw new UnsupportedChainIdError();
     }
 
-    const requests = Array.isArray(req.body) ? req.body : [req.body];
+    const isBatch = Array.isArray(req.body);
+    const requests: unknown[] = isBatch ? req.body : [req.body];
 
     if (typeof maxBatchSize === 'number' && requests.length > maxBatchSize) {
       throw new InvalidRequestError(`Too many batched requests`);
     }
-    return { chainId, requests };
+    return { chainId, requests, isBatch };
   };
 };
 
@@ -69,29 +68,65 @@ export const rpcMethodsValidationFactory = (allowedMethods?: string[]) => {
   };
 };
 
+const ERC6492_VALIDATOR_BYTECODE =
+  erc6492SignatureValidatorByteCode.toLowerCase();
+
+// To-less calls are allowed only for viem's deployless ERC-6492 signature verification
+const isErc6492DeploylessCall = (data: unknown) =>
+  typeof data === 'string' &&
+  data.toLowerCase().startsWith(ERC6492_VALIDATOR_BYTECODE);
+
 export const ethCallValidationFactory = (
   allowedAddress: Record<number, string[]>,
+  method = 'eth_call',
+  allowedOverrideAddress: Record<number, string[]> = {},
 ) => {
   const allowedCallAddressMap = createAllowedAddressMap(allowedAddress);
+  const allowedOverrideMap = createAllowedAddressMap(allowedOverrideAddress);
 
   return (
     request: RpcRequest,
     { chainId, rpcRequestBlocked }: ValidationContext,
   ) => {
     const { params } = request;
-    if (Array.isArray(params) && params[0] && typeof params[0] === 'object') {
-      // no `to` + `data` is viem's deployless eth_call (publicClient.verifyMessage)
-      if ('to' in params[0] && typeof params[0].to === 'string') {
-        if (!allowedCallAddressMap[chainId]?.has(params[0].to.toLowerCase())) {
-          rpcRequestBlocked.inc({ reason: 'address not allowed for eth_call' });
-          throw new InvalidRequestError(
-            `Address ${params[0].to} is not allowed for eth_call`,
-          );
-        }
-      } else if (!('data' in params[0])) {
-        throw new InvalidRequestError(`RPC method eth_call is invalid`);
+    if (!Array.isArray(params) || !params[0] || typeof params[0] !== 'object') {
+      throw new InvalidRequestError(`RPC method ${method} is invalid`);
+    }
+    const { to, data } = params[0] as { to?: unknown; data?: unknown };
+
+    const stateOverride = params[2];
+    if (stateOverride != null) {
+      const allowed = allowedOverrideMap[chainId];
+      const addresses =
+        typeof stateOverride === 'object' ? Object.keys(stateOverride) : [];
+      if (!addresses.every((a) => allowed?.has(a.toLowerCase()))) {
+        rpcRequestBlocked.inc({
+          reason: `state override address not allowed for ${method}`,
+        });
+        throw new InvalidRequestError(
+          `State override address is not allowed for ${method}`,
+        );
       }
-    } else throw new InvalidRequestError(`RPC method eth_call is invalid`);
+    }
+
+    if (typeof to === 'string') {
+      if (!allowedCallAddressMap[chainId]?.has(to.toLowerCase())) {
+        rpcRequestBlocked.inc({ reason: `address not allowed for ${method}` });
+        throw new InvalidRequestError(
+          `Address ${to} is not allowed for ${method}`,
+        );
+      }
+    } else if (to == null) {
+      if (!isErc6492DeploylessCall(data)) {
+        rpcRequestBlocked.inc({ reason: `${method} without address` });
+        throw new InvalidRequestError(
+          `Calls without address are not allowed for ${method}`,
+        );
+      }
+    } else {
+      rpcRequestBlocked.inc({ reason: `${method} invalid address` });
+      throw new InvalidRequestError(`RPC method ${method} is invalid`);
+    }
   };
 };
 
@@ -106,19 +141,64 @@ export const ethGetLogsValidationFactory = (
   const maxBlockRangeBN = maxBlockRange ? BigInt(maxBlockRange) : zeroBN;
 
   const currentBlock = new Cache<number, bigint>();
+  const inflightHead = new Map<number, Promise<bigint>>();
+
+  const getHead = async (
+    chainId: number,
+    requestRPC: ValidationContext['requestRPC'],
+  ) => {
+    const cached = currentBlock.get(chainId);
+    if (cached != null) return cached;
+
+    let pending = inflightHead.get(chainId);
+    if (!pending) {
+      pending = requestRPC(chainId, {
+        id: 1,
+        jsonrpc: '2.0',
+        method: 'eth_blockNumber',
+      })
+        .then(async (res) => {
+          if (!res.ok) {
+            void res.body?.cancel().catch(() => undefined);
+            throw new Error('eth_blockNumber failed');
+          }
+          const json = (await readJsonCapped(res)) as { result?: unknown };
+          if (
+            typeof json?.result !== 'string' ||
+            !HEX_BLOCK_RE.test(json.result)
+          ) {
+            throw new Error('eth_blockNumber result is invalid');
+          }
+          const head = BigInt(json.result);
+          currentBlock.put(chainId, head, currentBlockTTL);
+          return head;
+        })
+        .catch((error) => {
+          console.warn(
+            `[rpcFactory] head lookup failed: ${redactUrls(String(error)).slice(0, 200)}`,
+          );
+          throw new UpstreamError('eth_blockNumber lookup failed');
+        })
+        .finally(() => inflightHead.delete(chainId));
+      inflightHead.set(chainId, pending);
+    }
+    return pending;
+  };
 
   return async (
     request: RpcRequest,
     { chainId, rpcRequestBlocked, requestRPC }: ValidationContext,
   ) => {
     try {
-      const params = request.params[0] as any;
-      const fromBlock: string = params.fromBlock;
-      const toBlock: string = params.toBlock ?? 'latest';
+      const params = request.params?.[0];
+      if (typeof params !== 'object' || params === null) {
+        throw new InvalidRequestError(`RPC method eth_getLogs is invalid`);
+      }
+      const filter = params as Record<string, any>;
 
       if (blockEmptyAddressGetLogs || allowedAddress) {
         // address validation
-        const address: string | string[] = params.address;
+        const address: string | string[] = filter.address;
 
         if (blockEmptyAddressGetLogs && !address)
           throw new InvalidRequestError(
@@ -144,49 +224,43 @@ export const ethGetLogsValidationFactory = (
           rpcRequestBlocked.inc({
             reason: 'address not allowed for eth_getLogs',
           });
-          throw new InvalidRequestError(`Address not allowed for eth_getLogs`);
+          throw new InvalidRequestError(
+            `Address is not allowed for eth_getLogs`,
+          );
         }
       }
 
       // block range validation
       if (maxBlockRange) {
-        if (fromBlock === 'earliest')
-          throw new InvalidRequestError(
-            `RPC method eth_getLogs fromBlock is invalid`,
-          );
+        const fromBlock: unknown = filter.fromBlock;
+        const toBlock: unknown = filter.toBlock ?? 'latest';
 
         if (
-          !HEX_BLOCK_NUMBER.test(fromBlock) &&
-          !NEAR_HEAD_BLOCK_TAGS.has(fromBlock)
-        )
+          typeof fromBlock !== 'string' ||
+          !(HEX_BLOCK_RE.test(fromBlock) || fromBlock === 'latest')
+        ) {
           throw new InvalidRequestError(
             `RPC method eth_getLogs fromBlock is invalid`,
           );
+        }
+        if (
+          typeof toBlock !== 'string' ||
+          !(HEX_BLOCK_RE.test(toBlock) || TO_BLOCK_TAGS.has(toBlock))
+        ) {
+          throw new InvalidRequestError(
+            `RPC method eth_getLogs toBlock is invalid`,
+          );
+        }
 
-        const shouldValidateBlockDistance = fromBlock.startsWith('0x');
+        if (fromBlock !== 'latest') {
+          const from = BigInt(fromBlock);
+          const toIsHex = HEX_BLOCK_RE.test(toBlock);
+          const to = toIsHex
+            ? BigInt(toBlock)
+            : await getHead(chainId, requestRPC);
+          const range = to - from;
 
-        if (shouldValidateBlockDistance) {
-          const normalizedFromBlock = BigInt(fromBlock);
-          let normalizedToBlock: bigint;
-          if (toBlock.startsWith('0x')) normalizedToBlock = BigInt(toBlock);
-          else {
-            const cached = currentBlock.get(chainId);
-            if (cached) {
-              normalizedToBlock = cached;
-            } else {
-              normalizedToBlock = await requestRPC(chainId, {
-                id: 1,
-                jsonrpc: '2.0',
-                method: 'eth_blockNumber',
-              })
-                .then((res) => res.json())
-                .then((res) => BigInt(res.result));
-              currentBlock.put(chainId, normalizedToBlock, currentBlockTTL);
-            }
-          }
-          const range = normalizedToBlock - normalizedFromBlock;
-
-          if (range < zeroBN || range > maxBlockRangeBN) {
+          if ((toIsHex && range < zeroBN) || range > maxBlockRangeBN) {
             rpcRequestBlocked.inc({
               reason: 'eth_getLogs range is invalid',
             });
@@ -197,34 +271,40 @@ export const ethGetLogsValidationFactory = (
         }
       }
     } catch (error) {
-      if (error instanceof ClientError) throw error;
+      if (error instanceof ClientError || error instanceof UpstreamError) {
+        throw error;
+      }
       throw new InvalidRequestError(`RPC method eth_getLogs is invalid`);
     }
   };
 };
 
+export const maxSizeTransformFactory = (
+  MAX_SIZE: number,
+  onExceed: () => void,
+) => {
+  let bytesWritten = 0;
+  return new Transform({
+    transform(chunk, _encoding, callback) {
+      bytesWritten += chunk.length;
+      if (bytesWritten > MAX_SIZE) {
+        onExceed();
+        return callback(
+          new SizeTooLargeError(
+            `Stream size exceeds the maximum limit of ${MAX_SIZE} bytes`,
+          ),
+        );
+      }
+      return callback(null, chunk);
+    },
+  });
+};
+
 export const streamMaxSizeValidationFactory =
-  (MAX_SIZE: number) => (context: ValidationContext) => {
-    let bytesWritten = 0;
-    return new Transform({
-      transform(chunk, _encoding, callback) {
-        bytesWritten += chunk.length;
-        if (bytesWritten > MAX_SIZE) {
-          // Emit an error if size exceeds MAX_SIZE
-          context.rpcRequestBlocked.inc({ reason: 'response too large' });
-          return callback(
-            new SizeTooLargeError(
-              `Stream size exceeds the maximum limit of ${MAX_SIZE} bytes`,
-            ),
-          );
-        }
-        return callback(null, chunk); // Pass the chunk through
-      },
-      flush(callback) {
-        callback();
-      },
-    });
-  };
+  (MAX_SIZE: number) => (context: ValidationContext) =>
+    maxSizeTransformFactory(MAX_SIZE, () =>
+      context.rpcRequestBlocked.inc({ reason: 'response too large' }),
+    );
 
 // utils
 

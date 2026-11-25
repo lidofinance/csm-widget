@@ -827,6 +827,14 @@ export type VersionDto = {
      * Ethereum chain ID the application is connected to
      */
     chainId: number;
+    /**
+     * Git commit SHA the running build was produced from
+     */
+    commit: string;
+    /**
+     * Git branch the running build was produced from
+     */
+    branch: string;
 };
 
 export type AuthGetNonceData = {
@@ -851,7 +859,7 @@ export type AuthGetNonceError = AuthGetNonceErrors[keyof AuthGetNonceErrors];
 
 export type AuthGetNonceResponses = {
     /**
-     * issue a single-use SIWE nonce to embed in the sign-in message
+     * issue a server-signed SIWE nonce to embed in the sign-in message
      */
     200: AuthNonceDto;
 };
@@ -923,6 +931,9 @@ export type AuthVerifyResponse = AuthVerifyResponses[keyof AuthVerifyResponses];
 export type ContactsDeleteOneData = {
     body?: never;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
     };
     query?: never;
@@ -962,6 +973,9 @@ export type ContactsDeleteOneResponse = ContactsDeleteOneResponses[keyof Contact
 export type ContactsFindOneData = {
     body?: never;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
     };
     query?: never;
@@ -1001,6 +1015,9 @@ export type ContactsFindOneResponse = ContactsFindOneResponses[keyof ContactsFin
 export type ContactsUpdateData = {
     body: ContactDto;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
     };
     query?: never;
@@ -1040,6 +1057,9 @@ export type ContactsUpdateResponse = ContactsUpdateResponses[keyof ContactsUpdat
 export type DelegatesListData = {
     body?: never;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
     };
     query?: never;
@@ -1079,6 +1099,9 @@ export type DelegatesListResponse = DelegatesListResponses[keyof DelegatesListRe
 export type DelegatesAddData = {
     body: AddDelegateDto;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
     };
     query?: never;
@@ -1126,6 +1149,9 @@ export type DelegatesAddResponse = DelegatesAddResponses[keyof DelegatesAddRespo
 export type DelegatesRemoveData = {
     body?: never;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
         address: string;
     };
@@ -1203,6 +1229,9 @@ export type DelegatesMyGetMyDelegationsResponse = DelegatesMyGetMyDelegationsRes
 export type ExperienceFindOneData = {
     body?: never;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
     };
     query?: never;
@@ -1242,6 +1271,9 @@ export type ExperienceFindOneResponse = ExperienceFindOneResponses[keyof Experie
 export type ExperienceUpdateData = {
     body: ExperienceDto;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
     };
     query?: never;
@@ -1281,6 +1313,9 @@ export type ExperienceUpdateResponse = ExperienceUpdateResponses[keyof Experienc
 export type FilesListData = {
     body?: never;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
     };
     query?: never;
@@ -1320,6 +1355,9 @@ export type FilesListResponse = FilesListResponses[keyof FilesListResponses];
 export type FilesUploadData = {
     body: Array<FileUploadItemDto>;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
     };
     query?: never;
@@ -1367,6 +1405,9 @@ export type FilesUploadResponse = FilesUploadResponses[keyof FilesUploadResponse
 export type FilesRemoveData = {
     body?: never;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
         id: number;
     };
@@ -1411,6 +1452,9 @@ export type FilesRemoveResponse = FilesRemoveResponses[keyof FilesRemoveResponse
 export type FilesGetOneData = {
     body?: never;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
         id: number;
     };
@@ -1455,6 +1499,9 @@ export type FilesGetOneResponse = FilesGetOneResponses[keyof FilesGetOneResponse
 export type FilesSetActiveData = {
     body: SetFileActiveDto;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
         id: number;
     };
@@ -1503,6 +1550,9 @@ export type FilesSetActiveResponse = FilesSetActiveResponses[keyof FilesSetActiv
 export type HowDidYouLearnCsmFindOneData = {
     body?: never;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
     };
     query?: never;
@@ -1542,6 +1592,9 @@ export type HowDidYouLearnCsmFindOneResponse = HowDidYouLearnCsmFindOneResponses
 export type HowDidYouLearnCsmUpdateData = {
     body: HowDidYouLearnCsmDto;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
     };
     query?: never;
@@ -1737,6 +1790,9 @@ export type IdvtcGetStatusResponse = IdvtcGetStatusResponses[keyof IdvtcGetStatu
 export type MembersListData = {
     body?: never;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
     };
     query?: never;
@@ -1776,6 +1832,9 @@ export type MembersListResponse = MembersListResponses[keyof MembersListResponse
 export type MembersGetRotationRequestData = {
     body?: never;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
     };
     query?: never;
@@ -1815,6 +1874,9 @@ export type MembersGetRotationRequestResponse = MembersGetRotationRequestRespons
 export type MembersSubmitRotationRequestData = {
     body: SubmitRotationRequestDto;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
     };
     query?: never;
@@ -1858,6 +1920,9 @@ export type MembersSubmitRotationRequestResponse = MembersSubmitRotationRequestR
 export type MembersInitFromIdvtcData = {
     body?: never;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
     };
     query?: never;
@@ -1901,6 +1966,9 @@ export type MembersInitFromIdvtcResponse = MembersInitFromIdvtcResponses[keyof M
 export type SetupFindAllData = {
     body?: never;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
     };
     query?: never;
@@ -1940,6 +2008,9 @@ export type SetupFindAllResponse = SetupFindAllResponses[keyof SetupFindAllRespo
 export type SetupCreateData = {
     body: SetupDto;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
     };
     query?: never;
@@ -1979,6 +2050,9 @@ export type SetupCreateResponse = SetupCreateResponses[keyof SetupCreateResponse
 export type SetupDeleteOneData = {
     body?: never;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
         index: number;
     };
@@ -2019,6 +2093,9 @@ export type SetupDeleteOneResponse = SetupDeleteOneResponses[keyof SetupDeleteOn
 export type SetupFindOneData = {
     body?: never;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
         index: number;
     };
@@ -2063,6 +2140,9 @@ export type SetupFindOneResponse = SetupFindOneResponses[keyof SetupFindOneRespo
 export type SetupUpdateData = {
     body: SetupDto;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
         index: number;
     };
@@ -2103,6 +2183,9 @@ export type SetupUpdateResponse = SetupUpdateResponses[keyof SetupUpdateResponse
 export type SetupKeysData = {
     body?: never;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
     };
     query?: never;
@@ -2142,6 +2225,9 @@ export type SetupKeysResponse = SetupKeysResponses[keyof SetupKeysResponses];
 export type SummaryDeleteData = {
     body?: never;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
     };
     query?: never;
@@ -2181,6 +2267,9 @@ export type SummaryDeleteResponse = SummaryDeleteResponses[keyof SummaryDeleteRe
 export type SummaryFindOneData = {
     body?: never;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
     };
     query?: never;
@@ -2220,6 +2309,9 @@ export type SummaryFindOneResponse = SummaryFindOneResponses[keyof SummaryFindOn
 export type OpenIndexData = {
     body?: never;
     path: {
+        /**
+         * Module-prefixed operator id: csm-<n> | csm02-<n>
+         */
         nodeOperatorId: string;
     };
     query?: never;

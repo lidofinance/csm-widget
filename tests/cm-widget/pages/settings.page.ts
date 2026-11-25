@@ -7,7 +7,7 @@ import {
 } from './tabs/roles';
 import { MetadataPage } from './tabs/settings/metadata.page';
 import { ClaimerPage } from './tabs/settings/claimer.page';
-import { SplitsPage } from './tabs/settings/splits.page';
+import { SplitsPage } from 'tests/shared/pages/splits.page';
 import { WalletPage } from '@lidofinance/wallets-testing-wallets';
 import { RolesModal } from './elements/roles/rolesModal.element';
 import { TxModal } from './elements/common/element.txProgressModal';

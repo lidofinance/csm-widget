@@ -35,7 +35,7 @@ jobs:
       tags: "smoke"
       qase_plan_id: 3 # Smoke test Plan
       report_enabled: true
-      job_custom_name: "Post-deploy CSM smoke"
+      job_custom_name: "🚀 Post-deploy · CSM smoke"
 
   cm-smoke-tests:
     name: Post-deploy CM smoke
@@ -46,4 +46,60 @@ jobs:
       stand_type: "testnet"
       tags: "smoke"
       report_enabled: true
-      job_custom_name: "Post-deploy CM smoke"
+      job_custom_name: "🚀 Post-deploy · CM smoke"
+
+  csm-web-security-tests:
+    name: Post-deploy CSM web security checks
+    needs: deploy
+    secrets: inherit
+    uses: ./.github/workflows/e2e-tests.yml
+    with:
+      module: csm
+      stand_type: testnet
+      test_tags: webSecurity
+      qase_project_id: CSM
+      api_only: true
+      timeout_minutes: 15
+      report_enabled: true
+      job_custom_name: "🚀 Post-deploy · CSM web security"
+
+  cm-web-security-tests:
+    name: Post-deploy CM web security checks
+    needs: deploy
+    secrets: inherit
+    uses: ./.github/workflows/e2e-tests.yml
+    with:
+      module: cm
+      stand_type: testnet
+      test_tags: webSecurity
+      qase_project_id: CM
+      api_only: true
+      timeout_minutes: 15
+      report_enabled: true
+      job_custom_name: "🚀 Post-deploy · CM web security"
+
+  csm-contract-security-tests:
+    name: Post-deploy CSM contract security checks
+    needs: deploy
+    secrets: inherit
+    uses: ./.github/workflows/e2e-tests.yml
+    with:
+      module: csm
+      stand_type: testnet
+      test_tags: contractSecurityCheck
+      qase_project_id: CSM
+      report_enabled: true
+      job_custom_name: "🚀 Post-deploy · CSM contract security"
+
+  cm-contract-security-tests:
+    name: Post-deploy CM contract security checks
+    needs: deploy
+    secrets: inherit
+    uses: ./.github/workflows/e2e-tests.yml
+    with:
+      module: cm
+      stand_type: testnet
+      test_tags: contractSecurityCheck
+      qase_project_id: CM
+      report_enabled: true
+      job_custom_name: "🚀 Post-deploy · CM contract security"

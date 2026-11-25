@@ -96,7 +96,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
     migalabsDashboard: 'https://migalabs.io/entities',
     migalabs: 'https://migalabs.io',
     keysApi: 'https://keys-api.lido.fi',
-    surveyApi: 'https://csm-survey-api.lido.tools',
+    surveyApi: 'https://csm-survey-api.lido.fi',
     ethApi: 'https://eth-api.lido.fi',
   },
   [CHAINS.Hoodi]: {

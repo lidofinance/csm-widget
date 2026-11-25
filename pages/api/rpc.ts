@@ -13,6 +13,7 @@ import {
   requestAddressMetric,
   responseTimeMetric,
   allowedCallAddresses,
+  allowedOverrideAddresses,
   allowedLogsAddresses,
   rpcFactory,
 } from 'utilsApi';
@@ -59,6 +60,7 @@ const rpc = rpcFactory({
   validation: {
     allowedRPCMethods,
     allowedCallAddresses,
+    allowedOverrideAddresses,
     allowedLogsAddresses,
     maxBatchCount: config.PROVIDER_MAX_BATCH,
     blockEmptyAddressGetLogs: true,
@@ -67,10 +69,11 @@ const rpc = rpcFactory({
   },
 });
 
+// first item is innermost: metrics run after method guard and rate limit
 export default wrapNextRequest([
+  requestAddressMetric(Metrics.request.ethCallToAddress),
   httpMethodGuard([HttpMethod.POST]),
   rateLimit,
   responseTimeMetric(Metrics.request.apiTimings, API_ROUTES.RPC),
-  requestAddressMetric(Metrics.request.ethCallToAddress),
   defaultErrorHandler,
 ])(rpc);

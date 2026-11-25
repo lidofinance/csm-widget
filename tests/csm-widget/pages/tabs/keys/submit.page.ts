@@ -1,3 +1,4 @@
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { Locator, Page, test } from '@playwright/test';
 import {
   BOND_TOKEN_OPTION_TEST_ID,
@@ -71,7 +72,7 @@ export class SubmitPage {
     });
   }
 
-  async selectBondToken(tokenSymbol: TokenSymbol) {
+  async selectBondToken(tokenSymbol: TokenSymbol | TOKENS) {
     await test.step(`Select "${tokenSymbol}" bond token`, async () => {
       await this.formBlock.getByTestId('tokenSelectTrigger').click();
       await this.formBlock
@@ -95,7 +96,7 @@ export class SubmitPage {
 
   async fillAndClickSubmit(
     keys: DepositKey[] | DepositKey,
-    tokenSymbol = TokenSymbol.STETH,
+    tokenSymbol: TokenSymbol | TOKENS = TokenSymbol.STETH,
   ) {
     await test.step('Fill keys and click Submit', async () => {
       await this.selectBondToken(tokenSymbol);
@@ -108,7 +109,7 @@ export class SubmitPage {
 
   async submitKeys(
     keys: DepositKey[] | DepositKey,
-    tokenSymbol = TokenSymbol.STETH,
+    tokenSymbol: TokenSymbol | TOKENS = TokenSymbol.STETH,
   ) {
     await this.fillAndClickSubmit(keys, tokenSymbol);
     await this.confirmOperatorModal.confirm();

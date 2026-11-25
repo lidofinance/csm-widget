@@ -4,20 +4,19 @@ import { ReadableStream } from 'node:stream/web';
 
 import { DEFAULT_API_ERROR_MESSAGE } from '@lidofinance/next-api-wrapper';
 import type { FetchRpcInitBody } from '@lidofinance/rpc';
-import { iterateUrls } from '@lidofinance/rpc';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Counter } from 'prom-client';
-import { redactUrls } from './redact-urls';
+import {
+  canonicalizeEnvelope,
+  readMethod,
+  canonicalizeParams,
+} from './canonical-request';
+import { requestRpcFactory, redactUrls } from './request-rpc';
 import {
   ClientError,
   HEALTHY_RPC_SERVICES_ARE_OVER,
   SizeTooLargeError,
 } from './errors';
-import {
-  DEFAULT_UPSTREAM_TIMEOUT_MS,
-  withUpstreamTimeout,
-} from './upstream-timeout';
-import type { RPCFactoryParams } from './types';
 import {
   baseRequestValidationFactory,
   ethCallValidationFactory,
@@ -26,6 +25,7 @@ import {
   shouldValidateRpcMethod,
   streamMaxSizeValidationFactory,
 } from './validation';
+import type { RPCFactoryParams, RpcRequest } from './types';
 
 export const rpcFactory = ({
   metrics,
@@ -33,12 +33,12 @@ export const rpcFactory = ({
   fetchRPC,
   defaultChain,
   validation,
-  serverLogger = console,
-  upstreamTimeoutMs = DEFAULT_UPSTREAM_TIMEOUT_MS,
+  upstreamTimeoutMs,
 }: RPCFactoryParams) => {
   const {
     allowedRPCMethods,
     allowedCallAddresses,
+    allowedOverrideAddresses,
     allowedLogsAddresses,
     maxResponseSize = 1_000_000,
     maxBatchCount = 20,
@@ -65,11 +65,21 @@ export const rpcFactory = ({
 
   const validateRpcMethod = rpcMethodsValidationFactory(allowedRPCMethods);
 
-  const validateEthCall =
-    allowedCallAddresses &&
-    shouldValidateRpcMethod('eth_call', allowedRPCMethods)
-      ? ethCallValidationFactory(allowedCallAddresses)
-      : undefined;
+  const callValidators: Record<
+    string,
+    ReturnType<typeof ethCallValidationFactory>
+  > = {};
+  if (allowedCallAddresses) {
+    for (const method of ['eth_call', 'eth_estimateGas']) {
+      if (shouldValidateRpcMethod(method, allowedRPCMethods)) {
+        callValidators[method] = ethCallValidationFactory(
+          allowedCallAddresses,
+          method,
+          allowedOverrideAddresses,
+        );
+      }
+    }
+  }
 
   const validateEthGetLogs =
     (allowedLogsAddresses || blockEmptyAddressGetLogs) &&
@@ -84,38 +94,16 @@ export const rpcFactory = ({
 
   const validateMaxSteamSize = streamMaxSizeValidationFactory(maxResponseSize);
 
-  const requestRPC = (chainId: number, body: FetchRpcInitBody) =>
-    iterateUrls(
-      providers[chainId],
-      // TODO: consider adding verification that body is actually matches FetchRpcInitBody
-      (url) =>
-        withUpstreamTimeout(upstreamTimeoutMs, (signal) =>
-          fetchRPC(url, { body, ...(signal ? { signal } : {}) }, { chainId }),
-        ),
-      (error, { failedUrl, nextUrl, attempt }) => {
-        const failedProvider = redactUrls(failedUrl);
-        const message = redactUrls(
-          error instanceof Error ? error.message : String(error),
-        );
-        if (nextUrl) {
-          const nextProvider = redactUrls(nextUrl);
-          serverLogger.warn(
-            `[rpcFactory] RPC provider ${failedProvider} failed on attempt ${attempt} (${message}), switching to fallback ${nextProvider}`,
-            { chainId, failedProvider, nextProvider, attempt },
-          );
-        } else {
-          serverLogger.error(
-            `[rpcFactory] all RPC providers for chain ${chainId} failed after ${attempt} attempts (${message})`,
-            { chainId, failedProvider, attempt },
-          );
-        }
-      },
-    );
+  const requestRPC = requestRpcFactory({
+    providers,
+    fetchRPC,
+    upstreamTimeoutMs,
+  });
 
   return async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     const abortController = new AbortController();
     try {
-      const { chainId, requests } = validateBaseRequest(req);
+      const { chainId, requests, isBatch } = validateBaseRequest(req);
 
       const validationContext = {
         chainId,
@@ -125,22 +113,26 @@ export const rpcFactory = ({
 
       // We throw HTTP error for ANY invalid RPC request out of batch
       // because we assume that frontend must not send invalid requests at all
-      for (const request of requests) {
-        validateRpcMethod(request, validationContext);
+      const canonical: RpcRequest[] = [];
+      for (const raw of requests) {
+        const method = readMethod(raw);
+        validateRpcMethod({ method }, validationContext);
+        const envelope = canonicalizeEnvelope(raw, method);
 
-        const method = request.method;
+        const item = canonicalizeParams(envelope, {
+          allowOverrides: !!allowedOverrideAddresses && !!allowedCallAddresses,
+        });
 
-        if (method === 'eth_call' && validateEthCall) {
-          validateEthCall(request, validationContext);
+        callValidators[item.method]?.(item, validationContext);
+        if (item.method === 'eth_getLogs' && validateEthGetLogs) {
+          await validateEthGetLogs(item, validationContext);
         }
-        if (method === 'eth_getLogs' && validateEthGetLogs) {
-          await validateEthGetLogs(request, validationContext);
-        }
+        canonical.push(item);
       }
 
       const proxyedRPC = await requestRPC(
         chainId,
-        req.body as FetchRpcInitBody,
+        (isBatch ? canonical : canonical[0]) as FetchRpcInitBody,
       );
 
       // iterateUrls returns the last response when no provider answered ok
@@ -184,10 +176,7 @@ export const rpcFactory = ({
             .json(error.message ?? DEFAULT_API_ERROR_MESSAGE);
         }
       } else if (error instanceof Error) {
-        serverLogger.error(
-          '[rpcFactory]' +
-            redactUrls(error.message ?? DEFAULT_API_ERROR_MESSAGE),
-        );
+        console.error('[rpcFactory] ' + redactUrls(error.message));
         if (!res.headersSent) {
           res.status(500).json(DEFAULT_API_ERROR_MESSAGE);
         }

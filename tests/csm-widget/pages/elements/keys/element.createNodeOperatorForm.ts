@@ -1,3 +1,4 @@
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { Locator, Page, expect, test } from '@playwright/test';
 import {
   BOND_TOKEN_OPTION_TEST_ID,
@@ -59,7 +60,7 @@ export class CreateNodeOperatorForm {
     this.depositDataRow = this.formBlock.getByTestId('deposit-data-row');
   }
 
-  async selectBondToken(tokenSymbol: TokenSymbol) {
+  async selectBondToken(tokenSymbol: TokenSymbol | TOKENS) {
     await test.step(`Select "${tokenSymbol}" bond token`, async () => {
       await this.formBlock.getByTestId('tokenSelectTrigger').click();
       await this.formBlock

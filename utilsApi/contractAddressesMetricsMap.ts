@@ -124,10 +124,20 @@ const CONTRACT_LIST_LOGS: AlL_CONTRACT_NAMES[] = [
   CONTRACT_NAMES.stETH,
 ];
 
+const CONTRACT_LIST_OVERRIDES: AlL_CONTRACT_NAMES[] = [
+  CONTRACT_NAMES.stETH,
+  CONTRACT_NAMES.wstETH,
+];
+
 export const allowedCallAddresses = mapValues(METRIC_CONTRACT_ADDRESSES, keys);
 
 export const allowedLogsAddresses = mapValues(METRIC_CONTRACT_ADDRESSES, (o) =>
   keys(pickBy(o, (v) => CONTRACT_LIST_LOGS.includes(v))),
+);
+
+export const allowedOverrideAddresses = mapValues(
+  METRIC_CONTRACT_ADDRESSES,
+  (o) => keys(pickBy(o, (v) => CONTRACT_LIST_OVERRIDES.includes(v))),
 );
 
 const METRIC_CONTRACT_ABIS: Record<AlL_CONTRACT_NAMES, Abi> = {

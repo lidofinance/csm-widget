@@ -1,5 +1,5 @@
 import { expect, Locator, Page, test } from '@playwright/test';
-import { BasePage } from '../../../../shared/pages/base.page';
+import { BasePage } from '../base.page';
 
 export type PenaltyReportInput = {
   nodeOperatorId: number;

@@ -7,6 +7,7 @@ import {
 } from '@lidofinance/next-api-wrapper';
 import { rateLimitWrapper } from '@lidofinance/next-ip-rate-limit';
 
+import { config } from 'config';
 import { getServerConfig } from './server-config';
 
 import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
@@ -91,13 +92,13 @@ export { responseTimeMetric } from '@lidofinance/next-api-wrapper';
 export const requestAddressMetric =
   (metrics: Counter<string>): RequestWrapper =>
   async (req, res, next) => {
-    const referer = req.headers.referer as string;
     const chainId = req.query.chainId as unknown as SUPPORTED_CHAINS;
 
-    if (req.body) {
+    const calls = Array.isArray(req.body) ? req.body : [req.body];
+
+    if (req.body && calls.length <= config.PROVIDER_MAX_BATCH) {
       collectRequestAddressMetric({
-        calls: Array.isArray(req.body) ? req.body : [req.body],
-        referer,
+        calls,
         chainId,
         metrics,
       });

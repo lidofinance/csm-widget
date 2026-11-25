@@ -62,7 +62,7 @@ test.describe(
         });
 
         await inboxRequestsPage.acceptRequest(randomId, ROLES.REWARDS);
-        await expectedRequest.waitFor({ state: 'hidden' });
+        await expect(expectedRequest).toBeHidden({ timeout: RPC_WAIT_TIMEOUT });
       },
     );
 
@@ -85,7 +85,7 @@ test.describe(
         });
 
         await inboxRequestsPage.acceptRequest(randomId, ROLES.MANAGER);
-        await expectedRequest.waitFor({ state: 'hidden' });
+        await expect(expectedRequest).toBeHidden({ timeout: RPC_WAIT_TIMEOUT });
       },
     );
   },

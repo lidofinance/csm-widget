@@ -2,7 +2,11 @@ import type { MockInstance } from 'vitest';
 const CHAIN_ID = 1;
 const KNOWN_ADDRESS = '0x1234567890123456789012345678901234567890';
 const UNKNOWN_ADDRESS = '0xaBcDEF1234567890abcdEF1234567890AbCdEf12';
-const REFERER = 'https://example.com/page';
+
+vi.mock('viem', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('viem')>();
+  return { ...actual, isAddress: vi.fn(actual.isAddress) };
+});
 
 vi.mock('../contractAddressesMetricsMap', () => ({
   METRIC_CONTRACT_ADDRESSES: {
@@ -15,8 +19,11 @@ vi.mock('../get-function-name-from-abi', () => ({
   getFunctionNameFromAbi: vi.fn(() => 'submit'),
 }));
 
+import { isAddress } from 'viem';
+
 import { collectRequestAddressMetric } from '../collect-request-address-metric';
 import { getMetricContractAbi } from '../contractAddressesMetricsMap';
+import { getFunctionNameFromAbi } from '../get-function-name-from-abi';
 
 const makeCounterMock = () => {
   const recorded: Record<string, string>[] = [];
@@ -30,20 +37,27 @@ const makeCounterMock = () => {
   return { counter, recorded };
 };
 
-const makeEthCall = (to: string) => ({
+const makeEthCall = (to: string, data = '0x12345678') => ({
   method: 'eth_call',
-  params: [{ to, data: '0x12345678' }],
+  params: [{ to, data }],
 });
 
 const collect = (calls: any[], counter: any) =>
   collectRequestAddressMetric({
     calls,
-    referer: REFERER,
     chainId: CHAIN_ID as any,
     metrics: counter,
   });
 
 describe('collectRequestAddressMetric', () => {
+  it('never passes an oversized `to` to isAddress', () => {
+    const { counter, recorded } = makeCounterMock();
+    vi.mocked(isAddress).mockClear();
+    collect([makeEthCall('0x' + 'a'.repeat(1024 * 1024))], counter);
+    expect(isAddress).not.toHaveBeenCalled();
+    expect(recorded).toHaveLength(0);
+  });
+
   let warnSpy: MockInstance<typeof console.warn>;
 
   beforeEach(() => {
@@ -78,7 +92,6 @@ describe('collectRequestAddressMetric', () => {
     expect(recorded).toHaveLength(1);
     expect(recorded[0]).toMatchObject({
       address: KNOWN_ADDRESS,
-      referer: REFERER,
       contractName: 'csModule',
       methodEncoded: '0x12345678',
       methodDecoded: 'submit',
@@ -172,5 +185,45 @@ describe('collectRequestAddressMetric', () => {
       expect(line.length).toBeLessThan(512);
     }
     expect(recorded).toHaveLength(0);
+  });
+
+  it('labels an unknown selector on a known contract as N/A', () => {
+    const { counter, recorded } = makeCounterMock();
+    vi.mocked(getFunctionNameFromAbi).mockReturnValueOnce(undefined as any);
+
+    collect([makeEthCall(KNOWN_ADDRESS, '0xdeadbeef')], counter);
+
+    expect(recorded).toHaveLength(1);
+    expect(recorded[0]).toMatchObject({
+      contractName: 'csModule',
+      methodEncoded: 'N/A',
+      methodDecoded: 'N/A',
+    });
+  });
+
+  it('labels any selector on an unknown address as N/A', () => {
+    const { counter, recorded } = makeCounterMock();
+
+    collect([makeEthCall(UNKNOWN_ADDRESS, '0xdeadbeef')], counter);
+
+    expect(recorded[0]).toMatchObject({
+      methodEncoded: 'N/A',
+      methodDecoded: 'N/A',
+    });
+  });
+
+  it('keeps label cardinality bounded for unique selectors and addresses', () => {
+    const { counter, recorded } = makeCounterMock();
+    vi.mocked(getFunctionNameFromAbi).mockReturnValueOnce(undefined as any);
+
+    const calls = Array.from({ length: 50 }, (_, i) =>
+      makeEthCall(
+        `0x${(i + 1).toString(16).padStart(40, '0')}`,
+        `0x${i.toString(16).padStart(8, '0')}`,
+      ),
+    );
+    collect([...calls, makeEthCall(KNOWN_ADDRESS, '0xdeadbeef')], counter);
+
+    expect(new Set(recorded.map((l) => JSON.stringify(l))).size).toBe(2);
   });
 });

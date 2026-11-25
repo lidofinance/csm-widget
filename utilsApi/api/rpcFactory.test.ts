@@ -1,123 +1,193 @@
-import { createServer } from 'node:http';
-import type { Server } from 'node:http';
-import type { AddressInfo } from 'node:net';
-
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { PassThrough } from 'node:stream';
 
 import { DEFAULT_API_ERROR_MESSAGE } from '@lidofinance/next-api-wrapper';
+
 import { rpcFactory } from './rpcFactory';
-import type { RPCFactoryParams } from './types';
 
-type FetchRPC = RPCFactoryParams['fetchRPC'];
+const ALLOWED = '0x' + 'ab'.repeat(20);
+const SLOT = '0x' + '01'.repeat(32);
 
-const providers: RPCFactoryParams['providers'] = {
-  '1': ['https://first.example/key-1', 'https://second.example/key-2'],
-};
-
-const body = { jsonrpc: '2.0', id: 1, method: 'eth_chainId', params: [] };
-
-const servers: Server[] = [];
-
-afterEach(async () => {
-  await Promise.all(
-    servers
-      .splice(0)
-      .map((server) => new Promise((resolve) => server.close(resolve))),
+const setup = (validation: Record<string, unknown> = {}) => {
+  const fetchRPC = vi.fn((_url: string, _init: any, _ctx: any) =>
+    Promise.resolve(
+      new Response('[]', { headers: { 'Content-Type': 'application/json' } }),
+    ),
   );
-});
-
-const buildApp = async (fetchRPC: FetchRPC) => {
   const handler = rpcFactory({
-    providers,
-    fetchRPC,
+    fetchRPC: fetchRPC as any,
+    providers: { 1: ['http://rpc'] },
     defaultChain: 1,
     validation: {
-      allowedRPCMethods: ['eth_chainId'],
-      allowedCallAddresses: {},
-      allowedLogsAddresses: {},
-      maxResponseSize: 100,
+      allowedRPCMethods: ['eth_chainId', 'eth_call'],
+      ...validation,
     },
-    serverLogger: {
-      warn: vi.fn(),
-      error: vi.fn(),
-    } as unknown as RPCFactoryParams['serverLogger'],
-  });
+  } as any);
 
-  const server = createServer((req, res) => {
-    const chunks: Buffer[] = [];
-    req.on('data', (chunk: Buffer) => chunks.push(chunk));
-    req.on('end', () => {
-      const nextReq = Object.assign(req, {
-        query: {},
-        body: JSON.parse(Buffer.concat(chunks).toString() || 'null'),
-      }) as unknown as NextApiRequest;
-      const nextRes = Object.assign(res, {
-        status(code: number) {
-          res.statusCode = code;
-          return nextRes;
-        },
-        json(payload: unknown) {
-          res.setHeader('Content-Type', 'application/json');
-          res.end(JSON.stringify(payload));
-        },
-      }) as unknown as NextApiResponse;
-      void handler(nextReq, nextRes);
-    });
-  });
-  servers.push(server);
-  await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve));
-  const { port } = server.address() as AddressInfo;
-
-  return () =>
-    fetch(`http://127.0.0.1:${port}/rpc`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(body),
-    });
+  const run = async (body: unknown) => {
+    const res: any = new PassThrough();
+    res.setHeader = vi.fn();
+    res.status = vi.fn(() => res);
+    res.json = vi.fn();
+    res.headersSent = false;
+    res.resume();
+    await handler(
+      { method: 'POST', query: { chainId: '1' }, body } as any,
+      res,
+    );
+    return res;
+  };
+  const sent = () => fetchRPC.mock.calls[0]?.[1].body;
+  return { run, fetchRPC, sent };
 };
 
-describe('rpcFactory', () => {
-  test('streams ok upstream response', async () => {
-    const fetchRPC = vi
-      .fn<FetchRPC>()
-      .mockResolvedValue(new Response('{"result":"0x1"}', { status: 200 }));
-    const res = await (await buildApp(fetchRPC))();
-
-    expect(res.status).toBe(200);
-    expect(await res.text()).toBe('{"result":"0x1"}');
+describe('rpcFactory canonical forwarding', () => {
+  it('forwards only canonical envelope keys', async () => {
+    const { run, sent } = setup();
+    await run({
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'eth_chainId',
+      Method: 'debug_traceCall',
+      extra: 1,
+    });
+    expect(Object.keys(sent())).toEqual(['jsonrpc', 'id', 'method']);
   });
 
-  test('502 when every provider answers non-ok', async () => {
-    const fetchRPC = vi
-      .fn<FetchRPC>()
-      .mockImplementation(() =>
-        Promise.resolve(new Response('provider says: nope', { status: 503 })),
-      );
-    const res = await (await buildApp(fetchRPC))();
-
-    expect(res.status).toBe(502);
-    expect(await res.json()).toBe(DEFAULT_API_ERROR_MESSAGE);
+  it('keeps batch order, ids and array shape', async () => {
+    const { run, sent } = setup();
+    await run([3, 1, 2].map((id) => ({ id, method: 'eth_chainId' })));
+    expect(Array.isArray(sent())).toBe(true);
+    expect(sent().map((r: any) => r.id)).toEqual([3, 1, 2]);
   });
 
-  test('413 on oversized Content-Length', async () => {
-    const fetchRPC = vi.fn<FetchRPC>().mockResolvedValue(
-      new Response('x'.repeat(500), {
-        status: 200,
-        headers: { 'Content-Length': '500' },
-      }),
+  it('rejects disallowed method in batch before forwarding', async () => {
+    const { run, fetchRPC } = setup();
+    const res = await run([
+      { id: 1, method: 'eth_chainId' },
+      { id: 2, method: 'debug_traceCall' },
+    ]);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith(
+      'RPC method debug_traceCall not allowed',
     );
-    const res = await (await buildApp(fetchRPC))();
-
-    expect(res.status).toBe(413);
+    expect(fetchRPC).not.toHaveBeenCalled();
   });
 
-  test('500 body is the constant message', async () => {
-    const fetchRPC = vi
-      .fn<FetchRPC>()
-      .mockResolvedValue(new Response(null, { status: 200 }));
-    const res = await (await buildApp(fetchRPC))();
+  it('rejects null item with 400', async () => {
+    const { run, fetchRPC } = setup();
+    const res = await run([null]);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(fetchRPC).not.toHaveBeenCalled();
+  });
 
-    expect(res.status).toBe(500);
-    expect(await res.json()).toBe(DEFAULT_API_ERROR_MESSAGE);
+  it('keeps allowlisted override', async () => {
+    const { run, sent } = setup({
+      allowedCallAddresses: { 1: [ALLOWED] },
+      allowedOverrideAddresses: { 1: [ALLOWED] },
+    });
+    const override = { [ALLOWED]: { stateDiff: { [SLOT]: SLOT } } };
+    await run({
+      id: 1,
+      method: 'eth_call',
+      params: [{ to: ALLOWED, data: '0x' }, 'latest', override],
+    });
+    expect(sent().params).toEqual([
+      { to: ALLOWED, data: '0x' },
+      'latest',
+      override,
+    ]);
+  });
+
+  it('rejects override address outside allowlist', async () => {
+    const { run, fetchRPC } = setup({
+      allowedCallAddresses: { 1: [ALLOWED] },
+      allowedOverrideAddresses: { 1: [ALLOWED] },
+    });
+    const res = await run({
+      id: 1,
+      method: 'eth_call',
+      params: [
+        { to: ALLOWED },
+        'latest',
+        { ['0x' + 'cd'.repeat(20)]: { stateDiff: {} } },
+      ],
+    });
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(fetchRPC).not.toHaveBeenCalled();
+  });
+
+  it('reports disallowed method before params shape', async () => {
+    const { run, fetchRPC } = setup();
+    const res = await run({ method: 'debug_traceCall', params: {} });
+    expect(res.json).toHaveBeenCalledWith(
+      'RPC method debug_traceCall not allowed',
+    );
+    expect(fetchRPC).not.toHaveBeenCalled();
+  });
+
+  it('rejects overrides when no override allowlist is set', async () => {
+    const { run, fetchRPC } = setup({ allowedCallAddresses: { 1: [ALLOWED] } });
+    const res = await run({
+      id: 1,
+      method: 'eth_call',
+      params: [{ to: ALLOWED }, 'latest', { [ALLOWED]: { stateDiff: {} } }],
+    });
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(fetchRPC).not.toHaveBeenCalled();
+  });
+
+  it('answers 500 when head lookup fails upstream', async () => {
+    const { run, fetchRPC } = setup({
+      allowedRPCMethods: ['eth_getLogs'],
+      blockEmptyAddressGetLogs: true,
+      maxGetLogsRange: 10,
+    });
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    fetchRPC.mockRejectedValue(new Error('down'));
+    const res = await run({
+      id: 1,
+      method: 'eth_getLogs',
+      params: [{ address: ALLOWED, fromBlock: '0x1' }],
+    });
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith(DEFAULT_API_ERROR_MESSAGE);
+    errorSpy.mockRestore();
+    warnSpy.mockRestore();
+  });
+
+  it('hides provider error details in 500', async () => {
+    const { run, fetchRPC } = setup();
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    fetchRPC.mockRejectedValue(new Error('fail https://user:secret@x'));
+    const res = await run({ id: 1, method: 'eth_chainId' });
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith(DEFAULT_API_ERROR_MESSAGE);
+    expect(JSON.stringify(errorSpy.mock.calls)).not.toContain('secret');
+    errorSpy.mockRestore();
+  });
+});
+
+describe('rpcFactory upstream status', () => {
+  const runWith = (response: Response, maxResponseSize?: number) => {
+    const { run, fetchRPC } = setup({ maxResponseSize });
+    fetchRPC.mockResolvedValue(response);
+    return run({ jsonrpc: '2.0', id: 1, method: 'eth_chainId' });
+  };
+
+  it('answers 502 when every provider answers non-ok', async () => {
+    const res = await runWith(
+      new Response('provider says: nope', { status: 503 }),
+    );
+    expect(res.status).toHaveBeenCalledWith(502);
+    expect(res.json).toHaveBeenCalledWith(DEFAULT_API_ERROR_MESSAGE);
+  });
+
+  it('answers 413 on oversized Content-Length', async () => {
+    const res = await runWith(
+      new Response('x'.repeat(500), { headers: { 'Content-Length': '500' } }),
+      100,
+    );
+    expect(res.status).toHaveBeenCalledWith(413);
   });
 });
