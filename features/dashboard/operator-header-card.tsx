@@ -21,10 +21,10 @@ import { useDisplayOperatorType, useShowRule } from 'shared/hooks';
 import {
   OperatorAddresses,
   OperatorAvatar,
-  OperatorTypeTag,
   formatGroupLabel,
   useOperatorTitle,
 } from 'shared/node-operator';
+import { TypeBadgeButton } from 'shared/node-operator/operator-type';
 import { trackMatomoEvent } from 'utils';
 import { useHeaderFlags } from './hooks/use-header-flags';
 import s from './operator-header-card.module.css';
@@ -113,10 +113,10 @@ const OperatorHeader: FC<HeaderProps> = ({ operator }) => {
             </Typography>
           )}
           {displayType && (
-            <OperatorTypeTag
-              type={displayType}
+            <TypeBadgeButton
+              curve={curve}
+              displayType={displayType}
               full
-              tooltip={false}
               data-testid="operatorTypeTag"
             />
           )}
