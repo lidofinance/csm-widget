@@ -51,7 +51,7 @@ export const SplitRow: FC<SplitRowProps> = ({ index, onRemove }) => {
         />
         <PercentField
           name={`feeSplits.${index}.share`}
-          placeholder="Share, %"
+          placeholder="Share"
           error={!!shareError}
           onChange={() => clearErrors(`feeSplits.${index}.share`)}
         />
