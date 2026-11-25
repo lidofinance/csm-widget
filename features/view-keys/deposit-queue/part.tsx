@@ -1,7 +1,8 @@
-import { Tooltip } from 'shared/components';
-import { FC, useCallback } from 'react';
+import { Tooltip } from '@lidofinance/lido-app-ui';
+import { CSSProperties, FC, useCallback } from 'react';
 import { useGraphInteraction } from './hover-provider';
-import { PartStyle } from './style';
+import { getPartStyle } from './part-style';
+import s from './styles.module.css';
 import { BatchMetadata, GraphPart, QueueUnit } from './types';
 import { BatchTooltipContent } from './batch-tooltip-content';
 import { AddedTooltipContent } from './added-tooltip-content';
@@ -31,37 +32,41 @@ export const Part: FC<PartProps> = ({
     return null;
   }
 
-  const part = (
-    <PartStyle
-      $type={type}
-      $width={width}
-      $offset={offset}
-      $fade={hover && hover !== type}
+  const renderPart = (inner?: boolean) => (
+    <div
+      className={s.part}
+      data-type={type}
+      data-fade={(hover && hover !== type) || undefined}
+      style={getPartStyle(type, inner ? 100 : width, inner ? 0 : offset)}
       onMouseEnter={type === 'active' ? onMouseEnter : undefined}
     />
   );
 
-  if (type === 'batch' && metadata) {
+  // The Tooltip trigger span sizes the segment, so it takes over width/offset
+  const wrapperStyle: CSSProperties = {
+    display: 'inline-block',
+    verticalAlign: 'top',
+    height: '100%',
+    width: `${width}%`,
+    ...(type === 'batch' && {
+      position: 'absolute',
+      left: `${offset}%`,
+    }),
+  };
+
+  if ((type === 'batch' || type === 'added') && metadata) {
+    const Content =
+      type === 'batch' ? BatchTooltipContent : AddedTooltipContent;
     return (
       <Tooltip
-        title={<BatchTooltipContent metadata={metadata} unit={unit} />}
-        placement="top"
+        content={<Content metadata={metadata} unit={unit} />}
+        position="top"
+        style={wrapperStyle}
       >
-        {part}
+        {renderPart(true)}
       </Tooltip>
     );
   }
 
-  if (type === 'added' && metadata) {
-    return (
-      <Tooltip
-        title={<AddedTooltipContent metadata={metadata} unit={unit} />}
-        placement="top"
-      >
-        {part}
-      </Tooltip>
-    );
-  }
-
-  return part;
+  return renderPart();
 };

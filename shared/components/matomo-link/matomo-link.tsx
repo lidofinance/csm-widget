@@ -1,40 +1,64 @@
+import { IconLink, TextLink, TextLinkProps } from '@lidofinance/lido-app-ui';
+import cn from 'classnames';
 import { useInpageNavigation } from 'providers/inpage-navigation';
-import { ComponentProps, FC, PropsWithChildren, useCallback } from 'react';
+import { FC, MouseEvent, useCallback } from 'react';
 import { trackMatomoEvent, WithMatomoEvent } from 'utils';
-import { ArrowIcon, ExternalIcon, LinkStyled } from './styles';
+
+import Arrow from 'assets/icons/arrow-right.svg?react';
+
+import s from './styles.module.css';
+
+type AnchorLinkProps = Omit<
+  Extract<TextLinkProps, { href: string }>,
+  'href' | 'icon'
+> & { href?: string };
 
 type LinkIconProps = {
   icon?: 'arrow' | 'external';
+  $inline?: boolean;
+  $secondary?: boolean;
 };
 
 export const MatomoLink: FC<
-  PropsWithChildren<
-    WithMatomoEvent<ComponentProps<typeof LinkStyled> & LinkIconProps>
-  >
-> = ({ matomoEvent, onClick, icon, children, ...props }) => {
+  WithMatomoEvent<AnchorLinkProps & LinkIconProps>
+> = ({
+  matomoEvent,
+  onClick,
+  icon,
+  href,
+  className,
+  $inline,
+  $secondary,
+  ...props
+}) => {
   const { navigateInpageAnchor } = useInpageNavigation();
 
   const onClickHandler = useCallback(
-    (event: React.MouseEvent<HTMLAnchorElement>) => {
+    (event: MouseEvent<HTMLAnchorElement>) => {
       trackMatomoEvent(matomoEvent);
-      props.href?.startsWith('#') && navigateInpageAnchor(event);
-      event?.stopPropagation();
+      href?.startsWith('#') && navigateInpageAnchor(event);
+      event.stopPropagation();
       onClick?.(event);
     },
-    [matomoEvent, navigateInpageAnchor, onClick, props.href],
+    [matomoEvent, navigateInpageAnchor, onClick, href],
   );
 
-  const IconComponent =
-    icon === 'arrow' ? (
-      <ArrowIcon />
-    ) : icon === 'external' ? (
-      <ExternalIcon />
-    ) : null;
-
   return (
-    <LinkStyled {...props} onClick={onClickHandler}>
-      {children}
-      {IconComponent}
-    </LinkStyled>
+    <TextLink
+      {...props}
+      className={cn(s.link, className)}
+      data-inline={$inline || undefined}
+      href={href as string}
+      onClick={onClickHandler}
+      size="inherit"
+      variant={$secondary ? 'secondary' : 'primary'}
+      icon={
+        icon === 'arrow' ? (
+          <Arrow className={s.arrowIcon} />
+        ) : icon === 'external' ? (
+          <IconLink className={s.externalIcon} />
+        ) : undefined
+      }
+    />
   );
 };

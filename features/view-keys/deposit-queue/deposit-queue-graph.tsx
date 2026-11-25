@@ -1,7 +1,6 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { InlineLoader } from '@lidofinance/lido-ui';
+import { Skeleton } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import { Stack } from 'shared/components';
 import { useDepositQueueGraph } from './hooks/use-deposit-queue-graph';
 import {
   GraphInteractionProvider,
@@ -10,30 +9,30 @@ import {
 import { Legend } from './legend';
 import { LineWrapper } from './line-wrapper';
 import { Part } from './part';
-import { LegendsStyle, LineStyle } from './style';
+import s from './styles.module.css';
 
 const Graph: FC = () => {
   const { fullView, module } = useGraphInteraction();
   const { data, isLoading } = useDepositQueueGraph(fullView, module);
 
   if (isLoading || !data) {
-    return <InlineLoader />;
+    return <Skeleton variant="text" />;
   }
 
   return (
-    <Stack direction="column">
+    <div className={s.graph}>
       <LineWrapper farAway={data.farAway}>
-        <LineStyle>
+        <div className={s.line}>
           {data.parts.map((part, index) => (
             <Part key={`${part.type}-${index}`} unit={data.unit} {...part} />
           ))}
           {data.operator?.batches.map((batch, index) => (
             <Part key={index} type="batch" unit={data.unit} {...batch} />
           ))}
-        </LineStyle>
+        </div>
         <Part type="limit" offset={data.limit.offset} unit={data.unit} />
       </LineWrapper>
-      <LegendsStyle>
+      <div className={s.legends}>
         {data.parts
           .filter((part) => part.type !== 'added')
           .map((part, index) => (
@@ -47,8 +46,8 @@ const Graph: FC = () => {
           amount={data.submittingAmount}
           hide={data.submittingAmount === undefined}
         />
-      </LegendsStyle>
-    </Stack>
+      </div>
+    </div>
   );
 };
 

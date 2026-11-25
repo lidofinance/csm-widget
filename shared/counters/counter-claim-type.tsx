@@ -1,6 +1,6 @@
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { FC } from 'react';
-import { Counter } from 'shared/components';
+import { NavCounter } from './nav-counter';
 import { useCanClaimICS, useCanClaimIDVTC } from 'shared/hooks';
 
 type CounterClaimTypeProps = {
@@ -12,13 +12,11 @@ export const CounterClaimType: FC<CounterClaimTypeProps> = ({ type }) => {
   const canClaimIdvtc = useCanClaimIDVTC();
 
   if (type === OPERATOR_TYPE.CSM_IDVTC || (!type && canClaimIdvtc)) {
-    return (
-      <Counter count={Number(canClaimIdvtc)} type={OPERATOR_TYPE.CSM_IDVTC} />
-    );
+    return <NavCounter count={Number(canClaimIdvtc)} variant="action" />;
   }
 
   if (type === OPERATOR_TYPE.CSM_ICS || (!type && canClaimIcs)) {
-    return <Counter count={Number(canClaimIcs)} type={OPERATOR_TYPE.CSM_ICS} />;
+    return <NavCounter count={Number(canClaimIcs)} variant="action" />;
   }
 
   return null;

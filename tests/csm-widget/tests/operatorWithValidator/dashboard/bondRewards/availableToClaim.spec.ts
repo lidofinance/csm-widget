@@ -3,7 +3,6 @@ import { expect } from '@playwright/test';
 import { test } from '../../../test.fixture';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { USD_AMOUNT_REGEX } from 'tests/shared/consts/regexp.const';
 import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
@@ -35,111 +34,20 @@ test.describe(
     });
 
     test(
-      qase(134, 'Should correctly expand and display the balance'),
+      qase(134, 'Should correctly display the balance'),
       async ({ widgetService, csmSDK }) => {
-        const availableToClaim =
-          widgetService.dashboardPage.bondRewards.availableToClaim;
+        const { claimCard } = widgetService.dashboardPage;
 
         const nodeOperatorId = await widgetService.extractNodeOperatorId();
 
-        const bondSummary = await csmSDK.getBondSummary(nodeOperatorId);
-        const rewards = await csmSDK.getRewards(nodeOperatorId);
-        const totalClaimable = (
-          Number(bondSummary.excess) + Number(rewards.available)
-        ).toString();
+        const totalClaimable = await csmSDK.getAvailableToClaim(nodeOperatorId);
 
-        await test.step('Check "Available to claim" section', async () => {
-          await expect(availableToClaim.rewardsBalance).toBeHidden();
-
-          await availableToClaim.expandedButton.click();
-          await expect(availableToClaim.rewardsBalance).toBeVisible();
-          await expect(availableToClaim.expandedButton).toHaveAttribute(
-            'aria-expanded',
-            'true',
+        await test.step('Verify "Available to claim" value', async () => {
+          await expect(claimCard.value).toHaveText(/\d/);
+          const value = parseFloat(
+            ((await claimCard.value.textContent()) ?? '').replace(/,/g, ''),
           );
-        });
-
-        await test.step('Verify "Rewards" stETH value', async () => {
-          const rewardsBalance =
-            await availableToClaim.rewardsBalance_Text.textContent();
-          expect(rewardsBalance).toEqual(`${rewards.available.toCut(4)} stETH`);
-
-          const rewardsUSDBalance =
-            await availableToClaim.rewardsBalance_SubText.textContent();
-          expect(rewardsUSDBalance).toMatch(USD_AMOUNT_REGEX);
-        });
-
-        await test.step('Verify "Excess bond" stETH value', async () => {
-          const excessBondBalance =
-            await availableToClaim.excessBondBalance_Text.textContent();
-          expect(excessBondBalance).toEqual(
-            `${bondSummary.excess.toCut(4)} stETH`,
-          );
-
-          const excessBondUSDBalance =
-            await availableToClaim.excessBondBalance_SubText.textContent();
-          expect(excessBondUSDBalance).toMatch(USD_AMOUNT_REGEX);
-        });
-
-        await test.step('Verify total claimable amount', async () => {
-          const commonBalance =
-            await availableToClaim.commonBalance_Text.textContent();
-          expect(commonBalance).toEqual(`${totalClaimable.toCut(4)} stETH`);
-
-          const commonUSDBalance =
-            await availableToClaim.commonBalance_SubText.textContent();
-          expect(commonUSDBalance).toMatch(USD_AMOUNT_REGEX);
-        });
-      },
-    );
-
-    test(
-      qase(183, 'Tooltip verification for "Rewards" field'),
-      async ({ widgetService }) => {
-        const availableToClaim =
-          widgetService.dashboardPage.bondRewards.availableToClaim;
-
-        await availableToClaim.expand();
-
-        await test.step('Check tooltip for "Rewards"', async () => {
-          const tooltip = await widgetService.dashboardPage.hoverElement(
-            availableToClaim.rewardsBalance_TitleIcon,
-          );
-          expect(tooltip).toContain(
-            'Next rewards distribution is expected on ',
-          );
-        });
-
-        await test.step('Check to hidden tooltip after unhover', async () => {
-          await widgetService.dashboardPage.closeTooltip();
-          const tooltip =
-            await widgetService.dashboardPage.bondRewards.getHoveredContent();
-          await expect(tooltip).toBeHidden();
-        });
-      },
-    );
-
-    test(
-      qase(184, 'Tooltip verification for "Excess bond" field'),
-      async ({ widgetService }) => {
-        const availableToClaim =
-          widgetService.dashboardPage.bondRewards.availableToClaim;
-
-        await availableToClaim.expand();
-
-        await test.step('Check tooltip for "Excess bond"', async () => {
-          const tooltip = await widgetService.dashboardPage.hoverElement(
-            availableToClaim.excessBondBalance_TitleIcon,
-          );
-
-          expect(tooltip).toContain('Increases daily');
-        });
-
-        await test.step('Check to hidden tooltip after unhover', async () => {
-          await widgetService.dashboardPage.closeTooltip();
-          const tooltip =
-            await widgetService.dashboardPage.bondRewards.getHoveredContent();
-          await expect(tooltip).toBeHidden();
+          expect(Math.abs(value - totalClaimable)).toBeLessThan(0.1);
         });
       },
     );

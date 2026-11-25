@@ -1,32 +1,36 @@
-import { Text } from '@lidofinance/lido-ui';
-import { FC } from 'react';
-import { Stack } from 'shared/components';
-import { ScoreCategory } from './score-category';
-import { SCORE_SOURCES, TOTAL_SCORE_REQUIRED } from '../shared';
-import { Points } from './points';
+import { Body, Card, SectionTitle, Stack } from '@lidofinance/lido-app-ui';
+import { FC, useState } from 'react';
+import { ScoreSource } from '../shared';
+import { CriteriaModal } from './criteria-modal';
+import { ScoreTable } from './score-table';
 
 export const ScoreSources: FC = () => {
+  const [category, setCategory] = useState<ScoreSource>();
+
   return (
-    <Stack direction="column" gap="md">
-      <Text as="h3" size="lg" weight="bold">
-        Score sources
-      </Text>
-      <Text size="xs" color="secondary">
-        To be included in the list, applicants must obtain a sufficient score in
-        each category below as well as an overall score across all the
-        categories
-      </Text>
-      <Stack justify="space-between">
-        <Text size="sm" weight={700}>
-          Total score required
-        </Text>
-        <Text size="sm" weight={700}>
-          <Points value={TOTAL_SCORE_REQUIRED} />
-        </Text>
+    <Card dataTestId={{ root: 'scoreSystem' }}>
+      <Stack direction="column" gap={24} align="stretch">
+        <Stack direction="column" gap={4}>
+          <SectionTitle title="Score system" />
+          <Body color="secondary">
+            The scoring system creates a clear path for independent stakers to
+            qualify as “Identified Community” operators. Your score determines
+            eligibility for the Identified Community Stakers List. Points are
+            awarded by submitting verifiable proofs; - across categories such as
+            experience, on-chain engagement, and community contributions - that
+            demonstrate your qualifications. To be included in the list,
+            applicants must obtain a sufficient score in each category below as
+            well as an overall score across all the categories.
+          </Body>
+        </Stack>
+        <ScoreTable onViewCriteria={setCategory} />
       </Stack>
-      {SCORE_SOURCES.map((category) => (
-        <ScoreCategory key={category.id} category={category} />
-      ))}
-    </Stack>
+      {category && (
+        <CriteriaModal
+          category={category}
+          onClose={() => setCategory(undefined)}
+        />
+      )}
+    </Card>
   );
 };

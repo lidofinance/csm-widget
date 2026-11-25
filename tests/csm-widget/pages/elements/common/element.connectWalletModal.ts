@@ -30,6 +30,6 @@ export class ConnectWalletModal {
   }
 
   async closePopUp() {
-    await this.modal.locator('button').nth(0).click();
+    await this.modal.getByRole('button', { name: 'Close' }).click();
   }
 }

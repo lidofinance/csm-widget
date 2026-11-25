@@ -1,31 +1,31 @@
-import { FC, useCallback, useState } from 'react';
-import { ButtonIcon, Text } from '@lidofinance/lido-ui';
+import { FC, useCallback, useMemo, useState } from 'react';
+import {
+  Body,
+  IconButton,
+  IconDownload,
+  IconTrash,
+  Stack,
+  Switch,
+  Table,
+  TableColumn,
+} from '@lidofinance/lido-app-ui';
 import type { FileMetadataDto } from 'modules/surveys-sdk/generated';
-import { Stack, Toggle } from 'shared/components';
 import { useToggleDkgFile } from '../hooks/use-toggle-dkg-file';
 import { useDeleteDkgFile } from '../hooks/use-delete-dkg-file';
 import { useDownloadDkgFile } from '../hooks/use-download-dkg-file';
 import { useDkgDeleteConfirm } from './dkg-delete-confirm-modal';
-import {
-  DkgRow,
-  DkgTable,
-  DkgTableHead,
-  FileName,
-  RowActions,
-} from '../styles';
+import s from '../styles.module.css';
 
-import DownloadIcon from 'assets/icons/download-2.svg?react';
-import Trash from 'assets/icons/trash.svg?react';
+const ERROR_ICON_STYLE = { color: 'var(--lido-app-ui-color-icons-error)' };
 
-const DkgDeleteButton: FC<{ onClick: () => void; disabled?: boolean }> = ({
-  onClick,
-  disabled,
-}) => (
-  <ButtonIcon
-    icon={<Trash />}
+const DkgDeleteButton: FC<{
+  onClick: () => void;
+  disabled?: boolean;
+  danger?: boolean;
+}> = ({ onClick, disabled, danger }) => (
+  <IconButton
+    icon={<IconTrash style={danger ? ERROR_ICON_STYLE : undefined} />}
     variant="ghost"
-    size="xxs"
-    color="error"
     type="button"
     disabled={disabled}
     onClick={onClick}
@@ -33,6 +33,8 @@ const DkgDeleteButton: FC<{ onClick: () => void; disabled?: boolean }> = ({
     title="Delete"
   />
 );
+
+const getFileKey = ({ id }: FileMetadataDto) => String(id);
 
 type Props = { files: FileMetadataDto[]; canManage: boolean };
 
@@ -77,60 +79,68 @@ export const DkgFilesTable: FC<Props> = ({ files, canManage }) => {
     [confirmDelete, remove],
   );
 
+  const columns = useMemo<TableColumn<FileMetadataDto>[]>(
+    () => [
+      {
+        key: 'active',
+        header: 'Status',
+        width: 80,
+        render: (file) => (
+          <Switch
+            checked={file.active}
+            disabled={!canManage || busyId === file.id}
+            aria-label={`Toggle ${file.name}`}
+            onChange={(e) => void onToggle(file, e.target.checked)}
+          />
+        ),
+      },
+      {
+        key: 'name',
+        header: 'Filename',
+        render: (file) => (
+          <Body truncate color={file.active ? undefined : 'tertiary'}>
+            {file.name}
+          </Body>
+        ),
+      },
+      {
+        key: 'actions',
+        header: 'Actions',
+        align: 'right',
+        width: 120,
+        render: (file) => (
+          <Stack direction="row" align="center" justify="end" gap={4}>
+            <IconButton
+              icon={<IconDownload />}
+              variant="ghost"
+              type="button"
+              loading={downloadingId === file.id}
+              onClick={() => void download(file)}
+              aria-label="Download"
+              title="Download"
+            />
+            {canManage && (
+              <DkgDeleteButton
+                disabled={busyId === file.id}
+                onClick={() => void onDelete(file)}
+              />
+            )}
+          </Stack>
+        ),
+      },
+    ],
+    [canManage, busyId, downloadingId, download, onToggle, onDelete],
+  );
+
   return (
     <>
-      <DkgTable>
-        <DkgTableHead>
-          <Stack gap="sm">
-            <Text size="xxs" color="secondary">
-              Status
-            </Text>
-            <Text size="xxs" color="secondary">
-              Filename
-            </Text>
-          </Stack>
-          <Text size="xxs" color="secondary">
-            Actions
-          </Text>
-        </DkgTableHead>
-        {files.map((file) => {
-          const busy = busyId === file.id;
-          return (
-            <DkgRow key={file.id} $columns="auto 1fr auto">
-              <Toggle
-                checked={file.active}
-                disabled={!canManage || busy}
-                onChange={(active) => void onToggle(file, active)}
-              />
-              <FileName $inactive={!file.active}>{file.name}</FileName>
-              <RowActions>
-                <ButtonIcon
-                  icon={<DownloadIcon />}
-                  variant="ghost"
-                  size="xxs"
-                  color="primary"
-                  type="button"
-                  loading={downloadingId === file.id}
-                  onClick={() => void download(file)}
-                  aria-label="Download"
-                  title="Download"
-                />
-                {canManage && (
-                  <DkgDeleteButton
-                    disabled={busy}
-                    onClick={() => void onDelete(file)}
-                  />
-                )}
-              </RowActions>
-            </DkgRow>
-          );
-        })}
-      </DkgTable>
-      {actionError && (
-        <Text size="xs" color="error">
-          {actionError.message}
-        </Text>
-      )}
+      <Table
+        variant="dense"
+        columns={columns}
+        rows={files}
+        rowKey={getFileKey}
+      />
+      {actionError && <Body color="error">{actionError.message}</Body>}
     </>
   );
 };
@@ -140,17 +150,32 @@ type StagedProps = {
   onRemove: (index: number) => void;
 };
 
-// Staged variant: filename · delete only. No header, toggle or download —
-// these files exist only client-side until the parent flow uploads them.
-export const DkgStagedTable: FC<StagedProps> = ({ items, onRemove }) => (
-  <DkgTable>
-    {items.map((item, index) => (
-      <DkgRow key={`${item.name}-${index}`} $columns="1fr auto">
-        <FileName>{item.name}</FileName>
-        <RowActions>
-          <DkgDeleteButton onClick={() => onRemove(index)} />
-        </RowActions>
-      </DkgRow>
-    ))}
-  </DkgTable>
-);
+// Staged files exist only client-side until the parent flow uploads them.
+export const DkgStagedTable: FC<StagedProps> = ({ items, onRemove }) => {
+  if (items.length === 1) {
+    return (
+      <Stack direction="row" align="center" gap={8}>
+        <Body truncate>
+          <Body as="span" weight="semibold">
+            Attached file:
+          </Body>{' '}
+          {items[0].name}
+        </Body>
+        <DkgDeleteButton danger onClick={() => onRemove(0)} />
+      </Stack>
+    );
+  }
+
+  return (
+    <Stack>
+      {items.map((item, index) => (
+        <div key={`${item.name}-${index}`} className={s.row}>
+          <Body truncate>{item.name}</Body>
+          <Stack direction="row" align="center" justify="end" gap={4}>
+            <DkgDeleteButton onClick={() => onRemove(index)} />
+          </Stack>
+        </div>
+      ))}
+    </Stack>
+  );
+};

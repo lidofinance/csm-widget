@@ -24,16 +24,9 @@ test.describe(
     });
 
     test(
-      qase(
-        180,
-        'Should display form with correct section title and input labels',
-      ),
+      qase(180, 'Should display form with correct input labels'),
       async ({ widgetService }) => {
         const { metadataPage } = widgetService.settingsPage;
-
-        await test.step('Section title is visible', async () => {
-          await expect(metadataPage.formTitle).toBeVisible();
-        });
 
         await test.step('Name input is visible with correct label', async () => {
           await expect(metadataPage.nameInput).toBeVisible();
@@ -47,7 +40,7 @@ test.describe(
           );
         });
 
-        await test.step('Save button is visible and enabled on initial load', async () => {
+        await test.step('Update button is visible and enabled on initial load', async () => {
           await expect(metadataPage.saveButton).toBeVisible();
           await expect(metadataPage.saveButton).toBeEnabled();
         });
@@ -93,7 +86,7 @@ test.describe(
           );
         });
 
-        await test.step('Save button is disabled', async () => {
+        await test.step('Update button is disabled', async () => {
           await expect(metadataPage.saveButton).toBeDisabled();
         });
       },
@@ -119,7 +112,7 @@ test.describe(
           );
         });
 
-        await test.step('Save button is disabled', async () => {
+        await test.step('Update button is disabled', async () => {
           await expect(metadataPage.saveButton).toBeDisabled();
         });
       },
@@ -134,8 +127,6 @@ test.describe(
       async ({ widgetService }) => {
         const { metadataPage } = widgetService.settingsPage;
         const { txModal } = widgetService.settingsPage;
-
-        const nodeOperatorId = await widgetService.extractNodeOperatorId();
 
         const uid = crypto.randomUUID().slice(0, 8);
         const newName = `Test ${uid} !@#$`;
@@ -189,28 +180,19 @@ test.describe(
 
         await test.step('Operator name is updated on dashboard', async () => {
           await widgetService.dashboardPage.open();
-          await expect(widgetService.dashboardPage.operatorName).toHaveText(
-            newName,
-          );
+          await expect(
+            widgetService.dashboardPage.operatorHeader.operatorName,
+          ).toHaveText(newName);
         });
 
-        await test.step('Operator name is updated in Switch Node Operator modal', async () => {
+        await test.step('Operator name is updated in the operator switch popup', async () => {
           await widgetService.page.getByTestId('nodeOperatorHeader').click();
 
-          const modal = widgetService.page.getByRole('dialog');
-          const currentRow = modal
-            .getByTestId('switchModalOperatorRow')
-            .filter({
-              has: widgetService.page
-                .getByTestId('descriptorId')
-                .filter({ hasText: `#${nodeOperatorId}` }),
-            });
-
           await expect(
-            currentRow.getByTestId('switchModalOperatorName'),
+            widgetService.page.getByTestId('switchPopupOperatorName'),
           ).toHaveText(newName);
 
-          await widgetService.settingsPage.closeModalWindow();
+          await widgetService.page.keyboard.press('Escape');
         });
       },
     );

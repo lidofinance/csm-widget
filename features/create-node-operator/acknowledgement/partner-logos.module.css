@@ -1,0 +1,7 @@
+.logo {
+  padding: 5px;
+}
+
+.logo.logo {
+  object-fit: contain;
+}

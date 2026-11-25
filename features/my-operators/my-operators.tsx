@@ -1,30 +1,75 @@
+import { EmptyState, MessageBox, Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import { WhenLoaded } from 'shared/components';
 import { useMyOperators, useShowRule } from 'shared/hooks';
-import { CreateOperatorTile } from './create-operator-tile';
+import { CreateOperatorButton } from './create-operator-button';
+import { GroupSection, GroupSectionSkeleton } from './group-section';
+import { useMyOperatorsSections } from './hooks';
+import { MyOperatorsSkeleton } from './my-operators-skeleton';
 import { OperatorCard } from './operator-card';
-import { ListStyle } from './styles';
-import { SummaryCard } from './summary-card';
+import { OperatorsSection } from './operators-section';
+import { MyOperatorsSummaryCard } from './summary-card';
 
 export const MyOperators: FC = () => {
-  const { data: operators, isPending } = useMyOperators();
+  const { data: roster, isPending, isError } = useMyOperators();
+  const sections = useMyOperatorsSections(isPending ? undefined : roster);
   const check = useShowRule();
 
+  if (isPending) return <MyOperatorsSkeleton />;
+  if (isError && !roster) {
+    return (
+      <MessageBox variant="error">
+        Failed to load your operators. Try again later.
+      </MessageBox>
+    );
+  }
+  if (!roster?.length) return <EmptyState title="No operators" />;
+
+  const { cmPending, groups, ungroupedCm, csmFamily } = sections;
+
   return (
-    <WhenLoaded
-      loading={isPending}
-      empty={!operators?.length && <>No operators</>}
-    >
-      <ListStyle data-testid="myOperatorsList">
-        <SummaryCard />
-        {operators?.map((operator) => (
-          <OperatorCard
-            key={`${operator.module}-${operator.nodeOperatorId}`}
-            operator={operator}
+    <Stack direction="column" gap={52} data-testid="myOperatorsList">
+      {cmPending ? (
+        <GroupSectionSkeleton />
+      ) : (
+        groups.map((g) => (
+          <GroupSection
+            key={String(g.groupId)}
+            nodeOperatorId={g.representative.nodeOperatorId}
           />
-        ))}
-        {check('CAN_CREATE') && <CreateOperatorTile />}
-      </ListStyle>
-    </WhenLoaded>
+        ))
+      )}
+      {!cmPending && ungroupedCm.length > 0 && (
+        <OperatorsSection
+          title="CM Operators"
+          dataTestId="cmOperatorsSection"
+          titleTestId="cmOperatorsSectionTitle"
+        >
+          {ungroupedCm.map((operator) => (
+            <OperatorCard
+              key={`${operator.module}-${operator.nodeOperatorId}`}
+              operator={operator}
+            />
+          ))}
+        </OperatorsSection>
+      )}
+      {csmFamily.length > 0 && (
+        <OperatorsSection
+          title="CSM Operators"
+          dataTestId="csmOperatorsSection"
+          titleTestId="csmOperatorsSectionTitle"
+          summary={
+            csmFamily.length >= 2 ? <MyOperatorsSummaryCard /> : undefined
+          }
+        >
+          {csmFamily.map((operator) => (
+            <OperatorCard
+              key={`${operator.module}-${operator.nodeOperatorId}`}
+              operator={operator}
+            />
+          ))}
+        </OperatorsSection>
+      )}
+      {check('CAN_CREATE') && <CreateOperatorButton />}
+    </Stack>
   );
 };

@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDappStatus } from '../hooks';
 import { resolveActiveOperator } from './resolve-active-operator';
 import { useCachedId } from './use-cached-id';
@@ -9,15 +10,35 @@ const sameOperator = (a?: ModuleNodeOperator, b?: ModuleNodeOperator) =>
   !!a && !!b && a.module === b.module && a.nodeOperatorId === b.nodeOperatorId;
 
 export const useActiveNodeOperator = (list?: ModuleNodeOperator[]) => {
-  const [active, setActive] = useState<ModuleNodeOperator | undefined>();
+  const [active, setActiveRaw] = useState<ModuleNodeOperator | undefined>();
+  const [dismissed, setDismissed] = useState(false);
+  const [selectionFilter, setSelectionFilter] = useState<
+    MODULE_NAME[] | undefined
+  >();
   const [cachedRef, setCachedRef] = useCachedId();
   const { address } = useDappStatus();
   const invalidate = useInvalidateOperatorCache();
 
-  const { operator: resolved, needsSelection } = useMemo(
+  const { operator: resolved, needsSelection: rawNeedsSelection } = useMemo(
     () => resolveActiveOperator(list, cachedRef, active),
     [list, cachedRef, active],
   );
+
+  const setActive = useCallback((operator: ModuleNodeOperator) => {
+    setDismissed(false);
+    setSelectionFilter(undefined);
+    setActiveRaw(operator);
+  }, []);
+  const dismissSelection = useCallback(() => {
+    setDismissed(true);
+    setSelectionFilter(undefined);
+  }, []);
+  const requestSelection = useCallback((modules?: MODULE_NAME[]) => {
+    setSelectionFilter(Array.isArray(modules) ? modules : undefined);
+    setDismissed(false);
+  }, []);
+
+  const needsSelection = rawNeedsSelection && !dismissed;
 
   const prevActiveRef = useRef(resolved);
   const prevAddressRef = useRef(address);
@@ -26,13 +47,16 @@ export const useActiveNodeOperator = (list?: ModuleNodeOperator[]) => {
     prevAddressRef.current = address;
     prevActiveRef.current = resolved;
     invalidate('operatorAndAddress');
+    setDismissed(false);
   } else if (!sameOperator(resolved, prevActiveRef.current)) {
     prevActiveRef.current = resolved;
     invalidate('operator');
   }
 
   useEffect(() => {
-    setActive((prev) => prev && list?.find((item) => sameOperator(item, prev)));
+    setActiveRaw(
+      (prev) => prev && list?.find((item) => sameOperator(item, prev)),
+    );
   }, [list]);
 
   useEffect(() => {
@@ -41,5 +65,13 @@ export const useActiveNodeOperator = (list?: ModuleNodeOperator[]) => {
     }
   }, [resolved, setCachedRef]);
 
-  return { nodeOperator: resolved, setActive, needsSelection } as const;
+  return {
+    nodeOperator: resolved,
+    setActive,
+    needsSelection,
+    selectionFilter,
+    hasCachedPick: !!cachedRef,
+    dismissSelection,
+    requestSelection,
+  } as const;
 };

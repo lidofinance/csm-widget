@@ -1,3 +1,4 @@
+import { expect } from '@playwright/test';
 import { RPC_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../test.fixture';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
@@ -21,7 +22,7 @@ test.describe(
       snapshotId = await csmSDK.evmSnapshot();
 
       await test.step('Set up: report rewards', async () => {
-        await widgetService.page.goto('/bond/rewards-history');
+        await widgetService.bondRewardsPage.hub.open();
         await forkActionService.reportRewards();
       });
     });
@@ -34,10 +35,11 @@ test.describe(
 
     test.beforeEach(async ({ widgetService, widgetConfig }) => {
       matomoEventService = new MatomoService(widgetService.page, widgetConfig);
-      await widgetService.page.goto('/bond/rewards-history');
-      await widgetService.page
-        .getByRole('button', { name: 'Export all to CSV' })
-        .waitFor({ state: 'visible', timeout: RPC_WAIT_TIMEOUT });
+      await widgetService.bondRewardsPage.hub.open();
+      await widgetService.bondRewardsPage.hub.exportButton.waitFor({
+        state: 'visible',
+        timeout: RPC_WAIT_TIMEOUT,
+      });
     });
 
     test(
@@ -51,11 +53,35 @@ test.describe(
             'e_n',
             'csm_widget_rewards_history_export',
           ),
-          widgetService.page
-            .getByRole('button', { name: 'Export all to CSV' })
-            .click(),
+          widgetService.bondRewardsPage.hub.exportButton.click(),
         ]);
       },
     );
+
+    test('Should show rewards table with sortable columns', async ({
+      widgetService,
+    }) => {
+      const { hub } = widgetService.bondRewardsPage;
+
+      await test.step('Rewards rows are shown', async () => {
+        await expect(hub.rewardsRows.first()).toBeVisible();
+      });
+
+      await test.step('Date period header toggles sort', async () => {
+        const header = hub.historyTable.getByRole('columnheader', {
+          name: 'Date period',
+        });
+        const before = await header.getAttribute('aria-sort');
+        await header.getByRole('button').click();
+        await expect(header).not.toHaveAttribute('aria-sort', before ?? '');
+      });
+    });
+
+    test('Should redirect to hub from legacy url', async ({
+      widgetService,
+    }) => {
+      await widgetService.page.goto('/bond/rewards-history');
+      await expect(widgetService.page).toHaveURL(/\/bond$/);
+    });
   },
 );

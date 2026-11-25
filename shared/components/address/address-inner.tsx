@@ -1,13 +1,17 @@
 import {
   Address as AddressComponent,
-  AddressProps as BaseAddressProps,
+  Caption,
+  Description,
   Identicon,
-  Text,
-  Tooltip,
-} from '@lidofinance/lido-ui';
-import { ComponentProps, FC, ReactNode } from 'react';
+  Body,
+  TypographyColor,
+  TypographyWeight,
+} from '@lidofinance/lido-app-ui';
+import { CSSProperties, FC, ReactNode } from 'react';
+import { Tooltip } from '@lidofinance/lido-app-ui';
 import { EtherscanAddressLink } from '../external-icon-link';
-import { AddressContainerStyle, Avatar } from './styles';
+import cn from 'classnames';
+import s from './styles.module.css';
 
 export type AddressProps = {
   showIcon?: boolean;
@@ -17,8 +21,22 @@ export type AddressProps = {
   name?: string;
   avatar?: string;
   noStyle?: boolean;
-} & Pick<ComponentProps<typeof Text>, 'weight' | 'size' | 'color'> &
-  Partial<BaseAddressProps>;
+  address?: string;
+  symbols?: number;
+  size?: 'xxs' | 'xs' | 'sm' | 'md' | 'lg';
+  weight?: TypographyWeight | number;
+  color?: TypographyColor;
+};
+
+const toWeight = (weight: TypographyWeight | number | undefined) => {
+  if (typeof weight !== 'number') return weight;
+  if (weight >= 700) return 'bold';
+  if (weight >= 600) return 'semibold';
+  if (weight >= 500) return 'medium';
+  return 'regular';
+};
+
+const TEXT = { xxs: Caption, xs: Description, sm: Body, md: Body, lg: Body };
 
 export const AddressInner: FC<AddressProps> = ({
   address = '',
@@ -28,7 +46,6 @@ export const AddressInner: FC<AddressProps> = ({
   weight,
   size = 'xs',
   color,
-  monospace = false,
   noStyle = false,
   link,
   avatar,
@@ -38,17 +55,17 @@ export const AddressInner: FC<AddressProps> = ({
     <AddressComponent
       address={address}
       symbols={!symbols ? 90 : symbols}
-      as="span"
+      tooltip={false}
     />
   );
 
+  const Text = TEXT[size];
   const component = noStyle ? (
     <span data-testid="addressText">{content}</span>
   ) : (
     <Text
       as="span"
-      weight={weight}
-      size={size}
+      weight={toWeight(weight)}
       color={color}
       data-testid="addressText"
     >
@@ -59,22 +76,25 @@ export const AddressInner: FC<AddressProps> = ({
   return (
     <>
       {address && (
-        <AddressContainerStyle
-          $big={big}
-          $monospace={monospace}
+        <span
+          className={cn(s.container, !big && s.small)}
           data-testid="addressContainer"
         >
           {showIcon &&
             (avatar ? (
-              <Avatar
+              <img
+                className={s.avatar}
+                style={
+                  { '--avatar-size': `${big ? 24 : 20}px` } as CSSProperties
+                }
                 src={avatar}
-                diameter={big ? 24 : 20}
+                alt=""
                 data-testid="avatar"
               />
             ) : (
               <Identicon
                 address={address}
-                diameter={big ? 24 : 20}
+                size={big ? 24 : 20}
                 data-testid="identicon"
               />
             ))}
@@ -82,9 +102,9 @@ export const AddressInner: FC<AddressProps> = ({
             component
           ) : (
             <Tooltip
-              placement="top"
-              title={address}
-              style={{ wordWrap: 'break-word', maxWidth: '300px' }}
+              position="top"
+              content={address}
+              width={300}
               data-testid="addressTooltip"
             >
               {component}
@@ -97,7 +117,7 @@ export const AddressInner: FC<AddressProps> = ({
               data-testid="etherscanLink"
             />
           )}
-        </AddressContainerStyle>
+        </span>
       )}
     </>
   );

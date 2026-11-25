@@ -22,7 +22,12 @@
     "jsx-a11y/no-autofocus": "off",
     "jsx-a11y/anchor-is-valid": "off",
     "@next/next/no-img-element": "off",
-    "no-console": ["warn", { "allow": ["warn", "error", "info", "debug"] }],
+    "no-console": [
+      "warn",
+      {
+        "allow": ["warn", "error", "info", "debug"]
+      }
+    ],
     "@typescript-eslint/no-unused-vars": [
       "warn",
       {
@@ -53,6 +58,22 @@
           "vitest.config.mjs",
           "**/*.{spec,test}.{ts,tsx}"
         ]
+      }
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "styled-components",
+            "message": "Use CSS Modules + app-ui props (docs/component-rules.md)"
+          },
+          {
+            "name": "@lidofinance/address",
+            "message": "Use utils/trim-address"
+          }
+        ],
+        "patterns": ["styled-components/*"]
       }
     ]
   },

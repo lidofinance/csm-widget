@@ -1,0 +1,121 @@
+.hubList {
+  align-self: stretch;
+  width: 100%;
+}
+
+.overline {
+  padding: 0 0 8px;
+}
+
+.footer {
+  padding: 16px 8px 0;
+}
+
+.hubRow {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 8px 12px;
+
+  /* only rows with trailing actions wrap them under the title on mobile */
+  &[data-wrap='true'] {
+    flex-wrap: wrap;
+  }
+
+  box-sizing: border-box;
+  min-height: 60px;
+  padding: 12px 8px;
+  text-decoration: none;
+}
+
+.hubRow.hubRow,
+.hubRow.hubRow:visited,
+.hubRow.hubRow:hover {
+  color: var(--lido-app-ui-color-text-default);
+}
+
+.hubRowLink {
+  cursor: pointer;
+
+  &:hover {
+    background: var(--lido-app-ui-color-background-transparent-hover);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--lido-app-ui-color-border-active);
+    outline-offset: 2px;
+  }
+}
+
+.media {
+  display: flex;
+  flex: none;
+  align-items: center;
+  margin-right: 8px;
+}
+
+.main {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: 4px;
+
+  /* never narrower than the unwrapped title; the value side gives way instead */
+  min-width: min-content;
+}
+
+.titleRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.titleText {
+  white-space: nowrap;
+}
+
+.value {
+  display: block;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.aside {
+  display: flex;
+  flex: 0 1 auto;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: 0;
+  overflow: hidden;
+  margin-left: auto;
+}
+
+.trailing {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+
+  @media (max-width: 440px) {
+    flex: 1 1 100%;
+    order: 1;
+  }
+}
+
+.chevron {
+  display: inline-flex;
+  flex: none;
+  color: var(--lido-app-ui-color-icons-secondary);
+
+  & svg {
+    width: 20px;
+    height: 20px;
+  }
+}

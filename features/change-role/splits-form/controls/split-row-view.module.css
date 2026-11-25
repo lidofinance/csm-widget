@@ -1,0 +1,7 @@
+.shareInput.shareInput input {
+  text-align: right;
+}
+
+.addressInput.addressInput input {
+  text-overflow: ellipsis;
+}

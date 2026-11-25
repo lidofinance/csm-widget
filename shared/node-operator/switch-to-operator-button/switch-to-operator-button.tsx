@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from '@lidofinance/lido-ui';
+import { Button } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES, PATH } from 'consts';
 import { OperatorRef } from 'modules/web3';
 import { useModalActions } from 'providers/modal-provider';
@@ -11,8 +11,6 @@ type Props = {
   operator: OperatorRef;
   path?: PATH;
   children?: ReactNode;
-  variant?: ButtonProps['variant'];
-  color?: ButtonProps['color'];
   matomoEvent?: MATOMO_CLICK_EVENTS_TYPES;
 };
 
@@ -20,8 +18,6 @@ export const SwitchToOperatorButton: FC<Props> = ({
   operator,
   path,
   children,
-  variant,
-  color,
   matomoEvent,
 }) => {
   const { closeModal } = useModalActions();
@@ -38,12 +34,11 @@ export const SwitchToOperatorButton: FC<Props> = ({
 
   return (
     <Button
-      fullwidth
-      size="sm"
-      variant={variant}
-      color={color}
+      fullWidth
+      size="small"
+      variant="outline"
       onClick={handleClick}
-      data-testid="switchToOperatorBtn"
+      dataTestId={{ root: 'switchToOperatorBtn' }}
     >
       {children ?? `Switch to Node Operator #${operator.nodeOperatorId}`}
     </Button>

@@ -40,7 +40,7 @@ export const Keys11: Faq = {
           withdrawal can be reported to CSM permissionlessly. Once that occurs,
           the part of the Node Operator&apos;s bond used for this validator is
           released. At this point, the Node Operator can claim the bond on the{' '}
-          <strong>Bond &amp; Rewards Claim</strong> tab.
+          <strong>Claim</strong> page via the Bond &amp; Rewards buttons.
         </li>
       </ol>
     </div>

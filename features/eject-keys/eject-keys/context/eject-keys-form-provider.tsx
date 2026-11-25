@@ -18,11 +18,16 @@ export const EjectKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
     mode: 'onChange',
   });
 
-  const submitter = useFlowSubmit(useEjectKeysFlowResolver());
+  const resolve = useEjectKeysFlowResolver();
+  const submitter = useFlowSubmit(resolve);
 
   return (
     <FormProvider {...formObject}>
-      <FormControllerProvider submitter={submitter} formName="ejectKeys">
+      <FormControllerProvider
+        submitter={submitter}
+        resolve={resolve}
+        formName="ejectKeys"
+      >
         <EjectKeysUpdater />
         {children}
       </FormControllerProvider>

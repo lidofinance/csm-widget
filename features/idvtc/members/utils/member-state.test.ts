@@ -19,22 +19,17 @@ const req = (over: Partial<RotationRequestDto> = {}): RotationRequestDto => ({
 
 describe('deriveMemberCardState', () => {
   it('is idle without a request', () => {
-    expect(deriveMemberCardState(0, null, null)).toEqual({ kind: 'idle' });
+    expect(deriveMemberCardState(0, null)).toEqual({ kind: 'idle' });
   });
 
   it('is idle when the slot has no proposal', () => {
     const r = req({ slots: [{ newAddress: X }, {}, {}, {}] });
-    expect(deriveMemberCardState(1, r, null)).toEqual({ kind: 'idle' });
-  });
-
-  it('editing wins over any request state', () => {
-    const r = req({ slots: [{ newAddress: X }, {}, {}, {}] });
-    expect(deriveMemberCardState(0, r, 0)).toEqual({ kind: 'editing' });
+    expect(deriveMemberCardState(1, r)).toEqual({ kind: 'idle' });
   });
 
   it('is pending for a proposed slot under REVIEW', () => {
     const r = req({ slots: [{}, { newAddress: X }, {}, {}] });
-    expect(deriveMemberCardState(1, r, null)).toEqual({
+    expect(deriveMemberCardState(1, r)).toEqual({
       kind: 'pending',
       proposed: { newAddress: X },
     });
@@ -46,7 +41,7 @@ describe('deriveMemberCardState', () => {
       slots: [{}, { newAddress: X }, {}, {}],
       comments: { reason: 'bad batch', slots: [null, 'wrong sig', null, null] },
     });
-    expect(deriveMemberCardState(1, r, null)).toEqual({
+    expect(deriveMemberCardState(1, r)).toEqual({
       kind: 'rejected',
       proposed: { newAddress: X },
       comment: 'wrong sig',

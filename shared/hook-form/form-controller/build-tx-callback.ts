@@ -1,7 +1,13 @@
 import {
   type TransactionCallback,
+  type TransactionCallbackProps,
   TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
+
+export type MultisigDonePayload = Extract<
+  TransactionCallbackProps,
+  { stage: TransactionCallbackStage.MULTISIG_DONE }
+>['payload'];
 
 // Factory type: hook returns a function that builds a TransactionCallback from form input+data
 export type TxModalStagesFactory<I, D, R = undefined> = (
@@ -14,7 +20,7 @@ export type FlowStages<TResult = undefined> = {
   sign(): void;
   pending(txHash?: string): void;
   success(result: TResult, txHash?: string): void;
-  successMultisig(): void;
+  successMultisig(payload: MultisigDonePayload): void;
   failed(error: unknown): void;
   signPermit?(): void;
   signApproval?(amount: bigint, token: unknown): void;
@@ -40,7 +46,7 @@ export const buildTxCallback =
         stages.success(payload.result, payload.hash);
         break;
       case TransactionCallbackStage.MULTISIG_DONE:
-        stages.successMultisig();
+        stages.successMultisig(payload);
         break;
       case TransactionCallbackStage.ERROR: {
         // DECODE_RESULT_ERROR: tx is confirmed on-chain; failed() renders honest

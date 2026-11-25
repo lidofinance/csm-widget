@@ -12,11 +12,16 @@ export const UnlockBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
     mode: 'onChange',
   });
 
-  const submitter = useFlowSubmit(useUnlockBondFlowResolver());
+  const resolve = useUnlockBondFlowResolver();
+  const submitter = useFlowSubmit(resolve);
 
   return (
     <FormProvider {...formObject}>
-      <FormControllerProvider submitter={submitter} formName="unlockBond">
+      <FormControllerProvider
+        submitter={submitter}
+        resolve={resolve}
+        formName="unlockBond"
+      >
         {children}
       </FormControllerProvider>
     </FormProvider>

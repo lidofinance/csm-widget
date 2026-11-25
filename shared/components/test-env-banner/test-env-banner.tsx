@@ -1,11 +1,7 @@
 import { config } from 'config';
 
-import { BannerStyle, TestEnvBannerOffset } from './styles';
+import { TestEnvBanner as TestEnvBannerUi } from '@lidofinance/lido-app-ui';
+import s from './styles.module.css';
 
 export const TestEnvBanner = () =>
-  config.isTestEnv ? (
-    <>
-      <TestEnvBannerOffset />
-      <BannerStyle />
-    </>
-  ) : null;
+  config.isTestEnv ? <TestEnvBannerUi className={s.banner} /> : null;

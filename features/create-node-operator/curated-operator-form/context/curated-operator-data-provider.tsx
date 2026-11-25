@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import {
   useSmStatus,
   useDappStatus,
@@ -12,12 +13,15 @@ import {
   useFormData,
 } from 'shared/hook-form/form-controller';
 import { useInvalidate } from 'shared/hooks';
+import { CuratedOperatorCreatedProvider } from './curated-operator-created-context';
 import { type CuratedOperatorFormNetworkData } from './types';
 
 const useCuratedOperatorFormNetworkData: NetworkData<
   CuratedOperatorFormNetworkData
 > = () => {
-  const { data: status, isPending: isStatusLoading } = useSmStatus();
+  const { data: status, isPending: isStatusLoading } = useSmStatus(
+    MODULE_NAME.CM,
+  );
   const { address } = useDappStatus();
 
   const ethBalanceQuery = useEthereumBalance();
@@ -57,7 +61,9 @@ export const CuratedOperatorDataProvider: FC<PropsWithChildren> = ({
 
   return (
     <FormDataContext.Provider value={networkData}>
-      {children}
+      <CuratedOperatorCreatedProvider>
+        {children}
+      </CuratedOperatorCreatedProvider>
     </FormDataContext.Provider>
   );
 };

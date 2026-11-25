@@ -1,20 +1,12 @@
+import { Description, MessageBox, Stack } from '@lidofinance/lido-app-ui';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { Checkbox } from '@lidofinance/lido-ui';
-import { INSTANT_WAITING_TIME } from 'consts';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
-import { useController, useWatch } from 'react-hook-form';
-import {
-  FormTitle,
-  Note,
-  Stack,
-  TokenAmount,
-  WarningBlock,
-  YouWillReceive,
-} from 'shared/components';
-import { TokenButtonsHookForm } from 'shared/hook-form/controls';
+import { FC } from 'react';
+import { useWatch } from 'react-hook-form';
+import { CheckboxField, TokenSelectField } from 'shared/hook-form/fields';
 import { LocalLink } from 'shared/navigate';
-import { getTokenDisplayName } from 'utils';
+import { getClaimTokenOptions } from '../claim-token-options';
 import {
   ClaimBondFormInputType,
   useClaimBondFlow,
@@ -22,125 +14,73 @@ import {
 } from '../context';
 import { useWithdrawalWaitingTime } from '../hooks/use-withdrawal-waiting-time';
 
-export const TokenSelect: React.FC = () => {
-  const [token] = useWatch<ClaimBondFormInputType, ['token']>({
-    name: ['token'],
-  });
+const EthNote: FC = () => (
+  <Description color="secondary" data-testid="ethNote">
+    <b>Note:</b> After receiving NFT you will need to claim ETH manually. Follow{' '}
+    <LocalLink
+      href={PATH.BOND_CLAIM}
+      anchor="#how-to-claim-eth-using-a-withdrawal-nft"
+      matomoEvent={MATOMO_CLICK_EVENTS_TYPES.howToClaimEth}
+    >
+      FAQ
+    </LocalLink>{' '}
+    for more details.
+  </Description>
+);
+
+export const TokenSelect: FC = () => {
+  const [token, unlockedClaimTokens] = useWatch<
+    ClaimBondFormInputType,
+    ['token', 'unlockedClaimTokens']
+  >({ name: ['token', 'unlockedClaimTokens'] });
   const {
     isContract,
     feeSplits,
     calculation: { claimableMaxValues },
   } = useClaimBondFormData(true);
   const flow = useClaimBondFlow();
-
-  const maxEthAmount = claimableMaxValues?.[TOKENS.eth]?.[1];
-  const {
-    data: { text: waitingTimeValue } = {},
-    isPending: isWaitingTimeLoading,
-  } = useWithdrawalWaitingTime(maxEthAmount);
-
-  const { field: unlockField } = useController<
-    ClaimBondFormInputType,
-    'unlockedClaimTokens'
-  >({
-    name: 'unlockedClaimTokens',
-  });
+  const { data: waitingTime } = useWithdrawalWaitingTime(
+    claimableMaxValues?.[TOKENS.eth]?.[1],
+  );
 
   if (flow.action !== 'claim' || !flow.showAmount) return null;
-  const maxIdx = flow.maxValueIndex;
+  const index = flow.maxValueIndex;
 
   return (
-    <>
-      <FormTitle>Choose a token to claim</FormTitle>
-      {flow.includeRewards && feeSplits.length > 0 && (
-        <Note>
-          Splitter addresses receive stETH. Choose the token for your Rewards
-          Address.
-        </Note>
-      )}
-      {isContract && (
-        <WarningBlock>
-          The Rewards Address of your Node Operator seems to be a smart
-          contract. Please ensure the smart contract you use for the Reward
-          Address is compatible with the chosen token for claiming of your
-          bond/rewards.
-        </WarningBlock>
-      )}
-      <TokenButtonsHookForm
-        disabled={
-          !claimableMaxValues?.[TOKENS.eth][maxIdx] ||
-          (isContract && !unlockField.value)
+    <Stack direction="column" gap={16}>
+      <TokenSelectField
+        name="token"
+        label="Choose a token to claim"
+        subtitle={
+          flow.includeRewards && feeSplits.length > 0
+            ? 'Splitter addresses receive stETH. Choose the token for your Rewards Address.'
+            : undefined
         }
-        options={{
-          [TOKENS.eth]: (
-            <Stack direction="column">
-              <TokenAmount
-                token={TOKENS.eth}
-                amount={claimableMaxValues[TOKENS.eth][maxIdx]}
-              />
-              <YouWillReceive
-                waitingTime={
-                  isWaitingTimeLoading ? 'Loading...' : waitingTimeValue
-                }
-                receive="withdrawal NFT"
-              />
-            </Stack>
-          ),
-          [TOKENS.steth]: (
-            <Stack direction="column">
-              <TokenAmount
-                token={TOKENS.steth}
-                amount={claimableMaxValues[TOKENS.steth][maxIdx]}
-              />
-              <YouWillReceive
-                waitingTime={INSTANT_WAITING_TIME}
-                receive={getTokenDisplayName(TOKENS.steth)}
-              />
-            </Stack>
-          ),
-          [TOKENS.wsteth]: (
-            <Stack direction="column">
-              <TokenAmount
-                token={TOKENS.wsteth}
-                amount={claimableMaxValues[TOKENS.wsteth][maxIdx]}
-              />
-              <YouWillReceive
-                waitingTime={INSTANT_WAITING_TIME}
-                receive={getTokenDisplayName(TOKENS.wsteth)}
-              />
-            </Stack>
-          ),
-        }}
+        options={getClaimTokenOptions({
+          maxValues: {
+            [TOKENS.eth]: claimableMaxValues[TOKENS.eth][index],
+            [TOKENS.steth]: claimableMaxValues[TOKENS.steth][index],
+            [TOKENS.wsteth]: claimableMaxValues[TOKENS.wsteth][index],
+          },
+          ethWaitingTime: waitingTime?.text,
+          contractLocked: isContract && !unlockedClaimTokens,
+        })}
       />
-      {token === TOKENS.eth && (
-        <Note data-testid="ethNote">
-          After receiving NFT you will need to claim ETH manually. Follow{' '}
-          <LocalLink
-            href={PATH.BOND_CLAIM}
-            anchor="#how-to-claim-eth-using-a-withdrawal-nft"
-            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.howToClaimEth}
-          >
-            FAQ
-          </LocalLink>{' '}
-          for more details.
-        </Note>
-      )}
       {isContract && (
         <>
-          <Note>
+          <MessageBox variant="warning">
             The Rewards Address of your Node Operator seems to be a smart
             contract. Please ensure the smart contract you use for the Reward
             Address is compatible with the chosen token for claiming of your
             bond/rewards.
-          </Note>
-          <Checkbox
+          </MessageBox>
+          <CheckboxField
+            name="unlockedClaimTokens"
             label="I am fully aware of the risks and want to claim rewards in ETH/stETH anyway"
-            {...unlockField}
-            value=""
-            checked={!!unlockField.value}
           />
         </>
       )}
-    </>
+      {token === TOKENS.eth && <EthNote />}
+    </Stack>
   );
 };

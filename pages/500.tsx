@@ -1,19 +1,27 @@
-import { ServicePage } from '@lidofinance/lido-ui';
+import { Button, ErrorPage } from '@lidofinance/lido-app-ui';
 import { GetStaticProps } from 'next';
 import Head from 'next/head';
 import { FC } from 'react';
+import { PATH } from 'consts/urls';
 import { Layout } from 'shared/layout';
 
-const Page500: FC = () => (
-  <Layout dummy={true} pageName="500">
-    <ServicePage title="500">
+const Page500: FC = () => {
+  return (
+    <Layout pageName="500" dummy="semi">
       <Head>
         <title>Lido | Internal Server Error</title>
       </Head>
-      Internal Server Error
-    </ServicePage>
-  </Layout>
-);
+      <ErrorPage
+        code="500"
+        action={
+          <Button size="big" href={PATH.HOME}>
+            Back to dashboard
+          </Button>
+        }
+      />
+    </Layout>
+  );
+};
 
 export default Page500;
 

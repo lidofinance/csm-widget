@@ -1,5 +1,4 @@
 /* eslint-disable no-empty-pattern */
-import fs from 'fs';
 import { BrowserService } from '@lidofinance/browser-service';
 import { test as base } from '@playwright/test';
 import { widgetFullConfig } from '../config';
@@ -21,7 +20,7 @@ import { reportTagsToQase } from 'tests/shared/helpers/qaseTags';
 import { IpfsGatewayProxyService } from 'tests/shared/services/ipfsGatewayProxy.service';
 import { ClMockService } from 'tests/shared/services/clMock.service';
 
-import path from 'path';
+import { loadDevnetArtifacts } from '../../../scripts/load-devnet-artifacts.mjs';
 
 type WorkerFixtures = {
   // fixture-options
@@ -183,20 +182,15 @@ export const test = base.extend<
         ? forkRpcURL
         : widgetFullConfig.standConfig.networkConfig.rpcUrl;
 
-      // Load devnet contract addresses from JSON file if specified
-      let devnetAddresses = null;
-      if (process.env.DEVNET_ADDRESSES_FILE_PATH) {
-        try {
-          const filePath = path.resolve(process.env.DEVNET_ADDRESSES_FILE_PATH);
-          devnetAddresses = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-        } catch (e) {
-          if (e instanceof Error) {
-            console.warn('Failed to load devnet addresses:', e.message);
-          } else {
-            console.warn('Failed to load devnet addresses:', e);
-          }
-        }
-      }
+      const artifactEntries =
+        loadDevnetArtifacts(process.env.DEVNET_ADDRESSES_FILE_PATH) ?? [];
+      const devnetAddresses =
+        (
+          artifactEntries.find(({ module }) => module === MODULE_NAME.CM) ??
+          artifactEntries.find(
+            ({ module, artifacts }) => !module && 'CuratedModule' in artifacts,
+          )
+        )?.artifacts ?? null;
 
       await use(new LidoSDKClient([rpcUrl], devnetAddresses));
     },

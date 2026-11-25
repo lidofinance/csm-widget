@@ -1,8 +1,6 @@
-import { Button, Text } from '@lidofinance/lido-ui';
+import { Button, Card, Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import { FormBlock } from 'shared/components';
 import type { RotationRequestDto } from 'modules/surveys-sdk/generated';
-import { ClusterMemberCard } from '../../shared';
 import { useMembersModalStages } from '../hooks/use-members-modal-stages';
 import { useSubmitRotation } from '../hooks/use-submit-rotation';
 import { PendingRotation } from '../initialized/pending-rotation';
@@ -37,17 +35,10 @@ export const InitRequestStatus: FC<InitRequestStatusProps> = ({
   };
 
   return (
-    <FormBlock $gap="md" data-testid="initRequestStatus">
-      <Text as="h5" size="sm" weight="bold">
-        Cluster member addresses
-      </Text>
-
+    <Stack gap={8} data-testid="initRequestStatus">
       {request.slots.map((proposed, index) =>
         proposed.newAddress ? (
-          <ClusterMemberCard
-            key={index}
-            data-testid={`initPendingCard${index}`}
-          >
+          <Card key={index} data-testid={`initPendingCard${index}`}>
             <PendingRotation
               title={`Cluster member #${index + 1}`}
               divider={false}
@@ -61,31 +52,30 @@ export const InitRequestStatus: FC<InitRequestStatusProps> = ({
                   : undefined
               }
             />
-          </ClusterMemberCard>
+          </Card>
         ) : null,
       )}
 
       {canManage &&
         (rejected ? (
           <Button
-            fullwidth
+            fullWidth
             onClick={onNewRequest}
-            data-testid="newInitRequestButton"
+            dataTestId={{ root: 'newInitRequestButton' }}
           >
             Submit a new request
           </Button>
         ) : (
           <Button
-            fullwidth
-            variant="outlined"
-            color="error"
+            fullWidth
+            variant="error"
             loading={submit.isPending}
             onClick={() => void onCancelAll()}
-            data-testid="cancelInitRequestButton"
+            dataTestId={{ root: 'cancelInitRequestButton' }}
           >
             Cancel rotation
           </Button>
         ))}
-    </FormBlock>
+    </Stack>
   );
 };

@@ -1,4 +1,3 @@
-export * from './alerts';
 export * from './api';
 export * from './chains';
 export * from './external-links';

@@ -1,0 +1,31 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "ignoreFiles": [".next/**", "node_modules/**", "public/**"],
+  "rules": {
+    "selector-class-pattern": null,
+    "custom-property-pattern": null,
+    "keyframes-name-pattern": null,
+    "no-descending-specificity": null,
+    "no-empty-source": null,
+    "media-feature-range-notation": null,
+    "color-function-notation": null,
+    "alpha-value-notation": null,
+    "selector-not-notation": null,
+    "value-keyword-case": null,
+    "font-family-name-quotes": null,
+    "declaration-block-no-redundant-longhand-properties": null,
+    "shorthand-property-no-redundant-values": null,
+    "property-no-vendor-prefix": null,
+    "value-no-vendor-prefix": null,
+    "selector-pseudo-element-colon-notation": null,
+    "length-zero-no-unit": null,
+    "color-hex-length": null,
+    "number-max-precision": null,
+    "property-no-unknown": [true, { "ignoreProperties": ["composes"] }],
+    "selector-pseudo-class-no-unknown": [
+      true,
+      { "ignorePseudoClasses": ["global", "local"] }
+    ],
+    "at-rule-no-unknown": [true, { "ignoreAtRules": ["value", "custom-media"] }]
+  }
+}

@@ -19,19 +19,16 @@ test.describe(
     });
 
     test(
-      qase(212, 'Should display correct page title and subtitle'),
+      qase(212, 'Should display correct section title'),
       async ({ widgetService }) => {
         const { groupPage } = widgetService;
 
         await test.step('Title contains "Operator Group #"', async () => {
-          await expect(groupPage.pageTitle).toContainText('Operator Group #', {
-            timeout: STAGE_WAIT_TIMEOUT,
-          });
-        });
-
-        await test.step('Subtitle describes the group purpose', async () => {
-          await expect(groupPage.pageSubtitle).toContainText(
-            'View all of the sub-operators within your Node Operator Group',
+          await expect(groupPage.sectionTitle).toContainText(
+            'Operator Group #',
+            {
+              timeout: STAGE_WAIT_TIMEOUT,
+            },
           );
         });
       },
@@ -95,10 +92,10 @@ test.describe(
           );
         });
 
-        await test.step('"Potential additional capacity" column', async () => {
-          await expect(summary.stakeColumnPotential).toBeVisible();
-          await expect(summary.stakeColumnPotential).toContainText(
-            'Potential additional capacity',
+        await test.step('"Total Stake Allocation" column', async () => {
+          await expect(summary.stakeColumnTsa).toBeVisible();
+          await expect(summary.stakeColumnTsa).toContainText(
+            'Total Stake Allocation',
           );
         });
       },
@@ -125,11 +122,11 @@ test.describe(
           );
         });
 
-        await test.step('"Potential additional capacity" column tooltip', async () => {
-          await summary.stakeColumnPotentialTooltip.hover();
+        await test.step('"Total Stake Allocation" column tooltip', async () => {
+          await summary.stakeColumnTsaTooltip.hover();
           await expect(summary.tooltipWrapper).toHaveCount(1);
           await expect(summary.tooltipWrapper).toContainText(
-            'The additional stake the Lido protocol could allocate to this Node Operator based on its current weight, assuming enough validator keys are available',
+            'Sum of the Target Stake Allocations of all Node Operators in the group',
           );
         });
       },

@@ -27,7 +27,7 @@ export const EPIC = {
   },
   dashboard: {
     name: 'Dashboard',
-    features: ['Keys', 'Bond & Rewards', 'Roles'],
+    features: ['Operator', 'Keys', 'Bond & Rewards', 'Tools'],
   },
   group: {
     name: 'Group',

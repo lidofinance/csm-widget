@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import {
   KEY_OPERATORS_WITH_LOCKED_BOND,
   useEthereumBalance,
@@ -13,15 +14,16 @@ import { useInvalidate } from 'shared/hooks';
 import { type DelayedPenaltyReportFormNetworkData } from './types';
 
 const useDelayedPenaltyReportFormNetworkData: NetworkData<
-  DelayedPenaltyReportFormNetworkData
-> = () => {
+  DelayedPenaltyReportFormNetworkData,
+  { module?: MODULE_NAME }
+> = ({ module }) => {
   const ethBalanceQuery = useEthereumBalance();
 
   const ethBalance = ethBalanceQuery.data;
   const isEthBalanceLoading = ethBalanceQuery.isPending;
 
   const { data: nodeOperatorsCount, isPending: isNodeOperatorsCountLoading } =
-    useOperatorsCount();
+    useOperatorsCount(module);
 
   const invalidate = useInvalidate();
 
@@ -42,10 +44,10 @@ const useDelayedPenaltyReportFormNetworkData: NetworkData<
 export const useDelayedPenaltyReportFormData =
   useFormData<DelayedPenaltyReportFormNetworkData>;
 
-export const DelayedPenaltyReportDataProvider: FC<PropsWithChildren> = ({
-  children,
-}) => {
-  const networkData = useDelayedPenaltyReportFormNetworkData();
+export const DelayedPenaltyReportDataProvider: FC<
+  PropsWithChildren<{ module?: MODULE_NAME }>
+> = ({ children, module }) => {
+  const networkData = useDelayedPenaltyReportFormNetworkData({ module });
 
   return (
     <FormDataContext.Provider value={networkData}>

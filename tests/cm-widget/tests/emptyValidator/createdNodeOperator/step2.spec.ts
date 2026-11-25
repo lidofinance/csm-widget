@@ -104,20 +104,27 @@ test.describe(
 
       await test.step('Check form warning texts', async () => {
         await expect(
-          step2.form,
-          'Form should display "Rewards Address cannot reset the Manager Address" warning',
+          step2.stepHeader,
+          'Header should display "Rewards Address cannot reset the Manager Address" warning',
         ).toContainText('Rewards Address cannot reset the Manager Address');
 
         await expect(
-          step2.form,
-          'Form should display "Manager Address can change the Rewards Address" warning',
+          step2.stepHeader,
+          'Header should display "Manager Address can change the Rewards Address" warning',
         ).toContainText('Manager Address can change the Rewards Address');
 
         await expect(
           step2.form,
-          'Form should display risk warning about setting addresses',
+          'Form should display the risk warning headline',
         ).toContainText(
-          'warning: Setting addresses for the Node Operator is at your own risk. If you specify an incorrect or incompatible address, you may permanently lose access to your Node Operator, bond, and potential rewards.',
+          'Setting addresses for the Node Operator is at your own risk.',
+        );
+
+        await expect(
+          step2.form,
+          'Form should display the risk warning text',
+        ).toContainText(
+          'If you specify an incorrect or incompatible address, you may permanently lose access to your Node Operator, bond, and potential rewards',
         );
       });
     });
@@ -179,7 +186,7 @@ test.describe(
 
             await test.step(`Check "${label}" input label`, async () => {
               await expect(
-                getContainer(step2).locator('label'),
+                getContainer(step2).locator('label').first(),
                 `"${label}" input should have correct label`,
               ).toContainText(label);
             });
@@ -201,7 +208,7 @@ test.describe(
           async ({}) => {
             qase.parameters({ label });
             await test.step(`Hover over "${label}" tooltip icon`, async () => {
-              const tooltipText = await step2.hoverElement(
+              const tooltipText = await step2.hoverTooltip(
                 getTooltipIcon(step2),
               );
 
@@ -216,7 +223,7 @@ test.describe(
             await test.step('Tooltip should hide after unhover', async () => {
               await step2.closeTooltip();
               await expect(
-                await step2.getHoveredContent(),
+                step2.tooltip,
                 'Tooltip should be hidden after unhover',
               ).toBeHidden();
             });

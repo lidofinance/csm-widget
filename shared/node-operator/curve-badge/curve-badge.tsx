@@ -1,28 +1,29 @@
 import { CurveRef } from '@lidofinance/lido-csm-sdk';
-import { FC } from 'react';
+import { CSSProperties, FC } from 'react';
 import { useDisplayOperatorType } from 'shared/hooks';
-import { DescriptorCurveStyle } from './styles';
+import { CURVE_GRADIENTS } from './curve-gradients';
 import { DisplayOperatorType, OPERATOR_TYPE_METADATA } from 'consts';
+import s from './curve-badge.module.css';
 
 type Props = {
   type?: DisplayOperatorType;
   curve?: CurveRef;
-  noStyle?: boolean;
   inline?: boolean;
 };
 
-export const CurveBadge: FC<Props> = ({ type, curve, noStyle, inline }) => {
+export const CurveBadge: FC<Props> = ({ type, curve, inline }) => {
   const typeFromCurve = useDisplayOperatorType(curve);
   const resolved = type ?? typeFromCurve;
 
   if (!resolved) return null;
 
   return (
-    <DescriptorCurveStyle
-      $variant={noStyle ? undefined : resolved}
-      $inline={inline}
+    <span
+      className={s.root}
+      data-inline={inline || undefined}
+      style={{ '--curve-gradient': CURVE_GRADIENTS[resolved] } as CSSProperties}
     >
       {OPERATOR_TYPE_METADATA[resolved].short}
-    </DescriptorCurveStyle>
+    </span>
   );
 };

@@ -2,7 +2,6 @@ import { TxStageMembersInitializing } from 'features/idvtc/members/tx-stages/tx-
 import {
   TxStagePending,
   TxStageSign,
-  TxStageSuccess,
   useTxStages,
 } from 'shared/transaction-modal';
 import {
@@ -24,19 +23,13 @@ export const useTxModalStagesClaimIdvtc = () =>
         transitStage(
           <TxStagePending title="Claiming IDVTC type" txHash={txHash} />,
         ),
-      // When a members init is planned, hand off to its holding stage — the
-      // flow runs the init after claimCurve resolves and renders the final
-      // success (or the failed+retry stage) once it settles.
+      // Fires before claimCurve resolves; the flow closes the modal once the success screen is set
       success: (_result: undefined, txHash) => {
         if (data.willInitMembers) {
           return transitStage(<TxStageMembersInitializing />);
         }
         return transitStage(
-          <TxStageSuccess
-            txHash={txHash}
-            title="IDVTC type has been successfully claimed"
-            description=""
-          />,
+          <TxStagePending title="Claiming IDVTC type" txHash={txHash} />,
         );
       },
     }),

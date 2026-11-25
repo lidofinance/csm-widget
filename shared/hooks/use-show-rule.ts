@@ -8,6 +8,7 @@ import { useFeatureFlags } from 'config/feature-flags';
 import {
   useDappStatus,
   useHasProtocolRole,
+  useHasReportDelayedPenaltyRole,
   useInvites,
   useModule,
   useNodeOperator,
@@ -23,6 +24,7 @@ import {
   useCanClaimIDVTC,
   useCanCreate0x01,
   useCanCreate0x02,
+  useCanCreateCM,
   useCanCreateICS,
   useCanCreateIDVTC,
   useCanCreateNodeOperator,
@@ -42,6 +44,7 @@ export type ShowRule =
   | 'CAN_CREATE_ICS'
   | 'CAN_CREATE_IDVTC'
   | 'CAN_CREATE_0X02'
+  | 'CAN_CREATE_CM'
   | 'HAS_KEYS'
   | 'HAS_INVITES'
   | 'HAS_MANAGER_ROLE'
@@ -61,6 +64,7 @@ export type ShowRule =
   | 'IS_CSM'
   | 'IS_CSM_02'
   | 'IS_CSM_FAMILY'
+  | 'IS_CSM_FAMILY_SCOPE'
   | 'IS_CM'
   | 'CAN_TOGGLE_TOP_UP'
   | 'IS_IDVTC';
@@ -120,9 +124,7 @@ export const useShowFlags = (): ShowFlags => {
     'ENABLE_TOP_UP_ALLOCATION_ROLE',
     MODULE_NAME.CM,
   );
-  const { data: isReportingRole } = useHasProtocolRole(
-    'REPORT_GENERAL_DELAYED_PENALTY_ROLE',
-  );
+  const { data: reportingRoleModules } = useHasReportDelayedPenaltyRole();
   const { data: balance } = useOperatorBalance({
     nodeOperatorId: nodeOperator?.nodeOperatorId,
   });
@@ -137,6 +139,7 @@ export const useShowFlags = (): ShowFlags => {
   const { canCreate: canCreate0x02 } = useCanCreate0x02();
   const { canCreate: canCreateICS } = useCanCreateICS();
   const { canCreate: canCreateIDVTC } = useCanCreateIDVTC();
+  const { canCreate: canCreateCM } = useCanCreateCM();
   const createOptions = useCreateOptions();
   const { referrer } = useModifyContext();
   const featureFlags = useFeatureFlags();
@@ -163,6 +166,7 @@ export const useShowFlags = (): ShowFlags => {
       ['CAN_CREATE_ICS']: canCreateICS,
       ['CAN_CREATE_IDVTC']: canCreateIDVTC,
       ['CAN_CREATE_0X02']: canCreate0x02,
+      ['CAN_CREATE_CM']: canCreateCM,
       ['HAS_KEYS']: !!info?.totalAddedKeys,
       ['HAS_MANAGER_ROLE']: hasManagerRole,
       ['HAS_REWARDS_ROLE']: hasRewardsRole,
@@ -172,7 +176,7 @@ export const useShowFlags = (): ShowFlags => {
       ['HAS_INVITES']: !!invites?.length,
       ['HAS_LOCKED_BOND']: !!balance?.locked,
       ['HAS_REFERRER']: !!referrer,
-      ['EL_DELAYED_PENALTY_REPORTER']: !!isReportingRole,
+      ['EL_DELAYED_PENALTY_REPORTER']: (reportingRoleModules?.length ?? 0) > 0,
       ['EL_TOP_UP_ALLOCATION_ENABLER']:
         !!isTopUpEnablerRole && !!topUpSupported,
       ['CAN_CLAIM_ICS']: !!canClaimICS && isAccountActive,
@@ -183,6 +187,7 @@ export const useShowFlags = (): ShowFlags => {
       ['IS_CSM']: module === MODULE_NAME.CSM,
       ['IS_CSM_02']: module === MODULE_NAME.CSM_02,
       ['IS_CSM_FAMILY']: isCsmFamily,
+      ['IS_CSM_FAMILY_SCOPE']: isCsmFamily || !nodeOperator,
       ['IS_CM']: module === MODULE_NAME.CM,
       ['CAN_TOGGLE_TOP_UP']: module === MODULE_NAME.CM && !!topUpSupported,
       ['IS_IDVTC']: isNodeOperator && operatorType === OPERATOR_TYPE.CSM_IDVTC,
@@ -200,12 +205,13 @@ export const useShowFlags = (): ShowFlags => {
       canCreate0x02,
       canCreateICS,
       canCreateIDVTC,
+      canCreateCM,
       info?.totalAddedKeys,
       address,
       invites?.length,
       balance?.locked,
       referrer,
-      isReportingRole,
+      reportingRoleModules,
       isTopUpEnablerRole,
       canClaimICS,
       canClaimIDVTC,
@@ -243,7 +249,10 @@ export const useFilterShowRules = <T extends ShowRuleProps>(items: T[]) => {
   return useMemo(
     () =>
       items
-        .filter(({ modules }) => !modules || modules.includes(module))
+        .filter(
+          ({ modules }) =>
+            !modules || (module !== undefined && modules.includes(module)),
+        )
         .filter(
           ({ showRules }) =>
             !showRules?.length ||

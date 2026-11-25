@@ -1,4 +1,4 @@
-import { trimAddress } from '@lidofinance/address';
+import { trimHex } from 'tests/shared/helpers/trimHex';
 import { test } from '../../../test.fixture';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { expect } from '@playwright/test';
@@ -134,7 +134,7 @@ test.describe(
 
         await test.step('Pending address is the normalized name one', async () => {
           await expect(page.pendingAddress).toContainText(
-            trimAddress(OWNER_ADDRESS, 6),
+            trimHex(OWNER_ADDRESS, 6),
           );
           expect(await forkActionService.getProposedRewardAddress(noId)).toBe(
             OWNER_ADDRESS,

@@ -27,10 +27,9 @@ export class DvtApplicationFormStatus {
     this.operatorTypeStatus = this.form.getByTestId('operatorTypeStatus');
     this.operatorTypeChip = this.operatorTypeStatus.getByTestId('scoreChip');
 
-    this.applicationSection = this.form.getByTestId('applicationSection');
-    this.applicationInfo =
-      this.applicationSection.getByTestId('applicationInfo');
-    this.submittedDate = this.applicationSection.getByTestId('submittedDate');
+    this.applicationSection = page.getByTestId('applicationSection');
+    this.applicationInfo = this.form.getByTestId('applicationInfo');
+    this.submittedDate = this.form.getByTestId('submittedDate');
 
     this.mainAddressInput = this.applicationSection.locator(
       'input[name="mainAddress"]',
@@ -53,7 +52,21 @@ export class DvtApplicationFormStatus {
   }
 
   getClusterMemberAddress(index: number) {
-    return this.getClusterMemberInfo(index).getByTestId('addressText');
+    return this.getClusterMemberInfo(index).locator(
+      `input[name="clusterMembers.${index}.address"]`,
+    );
+  }
+
+  getClusterMemberDiscord(index: number) {
+    return this.getClusterMemberInfo(index).locator(
+      `input[name="clusterMembers.${index}.discordHandle"]`,
+    );
+  }
+
+  getClusterMemberTelegram(index: number) {
+    return this.getClusterMemberInfo(index).locator(
+      `input[name="clusterMembers.${index}.telegramUsername"]`,
+    );
   }
 
   async expand() {

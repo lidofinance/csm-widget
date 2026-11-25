@@ -7,7 +7,7 @@ import { useCurveParameters } from 'modules/web3';
 import { FC, useCallback } from 'react';
 import { FormatToken } from 'shared/formatters';
 import { useCurrentCurve, useOperatorTypeCurve } from 'shared/hooks';
-import { ShortInlineLoader } from './styles';
+import { ShortInlineLoader } from './short-inline-loader';
 
 type Props = { type?: OPERATOR_TYPE; second?: boolean };
 

@@ -1,10 +1,10 @@
-import { Text } from '@lidofinance/lido-ui';
+import { Stack } from '@lidofinance/lido-app-ui';
 import { FC, useMemo, useState } from 'react';
-import { FormBlock, Stack } from 'shared/components';
 import type {
   MemberDto,
   RotationRequestDto,
 } from 'modules/surveys-sdk/generated';
+import { RotationModal } from '../rotation/rotation-modal';
 import {
   collectTakenAddresses,
   deriveMemberCardState,
@@ -22,37 +22,37 @@ export const MembersSection: FC<MembersSectionProps> = ({
   request,
   canManage,
 }) => {
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [rotatingIndex, setRotatingIndex] = useState<number | null>(null);
   const activeAddresses = useMemo(
     () => members.map((m) => m.address),
     [members],
   );
 
   return (
-    <FormBlock $gap="md" data-testid="membersSection">
-      <Stack direction="column" gap="xxs">
-        <Text as="h5" size="sm" weight="bold">
-          Cluster member addresses
-        </Text>
-      </Stack>
-
+    <Stack gap={8} data-testid="membersSection">
       {members.map((member, index) => (
         <MemberCard
           key={member.address}
           index={index}
           member={member}
-          state={deriveMemberCardState(index, request, editingIndex)}
-          dimmed={editingIndex !== null && editingIndex !== index}
+          state={deriveMemberCardState(index, request)}
           canManage={canManage}
+          onRotate={() => setRotatingIndex(index)}
+        />
+      ))}
+
+      {rotatingIndex !== null && members[rotatingIndex] && (
+        <RotationModal
+          index={rotatingIndex}
+          member={members[rotatingIndex]}
           takenAddresses={collectTakenAddresses(
             activeAddresses,
             request,
-            index,
+            rotatingIndex,
           )}
-          onRotate={() => setEditingIndex(index)}
-          onDone={() => setEditingIndex(null)}
+          onClose={() => setRotatingIndex(null)}
         />
-      ))}
-    </FormBlock>
+      )}
+    </Stack>
   );
 };

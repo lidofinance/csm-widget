@@ -1,7 +1,6 @@
-import { Loader } from '@lidofinance/lido-ui';
+import { EmptyState, Spinner } from '@lidofinance/lido-app-ui';
 import { FC, PropsWithChildren, ReactNode } from 'react';
-import { EmptyState } from './empty-state';
-import { WrapperStyle } from './style';
+import s from './when-loaded.module.css';
 
 export type WhenLoaded = {
   loading: boolean;
@@ -18,22 +17,34 @@ export const WhenLoaded: FC<PropsWithChildren<WhenLoaded>> = ({
   children,
   error,
   morePadding,
-}) => (
-  <>
-    {error ? (
-      <>
-        <WrapperStyle $morePadding={morePadding}>Error</WrapperStyle>
-      </>
-    ) : loading ? (
-      <WrapperStyle $morePadding={morePadding}>
-        <Loader data-testid="loader" />
-      </WrapperStyle>
-    ) : empty ? (
-      <EmptyState note={emptyNote} morePadding={morePadding}>
-        {empty}
-      </EmptyState>
-    ) : (
-      children
-    )}
-  </>
-);
+}) => {
+  if (error) {
+    return (
+      <div className={s.center} data-more-padding={morePadding || undefined}>
+        <EmptyState description="Error" />
+      </div>
+    );
+  }
+  if (loading) {
+    return (
+      <div className={s.center} data-more-padding={morePadding || undefined}>
+        <Spinner data-testid="loader" />
+      </div>
+    );
+  }
+  if (empty) {
+    return (
+      <div className={s.center} data-more-padding={morePadding || undefined}>
+        {typeof empty === 'string' ? (
+          <EmptyState title={empty} description={emptyNote} />
+        ) : (
+          <>
+            {empty}
+            {emptyNote && <EmptyState description={emptyNote} />}
+          </>
+        )}
+      </div>
+    );
+  }
+  return <>{children}</>;
+};

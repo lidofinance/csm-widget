@@ -1,0 +1,27 @@
+@media (width > 600px) {
+  .modal.modal {
+    max-height: calc(100dvh - 32px);
+  }
+
+  /* app-ui exposes no className for the modal body, it is always the last child */
+  .modal.modal > :last-child {
+    flex: 0 1 auto;
+    margin: -4px calc(var(--local-padding) * -1) calc(var(--local-padding) * -1);
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 4px var(--local-padding) var(--local-padding);
+  }
+
+  .modal.modal > :last-child > * {
+    flex-shrink: 0;
+  }
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+  color: var(--lido-app-ui-color-icons-secondary);
+}

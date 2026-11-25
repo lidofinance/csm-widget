@@ -1,13 +1,6 @@
 import { PATH } from 'consts/urls';
-import { RewardsHistoryPage } from 'features/rewards-history';
-import { Gate, GateLoaded, Navigate } from 'shared/navigate';
+import { Navigate } from 'shared/navigate';
 
-const Page = () => (
-  <GateLoaded>
-    <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.HOME} />}>
-      <RewardsHistoryPage />
-    </Gate>
-  </GateLoaded>
-);
+const Page = () => <Navigate path={PATH.BOND} />;
 
 export default Page;

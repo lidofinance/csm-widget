@@ -1,0 +1,16 @@
+.link.link.link {
+  display: inline-flex;
+  letter-spacing: inherit;
+}
+
+.link.link.link[data-inline] {
+  display: inline;
+}
+
+.externalIcon.externalIcon {
+  margin-top: -1px;
+}
+
+.arrowIcon {
+  margin-top: -1px;
+}

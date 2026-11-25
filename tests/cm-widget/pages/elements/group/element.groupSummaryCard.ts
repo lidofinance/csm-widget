@@ -12,8 +12,8 @@ export class GroupSummaryCard extends BasePage {
   stakeColumnActiveTooltip: Locator;
   stakeColumnDepositable: Locator;
   stakeColumnDepositableTooltip: Locator;
-  stakeColumnPotential: Locator;
-  stakeColumnPotentialTooltip: Locator;
+  stakeColumnTsa: Locator;
+  stakeColumnTsaTooltip: Locator;
 
   tooltipWrapper: Locator;
 
@@ -32,9 +32,8 @@ export class GroupSummaryCard extends BasePage {
     );
     this.stakeColumnDepositableTooltip =
       this.stakeColumnDepositable.getByTestId('iconTooltip');
-    this.stakeColumnPotential = this.root.getByTestId('stakeColumnPotential');
-    this.stakeColumnPotentialTooltip =
-      this.stakeColumnPotential.getByTestId('iconTooltip');
+    this.stakeColumnTsa = this.root.getByTestId('stakeColumnTsa');
+    this.stakeColumnTsaTooltip = this.stakeColumnTsa.getByTestId('iconTooltip');
 
     this.tooltipWrapper = this.page.getByTestId('tooltipWrapper');
   }

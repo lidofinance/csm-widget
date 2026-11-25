@@ -1,12 +1,12 @@
 import type { PenaltyRecord } from '@lidofinance/lido-csm-sdk';
-import { Divider, Text } from '@lidofinance/lido-ui';
+import { Accordion, Card } from '@lidofinance/lido-app-ui';
 import { useNodeOperatorId, useOperatorPenalties } from 'modules/web3';
-import { TablePagination, TableProvider } from 'providers/table-provider';
+import { TableProvider } from 'providers/table-provider';
 import { FC } from 'react';
-import { Stack, WhenLoaded } from 'shared/components';
+import { WhenLoaded } from 'shared/components';
 import { PenaltyHistoryTable } from './penalty-history-table';
 import { sortFunctions } from './sort';
-import { AccordionStyle, Wrapper } from './styles';
+import s from './penalty-history.module.css';
 import { EnrichedPenalty } from './types';
 
 const getPenaltyTypeLabel = (record: PenaltyRecord): string => {
@@ -33,33 +33,23 @@ export const PenaltyHistory: FC = () => {
   });
 
   return (
-    <AccordionStyle
-      data-testid="penaltyHistory"
-      summary={
-        <Text as="h4" size="sm" weight={700}>
-          Penalty History
-        </Text>
-      }
-      defaultExpanded={false}
-    >
-      <Divider />
-      <TableProvider
-        data={data}
-        sort={sortFunctions}
-        defaultSort={{ column: 'timestamp', direction: 'desc' }}
+    <Card gap={0} className={s.card}>
+      <Accordion
+        title="History"
+        border={false}
+        defaultExpanded={false}
+        dataTestId={{ root: 'penaltyHistory' }}
       >
-        <WhenLoaded
-          loading={isPending}
-          empty={!data?.length && 'No penalty history'}
+        <TableProvider
+          data={data}
+          sort={sortFunctions}
+          defaultSort={{ column: 'timestamp', direction: 'desc' }}
         >
-          <Stack direction="column" gap="md">
+          <WhenLoaded loading={isPending}>
             <PenaltyHistoryTable />
-            <Wrapper>
-              <TablePagination />
-            </Wrapper>
-          </Stack>
-        </WhenLoaded>
-      </TableProvider>
-    </AccordionStyle>
+          </WhenLoaded>
+        </TableProvider>
+      </Accordion>
+    </Card>
   );
 };

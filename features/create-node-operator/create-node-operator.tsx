@@ -1,20 +1,15 @@
+import { useDappStatus } from 'modules/web3';
 import { FC } from 'react';
-import { CreatableOperatorType, useWeb3Key } from 'shared/hooks';
+import { CreatableOperatorType } from 'shared/hooks';
 
-import { OtherModuleBanner } from './other-module-banner';
-import { ShareLimitBanner } from './share-limit-banner';
 import { SubmitKeysForm } from './submit-keys-form';
 
 export const CreateNodeOperator: FC<{ type: CreatableOperatorType }> = ({
   type,
 }) => {
-  const key = useWeb3Key();
+  const { address, chainId } = useDappStatus();
+  // Not useWeb3Key: the first appended operator changes the active module and id, which would drop the success state
+  const key = `${address ?? 'NO_ACCOUNT'}_${chainId}`;
 
-  return (
-    <>
-      <ShareLimitBanner />
-      <OtherModuleBanner />
-      <SubmitKeysForm key={key} type={type} />
-    </>
-  );
+  return <SubmitKeysForm key={key} type={type} />;
 };

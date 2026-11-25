@@ -74,7 +74,7 @@ test.describe(
 
             await test.step(`Submit 1 key with ${token} bond`, async () => {
               await widgetService.keysPage.goto(type);
-              await form.getBondTokenElement(token).click();
+              await form.selectBondToken(token);
               await form.fillKeys(keysGeneratorService.generateKeys());
               await form.confirmKeysReady.click();
               await form.submitKeysButton.click();

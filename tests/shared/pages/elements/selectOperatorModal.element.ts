@@ -10,12 +10,13 @@ export class SelectOperatorModalElement {
   constructor(page: Page) {
     this.page = page;
     this.modal = this.page.locator('[role=dialog]', {
-      hasText: 'Select Node Operator',
+      hasText: 'Choose a Node Operator',
     });
     this.rows = this.page.getByTestId('selectModalOperatorRow');
     this.settledState = this.page
       .getByTestId('connectBtn')
-      .or(this.page.getByTestId('accountSectionHeader'))
+      .or(this.page.getByTestId('navBlockMain'))
+      .or(this.page.getByTestId('nodeOperatorHeader'))
       .or(this.rows)
       .first();
   }
@@ -26,7 +27,16 @@ export class SelectOperatorModalElement {
         .waitFor({ state: 'visible', timeout: PAGE_WAIT_TIMEOUT })
         .catch(() => undefined);
 
-      if (!(await this.rows.first().isVisible())) return;
+      if (!(await this.rows.first().isVisible())) {
+        const trigger = this.page.getByTestId('nodeOperatorHeader');
+        const promptPending = await trigger
+          .filter({ hasText: 'Choose a Node Operator' })
+          .isVisible();
+        if (!promptPending) return;
+        await this.rows
+          .first()
+          .waitFor({ state: 'visible', timeout: PAGE_WAIT_TIMEOUT });
+      }
 
       await this.rows.first().click();
       await this.modal.waitFor({ state: 'hidden', timeout: PAGE_WAIT_TIMEOUT });

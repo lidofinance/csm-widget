@@ -90,14 +90,9 @@ test.describe(
 
         await test.step('Check operator type is selected', async () => {
           await expect(
-            getSelect.input,
-            'Operator type input should be checked after click',
+            getSelect.card,
+            'Operator type card should be checked after click',
           ).toBeChecked();
-
-          await expect(
-            getSelect.checkIcon,
-            'Check icon should be visible after selection',
-          ).toBeVisible();
 
           await expect(
             step1.continueButton,
@@ -121,9 +116,9 @@ test.describe(
 
         await test.step('Check next step is displayed', async () => {
           await expect(
-            widgetService.createNodeOperatorPage.curatedOperatorForm,
+            widgetService.createNodeOperatorPage.step2.stepTitle,
             'Next step should display "Specify addresses" form',
-          ).toContainText('Specify addresses');
+          ).toHaveText('Specify addresses');
         });
       },
     );

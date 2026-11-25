@@ -1,12 +1,14 @@
+import { Card } from '@lidofinance/lido-app-ui';
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { useOperatorsWithLockedBond } from 'modules/web3';
-import { TablePagination, TableProvider } from 'providers/table-provider';
+import { TableProvider } from 'providers/table-provider';
 import { FC } from 'react';
-import { Block, Stack, WhenLoaded } from 'shared/components';
+import { WhenLoaded } from 'shared/components';
 import { LockedTable } from './locked-table';
 import { sortFunctions } from './sort';
 
-export const LockedSection: FC = () => {
-  const { data, isPending: loading } = useOperatorsWithLockedBond();
+export const LockedSection: FC<{ module?: MODULE_NAME }> = ({ module }) => {
+  const { data, isPending: loading } = useOperatorsWithLockedBond(module);
 
   return (
     <TableProvider
@@ -14,20 +16,17 @@ export const LockedSection: FC = () => {
       sort={sortFunctions}
       defaultSort={{ column: 'until', direction: 'asc' }}
     >
-      <Stack direction="column" gap="xl">
-        <Block paddingLess overflowHidden data-testid="lockedSectionBlock">
-          <WhenLoaded
-            loading={loading}
-            empty={
-              !data?.length && 'There are no Node Operators with Locked bond'
-            }
-            morePadding
-          >
-            <LockedTable />
-          </WhenLoaded>
-        </Block>
-        <TablePagination />
-      </Stack>
+      <Card
+        align="stretch"
+        padding={0}
+        gap={0}
+        clip
+        dataTestId={{ root: 'lockedSectionBlock' }}
+      >
+        <WhenLoaded loading={loading} morePadding>
+          <LockedTable />
+        </WhenLoaded>
+      </Card>
     </TableProvider>
   );
 };

@@ -25,6 +25,8 @@ export type RPCFactoryParams = {
   fetchRPC: TrackedFetchRPC;
   defaultChain: string | number;
   validation: RPCFactoryValidationParams;
+  // 0 turns the per-provider time-to-first-byte limit off
+  upstreamTimeoutMs?: number;
 };
 
 export type RpcRequest = {

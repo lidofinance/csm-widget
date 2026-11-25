@@ -1,17 +1,11 @@
-import { Locator, Page, test } from '@playwright/test';
+import { Page } from '@playwright/test';
 import { BasePage } from '../../shared/pages/base.page';
-import { CreateNodeOperatorForm } from './elements/keys/element.createNodeOperatorForm';
 import { RemovePage } from './tabs/keys/remove.page';
 import { SubmitPage } from './tabs/keys/submit.page';
 import { KeysViewPage } from './tabs/keys/keysView.page';
 
 export class KeysPage extends BasePage {
   base: BasePage;
-
-  // Own elements
-  createNodeOperatorForm: CreateNodeOperatorForm;
-  headerTitle: Locator;
-  headerSubTitle: Locator;
 
   // Tabs
   removePage: RemovePage;
@@ -24,18 +18,6 @@ export class KeysPage extends BasePage {
     this.removePage = new RemovePage(page);
     this.submitPage = new SubmitPage(page);
     this.keysView = new KeysViewPage(page);
-    this.createNodeOperatorForm = new CreateNodeOperatorForm(this.page);
-    this.headerTitle = this.page.getByText('Create a Node Operator');
-    this.headerSubTitle = this.page.getByText('Upload your first key(s)');
-  }
-
-  async goto() {
-    await test.step('Open the Keys page to create new node operator', async () => {
-      await this.openWithRetry(
-        '/create',
-        this.createNodeOperatorForm.formBlock,
-      );
-    });
   }
 
   async openSubmitPage() {
@@ -46,12 +28,5 @@ export class KeysPage extends BasePage {
   async openRemovePage() {
     await this.removePage.open();
     return this.removePage;
-  }
-
-  async isNewOperator() {
-    return (
-      (await this.headerTitle.isVisible()) &&
-      (await this.headerSubTitle.isVisible())
-    );
   }
 }

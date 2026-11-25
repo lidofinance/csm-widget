@@ -6,6 +6,8 @@ export class ApplicationFormStatus {
   scoreChip: Locator;
   applicationSection: Locator;
   applicationInfo: Locator;
+  viewBreakdownBtn: Locator;
+  scoreBreakdownTotal: Locator;
   mainAddressInput: Locator;
   mainAddressLabel: Locator;
   applyAgainBtn: Locator;
@@ -26,9 +28,12 @@ export class ApplicationFormStatus {
     this.page = page;
     this.form = page.getByTestId('applicationFormStatus');
     this.scoreChip = this.form.getByTestId('scoreChip');
-    this.applicationSection = this.form.getByTestId('applicationSection');
-    this.applicationInfo =
-      this.applicationSection.getByTestId('applicationInfo');
+    this.applicationSection = page.getByTestId('applicationSection');
+    this.applicationInfo = this.form.getByTestId('applicationInfo');
+    this.viewBreakdownBtn = this.form.getByRole('button', {
+      name: 'View breakdown',
+    });
+    this.scoreBreakdownTotal = page.getByTestId('scoreBreakdownTotal');
 
     this.mainAddressInput = this.applicationSection.locator(
       'input[name="mainAddress"]',
@@ -52,8 +57,8 @@ export class ApplicationFormStatus {
     );
     // proof of
     this.totalScoreBreakdown = this.form.getByTestId('totalScoreBreakdown');
-    this.proofOfHumanityCollapse = this.form.locator('#proofOfHumanity');
-    this.proofOfExperienceCollapse = this.form.locator('#proofOfExperience');
-    this.proofOfEngagementCollapse = this.form.locator('#proofOfEngagement');
+    this.proofOfHumanityCollapse = page.locator('#proofOfHumanity');
+    this.proofOfExperienceCollapse = page.locator('#proofOfExperience');
+    this.proofOfEngagementCollapse = page.locator('#proofOfEngagement');
   }
 }

@@ -1,15 +1,8 @@
 import { FC } from 'react';
-import styled from 'styled-components';
-
-const TooltipText = styled.div`
-  p + *,
-  li + * {
-    margin-top: ${({ theme }) => theme.spaceMap.xs}px;
-  }
-`;
+import s from './main-address-tooltip-content.module.css';
 
 export const MainAddressTooltipContent: FC = () => (
-  <TooltipText>
+  <div className={s.root}>
     <p>
       If your application is approved, this Main address will be able to claim
       the IDVTC operator type.
@@ -26,5 +19,5 @@ export const MainAddressTooltipContent: FC = () => (
         cluster.
       </li>
     </ul>
-  </TooltipText>
+  </div>
 );

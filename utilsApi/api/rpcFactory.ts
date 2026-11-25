@@ -12,7 +12,11 @@ import {
   canonicalizeParams,
 } from './canonical-request';
 import { requestRpcFactory, redactUrls } from './request-rpc';
-import { ClientError, HEALTHY_RPC_SERVICES_ARE_OVER } from './errors';
+import {
+  ClientError,
+  HEALTHY_RPC_SERVICES_ARE_OVER,
+  SizeTooLargeError,
+} from './errors';
 import {
   baseRequestValidationFactory,
   ethCallValidationFactory,
@@ -29,6 +33,7 @@ export const rpcFactory = ({
   fetchRPC,
   defaultChain,
   validation,
+  upstreamTimeoutMs,
 }: RPCFactoryParams) => {
   const {
     allowedRPCMethods,
@@ -89,7 +94,11 @@ export const rpcFactory = ({
 
   const validateMaxSteamSize = streamMaxSizeValidationFactory(maxResponseSize);
 
-  const requestRPC = requestRpcFactory({ providers, fetchRPC });
+  const requestRPC = requestRpcFactory({
+    providers,
+    fetchRPC,
+    upstreamTimeoutMs,
+  });
 
   return async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     const abortController = new AbortController();
@@ -126,6 +135,22 @@ export const rpcFactory = ({
         (isBatch ? canonical : canonical[0]) as FetchRpcInitBody,
       );
 
+      // iterateUrls returns the last response when no provider answered ok
+      if (!proxyedRPC.ok) {
+        await proxyedRPC.body?.cancel().catch(() => undefined);
+        res.status(502).json(DEFAULT_API_ERROR_MESSAGE);
+        return;
+      }
+
+      const contentLength = Number(proxyedRPC.headers.get('Content-Length'));
+      if (contentLength > maxResponseSize) {
+        await proxyedRPC.body?.cancel().catch(() => undefined);
+        rpcRequestBlocked.inc({ reason: 'response too large' });
+        throw new SizeTooLargeError(
+          `Stream size exceeds the maximum limit of ${maxResponseSize} bytes`,
+        );
+      }
+
       res.setHeader(
         'Content-Type',
         proxyedRPC.headers.get('Content-Type') ?? 'application/json',
@@ -145,7 +170,11 @@ export const rpcFactory = ({
       );
     } catch (error) {
       if (error instanceof ClientError) {
-        res.status(400).json(error.message ?? DEFAULT_API_ERROR_MESSAGE);
+        if (!res.headersSent) {
+          res
+            .status(error instanceof SizeTooLargeError ? 413 : 400)
+            .json(error.message ?? DEFAULT_API_ERROR_MESSAGE);
+        }
       } else if (error instanceof Error) {
         console.error('[rpcFactory] ' + redactUrls(error.message));
         if (!res.headersSent) {

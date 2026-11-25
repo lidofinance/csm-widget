@@ -1,0 +1,121 @@
+.wrapper {
+  position: relative;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-inline: var(--layout-gutter, 20px);
+
+  /* bleeds into the layout gutters so the track can scroll edge to edge */
+  margin-inline: calc(-1 * var(--layout-gutter, 20px));
+
+  --fade: 48px;
+  --fade-start: 0px;
+  --fade-end: 0px;
+
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 var(--fade-start),
+    #000 calc(100% - var(--fade-end)),
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 var(--fade-start),
+    #000 calc(100% - var(--fade-end)),
+    transparent
+  );
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.wrapper[data-fade-start] {
+  --fade-start: var(--fade);
+}
+
+.wrapper[data-fade-end] {
+  --fade-end: var(--fade);
+}
+
+.track {
+  position: relative;
+  width: max-content;
+  margin-inline: auto;
+  height: 44px;
+  background-color: var(--lido-app-ui-color-background-secondary);
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  user-select: none;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.handle {
+  height: 40px;
+  background-color: var(--lido-app-ui-color-background-surface);
+  border-radius: 20px;
+  position: absolute;
+  top: 2px;
+  transition:
+    left 0.3s ease,
+    width 0.3s ease;
+  z-index: 1;
+}
+
+.item {
+  z-index: 2;
+  margin: 0;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+  flex: 0 0 134px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  justify-content: center;
+  height: 100%;
+  font-size: 10px;
+  line-height: 2.4em;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--lido-app-ui-color-text-default);
+}
+
+.item:where([data-warning]) {
+  color: var(--lido-app-ui-color-text-error);
+}
+
+.item[data-active] {
+  opacity: 1;
+}
+
+.item:hover {
+  color: var(--lido-app-ui-color-text-default);
+  opacity: 1;
+}
+
+.item:where([data-warning]):hover {
+  color: var(--lido-app-ui-color-text-error);
+}
+
+.item:visited {
+  color: var(--lido-app-ui-color-text-default);
+}
+
+.item:where([data-warning]):visited {
+  color: var(--lido-app-ui-color-text-error);
+}
+
+@media screen and (max-width: 767px) {
+  .item {
+    flex: 0 0 auto;
+    padding-inline: 24px;
+    white-space: nowrap;
+  }
+}

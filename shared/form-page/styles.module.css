@@ -1,0 +1,35 @@
+.hero.hero {
+  text-align: center;
+}
+
+.hero.hero > div {
+  padding: 52px 32px;
+
+  @media (--lido-app-ui-breakpoint-md-down) {
+    padding: 52px 20px;
+  }
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 16px;
+  border-radius: var(--lido-app-ui-border-radius-pill);
+  background: var(--lido-app-ui-color-icons-success);
+  color: var(--lido-app-ui-color-text-inverse);
+
+  svg {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.illustration {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}

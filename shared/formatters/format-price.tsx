@@ -1,9 +1,10 @@
-import { Tooltip } from 'shared/components/tooltip/tooltip';
+import { Tooltip } from '@lidofinance/lido-app-ui';
 import { DATA_UNAVAILABLE } from 'consts/text';
 
 import { config } from 'config';
 import { Component } from 'types';
-import styled from 'styled-components';
+import cn from 'classnames';
+import s from './format-price.module.css';
 
 export type FormatPriceComponent = Component<
   'span',
@@ -14,6 +15,7 @@ export const FormatPrice: FormatPriceComponent = ({
   amount,
   currency = 'USD',
   approx,
+  className,
   ...rest
 }) => {
   const actual =
@@ -28,8 +30,8 @@ export const FormatPrice: FormatPriceComponent = ({
   if (amount !== null && amount !== undefined && amount < 0.01) {
     return (
       <Tooltip
-        placement="topRight"
-        title={
+        position="top-right"
+        content={
           <span>
             {amount.toLocaleString(config.LOCALE, {
               style: 'currency',
@@ -39,22 +41,18 @@ export const FormatPrice: FormatPriceComponent = ({
           </span>
         }
       >
-        <Price {...rest}>
+        <span {...rest} className={cn(s.price, className)}>
           {prefix}
           {actual}
-        </Price>
+        </span>
       </Tooltip>
     );
   }
 
   return (
-    <Price {...rest}>
+    <span {...rest} className={cn(s.price, className)}>
       {prefix}
       {actual}
-    </Price>
+    </span>
   );
 };
-
-const Price = styled.span`
-  white-space: nowrap;
-`;

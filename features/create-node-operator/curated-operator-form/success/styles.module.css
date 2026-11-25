@@ -1,0 +1,35 @@
+.nextStepRow {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+
+  & + & {
+    border-top: 1px solid var(--lido-app-ui-color-border-subtle);
+  }
+
+  @media (max-width: 439px) {
+    grid-template-columns: 48px minmax(0, 1fr);
+
+    & > button {
+      grid-column: 2;
+      justify-self: start;
+    }
+  }
+}
+
+.nextStepIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--lido-app-ui-border-radius-pill);
+  background: var(--lido-app-ui-color-tint-info);
+  color: var(--lido-app-ui-color-icons-info);
+}
+
+.nextStepText.nextStepText {
+  min-width: 0;
+}

@@ -1,5 +1,6 @@
-import { Loader } from '@lidofinance/lido-ui';
+import { Card, Skeleton } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
+import { HubSection } from 'shared/components';
 import { useApprovedUnboundForm } from './hooks/use-approved-unbound-form';
 import { useCanManageMembers } from './hooks/use-can-manage-members';
 import { useOperatorMembers } from './hooks/use-operator-members';
@@ -7,7 +8,7 @@ import { useRotationRequest } from './hooks/use-rotation-request';
 import { MembersSection } from './initialized/members-section';
 import { NotInitialized } from './not-initialized/not-initialized';
 
-export const MembersContent: FC = () => {
+const MembersContent: FC = () => {
   const { data, isPending } = useOperatorMembers();
   const canManage = useCanManageMembers();
   const { isBindable, isPending: formPending } = useApprovedUnboundForm();
@@ -26,7 +27,11 @@ export const MembersContent: FC = () => {
     ((hasMembers || canManage) && rotationPending) ||
     (!hasMembers && canManage && formPending)
   ) {
-    return <Loader data-testid="loader" />;
+    return (
+      <Card data-testid="loader">
+        <Skeleton variant="text" lines={3} />
+      </Card>
+    );
   }
 
   if (data && data.members.length > 0) {
@@ -47,3 +52,9 @@ export const MembersContent: FC = () => {
     />
   );
 };
+
+export const ClusterMembersSection: FC = () => (
+  <HubSection title="Cluster members" dataTestId="clusterMembersSection">
+    <MembersContent />
+  </HubSection>
+);

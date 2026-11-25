@@ -1,0 +1,39 @@
+.heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: var(--lido-app-ui-font-size-body);
+  line-height: var(--lido-app-ui-line-height-body);
+  font-weight: 600;
+  color: var(--lido-app-ui-color-text-default);
+}
+
+.items {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  font-size: var(--lido-app-ui-font-size-body);
+  line-height: var(--lido-app-ui-line-height-body);
+  color: var(--lido-app-ui-color-text-default);
+}
+
+.item[data-dimmed] {
+  color: var(--lido-app-ui-color-text-tertiary);
+  opacity: 0.6;
+}
+
+.item + .item {
+  border-top: 1px solid var(--lido-app-ui-color-border-default);
+}
+
+.itemName {
+  flex: 1;
+  min-width: 0;
+}

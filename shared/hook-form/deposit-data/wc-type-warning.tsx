@@ -1,8 +1,8 @@
+import { MessageBox } from '@lidofinance/lido-app-ui';
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { PATH } from 'consts/urls';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
-import { WarningBlock } from 'shared/components';
 import { LocalLink } from 'shared/navigate';
 import { useMyOperators } from 'shared/hooks/use-my-operators';
 import { DepositDataInputType } from './use-parse-deposit-data';
@@ -36,10 +36,10 @@ export const WcTypeWarning: FC = () => {
   const csm0x01Path = has0x01Operator ? PATH.MY_OPERATORS : PATH.CREATE_0x01;
 
   return (
-    <WarningBlock data-testid="wcTypeWarning">
+    <MessageBox variant="warning" dataTestId={{ root: 'wcTypeWarning' }}>
       The submitted key is 0x01. If you plan to use 0x02, please generate it
       correctly or upload the key to{' '}
       <LocalLink href={csm0x01Path}>CSM 0x01</LocalLink>.
-    </WarningBlock>
+    </MessageBox>
   );
 };

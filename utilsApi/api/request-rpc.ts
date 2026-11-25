@@ -1,13 +1,21 @@
 import { iterateUrls } from '@lidofinance/rpc';
 import type { FetchRpcInitBody } from '@lidofinance/rpc';
 import type { RPCFactoryParams } from './types';
+import {
+  DEFAULT_UPSTREAM_TIMEOUT_MS,
+  withUpstreamTimeout,
+} from './upstream-timeout';
 
 // Provider URLs carry API keys in userinfo, path or query
 export const redactUrls = (text: string) =>
   text.replace(/[a-z][a-z0-9+.-]*:\/\/[^\s'"]+/gi, '<url>');
 
 export const requestRpcFactory =
-  ({ providers, fetchRPC }: Pick<RPCFactoryParams, 'providers' | 'fetchRPC'>) =>
+  ({
+    providers,
+    fetchRPC,
+    upstreamTimeoutMs = DEFAULT_UPSTREAM_TIMEOUT_MS,
+  }: Pick<RPCFactoryParams, 'providers' | 'fetchRPC' | 'upstreamTimeoutMs'>) =>
   async (chainId: number, body: FetchRpcInitBody): Promise<Response> => {
     const received: Response[] = [];
     let result: Response | undefined;
@@ -15,7 +23,15 @@ export const requestRpcFactory =
       result = await iterateUrls(
         providers[chainId],
         async (url) => {
-          const response = await fetchRPC(url, { body }, { chainId });
+          const response = await withUpstreamTimeout(
+            upstreamTimeoutMs,
+            (signal) =>
+              fetchRPC(
+                url,
+                { body, ...(signal ? { signal } : {}) },
+                { chainId },
+              ),
+          );
           received.push(response);
           return response;
         },

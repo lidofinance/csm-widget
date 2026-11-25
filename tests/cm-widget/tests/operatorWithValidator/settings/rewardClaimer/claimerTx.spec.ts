@@ -266,14 +266,11 @@ test.describe(
         await txModal.closeModal();
         await expect(txModal.modal).not.toBeVisible();
 
-        await test.step('Claimer is visible on dashboard roles section', async () => {
+        await test.step('Claimer flag is visible in dashboard header', async () => {
           await widgetService.dashboardPage.open();
-          const claimerRow =
-            widgetService.dashboardPage.rolesSection.claimerAddressRow;
-          await expect(claimerRow).toBeVisible();
           await expect(
-            claimerRow.getByTestId('addressContainer'),
-          ).toContainText(VALID_ADDRESS);
+            widgetService.dashboardPage.operatorHeader.claimerFlag,
+          ).toHaveText('Claimer ON');
         });
       },
     );

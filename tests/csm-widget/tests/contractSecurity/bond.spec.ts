@@ -52,7 +52,7 @@ test.describe(
 
           await test.step(`Submit ${token} bond`, async () => {
             await addBond.open();
-            await addBond.selectBondToken(token).click();
+            await addBond.selectBondToken(token);
             await addBond.amountInput.fill('0.0003');
             await addBond.addBondButton.click();
             await widgetService.confirmOperatorModal.confirm();

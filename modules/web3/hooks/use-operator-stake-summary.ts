@@ -6,24 +6,23 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
-import { useActiveSmSDK } from '../web3-provider';
+import { useSmSDK } from '../web3-provider';
 
 export const KEY_OPERATOR_STAKE_INFO = ['operator-stake-info'];
 
 export const useOperatorStakeSummary = <TData = OperatorStakeSummary>({
   nodeOperatorId,
+  module,
   select,
 }: {
   nodeOperatorId: NodeOperatorId | undefined;
+  module: MODULE_NAME | undefined;
   select?: (data: OperatorStakeSummary) => TData;
 }) => {
-  const sdk = useActiveSmSDK(MODULE_NAME.CM);
+  const sdk = useSmSDK(MODULE_NAME.CM);
 
   return useQuery({
-    queryKey: [
-      ...KEY_OPERATOR_STAKE_INFO,
-      { nodeOperatorId, module: MODULE_NAME.CM },
-    ],
+    queryKey: [...KEY_OPERATOR_STAKE_INFO, { nodeOperatorId, module }],
     ...STRATEGY_CONSTANT,
     queryFn: async () => {
       invariant(sdk);
@@ -31,7 +30,7 @@ export const useOperatorStakeSummary = <TData = OperatorStakeSummary>({
 
       return sdk.metaRegistry.getOperatorStakeSummary(nodeOperatorId);
     },
-    enabled: !!sdk && nodeOperatorId !== undefined,
+    enabled: module === MODULE_NAME.CM && !!sdk && nodeOperatorId !== undefined,
     select,
   });
 };

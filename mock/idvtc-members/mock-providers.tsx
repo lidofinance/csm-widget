@@ -25,6 +25,10 @@ const mockSiweAuth: SiweAuthContextType = {
 const mockNodeOperator: NodeOperatorContextValue = {
   isPending: false,
   needsSelection: false,
+  isDiscovering: false,
+  dismissSelection: () => {},
+  requestSelection: () => {},
+  selectionFilter: undefined,
   nodeOperator: {
     nodeOperatorId: MOCK_OPERATOR_ID,
     module: MODULE_NAME.CSM,

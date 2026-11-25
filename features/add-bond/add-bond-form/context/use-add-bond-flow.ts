@@ -1,5 +1,5 @@
 import { type MethodAccess } from '@lidofinance/lido-csm-sdk';
-import { useSmSDK } from 'modules/web3';
+import { useActiveOperatorSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -22,7 +22,7 @@ export const useAddBondFlowResolver = (): FlowResolver<
   AddBondFormNetworkData,
   AddBondFlow
 > => {
-  const { bond: bondSDK } = useSmSDK();
+  const { bond: bondSDK } = useActiveOperatorSDK();
   const [canAddBond, addBondAccess] = useCanPerform(bondSDK, 'addBond');
   const buildCallback = useTxModalStagesAddBond();
   const confirmOperator = useConfirmOperatorModal();
@@ -32,21 +32,21 @@ export const useAddBondFlowResolver = (): FlowResolver<
       if (!canAddBond) return { action: 'no-access', access: addBondAccess };
       if (data.isPaused) return { action: 'paused' };
 
+      const props = () => {
+        invariant(input.bondAmount !== undefined, 'BondAmount is not defined');
+        return {
+          nodeOperatorId: data.nodeOperatorId,
+          token: input.token,
+          amount: input.bondAmount,
+        };
+      };
+
       return {
         action: 'add-bond' as const,
         confirm: () => confirmOperator(),
-        submit: () => {
-          invariant(
-            input.bondAmount !== undefined,
-            'BondAmount is not defined',
-          );
-          return bondSDK.addBond({
-            nodeOperatorId: data.nodeOperatorId,
-            token: input.token,
-            amount: input.bondAmount,
-            callback: buildCallback(input, data),
-          });
-        },
+        submit: () =>
+          bondSDK.addBond({ ...props(), callback: buildCallback(input, data) }),
+        estimate: async () => bondSDK.estimateAddBond(props()),
       };
     },
     [bondSDK, canAddBond, addBondAccess, buildCallback, confirmOperator],

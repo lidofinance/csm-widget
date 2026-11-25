@@ -1,0 +1,19 @@
+/* both trims stay in the DOM so the desktop text the e2e matches is always present */
+.keyPubkey {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.keyPubkey > span:last-child {
+  display: none;
+
+  @media (max-width: 439px) {
+    display: inline;
+  }
+}
+
+.keyPubkey > span:first-child {
+  @media (max-width: 439px) {
+    display: none;
+  }
+}

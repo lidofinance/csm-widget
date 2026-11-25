@@ -16,10 +16,11 @@ export class CreateOperatorStep4Page extends BasePage {
   constructor(
     page: Page,
     public form: Locator,
+    public stepHeader: Locator,
   ) {
     super(page);
-    this.stepTrackText = this.form.getByTestId('stepTrackText');
-    this.stepTitle = this.form.getByTestId('stepTitle');
+    this.stepTrackText = this.stepHeader.getByTestId('stepTrackText');
+    this.stepTitle = this.stepHeader.getByTestId('stepTitle');
     this.backButton = this.form.getByRole('button', { name: 'Back' });
     this.createButton = this.form.getByRole('button', {
       name: 'Create Node Operator',

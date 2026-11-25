@@ -1,112 +1,65 @@
-import { Button, Text } from '@lidofinance/lido-ui';
-import { PATH } from 'consts';
+import { Button, SectionTitle, Stack } from '@lidofinance/lido-app-ui';
 import { FC, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Stack } from 'shared/components';
-import { WarningBlockStyle } from 'shared/components/warning-block/style';
-import { LocalLink } from 'shared/navigate';
+import { FormCard } from 'shared/form-page';
 import { SplitsFormInputType, useSplitsFormData } from '../context';
+import {
+  ADDITIONAL_ADDRESSES_DESCRIPTION,
+  getSplitsActionLabel,
+  getSplitsNotice,
+} from '../splits-state';
 import { BondRow } from './bond-row';
-import { SplitRowView } from './split-row-view';
-import { WarningRow } from './styles';
+import { ShareRowView } from './split-row-view';
+import { SplitsNotice } from './splits-notice';
 
 export const ViewSplits: FC = () => {
   const { setValue } = useFormContext<SplitsFormInputType>();
   const handleEdit = useCallback(() => setValue('isEditing', true), [setValue]);
-  const { currentFeeSplits, canEdit, rewards, pendingToSplit } =
+  const { currentFeeSplits, canEdit, isOwner, rewards, pendingToSplit } =
     useSplitsFormData(true);
 
+  const hasSplits = currentFeeSplits.length > 0;
+  const notice = getSplitsNotice({
+    canEdit,
+    splitsCount: currentFeeSplits.length,
+    proofLength: rewards.proof.length,
+    hasAvailable: rewards.available > 0n,
+    hasPendingToSplit: !!pendingToSplit,
+  });
+
   return (
-    <>
-      {canEdit &&
-      currentFeeSplits.length === 0 &&
-      rewards.proof.length === 0 ? (
-        <WarningBlockStyle>
-          You can set up rewards splitting now. Please note that editing will
-          only be available after your first rewards are distributed.
-        </WarningBlockStyle>
-      ) : canEdit && currentFeeSplits.length === 0 && rewards.available ? (
-        <WarningBlockStyle>
-          <WarningRow>
-            <span>
-              You have unclaimed rewards. If you set up splitting now, unclaimed
-              rewards will be distributed using the new split settings. To keep
-              current distribution, claim your rewards first.
-            </span>
-            <LocalLink href={PATH.BOND_CLAIM}>
-              <Button variant="outlined" size="sm">
-                Go to claim
-              </Button>
-            </LocalLink>
-          </WarningRow>
-        </WarningBlockStyle>
-      ) : null}
-
-      {currentFeeSplits.length > 0 && rewards.proof.length === 0 ? (
-        <WarningBlockStyle>
-          <span>
-            <b>Editing is disabled</b> while your first rewards have not been
-            distributed yet
-          </span>
-        </WarningBlockStyle>
-      ) : currentFeeSplits.length > 0 && rewards.available ? (
-        <WarningBlockStyle>
-          <WarningRow>
-            <span>
-              <b>Editing is disabled</b> while you have unclaimed rewards. Claim
-              them in Bond & Rewards to continue. Unclaimed rewards will be
-              distributed using your current split settings.
-            </span>
-            <LocalLink href={PATH.BOND_CLAIM}>
-              <Button variant="outlined" size="sm">
-                Go to claim
-              </Button>
-            </LocalLink>
-          </WarningRow>
-        </WarningBlockStyle>
-      ) : pendingToSplit ? (
-        <WarningBlockStyle>
-          <WarningRow>
-            <span>
-              <b>Editing is disabled</b> while there are pending shares to
-              distribute. Claim them in Bond & Rewards to continue.
-            </span>
-            <LocalLink href={PATH.BOND_CLAIM}>
-              <Button variant="outlined" size="sm">
-                Go to claim
-              </Button>
-            </LocalLink>
-          </WarningRow>
-        </WarningBlockStyle>
-      ) : null}
-
-      <Text size="md" weight={700} as="h4">
-        Rewards splitter settings
-      </Text>
-
+    <FormCard>
       <BondRow />
 
-      {currentFeeSplits.length > 0 && (
-        <Stack direction="column" gap="sm">
-          <Text size="xs" weight={700}>
-            Additional addresses
-          </Text>
+      {hasSplits && (
+        <Stack gap={12}>
+          <SectionTitle
+            title="Additional addresses"
+            tooltip={ADDITIONAL_ADDRESSES_DESCRIPTION}
+          />
           {currentFeeSplits.map((split, i) => (
-            <SplitRowView
+            <ShareRowView
               key={split.recipient}
-              title={`Additional address #${i + 1}`}
-              address={split.recipient}
+              label={`Additional address #${i + 1}`}
+              value={split.recipient}
               share={split.share}
             />
           ))}
         </Stack>
       )}
 
-      {canEdit && (
-        <Button fullwidth onClick={handleEdit} data-testid="splitsActionButton">
-          {currentFeeSplits.length > 0 ? 'Edit splits' : 'Set up splits'}
+      {notice && <SplitsNotice notice={notice} />}
+
+      {isOwner && (
+        <Button
+          fullWidth
+          disabled={!canEdit}
+          onClick={handleEdit}
+          data-testid="splitsActionButton"
+        >
+          {getSplitsActionLabel(hasSplits)}
         </Button>
       )}
-    </>
+    </FormCard>
   );
 };

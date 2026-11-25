@@ -1,12 +1,11 @@
 import { PATH } from 'consts/urls';
-import { ExitKeysPage } from 'features/exit-keys';
-import { Gate, GateLoaded, Navigate } from 'shared/navigate';
+import { GateLoaded, Navigate } from 'shared/navigate';
+
+const QUERY = { mode: 'exit' };
 
 const Page = () => (
   <GateLoaded>
-    <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.HOME} />}>
-      <ExitKeysPage />
-    </Gate>
+    <Navigate replace path={PATH.KEYS_DELETE} query={QUERY} />
   </GateLoaded>
 );
 

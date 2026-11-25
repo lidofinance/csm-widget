@@ -15,6 +15,8 @@ export const useCanCreate0x01 = () => {
 
   return {
     canCreate: def.canCreate && !holdsProof,
+    blockedByOperator:
+      def.isAccountActive && def.isOpen && def.hasOperator && !holdsProof,
     // A disabled react-query stays pending forever; only block when CSM is constructed.
     isPending:
       def.isPending || (!!csmSdk && (ics.isPending || idvtc.isPending)),

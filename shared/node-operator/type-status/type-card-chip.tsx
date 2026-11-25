@@ -1,7 +1,7 @@
 import { OperatorTypeStatus } from 'modules/web3';
 import { FC } from 'react';
-import { ApplicationStatusChip } from './application-status-chip';
-import { TypeStatusChip } from './type-status-chip';
+import { ApplicationStatusTag } from './application-status-tag';
+import { TypeStatusTag } from './type-status-tag';
 import { ApplicationStatus } from './types';
 
 type Props = {
@@ -11,6 +11,6 @@ type Props = {
 
 export const TypeCardChip: FC<Props> = ({ typeStatus, formStatus }) => {
   if (typeStatus !== 'PENDING')
-    return <TypeStatusChip typeStatus={typeStatus} />;
-  return formStatus ? <ApplicationStatusChip status={formStatus} /> : null;
+    return <TypeStatusTag typeStatus={typeStatus} />;
+  return formStatus ? <ApplicationStatusTag status={formStatus} /> : null;
 };

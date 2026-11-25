@@ -2,7 +2,7 @@ import { useCurveParameters } from 'modules/web3';
 import { FC } from 'react';
 import { useCurrentCurve } from 'shared/hooks';
 import { formatPercent } from 'utils';
-import { ShortInlineLoader } from './styles';
+import { ShortInlineLoader } from './short-inline-loader';
 
 export const FaqPerformanceLeeway: FC = () => {
   const curve = useCurrentCurve();

@@ -1,0 +1,76 @@
+@value link as matomoLink from '../matomo-link/styles.module.css';
+
+.container {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.container > span > span {
+  font-weight: inherit;
+}
+
+.container .matomoLink svg {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.small .matomoLink svg {
+  width: 20px;
+  height: 20px;
+}
+
+.pubkey[data-monospace] {
+  font-family: 'Fira Code', monospace;
+  font-size: 12px;
+}
+
+.pubkey[data-color='default'] {
+  color: var(--lido-app-ui-color-text-default);
+}
+
+.pubkey[data-color='secondary'] {
+  color: var(--lido-app-ui-color-text-secondary);
+}
+
+.pubkey[data-color='tertiary'] {
+  color: var(--lido-app-ui-color-text-tertiary);
+}
+
+.pubkey[data-color='neutral'] {
+  color: var(--lido-app-ui-color-text-neutral);
+}
+
+.pubkey[data-color='active'] {
+  color: var(--lido-app-ui-color-text-active);
+}
+
+.pubkey[data-color='success'] {
+  color: var(--lido-app-ui-color-text-success);
+}
+
+.pubkey[data-color='warning'] {
+  color: var(--lido-app-ui-color-text-warning);
+}
+
+.pubkey[data-color='error'] {
+  color: var(--lido-app-ui-color-text-error);
+}
+
+.pubkey[data-color='info'] {
+  color: var(--lido-app-ui-color-text-info);
+}
+
+.pubkey[data-color='inverse'] {
+  color: var(--lido-app-ui-color-text-inverse);
+}
+
+.pubkey[data-color='disabled'] {
+  color: var(--lido-app-ui-color-text-disabled);
+}
+
+.avatar {
+  border-radius: 50%;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+}

@@ -23,7 +23,6 @@ export type SubmitKeysFormInputType = {
   managerAddress?: Address;
   extendedManagerPermissions: boolean;
   specifyCustomAddresses: boolean;
-  specifyReferrrer: boolean;
   dkgFiles: FileUploadItemDto[];
 } & DepositDataInputType;
 

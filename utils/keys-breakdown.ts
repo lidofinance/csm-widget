@@ -6,7 +6,7 @@ import {
 import { sumKeysBalance } from './compute-stake-data';
 import { hasStatus, StatusFilter } from './has-status';
 
-const STATUS_GROUPS: Record<keyof KeysBreakdownCounts, StatusFilter> = {
+export const STATUS_GROUPS: Record<KeysBreakdownGroup, StatusFilter> = {
   depositable: KEY_STATUS.DEPOSITABLE,
   activationPending: KEY_STATUS.ACTIVATION_PENDING,
   active: [KEY_STATUS.ACTIVE, KEY_STATUS.EXITING],
@@ -45,6 +45,8 @@ export type KeysBreakdownCounts = {
   invalid: number;
   unchecked: number;
 };
+
+export type KeysBreakdownGroup = keyof KeysBreakdownCounts;
 
 export type KeysBreakdownBalances = {
   depositable: bigint;

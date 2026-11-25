@@ -1,9 +1,9 @@
-import { Accordion, Block, Text } from '@lidofinance/lido-ui';
+import { Accordion, Card, Description } from '@lidofinance/lido-app-ui';
 import { useClaimBondFormData } from 'features/claim-bond/claim-bond-form/context';
 import { type CLAIM_OPTION } from 'features/claim-bond/claim-bond-form/context/types';
 import { FC } from 'react';
-import styled from 'styled-components';
 import { formatEther } from 'viem';
+import s from './debug-panel.module.css';
 
 const f = (v?: bigint) => formatEther(v ?? 0n);
 
@@ -36,16 +36,17 @@ export const ClaimBondDebugPanel: FC<{
   const match = !hasExpectation || actual === expected;
 
   return (
-    <TestBlock>
-      <StyledAccordion
-        summary={
-          <Text size="xs" color="secondary">
+    <Card className={s.card}>
+      <Accordion
+        border={false}
+        title={
+          <Description color="secondary">
             Raw inputs &amp; derived calculation{' '}
             {match ? '✓' : '✗ options mismatch'}
-          </Text>
+          </Description>
         }
       >
-        <DataPre>
+        <pre className={s.data}>
           {[
             `current:                 ${f(bond.current)}`,
             `required (forKeys):      ${f(bond.required)}`,
@@ -55,7 +56,7 @@ export const ClaimBondDebugPanel: FC<{
             `delta:                   ${f(bond.delta)}  (isInsufficient: ${bond.isInsufficient})`,
             `rewards.available:       ${f(rewards?.available)}`,
             `feeSplits:               ${
-              feeSplits.map((s) => `${Number(s.share) / 100}%`).join(', ') ||
+              feeSplits.map((fs) => `${Number(fs.share) / 100}%`).join(', ') ||
               '—'
             }`,
             '—',
@@ -70,35 +71,8 @@ export const ClaimBondDebugPanel: FC<{
             `expectedOptions:         [${expected}]  ${match ? '✓' : '✗ MISMATCH'}`,
             `isPaused: ${isPaused}   isContract: ${isContract}`,
           ].join('\n')}
-        </DataPre>
-      </StyledAccordion>
-    </TestBlock>
+        </pre>
+      </Accordion>
+    </Card>
   );
 };
-
-const TestBlock = styled(Block)`
-  padding: 16px;
-`;
-
-const StyledAccordion = styled(Accordion)`
-  & > [type='button'] {
-    padding: 0;
-    min-height: 24px;
-  }
-  & > [type='button'] + div > div {
-    padding: 8px 0 0;
-  }
-`;
-
-const DataPre = styled.pre`
-  background: var(--lido-color-backgroundSecondary);
-  border-radius: 8px;
-  padding: 16px;
-  margin: 0;
-  font-family: 'Monaco', 'Menlo', monospace;
-  font-size: 12px;
-  line-height: 1.5;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  overflow-x: auto;
-`;

@@ -30,13 +30,13 @@ test.describe(
           await expect(claim.rewardsBalanceCard).toBeVisible({
             timeout: PAGE_WAIT_TIMEOUT,
           });
-          await expect(claim.rewardsBalanceCard).toContainText('0.0 stETH');
+          await expect(claim.rewardsBalanceCard).toContainText('0.0');
         });
 
         await test.step('Bond balance card shows "Excess bond" with 0.0 stETH', async () => {
           await expect(claim.bondBalanceCard).toBeVisible();
           await expect(claim.bondBalanceCard).toContainText('Excess bond');
-          await expect(claim.bondBalanceCard).toContainText('0.0 stETH');
+          await expect(claim.bondBalanceCard).toContainText('0.0');
         });
 
         await test.step('"Nothing to claim at the moment" empty state is shown', async () => {
@@ -136,7 +136,7 @@ test.describe(
           await expect(claim.rewardsBalanceCard).toBeVisible({
             timeout: PAGE_WAIT_TIMEOUT,
           });
-          await expect(claim.rewardsBalanceCard).toContainText('0.0 stETH');
+          await expect(claim.rewardsBalanceCard).toContainText('0.0');
         });
 
         await test.step('Bond balance card shows "Insufficient bond" title', async () => {

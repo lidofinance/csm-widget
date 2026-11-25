@@ -167,3 +167,27 @@ describe('rpcFactory canonical forwarding', () => {
     errorSpy.mockRestore();
   });
 });
+
+describe('rpcFactory upstream status', () => {
+  const runWith = (response: Response, maxResponseSize?: number) => {
+    const { run, fetchRPC } = setup({ maxResponseSize });
+    fetchRPC.mockResolvedValue(response);
+    return run({ jsonrpc: '2.0', id: 1, method: 'eth_chainId' });
+  };
+
+  it('answers 502 when every provider answers non-ok', async () => {
+    const res = await runWith(
+      new Response('provider says: nope', { status: 503 }),
+    );
+    expect(res.status).toHaveBeenCalledWith(502);
+    expect(res.json).toHaveBeenCalledWith(DEFAULT_API_ERROR_MESSAGE);
+  });
+
+  it('answers 413 on oversized Content-Length', async () => {
+    const res = await runWith(
+      new Response('x'.repeat(500), { headers: { 'Content-Length': '500' } }),
+      100,
+    );
+    expect(res.status).toHaveBeenCalledWith(413);
+  });
+});

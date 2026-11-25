@@ -12,57 +12,48 @@ const SIDEBAR_ITEMS = [
   { name: 'Dashboard', url: '/' },
   { name: 'Create Operator', url: '/create' },
   { name: 'Keys', url: '/keys' },
-  { name: 'Monitoring', url: '/monitoring' },
   { name: 'Bond & Rewards', url: '/bond' },
   { name: 'Settings', url: '/settings' },
+  { name: 'My Operators', url: '/operators' },
 ];
 
-const KEYS_TABS = [
-  { title: 'Submit', url: '/keys/submit' },
-  { title: 'Delete', url: '/keys/exit' },
-  { title: 'View keys', url: '/keys/view' },
+const KEYS_ACTIONS = [
+  { title: 'Submit new key', url: '/keys/submit' },
+  { title: 'Delete key', url: '/keys/delete' },
 ];
 
-const BOND_TABS = [
+const BOND_ACTIONS = [
   {
-    title: 'Add Bond',
+    title: 'Add bond',
     url: '/bond/add',
     event: 'cm_widget_view_add_bond_page',
   },
   {
-    title: 'Claim',
+    title: 'Claim Bond & Rewards',
     url: '/bond/claim',
     event: 'cm_widget_view_claim_bond_page',
   },
-  {
-    title: 'Rewards history',
-    url: '/bond/rewards-history',
-    event: 'cm_widget_view_rewards_history_page',
-  },
 ];
 
-const SETTINGS_TABS = [
+const SETTINGS_PAGES = [
   {
-    title: 'Meta data',
     url: '/settings/metadata',
     event: 'cm_widget_view_settings_metadata_page',
   },
   {
-    title: 'Roles',
-    url: '/settings/roles',
+    url: '/settings',
     event: 'cm_widget_view_settings_roles_page',
   },
   {
-    title: 'Inbox requests',
     url: '/settings/inbox',
     event: 'cm_widget_view_inbox_requests_page',
   },
 ];
 
 const DELETE_KEYS_CARDS = [
-  { title: 'Remove', url: '/keys/remove' },
-  { title: 'Exit', url: '/keys/exit' },
-  { title: 'Eject', url: '/keys/eject' },
+  { title: 'Exit', mode: 'exit' },
+  { title: 'Eject', mode: 'eject' },
+  { title: 'Remove', mode: 'remove' },
 ];
 
 test.describe(
@@ -98,82 +89,93 @@ test.describe(
             await expect(widgetService.page).toHaveURL(new RegExp(url));
           });
         }
+
+        await test.step('My Operators shows the group', async () => {
+          await expect(widgetService.groupPage.groupSection).toBeVisible();
+        });
       },
     );
 
     test(
       qase(174, 'Should display Keys tabs and navigate correctly'),
       async ({ widgetService }) => {
+        const { page } = widgetService;
         await navigation.navItem('Keys').click();
-        await widgetService.page.waitForURL(/\/keys/);
+        await expect(page).toHaveURL(/\/keys$/);
 
-        await test.step('All Keys tabs are visible', async () => {
-          for (const { title } of KEYS_TABS) {
+        await test.step('All Keys hub actions are visible', async () => {
+          for (const { title } of KEYS_ACTIONS) {
             await expect(
-              navigation.switcherTab(title),
-              `"${title}" tab should be visible`,
+              page.getByRole('link', { name: title }),
+              `"${title}" action should be visible`,
             ).toBeVisible();
           }
         });
 
-        for (const { title, url } of KEYS_TABS) {
-          await test.step(`Navigate to "${title}" tab`, async () => {
-            await navigation.switcherTab(title).click();
-            await expect(widgetService.page).toHaveURL(new RegExp(url));
+        for (const { title, url } of KEYS_ACTIONS) {
+          await test.step(`Navigate to "${title}" action`, async () => {
+            await page.getByRole('link', { name: title }).click();
+            await expect(page).toHaveURL(new RegExp(url));
+            await navigation.navItem('Keys').click();
+            await expect(page).toHaveURL(/\/keys$/);
           });
         }
       },
     );
 
     test(
-      qase(175, 'Should display Bond & Rewards tabs and navigate correctly'),
+      qase(175, 'Should display Bond & Rewards hub and navigate to actions'),
       async ({ widgetService }) => {
-        await navigation.navItem('Bond & Rewards').click();
-        await widgetService.page.waitForURL(/\/bond/);
+        const { hub } = widgetService.bondRewardsPage;
 
-        await test.step('All Bond & Rewards tabs are visible', async () => {
-          for (const { title } of BOND_TABS) {
-            await expect(
-              navigation.switcherTab(title),
-              `"${title}" tab should be visible`,
-            ).toBeVisible();
-          }
+        await Promise.all([
+          matomoEventService.waitForEvent(
+            'e_n',
+            'cm_widget_view_bond_rewards_page',
+          ),
+          navigation.navItem('Bond & Rewards').click(),
+        ]);
+        await expect(widgetService.page).toHaveURL(/\/bond$/);
+
+        await test.step('Hub actions are visible', async () => {
+          await expect(hub.claimButton).toBeVisible();
+          await expect(hub.addBondButton).toBeVisible();
         });
 
-        for (const { title, url, event } of BOND_TABS) {
-          await test.step(`Navigate to "${title}" tab and check Matomo event`, async () => {
+        for (const { title, url, event } of BOND_ACTIONS) {
+          await test.step(`Navigate to "${title}" and check Matomo event`, async () => {
+            const button =
+              url === '/bond/add' ? hub.addBondButton : hub.claimButton;
             await Promise.all([
               matomoEventService.waitForEvent('e_n', event),
-              navigation.switcherTab(title).click(),
+              button.click(),
             ]);
             await expect(widgetService.page).toHaveURL(new RegExp(url));
+            await widgetService.page.goBack();
+            await expect(hub.claimButton).toBeVisible();
           });
         }
+
+        await test.step('Legacy rewards history url redirects to hub', async () => {
+          await widgetService.page.goto('/bond/rewards-history');
+          await expect(widgetService.page).toHaveURL(/\/bond$/);
+        });
       },
     );
 
     test(
-      qase(176, 'Should display Settings tabs and navigate correctly'),
+      qase(176, 'Should display Settings hub and navigate to sub-pages'),
       async ({ widgetService }) => {
         await navigation.navItem('Settings').click();
-        await widgetService.page.waitForURL(/\/settings/);
+        await widgetService.page.waitForURL(/\/settings$/);
 
-        await test.step('All Settings tabs are visible', async () => {
-          for (const { title } of SETTINGS_TABS) {
-            await expect(
-              navigation.switcherTab(title),
-              `"${title}" tab should be visible`,
-            ).toBeVisible();
-          }
-        });
-
-        for (const { title, url, event } of SETTINGS_TABS) {
-          await test.step(`Navigate to "${title}" tab and check Matomo event`, async () => {
+        for (const { url, event } of SETTINGS_PAGES) {
+          await test.step(`Open ${url} and check Matomo event`, async () => {
             await Promise.all([
               matomoEventService.waitForEvent('e_n', event),
-              navigation.switcherTab(title).click(),
+              widgetService.page.goto(url),
             ]);
-            await expect(widgetService.page).toHaveURL(new RegExp(url));
+            await expect(widgetService.page).toHaveURL(new RegExp(`${url}$`));
           });
         }
       },
@@ -182,17 +184,22 @@ test.describe(
     test(
       qase(
         178,
-        'Should display edit metadata button on dashboard and navigate to metadata page',
+        'Should reach metadata page from dashboard header Settings link',
       ),
       async ({ widgetService }) => {
-        const { editMetadataLink } = widgetService.dashboardPage;
+        const { settingsLink } = widgetService.dashboardPage.operatorHeader;
 
-        await test.step('Edit metadata button is visible', async () => {
-          await expect(editMetadataLink).toBeVisible();
+        await test.step('Settings link is visible', async () => {
+          await expect(settingsLink).toBeVisible();
         });
 
-        await test.step('Navigate to metadata page on click', async () => {
-          await editMetadataLink.click();
+        await test.step('Navigate to settings on click', async () => {
+          await settingsLink.click();
+          await expect(widgetService.page).toHaveURL(/\/settings$/);
+        });
+
+        await test.step('Open metadata page from settings hub', async () => {
+          await widgetService.page.getByTestId('metadataRow').click();
           await expect(widgetService.page).toHaveURL(/\/settings\/metadata/);
         });
       },
@@ -202,8 +209,10 @@ test.describe(
       qase(179, 'Should display Delete keys cards and navigate correctly'),
       async ({ widgetService }) => {
         await navigation.navItem('Keys').click();
-        await navigation.switcherTab('Delete').click();
-        await widgetService.page.waitForURL(/\/keys\/exit/);
+        await widgetService.page
+          .getByRole('link', { name: 'Delete key' })
+          .click();
+        await expect(widgetService.page).toHaveURL(/\/keys\/delete/);
 
         await test.step('All Delete keys cards are visible', async () => {
           for (const { title } of DELETE_KEYS_CARDS) {
@@ -214,10 +223,12 @@ test.describe(
           }
         });
 
-        for (const { title, url } of DELETE_KEYS_CARDS) {
+        for (const { title, mode } of DELETE_KEYS_CARDS) {
           await test.step(`Navigate to "${title}" on click`, async () => {
             await navigation.deleteKeysCard(title).click();
-            await expect(widgetService.page).toHaveURL(new RegExp(url));
+            await expect(widgetService.page).toHaveURL(
+              new RegExp(`/keys/delete\\?mode=${mode}`),
+            );
           });
         }
       },
@@ -226,17 +237,20 @@ test.describe(
     test(
       qase(
         177,
-        'Should display Operator Group link in dashboard subtitle and navigate to group page',
+        'Should display Operator Group link in dashboard header and navigate to group page',
       ),
       async ({ widgetService }) => {
-        const { operatorGroupLink } = widgetService.dashboardPage;
+        const { operatorGroupLink } =
+          widgetService.dashboardPage.operatorHeader;
 
         await test.step('Operator Group link is visible', async () => {
           await expect(operatorGroupLink).toBeVisible();
         });
 
         await test.step('Operator Group link has correct text', async () => {
-          await expect(operatorGroupLink).toContainText(/Operator Group #\d+/);
+          await expect(operatorGroupLink).toContainText(
+            /(Operator Group #\d+|\(#\d+\))/,
+          );
         });
 
         await test.step('Navigate to group page on click', async () => {

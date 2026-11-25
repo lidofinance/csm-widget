@@ -72,4 +72,25 @@ test.describe(...suite({ epic: EPIC.faq, story: 'Keys' }), () => {
       },
     );
   });
+
+  test('Should open the drawer from a #anchor in the URL', async ({
+    widgetService,
+  }) => {
+    const { faq, page } = widgetService;
+
+    await page.goto('/keys/submit#how-to-set-up-a-validator');
+
+    await test.step('Check drawer opens with the item expanded', async () => {
+      await expect(faq.root).toBeVisible();
+      await expect(faq.getItem(FAQ_KEYS[0].title).toggle).toHaveAttribute(
+        'aria-expanded',
+        'true',
+      );
+    });
+
+    await test.step('Check closing removes the hash', async () => {
+      await faq.close();
+      await expect(page).not.toHaveURL(/#/);
+    });
+  });
 });

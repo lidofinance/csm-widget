@@ -1,3 +1,4 @@
+import { MessageBox } from '@lidofinance/lido-app-ui';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { OPERATOR_TYPE_METADATA } from 'consts';
 import { useOperatorCurveId } from 'modules/web3';
@@ -8,31 +9,9 @@ import {
   useOtherOperatorsClaimable,
 } from 'shared/hooks';
 import { TxAmount } from 'shared/transaction-modal';
-import styled from 'styled-components';
+import s from './other-operators-claimable.module.css';
 
-// The success description renders as a <p> (lido-ui Text), whose content
-// model only allows phrasing content — spans, not divs, keep this valid.
-const Box = styled.span`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-
-  margin-top: ${({ theme }) => theme.spaceMap.lg}px;
-  padding: 12px 16px;
-  border-radius: 16px;
-  border: 1px solid
-    color-mix(in srgb, var(--lido-color-primary) 20%, transparent);
-  background: color-mix(in srgb, var(--lido-color-primary) 5%, transparent);
-
-  text-align: left;
-  color: var(--lido-color-text);
-  font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
-  line-height: 20px;
-`;
-
-const Line = styled.span`
-  display: block;
-`;
+const TEST_ID = 'otherOperatorsClaimable';
 
 type ClaimableLineProps = { operator: ModuleNodeOperator; amount: bigint };
 
@@ -43,11 +22,11 @@ const ClaimableLine: FC<ClaimableLineProps> = ({ operator, amount }) => {
   if (!type) return null;
 
   return (
-    <Line>
+    <span className={s.line}>
       You have <TxAmount amount={amount} token={TOKENS.steth} /> on your{' '}
       {OPERATOR_TYPE_METADATA[type].short} Node Operator #
       {operator.nodeOperatorId.toString()}
-    </Line>
+    </span>
   );
 };
 
@@ -56,15 +35,19 @@ export const OtherOperatorsClaimable: FC = () => {
 
   if (items.length === 0) return null;
 
+  const lines = items.map(({ operator, amount }) => (
+    <ClaimableLine
+      key={`${operator.module}-${operator.nodeOperatorId}`}
+      operator={operator}
+      amount={amount}
+    />
+  ));
+
   return (
-    <Box data-testid="otherOperatorsClaimable">
-      {items.map(({ operator, amount }) => (
-        <ClaimableLine
-          key={`${operator.module}-${operator.nodeOperatorId}`}
-          operator={operator}
-          amount={amount}
-        />
-      ))}
-    </Box>
+    <div className={s.box}>
+      <MessageBox variant="info" icon={false} dataTestId={{ root: TEST_ID }}>
+        {lines}
+      </MessageBox>
+    </div>
   );
 };

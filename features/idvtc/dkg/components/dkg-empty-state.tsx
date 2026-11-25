@@ -1,19 +1,12 @@
 import { FC } from 'react';
-import { Text } from '@lidofinance/lido-ui';
-import { EmptyStateBox, EmptyStateIcon } from '../styles';
+import { EmptyState } from '@lidofinance/lido-app-ui';
 
 import FileTextIcon from 'assets/icons/file-text.svg?react';
 
 export const DkgEmptyState: FC = () => (
-  <EmptyStateBox>
-    <EmptyStateIcon>
-      <FileTextIcon />
-    </EmptyStateIcon>
-    <Text size="sm" weight={700}>
-      No DKG files at the moment
-    </Text>
-    <Text size="xxs" color="secondary">
-      Upload your first distributed key generation file
-    </Text>
-  </EmptyStateBox>
+  <EmptyState
+    illustration={<FileTextIcon />}
+    title="No DKG files at the moment"
+    description="Upload your first distributed key generation file"
+  />
 );

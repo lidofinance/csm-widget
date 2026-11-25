@@ -1,0 +1,4 @@
+.steps.steps {
+  padding-left: 16px;
+  border-left: 1px solid var(--lido-app-ui-color-border-default);
+}

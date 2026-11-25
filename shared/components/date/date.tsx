@@ -1,7 +1,7 @@
-import { Tooltip } from '../tooltip/tooltip';
+import { Tooltip } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { formatDate } from 'utils';
-import { DateStyle } from './styles';
+import s from './date.module.css';
 
 type Props = {
   timestamp: number | Date | undefined;
@@ -13,8 +13,8 @@ export const Date: FC<Props> = ({ timestamp, format }) => {
     return null;
   }
   return (
-    <Tooltip title={formatDate(timestamp, 'PP')} placement="top">
-      <DateStyle>{formatDate(timestamp, format)}</DateStyle>
+    <Tooltip content={formatDate(timestamp, 'PP')} position="top">
+      <span className={s.root}>{formatDate(timestamp, format)}</span>
     </Tooltip>
   );
 };

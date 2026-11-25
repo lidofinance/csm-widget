@@ -1,0 +1,44 @@
+.root.root {
+  border-radius: 20px;
+}
+
+.root.root[data-radius='xl'] {
+  border-radius: 32px;
+}
+
+.root.root[data-gradient='border'] {
+  border: 2px solid transparent;
+  background:
+    linear-gradient(
+        76.5deg,
+        rgba(106, 154, 255, 0.2) 0%,
+        rgba(201, 172, 255, 0.2) 29.27%,
+        rgba(255, 190, 191, 0.2) 102.28%
+      )
+      padding-box,
+    linear-gradient(
+        var(--lido-app-ui-color-background-surface),
+        var(--lido-app-ui-color-background-surface)
+      )
+      padding-box,
+    linear-gradient(76.5deg, #6a9aff 0%, #c9acff 29.27%, #ffbebf 102.28%)
+      border-box;
+}
+
+.root.root[data-gradient='fill'] {
+  border: 1px solid var(--lido-app-ui-color-border-default);
+  background:
+    linear-gradient(
+      76.5deg,
+      rgba(106, 154, 255, 0.2) 0%,
+      rgba(201, 172, 255, 0.2) 29.35%,
+      rgba(255, 190, 191, 0.2) 102.56%
+    ),
+    var(--lido-app-ui-color-background-surface);
+}
+
+@media (--lido-app-ui-breakpoint-sm-down) {
+  .root.root > div {
+    padding: 20px;
+  }
+}

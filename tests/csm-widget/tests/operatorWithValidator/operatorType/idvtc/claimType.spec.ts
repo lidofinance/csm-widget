@@ -47,9 +47,9 @@ test.describe(
       qase(468, 'Should show the claim notification, badge and claim button'),
       async ({ widgetService }) => {
         const operatorType = widgetService.operatorType;
-        await operatorType.openTypePage();
+        await operatorType.openIdvtcOverviewPage();
 
-        await test.step('IDVTC card is issued and claimable', async () => {
+        await test.step('IDVTC banner is issued and claimable', async () => {
           await expect(operatorType.idvtcIssuedChip).toBeVisible();
           await expect(operatorType.idvtcApplyButton).toContainText(
             'Claim IDVTC type',
@@ -62,7 +62,7 @@ test.describe(
             'You have a new operator type to be claimed',
           );
           await expect(operatorType.claimAlert).toContainText(
-            'The Identified DVT Cluster type is now available to be claimed for your node operator.',
+            'The Identified DVT Cluster type is now available to be claimed for your node operator',
           );
           await expect(operatorType.claimAlertButton).toBeVisible();
         });
@@ -77,14 +77,12 @@ test.describe(
       qase(438, 'Should open the claim page from the claim button'),
       async ({ widgetService }) => {
         const operatorType = widgetService.operatorType;
-        await operatorType.openTypePage();
+        await operatorType.openIdvtcOverviewPage();
 
         await operatorType.idvtcApplyButton.click();
 
         await widgetService.page.waitForURL(/\/type\/idvtc-claim/);
-        await expect(operatorType.claimPageTitle).toHaveText(
-          'Apply for Identified DVT Cluster',
-        );
+        await expect(operatorType.claimPageTitle).toHaveText('Claim');
       },
     );
 
@@ -97,9 +95,7 @@ test.describe(
         await operatorType.claimAlertButton.click();
 
         await widgetService.page.waitForURL(/\/type\/idvtc-claim/);
-        await expect(operatorType.claimPageTitle).toHaveText(
-          'Apply for Identified DVT Cluster',
-        );
+        await expect(operatorType.claimPageTitle).toHaveText('Claim');
       },
     );
 
@@ -109,13 +105,8 @@ test.describe(
         const claim = widgetService.operatorType.claimIdvtc;
         await claim.open();
 
-        await test.step('Page header', async () => {
-          await expect(claim.title).toHaveText(
-            'Apply for Identified DVT Cluster',
-          );
-          await expect(claim.subtitle).toHaveText(
-            'Get verified as an Independent DVT Cluster',
-          );
+        await test.step('Page crumbs', async () => {
+          await expect(claim.title).toHaveText('Claim');
         });
 
         await test.step('Claim card', async () => {
@@ -127,7 +118,8 @@ test.describe(
               'You are eligible to claim a new operator type. Claiming the Identified DVT Cluster operator type will change some parameters for your node operator according to the section below.',
             ),
           ).toBeVisible();
-          await expect(claim.parameterChanges).toBeVisible();
+          await expect(claim.whatsChanging).toContainText('What’s changing');
+          await expect(claim.viewFullListButton).toBeVisible();
           await expect(claim.claimButton).toBeVisible();
         });
       },
@@ -139,9 +131,12 @@ test.describe(
         const claim = widgetService.operatorType.claimIdvtc;
         await claim.open();
 
-        await claim.expandParameterChanges();
+        await claim.openParameterChanges();
 
         await test.step('Current and new operator type columns', async () => {
+          await expect(claim.parameterChanges).toContainText(
+            'Parameter changes',
+          );
           await expect(claim.getColumn('Current (0x01)')).toBeVisible();
           await expect(claim.getColumn('New (IDVTC)')).toBeVisible();
         });

@@ -39,6 +39,10 @@ export const MockRewardsHistoryProvider: FC<
   const mockNodeOperatorContextValue: NodeOperatorContextValue = {
     isPending: false,
     needsSelection: false,
+    isDiscovering: false,
+    dismissSelection: () => {},
+    requestSelection: () => {},
+    selectionFilter: undefined,
     nodeOperator: {
       nodeOperatorId: BigInt(scenario.nodeOperatorId),
       module,

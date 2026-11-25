@@ -1,0 +1,18 @@
+.root {
+  border-radius: var(--lido-app-ui-border-radius-sm);
+  min-width: 28px;
+  height: 28px;
+  font-size: var(--lido-app-ui-font-size-label);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: capitalize;
+  font-weight: 700;
+  color: #fff;
+  width: max-content;
+  background: var(--curve-gradient);
+}
+
+.root[data-inline] {
+  padding-inline: 6px;
+}

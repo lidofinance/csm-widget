@@ -1,0 +1,9 @@
+.bullets {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.recipient {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}

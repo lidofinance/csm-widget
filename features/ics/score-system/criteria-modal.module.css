@@ -1,0 +1,40 @@
+.range {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin-bottom: 16px;
+}
+
+.items {
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.item + .item {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--lido-app-ui-color-border-default);
+}
+
+.item > img {
+  width: 40px;
+  height: 40px;
+}
+
+.itemBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.description {
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--lido-app-ui-color-text-secondary);
+}

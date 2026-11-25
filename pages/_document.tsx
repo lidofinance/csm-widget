@@ -1,58 +1,25 @@
-import Document, {
-  Head,
-  Html,
-  Main,
-  NextScript,
-  DocumentContext,
-  DocumentInitialProps,
-} from 'next/document';
-import { ServerStyleSheet } from 'styled-components';
-import { Fonts, LidoUIHead } from '@lidofinance/lido-ui';
+import Document, { Head, Html, Main, NextScript } from 'next/document';
 
 import { config } from 'config';
-import { moduleMeta } from 'consts/module';
+import {
+  WIDGET_DESCRIPTION,
+  WIDGET_HOST,
+  WIDGET_PREVIEW_FILE,
+  WIDGET_TITLE,
+} from 'consts/module';
 import { FiraCodeFont } from 'styles';
 
 export default class MyDocument extends Document {
-  static async getInitialProps(
-    ctx: DocumentContext,
-  ): Promise<DocumentInitialProps> {
-    const sheet = new ServerStyleSheet();
-    const originalRenderPage = ctx.renderPage;
-
-    try {
-      ctx.renderPage = () =>
-        originalRenderPage({
-          enhanceApp: (App) => (props) =>
-            sheet.collectStyles(<App {...props} />),
-        });
-
-      const initialProps = await Document.getInitialProps(ctx);
-
-      return {
-        ...initialProps,
-        styles: (
-          <>
-            {initialProps.styles}
-            {sheet.getStyleElement()}
-          </>
-        ),
-      };
-    } finally {
-      sheet.seal();
-    }
-  }
-
   get metaTitle(): string {
-    return `${moduleMeta.title} | Lido`;
+    return `${WIDGET_TITLE} | Lido`;
   }
 
   get metaDescription(): string {
-    return moduleMeta.description;
+    return WIDGET_DESCRIPTION;
   }
 
   get metaPreviewImgUrl(): string {
-    return `${moduleMeta.host}/${moduleMeta.previewFile}`;
+    return `${WIDGET_HOST}/${WIDGET_PREVIEW_FILE}`;
   }
 
   render(): JSX.Element {
@@ -108,9 +75,7 @@ export default class MyDocument extends Document {
           <meta name="twitter:site" content="@lidofinance" />
           <meta name="twitter:creator" content="@lomashuk" />
           <meta name="description" content={this.metaDescription} />
-          <Fonts />
           <FiraCodeFont />
-          <LidoUIHead />
           {/* eslint-disable-next-line @next/next/no-sync-scripts */}
           <script src={`${config.BASE_PATH_ASSET}/runtime/window-env.js`} />
         </Head>

@@ -1,25 +1,27 @@
-import { ServicePage } from '@lidofinance/lido-ui';
+import { Button, ErrorPage } from '@lidofinance/lido-app-ui';
 import { GetStaticProps } from 'next';
 import Head from 'next/head';
 import { FC } from 'react';
+import { PATH } from 'consts/urls';
 import { Layout } from 'shared/layout';
-import styled from 'styled-components';
 
-const StyledServicePage = styled(ServicePage)`
-  height: auto;
-  min-height: 70vh;
-`;
-
-const Page404: FC = () => (
-  <Layout dummy={true} pageName="404">
-    <StyledServicePage title="404">
+const Page404: FC = () => {
+  return (
+    <Layout pageName="404" dummy="semi">
       <Head>
         <title>Lido | Page Not Found</title>
       </Head>
-      Page Not Found
-    </StyledServicePage>
-  </Layout>
-);
+      <ErrorPage
+        code="404"
+        action={
+          <Button size="big" href={PATH.HOME}>
+            Back to dashboard
+          </Button>
+        }
+      />
+    </Layout>
+  );
+};
 
 export default Page404;
 

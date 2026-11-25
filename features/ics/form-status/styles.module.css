@@ -1,0 +1,8 @@
+.scoreIcon {
+  display: inline-flex;
+  color: var(--lido-app-ui-color-icons-error);
+}
+
+.scoreIcon[data-passed] {
+  color: var(--lido-app-ui-color-icons-success);
+}

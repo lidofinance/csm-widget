@@ -63,7 +63,7 @@ test.describe(
         await test.step('Socials heading and description', async () => {
           await expect(applyForm.socialProofSection).toContainText('Socials');
           await expect(applyForm.socialProofSection).toContainText(
-            'You must add your social accounts. To prove you own an account, post a message. For more info see the guide',
+            'You must add your social accounts. To prove you own an account, post a message',
           );
           await expect(
             applyForm.socialProofSection.getByRole('link', {
@@ -112,7 +112,7 @@ test.describe(
             'Cluster member addresses',
           );
           await expect(applyForm.clusterMembersSection).toContainText(
-            'Verify ownership of 4 additional Ethereum addresses in your validator cluster.',
+            'Verify ownership of 4 additional Ethereum addresses in your validator cluster',
           );
           await expect(applyForm.clusterProgress).toContainText(
             '0 / 4 verified',
@@ -122,12 +122,12 @@ test.describe(
         await test.step('First member card texts', async () => {
           await expect(member.card).toContainText('Cluster member #1');
           await expect(member.step1).toContainText(
-            'Step 1. Insert cluster member #1 Ethereum address and send the link to this member to sign the transaction on Etherscan.',
+            'Step 1. Insert cluster member #1 Ethereum address and send the link to this member to sign the transaction on Etherscan',
           );
           await expect(member.step1).toContainText('Message to sign');
           await expect(member.signBtn).toContainText('Sign');
           await expect(member.step2).toContainText(
-            'Step 2. Copy the signature and past in the field below',
+            'Step 2. Copy the signature and paste in the field below',
           );
           await expect(member.card).toContainText('Add contacts');
         });

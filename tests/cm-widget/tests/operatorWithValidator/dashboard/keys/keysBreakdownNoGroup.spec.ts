@@ -1,7 +1,6 @@
 import { expect } from '@playwright/test';
 import { test } from '../../../test.fixture';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
-import { qase } from 'playwright-qase-reporter/playwright';
 
 import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 
@@ -11,57 +10,26 @@ test.describe(
   ...suite({
     epic: EPIC.dashboard,
     feature: 'Keys',
-    story: 'Keys breakdown without group',
+    story: 'Deposits paused without group',
   }),
   () => {
     test.beforeEach(async ({ widgetService }) => {
       await widgetService.dashboardPage.open();
-      await widgetService.dashboardPage.keysSection.expandKeysBreakdown();
     });
 
-    test(
-      qase(
-        349,
-        'Should display all key status rows with correct labels except Depositable',
-      ),
-      async ({ widgetService }) => {
-        const { keysSection } = widgetService.dashboardPage;
+    test('Should show deposits paused notice and No group in header', async ({
+      widgetService,
+    }) => {
+      const { depositsPausedNotice, operatorHeader } =
+        widgetService.dashboardPage;
 
-        const rows = [
-          {
-            locator: keysSection.keysPendingActivationCount,
-            label: 'Pending activation',
-          },
-          { locator: keysSection.keysActiveCount, label: 'Active' },
-          { locator: keysSection.keysExitedCount, label: 'Exited' },
-          { locator: keysSection.keysWithdrawnCount, label: 'Withdrawn' },
-          { locator: keysSection.keysUnbondedCount, label: 'Unbonded' },
-          {
-            locator: keysSection.keysExitRequestedCount,
-            label: 'Exit requested',
-          },
-          { locator: keysSection.keysDuplicatedCount, label: 'Duplicated' },
-          { locator: keysSection.keysInvalidCount, label: 'Invalid' },
-          { locator: keysSection.keysUncheckedCount, label: 'Unchecked' },
-        ];
+      await test.step('Check deposits paused notice', async () => {
+        await expect(depositsPausedNotice).toBeVisible();
+      });
 
-        await test.step('Check Depositable count is not visible', async () => {
-          await expect(keysSection.keysDepositableCount).toBeHidden();
-        });
-
-        for (const { locator, label } of rows) {
-          await test.step(`Check "${label}" row is visible`, async () => {
-            await expect(
-              locator,
-              `"${label}" row should be visible`,
-            ).toBeVisible();
-            await expect(
-              locator,
-              `"${label}" row should contain label text`,
-            ).toContainText(label);
-          });
-        }
-      },
-    );
+      await test.step('Check header shows No group', async () => {
+        await expect(operatorHeader.operatorNoGroup).toHaveText('No group');
+      });
+    });
   },
 );

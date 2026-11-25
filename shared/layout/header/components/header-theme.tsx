@@ -1,19 +1,13 @@
+import { ThemeSwitcher } from '@lidofinance/lido-app-ui';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
-import { ThemeTogglerStyle } from '../styles';
 
-const HeaderTheme: FC<{ showAlways?: boolean }> = ({ showAlways }) => {
+const HeaderTheme: FC = () => {
   const router = useRouter();
 
-  const queryTheme = router?.query?.theme;
+  if (router?.query?.theme) return null;
 
-  return (
-    <>
-      {!queryTheme && (
-        <ThemeTogglerStyle $always={showAlways} data-testid="themeToggler" />
-      )}
-    </>
-  );
+  return <ThemeSwitcher data-testid="themeToggler" />;
 };
 
 export default HeaderTheme;

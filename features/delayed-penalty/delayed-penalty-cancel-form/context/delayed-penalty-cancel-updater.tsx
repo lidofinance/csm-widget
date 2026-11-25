@@ -1,9 +1,12 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { useOperatorBalance } from 'modules/web3';
 import { FC, useEffect } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { DelayedPenaltyCancelFormInputType } from './types';
 
-export const DelayedPenaltyCancelUpdater: FC = () => {
+export const DelayedPenaltyCancelUpdater: FC<{ module?: MODULE_NAME }> = ({
+  module,
+}) => {
   const [nodeOperatorId] = useWatch<
     DelayedPenaltyCancelFormInputType,
     ['nodeOperatorId']
@@ -14,6 +17,7 @@ export const DelayedPenaltyCancelUpdater: FC = () => {
 
   const { data: maxAmount } = useOperatorBalance({
     nodeOperatorId,
+    module,
     select: (data) => data.locked,
   });
 

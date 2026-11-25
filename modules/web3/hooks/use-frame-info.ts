@@ -1,18 +1,24 @@
-import { FrameInfo } from '@lidofinance/lido-csm-sdk';
+import { FrameInfo, MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
-import { useSmSDK } from '../web3-provider';
+import invariant from 'tiny-invariant';
+import { useTargetSmSDK } from '../web3-provider';
 import { formatDate, isDayInPast } from 'utils';
 
 export const useFrameInfo = <TData = FrameInfo>(
   select?: (data: FrameInfo) => TData,
+  module?: MODULE_NAME,
 ) => {
-  const { frame, core } = useSmSDK();
+  const { targetModule, sdk } = useTargetSmSDK(module);
 
   return useQuery({
-    queryKey: ['frame-info', { module: core.moduleName }],
+    queryKey: ['frame-info', { module: targetModule }],
     ...STRATEGY_CONSTANT,
-    queryFn: () => frame.getInfo(),
+    queryFn: () => {
+      invariant(sdk);
+      return sdk.frame.getInfo();
+    },
+    enabled: !!sdk,
     select,
   });
 };

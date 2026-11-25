@@ -28,7 +28,6 @@ describe('VALIDATION_MESSAGES static strings', () => {
       'notSameAsCurrentAddress',
       'notSameAsProposedAddress',
       'noChangesAdditionalAddresses',
-      'exceededTotalShare',
       'duplicateAddress',
       'noKeysSelected',
       'proofNotProvided',
@@ -54,6 +53,12 @@ describe('VALIDATION_MESSAGES static strings', () => {
       const msg = VALIDATION_MESSAGES[key];
       expect(msg.endsWith('.')).toBe(false);
     }
+  });
+
+  it('two-sentence messages keep the trailing dot', () => {
+    expect(VALIDATION_MESSAGES.exceededTotalShare).toBe(
+      'You’ve exceeded 100% of the total share. To add a new address to the splitter, please adjust the shares.',
+    );
   });
 });
 
@@ -101,6 +106,15 @@ describe('validationMessage builders', () => {
   it('notEnoughBalance: contains token name', () => {
     const msg = validationMessage.notEnoughBalance('stETH');
     expect(msg).toContain('stETH');
+  });
+
+  it('cannotUploadMoreKeys: pluralizes, no trailing dot', () => {
+    expect(validationMessage.cannotUploadMoreKeys(1)).toBe(
+      'Cannot upload more than 1 key according to your wallet balance',
+    );
+    expect(validationMessage.cannotUploadMoreKeys(3)).toBe(
+      'Cannot upload more than 3 keys according to your wallet balance',
+    );
   });
 
   it('enterAmount: contains token and field', () => {

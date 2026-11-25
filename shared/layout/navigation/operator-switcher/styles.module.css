@@ -1,0 +1,102 @@
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--lido-app-ui-color-background-surface);
+  font: inherit;
+  color: var(--lido-app-ui-color-text-default);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.trigger:hover,
+.trigger:focus-visible {
+  background: var(--lido-app-ui-color-background-surface-hover);
+}
+
+.name.name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.name.name > :last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tags.tags {
+  flex-shrink: 0;
+}
+
+.chevron {
+  display: flex;
+  flex-shrink: 0;
+  color: var(--lido-app-ui-color-icons-secondary);
+}
+
+.popup.popup {
+  gap: 24px;
+
+  /* Figma strokes sit inside the box: padding minus the 1px border */
+  padding: 11px;
+}
+
+.header.header {
+  flex-shrink: 0;
+  width: 100%;
+  padding-top: 20px;
+}
+
+.headerText.headerText {
+  max-width: 100%;
+  text-align: center;
+}
+
+.title.title {
+  overflow-wrap: anywhere;
+}
+
+.subLine.subLine {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.headerTags.headerTags {
+  width: 100%;
+}
+
+.headerTags.headerTags > * {
+  max-width: 100%;
+}
+
+.body.body {
+  width: 100%;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.bodyContent.bodyContent {
+  padding: 16px 0;
+}
+
+.tip.tip {
+  gap: 4px;
+}
+
+@media (--lido-app-ui-breakpoint-lg-down) {
+  .tip.tip {
+    display: none;
+  }
+}

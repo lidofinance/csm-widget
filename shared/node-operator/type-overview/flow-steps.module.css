@@ -1,0 +1,75 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 48px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @media (--lido-app-ui-breakpoint-md-down) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 24px 0;
+  border-top: 1px solid var(--lido-app-ui-color-border-default);
+
+  &:nth-child(odd) {
+    margin-right: -24px;
+    padding-right: 24px;
+  }
+
+  &:nth-child(even) {
+    margin-left: -24px;
+    padding-left: 24px;
+  }
+
+  &:nth-child(-n + 2) {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  &:nth-last-child(-n + 2) {
+    padding-bottom: 0;
+  }
+
+  @media (--lido-app-ui-breakpoint-md-down) {
+    &:nth-child(odd),
+    &:nth-child(even) {
+      margin: 0;
+      padding-right: 0;
+      padding-left: 0;
+    }
+
+    &:nth-child(2) {
+      border-top: 1px solid var(--lido-app-ui-color-border-default);
+      padding-top: 24px;
+    }
+
+    &:nth-last-child(2) {
+      padding-bottom: 24px;
+    }
+  }
+}
+
+.number {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--lido-app-ui-color-tint-active);
+  color: var(--lido-app-ui-color-text-active);
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.text {
+  min-width: 0;
+}

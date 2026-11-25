@@ -1,0 +1,5 @@
+/* z-index 100 keeps the banner above page content but under the sticky header (250), sidebar and scrim (300/290) */
+.banner.banner {
+  position: relative;
+  z-index: 100;
+}

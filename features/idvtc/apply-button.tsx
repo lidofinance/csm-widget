@@ -1,4 +1,4 @@
-import { ButtonProps } from '@lidofinance/lido-ui';
+import { ButtonProps } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { TypeApplyButton } from 'shared/node-operator/type-status';
 import { useIdvtcState } from './shared';
@@ -18,7 +18,7 @@ export const IdvtcApplyButton: FC<Props> = ({ size }) => {
       hasOperator={hasOperator}
       isPending={isButtonPending}
       size={size}
-      data-testid="dvtApplyButton"
+      dataTestId="dvtApplyButton"
     />
   );
 };

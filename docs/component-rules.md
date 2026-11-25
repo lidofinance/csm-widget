@@ -11,7 +11,7 @@ shared/components/
 ├── [component-name]/           # kebab-case directory names
 │   ├── index.ts               # barrel exports
 │   ├── [component-name].tsx   # main component file
-│   ├── styles.ts              # styling (or style.ts for simple components)
+│   ├── styles.module.css      # co-located CSS Module (or [component-name].module.css)
 │   └── types.ts               # optional type definitions
 ```
 
@@ -19,7 +19,7 @@ shared/components/
 
 - **Directories**: kebab-case (`accordion-navigatable`, `input-amount`)
 - **Component files**: `{component-name}.tsx` matching directory name
-- **Style files**: `styles.ts` (complex) or `style.ts` (simple) or `styles.tsx` (with JSX)
+- **Style files**: co-located `*.module.css` (`styles.module.css` or `<component>.module.css`)
 - **Type files**: `types.ts` (when needed)
 - **Index files**: `index.ts` for re-exports
 
@@ -29,7 +29,8 @@ shared/components/
 
 ```typescript
 import { FC, ReactNode } from 'react';
-import { ComponentNameStyled } from './styles';
+import cn from 'classnames';
+import s from './component-name.module.css';
 
 type Props = {
   children?: ReactNode;
@@ -41,11 +42,17 @@ export const ComponentName: FC<Props> = ({
   children,
   variant = 'default',
   big = false,
+  className,
   ...props
 }) => (
-  <ComponentNameStyled $variant={variant} $big={big} {...props}>
+  <div
+    {...props}
+    className={cn(s.root, className)}
+    data-variant={variant}
+    data-big={big || undefined}
+  >
     {children}
-  </ComponentNameStyled>
+  </div>
 );
 ```
 
@@ -71,44 +78,79 @@ export const FaqItem = ({ title, content }) => (
 
 ## Styling Patterns
 
-### Styled-Components with Theme Integration
+### CSS Modules + app-ui props
 
-```typescript
-// styles.ts
-import styled, { css } from 'styled-components';
-import { Block } from '@lidofinance/lido-ui';
+Styled-components is banned (eslint `no-restricted-imports`). Style with co-located CSS Modules and app-ui primitive props.
 
-const VARIANTS = {
-  default: css`
-    background: var(--lido-color-background);
-  `,
-  warning: css`
-    background: var(--lido-color-warning);
-  `,
-};
+**Files and names**
 
-export const ComponentStyled = styled(Block)<{
-  $variant?: keyof typeof VARIANTS;
-  $big?: boolean;
-}>`
-  display: flex;
-  gap: ${({ theme }) => theme.spaceMap.md}px;
-  padding: ${({ theme }) => theme.spaceMap.lg}px;
+- `foo/styles.module.css` (or `foo/bar.module.css` for `bar.tsx`); `import s from './bar.module.css'` (always `s`); `import cn from 'classnames'` only when merging.
+- Class names are camelCase, no `Style`/`Styled` suffix. `.root` is the outermost element of the exported component.
+- Barrels never re-export style files.
+- Comments: near zero, only a non-obvious why.
 
-  ${({ $variant }) => $variant && VARIANTS[$variant]}
-  ${({ $big }) =>
-    $big &&
-    css`
-      font-size: ${({ theme }) => theme.fontSizesMap.lg}px;
-    `}
-`;
+**Primitives first**
+
+- Use `Stack`/`Grid`/`Card`/`Typography` props (`direction`, `gap`, `align`, `justify`, `columns`, `padding`, `variant`, `weight`, `as`) wherever they reproduce every declaration. Keep a residual class for the rest (width, padding, margin, min-width, flex, off-scale gap).
+- Keep the DOM tag identical (`<Stack as="section">`).
+- Space scale: 0|2|4|6|8|12|16|20|24|32|40|52.
+- Card padding/gap/align are inline on its inner div when the prop is passed. Use the prop, CSS cannot override it.
+
+**Specificity**
+
+- A rule targeting an app-ui root uses a doubled class: `.x.x { ... }`. Never put app CSS in `@layer`.
+- Plain elements and local components use a single class.
+- Anchors without a lib class are governed by `a:not([class*='-module_'])` in `styles/global.css`: mirror specificity literally, do not double "for safety".
+- Bump to `.x.x.x` only when a lib rule at exactly the same specificity sets the same property on the same element. Never reach a lib rule that wins today.
+- If a non-doubled declaration sets a property the lib overrides in a state, scope it with `:not(<state>)`.
+- Nested pseudo: write `&:hover` / `.x:hover`, never a bare `:hover`.
+
+**Dynamic styles**
+
+- Enum/boolean state: `data-*` on the same element (`data-variant={variant}`, `data-selected={selected || undefined}`), styled with `.x[data-variant='cards']`. Prefer existing `aria-*` state. Use a modifier class (`cn(s.x, selected && s.selected)`) when an app-ui component does not spread rest props to its root.
+- Continuous values: inline custom property, consumed by the class.
+
+```tsx
+<img
+  className={s.avatar}
+  style={{ '--avatar-size': `${diameter}px` } as CSSProperties}
+/>
 ```
 
-### Styled-Component Props Rules
+```css
+.avatar {
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+}
+```
 
-- **Dollar prefix**: All styled-component props use `$` prefix (`$variant`, `$big`, `$gap`)
-- **Boolean props**: Use direct boolean values (`$loading`, `$secondary`)
-- **Variant props**: Use union types from variant objects
+- Public props of exported components keep their names (including legacy `$`-prefixed ones on existing components), destructured so they never reach the DOM.
+
+**Wrappers**
+
+- Inline `className={s.x}` at the call site by default. Keep a thin component only for kit APIs, outside-directory imports, or 4+ importers. It merges `cn(s.root, className)` with its own class first.
+- A wrapped local component must forward `className` to its root.
+- Keep the lib class first on lib components: pass `className` into them, never wrap.
+
+**Media / container queries**
+
+- Lib breakpoints: `@media (--lido-app-ui-breakpoint-md-down)` / `-up` (nested inside the rule).
+- Raw ad-hoc queries stay raw (`(max-width: 767px)`, `(prefers-reduced-motion: reduce)`, `(hover: hover)`).
+- `@container (width <= 400px)` is allowed.
+
+**Pure selectors**
+
+Every selector in a `.module.css` contains a local class: no bare `body`, `a`, `:root`, `[data-x]`. Global CSS lives only in `styles/global.css`.
+
+**Values**
+
+Copy tokens and values literally (`var(--lido-app-ui-...)`, px, transitions). No px to token rewrites.
+
+**Don't**
+
+- Don't use `styled-components`, `css` helpers or `$`-prefixed props on new components.
+- Don't change `data-testid`, `role`, `aria-*`, tag names or wrapper depth when restyling.
+- Don't use `[class*='Lib-module_x']` unless a lib part has no other hook.
 
 ## TypeScript Patterns
 
@@ -143,7 +185,7 @@ type Component<T extends keyof JSX.IntrinsicElements> = ComponentProps<T> & {
 ```typescript
 export const InputComponent = forwardRef<HTMLInputElement, InputProps>(
   ({ value, onChange, ...props }, ref) => (
-    <InputStyled
+    <input
       ref={ref}
       value={value}
       onChange={onChange}
@@ -171,7 +213,7 @@ export * from './sub-component';
 
 ```typescript
 // Named imports (preferred)
-import { Text, Button } from '@lidofinance/lido-ui';
+import { Body, Button } from '@lidofinance/lido-app-ui';
 import { Stack } from '../stack';
 
 // Type-only imports
@@ -283,7 +325,7 @@ export const useFormSubmit = ({ onConfirm, onRetry }) => {
 ### Shared Components
 
 - **Descriptive names**: `AccordionNavigatable`, `AmountWithPrice`, `ExternalButtonLink`
-- **Suffix patterns**: `Styled` for styled components, `Hook` for hook components
+- **Suffix patterns**: `Hook` for hook components
 - **Boolean props**: `big`, `loading`, `disabled`, `warning`
 
 ### Feature Components
@@ -321,24 +363,25 @@ export const useFormSubmit = ({ onConfirm, onRetry }) => {
 
 ### External Libraries
 
-- **Base components**: Extend `@lidofinance/lido-ui` components
+- **Base components**: Use `@lidofinance/lido-app-ui` (Card, Typography shortcuts, Button)
 - **Web3 integration**: Use `@lidofinance/lido-csm-sdk` for blockchain operations
 - **Form handling**: React Hook Form with custom resolvers
-- **Styling**: Styled-components with theme integration
+- **Styling**: CSS Modules + app-ui primitive props
 
-### Theme Integration
+### Tokens
 
-```typescript
-// Use theme properties
-gap: ${({ theme }) => theme.spaceMap.md}px;
-border-radius: ${({ theme }) => theme.borderRadiusesMap.md}px;
-color: var(--lido-color-text);
+```css
+.card {
+  gap: 12px;
+  border-radius: var(--lido-app-ui-border-radius-card);
+  color: var(--lido-app-ui-color-text-default);
+}
 ```
 
 ## Common Anti-Patterns to Avoid
 
 1. **Don't** use direct DOM manipulation
-2. **Don't** create styled-component props without `$` prefix
+2. **Don't** import `styled-components`
 3. **Don't** mix file naming conventions (stick to kebab-case)
 4. **Don't** create new validation patterns - use existing utilities
 5. **Don't** bypass the form context architecture for forms

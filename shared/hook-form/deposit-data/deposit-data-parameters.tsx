@@ -1,11 +1,11 @@
+import { Table, TableColumn, Typography } from '@lidofinance/lido-app-ui';
 import {
   CurveParameters,
   NodeOperatorInfo,
   TOKENS,
 } from '@lidofinance/lido-csm-sdk';
-import { FC, useMemo } from 'react';
+import { FC, ReactNode, useMemo } from 'react';
 import { useModule } from 'modules/web3';
-import { IconTooltip } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
 import {
   formatPercent,
@@ -13,13 +13,6 @@ import {
   getFeeForKey,
   getQueueTypeForKey,
 } from 'utils';
-import {
-  DataCell,
-  HeaderCell,
-  TableContainer,
-  TableHeader,
-  TableRow,
-} from './styles';
 import { useWatch } from 'react-hook-form';
 import { DepositDataInputType } from './use-parse-deposit-data';
 import { useFormData } from '../form-controller';
@@ -29,7 +22,22 @@ type FormData = {
   curveParameters?: CurveParameters;
 };
 
-export const DepositDataParameters: FC = () => {
+type KeyRow = {
+  keyNumber: number;
+  bondAmount: bigint;
+  feePercentage: bigint;
+  queueType?: string;
+};
+
+const getRowKey = ({ keyNumber }: KeyRow) => String(keyNumber);
+
+export type DepositDataParametersProps = {
+  highlightFrom?: number;
+};
+
+export const DepositDataParameters: FC<DepositDataParametersProps> = ({
+  highlightFrom,
+}) => {
   const { isCsmFamily } = useModule();
   const [depositData] = useWatch<DepositDataInputType, ['depositData']>({
     name: ['depositData'],
@@ -69,45 +77,66 @@ export const DepositDataParameters: FC = () => {
     });
   }, [curveParameters, depositData.length, operatorInfo, isCsmFamily]);
 
-  return (
-    <TableContainer $equal $short={!isCsmFamily}>
-      <TableHeader>
-        <HeaderCell>Key number</HeaderCell>
-        <HeaderCell>
-          Fee
-          <IconTooltip
-            tooltip="A share of the Consensus and Execution layers rewards"
-            placement="bottomRight"
-          />
-        </HeaderCell>
-        {isCsmFamily && (
-          <HeaderCell>
-            Queue
-            <IconTooltip
-              tooltip="Priority queue stays ahead of the general queue"
-              placement="bottomRight"
-            />
-          </HeaderCell>
-        )}
-        <HeaderCell>
-          Bond
-          <IconTooltip
-            tooltip="Security collateral required per validator key"
-            placement="bottomRight"
-          />
-        </HeaderCell>
-      </TableHeader>
+  const columns = useMemo<TableColumn<KeyRow>[]>(() => {
+    const cell = (keyNumber: number, content: ReactNode) => (
+      <Typography
+        color={
+          highlightFrom !== undefined && keyNumber > highlightFrom
+            ? 'error'
+            : undefined
+        }
+      >
+        {content}
+      </Typography>
+    );
 
-      {keyData.map(({ keyNumber, bondAmount, feePercentage, queueType }) => (
-        <TableRow key={keyNumber}>
-          <DataCell>#{keyNumber}</DataCell>
-          <DataCell>{formatPercent(feePercentage)}</DataCell>
-          {isCsmFamily && <DataCell>{queueType}</DataCell>}
-          <DataCell>
-            <FormatToken amount={bondAmount} token={TOKENS.eth} />
-          </DataCell>
-        </TableRow>
-      ))}
-    </TableContainer>
+    return [
+      {
+        key: 'keyNumber',
+        header: 'Key number',
+        render: ({ keyNumber }) => cell(keyNumber, `#${keyNumber}`),
+      },
+      {
+        key: 'feePercentage',
+        header: 'Fee',
+        align: 'right',
+        info: 'A share of the Consensus and Execution layers rewards',
+        render: ({ keyNumber, feePercentage }) =>
+          cell(keyNumber, formatPercent(feePercentage)),
+      },
+      ...(isCsmFamily
+        ? [
+            {
+              key: 'queueType',
+              header: 'Queue',
+              align: 'right',
+              info: 'Priority queue stays ahead of the general queue',
+              render: ({ keyNumber, queueType }) => cell(keyNumber, queueType),
+            } as TableColumn<KeyRow>,
+          ]
+        : []),
+      {
+        key: 'bondAmount',
+        header: 'Bond',
+        align: 'right',
+        info: 'Security collateral required per validator key',
+        render: ({ keyNumber, bondAmount }) =>
+          cell(
+            keyNumber,
+            <FormatToken amount={bondAmount} token={TOKENS.eth} />,
+          ),
+      },
+    ];
+  }, [highlightFrom, isCsmFamily]);
+
+  return (
+    <Table
+      variant="dense"
+      stickyHeader
+      maxHeight={150}
+      columns={columns}
+      rows={keyData}
+      rowKey={getRowKey}
+    />
   );
 };

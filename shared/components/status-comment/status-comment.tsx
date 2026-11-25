@@ -13,7 +13,7 @@ import {
   CommentWithStrikes,
 } from './comments';
 import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
-import { CommentStyle } from './styles';
+import s from './status-comment.module.css';
 
 type Props = {
   statuses: KEY_STATUS[];
@@ -21,9 +21,9 @@ type Props = {
 
 export const StatusComment: FC<Props> = (props) => {
   return (
-    <CommentStyle>
+    <span className={s.root}>
       <Comment {...props} />
-    </CommentStyle>
+    </span>
   );
 };
 

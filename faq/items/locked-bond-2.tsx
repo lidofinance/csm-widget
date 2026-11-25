@@ -9,9 +9,9 @@ export const LockedBond2: Faq = {
     <div>
       <p>
         To unlock the bond, the penalty amount, which includes the stolen amount
-        and a fixed stealing fine, must be compensated on the &quot;Locked
-        bond&quot; tab. This action can be performed from the Manager Address of
-        the Node Operator.{' '}
+        and a fixed stealing fine, must be compensated on the Compensate locked
+        bond page. This action can be performed from the Manager Address of the
+        Node Operator.{' '}
       </p>
       <p>
         If there are disputes regarding the penalty, node operators can start a

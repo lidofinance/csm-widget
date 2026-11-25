@@ -23,21 +23,30 @@ export const useEnableTopUpAllocationFlowResolver = (): FlowResolver<
   const buildCallback = useTxModalStagesEnableTopUpAllocation();
 
   return useCallback(
-    (input, data) => ({
-      action: 'enable' as const,
-      submit: () => {
-        invariant(cmSdk, 'CM SDK is not defined');
+    (input, data) => {
+      const props = () => {
         invariant(
           input.nodeOperatorId !== undefined,
           'NodeOperatorId is not defined',
         );
+        return { nodeOperatorId: input.nodeOperatorId };
+      };
 
-        return cmSdk.metaRegistry.enableTopUpAllocation({
-          nodeOperatorId: input.nodeOperatorId,
-          callback: buildCallback(input, data),
-        });
-      },
-    }),
+      return {
+        action: 'enable' as const,
+        submit: () => {
+          invariant(cmSdk, 'CM SDK is not defined');
+          return cmSdk.metaRegistry.enableTopUpAllocation({
+            ...props(),
+            callback: buildCallback(input, data),
+          });
+        },
+        estimate: async () => {
+          invariant(cmSdk, 'CM SDK is not defined');
+          return cmSdk.metaRegistry.estimateEnableTopUpAllocation(props());
+        },
+      };
+    },
     [cmSdk, buildCallback],
   );
 };

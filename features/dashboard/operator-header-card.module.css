@@ -1,0 +1,80 @@
+.grid {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+  grid-template-areas: var(--grid-areas);
+  column-gap: 24px;
+  row-gap: 12px;
+  align-items: start;
+
+  @media (--lido-app-ui-breakpoint-md-down) {
+    grid-template-columns: 52px minmax(0, 1fr);
+    grid-template-areas: var(--grid-areas-md);
+    column-gap: 16px;
+  }
+}
+
+.grid[data-tight] {
+  row-gap: 8px;
+
+  @media (--lido-app-ui-breakpoint-md-down) {
+    row-gap: 12px;
+  }
+}
+
+.avatarArea {
+  grid-area: avatar;
+  width: 72px;
+  height: 72px;
+
+  @media (--lido-app-ui-breakpoint-md-down) {
+    width: 52px;
+    height: 52px;
+  }
+}
+
+.avatarScale {
+  width: 72px;
+  height: 72px;
+  transform-origin: top left;
+
+  @media (--lido-app-ui-breakpoint-md-down) {
+    transform: scale(0.7222);
+  }
+}
+
+.titleArea {
+  grid-area: title;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+
+  @media (--lido-app-ui-breakpoint-md-down) {
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: center;
+  }
+}
+
+.settingsArea {
+  grid-area: settings;
+  align-self: center;
+}
+
+.metaArea {
+  grid-area: meta;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+  min-width: 0;
+
+  @media (--lido-app-ui-breakpoint-md-down) {
+    flex-direction: column;
+    gap: 4px;
+  }
+}
+
+.descriptionArea {
+  grid-area: desc;
+}

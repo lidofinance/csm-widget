@@ -1,0 +1,13 @@
+.whatsNext.whatsNext {
+  width: 100%;
+
+  & ol {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 0;
+    padding-left: 24px;
+    color: var(--lido-app-ui-color-text-default);
+    line-height: 28px;
+  }
+}

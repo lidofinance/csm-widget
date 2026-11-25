@@ -1,0 +1,29 @@
+.root.root [data-wrap] {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.root.root > div > div > div > div:first-child > [data-wrap] {
+  padding-top: 0;
+}
+
+.root.root > div > div > div > div:last-child:not(:has([data-wrap])) {
+  padding-top: 28px;
+}
+
+.stepIcon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--lido-app-ui-border-radius-pill);
+  background: var(--lido-app-ui-color-tint-active);
+  color: var(--lido-app-ui-color-icons-active);
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}

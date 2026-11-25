@@ -156,9 +156,8 @@ test.describe(
         await test.step('Accept the invite', async () => {
           await inboxRequestsPage.open();
           await inboxRequestsPage
-            .getRequestLocator(INVITER_NO_ID, ROLES.REWARDS)
+            .getAcceptButton(INVITER_NO_ID, ROLES.REWARDS)
             .click();
-          await inboxRequestsPage.acceptRequestButton.click();
         });
 
         await test.step('Transaction goes to CuratedModule', async () => {

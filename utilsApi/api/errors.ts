@@ -1,6 +1,3 @@
-export const DEFAULT_API_ERROR_MESSAGE =
-  'Something went wrong. Sorry, try again later :(';
-
 export const HEALTHY_RPC_SERVICES_ARE_OVER = 'Healthy RPC services are over!';
 
 export class ClientError extends Error {

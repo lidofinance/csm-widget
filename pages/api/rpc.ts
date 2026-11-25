@@ -9,8 +9,6 @@ import {
   defaultErrorHandler,
   HttpMethod,
   httpMethodGuard,
-  /* `fetchRPC` is a function used to make RPC (Remote Procedure Call) requests to a server. It is
-  likely responsible for handling the actual communication with the server. */
   rateLimit,
   requestAddressMetric,
   responseTimeMetric,
@@ -58,6 +56,7 @@ const rpc = rpcFactory({
     [CHAINS.Mainnet]: serverConfig.rpcUrls_1,
     [CHAINS.Hoodi]: serverConfig.rpcUrls_560048,
   },
+  upstreamTimeoutMs: 30_000, // 1M-block eth_getLogs need time to first byte
   validation: {
     allowedRPCMethods,
     allowedCallAddresses,

@@ -1,0 +1,17 @@
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--lido-app-ui-color-tint-info-hover);
+  color: var(--lido-app-ui-color-icons-info);
+}
+
+/* doubled class beats app-ui Banner's `.icon svg { width: 100% }` */
+.root.root svg {
+  width: 20px;
+  height: 20px;
+}

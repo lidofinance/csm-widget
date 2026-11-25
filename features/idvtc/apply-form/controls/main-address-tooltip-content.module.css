@@ -1,0 +1,4 @@
+.root p + *,
+.root li + * {
+  margin-top: var(--lido-app-ui-space-4);
+}

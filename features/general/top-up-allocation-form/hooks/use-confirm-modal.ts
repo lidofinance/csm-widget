@@ -1,6 +1,6 @@
 import { getUseConfirmModal } from 'shared/hooks';
-import { ConfirmDisableTopUpModal } from '../confirm-disable-top-up-modal';
+import { ConfirmDisableTopUpModalApp } from '../confirm-disable-top-up-modal-app';
 
 export const useConfirmDisableTopUpModal = getUseConfirmModal(
-  ConfirmDisableTopUpModal,
+  ConfirmDisableTopUpModalApp,
 );

@@ -1,2 +1,1 @@
-export * from './view-keys-page';
-export * from './view-keys';
+export * from './keys-page';

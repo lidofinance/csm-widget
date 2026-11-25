@@ -26,7 +26,8 @@ export const TopUpAllocationFormProvider: FC<PropsWithChildren> = ({
   });
   const { reset } = formObject;
 
-  const flowSubmit = useFlowSubmit(useTopUpAllocationFlowResolver());
+  const resolve = useTopUpAllocationFlowResolver();
+  const flowSubmit = useFlowSubmit(resolve);
 
   // The toggle flips optimistically; a cancelled or failed submit must put it back
   const submitter: FormSubmitter<
@@ -45,6 +46,7 @@ export const TopUpAllocationFormProvider: FC<PropsWithChildren> = ({
     <FormProvider {...formObject}>
       <FormControllerProvider
         submitter={submitter}
+        resolve={resolve}
         formName="topUpAllocation"
         onReset={reset}
       >

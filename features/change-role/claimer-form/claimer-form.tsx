@@ -1,28 +1,22 @@
+import { useFaq } from 'faq';
 import { FC, memo } from 'react';
-
-import { PATH } from 'consts/urls';
-import { BackButton, FormBlock } from 'shared/components';
-import { Form } from 'shared/hook-form/form-controller';
-import { ClaimerFormLoader } from './claimer-form-loader';
+import { Faq } from 'shared/components';
+import { FormPage, FormReady } from 'shared/form-page';
+import { ClaimerFormGate } from './claimer-form-gate';
 import { ClaimerDataProvider, ClaimerFormProvider } from './context';
-import { AddressInput } from './controls/address-input';
-import { Info } from './controls/info';
-import { SubmitButton } from './controls/submit-button';
 
 export const ClaimerForm: FC = memo(() => {
+  const faq = useFaq('ROLES');
+
   return (
     <ClaimerDataProvider>
       <ClaimerFormProvider>
-        <FormBlock data-testid="claimerForm">
-          <BackButton href={PATH.SETTINGS} />
-          <ClaimerFormLoader>
-            <Form>
-              <Info />
-              <AddressInput />
-              <SubmitButton />
-            </Form>
-          </ClaimerFormLoader>
-        </FormBlock>
+        <FormPage>
+          <FormReady>
+            <ClaimerFormGate />
+          </FormReady>
+          <Faq items={faq} />
+        </FormPage>
       </ClaimerFormProvider>
     </ClaimerDataProvider>
   );

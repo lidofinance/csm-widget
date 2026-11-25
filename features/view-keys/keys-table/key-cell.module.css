@@ -1,0 +1,12 @@
+.commentLine {
+  font-size: 14px;
+  line-height: 24px;
+  color: var(--lido-app-ui-color-text-secondary);
+
+  &:has(
+    [data-testid='statusCommentCell'] > :not(:empty),
+    [data-testid='topUpQueuePosition']
+  ) {
+    margin-top: 4px;
+  }
+}

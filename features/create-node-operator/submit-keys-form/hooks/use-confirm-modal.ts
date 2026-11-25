@@ -1,6 +1,11 @@
 import { getUseConfirmModal } from 'shared/hooks';
-import { ConfirmCustomAddressesModal } from '../confirm-custom-addresses-modal';
+import { ConfirmCustomAddressesModalApp } from '../confirm-custom-addresses-modal-app';
+import { ConfirmRemoveReferrerModalApp } from '../confirm-remove-referrer-modal-app';
 
 export const useConfirmCustomAddressesModal = getUseConfirmModal(
-  ConfirmCustomAddressesModal,
+  ConfirmCustomAddressesModalApp,
+);
+
+export const useConfirmRemoveReferrerModal = getUseConfirmModal(
+  ConfirmRemoveReferrerModalApp,
 );

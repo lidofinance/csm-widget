@@ -57,9 +57,9 @@ test.describe(
           ROLES.REWARDS,
         );
 
-        await expect(expectedRequest).toBeVisible();
-        await expectedRequest.click();
-        await expect(expectedRequest).toBeChecked();
+        await expect(expectedRequest).toBeVisible({
+          timeout: RPC_WAIT_TIMEOUT,
+        });
 
         await inboxRequestsPage.acceptRequest(randomId, ROLES.REWARDS);
         await expect(expectedRequest).toBeHidden({ timeout: RPC_WAIT_TIMEOUT });
@@ -80,9 +80,9 @@ test.describe(
           ROLES.MANAGER,
         );
 
-        await expect(expectedRequest).toBeVisible();
-        await expectedRequest.click();
-        await expect(expectedRequest).toBeChecked();
+        await expect(expectedRequest).toBeVisible({
+          timeout: RPC_WAIT_TIMEOUT,
+        });
 
         await inboxRequestsPage.acceptRequest(randomId, ROLES.MANAGER);
         await expect(expectedRequest).toBeHidden({ timeout: RPC_WAIT_TIMEOUT });

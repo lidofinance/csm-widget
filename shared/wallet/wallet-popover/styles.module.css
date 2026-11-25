@@ -1,0 +1,58 @@
+.popup.popup {
+  gap: 32px;
+  padding: 32px;
+}
+
+.account.account {
+  width: 100%;
+}
+
+.avatar {
+  position: relative;
+  display: flex;
+}
+
+.badge {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--lido-app-ui-color-background-surface);
+
+  img,
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.addressRow.addressRow {
+  width: 100%;
+
+  /* app-ui Copy sizes its icon as 1lh - 4px, i.e. 20px */
+  line-height: 24px;
+}
+
+.address.address {
+  line-height: 36px;
+}
+
+.copy.copy:not(:hover) {
+  color: var(--lido-app-ui-color-icons-secondary);
+}
+
+.etherscan.etherscan.etherscan {
+  flex-shrink: 0;
+  color: var(--lido-app-ui-color-icons-secondary);
+}
+
+.etherscan svg {
+  width: 20px;
+  height: 20px;
+}

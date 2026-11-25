@@ -37,7 +37,7 @@ test.describe(
         const { addBond } = widgetService.bondRewardsPage;
 
         await test.step('Choose ETH and fill amount', async () => {
-          await addBond.selectBondToken(TOKENS.eth).click();
+          await addBond.selectBondToken(TOKENS.eth);
           await addBond.amountInput.fill('0.1');
           await expect(addBond.addBondButton).toBeEnabled();
         });

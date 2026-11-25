@@ -1,0 +1,102 @@
+import { DataListRow } from '@lidofinance/lido-app-ui';
+import { STETH_ROUNDING_THRESHOLD, TOKENS } from '@lidofinance/lido-csm-sdk';
+import { FC } from 'react';
+import { Address } from 'shared/components';
+import { GasCostRow, SubmitAside, SubmitButton } from 'shared/form-page';
+import { FormatToken } from 'shared/formatters';
+import { useClaimBondFormData } from './context';
+import { SplittersRow } from './controls/splitters-row';
+import { useClaimBreakdown } from './hooks/use-claim-breakdown';
+import { useClaimOptions } from './hooks/use-claim-options';
+
+const InfoRows: FC = () => {
+  const { rewardsAddress, feeSplits } = useClaimBondFormData(true);
+  const {
+    coverAmount,
+    splittableGross,
+    splittable,
+    toRA,
+    toRAToken,
+    token,
+    bondDelta,
+    debtBurned,
+    debtRemain,
+    includesRewards,
+    hasSplits,
+  } = useClaimBreakdown();
+
+  return (
+    <>
+      {includesRewards && coverAmount > STETH_ROUNDING_THRESHOLD && (
+        <DataListRow
+          label="Insufficient Bond compensation"
+          value={<FormatToken amount={coverAmount} token={TOKENS.steth} />}
+        />
+      )}
+      {includesRewards && debtBurned > 0n && (
+        <DataListRow
+          label="Bond debt covered"
+          info="Outstanding bond debt is automatically burned from the bond on every rewards distribution and deposit"
+          value={<FormatToken amount={debtBurned} token={TOKENS.steth} />}
+        />
+      )}
+      {debtRemain > 0n && (
+        <DataListRow
+          label="Bond debt remaining"
+          info="Bond debt that cannot be covered yet — it will be paid down by future rewards or deposits"
+          value={<FormatToken amount={debtRemain} token={TOKENS.steth} />}
+        />
+      )}
+      {hasSplits && splittable > 0n && (
+        <SplittersRow feeSplits={feeSplits} amount={splittableGross} />
+      )}
+      {toRA > 0n && (
+        <DataListRow
+          label="Rewards Address to receive"
+          description={
+            <Address
+              address={rewardsAddress}
+              size="xxs"
+              weight={700}
+              color="secondary"
+            />
+          }
+          descriptionInfo="The recipient of the claim is the Rewards Address. You can change the Rewards Address on the Settings tab."
+          value={<FormatToken amount={toRAToken} token={token} />}
+          dataTestId={{
+            root: 'claimBondFormInfoTitle',
+            descriptionInfo: 'iconTooltip',
+            descriptionInfoContent: 'tooltipWrapper',
+          }}
+        />
+      )}
+      {bondDelta > 0n && (
+        <DataListRow
+          label="Bond balance will increase by"
+          value={<FormatToken amount={bondDelta} token={TOKENS.steth} />}
+        />
+      )}
+      {bondDelta < 0n && (
+        <DataListRow
+          label="Bond balance will decrease by"
+          value={<FormatToken amount={-bondDelta} token={TOKENS.steth} />}
+          dataTestId={{ root: 'bondDecreaseRow' }}
+        />
+      )}
+      <GasCostRow />
+    </>
+  );
+};
+
+const ClaimSubmitButton: FC = () => {
+  const { submitLabel } = useClaimOptions();
+  return <SubmitButton>{submitLabel}</SubmitButton>;
+};
+
+export const ClaimBondAside: FC = () => (
+  <div data-testid="claimBondFormInfo">
+    <SubmitAside rows={<InfoRows />}>
+      <ClaimSubmitButton />
+    </SubmitAside>
+  </div>
+);

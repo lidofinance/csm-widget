@@ -30,30 +30,31 @@ describe('readServerConfig', () => {
   });
 });
 
-describe('readServerConfig devnetAddresses', () => {
+describe('readServerConfig devnetArtifacts', () => {
   const tmpFile = path.join(os.tmpdir(), `devnet-${process.pid}.json`);
   afterAll(() => fs.rmSync(tmpFile, { force: true }));
 
   it('is null when path is unset', () => {
-    expect(readServerConfig({}).devnetAddresses).toBeNull();
+    expect(readServerConfig({}).devnetArtifacts).toBeNull();
   });
 
   it('loads the json file', () => {
     fs.writeFileSync(tmpFile, JSON.stringify({ Accounting: '0xabc' }));
     expect(
-      readServerConfig({ DEVNET_ADDRESSES_FILE_PATH: tmpFile }).devnetAddresses,
-    ).toEqual({ Accounting: '0xabc' });
+      readServerConfig({ DEVNET_ADDRESSES_FILE_PATH: `CM=${tmpFile}` })
+        .devnetArtifacts,
+    ).toEqual([{ module: 'CM', artifacts: { Accounting: '0xabc' } }]);
   });
 
   it('is null for a missing or invalid file', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     fs.writeFileSync(tmpFile, 'not json');
     expect(
-      readServerConfig({ DEVNET_ADDRESSES_FILE_PATH: tmpFile }).devnetAddresses,
+      readServerConfig({ DEVNET_ADDRESSES_FILE_PATH: tmpFile }).devnetArtifacts,
     ).toBeNull();
     expect(
       readServerConfig({ DEVNET_ADDRESSES_FILE_PATH: `${tmpFile}.nope` })
-        .devnetAddresses,
+        .devnetArtifacts,
     ).toBeNull();
     warn.mockRestore();
   });

@@ -1,23 +1,23 @@
-import { Button, Modal, Text } from '@lidofinance/lido-ui';
+import { Body, Button, Stack } from '@lidofinance/lido-app-ui';
 import type { ModalComponentType } from 'providers/modal-provider';
-import { Stack } from 'shared/components';
 import { ConfirmModalProps, getUseConfirmModal } from 'shared/hooks';
+import { FormModalShell } from 'shared/transaction-modal/form-modal-shell';
 
 type DkgDeleteConfirmProps = ConfirmModalProps & { fileName: string };
 
 export const DkgDeleteConfirmModal: ModalComponentType<
   DkgDeleteConfirmProps
-> = ({ fileName, onConfirm, onReject, ...props }) => (
-  <Modal {...props} onClose={onReject} title="Delete file">
-    <Stack direction="column" gap="xxl">
-      <Text size="xs" color="secondary">
+> = ({ open, fileName, onConfirm, onReject }) => (
+  <FormModalShell open={open} onClose={onReject} title="Delete file">
+    <Stack direction="column" gap={24}>
+      <Body color="secondary">
         Delete <b>{fileName}</b>? This cannot be undone.
-      </Text>
-      <Button fullwidth size="sm" onClick={onConfirm}>
+      </Body>
+      <Button fullWidth onClick={onConfirm}>
         Delete
       </Button>
     </Stack>
-  </Modal>
+  </FormModalShell>
 );
 
 export const useDkgDeleteConfirm = getUseConfirmModal<{ fileName: string }>(

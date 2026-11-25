@@ -1,0 +1,16 @@
+.dots {
+  display: inline-flex;
+  gap: 4px;
+  vertical-align: middle;
+}
+
+.dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--lido-app-ui-color-background-default);
+}
+
+.dot[data-filled='true'] {
+  background: var(--lido-app-ui-color-icons-error);
+}
