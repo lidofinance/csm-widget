@@ -1,4 +1,4 @@
-import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { OPERATOR_TYPE, OPERATOR_TYPE_INFO } from '@lidofinance/lido-csm-sdk';
 import {
   Body,
   Card,
@@ -24,10 +24,12 @@ import {
   useOperatorTypeCurve,
   useOperatorTypeParameters,
 } from 'shared/hooks';
+import { getTypeColumns } from './get-type-columns';
 import s from './type-parameters-card.module.css';
 
 type Props = {
-  type: OPERATOR_TYPE.CSM_ICS | OPERATOR_TYPE.CSM_IDVTC;
+  type:
+    OPERATOR_TYPE.CSM_ICS | OPERATOR_TYPE.CSM_IDVTC | OPERATOR_TYPE.CSM2_DEF;
 };
 
 type ParameterRow = ReturnType<typeof useParameters>[number];
@@ -63,27 +65,24 @@ const ColumnHeader: FC<{ title: string; current: boolean }> = ({
 );
 
 export const TypeParametersCard: FC<Props> = ({ type }) => {
-  // ICS/IDVTC live in CSM only: other modules and pre-operator contribute just the DEF baseline.
   const { nodeOperator } = useNodeOperator();
-  const csmOperator =
-    nodeOperator?.module === MODULE_NAME.CSM ? nodeOperator : undefined;
-  const { data: operatorCurve } = useOperatorCurveId(csmOperator);
+  const { data: operatorCurve } = useOperatorCurveId(nodeOperator);
 
   const typeCurve = useOperatorTypeCurve(type);
   const defCurve = useOperatorTypeCurve(OPERATOR_TYPE.CSM_DEF);
-
-  const holdsTarget =
-    !!operatorCurve && operatorCurve.curveId === typeCurve?.curveId;
-  const ownOtherCurve = !!operatorCurve && !holdsTarget;
-  const baseCurve = ownOtherCurve ? operatorCurve : defCurve;
+  const { baseCurve, baseCurrent, baseOwnTitle, holdsTarget } = getTypeColumns({
+    type,
+    operatorCurve,
+    typeCurve,
+    defCurve,
+  });
 
   const { data: baseParams } = useCurveParameters(baseCurve);
   const { data: typeParams } = useOperatorTypeParameters(type);
-  const isDefBase = baseCurve?.curveId === defCurve?.curveId;
   const baseShort = useCurveMetadata(baseCurve)?.short ?? '';
-  const baseTitle = ownOtherCurve && !isDefBase ? baseShort : 'Default';
+  const baseTitle = baseOwnTitle ? baseShort : 'Default';
 
-  const parameters = useParameters(MODULE_NAME.CSM).filter(
+  const parameters = useParameters(OPERATOR_TYPE_INFO[type].module).filter(
     ({ title }) => !HIDDEN_PARAMETERS.includes(title),
   );
 
@@ -112,9 +111,7 @@ export const TypeParametersCard: FC<Props> = ({ type }) => {
             },
             {
               key: 'base',
-              header: (
-                <ColumnHeader title={baseTitle} current={ownOtherCurve} />
-              ),
+              header: <ColumnHeader title={baseTitle} current={baseCurrent} />,
               render: ({ render }) => (
                 <Values values={baseParams && render(baseParams)} />
               ),

@@ -38,6 +38,7 @@ export const PATH = {
   TOP_UP_ALLOCATION: '/top-up-allocation',
 
   TYPE: '/type',
+  TYPE_0X02: '/type/0x02',
   TYPE_ICS_CLAIM: '/type/ics-claim',
   TYPE_ICS_SYSTEM: '/type/ics-system',
   TYPE_ICS_APPLY: '/type/ics-apply',

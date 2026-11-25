@@ -9,12 +9,12 @@ export type AvailableType = {
 
 export type AvailableTypesFlags = {
   canCreate0x01: boolean;
-  canCreate0x02: boolean;
+  has0x02: boolean;
 };
 
 export const getAvailableTypes = (
   current: DisplayOperatorType | undefined,
-  { canCreate0x01, canCreate0x02 }: AvailableTypesFlags,
+  { canCreate0x01, has0x02 }: AvailableTypesFlags,
 ): AvailableType[] => {
   const candidates: { type: OPERATOR_TYPE; href: PATH | undefined }[] = [
     { type: OPERATOR_TYPE.CSM_ICS, href: PATH.TYPE_ICS_SYSTEM },
@@ -25,7 +25,7 @@ export const getAvailableTypes = (
     },
     {
       type: OPERATOR_TYPE.CSM2_DEF,
-      href: canCreate0x02 ? PATH.CREATE_0x02 : undefined,
+      href: has0x02 ? PATH.TYPE_0X02 : undefined,
     },
   ];
 

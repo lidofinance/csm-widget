@@ -1,14 +1,14 @@
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { Stack } from '@lidofinance/lido-app-ui';
 import { PATH } from 'consts/urls';
 import type { DisplayOperatorType } from 'consts';
-import { useNodeOperator, useOperatorCurveId } from 'modules/web3';
+import { useNodeOperator, useOperatorCurveId, useSmSDK } from 'modules/web3';
 import { FC } from 'react';
 import { HubList, HubRow, HubSection } from 'shared/components';
 import {
   useCanCreate0x01,
-  useCanCreate0x02,
   useDisplayOperatorType,
+  useOperatorTypeCurve,
 } from 'shared/hooks';
 import { TypeBadge } from '../type-badge';
 import { getAvailableTypes } from './get-available-types';
@@ -33,6 +33,7 @@ const TYPE_COPY: Partial<Record<DisplayOperatorType, TypeCopy>> = {
   [OPERATOR_TYPE.CSM2_DEF]: {
     title: '0x02',
     description: 'Validate up to 2,048 ETH per key for enhanced economics',
+    href: PATH.TYPE_0X02,
   },
 };
 
@@ -63,12 +64,14 @@ export const OperatorTypeSection: FC = () => {
   const displayType = useDisplayOperatorType(curve ?? nodeOperator);
   const current = nodeOperator ? displayType : undefined;
   const canCreate0x01 = useCanCreate0x01().canCreate;
-  const canCreate0x02 = useCanCreate0x02().canCreate;
+  const sdk0x02 = useSmSDK(MODULE_NAME.CSM_02);
+  const curve0x02 = useOperatorTypeCurve(OPERATOR_TYPE.CSM2_DEF);
+  const has0x02 = !!sdk0x02 && !!curve0x02;
 
   const currentCopy = current && TYPE_COPY[current];
   const available = getAvailableTypes(current, {
     canCreate0x01,
-    canCreate0x02,
+    has0x02,
   });
 
   return (

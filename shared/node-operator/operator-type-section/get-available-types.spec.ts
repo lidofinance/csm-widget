@@ -2,8 +2,8 @@ import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { PATH } from 'consts/urls';
 import { getAvailableTypes } from './get-available-types';
 
-const on = { canCreate0x01: true, canCreate0x02: true };
-const off = { canCreate0x01: false, canCreate0x02: false };
+const on = { canCreate0x01: true, has0x02: true };
+const off = { canCreate0x01: false, has0x02: false };
 const types = (list: ReturnType<typeof getAvailableTypes>) =>
   list.map(({ type }) => type);
 
@@ -40,7 +40,7 @@ describe('getAvailableTypes', () => {
       types(
         getAvailableTypes(OPERATOR_TYPE.CSM_DEF, {
           ...off,
-          canCreate0x02: true,
+          has0x02: true,
         }),
       ),
     ).toEqual([
@@ -66,7 +66,7 @@ describe('getAvailableTypes', () => {
       PATH.TYPE_ICS_SYSTEM,
       PATH.TYPE_IDVTC_DESCRIPTION,
       PATH.CREATE_0x01,
-      PATH.CREATE_0x02,
+      PATH.TYPE_0X02,
     ]);
   });
 });

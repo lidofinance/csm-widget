@@ -137,6 +137,7 @@ const routes: Route[] = [
     path: PATH.TYPE,
     icon: <IconUser />,
     subPaths: [
+      PATH.TYPE_0X02,
       PATH.TYPE_ICS_SYSTEM,
       PATH.TYPE_ICS_APPLY,
       PATH.TYPE_ICS_CLAIM,
