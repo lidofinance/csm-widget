@@ -1,10 +1,6 @@
 import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
 
-import {
-  getLatestFrameRange,
-  getStrikeDismissKey,
-  selectStruckPubkeys,
-} from './strike-alert';
+import { getLatestFrameRange, selectStruckPubkeys } from './strike';
 
 const key = (
   pubkey: string,
@@ -50,13 +46,5 @@ describe('getLatestFrameRange', () => {
       start: 700,
       end: 1000,
     });
-  });
-});
-
-describe('getStrikeDismissKey', () => {
-  it('differs per lastReport for one operator', () => {
-    expect(getStrikeDismissKey('csm-1', 1)).not.toBe(
-      getStrikeDismissKey('csm-1', 2),
-    );
   });
 });

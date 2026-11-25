@@ -12,13 +12,16 @@ import {
 import { FC, PropsWithChildren, ReactNode, useContext, useEffect } from 'react';
 
 import { NodeOperatorContext } from 'modules/web3/operator-provider/node-operator-provider';
-import { AlertContainer } from 'shared/alerts';
 import {
   LegalDisclaimer,
   PageDisclaimerProvider,
   PageDisclaimers,
   TestEnvBanner,
 } from 'shared/components';
+import {
+  NotificationsToasts,
+  UnsupportedChainBanner,
+} from 'shared/notifications';
 import { trackMatomoPageEvent } from 'utils';
 import { Footer } from './footer';
 import { Crumb, Crumbs, useCrumbs } from './crumbs';
@@ -64,10 +67,11 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
           <Navigation />
           <SidebarInset>
             <Header dummy={mode} crumbs={crumbs} />
+            {!mode && <NotificationsToasts />}
             <Main className={s.main}>
-              {!mode && !fullwidth && <AlertContainer wide={wide} />}
               <PageContent variant={fullwidth || wide ? 'default' : 'narrow'}>
                 <AppStack direction="column" gap={24} align="stretch">
+                  {!mode && <UnsupportedChainBanner />}
                   <Hidden above="md" data-testid="pageTitle">
                     <Crumbs crumbs={crumbs} />
                   </Hidden>

@@ -37,15 +37,7 @@ import {
 import { MockMyOperatorsProvider } from 'mock/my-operators/mock-providers';
 import { VARIANTS } from 'mock/my-operators/variants';
 import { TableProvider } from 'providers/table-provider';
-import { FC, PropsWithChildren, useEffect, useState } from 'react';
-import {
-  AlertComponentType,
-  AlertContainer,
-  AlertProvider,
-  useAlertActions,
-} from 'shared/alerts';
-import { AlertClaimIcs } from 'shared/alerts/components/alert-claim-ics';
-import { AlertExpiredLockedBond } from 'shared/alerts/components/alert-expired-locked-bond';
+import { FC, PropsWithChildren, useState } from 'react';
 import {
   AddressInner,
   CompareParametersList,
@@ -97,7 +89,6 @@ const MESSAGE_VARIANTS: MessageBoxVariant[] = [
   'success',
 ];
 const TX_STATUSES = ['loading', 'success', 'error', 'warning'] as const;
-const ALERTS: AlertComponentType[] = [AlertClaimIcs, AlertExpiredLockedBond];
 const OPERATORS = VARIANTS['cm-group+csm'].available;
 const noop = () => undefined;
 
@@ -141,25 +132,6 @@ const OptionListDemo: FC<{
     </OptionList>
   );
 };
-
-const AlertSeeder: FC = () => {
-  const { showAlert } = useAlertActions();
-
-  useEffect(() => {
-    ALERTS.forEach((alert) => showAlert(alert));
-  }, [showAlert]);
-
-  return null;
-};
-
-const AlertsDemo: FC<{ wide?: boolean }> = ({ wide }) => (
-  <AlertProvider>
-    <AlertSeeder />
-    <div style={{ position: 'relative', minHeight: 360 }}>
-      <AlertContainer wide={wide} />
-    </div>
-  </AlertProvider>
-);
 
 const SuccessScreens: FC = () => (
   <Stack gap={32}>
@@ -423,12 +395,6 @@ const StyleHarnessPage: FC = () => (
             <ShareRowView key={row.label} {...row} />
           ))}
         </Stack>
-      </Section>
-      <Section title="AlertContainer narrow">
-        <AlertsDemo />
-      </Section>
-      <Section title="AlertContainer wide">
-        <AlertsDemo wide />
       </Section>
       <Section title="Badges and tags">
         <TypeTags />

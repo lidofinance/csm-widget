@@ -7,24 +7,27 @@ import {
   useOperatorIsOwner,
   useOperatorType,
 } from 'modules/web3';
+import { toConditionState } from 'shared/notifications/condition-state';
+import type { ConditionState } from 'shared/notifications/types';
 
-export const useCanClaimIDVTC = () => {
+export const useCanClaimIDVTCState = (): ConditionState => {
   const { isCSM } = useModule();
   const { nodeOperator } = useNodeOperator();
   const nodeOperatorId = nodeOperator?.nodeOperatorId;
   const { address } = useDappStatus();
-  const { data: proof } = useIdvtcProof();
-  const { data: isOwner } = useOperatorIsOwner({ nodeOperatorId });
+  const proofQuery = useIdvtcProof();
+  const isOwnerQuery = useOperatorIsOwner({ nodeOperatorId });
   const operatorTypeQuery = useOperatorType(isCSM ? nodeOperator : undefined);
 
-  return Boolean(
-    isCSM &&
-    nodeOperatorId !== undefined &&
-    address &&
-    isOwner &&
-    operatorTypeQuery.isSuccess &&
-    operatorTypeQuery.data !== OPERATOR_TYPE.CSM_IDVTC &&
-    proof?.proof &&
-    !proof.isConsumed,
-  );
+  return toConditionState({
+    gate: isCSM && nodeOperatorId !== undefined && !!address,
+    queries: [proofQuery, isOwnerQuery, operatorTypeQuery],
+    active: () =>
+      !!isOwnerQuery.data &&
+      operatorTypeQuery.data !== OPERATOR_TYPE.CSM_IDVTC &&
+      !!proofQuery.data?.proof &&
+      !proofQuery.data.isConsumed,
+  });
 };
+
+export const useCanClaimIDVTC = () => useCanClaimIDVTCState() === 'active';

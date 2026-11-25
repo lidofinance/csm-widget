@@ -6,9 +6,12 @@ import { ConfigProvider } from 'config';
 
 import { SurveysAuthProvider } from 'modules/surveys-sdk';
 import { NodeOperatorProvider, Web3Provider } from 'modules/web3';
-import { AlertProvider, AlertsWatcherProvider } from 'shared/alerts';
 import { AppLink, ExternalLink, GateSupported } from 'shared/navigate';
 import { SelectOperatorWatcher } from 'shared/node-operator/choose-operator-modal';
+import {
+  ActiveOperatorAlertsWatcher,
+  NotificationsProvider,
+} from 'shared/notifications';
 import { hashKey } from 'utils';
 import { AddressValidationProvider } from './address-validation-provider';
 import { AppFlagProvider } from './app-flag';
@@ -42,42 +45,41 @@ export const Providers: FC<PropsWithChildren<Props>> = ({
         <ModifyProvider>
           <ThemeProvider>
             <InpageNavigationProvider>
-              <AlertProvider>
-                {dummy ? (
-                  <LinkProvider
-                    component={AppLink}
-                    externalComponent={ExternalLink}
-                  >
-                    <ModalProvider>{children}</ModalProvider>
-                  </LinkProvider>
-                ) : (
-                  <Web3Provider>
-                    <AddressValidationProvider>
-                      <NodeOperatorProvider>
-                        <LinkProvider
-                          component={AppLink}
-                          externalComponent={ExternalLink}
-                        >
-                          <ModalProvider>
+              {dummy ? (
+                <LinkProvider
+                  component={AppLink}
+                  externalComponent={ExternalLink}
+                >
+                  <ModalProvider>{children}</ModalProvider>
+                </LinkProvider>
+              ) : (
+                <Web3Provider>
+                  <AddressValidationProvider>
+                    <NodeOperatorProvider>
+                      <LinkProvider
+                        component={AppLink}
+                        externalComponent={ExternalLink}
+                      >
+                        <ModalProvider>
+                          <NotificationsProvider>
                             <SelectOperatorWatcher />
                             <SurveysAuthProvider>
                               {isError ? (
                                 children
                               ) : (
                                 <GateSupported>
-                                  <AlertsWatcherProvider>
-                                    {children}
-                                  </AlertsWatcherProvider>
+                                  <ActiveOperatorAlertsWatcher />
+                                  {children}
                                 </GateSupported>
                               )}
                             </SurveysAuthProvider>
-                          </ModalProvider>
-                        </LinkProvider>
-                      </NodeOperatorProvider>
-                    </AddressValidationProvider>
-                  </Web3Provider>
-                )}
-              </AlertProvider>
+                          </NotificationsProvider>
+                        </ModalProvider>
+                      </LinkProvider>
+                    </NodeOperatorProvider>
+                  </AddressValidationProvider>
+                </Web3Provider>
+              )}
             </InpageNavigationProvider>
           </ThemeProvider>
         </ModifyProvider>

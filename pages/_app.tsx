@@ -9,12 +9,11 @@ import { WIDGET_TITLE } from 'consts/module';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { ThemeName, Toaster, useThemeToggle } from '@lidofinance/lido-app-ui';
+import { Toaster } from '@lidofinance/lido-app-ui';
 import { Providers } from 'providers';
 import { memo } from 'react';
 import {
   AppShellLoader,
-  BackgroundGradient,
   ErrorBoundary,
   SecurityStatusBanner,
 } from 'shared/components';
@@ -33,17 +32,6 @@ const App = (props: AppProps) => {
 
 const MemoApp = memo(App);
 
-const ThemedBackgroundGradient = () => {
-  const { themeName } = useThemeToggle();
-  return (
-    <BackgroundGradient
-      width={1560}
-      height={784}
-      style={{ opacity: themeName === ThemeName.dark ? 1 : 0 }}
-    />
-  );
-};
-
 type AppParams = {
   isError?: boolean;
   dummy?: boolean;
@@ -60,8 +48,7 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
 
   const renderApp = (dummy?: boolean) => (
     <Providers dummy={dummy} isError={isError}>
-      <ThemedBackgroundGradient />
-      <Toaster />
+      <Toaster position="bottom-center" />
       {isMaintenance ? <MaintenancePage /> : <MemoApp {...props} />}
       <SecurityStatusBanner />
     </Providers>

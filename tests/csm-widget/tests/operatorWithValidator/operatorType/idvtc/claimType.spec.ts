@@ -62,7 +62,7 @@ test.describe(
             'You have a new operator type to be claimed',
           );
           await expect(operatorType.claimAlert).toContainText(
-            'The Identified DVT Cluster type is now available to be claimed for your node operator.',
+            'The Identified DVT Cluster type is now available to be claimed for your node operator',
           );
           await expect(operatorType.claimAlertButton).toBeVisible();
         });

@@ -6,6 +6,7 @@ import {
 } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 
+import { HeaderNotifications } from 'shared/notifications';
 import { Crumb, Crumbs } from '../crumbs';
 import HeaderTheme from './components/header-theme';
 import HeaderWallet from './components/header-wallet';
@@ -22,7 +23,12 @@ export const Header: FC<Props> = ({ dummy, crumbs }) => (
     actions={
       <>
         <HeaderTheme />
-        {dummy !== true && <HeaderWallet />}
+        {dummy !== true && (
+          <>
+            <HeaderNotifications />
+            <HeaderWallet />
+          </>
+        )}
       </>
     }
   >

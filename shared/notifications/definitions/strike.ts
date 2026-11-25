@@ -20,8 +20,3 @@ export const getLatestFrameRange = (info: {
   start: info.lastReport - info.frameDuration,
   end: info.lastReport,
 });
-
-export const getStrikeDismissKey = (
-  operator: string,
-  lastReport: number,
-): string => `alert-key-strike-dismissed-${operator}-${lastReport}`;

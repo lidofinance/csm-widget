@@ -1,0 +1,41 @@
+.toastsAnchor {
+  position: sticky;
+  top: var(--lido-app-ui-header-height);
+  height: 0;
+  z-index: calc(var(--lido-app-ui-z-index-header) + 1);
+}
+
+.toasts {
+  position: absolute;
+  top: 6px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  max-width: calc(100vw - 40px);
+  pointer-events: none;
+
+  > * {
+    pointer-events: auto;
+  }
+
+  @media (--lido-app-ui-breakpoint-md-down) {
+    right: 16px;
+    left: 16px;
+    max-width: none;
+    align-items: stretch;
+  }
+}
+
+.itemBody {
+  margin-top: 8px;
+}
+
+.itemActions.itemActions {
+  margin-top: 24px;
+}
+
+.list.list {
+  padding-top: 8px;
+}

@@ -1,14 +1,21 @@
 import { useModule, useNodeOperatorId } from 'modules/web3';
 import { useOperatorInfo } from 'modules/web3/hooks/use-operator-info';
+import { toConditionState } from 'shared/notifications/condition-state';
+import type { ConditionState } from 'shared/notifications/types';
 
-export const useNeedsNormalize = (): boolean => {
+export const useNeedsNormalizeState = (): ConditionState => {
   const { isCsmFamily } = useModule();
   const nodeOperatorId = useNodeOperatorId();
-  const { data: info } = useOperatorInfo({ nodeOperatorId });
+  const infoQuery = useOperatorInfo({ nodeOperatorId });
 
-  return (
-    isCsmFamily &&
-    !!info &&
-    info.enqueuedCount < info.depositableValidatorsCount
-  );
+  return toConditionState({
+    gate: isCsmFamily,
+    queries: [infoQuery],
+    active: () =>
+      !!infoQuery.data &&
+      infoQuery.data.enqueuedCount < infoQuery.data.depositableValidatorsCount,
+  });
 };
+
+export const useNeedsNormalize = (): boolean =>
+  useNeedsNormalizeState() === 'active';
