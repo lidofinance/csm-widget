@@ -126,6 +126,12 @@ test.describe(
                 ),
                 faqLink.click(),
               ]);
+              const { faq } = widgetService;
+              await faq.root.waitFor({ state: 'visible' });
+              await expect(
+                faq.getItem('How to claim ETH using a withdrawal NFT?').toggle,
+              ).toHaveAttribute('aria-expanded', 'true');
+              await faq.close();
             });
           }
 

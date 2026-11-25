@@ -64,7 +64,6 @@ const SubmitKeysPage: FC<Props> = ({ type }) => {
         </>
       }
       below={<DepositQueue module={targetModule} />}
-      faq={created ? undefined : <Faq items={faq} />}
       done={!!created}
     >
       {created ? (
@@ -100,6 +99,7 @@ const SubmitKeysPage: FC<Props> = ({ type }) => {
           </SubmitKeysFormGate>
         </FormReady>
       )}
+      {!created && <Faq items={faq} />}
     </FormPage>
   );
 };

@@ -15,16 +15,7 @@ const ClaimIdvtcContent: FC = () => {
   const faq = useFaq('OPERATOR_TYPE');
 
   return (
-    <FormPage
-      faq={
-        justClaimed ? undefined : (
-          <div className={s.narrow}>
-            <Faq items={faq} />
-          </div>
-        )
-      }
-      done={justClaimed}
-    >
+    <FormPage done={justClaimed}>
       {justClaimed ? (
         <div className={s.narrow}>
           <ClaimIdvtcSuccess />
@@ -38,6 +29,7 @@ const ClaimIdvtcContent: FC = () => {
           </ClaimIdvtcFormGate>
         </FormReady>
       )}
+      {!justClaimed && <Faq items={faq} />}
     </FormPage>
   );
 };

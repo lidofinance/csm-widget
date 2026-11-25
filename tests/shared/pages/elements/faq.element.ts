@@ -39,12 +39,14 @@ export class FaqItemElement {
 
 export class FaqElement {
   page: Page;
+  button: Locator;
   root: Locator;
   items: Locator;
   titles: Locator;
 
   constructor(page: Page) {
     this.page = page;
+    this.button = this.page.getByTestId('faqButton');
     this.root = this.page.getByTestId('faqSection');
     this.items = this.root.getByTestId('faqItem');
     this.titles = this.items.getByTestId('faqItemTitle');
@@ -58,9 +60,27 @@ export class FaqElement {
     );
   }
 
+  async open() {
+    await test.step('Open FAQ drawer', async () => {
+      if (!(await this.root.isVisible())) await this.button.click();
+      await this.root.waitFor({ state: 'visible' });
+    });
+  }
+
+  async close() {
+    await test.step('Close FAQ drawer', async () => {
+      await this.page.getByTestId('faqClose').click();
+      await this.root.waitFor({ state: 'hidden' });
+    });
+  }
+
   async waitForVisible() {
     await test.step('Wait for FAQ', async () => {
-      await this.root.waitFor({ state: 'visible', timeout: RPC_WAIT_TIMEOUT });
+      await this.button.waitFor({
+        state: 'visible',
+        timeout: RPC_WAIT_TIMEOUT,
+      });
+      await this.open();
     });
   }
 }

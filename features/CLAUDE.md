@@ -5,7 +5,7 @@ Forms use the flow pattern described in `shared/hook-form/README.md` and render 
 ```text
 XDataProvider              network data: FormDataContext { data, isPending, revalidate }
 └─ XFormProvider           useForm + FormControllerProvider(useFlowSubmit(useXFlowResolver()))
-   └─ FormPage             notices (above) / below / faq / done
+   └─ FormPage             notices (above) / below / done; <Faq items> anywhere inside
       └─ FormReady         skeleton card while the form is loading
          └─ XFormGate      no-access / paused / empty → notice; never renders a <form>
             └─ Form data-testid="xForm"

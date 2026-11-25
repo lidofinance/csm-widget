@@ -19,10 +19,7 @@ const ClaimIcsContent: FC = () => {
   const faq = useFaq('OPERATOR_TYPE');
 
   return (
-    <FormPage
-      faq={justClaimed ? undefined : <Faq items={faq} />}
-      done={justClaimed}
-    >
+    <FormPage done={justClaimed}>
       {justClaimed ? (
         <ClaimIcsSuccess />
       ) : (
@@ -41,6 +38,7 @@ const ClaimIcsContent: FC = () => {
           </ClaimIcsFormGate>
         </FormReady>
       )}
+      {!justClaimed && <Faq items={faq} />}
     </FormPage>
   );
 };

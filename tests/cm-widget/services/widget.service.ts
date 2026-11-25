@@ -22,6 +22,7 @@ import { GroupPage } from '../pages/group.page';
 import { ElementController } from '../pages/elements/controller';
 import {
   ConfirmOperatorModalElement,
+  FaqElement,
   NavBlockElement,
   SelectOperatorModalElement,
 } from '../../shared/pages/elements';
@@ -46,6 +47,7 @@ export class WidgetService {
   public footerElement: FooterElement;
   public selectOperatorModal: SelectOperatorModalElement;
   public confirmOperatorModal: ConfirmOperatorModalElement;
+  public faq: FaqElement;
 
   constructor(
     public page: Page,
@@ -66,6 +68,7 @@ export class WidgetService {
     this.footerElement = new FooterElement(this.page);
     this.selectOperatorModal = new SelectOperatorModalElement(this.page);
     this.confirmOperatorModal = new ConfirmOperatorModalElement(this.page);
+    this.faq = new FaqElement(this.page);
   }
 
   async connectWallet(expectConnectionState = true) {

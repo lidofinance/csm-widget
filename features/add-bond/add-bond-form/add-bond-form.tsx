@@ -25,7 +25,6 @@ export const AddBondForm: FC = memo(() => {
             </>
           }
           below={<WhyAddBondNotice />}
-          faq={<Faq items={faq} />}
         >
           <FormReady>
             <AddBondFormGate>
@@ -39,6 +38,7 @@ export const AddBondForm: FC = memo(() => {
               </Form>
             </AddBondFormGate>
           </FormReady>
+          <Faq items={faq} />
         </FormPage>
       </AddBondFormProvider>
     </AddBondDataProvider>

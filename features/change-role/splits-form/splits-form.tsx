@@ -11,10 +11,11 @@ export const SplitsForm: FC = memo(() => {
   return (
     <SplitsDataProvider>
       <SplitsFormProvider>
-        <FormPage faq={<Faq items={faq} />}>
+        <FormPage>
           <FormReady>
             <SplitsFormGate />
           </FormReady>
+          <Faq items={faq} />
         </FormPage>
       </SplitsFormProvider>
     </SplitsDataProvider>

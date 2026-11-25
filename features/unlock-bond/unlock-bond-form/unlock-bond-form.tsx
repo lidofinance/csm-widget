@@ -16,11 +16,7 @@ export const UnlockBondForm: FC = memo(() => {
   return (
     <UnlockBondDataProvider>
       <UnlockBondFormProvider>
-        <FormPage
-          notices={<BondStatsCard />}
-          below={<PenaltyHistory />}
-          faq={<Faq items={faq} />}
-        >
+        <FormPage notices={<BondStatsCard />} below={<PenaltyHistory />}>
           <FormReady>
             <UnlockBondFormGate>
               <Form data-testid="unlockBondForm">
@@ -30,6 +26,7 @@ export const UnlockBondForm: FC = memo(() => {
               </Form>
             </UnlockBondFormGate>
           </FormReady>
+          <Faq items={faq} />
         </FormPage>
       </UnlockBondFormProvider>
     </UnlockBondDataProvider>

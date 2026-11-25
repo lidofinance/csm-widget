@@ -15,10 +15,11 @@ export const ChangeRoleForm: FC<ChangeRoleDataProviderProps> = memo((props) => {
   return (
     <ChangeRoleDataProvider {...props}>
       <ChangeRoleFormProvider {...props}>
-        <FormPage faq={<Faq items={faq} />}>
+        <FormPage>
           <FormReady>
             <ChangeRoleFormGate />
           </FormReady>
+          <Faq items={faq} />
         </FormPage>
       </ChangeRoleFormProvider>
     </ChangeRoleDataProvider>

@@ -5,7 +5,6 @@ export type FormPageProps = PropsWithChildren<{
   steps?: ReactNode;
   notices?: ReactNode;
   below?: ReactNode;
-  faq?: ReactNode;
   done?: boolean;
 }>;
 
@@ -13,7 +12,6 @@ export const FormPage: FC<FormPageProps> = ({
   steps,
   notices,
   below,
-  faq,
   done,
   children,
 }) => (
@@ -22,6 +20,5 @@ export const FormPage: FC<FormPageProps> = ({
     {!done && notices}
     {children}
     {!done && below}
-    {faq}
   </Stack>
 );

@@ -13,6 +13,8 @@ import { FC, PropsWithChildren, ReactNode, useContext, useEffect } from 'react';
 
 import { NodeOperatorContext } from 'modules/web3/operator-provider/node-operator-provider';
 import {
+  FaqDrawer,
+  FaqProvider,
   LegalDisclaimer,
   PageDisclaimerProvider,
   PageDisclaimers,
@@ -60,50 +62,53 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
 
   return (
     <PageDisclaimerProvider>
-      <LibLayout>
-        <SkipLink />
-        <TestEnvBanner />
-        <SidebarLayout>
-          <Navigation />
-          <SidebarInset>
-            <Header dummy={mode} crumbs={crumbs} />
-            {!mode && <NotificationsToasts />}
-            <Main className={s.main}>
-              <PageContent variant={fullwidth || wide ? 'default' : 'narrow'}>
-                <AppStack direction="column" gap={24} align="stretch">
-                  {!mode && <UnsupportedChainBanner />}
-                  <Hidden above="md" data-testid="pageTitle">
-                    <Crumbs crumbs={crumbs} />
-                  </Hidden>
-                  {mainPrefix}
-                  {subtitle && (
-                    <Description
-                      as="div"
-                      color="secondary"
-                      data-testid="pageSubtitle"
-                    >
-                      {subtitle}
-                    </Description>
-                  )}
-                  {children}
-                </AppStack>
-                {!mode && (
-                  <AppStack
-                    direction="column"
-                    gap={12}
-                    align="stretch"
-                    className={s.disclaimers}
-                  >
-                    <PageDisclaimers />
-                    <LegalDisclaimer />
+      <FaqProvider>
+        <LibLayout>
+          <SkipLink />
+          <TestEnvBanner />
+          <SidebarLayout>
+            <Navigation />
+            <SidebarInset>
+              <Header dummy={mode} crumbs={crumbs} />
+              {!mode && <NotificationsToasts />}
+              <Main className={s.main}>
+                <PageContent variant={fullwidth || wide ? 'default' : 'narrow'}>
+                  <AppStack direction="column" gap={24} align="stretch">
+                    {!mode && <UnsupportedChainBanner />}
+                    <Hidden above="md" data-testid="pageTitle">
+                      <Crumbs crumbs={crumbs} />
+                    </Hidden>
+                    {mainPrefix}
+                    {subtitle && (
+                      <Description
+                        as="div"
+                        color="secondary"
+                        data-testid="pageSubtitle"
+                      >
+                        {subtitle}
+                      </Description>
+                    )}
+                    {children}
                   </AppStack>
-                )}
-              </PageContent>
-            </Main>
-            <Footer dummy={mode} />
-          </SidebarInset>
-        </SidebarLayout>
-      </LibLayout>
+                  {!mode && (
+                    <AppStack
+                      direction="column"
+                      gap={12}
+                      align="stretch"
+                      className={s.disclaimers}
+                    >
+                      <PageDisclaimers />
+                      <LegalDisclaimer />
+                    </AppStack>
+                  )}
+                </PageContent>
+              </Main>
+              <FaqDrawer />
+              <Footer dummy={mode} />
+            </SidebarInset>
+          </SidebarLayout>
+        </LibLayout>
+      </FaqProvider>
     </PageDisclaimerProvider>
   );
 };

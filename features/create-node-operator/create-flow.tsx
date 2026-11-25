@@ -17,7 +17,7 @@ export const CreateFlow: FC = () => {
   const { showAck, willChoose, directType } = getCreateFlow(useCreateOptions());
   const [acknowledged, setAcknowledged] = useState(false);
   const navigate = useNavigate();
-  const faq = <Faq items={useFaq('BOND', MODULE_NAME.CSM)} />;
+  const faq = useFaq('BOND', MODULE_NAME.CSM);
   const onAck = showAck && !acknowledged;
 
   const handleGetStarted = () => {
@@ -43,13 +43,13 @@ export const CreateFlow: FC = () => {
       <FormPage
         steps={<WizardStepper steps={steps} current={current} />}
         notices={onAck ? <BannerOperatorCustomAddresses /> : undefined}
-        faq={faq}
       >
         {onAck ? (
           <AcknowledgementView onGetStarted={handleGetStarted} />
         ) : (
           <SelectTypeView />
         )}
+        <Faq items={faq} />
       </FormPage>
     </Layout>
   );

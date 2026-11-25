@@ -24,7 +24,6 @@ export const CuratedOperatorFormPage: FC = () => {
           <BannerOperatorCustomAddresses />
         </>
       }
-      faq={done ? undefined : <Faq items={faq} />}
       done={done}
     >
       {created ? (
@@ -34,6 +33,7 @@ export const CuratedOperatorFormPage: FC = () => {
           <CuratedOperatorWizardForm />
         </FormReady>
       )}
+      {!done && <Faq items={faq} />}
     </FormPage>
   );
 };

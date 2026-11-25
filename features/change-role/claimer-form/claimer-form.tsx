@@ -11,10 +11,11 @@ export const ClaimerForm: FC = memo(() => {
   return (
     <ClaimerDataProvider>
       <ClaimerFormProvider>
-        <FormPage faq={<Faq items={faq} />}>
+        <FormPage>
           <FormReady>
             <ClaimerFormGate />
           </FormReady>
+          <Faq items={faq} />
         </FormPage>
       </ClaimerFormProvider>
     </ClaimerDataProvider>

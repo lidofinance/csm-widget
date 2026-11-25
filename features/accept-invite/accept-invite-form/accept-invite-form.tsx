@@ -13,7 +13,7 @@ export const AcceptInviteForm: FC = memo(() => {
   return (
     <AcceptInviteDataProvider>
       <AcceptInviteFormProvider>
-        <FormPage faq={<Faq items={faq} />}>
+        <FormPage>
           <FormReady>
             <AcceptInviteFormGate>
               <Form data-testid="acceptInviteForm">
@@ -21,6 +21,7 @@ export const AcceptInviteForm: FC = memo(() => {
               </Form>
             </AcceptInviteFormGate>
           </FormReady>
+          <Faq items={faq} />
         </FormPage>
       </AcceptInviteFormProvider>
     </AcceptInviteDataProvider>

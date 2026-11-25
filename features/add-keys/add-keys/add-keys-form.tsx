@@ -34,7 +34,6 @@ export const AddKeysForm: FC = memo(() => {
               <DepositQueue />
             </Gate>
           }
-          faq={<Faq items={faq} />}
         >
           <FormReady skeleton={<FormMainAsideSkeleton />}>
             <AddKeysFormGate>
@@ -54,6 +53,7 @@ export const AddKeysForm: FC = memo(() => {
               </Form>
             </AddKeysFormGate>
           </FormReady>
+          <Faq items={faq} />
         </FormPage>
       </AddKeysFormProvider>
     </AddKeysDataProvider>

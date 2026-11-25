@@ -13,15 +13,16 @@ How forms are built: React Hook Form state, network data, a flow resolver that t
 ```text
 <XDataProvider>
   <XFormProvider>
-    <FormPage notices below faq done>
+    <FormPage notices below done>
       <FormReady>
         <XFormGate>
           <Form data-testid="xForm">
             <FormLayout aside={<XAside />}>   archetype A
             <FormCard>                         archetype B
+      <Faq items={faq} />
 ```
 
-- `FormPage` is the page shell, not a `<form>`. `notices` render above the form and `below` under it, and both hide while `done`. `faq` is always last.
+- `FormPage` is the page shell, not a `<form>`. `notices` render above the form and `below` under it, and both hide while `done`. `<Faq items={…} />` goes anywhere in the form's tree (by convention last inside `FormPage`); it renders nothing in place and registers the items for the layout's FAQ drawer.
 - `FormReady` shows a skeleton card (`formSkeleton`) while `useFormState().isLoading` is true or the data provider is pending.
 - `XFormGate` reads `useXFlow()` and returns a notice for the non-executable actions (`no-access`, `paused`, empty data). Otherwise it renders its children.
 - `<Form>` exists only when the form can submit. It carries the e2e form testid.
@@ -315,7 +316,7 @@ The app variant uses `FormModalShell ui="app" open onClose={onReject} title subt
 - Success as form state (create, claim ICS/IDVTC): the data provider holds the success record. The flow sets it synchronously before closing the tx modal, and the form renders `SuccessScreen` in place of `FormReady`:
 
 ```tsx
-<FormPage done={!!created} faq={created ? undefined : faq}>
+<FormPage done={!!created}>
   {created ? (
     <MySuccess created={created} />
   ) : (
@@ -325,6 +326,7 @@ The app variant uses `FormModalShell ui="app" open onClose={onReject} title subt
       </MyFormGate>
     </FormReady>
   )}
+  {!created && <Faq items={faq} />}
 </FormPage>
 ```
 

@@ -17,7 +17,7 @@ export const ClaimBondForm: FC = memo(() => {
   return (
     <ClaimBondDataProvider>
       <ClaimBondFormProvider>
-        <FormPage notices={<BondStatsCard />} faq={<Faq items={faq} />}>
+        <FormPage notices={<BondStatsCard />}>
           <FormReady>
             <ClaimBondFormGate>
               <Form data-testid="claimBondForm">
@@ -31,6 +31,7 @@ export const ClaimBondForm: FC = memo(() => {
               </Form>
             </ClaimBondFormGate>
           </FormReady>
+          <Faq items={faq} />
         </FormPage>
       </ClaimBondFormProvider>
     </ClaimBondDataProvider>
