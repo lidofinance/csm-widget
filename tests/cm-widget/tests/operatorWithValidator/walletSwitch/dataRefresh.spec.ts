@@ -87,7 +87,7 @@ test.describe(
         await test.step('Inbox requests lists the new invite', async () => {
           await navBlockElement.navItem('Settings').click();
           await navBlockElement.page
-            .getByTestId('incomingRequestsBanner')
+            .getByTestId('incomingRequestsBannerButton')
             .click();
           await expect(
             inboxRequestsPage.getRequestLocator(invitedNoId, ROLES.REWARDS),

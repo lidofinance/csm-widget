@@ -28,7 +28,7 @@ describe('getIncomingRequestsCopy', () => {
         { nodeOperatorId: 2, role: 'REWARDS' },
       ]),
     ).toBe(
-      'Your connected address has been proposed as the Manager / Rewards Address for multiple Node Operators',
+      'Your connected address has been proposed as a Manager or Rewards Address for multiple Node Operators',
     );
   });
 });
