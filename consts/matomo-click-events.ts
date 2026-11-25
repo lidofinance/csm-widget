@@ -47,7 +47,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   partnerSedge = 'partnerSedge',
   partnerEthdocker = 'partnerEthdocker',
   partnerEthPillar = 'partnerEthPillar',
-  partnerPremia = 'partnerPremia',
+  partnerStereum = 'partnerStereum',
   operatorTypeModalJoinPermissionless = 'operatorTypeModalJoinPermissionless',
   operatorTypeModalJoinCsm02 = 'operatorTypeModalJoinCsm02',
   operatorTypeModalApplyIcs = 'operatorTypeModalApplyIcs',
@@ -299,9 +299,9 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click partner «EthPillar» link on StarterPack screen',
     'starterpack_partner_ethpillar_link',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.partnerPremia]: createEvent(
-    'Click partner «Premia» link on StarterPack screen',
-    'starterpack_partner_premia_link',
+  [MATOMO_CLICK_EVENTS_TYPES.partnerStereum]: createEvent(
+    'Click partner «Stereum» link on StarterPack screen',
+    'starterpack_partner_stereum_link',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalJoinPermissionless]: createEvent(
     'Push «Join permissionlessly» button on Operator Type modal',

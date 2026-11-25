@@ -1,38 +1,13 @@
 import { AvatarStack } from 'shared/components';
 import { FC } from 'react';
 import s from './partner-logos.module.css';
-import { trackMatomoEvent } from 'utils';
-import {
-  LOW_CODE_PARTNERS,
-  LowCodePartner,
-} from 'features/validate-with-lido/community-staking/low-code-partners';
-
-const PartnerLogo: FC<{ partner: LowCodePartner }> = ({
-  partner: { name, src, href, matomoEvent },
-}) => {
-  const image = <img className={s.logo} src={src} alt={name} title={name} />;
-
-  return href ? (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={name}
-      onClick={() => matomoEvent && trackMatomoEvent(matomoEvent)}
-    >
-      {image}
-    </a>
-  ) : (
-    image
-  );
-};
-
-const STARTER_PACK_PARTNERS = LOW_CODE_PARTNERS.filter((p) => p.starterPack);
+import { LOW_CODE_PARTNERS } from 'features/validate-with-lido/community-staking/low-code-partners';
+import { PartnerAvatar } from 'features/validate-with-lido/community-staking/partner-avatar';
 
 export const PartnerLogos: FC = () => (
   <AvatarStack style={{ marginTop: 8 }}>
-    {STARTER_PACK_PARTNERS.map((partner) => (
-      <PartnerLogo key={partner.name} partner={partner} />
+    {LOW_CODE_PARTNERS.map((partner) => (
+      <PartnerAvatar key={partner.name} {...partner} className={s.logo} />
     ))}
   </AvatarStack>
 );

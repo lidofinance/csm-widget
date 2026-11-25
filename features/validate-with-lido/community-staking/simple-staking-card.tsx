@@ -23,8 +23,9 @@ import ssv from 'assets/partners/simple-staking/ssv.svg';
 import stakely from 'assets/partners/simple-staking/stakely.svg';
 import { PromoCard } from '../components';
 import { LOW_CODE_PARTNERS } from './low-code-partners';
+import { PartnerAvatar } from './partner-avatar';
 
-type Partner = { name: string; src: string };
+type Partner = { name: string; src: string; href: string };
 
 type Block = {
   title: string;
@@ -43,8 +44,8 @@ const BLOCKS: Block[] = [
     title: 'Run with DVTs',
     description: 'Collaborate with peers to run CSM validators through DVTs',
     partners: [
-      { name: 'Obol', src: obol },
-      { name: 'SSV', src: ssv },
+      { name: 'Obol', src: obol, href: 'https://obol.org' },
+      { name: 'SSV', src: ssv, href: 'https://ssv.network' },
     ],
   },
   {
@@ -52,18 +53,22 @@ const BLOCKS: Block[] = [
     description:
       'Participate in the network via VaaS without needing to bootstrap or maintain a validator node',
     partners: [
-      { name: 'Allnodes', src: allnodes },
-      { name: 'Launchnodes', src: launchnodes },
-      { name: 'Stakely', src: stakely },
+      { name: 'Allnodes', src: allnodes, href: 'https://www.allnodes.com' },
+      {
+        name: 'Launchnodes',
+        src: launchnodes,
+        href: 'https://www.launchnodes.com',
+      },
+      { name: 'Stakely', src: stakely, href: 'https://stakely.io' },
     ],
   },
   {
     title: 'Performance Tracking',
     description: 'Access real-time insights into validator performance',
     partners: [
-      { name: 'beaconcha.in', src: beaconchain },
-      { name: 'MigaLabs', src: migalabs },
-      { name: 'Rated', src: rated },
+      { name: 'beaconcha.in', src: beaconchain, href: 'https://beaconcha.in' },
+      { name: 'MigaLabs', src: migalabs, href: 'https://migalabs.io' },
+      { name: 'Rated', src: rated, href: 'https://www.rated.network' },
     ],
   },
 ];
@@ -71,8 +76,8 @@ const BLOCKS: Block[] = [
 const BlockView: FC<{ block: Block }> = ({ block }) => (
   <Stack direction="column" gap={8} align="start">
     <AvatarStack size={24}>
-      {block.partners.map(({ name, src }) => (
-        <img key={name} src={src} alt={name} title={name} />
+      {block.partners.map(({ name, src, href }) => (
+        <PartnerAvatar key={name} name={name} src={src} href={href} />
       ))}
     </AvatarStack>
     <Stack direction="column" gap={0}>
