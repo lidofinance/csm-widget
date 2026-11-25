@@ -10,6 +10,7 @@ import { useCreateOptions, useModuleOperatorTypeGetter } from 'shared/hooks';
 import { useNavigate } from 'shared/navigate';
 import { trackMatomoEvent } from 'utils';
 import { ModuleMenuIcon, ModuleMenuIconProps } from '../module-menu-icon';
+import type { CreateRows } from './filter-create-rows';
 import {
   AvatarSlotStyle,
   CaptionStyle,
@@ -71,7 +72,7 @@ const CreateRow: FC<CreateRowProps> = ({
   );
 };
 
-export const useCreateRows = () => {
+export const useCreateRows = (): CreateRows => {
   const { data: gates } = useCuratedGatesEligibility();
   const getType = useModuleOperatorTypeGetter();
   const options = useCreateOptions();
@@ -106,8 +107,6 @@ export const useCreateRows = () => {
     hasRows: canCreateCm || csmTypes.length > 0,
   };
 };
-
-type CreateRows = ReturnType<typeof useCreateRows>;
 
 type CreateSectionProps = {
   size: RowSize;

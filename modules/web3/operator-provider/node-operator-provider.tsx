@@ -24,7 +24,8 @@ export type NodeOperatorContextValue = {
   needsSelection: boolean;
   isDiscovering: boolean;
   dismissSelection: () => void;
-  requestSelection: () => void;
+  selectionFilter: MODULE_NAME[] | undefined;
+  requestSelection: (modules?: MODULE_NAME[]) => void;
   switchNodeOperator: (operator: OperatorRef) => void;
 };
 
@@ -67,6 +68,7 @@ export const NodeOperatorProvider: FC<PropsWithChildren> = ({ children }) => {
     nodeOperator: active,
     setActive,
     needsSelection,
+    selectionFilter,
     hasCachedPick,
     dismissSelection,
     requestSelection,
@@ -104,6 +106,7 @@ export const NodeOperatorProvider: FC<PropsWithChildren> = ({ children }) => {
       nodeOperator: active,
       activeModule: active?.module,
       needsSelection,
+      selectionFilter,
       isDiscovering,
       dismissSelection,
       requestSelection,
@@ -113,6 +116,7 @@ export const NodeOperatorProvider: FC<PropsWithChildren> = ({ children }) => {
       active,
       isPending,
       needsSelection,
+      selectionFilter,
       isDiscovering,
       dismissSelection,
       requestSelection,

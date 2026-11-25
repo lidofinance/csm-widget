@@ -96,6 +96,7 @@ export const MockDepositQueueProvider: FC<
     isDiscovering: false,
     dismissSelection: () => {},
     requestSelection: () => {},
+    selectionFilter: undefined,
     nodeOperator: {
       id: BigInt(scenario.nodeOperatorId),
       // Add other required properties if needed

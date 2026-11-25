@@ -28,6 +28,8 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   validateLearnMoreCurated = 'validateLearnMoreCurated',
   validateLearnMoreCm = 'validateLearnMoreCm',
   validateCreateCm = 'validateCreateCm',
+  validateManageCsm = 'validateManageCsm',
+  validateManageCm = 'validateManageCm',
   csmCreateOperator = 'csmCreateOperator',
   csmLearnMore = 'csmLearnMore',
   csmHowItWorks = 'csmHowItWorks',
@@ -223,6 +225,14 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.validateCreateCm]: createEvent(
     'Push «Create new NO» for Curated v2 on Validate with Lido screen',
     'validate_create_cm',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.validateManageCsm]: createEvent(
+    'Push «Manage» for CSM on Validate with Lido screen',
+    'validate_manage_csm',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.validateManageCm]: createEvent(
+    'Push «Manage» for Curated v2 on Validate with Lido screen',
+    'validate_manage_cm',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.csmCreateOperator]: createEvent(
     'Push «Create a Node Operator» on Community Staking screen',

@@ -141,6 +141,7 @@ export const MockDashboardProvider: FC<
       isDiscovering: false,
       dismissSelection: () => {},
       requestSelection: () => {},
+      selectionFilter: undefined,
       nodeOperator: record.operator,
       activeModule: record.operator.module,
       switchNodeOperator: () => {},

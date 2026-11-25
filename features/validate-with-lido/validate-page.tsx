@@ -7,7 +7,7 @@ import {
 } from 'modules/web3';
 import { Layout } from 'shared/layout';
 import { BannerOperatorCustomAddresses } from 'features/create-node-operator/banner-operator-custom-addresses';
-import { ConnectedHero, DisconnectedHero, SelectOperatorHero } from './hero';
+import { ConnectedHero, DisconnectedHero } from './hero';
 import { InvitesRedirect } from './invites-redirect';
 import { ModulesSection } from './modules/modules-section';
 
@@ -28,7 +28,7 @@ export const ValidatePage: FC = () => {
           <>
             <InvitesRedirect />
             <BannerOperatorCustomAddresses />
-            {needsChoice ? <SelectOperatorHero /> : <ConnectedHero />}
+            {!needsChoice && <ConnectedHero />}
           </>
         ) : (
           <DisconnectedHero />

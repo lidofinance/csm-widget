@@ -48,6 +48,7 @@ const MockOperatorProvider: FC<
       isDiscovering: false,
       dismissSelection: () => {},
       requestSelection: () => {},
+      selectionFilter: undefined,
       nodeOperator: {
         nodeOperatorId,
         managerAddress: MOCK_MANAGER,

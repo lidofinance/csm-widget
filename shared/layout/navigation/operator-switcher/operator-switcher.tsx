@@ -1,5 +1,6 @@
 import {
   IconChevronsUpDown,
+  Popover,
   Stack,
   Typography,
 } from '@lidofinance/lido-app-ui';
@@ -22,14 +23,16 @@ import { SwitchPopup } from './switch-popup';
 import s from './styles.module.css';
 
 export const OperatorSwitcher: FC = () => {
-  const { nodeOperator, requestSelection } = useNodeOperator();
+  const { nodeOperator, requestSelection, needsSelection } = useNodeOperator();
   const { data: list } = useAvailableOperators();
   const { data: curve } = useOperatorCurveId(nodeOperator);
   const type = useDisplayOperatorType(curve ?? nodeOperator);
   const [open, setOpen] = useState(false);
+  const [tipDismissed, setTipDismissed] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
 
   const handleClose = useCallback(() => setOpen(false), []);
+  const handleTipClose = useCallback(() => setTipDismissed(true), []);
   const handleClick = useCallback(() => {
     if (!nodeOperator) {
       requestSelection();
@@ -40,6 +43,9 @@ export const OperatorSwitcher: FC = () => {
   }, [nodeOperator, requestSelection]);
 
   if (!list) return null;
+
+  const showTip =
+    !nodeOperator && list.length > 0 && !needsSelection && !tipDismissed;
 
   return (
     <>
@@ -83,6 +89,26 @@ export const OperatorSwitcher: FC = () => {
           <IconChevronsUpDown width={20} height={20} />
         </span>
       </button>
+      <Popover
+        className={s.tip}
+        open={showTip}
+        onClose={handleTipClose}
+        anchorRef={triggerRef}
+        placement="top"
+        align="start"
+        arrow
+        modal={false}
+        width={240}
+        aria-label="Select a Node Operator"
+        data-testid="chooseOperatorTip"
+      >
+        <Typography variant="body" weight="bold">
+          Select a Node Operator here
+        </Typography>
+        <Typography variant="description" color="secondary">
+          You can switch between operators anytime
+        </Typography>
+      </Popover>
       {nodeOperator && open && (
         <SwitchPopup
           onClose={handleClose}

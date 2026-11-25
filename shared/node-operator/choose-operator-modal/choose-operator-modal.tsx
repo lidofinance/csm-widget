@@ -2,10 +2,11 @@ import { Modal, Spinner, Stack } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { useAvailableOperators, useNodeOperator } from 'modules/web3';
 import type { ModalComponentType } from 'providers/modal-provider';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
   CaptionStyle,
   CreateSection,
+  filterCreateRows,
   OperatorRow,
   SectionStyle,
   useCreateRows,
@@ -18,10 +19,28 @@ const CREATE_EVENTS = {
 };
 
 export const ChooseOperatorModal: ModalComponentType = ({ onClose }) => {
-  const { dismissSelection, switchNodeOperator, isDiscovering } =
-    useNodeOperator();
+  const {
+    dismissSelection,
+    switchNodeOperator,
+    isDiscovering,
+    selectionFilter,
+  } = useNodeOperator();
   const { data: list } = useAvailableOperators();
-  const createRows = useCreateRows();
+  const allCreateRows = useCreateRows();
+  const createRows = useMemo(
+    () =>
+      selectionFilter
+        ? filterCreateRows(allCreateRows, selectionFilter)
+        : allCreateRows,
+    [allCreateRows, selectionFilter],
+  );
+  const operators = useMemo(
+    () =>
+      selectionFilter
+        ? list?.filter((item) => selectionFilter.includes(item.module))
+        : list,
+    [list, selectionFilter],
+  );
 
   const handleClose = useCallback(() => {
     dismissSelection();
@@ -50,14 +69,19 @@ export const ChooseOperatorModal: ModalComponentType = ({ onClose }) => {
     <Modal
       withOverlay
       title="Choose a Node Operator"
-      subtitle="Choose an existing operator to continue, or create a new one"
+      subtitle={
+        createRows.hasRows
+          ? 'Choose an existing operator to continue, or create a new one'
+          : 'Choose an existing operator to continue'
+      }
       onClose={handleClose}
+      className={s.modal}
       data-testid="selectOperatorModal"
     >
       <Stack gap={32}>
         <SectionStyle>
           <CaptionStyle $size="regular">Your Node Operators</CaptionStyle>
-          {list?.map((item) => (
+          {operators?.map((item) => (
             <OperatorRow
               key={`${String(item.nodeOperatorId)}-${item.module}`}
               operator={item}

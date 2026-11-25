@@ -68,6 +68,7 @@ const MockOperatorProvider: FC<
       isDiscovering: false,
       dismissSelection: () => {},
       requestSelection: () => {},
+      selectionFilter: undefined,
       nodeOperator,
       activeModule: nodeOperator?.module,
       switchNodeOperator,

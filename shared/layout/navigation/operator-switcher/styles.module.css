@@ -90,3 +90,13 @@
 .bodyContent.bodyContent {
   padding: 16px 0;
 }
+
+.tip.tip {
+  gap: 4px;
+}
+
+@media (--lido-app-ui-breakpoint-lg-down) {
+  .tip.tip {
+    display: none;
+  }
+}

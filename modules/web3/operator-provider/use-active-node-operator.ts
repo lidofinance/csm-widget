@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDappStatus } from '../hooks';
 import { resolveActiveOperator } from './resolve-active-operator';
@@ -11,6 +12,9 @@ const sameOperator = (a?: ModuleNodeOperator, b?: ModuleNodeOperator) =>
 export const useActiveNodeOperator = (list?: ModuleNodeOperator[]) => {
   const [active, setActiveRaw] = useState<ModuleNodeOperator | undefined>();
   const [dismissed, setDismissed] = useState(false);
+  const [selectionFilter, setSelectionFilter] = useState<
+    MODULE_NAME[] | undefined
+  >();
   const [cachedRef, setCachedRef] = useCachedId();
   const { address } = useDappStatus();
   const invalidate = useInvalidateOperatorCache();
@@ -22,10 +26,17 @@ export const useActiveNodeOperator = (list?: ModuleNodeOperator[]) => {
 
   const setActive = useCallback((operator: ModuleNodeOperator) => {
     setDismissed(false);
+    setSelectionFilter(undefined);
     setActiveRaw(operator);
   }, []);
-  const dismissSelection = useCallback(() => setDismissed(true), []);
-  const requestSelection = useCallback(() => setDismissed(false), []);
+  const dismissSelection = useCallback(() => {
+    setDismissed(true);
+    setSelectionFilter(undefined);
+  }, []);
+  const requestSelection = useCallback((modules?: MODULE_NAME[]) => {
+    setSelectionFilter(Array.isArray(modules) ? modules : undefined);
+    setDismissed(false);
+  }, []);
 
   const needsSelection = rawNeedsSelection && !dismissed;
 
@@ -58,6 +69,7 @@ export const useActiveNodeOperator = (list?: ModuleNodeOperator[]) => {
     nodeOperator: resolved,
     setActive,
     needsSelection,
+    selectionFilter,
     hasCachedPick: !!cachedRef,
     dismissSelection,
     requestSelection,
