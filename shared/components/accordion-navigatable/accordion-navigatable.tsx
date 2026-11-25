@@ -9,14 +9,12 @@ type AccordionNavigatableProps = Omit<
 > & {
   id: string;
   summary: ComponentProps<typeof Accordion>['title'];
-  isFirst?: boolean;
 };
 
 export const AccordionNavigatable = ({
   onExpandedChange,
   id,
   summary,
-  isFirst,
   ...rest
 }: AccordionNavigatableProps) => {
   const { hashNav, scrollToAnchor, resetSpecificAnchor } =
@@ -27,7 +25,7 @@ export const AccordionNavigatable = ({
       if (expanded) {
         trackMatomoFaqEvent(id);
       } else {
-        id && resetSpecificAnchor(id);
+        resetSpecificAnchor(id);
       }
       onExpandedChange?.(expanded);
     },
@@ -35,7 +33,7 @@ export const AccordionNavigatable = ({
   );
 
   useEffect(() => {
-    if (id && hashNav === id) {
+    if (hashNav === id) {
       scrollToAnchor(id);
     }
   }, [hashNav, id, scrollToAnchor]);
@@ -45,7 +43,7 @@ export const AccordionNavigatable = ({
       {...rest}
       id={id}
       title={summary}
-      defaultExpanded={Boolean((id && hashNav === id) || isFirst)}
+      defaultExpanded={hashNav === id}
       onExpandedChange={handleExpandedChange}
     />
   );

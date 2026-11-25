@@ -24,6 +24,14 @@ const state = {
 
 let drawerProps: { open: boolean; onClose: () => void; children: ReactNode };
 
+// renderToStaticMarkup skips effects; run them synchronously instead
+vi.mock('react', async (orig) => ({
+  ...(await orig<object>()),
+  useEffect: (fn: () => void) => {
+    fn();
+  },
+}));
+
 vi.mock('providers/inpage-navigation', () => ({
   useInpageNavigation: () => nav,
 }));
@@ -94,5 +102,29 @@ describe('FaqDrawer', () => {
     drawerProps.onClose();
     expect(state.setOpen).toHaveBeenCalledWith(false);
     expect(nav.resetInpageAnchor).not.toHaveBeenCalled();
+  });
+
+  it('opens when the hash matches an item', () => {
+    state.items = items;
+    nav.hashNav = 'a';
+    renderToStaticMarkup(<FaqDrawer />);
+    expect(state.setOpen).toHaveBeenCalledWith(true);
+  });
+
+  it('stays closed when the hash matches no item', () => {
+    state.items = items;
+    nav.hashNav = 'zzz';
+    renderToStaticMarkup(<FaqDrawer />);
+    expect(state.setOpen).not.toHaveBeenCalled();
+  });
+
+  it('opens once items arrive after the hash is set', () => {
+    nav.hashNav = 'a';
+    renderToStaticMarkup(<FaqDrawer />);
+    expect(state.setOpen).not.toHaveBeenCalled();
+
+    state.items = items;
+    renderToStaticMarkup(<FaqDrawer />);
+    expect(state.setOpen).toHaveBeenCalledWith(true);
   });
 });

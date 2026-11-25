@@ -40,6 +40,7 @@ export class FaqItemElement {
 export class FaqElement {
   page: Page;
   button: Locator;
+  closeButton: Locator;
   root: Locator;
   items: Locator;
   titles: Locator;
@@ -47,6 +48,7 @@ export class FaqElement {
   constructor(page: Page) {
     this.page = page;
     this.button = this.page.getByTestId('faqButton');
+    this.closeButton = this.page.getByTestId('faqClose');
     this.root = this.page.getByTestId('faqSection');
     this.items = this.root.getByTestId('faqItem');
     this.titles = this.items.getByTestId('faqItemTitle');
@@ -69,7 +71,7 @@ export class FaqElement {
 
   async close() {
     await test.step('Close FAQ drawer', async () => {
-      await this.page.getByTestId('faqClose').click();
+      await this.closeButton.click();
       await this.root.waitFor({ state: 'hidden' });
     });
   }

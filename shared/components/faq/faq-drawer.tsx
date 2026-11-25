@@ -43,7 +43,6 @@ export const FaqDrawer: FC = () => {
         width={500}
         returnFocusTo={fabRef}
         dataTestId={{
-          root: 'faqDrawer',
           body: 'faqSection',
           closeButton: 'faqClose',
         }}
