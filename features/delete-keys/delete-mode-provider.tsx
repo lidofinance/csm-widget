@@ -10,8 +10,11 @@ import {
 } from 'react';
 import { useRouter } from 'next/router';
 import invariant from 'tiny-invariant';
-import { DeleteMode, resolveDeleteMode } from './resolve-delete-mode';
-import { useDeleteModes } from './use-delete-modes';
+import {
+  DELETE_MODES,
+  DeleteMode,
+  resolveDeleteMode,
+} from './resolve-delete-mode';
 
 type DeleteModeContextValue = {
   mode: DeleteMode | undefined;
@@ -19,6 +22,8 @@ type DeleteModeContextValue = {
   setMode: (next: DeleteMode) => void;
   userSwitched: MutableRefObject<boolean>;
 };
+
+const MODES: DeleteMode[] = [...DELETE_MODES];
 
 const DeleteModeContext = createContext<DeleteModeContextValue | null>(null);
 
@@ -30,10 +35,9 @@ export const useDeleteMode = (): DeleteModeContextValue => {
 
 export const DeleteModeProvider: FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter();
-  const modes = useDeleteModes();
   const userSwitched = useRef(false);
   const mode = router.isReady
-    ? resolveDeleteMode(router.query.mode, modes)
+    ? resolveDeleteMode(router.query.mode, MODES)
     : undefined;
 
   const setMode = useCallback(
@@ -49,8 +53,8 @@ export const DeleteModeProvider: FC<PropsWithChildren> = ({ children }) => {
   );
 
   const value = useMemo(
-    () => ({ mode, modes, setMode, userSwitched }),
-    [mode, modes, setMode],
+    () => ({ mode, modes: MODES, setMode, userSwitched }),
+    [mode, setMode],
   );
 
   return (
