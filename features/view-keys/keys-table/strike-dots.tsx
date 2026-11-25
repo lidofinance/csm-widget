@@ -1,22 +1,14 @@
-import {
-  useCurveParameters,
-  useNodeOperator,
-  useOperatorCurveId,
-} from 'modules/web3';
 import { FC } from 'react';
 import { useStrikeDates } from 'shared/hooks';
 import type { KeyStrikes } from '@lidofinance/lido-csm-sdk';
 import { getStrikeDots } from './get-strike-dots';
 import { StrikeDotsView } from './strike-dots-view';
+import { useStrikesThreshold } from './use-strikes-threshold';
 
 export const StrikeDots: FC<{ strikes?: Readonly<KeyStrikes> }> = ({
   strikes,
 }) => {
-  const { nodeOperator } = useNodeOperator();
-  const { data: curve } = useOperatorCurveId(nodeOperator);
-  const { data: threshold } = useCurveParameters(curve, (p) =>
-    Number(p.strikesConfig.threshold),
-  );
+  const threshold = useStrikesThreshold();
   const getDates = useStrikeDates(undefined);
 
   const state = getStrikeDots(strikes, threshold ?? 0);

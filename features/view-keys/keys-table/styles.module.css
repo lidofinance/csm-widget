@@ -21,3 +21,14 @@
     padding: 20px 16px;
   }
 }
+
+.keyRow.keyRow > td {
+  vertical-align: top;
+}
+
+.cellLine {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  vertical-align: top;
+}

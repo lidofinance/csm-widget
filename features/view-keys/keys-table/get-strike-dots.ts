@@ -1,6 +1,12 @@
 import type { KeyStrikes } from '@lidofinance/lido-csm-sdk';
 import { getArraySum } from 'utils/get-array-sum';
 
+export const STRIKE_DOT_SIZE = 16;
+export const STRIKE_DOT_GAP = 4;
+
+export const getStrikeDotsWidth = (threshold: number) =>
+  threshold * STRIKE_DOT_SIZE + Math.max(threshold - 1, 0) * STRIKE_DOT_GAP;
+
 export type StrikeDotsState = {
   count: number;
   filled: number;
