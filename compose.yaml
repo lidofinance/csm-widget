@@ -1,41 +1,34 @@
 # Local anvil forks, IPFS, the CL mock and the QA panel, with one public
-# cloudflared tunnel in front of them all.
+# cloudflared tunnel in front of them all. A profile is a network: it starts
+# that network's fork and everything shared (IPFS, the CL mock, the tunnel and
+# the QA panel, all of them serve both networks). Both run side by side:
 #
-# Everything for manual checks at once: the hoodi fork, IPFS, the CL mock, the
-# tunnel and the QA panel (http://localhost:5050, every URL for /qa-config is
-# on it):
+#   yarn docker:up                    # hoodi
+#   yarn docker:up mainnet            # mainnet, next to hoodi if it is up
+#   yarn docker:up hoodi mainnet      # both
 #
-#   docker compose --env-file fork.env --profile stack up -d --wait
+# yarn docker:up is `docker compose --env-file fork.env --profile <network> up -d
+# --wait`. The rest goes to docker compose itself:
+#
 #   docker compose --env-file fork.env run --rm tunnel-url   # every URL
-#   docker compose --env-file fork.env --profile stack down
+#   docker compose --env-file fork.env ps                    # what is running
+#   docker compose --env-file fork.env logs -f mainnet       # follow a service
+#   docker compose --env-file fork.env --profile hoodi --profile mainnet down
 #
-# The same with the mainnet fork:
-#
-#   QA_CHAIN=mainnet docker compose --env-file fork.env --profile mainnet --profile ipfs --profile cl --profile tunnel --profile qa up -d --wait
-#
-# Or profile by profile:
-#
-#   docker compose --env-file fork.env --profile hoodi up -d --wait   # start
-#   docker compose --env-file fork.env --profile hoodi logs -f        # follow logs
-#   docker compose --env-file fork.env --profile hoodi down           # stop
-#   docker compose --env-file fork.env ps                             # everything running
+# The QA panel is on http://localhost:5050, with a network switch. The CL mock
+# is on http://localhost:5052/hoodi and /mainnet.
 #
 # Every module of a network (CSM, CSM_02, CM) is already deployed in that
 # network, so one fork per network serves them all — the module only decides
 # which contract addresses the calls go to.
 #
-# The IPFS node the tests pin merkle trees to has its own profile, so it can be
-# started once and left running next to any fork.
-#
 # A deployed widget (https) may not call localhost, so /qa-config takes the
-# tunnel's URLs: https://<tunnel>/hoodi, /mainnet, /cl and /ipfs/{cid}. The
-# tunnel is a container of its own: restarting a fork keeps its URL.
+# tunnel's URLs: https://<tunnel>/hoodi, /mainnet, /cl/hoodi, /cl/mainnet and
+# /ipfs/{cid}. The tunnel is a container of its own: restarting a fork keeps
+# its URL.
 #
 # fork.env holds the ports; `export COMPOSE_ENV_FILES=fork.env` drops the flag.
 # The fork URL and the test wallet come from .env.local.
-#
-# Profiles: mainnet, hoodi, ipfs, cl, tunnel, qa,
-# stack (hoodi + ipfs + cl + tunnel + qa).
 
 # Fixed, so the containers are named the same from any checkout of the repo —
 # a second worktree talks to the same forks instead of starting its own.
@@ -57,7 +50,7 @@ services:
   ipfs:
     image: ipfs/kubo:${KUBO_TAG:-v0.43.0}
     container_name: ipfs
-    profiles: [ipfs, stack]
+    profiles: [hoodi, mainnet]
     restart: unless-stopped
     ports:
       - '4001:4001'
@@ -84,26 +77,21 @@ services:
   hoodi:
     <<: *anvil
     container_name: hoodi-fork
-    profiles: [hoodi, stack]
+    profiles: [hoodi]
     ports: ['127.0.0.1:${HOODI_PORT}:8545']
     command:
       - 'exec anvil --host 0.0.0.0 -f "$$EL_RPC_URLS_560048" --mnemonic "$$WALLET_SECRET_PHRASE" --retries 15 --fork-retry-backoff 1000 --timeout 90000 $${ANVIL_ARGS:-}'
 
-  # The CL API URL for /qa-config: keys with a status in cl-mock.json get it,
-  # the rest go to the real CL. The file is shared through the mount, so
-  # `yarn cl-mock set ...` on the host and the QA panel change what it
-  # answers; reload the widget after
+  # The CL API URL for /qa-config, /hoodi or /mainnet: keys with a status in
+  # cl-mock.json get it, the rest go to the real CL of that network. The file
+  # is shared through the mount, so `yarn cl-mock set ...` on the host and the
+  # QA panel change what it answers; reload the widget after
   cl-mock:
     image: node:${NODE_TAG:-24-alpine}
     container_name: cl-mock
-    profiles: [cl, stack]
+    profiles: [hoodi, mainnet]
     restart: unless-stopped
-    command:
-      - sh
-      - -c
-      - exec node tests/scripts/cl-mock/cli.ts start --port 5052 --chain "$$QA_CHAIN"
-    environment:
-      QA_CHAIN: ${QA_CHAIN:-hoodi}
+    command: [node, tests/scripts/cl-mock/cli.ts, start, --port, '5052']
     ports: ['127.0.0.1:${CL_PORT:-5052}:5052']
     working_dir: /repo
     volumes:
@@ -120,7 +108,7 @@ services:
   tunnel:
     image: caddy:${CADDY_TAG:-2.10-alpine}
     container_name: tunnel
-    profiles: [tunnel, stack]
+    profiles: [hoodi, mainnet]
     restart: unless-stopped
     configs:
       - source: caddyfile
@@ -134,7 +122,11 @@ services:
           wget -qO $$bin https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-$$arch
           chmod +x $$bin
         fi
-        $$bin tunnel --no-autoupdate --protocol http2 --metrics 0.0.0.0:2000 --url http://127.0.0.1:8000 &
+        # trycloudflare refuses (429) after too many new tunnels: keep trying
+        while true; do
+          $$bin tunnel --no-autoupdate --protocol http2 --metrics 0.0.0.0:2000 --url http://127.0.0.1:8000
+          sleep 30
+        done &
         exec caddy run --config /etc/caddy/Caddyfile --adapter caddyfile
     healthcheck:
       test:
@@ -157,16 +149,18 @@ services:
         echo ""
         echo "  hoodi rpc:    https://$$host/hoodi        local http://127.0.0.1:${HOODI_PORT}"
         echo "  mainnet rpc:  https://$$host/mainnet      local http://127.0.0.1:${MAINNET_PORT}"
-        echo "  cl:           https://$$host/cl           local http://localhost:${CL_PORT:-5052}"
+        echo "  cl hoodi:     https://$$host/cl/hoodi     local http://localhost:${CL_PORT:-5052}/hoodi"
+        echo "  cl mainnet:   https://$$host/cl/mainnet   local http://localhost:${CL_PORT:-5052}/mainnet"
         echo "  ipfs:         https://$$host/ipfs/{cid}   local http://127.0.0.1:8080/ipfs/{cid}"
         echo ""
 
-  # The QA panel. It drives the containers through the docker socket and
-  # shares cl-mock.json and the presets with the host through the mount
+  # The QA panel of both networks. It drives the containers through the docker
+  # socket and shares cl-mock.json and the presets with the host through the
+  # mount
   qa:
     image: node:${NODE_TAG:-24-alpine}
     container_name: qa-panel
-    profiles: [qa, stack]
+    profiles: [hoodi, mainnet]
     restart: unless-stopped
     # node plus the docker CLI the panel drives the containers with; the
     # packages stay in the container, so only its first start installs them
@@ -175,9 +169,13 @@ services:
       - -c
       - |
         command -v docker >/dev/null || apk add --no-cache docker-cli docker-cli-compose
-        exec node tests/scripts/qa-panel/server.ts "$$QA_CHAIN" --rpc "http://$$QA_CHAIN:8545"
+        exec node tests/scripts/qa-panel/server.ts --docker
+    # IPFS by its service name: the merkle trees of gates and presets are
+    # pinned to it
     environment:
-      QA_CHAIN: ${QA_CHAIN:-hoodi}
+      IPFS_API_URL: http://ipfs:5001
+      IPFS_GATEWAY_URL: http://ipfs:8080
+      IPFS_GATEWAY: http://ipfs:8080/ipfs/
     ports: ['127.0.0.1:${QA_PORT:-5050}:5050']
     # the repo at its host path: compose run by the panel passes bind mounts
     # (cl-mock's) to the host daemon as they are

@@ -9,11 +9,6 @@ export const SENSITIVE_ENV_KEYS = [
   'SLACK_WEBHOOK_URL',
   'WC_PROJECT_ID',
   'REFUSE_CF_BLOCK_VALUE',
-  'PUSHGATEWAY_URL',
-  'PUSHGATEWAY_USERNAME',
-  'PUSHGATEWAY_PASSWORD',
-  'GRAFANA_URL',
-  'GRAFANA_API_KEY',
   'PREVIEW_STAND_PASSWORD',
   'BOCHQA_URL',
   'BOCHQA_USER',
@@ -47,10 +42,6 @@ export const getReportConfig: GetReportConfig = function (app) {
         },
       ],
     );
-
-    if (process.env.GH_EVENT_NAME !== 'workflow_dispatch') {
-      reporterConfig.push(reporters.pgReporter);
-    }
   }
   return [
     [
@@ -104,32 +95,11 @@ const reporters: {
   consoleReporter: ReporterDescription;
   githubReporter: ReporterDescription;
   chatReporter: ReporterDescription;
-  pgReporter: ReporterDescription;
   qaseReporter: ReporterDescription;
 } = {
   htmlReporter: ['html', { open: 'never' }],
   consoleReporter: ['list'],
   githubReporter: ['github'],
-  pgReporter: [
-    '@lidofinance/pg-reporter',
-    {
-      appName: 'csm-widget',
-      env: process.env.STAND_TYPE,
-      runName: getTestRunName(),
-      pushgatewayOptions: {
-        username: process.env.PUSHGATEWAY_USERNAME,
-        password: process.env.PUSHGATEWAY_PASSWORD,
-        url: process.env.PUSHGATEWAY_URL,
-        cookie: `${process.env.REFUSE_CF_BLOCK_NAME}=${process.env.REFUSE_CF_BLOCK_VALUE}`,
-      },
-      grafanaOptions: {
-        url: process.env.GRAFANA_URL,
-        apiKey: process.env.GRAFANA_API_KEY,
-      },
-      network: 'L1',
-      testTags: process.env.TEST_TAGS,
-    },
-  ],
   chatReporter: [
     '@lidofinance/chat-reporter',
     {

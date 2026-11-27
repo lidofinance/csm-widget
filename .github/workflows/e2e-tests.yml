@@ -99,11 +99,6 @@ jobs:
       # Optional envs
       REFUSE_CF_BLOCK_NAME: ${{ secrets.REFUSE_CF_BLOCK_NAME }}
       REFUSE_CF_BLOCK_VALUE: ${{ secrets.REFUSE_CF_BLOCK_VALUE }}
-      PUSHGATEWAY_URL: ${{ secrets.PUSHGATEWAY_URL }}
-      PUSHGATEWAY_USERNAME: ${{ secrets.PUSHGATEWAY_USERNAME }}
-      PUSHGATEWAY_PASSWORD: ${{ secrets.PUSHGATEWAY_PASSWORD }}
-      GRAFANA_URL: ${{ secrets.GRAFANA_URL }}
-      GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
       BOCHQA_URL: ${{ secrets.BOCHQA_URL }}
       BOCHQA_USER: ${{ secrets.BOCHQA_USER }}
       BOCHQA_PASSWORD: ${{ secrets.BOCHQA_PASSWORD }}

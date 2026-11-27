@@ -16,7 +16,7 @@ import {
 
 const HELP = `Local CL for manual checks of key statuses.
 
-  yarn cl-mock start [--port 5052] [--chain hoodi|mainnet]
+  yarn cl-mock start [--port 5052]
   yarn cl-mock set <STATUS> <pubkey...>
   yarn cl-mock remove <pubkey...>
   yarn cl-mock list
@@ -24,13 +24,15 @@ const HELP = `Local CL for manual checks of key statuses.
 
 Statuses: ${Object.keys(CL_STATUS).join(', ')}
 
-Point the widget at the server on /qa-config (CL API URL), then reload the page
-after every change. Keys without a status are answered by the real CL
+One server for both networks: point the widget at http://localhost:5052/hoodi
+or /mainnet on /qa-config (CL API URL), then reload the page after every
+change. Keys without a status are answered by the real CL of that network
 (CL_API_URLS_<chainId> from .env.local). In docker: the cl-mock service.`;
 
 nextEnv.loadEnvConfig(process.cwd());
 
 const PUBKEY = /^0x[0-9a-f]{96}$/i;
+const CHAIN_PATH = /^\/(hoodi|mainnet)\//;
 
 const fail: (message: string) => never = (message) => {
   console.error(message);
@@ -67,9 +69,7 @@ const answer = async (body: string, upstream: string | undefined) => {
   return response;
 };
 
-const start = (port: number, chain: string) => {
-  const upstream = clUpstream(chain);
-
+const start = (port: number) => {
   createServer(async (req, res) => {
     // the deployed widget calls it from its own origin; Chrome asks before a
     // public page may call localhost
@@ -78,15 +78,23 @@ const start = (port: number, chain: string) => {
     res.setHeader('Access-Control-Allow-Private-Network', 'true');
     if (req.method === 'OPTIONS') return res.writeHead(204).end();
     // the SDK posts `{ ids }` first and only falls back to GET when that fails
-    if (req.method !== 'POST' || !req.url?.endsWith(CL_VALIDATORS_PATH)) {
+    const chain = req.url?.match(CHAIN_PATH)?.[1];
+    if (
+      req.method !== 'POST' ||
+      !chain ||
+      !req.url?.endsWith(CL_VALIDATORS_PATH)
+    ) {
       return res.writeHead(404).end();
     }
-    const response = await answer(await readBody(req), upstream);
+    const response = await answer(await readBody(req), clUpstream(chain));
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(response));
   }).listen(port, () => {
-    console.info(`[cl-mock] ${chain} CL on http://localhost:${port}`);
-    console.info(`[cl-mock] real CL: ${upstream ? 'on' : 'off'}`);
+    for (const chain of ['hoodi', 'mainnet']) {
+      console.info(
+        `[cl-mock] ${chain} CL on http://localhost:${port}/${chain}, real CL ${clUpstream(chain) ? 'on' : 'off'}`,
+      );
+    }
   });
 };
 
@@ -94,19 +102,14 @@ const { values, positionals } = parseArgs({
   allowPositionals: true,
   options: {
     port: { type: 'string', default: '5052' },
-    chain: { type: 'string', default: 'hoodi' },
   },
 });
 const [command, ...args] = positionals;
 
 switch (command) {
-  case 'start': {
-    if (!['hoodi', 'mainnet'].includes(values.chain)) {
-      fail(`Unknown chain ${values.chain}`);
-    }
-    start(Number(values.port), values.chain);
+  case 'start':
+    start(Number(values.port));
     break;
-  }
   case 'set': {
     const [status, ...pubkeys] = args;
     if (!isClStatus(status)) fail(`Unknown status ${status}`);

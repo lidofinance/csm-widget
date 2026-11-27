@@ -20,3 +20,6 @@ next-env.d.ts
 
 **/.browser_context**
 
+
+# browser script of the QA panel, was inline in its index.html
+/tests/scripts/qa-panel/app.js
